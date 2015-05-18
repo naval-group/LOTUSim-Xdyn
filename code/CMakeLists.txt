@@ -119,6 +119,8 @@ ELSE()
     TARGET_LINK_LIBRARIES(${PROJECT_NAME} PUBLIC pthread)
 ENDIF()
 
+ADD_SUBDIRECTORY(fmi)
+
 IF(UNIX AND NOT(WIN32))
     SET(LIBRARY_OUTPUT_DIRECTORY "lib")
     INSTALL(TARGETS ${PROJECT_NAME}
@@ -152,6 +154,7 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:interface_hdf5_tests>
         $<TARGET_OBJECTS:observers_and_api_tests>
         $<TARGET_OBJECTS:gz_curves_tests>
+        $<TARGET_OBJECTS:fmi_tests>
         $<TARGET_OBJECTS:grpc_tests>
         )
 
@@ -159,6 +162,7 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         gtest      # static
         gmock_main # static
         binary_stl_data_static
+        fmi
         ${Boost_FILESYSTEM_LIBRARY}
         ${PROJECT_NAME}
         ${GRPC_GRPCPP_UNSECURE}
