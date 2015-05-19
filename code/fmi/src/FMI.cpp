@@ -33,8 +33,17 @@ fmiComponent fmiInstantiateModel (fmiString            instanceName,
                                   fmiCallbackFunctions functions,
                                   fmiBoolean           loggingOn)
 {
-    const ssc::text_file_reader::TextFileReader yaml_reader("simulator_conf.yml");
-    return (fmiComponent)new FMI(instanceName, GUID, functions, loggingOn, yaml_reader.get_contents());
+    fmiComponent ret = NULL;
+    try
+    {
+        const ssc::text_file_reader::TextFileReader yaml_reader("simulator_conf.yml");
+        ret = (fmiComponent)new FMI(instanceName, GUID, functions, loggingOn, yaml_reader.get_contents());
+    }
+    catch(const std::exception& e)
+    {
+        functions.logger(ret, instanceName, fmiFatal, "ERROR", e.what());
+    }
+    return ret;
 }
 
 std::string sha(const std::string& s, const YamlSimulatorInput& i);
