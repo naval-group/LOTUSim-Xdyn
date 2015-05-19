@@ -92,6 +92,12 @@ void FMI::set_continuous_states(const std::vector<double>& new_states)
     states = new_states;
 }
 
+fmiStatus fmiCompletedIntegratorStep(fmiComponent , fmiBoolean* callEventUpdate)
+{
+    if (callEventUpdate) *callEventUpdate = fmiFalse;
+    return fmiOK;
+}
+
 fmiStatus fmiSetContinuousStates    (fmiComponent c, const fmiReal x[], size_t nx)
 {
     if (nx != 13)
