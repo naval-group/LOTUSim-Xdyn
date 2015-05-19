@@ -8,8 +8,43 @@
 #ifndef FMI_HPP_
 #define FMI_HPP_
 
+#include <functional>
+#include <string>
+
+#define MODEL_IDENTIFIER Simulator
+extern "C"
+{
+    #include "fmiModelFunctions.h"
+    #include "fmiModelTypes.h"
+}
+
+#include "Sim.hpp"
+#include "YamlSimulatorInput.hpp"
+
 class FMI
 {
+    public:
+        FMI(const std::string& instance_name,
+            const std::string& GUID,
+            const fmiCallbackFunctions& callbacks,
+            const bool logging_on,
+            const std::string& yaml
+            );
+        FMI(const std::string& instance_name,
+            const fmiCallbackFunctions& callbacks,
+            const bool logging_on,
+            const std::string& yaml
+            );
+
+    private:
+        FMI(); // Disabled
+        std::string instance_name;
+        bool logging_on;
+        std::function<void(fmiComponent,fmiString,fmiStatus,fmiString,fmiString)> log;
+        std::function<void*(size_t,size_t)> allocate;
+        std::function<void(void*)> free_memory;
+        YamlSimulatorInput input;
+        Sim sim;
 };
 
 

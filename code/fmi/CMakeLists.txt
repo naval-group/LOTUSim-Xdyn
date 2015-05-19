@@ -13,6 +13,8 @@ include_directories(${observers_and_api_INCLUDE_DIRS})
 include_directories(${environment_models_INCLUDE_DIRS})
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
+include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
+include_directories(${exceptions_INCLUDE_DIRS})
 
 CONFIGURE_FILE(src/FMI.cpp "${CMAKE_CURRENT_BINARY_DIR}/FMI.cpp" @ONLY)
 
