@@ -18,6 +18,10 @@
 #include "simulator_api.hpp"
 #include "WaveModel.hpp"
 
+#define ERROR(msg) std::stringstream ss;\
+                   ss << msg;\
+                   ((FMI*)c)->error(ss.str());
+
 const char* fmiGetModelTypesPlatform()
 {
     return fmiModelTypesPlatform;
@@ -71,6 +75,11 @@ fmiStatus fmiSetTime (fmiComponent c, fmiReal time)
 {
     ((FMI*)c)->set_time(time);
     return fmiOK;
+}
+
+void FMI::error(const std::string& msg) const
+{
+    if (logging_on) this->log((fmiComponent)this, instance_name.c_str(), fmiError, "ERROR", msg.c_str());
 }
 
 void FMI::set_time(const double t_)

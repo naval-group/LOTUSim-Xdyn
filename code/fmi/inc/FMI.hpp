@@ -36,6 +36,7 @@ class FMI
             const std::string& yaml
             );
 
+        void error(const std::string& msg) const;
         void set_time(const double t);
 
     private:
