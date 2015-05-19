@@ -38,6 +38,7 @@ class FMI
 
         void error(const std::string& msg) const;
         void set_time(const double t);
+        void set_continuous_states(const std::vector<double>& new_states);
 
     private:
         FMI(); // Disabled
@@ -49,6 +50,7 @@ class FMI
         YamlSimulatorInput input;
         Sim sim;
         double t;
+        std::vector<double> states;
 };
 
 

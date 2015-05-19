@@ -87,6 +87,23 @@ void FMI::set_time(const double t_)
     t = t_;
 }
 
+void FMI::set_continuous_states(const std::vector<double>& new_states)
+{
+    states = new_states;
+}
+
+fmiStatus fmiSetContinuousStates    (fmiComponent c, const fmiReal x[], size_t nx)
+{
+    if (nx != 13)
+    {
+        ERROR("Invalid number of states: expected 13 but got " << nx);
+        return fmiFatal;
+    }
+    std::vector<double> vx(x, x+nx);
+    ((FMI*)c)->set_continuous_states(vx);
+    return fmiOK;
+}
+
 FMI::FMI(const std::string& instance_name_,
          const std::string& GUID,
          const fmiCallbackFunctions& callbacks,
@@ -99,7 +116,8 @@ FMI::FMI(const std::string& instance_name_,
       free_memory(callbacks.freeMemory),
       input(SimulatorYamlParser(yaml).parse()),
       sim(get_system(input, 0)),
-      t(0)
+      t(0),
+      states()
 {
 
     const std::string expected_GUID = sha("@GIT_SHA1@", input);
@@ -122,6 +140,7 @@ FMI::FMI(const std::string& instance_name_,
       free_memory(callbacks.freeMemory),
       input(SimulatorYamlParser(yaml).parse()),
       sim(get_system(input, 0)),
-      t(0)
+      t(0),
+      states()
 {
 }
