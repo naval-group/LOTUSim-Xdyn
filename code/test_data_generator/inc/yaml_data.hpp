@@ -67,6 +67,7 @@ namespace test_data
     std::string linear_hydrostatics();
     std::string test_ship_linear_hydrostatics_without_waves();
     std::string test_ship_linear_hydrostatics_with_waves();
+    std::string fmi();
     std::string dummy_history();
     std::string complete_yaml_message_from_gui();
     std::string JSON_message_with_requested_output();
