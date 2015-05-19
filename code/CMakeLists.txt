@@ -77,6 +77,7 @@ ADD_SUBDIRECTORY(parser_extensions)
 ADD_SUBDIRECTORY(observers_and_api)
 ADD_SUBDIRECTORY(gz_curves)
 ADD_SUBDIRECTORY(executables)
+ADD_SUBDIRECTORY(fmi)
 
 IF (WIN32)
     SET(STATICORSHARED STATIC)
@@ -93,6 +94,7 @@ ADD_LIBRARY(${PROJECT_NAME} ${STATICORSHARED}
         $<TARGET_OBJECTS:external_file_formats>
         $<TARGET_OBJECTS:mesh>
         $<TARGET_OBJECTS:yaml_parser>
+        $<TARGET_OBJECTS:fmi>
         $<TARGET_OBJECTS:external_data_structures>
         $<TARGET_OBJECTS:hdb_interpolators>
         $<TARGET_OBJECTS:interface_hdf5>
@@ -118,8 +120,6 @@ IF(WIN32)
 ELSE()
     TARGET_LINK_LIBRARIES(${PROJECT_NAME} PUBLIC pthread)
 ENDIF()
-
-ADD_SUBDIRECTORY(fmi)
 
 IF(UNIX AND NOT(WIN32))
     SET(LIBRARY_OUTPUT_DIRECTORY "lib")
@@ -162,7 +162,6 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         gtest      # static
         gmock_main # static
         binary_stl_data_static
-        fmi
         ${Boost_FILESYSTEM_LIBRARY}
         ${PROJECT_NAME}
         ${GRPC_GRPCPP_UNSECURE}
