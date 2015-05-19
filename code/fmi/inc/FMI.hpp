@@ -36,6 +36,8 @@ class FMI
             const std::string& yaml
             );
 
+        void set_time(const double t);
+
     private:
         FMI(); // Disabled
         std::string instance_name;
@@ -45,6 +47,7 @@ class FMI
         std::function<void(void*)> free_memory;
         YamlSimulatorInput input;
         Sim sim;
+        double t;
 };
 
 

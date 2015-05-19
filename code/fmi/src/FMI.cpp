@@ -57,6 +57,17 @@ std::string sha(const std::string& s, const YamlSimulatorInput& i)
     return ss.str();
 }
 
+fmiStatus fmiSetTime (fmiComponent c, fmiReal time)
+{
+    ((FMI*)c)->set_time(time);
+    return fmiOK;
+}
+
+void FMI::set_time(const double t_)
+{
+    t = t_;
+}
+
 FMI::FMI(const std::string& instance_name_,
          const std::string& GUID,
          const fmiCallbackFunctions& callbacks,
@@ -68,7 +79,8 @@ FMI::FMI(const std::string& instance_name_,
       allocate(callbacks.allocateMemory),
       free_memory(callbacks.freeMemory),
       input(SimulatorYamlParser(yaml).parse()),
-      sim(get_system(input, 0))
+      sim(get_system(input, 0)),
+      t(0)
 {
 
     const std::string expected_GUID = sha("@GIT_SHA1@", input);
@@ -90,6 +102,7 @@ FMI::FMI(const std::string& instance_name_,
       allocate(callbacks.allocateMemory),
       free_memory(callbacks.freeMemory),
       input(SimulatorYamlParser(yaml).parse()),
-      sim(get_system(input, 0))
+      sim(get_system(input, 0)),
+      t(0)
 {
 }
