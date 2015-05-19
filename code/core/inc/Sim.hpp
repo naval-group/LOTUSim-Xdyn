@@ -53,6 +53,7 @@ class Sim
         StateType state;
 
         void output(const StateType& x, Observer& obs, double t) const;
+        ssc::data_source::DataSource& get_command_listener() const;
 
         void set_bodystates(const State& state_history);
 

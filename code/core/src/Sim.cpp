@@ -54,6 +54,11 @@ class Sim::Impl
             observer.write(W.N(),DataAddressing(std::vector<std::string>{"efforts",body_name,"sum of forces",frame,"Mz"},std::string("Mz(sum of forces,")+body_name+","+frame+")"));
         }
 
+        ssc::data_source::DataSource& get_command_listener()
+        {
+            return command_listener;
+        }
+
         std::vector<BodyPtr> bodies;
         std::map<std::string,BodyPtr> name2bodyptr;
         std::map<std::string,std::vector<ForcePtr> > forces;
@@ -63,6 +68,11 @@ class Sim::Impl
         std::map<std::string,ssc::kinematics::UnsafeWrench> sum_of_forces_in_body_frame;
         std::map<std::string,ssc::kinematics::UnsafeWrench> sum_of_forces_in_NED_frame;
 };
+
+ssc::data_source::DataSource& Sim::get_command_listener() const
+{
+    return pimpl->get_command_listener();
+}
 
 std::map<std::string,std::vector<ForcePtr> > Sim::get_forces() const
 {
