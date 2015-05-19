@@ -46,6 +46,16 @@ fmiComponent fmiInstantiateModel (fmiString            instanceName,
     return ret;
 }
 
+void fmiFreeModelInstance(fmiComponent c)
+{
+    if (c) delete (FMI*)c;
+}
+
+fmiStatus fmiSetDebugLogging  (fmiComponent , fmiBoolean )
+{
+    return fmiOK;
+}
+
 std::string sha(const std::string& s, const YamlSimulatorInput& i);
 std::string sha(const std::string& s, const YamlSimulatorInput& i)
 {
