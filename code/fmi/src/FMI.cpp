@@ -229,6 +229,11 @@ fmiStatus fmiGetStateValueReferences(fmiComponent, fmiValueReference vrx[], size
     return fmiOK;
 }
 
+fmiStatus fmiTerminate(fmiComponent)
+{
+    return fmiOK;
+}
+
 std::vector<double> FMI::get_continuous_states() const
 {
     return states;
