@@ -18,3 +18,15 @@ include_directories(${exceptions_INCLUDE_DIRS})
 include_directories(${test_data_generator_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} OBJECT ${SRC})
+#SET(CMAKE_C_COMPILER ${CMAKE_CXX_COMPILER})
+ADD_EXECUTABLE(test_fmi src/test_fmi.c)
+MESSAGE(FATAl_ERROR "GRPC_GRPCPP_UNSECURE=${GRPC_GRPCPP_UNSECURE}")
+MESSAGE(FATAl_ERROR "PROTOBUF_LIBPROTOBUF=${PROTOBUF_LIBPROTOBUF}")
+TARGET_LINK_LIBRARIES(test_fmi
+                      ${Boost_FILESYSTEM_LIBRARY}
+                      x-dyn
+                      m
+                      ${GRPC_GRPCPP_UNSECURE}
+                      ${PROTOBUF_LIBPROTOBUF}
+                      stdc++
+                                            )
