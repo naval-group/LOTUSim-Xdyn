@@ -200,6 +200,16 @@ fmiStatus fmiGetString(fmiComponent, const fmiValueReference[], size_t, fmiStrin
     return fmiOK;
 }
 
+fmiStatus fmiEventUpdate(fmiComponent, fmiBoolean, fmiEventInfo* eventInfo)
+{
+    eventInfo->iterationConverged          = fmiTrue;
+    eventInfo->stateValueReferencesChanged = fmiFalse;
+    eventInfo->stateValuesChanged          = fmiFalse;
+    eventInfo->terminateSimulation         = fmiFalse;
+    eventInfo->upcomingTimeEvent           = fmiFalse;
+    return fmiOK;
+}
+
 FMI::FMI(const std::string& instance_name_,
          const std::string& GUID,
          const fmiCallbackFunctions& callbacks,
