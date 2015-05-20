@@ -41,6 +41,7 @@ class FMI
         void set_continuous_states(const std::vector<double>& new_states);
         std::vector<std::string> get_command_names() const;
         void set_real(const std::vector<size_t>& value_references, const std::vector<double>& values);
+        std::vector<double> get_derivatives();
 
     private:
         FMI(); // Disabled

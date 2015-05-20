@@ -149,6 +149,28 @@ fmiStatus fmiInitialize(fmiComponent , fmiBoolean , fmiReal , fmiEventInfo* )
     return fmiOK;
 }
 
+fmiStatus fmiGetDerivatives(fmiComponent c, fmiReal derivatives[], size_t nx)
+{
+    try
+    {
+        const std::vector<double> dx_dt = ((FMI*)c)->get_derivatives();
+        for (size_t i = 0 ; i < nx ; ++i) derivatives[i] = dx_dt.at(i);
+        return fmiOK;
+    }
+    catch(const std::exception& e)
+    {
+        ((FMI*)c)->error(e.what());
+    }
+    return fmiError;
+}
+
+std::vector<double> FMI::get_derivatives()
+{
+    std::vector<double> dxdt;
+    sim(states, dxdt, t);
+    return dxdt;
+}
+
 FMI::FMI(const std::string& instance_name_,
          const std::string& GUID,
          const fmiCallbackFunctions& callbacks,
