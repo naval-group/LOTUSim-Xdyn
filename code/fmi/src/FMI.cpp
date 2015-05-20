@@ -164,6 +164,11 @@ fmiStatus fmiGetDerivatives(fmiComponent c, fmiReal derivatives[], size_t nx)
     return fmiError;
 }
 
+fmiStatus fmiGetEventIndicators(fmiComponent, fmiReal[], size_t)
+{
+    return fmiOK;
+}
+
 std::vector<double> FMI::get_derivatives()
 {
     std::vector<double> dxdt;
