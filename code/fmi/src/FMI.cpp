@@ -148,8 +148,13 @@ fmiStatus fmiSetString(fmiComponent, const fmiValueReference[], size_t, const fm
     return fmiOK;
 }
 
-fmiStatus fmiInitialize(fmiComponent , fmiBoolean , fmiReal , fmiEventInfo* )
+fmiStatus fmiInitialize(fmiComponent , fmiBoolean , fmiReal , fmiEventInfo* eventInfo)
 {
+    eventInfo->iterationConverged          = fmiTrue;
+    eventInfo->stateValueReferencesChanged = fmiTrue;
+    eventInfo->stateValuesChanged          = fmiTrue;
+    eventInfo->terminateSimulation         = fmiFalse;
+    eventInfo->upcomingTimeEvent           = fmiFalse;
     return fmiOK;
 }
 
