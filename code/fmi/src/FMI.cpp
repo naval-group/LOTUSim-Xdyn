@@ -289,6 +289,11 @@ size_t FMI::get_nb_of_states() const
     return 13;
 }
 
+size_t FMI::get_nb_of_real_variables() const
+{
+    return command_names.size();
+}
+
 FMI::FMI(const std::string& instance_name_,
          const std::string& GUID,
          const fmiCallbackFunctions& callbacks,
