@@ -223,6 +223,12 @@ fmiStatus fmiGetNominalContinuousStates(fmiComponent , fmiReal x_nominal[], size
     return fmiOK;
 }
 
+fmiStatus fmiGetStateValueReferences(fmiComponent, fmiValueReference vrx[], size_t nx)
+{
+    for (size_t i = 0 ; i < nx ; ++i) vrx[i] = (fmiValueReference)i;
+    return fmiOK;
+}
+
 std::vector<double> FMI::get_continuous_states() const
 {
     return states;
