@@ -129,6 +129,21 @@ void FMI::set_real(const std::vector<size_t>& value_references, const std::vecto
     for (auto idx:value_references) ds.set(command_names.at(idx), values.at(idx));
 }
 
+fmiStatus fmiSetInteger(fmiComponent, const fmiValueReference[], size_t, const fmiInteger[])
+{
+    return fmiOK;
+}
+
+fmiStatus fmiSetBoolean(fmiComponent, const fmiValueReference[], size_t, const fmiBoolean[])
+{
+    return fmiOK;
+}
+
+fmiStatus fmiSetString(fmiComponent, const fmiValueReference[], size_t, const fmiString[])
+{
+    return fmiOK;
+}
+
 FMI::FMI(const std::string& instance_name_,
          const std::string& GUID,
          const fmiCallbackFunctions& callbacks,
