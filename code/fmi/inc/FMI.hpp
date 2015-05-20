@@ -57,7 +57,6 @@ class FMI
         YamlSimulatorInput input;
         Sim sim;
         double t;
-        std::vector<double> states;
         std::vector<std::string> command_names;
 };
 

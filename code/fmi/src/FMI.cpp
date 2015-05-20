@@ -18,6 +18,7 @@
 #include "simulator_api.hpp"
 #include "WaveModel.hpp"
 
+#include <ssc/macros.hpp>
 #define ERROR(msg) std::stringstream ss;\
                    ss << msg;\
                    ((FMI*)c)->error(ss.str());
@@ -95,7 +96,7 @@ void FMI::set_time(const double t_)
 
 void FMI::set_continuous_states(const std::vector<double>& new_states)
 {
-    states = new_states;
+    sim.state = new_states;
 }
 
 std::vector<std::string> FMI::get_command_names() const
@@ -210,8 +211,8 @@ fmiStatus fmiGetEventIndicators(fmiComponent c, fmiReal r[], size_t n)
 
 std::vector<double> FMI::get_derivatives()
 {
-    std::vector<double> dxdt;
-    sim(states, dxdt, t);
+    std::vector<double> dxdt(get_nb_of_states(),0);
+    sim(sim.state, dxdt, t);
     return dxdt;
 }
 
@@ -260,7 +261,8 @@ fmiStatus fmiGetContinuousStates(fmiComponent c, fmiReal states[], size_t nx)
     CHECK_POINTER(states);
     CHECK_VALUE(nx, ((FMI*)c)->get_nb_of_states());
     const std::vector<double> s = ((FMI*)c)->get_continuous_states();
-    for (size_t i = 0 ; i < nx ; ++i) states[i] = s[i];
+    CHECK_VALUE(s.size(), ((FMI*)c)->get_nb_of_states());
+    for (size_t i = 0 ; i < nx ; ++i) states[i] = s.at(i);
     return fmiOK;
 }
 
@@ -290,7 +292,7 @@ fmiStatus fmiTerminate(fmiComponent c)
 
 std::vector<double> FMI::get_continuous_states() const
 {
-    return states;
+    return sim.state;
 }
 
 size_t FMI::get_nb_of_states() const
@@ -316,10 +318,8 @@ FMI::FMI(const std::string& instance_name_,
       input(SimulatorYamlParser(yaml).parse()),
       sim(get_system(input, 0)),
       t(0),
-      states(),
       command_names(sim.get_command_names())
 {
-
     const std::string expected_GUID = sha("@GIT_SHA1@", input);
     if (GUID != expected_GUID)
     {
@@ -372,7 +372,6 @@ FMI::FMI(const std::string& instance_name_,
       input(SimulatorYamlParser(yaml).parse()),
       sim(get_system(input, 0)),
       t(0),
-      states(),
       command_names(sim.get_command_names())
 {
 }
