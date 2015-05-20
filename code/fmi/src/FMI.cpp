@@ -23,6 +23,7 @@
                    ((FMI*)c)->error(ss.str());
 
 #define CHECK_COMPONENT(c) if (!c) return fmiFatal;
+#define CHECK_POINTER(p) if (!p) {ERROR("Null pointer received for " #p);return fmiFatal;}
 
 const char* fmiGetModelTypesPlatform()
 {
@@ -104,6 +105,7 @@ std::vector<std::string> FMI::get_command_names() const
 fmiStatus fmiCompletedIntegratorStep(fmiComponent c, fmiBoolean* callEventUpdate)
 {
     CHECK_COMPONENT(c);
+    CHECK_POINTER(callEventUpdate);
     if (callEventUpdate) *callEventUpdate = fmiFalse;
     return fmiOK;
 }
@@ -111,6 +113,7 @@ fmiStatus fmiCompletedIntegratorStep(fmiComponent c, fmiBoolean* callEventUpdate
 fmiStatus fmiSetContinuousStates(fmiComponent c, const fmiReal x[], size_t nx)
 {
     CHECK_COMPONENT(c);
+    CHECK_POINTER(x);
     if (nx != 13)
     {
         ERROR("Invalid number of states: expected 13 but got " << nx);
@@ -121,9 +124,11 @@ fmiStatus fmiSetContinuousStates(fmiComponent c, const fmiReal x[], size_t nx)
     return fmiOK;
 }
 
-fmiStatus fmiSetReal (fmiComponent c, const fmiValueReference vr[], size_t nvr, const fmiReal    value[])
+fmiStatus fmiSetReal (fmiComponent c, const fmiValueReference vr[], size_t nvr, const fmiReal value[])
 {
     CHECK_COMPONENT(c);
+    CHECK_POINTER(vr);
+    CHECK_POINTER(value);
     const std::vector<size_t> value_references(vr, vr+nvr);
     const std::vector<double> values(value, value+nvr);
     ((FMI*)c)->set_real(value_references, values);
@@ -140,27 +145,34 @@ void FMI::set_real(const std::vector<size_t>& value_references, const std::vecto
     }
 }
 
-fmiStatus fmiSetInteger(fmiComponent c, const fmiValueReference[], size_t, const fmiInteger[])
+fmiStatus fmiSetInteger(fmiComponent c, const fmiValueReference vr[], size_t, const fmiInteger i[])
 {
     CHECK_COMPONENT(c);
+    CHECK_POINTER(vr);
+    CHECK_POINTER(i);
     return fmiOK;
 }
 
-fmiStatus fmiSetBoolean(fmiComponent c, const fmiValueReference[], size_t, const fmiBoolean[])
+fmiStatus fmiSetBoolean(fmiComponent c, const fmiValueReference vr[], size_t, const fmiBoolean b[])
 {
     CHECK_COMPONENT(c);
+    CHECK_POINTER(vr);
+    CHECK_POINTER(b);
     return fmiOK;
 }
 
-fmiStatus fmiSetString(fmiComponent c, const fmiValueReference[], size_t, const fmiString[])
+fmiStatus fmiSetString(fmiComponent c, const fmiValueReference vr[], size_t, const fmiString s[])
 {
     CHECK_COMPONENT(c);
+    CHECK_POINTER(vr);
+    CHECK_POINTER(s);
     return fmiOK;
 }
 
 fmiStatus fmiInitialize(fmiComponent c, fmiBoolean , fmiReal , fmiEventInfo* eventInfo)
 {
     CHECK_COMPONENT(c);
+    CHECK_POINTER(eventInfo);
     eventInfo->iterationConverged          = fmiTrue;
     eventInfo->stateValueReferencesChanged = fmiTrue;
     eventInfo->stateValuesChanged          = fmiTrue;
@@ -172,6 +184,7 @@ fmiStatus fmiInitialize(fmiComponent c, fmiBoolean , fmiReal , fmiEventInfo* eve
 fmiStatus fmiGetDerivatives(fmiComponent c, fmiReal derivatives[], size_t nx)
 {
     CHECK_COMPONENT(c);
+    CHECK_POINTER(derivatives);
     try
     {
         const std::vector<double> dx_dt = ((FMI*)c)->get_derivatives();
@@ -185,9 +198,10 @@ fmiStatus fmiGetDerivatives(fmiComponent c, fmiReal derivatives[], size_t nx)
     return fmiError;
 }
 
-fmiStatus fmiGetEventIndicators(fmiComponent c, fmiReal[], size_t)
+fmiStatus fmiGetEventIndicators(fmiComponent c, fmiReal r[], size_t)
 {
     CHECK_COMPONENT(c);
+    CHECK_POINTER(r);
     return fmiOK;
 }
 
@@ -198,27 +212,34 @@ std::vector<double> FMI::get_derivatives()
     return dxdt;
 }
 
-fmiStatus fmiGetInteger(fmiComponent c, const fmiValueReference[], size_t, fmiInteger[])
+fmiStatus fmiGetInteger(fmiComponent c, const fmiValueReference vr[], size_t, fmiInteger i[])
 {
     CHECK_COMPONENT(c);
+    CHECK_POINTER(vr);
+    CHECK_POINTER(i);
     return fmiOK;
 }
 
-fmiStatus fmiGetBoolean(fmiComponent c, const fmiValueReference[], size_t, fmiBoolean[])
+fmiStatus fmiGetBoolean(fmiComponent c, const fmiValueReference vr[], size_t, fmiBoolean b[])
 {
     CHECK_COMPONENT(c);
+    CHECK_POINTER(vr);
+    CHECK_POINTER(b);
     return fmiOK;
 }
 
-fmiStatus fmiGetString(fmiComponent c, const fmiValueReference[], size_t, fmiString[])
+fmiStatus fmiGetString(fmiComponent c, const fmiValueReference vr[], size_t, fmiString s[])
 {
     CHECK_COMPONENT(c);
+    CHECK_POINTER(vr);
+    CHECK_POINTER(s);
     return fmiOK;
 }
 
 fmiStatus fmiEventUpdate(fmiComponent c, fmiBoolean, fmiEventInfo* eventInfo)
 {
     CHECK_COMPONENT(c);
+    CHECK_POINTER(eventInfo);
     eventInfo->iterationConverged          = fmiTrue;
     eventInfo->stateValueReferencesChanged = fmiFalse;
     eventInfo->stateValuesChanged          = fmiFalse;
@@ -230,6 +251,7 @@ fmiStatus fmiEventUpdate(fmiComponent c, fmiBoolean, fmiEventInfo* eventInfo)
 fmiStatus fmiGetContinuousStates(fmiComponent c, fmiReal states[], size_t nx)
 {
     CHECK_COMPONENT(c);
+    CHECK_POINTER(states);
     const std::vector<double> s = ((FMI*)c)->get_continuous_states();
     for (size_t i = 0 ; i < nx ; ++i) states[i] = s[i];
     return fmiOK;
@@ -238,6 +260,7 @@ fmiStatus fmiGetContinuousStates(fmiComponent c, fmiReal states[], size_t nx)
 fmiStatus fmiGetNominalContinuousStates(fmiComponent c, fmiReal x_nominal[], size_t nx)
 {
     CHECK_COMPONENT(c);
+    CHECK_POINTER(x_nominal);
     for (size_t i = 0 ; i < nx ; ++i) x_nominal[i] = 1.0;
     return fmiOK;
 }
@@ -245,6 +268,7 @@ fmiStatus fmiGetNominalContinuousStates(fmiComponent c, fmiReal x_nominal[], siz
 fmiStatus fmiGetStateValueReferences(fmiComponent c, fmiValueReference vrx[], size_t nx)
 {
     CHECK_COMPONENT(c);
+    CHECK_POINTER(vrx);
     for (size_t i = 0 ; i < nx ; ++i) vrx[i] = (fmiValueReference)i;
     return fmiOK;
 }
@@ -288,6 +312,9 @@ FMI::FMI(const std::string& instance_name_,
 
 fmiStatus fmiGetReal(fmiComponent c, const fmiValueReference vr[], size_t nvr, fmiReal value[])
 {
+    CHECK_COMPONENT(c);
+    CHECK_POINTER(vr);
+    CHECK_POINTER(value);
     try
     {
         const std::vector<size_t> idx(vr, vr+nvr);
