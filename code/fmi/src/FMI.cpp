@@ -180,6 +180,21 @@ std::vector<double> FMI::get_derivatives()
     return dxdt;
 }
 
+fmiStatus fmiGetInteger(fmiComponent, const fmiValueReference[], size_t, fmiInteger[])
+{
+    return fmiOK;
+}
+
+fmiStatus fmiGetBoolean(fmiComponent, const fmiValueReference[], size_t, fmiBoolean[])
+{
+    return fmiOK;
+}
+
+fmiStatus fmiGetString(fmiComponent, const fmiValueReference[], size_t, fmiString[])
+{
+    return fmiOK;
+}
+
 FMI::FMI(const std::string& instance_name_,
          const std::string& GUID,
          const fmiCallbackFunctions& callbacks,
