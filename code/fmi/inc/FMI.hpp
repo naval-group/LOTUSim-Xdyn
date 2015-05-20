@@ -40,6 +40,7 @@ class FMI
         void set_time(const double t);
         void set_continuous_states(const std::vector<double>& new_states);
         std::vector<std::string> get_command_names() const;
+        void set_real(const std::vector<size_t>& value_references, const std::vector<double>& values);
 
     private:
         FMI(); // Disabled

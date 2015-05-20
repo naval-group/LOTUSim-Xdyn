@@ -115,6 +115,20 @@ fmiStatus fmiSetContinuousStates    (fmiComponent c, const fmiReal x[], size_t n
     return fmiOK;
 }
 
+fmiStatus fmiSetReal (fmiComponent c, const fmiValueReference vr[], size_t nvr, const fmiReal    value[])
+{
+    const std::vector<size_t> value_references(vr, vr+nvr);
+    const std::vector<double> values(value, value+nvr);
+    ((FMI*)c)->set_real(value_references, values);
+    return fmiOK;
+}
+
+void FMI::set_real(const std::vector<size_t>& value_references, const std::vector<double>& values)
+{
+    ssc::data_source::DataSource& ds = sim.get_command_listener();
+    for (auto idx:value_references) ds.set(command_names.at(idx), values.at(idx));
+}
+
 FMI::FMI(const std::string& instance_name_,
          const std::string& GUID,
          const fmiCallbackFunctions& callbacks,
