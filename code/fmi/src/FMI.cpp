@@ -126,7 +126,11 @@ fmiStatus fmiSetReal (fmiComponent c, const fmiValueReference vr[], size_t nvr, 
 void FMI::set_real(const std::vector<size_t>& value_references, const std::vector<double>& values)
 {
     ssc::data_source::DataSource& ds = sim.get_command_listener();
-    for (auto idx:value_references) ds.set(command_names.at(idx), values.at(idx));
+    for (size_t i = 0 ; i < value_references.size() ; ++i)
+    {
+        const size_t idx = value_references.at(i);
+        ds.set(command_names.at(idx), values.at(i));
+    }
 }
 
 fmiStatus fmiSetInteger(fmiComponent, const fmiValueReference[], size_t, const fmiInteger[])
