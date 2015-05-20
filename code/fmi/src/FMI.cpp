@@ -210,6 +210,18 @@ fmiStatus fmiEventUpdate(fmiComponent, fmiBoolean, fmiEventInfo* eventInfo)
     return fmiOK;
 }
 
+fmiStatus fmiGetContinuousStates(fmiComponent c, fmiReal states[], size_t nx)
+{
+    const std::vector<double> s = ((FMI*)c)->get_continuous_states();
+    for (size_t i = 0 ; i < nx ; ++i) states[i] = s[i];
+    return fmiOK;
+}
+
+std::vector<double> FMI::get_continuous_states() const
+{
+    return states;
+}
+
 FMI::FMI(const std::string& instance_name_,
          const std::string& GUID,
          const fmiCallbackFunctions& callbacks,
