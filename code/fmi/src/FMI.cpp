@@ -144,6 +144,11 @@ fmiStatus fmiSetString(fmiComponent, const fmiValueReference[], size_t, const fm
     return fmiOK;
 }
 
+fmiStatus fmiInitialize(fmiComponent , fmiBoolean , fmiReal , fmiEventInfo* )
+{
+    return fmiOK;
+}
+
 FMI::FMI(const std::string& instance_name_,
          const std::string& GUID,
          const fmiCallbackFunctions& callbacks,
