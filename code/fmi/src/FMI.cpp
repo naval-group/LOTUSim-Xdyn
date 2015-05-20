@@ -114,9 +114,9 @@ fmiStatus fmiSetContinuousStates(fmiComponent c, const fmiReal x[], size_t nx)
 {
     CHECK_COMPONENT(c);
     CHECK_POINTER(x);
-    if (nx != 13)
+    if (nx != ((FMI*)c)->get_nb_of_states())
     {
-        ERROR("Invalid number of states: expected 13 but got " << nx);
+        ERROR("Invalid number of states: expected " << ((FMI*)c)->get_nb_of_states() << " but got " << nx);
         return fmiFatal;
     }
     std::vector<double> vx(x, x+nx);
@@ -282,6 +282,11 @@ fmiStatus fmiTerminate(fmiComponent c)
 std::vector<double> FMI::get_continuous_states() const
 {
     return states;
+}
+
+size_t FMI::get_nb_of_states() const
+{
+    return 13;
 }
 
 FMI::FMI(const std::string& instance_name_,
