@@ -321,7 +321,7 @@ FMI::FMI(const std::string& instance_name_,
       command_names(sim.get_command_names())
 {
     const std::string expected_GUID = sha("@GIT_SHA1@", input);
-    if (GUID != expected_GUID)
+    if (not(GUID.empty()) and (GUID != expected_GUID))
     {
         std::stringstream ss;
         ss << "Invalid GUID: expected " << expected_GUID << ", but got " << GUID;
