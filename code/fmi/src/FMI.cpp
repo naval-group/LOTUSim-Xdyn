@@ -206,6 +206,33 @@ FMI::FMI(const std::string& instance_name_,
     }
 }
 
+fmiStatus fmiGetReal(fmiComponent c, const fmiValueReference vr[], size_t nvr, fmiReal value[])
+{
+    try
+    {
+        const std::vector<size_t> idx(vr, vr+nvr);
+        const std::vector<double> r = ((FMI*)c)->get_real(idx);
+        for (size_t i = 0 ; i < nvr ; ++i)
+        {
+            value[i] = r.at(i);
+        }
+        return fmiOK;
+    }
+    catch(const std::exception& e)
+    {
+        ((FMI*)c)->error(e.what());
+    }
+    return fmiError;
+}
+
+std::vector<double> FMI::get_real(const std::vector<size_t>& value_references)
+{
+    std::vector<double> ret;
+    ssc::data_source::DataSource& ds = sim.get_command_listener();
+    for (auto idx:value_references) ret.push_back(ds.get<double>(command_names.at(idx)));
+    return ret;
+}
+
 FMI::FMI(const std::string& instance_name_,
          const fmiCallbackFunctions& callbacks,
          const bool logging_on_,

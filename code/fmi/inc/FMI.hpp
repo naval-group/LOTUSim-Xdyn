@@ -42,6 +42,7 @@ class FMI
         std::vector<std::string> get_command_names() const;
         void set_real(const std::vector<size_t>& value_references, const std::vector<double>& values);
         std::vector<double> get_derivatives();
+        std::vector<double> get_real(const std::vector<size_t>& value_references);
 
     private:
         FMI(); // Disabled
