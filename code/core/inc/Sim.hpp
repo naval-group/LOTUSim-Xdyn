@@ -64,6 +64,7 @@ class Sim
         void set_command_listener(const std::map<std::string, double>& new_commands);
 
         void reset_history();
+        std::vector<std::string> get_command_names() const;
 
         /** \brief This function calls all force models from the current body states.
           * \detail This should be called before the first call to Sim::output if the initial state (at construction) is to be recorded.
@@ -71,8 +72,6 @@ class Sim
         void initialize_system_outputs_before_observation();
 
     private:
-
-
         ssc::kinematics::UnsafeWrench sum_of_forces(const StateType& x, const BodyPtr& body, const double t);
 
         /**  \brief Make sure quaternions can be converted to Euler angles

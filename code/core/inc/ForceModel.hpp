@@ -66,6 +66,7 @@ class ForceModel
         virtual double get_Tmax() const; // Can be overloaded if model needs access to History (not a problem, just has to say how much history to keep)
         std::string get_body_name() const;
         virtual bool is_a_surface_force_model() const;
+        std::vector<std::string> get_command_names() const;
 
         template<typename ForceType>
         static typename boost::enable_if<HasParse<ForceType>, ForceParser>::type build_parser()

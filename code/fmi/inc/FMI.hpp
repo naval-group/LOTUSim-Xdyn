@@ -39,6 +39,7 @@ class FMI
         void error(const std::string& msg) const;
         void set_time(const double t);
         void set_continuous_states(const std::vector<double>& new_states);
+        std::vector<std::string> get_command_names() const;
 
     private:
         FMI(); // Disabled
@@ -51,6 +52,7 @@ class FMI
         Sim sim;
         double t;
         std::vector<double> states;
+        std::vector<std::string> command_names;
 };
 
 

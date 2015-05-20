@@ -89,6 +89,27 @@ EnvironmentAndFrames Sim::get_env() const
     return pimpl->env;
 }
 
+std::vector<std::string> Sim::get_command_names() const
+{
+    std::vector<std::string> ret;
+    for (auto forces:pimpl->forces)
+    {
+        for (auto force:forces.second)
+        {
+            const auto command_names = force->get_command_names();
+            const auto force_name = force->get_name();
+            for (auto command_name:command_names)
+            {
+                if (not(command_name.empty()))
+                {
+                    ret.push_back(force_name + "(" + command_name + ")");
+                }
+            }
+        }
+    }
+    return ret;
+}
+
 Sim::Sim(const std::vector<BodyPtr>& bodies,
          const std::vector<ListOfForces>& forces,
          const EnvironmentAndFrames& env,

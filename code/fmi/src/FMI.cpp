@@ -92,6 +92,11 @@ void FMI::set_continuous_states(const std::vector<double>& new_states)
     states = new_states;
 }
 
+std::vector<std::string> FMI::get_command_names() const
+{
+    return command_names;
+}
+
 fmiStatus fmiCompletedIntegratorStep(fmiComponent , fmiBoolean* callEventUpdate)
 {
     if (callEventUpdate) *callEventUpdate = fmiFalse;
@@ -123,7 +128,8 @@ FMI::FMI(const std::string& instance_name_,
       input(SimulatorYamlParser(yaml).parse()),
       sim(get_system(input, 0)),
       t(0),
-      states()
+      states(),
+      command_names(sim.get_command_names())
 {
 
     const std::string expected_GUID = sha("@GIT_SHA1@", input);
@@ -147,6 +153,7 @@ FMI::FMI(const std::string& instance_name_,
       input(SimulatorYamlParser(yaml).parse()),
       sim(get_system(input, 0)),
       t(0),
-      states()
+      states(),
+      command_names(sim.get_command_names())
 {
 }
