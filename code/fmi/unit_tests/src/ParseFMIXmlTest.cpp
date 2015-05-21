@@ -99,3 +99,8 @@ TEST_F(ParseFMIXmlTest, can_parse_generation_tool)
 {
     ASSERT_EQ("Dymola Version 7.4, 2010-01-25", xml.attributes.generationTool);
 }
+
+TEST_F(ParseFMIXmlTest, can_parse_guid)
+{
+    ASSERT_EQ("{8c4e810f-3df3-4a00-8276-176fa3c9f9e0}", xml.attributes.guid);
+}
