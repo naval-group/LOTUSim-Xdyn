@@ -104,3 +104,8 @@ TEST_F(ParseFMIXmlTest, can_parse_guid)
 {
     ASSERT_EQ("{8c4e810f-3df3-4a00-8276-176fa3c9f9e0}", xml.attributes.guid);
 }
+
+TEST_F(ParseFMIXmlTest, can_parse_model_name)
+{
+    ASSERT_EQ("Modelica.Mechanics.Rotational.Examples.Friction", xml.attributes.modelName);
+}
