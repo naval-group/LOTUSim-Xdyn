@@ -37,6 +37,19 @@ namespace fmi
                 const bool logging_on,
                 const std::string& yaml
                 );
+            API(const std::string& instance_name,
+                const std::string& GUID,
+                const fmiCallbackFunctions& callbacks,
+                const bool logging_on,
+                const std::string& yaml,
+                const std::string& stl
+                );
+            API(const std::string& instance_name,
+                const fmiCallbackFunctions& callbacks,
+                const bool logging_on,
+                const std::string& yaml,
+                const std::string& stl
+                );
 
             void error(const std::string& msg) const;
             void set_time(const double t);

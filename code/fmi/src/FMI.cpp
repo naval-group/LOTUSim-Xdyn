@@ -335,6 +335,25 @@ fmi::API::API(const std::string& instance_name_,
     check_guid(GUID, input);
 }
 
+fmi::API::API(const std::string& instance_name_,
+         const std::string& GUID,
+         const fmiCallbackFunctions& callbacks,
+         const bool logging_on_,
+         const std::string& yaml,
+         const std::string& stl) :
+      instance_name(instance_name_),
+      logging_on(logging_on_),
+      log([callbacks](fmiComponent c,fmiString instanceName,fmiStatus status,fmiString category,fmiString message){callbacks.logger(c, instanceName, status, category, message);}),
+      allocate(callbacks.allocateMemory),
+      free_memory(callbacks.freeMemory),
+      input(SimulatorYamlParser(yaml).parse()),
+      sim(get_system(input, stl, 0)),
+      t(0),
+      command_names(sim.get_command_names())
+{
+    check_guid(GUID, input);
+}
+
 fmiStatus fmiGetReal(fmiComponent c, const fmiValueReference vr[], size_t nvr, fmiReal value[])
 {
     CHECK_COMPONENT(c);
@@ -377,6 +396,23 @@ fmi::API::API(const std::string& instance_name_,
       free_memory(callbacks.freeMemory),
       input(SimulatorYamlParser(yaml).parse()),
       sim(get_system(input, 0)),
+      t(0),
+      command_names(sim.get_command_names())
+{
+}
+
+fmi::API::API(const std::string& instance_name_,
+         const fmiCallbackFunctions& callbacks,
+         const bool logging_on_,
+         const std::string& yaml,
+         const std::string& stl) :
+      instance_name(instance_name_),
+      logging_on(logging_on_),
+      log([callbacks](fmiComponent c,fmiString instanceName,fmiStatus status,fmiString category,fmiString message){callbacks.logger(c, instanceName, status, category, message);}),
+      allocate(callbacks.allocateMemory),
+      free_memory(callbacks.freeMemory),
+      input(SimulatorYamlParser(yaml).parse()),
+      sim(get_system(input, stl, 0)),
       t(0),
       command_names(sim.get_command_names())
 {
