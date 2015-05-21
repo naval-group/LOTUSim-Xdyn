@@ -94,3 +94,8 @@ TEST_F(ParseFMIXmlTest, can_parse_date_and_time)
     ASSERT_EQ(33, xml.attributes.generationDateAndTime.seconds);
     ASSERT_EQ(2009, xml.attributes.generationDateAndTime.year);
 }
+
+TEST_F(ParseFMIXmlTest, can_parse_generation_tool)
+{
+    ASSERT_EQ("Dymola Version 7.4, 2010-01-25", xml.attributes.generationTool);
+}
