@@ -51,6 +51,7 @@ namespace fmi
 
         private:
             API(); // Disabled
+            void check_guid(const std::string& GUID, const YamlSimulatorInput& input) const;
             std::string instance_name;
             bool logging_on;
             std::function<void(fmiComponent,fmiString,fmiStatus,fmiString,fmiString)> log;

@@ -306,6 +306,17 @@ size_t fmi::API::get_nb_of_real_variables() const
     return command_names.size();
 }
 
+void fmi::API::check_guid(const std::string& GUID, const YamlSimulatorInput& input) const
+{
+    const std::string expected_GUID = sha("@GIT_SHA1@", input);
+    if (not(GUID.empty()) and (GUID != expected_GUID))
+    {
+        std::stringstream ss;
+        ss << "Invalid GUID: expected " << expected_GUID << ", but got " << GUID;
+        THROW(__PRETTY_FUNCTION__, Exception, ss.str());
+    }
+}
+
 fmi::API::API(const std::string& instance_name_,
          const std::string& GUID,
          const fmiCallbackFunctions& callbacks,
@@ -321,13 +332,7 @@ fmi::API::API(const std::string& instance_name_,
       t(0),
       command_names(sim.get_command_names())
 {
-    const std::string expected_GUID = sha("@GIT_SHA1@", input);
-    if (not(GUID.empty()) and (GUID != expected_GUID))
-    {
-        std::stringstream ss;
-        ss << "Invalid GUID: expected " << expected_GUID << ", but got " << GUID;
-        THROW(__PRETTY_FUNCTION__, Exception, ss.str());
-    }
+    check_guid(GUID, input);
 }
 
 fmiStatus fmiGetReal(fmiComponent c, const fmiValueReference vr[], size_t nvr, fmiReal value[])
