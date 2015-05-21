@@ -75,3 +75,7 @@ TEST_F(ParseFMIXmlTest, can_parse_author)
 {
     ASSERT_EQ("me", xml.attributes.author);
 }
+TEST_F(ParseFMIXmlTest, can_parse_description)
+{
+    ASSERT_EQ("Drive train with clutch and brake", xml.attributes.description);
+}
