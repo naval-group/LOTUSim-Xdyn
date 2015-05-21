@@ -55,7 +55,7 @@ std::string test_xml()
        << "<RealType quantity=\"AngularVelocity\" unit=\"rad/s\"/>\n"
        << "</Type>\n"
        << "</TypeDefinitions>\n"
-       << "<DefaultExperiment startTime=\"0.0\" stopTime=\"3.0\" tolerance=\"0.0001\"/>\n"
+       << "<DefaultExperiment startTime=\"1.0\" stopTime=\"3.0\" tolerance=\"0.0001\"/>\n"
        << "<ModelVariables>\n"
        << "<ScalarVariable\n"
        << "name=\"inertia1.J\"\n"
