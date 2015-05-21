@@ -119,3 +119,8 @@ TEST_F(ParseFMIXmlTest, can_parse_number_of_event_indicators)
 {
     ASSERT_EQ(34, xml.attributes.numberOfEventsIndicators);
 }
+
+TEST_F(ParseFMIXmlTest, can_parse_naming_convention)
+{
+    ASSERT_EQ(fmi::NamingConvention::STRUCTURED, xml.attributes.variableNamingConvention);
+}
