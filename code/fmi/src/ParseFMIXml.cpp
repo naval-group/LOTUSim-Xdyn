@@ -13,10 +13,28 @@
 
 using boost::property_tree::ptree;
 
+template <typename T> typename std::vector<T> parse_vector(const boost::property_tree::ptree& tree, const std::string& name)
+{
+    COUT(name);
+    std::vector<T> ret;
+    for (auto it = tree.begin() ; it != tree.end() ; ++it)
+    {
+        COUT(it->first);
+        if (it->first == name)
+        {
+            T b;
+            it->second >> b;
+            ret.push_back(b);
+        }
+    }
+    return ret;
+}
+
 void operator>>(const boost::property_tree::ptree& tree, fmi::Xml& out);
 void operator>>(const boost::property_tree::ptree& tree, fmi::DateTime& out);
 void operator>>(const boost::property_tree::ptree& tree, fmi::Attributes& out);
 void operator>>(const boost::property_tree::ptree& tree, fmi::DisplayUnitDefinition& out);
+void operator>>(const boost::property_tree::ptree& tree, std::vector<fmi::BaseUnit>& out);
 void operator>>(const boost::property_tree::ptree& tree, fmi::BaseUnit& out);
 void operator>>(const boost::property_tree::ptree& tree, fmi::DefaultExperiment& out);
 void operator>>(const boost::property_tree::ptree& tree, fmi::Annotation& out);
@@ -35,17 +53,15 @@ void operator>>(const boost::property_tree::ptree& tree, fmi::Xml& xml)
 {
     for (auto v: tree.get_child("fmiModelDescription"))
     {
-        COUT(v.first);
         if (v.first == "<xmlattr>") v.second >> xml.attributes;
-//        if( v.first == "flight" ) {
-//            Flight f;
-//            f.carrier = v.second.get<std::string>("carrier");
-//            f.number = v.second.get<unsigned>("number");
-//            f.date = v.second.get<Date>("date");
-//            f.cancelled = v.second.get("<xmlattr>.cancelled", false);
-//            ans.push_back(f);
-//        }
+        if (v.first == "UnitDefinitions") xml.UnitDefinitions = parse_vector<fmi::BaseUnit>(v.second, "BaseUnit");
     }
+}
+
+void operator>>(const boost::property_tree::ptree& tree, fmi::BaseUnit& out)
+{
+    out.definitions = parse_vector<fmi::DisplayUnitDefinition>(tree, "DisplayUnitDefinition");
+    out.unit = tree.get<std::string>("<xmlattr>.unit");
 }
 
 void operator>>(const boost::property_tree::ptree& tree, fmi::NamingConvention& out)
@@ -53,6 +69,14 @@ void operator>>(const boost::property_tree::ptree& tree, fmi::NamingConvention& 
     const std::string name = tree.get<std::string>("variableNamingConvention");
     if (name == "flat")       out = fmi::NamingConvention::FLAT;
     if (name == "structured") out = fmi::NamingConvention::STRUCTURED;
+}
+
+void operator>>(const boost::property_tree::ptree& tree, fmi::DisplayUnitDefinition& out)
+{
+    for (auto it = tree.begin() ; it != tree.end() ; ++it) COUT(it->first);
+    out.displayUnit = tree.get<std::string>("<xmlattr>.displayUnit");
+    out.gain = tree.get<double>("<xmlattr>.gain");
+    out.offset = tree.get<double>("<xmlattr>.offset",0);
 }
 
 size_t convert(const std::string& s);
@@ -98,16 +122,11 @@ void operator>>(const boost::property_tree::ptree& tree, fmi::Attributes& out)
 
 fmi::Xml fmi::parse(const std::string& xml)
 {
-    // populate tree structure pt
     ptree pt;
     std::istringstream is(xml);
     read_xml(is, pt);
-
-    // traverse pt
     Xml ans;
-
     pt >> ans;
-
     return ans;
 }
 

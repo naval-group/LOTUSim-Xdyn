@@ -124,3 +124,13 @@ TEST_F(ParseFMIXmlTest, can_parse_naming_convention)
 {
     ASSERT_EQ(fmi::NamingConvention::STRUCTURED, xml.attributes.variableNamingConvention);
 }
+
+TEST_F(ParseFMIXmlTest, can_parse_unit_definitions)
+{
+    ASSERT_EQ(1, xml.UnitDefinitions.size());
+    ASSERT_EQ("rad", xml.UnitDefinitions.at(0).unit);
+    ASSERT_EQ(1, xml.UnitDefinitions.at(0).definitions.size());
+    ASSERT_EQ("deg", xml.UnitDefinitions.at(0).definitions.at(0).displayUnit);
+    ASSERT_DOUBLE_EQ(57.2957795130823, xml.UnitDefinitions.at(0).definitions.at(0).gain);
+    ASSERT_DOUBLE_EQ(0, xml.UnitDefinitions.at(0).definitions.at(0).offset);
+}
