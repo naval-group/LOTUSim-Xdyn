@@ -79,3 +79,8 @@ TEST_F(ParseFMIXmlTest, can_parse_description)
 {
     ASSERT_EQ("Drive train with clutch and brake", xml.attributes.description);
 }
+
+TEST_F(ParseFMIXmlTest, can_parse_version)
+{
+    ASSERT_EQ("1.0", xml.attributes.fmiVersion);
+}
