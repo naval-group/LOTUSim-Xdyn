@@ -69,11 +69,9 @@ std::string test_xml()
     return ss.str();
 }
 
+const fmi::Xml xml = fmi::parse(test_xml());
+
 TEST_F(ParseFMIXmlTest, can_parse_author)
 {
-    const fmi::Xml xml = fmi::parse(test_xml());
     ASSERT_EQ("me", xml.attributes.author);
 }
-
-
-
