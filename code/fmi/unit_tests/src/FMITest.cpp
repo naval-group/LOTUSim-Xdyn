@@ -33,7 +33,7 @@ void FMITest::TearDown()
 TEST_F(FMITest, example)
 {
 //! [FMITest example]
-    FMI fmi("test", fmiCallbackFunctions(), false, test_data::fmi());
+    fmi::API fmi("test", fmiCallbackFunctions(), false, test_data::fmi());
 
 //! [FMITest example]
 //! [FMITest expected output]
@@ -42,7 +42,7 @@ TEST_F(FMITest, example)
 
 TEST_F(FMITest, can_get_all_commands)
 {
-    FMI fmi("test", fmiCallbackFunctions(), false, test_data::fmi());
+    fmi::API fmi("test", fmiCallbackFunctions(), false, test_data::fmi());
     const std::vector<std::string> command_names = fmi.get_command_names();
     ASSERT_THAT(command_names, ElementsAre("PropRudd(rpm)","PropRudd(P/D)","PropRudd(beta)"));
 }

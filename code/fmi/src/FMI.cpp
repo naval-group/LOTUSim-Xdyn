@@ -1,5 +1,5 @@
 /*
- * FMI.cpp
+ * FMI::Generator.cpp
  *
  *  Created on: May 12, 2015
  *      Author: cady
@@ -19,9 +19,10 @@
 #include "WaveModel.hpp"
 
 #include <ssc/macros.hpp>
+
 #define ERROR(msg) std::stringstream ss;\
                    ss << msg;\
-                   ((FMI*)c)->error(ss.str());
+                   ((fmi::API*)c)->error(ss.str());
 
 #define CHECK_COMPONENT(c) if (!c) return fmiFatal;
 #define CHECK_POINTER(p) if (!p) {ERROR("Null pointer received for " #p);return fmiFatal;}
@@ -46,7 +47,7 @@ fmiComponent fmiInstantiateModel (fmiString            instanceName,
     try
     {
         const ssc::text_file_reader::TextFileReader yaml_reader("simulator_conf.yml");
-        ret = (fmiComponent)new FMI(instanceName, GUID, functions, loggingOn, yaml_reader.get_contents());
+        ret = (fmiComponent)new fmi::API(instanceName, GUID, functions, loggingOn, yaml_reader.get_contents());
     }
     catch(const std::exception& e)
     {
@@ -57,7 +58,7 @@ fmiComponent fmiInstantiateModel (fmiString            instanceName,
 
 void fmiFreeModelInstance(fmiComponent c)
 {
-    if (c) delete (FMI*)c;
+    if (c) delete (fmi::API*)c;
 }
 
 fmiStatus fmiSetDebugLogging(fmiComponent c, fmiBoolean )
@@ -80,26 +81,26 @@ std::string sha(const std::string& s, const YamlSimulatorInput& i)
 fmiStatus fmiSetTime(fmiComponent c, fmiReal time)
 {
     CHECK_COMPONENT(c);
-    ((FMI*)c)->set_time(time);
+    ((fmi::API*)c)->set_time(time);
     return fmiOK;
 }
 
-void FMI::error(const std::string& msg) const
+void fmi::API::error(const std::string& msg) const
 {
     if (logging_on) this->log((fmiComponent)this, instance_name.c_str(), fmiError, "ERROR", msg.c_str());
 }
 
-void FMI::set_time(const double t_)
+void fmi::API::set_time(const double t_)
 {
     t = t_;
 }
 
-void FMI::set_continuous_states(const std::vector<double>& new_states)
+void fmi::API::set_continuous_states(const std::vector<double>& new_states)
 {
     sim.state = new_states;
 }
 
-std::vector<std::string> FMI::get_command_names() const
+std::vector<std::string> fmi::API::get_command_names() const
 {
     return command_names;
 }
@@ -116,9 +117,9 @@ fmiStatus fmiSetContinuousStates(fmiComponent c, const fmiReal x[], size_t nx)
 {
     CHECK_COMPONENT(c);
     CHECK_POINTER(x);
-    CHECK_VALUE(nx, ((FMI*)c)->get_nb_of_states());
+    CHECK_VALUE(nx, ((fmi::API*)c)->get_nb_of_states());
     std::vector<double> vx(x, x+nx);
-    ((FMI*)c)->set_continuous_states(vx);
+    ((fmi::API*)c)->set_continuous_states(vx);
     return fmiOK;
 }
 
@@ -127,14 +128,14 @@ fmiStatus fmiSetReal (fmiComponent c, const fmiValueReference vr[], size_t nvr, 
     CHECK_COMPONENT(c);
     CHECK_POINTER(vr);
     CHECK_POINTER(value);
-    CHECK_VALUE(nvr, ((FMI*)c)->get_nb_of_real_variables());
+    CHECK_VALUE(nvr, ((fmi::API*)c)->get_nb_of_real_variables());
     const std::vector<size_t> value_references(vr, vr+nvr);
     const std::vector<double> values(value, value+nvr);
-    ((FMI*)c)->set_real(value_references, values);
+    ((fmi::API*)c)->set_real(value_references, values);
     return fmiOK;
 }
 
-void FMI::set_real(const std::vector<size_t>& value_references, const std::vector<double>& values)
+void fmi::API::set_real(const std::vector<size_t>& value_references, const std::vector<double>& values)
 {
     ssc::data_source::DataSource& ds = sim.get_command_listener();
     for (size_t i = 0 ; i < value_references.size() ; ++i)
@@ -187,16 +188,16 @@ fmiStatus fmiGetDerivatives(fmiComponent c, fmiReal derivatives[], size_t nx)
 {
     CHECK_COMPONENT(c);
     CHECK_POINTER(derivatives);
-    CHECK_VALUE(nx, ((FMI*)c)->get_nb_of_states());
+    CHECK_VALUE(nx, ((fmi::API*)c)->get_nb_of_states());
     try
     {
-        const std::vector<double> dx_dt = ((FMI*)c)->get_derivatives();
+        const std::vector<double> dx_dt = ((fmi::API*)c)->get_derivatives();
         for (size_t i = 0 ; i < nx ; ++i) derivatives[i] = dx_dt.at(i);
         return fmiOK;
     }
     catch(const std::exception& e)
     {
-        ((FMI*)c)->error(e.what());
+        ((fmi::API*)c)->error(e.what());
     }
     return fmiError;
 }
@@ -209,7 +210,7 @@ fmiStatus fmiGetEventIndicators(fmiComponent c, fmiReal r[], size_t n)
     return fmiOK;
 }
 
-std::vector<double> FMI::get_derivatives()
+std::vector<double> fmi::API::get_derivatives()
 {
     std::vector<double> dxdt(get_nb_of_states(),0);
     sim(sim.state, dxdt, t);
@@ -259,9 +260,9 @@ fmiStatus fmiGetContinuousStates(fmiComponent c, fmiReal states[], size_t nx)
 {
     CHECK_COMPONENT(c);
     CHECK_POINTER(states);
-    CHECK_VALUE(nx, ((FMI*)c)->get_nb_of_states());
-    const std::vector<double> s = ((FMI*)c)->get_continuous_states();
-    CHECK_VALUE(s.size(), ((FMI*)c)->get_nb_of_states());
+    CHECK_VALUE(nx, ((fmi::API*)c)->get_nb_of_states());
+    const std::vector<double> s = ((fmi::API*)c)->get_continuous_states();
+    CHECK_VALUE(s.size(), ((fmi::API*)c)->get_nb_of_states());
     for (size_t i = 0 ; i < nx ; ++i) states[i] = s.at(i);
     return fmiOK;
 }
@@ -270,7 +271,7 @@ fmiStatus fmiGetNominalContinuousStates(fmiComponent c, fmiReal x_nominal[], siz
 {
     CHECK_COMPONENT(c);
     CHECK_POINTER(x_nominal);
-    CHECK_VALUE(nx, ((FMI*)c)->get_nb_of_states());
+    CHECK_VALUE(nx, ((fmi::API*)c)->get_nb_of_states());
     for (size_t i = 0 ; i < nx ; ++i) x_nominal[i] = 1.0;
     return fmiOK;
 }
@@ -279,7 +280,7 @@ fmiStatus fmiGetStateValueReferences(fmiComponent c, fmiValueReference vrx[], si
 {
     CHECK_COMPONENT(c);
     CHECK_POINTER(vrx);
-    CHECK_VALUE(nx, ((FMI*)c)->get_nb_of_states());
+    CHECK_VALUE(nx, ((fmi::API*)c)->get_nb_of_states());
     for (size_t i = 0 ; i < nx ; ++i) vrx[i] = (fmiValueReference)i;
     return fmiOK;
 }
@@ -290,22 +291,22 @@ fmiStatus fmiTerminate(fmiComponent c)
     return fmiOK;
 }
 
-std::vector<double> FMI::get_continuous_states() const
+std::vector<double> fmi::API::get_continuous_states() const
 {
     return sim.state;
 }
 
-size_t FMI::get_nb_of_states() const
+size_t fmi::API::get_nb_of_states() const
 {
     return 13;
 }
 
-size_t FMI::get_nb_of_real_variables() const
+size_t fmi::API::get_nb_of_real_variables() const
 {
     return command_names.size();
 }
 
-FMI::FMI(const std::string& instance_name_,
+fmi::API::API(const std::string& instance_name_,
          const std::string& GUID,
          const fmiCallbackFunctions& callbacks,
          const bool logging_on_,
@@ -334,11 +335,11 @@ fmiStatus fmiGetReal(fmiComponent c, const fmiValueReference vr[], size_t nvr, f
     CHECK_COMPONENT(c);
     CHECK_POINTER(vr);
     CHECK_POINTER(value);
-    CHECK_VALUE(nvr, ((FMI*)c)->get_nb_of_real_variables());
+    CHECK_VALUE(nvr, ((fmi::API*)c)->get_nb_of_real_variables());
     try
     {
         const std::vector<size_t> idx(vr, vr+nvr);
-        const std::vector<double> r = ((FMI*)c)->get_real(idx);
+        const std::vector<double> r = ((fmi::API*)c)->get_real(idx);
         for (size_t i = 0 ; i < nvr ; ++i)
         {
             value[i] = r.at(i);
@@ -347,12 +348,12 @@ fmiStatus fmiGetReal(fmiComponent c, const fmiValueReference vr[], size_t nvr, f
     }
     catch(const std::exception& e)
     {
-        ((FMI*)c)->error(e.what());
+        ((fmi::API*)c)->error(e.what());
     }
     return fmiError;
 }
 
-std::vector<double> FMI::get_real(const std::vector<size_t>& value_references)
+std::vector<double> fmi::API::get_real(const std::vector<size_t>& value_references)
 {
     std::vector<double> ret;
     ssc::data_source::DataSource& ds = sim.get_command_listener();
@@ -360,7 +361,7 @@ std::vector<double> FMI::get_real(const std::vector<size_t>& value_references)
     return ret;
 }
 
-FMI::FMI(const std::string& instance_name_,
+fmi::API::API(const std::string& instance_name_,
          const fmiCallbackFunctions& callbacks,
          const bool logging_on_,
          const std::string& yaml) :

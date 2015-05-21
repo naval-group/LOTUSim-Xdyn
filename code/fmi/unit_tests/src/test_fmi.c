@@ -48,7 +48,7 @@ void simulate(fmiComponent c, const double dt, const size_t n)
     fmiGetContinuousStates(c, x, 13);
     for (i = 0 ; i < n ; ++i)
     {
-        t = ((double)i)*dt;
+        t = (double)i*dt;
         fmiGetDerivatives(c, der_x, 13);
         for (j = 0 ; j < 13 ; ++j) x[j] = x[j] + dt*der_x[j];
         fmiSetTime(c, t);
