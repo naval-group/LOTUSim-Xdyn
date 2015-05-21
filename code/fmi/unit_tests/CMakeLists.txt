@@ -3,6 +3,7 @@ set(MODULE_UNDER_TEST fmi)
 project(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/FMITest.cpp
               src/calculate_hashTest.cpp
+              src/ParseFMIXmlTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 

@@ -21,6 +21,7 @@ CONFIGURE_FILE(src/FMI.cpp "${CMAKE_CURRENT_BINARY_DIR}/FMI.cpp" @ONLY)
 set(SRC ${CMAKE_CURRENT_BINARY_DIR}/FMI.cpp
         src/calculate_hash.cpp
         src/FMIXml.cpp
+        src/ParseFMIXml.cpp
         )
 
 # Using C++ 2011
