@@ -55,6 +55,7 @@ void operator>>(const boost::property_tree::ptree& tree, fmi::Xml& xml)
     {
         if (v.first == "<xmlattr>") v.second >> xml.attributes;
         if (v.first == "UnitDefinitions") xml.UnitDefinitions = parse_vector<fmi::BaseUnit>(v.second, "BaseUnit");
+        if (v.first == "DefaultExperiment") v.second >> xml.default_experiment;
     }
 }
 
@@ -77,6 +78,13 @@ void operator>>(const boost::property_tree::ptree& tree, fmi::DisplayUnitDefinit
     out.displayUnit = tree.get<std::string>("<xmlattr>.displayUnit");
     out.gain = tree.get<double>("<xmlattr>.gain");
     out.offset = tree.get<double>("<xmlattr>.offset",0);
+}
+
+void operator>>(const boost::property_tree::ptree& tree, fmi::DefaultExperiment& out)
+{
+    out.startTime = tree.get<double>("<xmlattr>.startTime");
+    out.stopTime = tree.get<double>("<xmlattr>.stopTime");
+    out.tolerance = tree.get<double>("<xmlattr>.tolerance");
 }
 
 size_t convert(const std::string& s);

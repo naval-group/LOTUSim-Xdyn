@@ -134,3 +134,10 @@ TEST_F(ParseFMIXmlTest, can_parse_unit_definitions)
     ASSERT_DOUBLE_EQ(57.2957795130823, xml.UnitDefinitions.at(0).definitions.at(0).gain);
     ASSERT_DOUBLE_EQ(0, xml.UnitDefinitions.at(0).definitions.at(0).offset);
 }
+
+TEST_F(ParseFMIXmlTest, can_parse_default_experiment)
+{
+    ASSERT_DOUBLE_EQ(1, xml.default_experiment.startTime);
+    ASSERT_DOUBLE_EQ(3, xml.default_experiment.stopTime);
+    ASSERT_DOUBLE_EQ(1E-4, xml.default_experiment.tolerance);
+}
