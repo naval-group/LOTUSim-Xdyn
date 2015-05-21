@@ -10,13 +10,16 @@
 
 #include <ssc/exception_handling.hpp>
 
-class FMIException: public ssc::exception_handling::Exception
+namespace fmi
 {
-    public:
-        FMIException(const std::string& message, const std::string& file, const std::string& function, const unsigned int line) :
-            ::ssc::exception_handling::Exception(message, file, function, line)
-        {
-        }
-};
+    class Exception: public ssc::exception_handling::Exception
+    {
+        public:
+            Exception(const std::string& message, const std::string& file, const std::string& function, const unsigned int line) :
+                ::ssc::exception_handling::Exception(message, file, function, line)
+            {
+            }
+    };
+}
 
 #endif  /* FMIEXCEPTION_HPP_ */

@@ -326,7 +326,7 @@ fmi::API::API(const std::string& instance_name_,
     {
         std::stringstream ss;
         ss << "Invalid GUID: expected " << expected_GUID << ", but got " << GUID;
-        THROW(__PRETTY_FUNCTION__, FMIException, ss.str());
+        THROW(__PRETTY_FUNCTION__, Exception, ss.str());
     }
 }
 
