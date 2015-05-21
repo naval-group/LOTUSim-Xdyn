@@ -33,7 +33,7 @@ std::string test_xml()
        << "    fmiVersion=\"1.0\"\n"
        << "    author=\"me\"\n"
        << "    modelName=\"Modelica.Mechanics.Rotational.Examples.Friction\"\n"
-       << "    modelIdentifier=\"Modelica_Mechanics_Rotational_Examples_Friction\"\n"
+       << "    modelIdentifier=\"IDModelica_Mechanics_Rotational_Examples_Friction\"\n"
        << "    guid=\"{8c4e810f-3df3-4a00-8276-176fa3c9f9e0}\"\n"
        << "    description=\"Drive train with clutch and brake\"\n"
        << "    version=\"3.1\"\n"
@@ -108,4 +108,9 @@ TEST_F(ParseFMIXmlTest, can_parse_guid)
 TEST_F(ParseFMIXmlTest, can_parse_model_name)
 {
     ASSERT_EQ("Modelica.Mechanics.Rotational.Examples.Friction", xml.attributes.modelName);
+}
+
+TEST_F(ParseFMIXmlTest, can_parse_model_identifier)
+{
+    ASSERT_EQ("IDModelica_Mechanics_Rotational_Examples_Friction", xml.attributes.modelidentifier);
 }
