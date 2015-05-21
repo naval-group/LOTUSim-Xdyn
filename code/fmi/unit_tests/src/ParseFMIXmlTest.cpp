@@ -84,3 +84,13 @@ TEST_F(ParseFMIXmlTest, can_parse_version)
 {
     ASSERT_EQ("1.0", xml.attributes.fmiVersion);
 }
+
+TEST_F(ParseFMIXmlTest, can_parse_date_and_time)
+{
+    ASSERT_EQ(22, xml.attributes.generationDateAndTime.day);
+    ASSERT_EQ(16, xml.attributes.generationDateAndTime.hours);
+    ASSERT_EQ(57, xml.attributes.generationDateAndTime.minutes);
+    ASSERT_EQ(12, xml.attributes.generationDateAndTime.month);
+    ASSERT_EQ(33, xml.attributes.generationDateAndTime.seconds);
+    ASSERT_EQ(2009, xml.attributes.generationDateAndTime.year);
+}
