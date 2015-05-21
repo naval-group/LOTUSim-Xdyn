@@ -114,3 +114,8 @@ TEST_F(ParseFMIXmlTest, can_parse_model_identifier)
 {
     ASSERT_EQ("IDModelica_Mechanics_Rotational_Examples_Friction", xml.attributes.modelidentifier);
 }
+
+TEST_F(ParseFMIXmlTest, can_parse_number_of_event_indicators)
+{
+    ASSERT_EQ(34, xml.attributes.numberOfEventsIndicators);
+}
