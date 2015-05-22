@@ -205,3 +205,33 @@ TEST_F(ParseFMIXmlTest, can_parse_type_definitions)
     ASSERT_EQ(false, xml.type_definitions.at(1).type_.relativeQuantity);
     ASSERT_EQ("rad/s", xml.type_definitions.at(1).type_.unit);
 }
+
+TEST_F(ParseFMIXmlTest, can_parse_vendor_annotations)
+{
+    ASSERT_EQ(3, xml.vendor_annotations.size());
+
+    ASSERT_EQ("tool 1", xml.vendor_annotations.at(0).name);
+    ASSERT_EQ(3, xml.vendor_annotations.at(0).annotations.size());
+    ASSERT_EQ("a1", xml.vendor_annotations.at(0).annotations.at(0).name);
+    ASSERT_EQ("v5", xml.vendor_annotations.at(0).annotations.at(0).value);
+    ASSERT_EQ("a2", xml.vendor_annotations.at(0).annotations.at(1).name);
+    ASSERT_EQ("v4", xml.vendor_annotations.at(0).annotations.at(1).value);
+    ASSERT_EQ("a3", xml.vendor_annotations.at(0).annotations.at(2).name);
+    ASSERT_EQ("v3", xml.vendor_annotations.at(0).annotations.at(2).value);
+
+    ASSERT_EQ("tool 2", xml.vendor_annotations.at(1).name);
+    ASSERT_EQ(3, xml.vendor_annotations.at(1).annotations.size());
+    ASSERT_EQ("a4", xml.vendor_annotations.at(1).annotations.at(0).name);
+    ASSERT_EQ("v3", xml.vendor_annotations.at(1).annotations.at(0).value);
+    ASSERT_EQ("a5", xml.vendor_annotations.at(1).annotations.at(1).name);
+    ASSERT_EQ("v2", xml.vendor_annotations.at(1).annotations.at(1).value);
+    ASSERT_EQ("a6", xml.vendor_annotations.at(1).annotations.at(2).name);
+    ASSERT_EQ("v1", xml.vendor_annotations.at(1).annotations.at(2).value);
+
+    ASSERT_EQ("tool 3", xml.vendor_annotations.at(2).name);
+    ASSERT_EQ(2, xml.vendor_annotations.at(2).annotations.size());
+    ASSERT_EQ("a7", xml.vendor_annotations.at(2).annotations.at(0).name);
+    ASSERT_EQ("v0", xml.vendor_annotations.at(2).annotations.at(0).value);
+    ASSERT_EQ("a8", xml.vendor_annotations.at(2).annotations.at(1).name);
+    ASSERT_EQ("v1", xml.vendor_annotations.at(2).annotations.at(1).value);
+}

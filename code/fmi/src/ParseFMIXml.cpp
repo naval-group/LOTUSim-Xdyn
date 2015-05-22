@@ -67,6 +67,7 @@ void operator>>(const boost::property_tree::ptree& tree, fmi::Xml& xml)
             xml.real_model_variables = parse_vector<fmi::ScalarVariable<fmi::RealAttributes> >(v.second, "ScalarVariable");
         }
         if (v.first == "TypeDefinitions") xml.type_definitions = parse_vector<fmi::Type<fmi::RealType> >(v.second, "Type");
+        if (v.first == "VendorAnnotations") xml.vendor_annotations = parse_vector<fmi::Tool>(v.second, "Tool");
     }
 }
 
@@ -246,6 +247,18 @@ void operator>>(const boost::property_tree::ptree& tree, fmi::RealType& out)
     out.quantity = tree.get<std::string>("<xmlattr>.quantity","");
     out.relativeQuantity = tree.get<bool>("<xmlattr>.relativeQuantity", false);
     out.unit = tree.get<std::string>("<xmlattr>.unit", "");
+}
+
+void operator>>(const boost::property_tree::ptree& tree, fmi::Tool& out)
+{
+    out.name = tree.get<std::string>("<xmlattr>.name");
+    out.annotations = parse_vector<fmi::Annotation>(tree, "Annotation");
+}
+
+void operator>>(const boost::property_tree::ptree& tree, fmi::Annotation& out)
+{
+    out.name = tree.get<std::string>("<xmlattr>.name");
+    out.value = tree.get<std::string>("<xmlattr>.value");
 }
 
 fmi::Xml fmi::parse(const std::string& xml)
