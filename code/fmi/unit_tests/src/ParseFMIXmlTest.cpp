@@ -67,6 +67,22 @@ std::string test_xml()
        << "<Real declaredType=\"Modelica.SIunits.Torque\" start=\"1\"/>\n"
        << "</ScalarVariable>\n"
        << "</ModelVariables>\n"
+       << "<VendorAnnotations>\n"
+       << "<Tool name=\"tool 1\">\n"
+       << "<Annotation name=\"a1\" value=\"v5\"/>"
+       << "<Annotation name=\"a2\" value=\"v4\"/>"
+       << "<Annotation name=\"a3\" value=\"v3\"/>"
+       << "</Tool>\n"
+       << "<Tool name=\"tool 2\">\n"
+       << "<Annotation name=\"a4\" value=\"v3\"/>"
+       << "<Annotation name=\"a5\" value=\"v2\"/>"
+       << "<Annotation name=\"a6\" value=\"v1\"/>"
+       << "</Tool>\n"
+       << "<Tool name=\"tool 3\">\n"
+       << "<Annotation name=\"a7\" value=\"v0\"/>"
+       << "<Annotation name=\"a8\" value=\"v1\"/>"
+       << "</Tool>\n"
+       << "</VendorAnnotations>\n"
        << "</fmiModelDescription>\n";
     return ss.str();
 }
