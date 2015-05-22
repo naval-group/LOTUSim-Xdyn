@@ -5,6 +5,8 @@
  *      Author: cady
  */
 
+#include <limits>
+
 #include "ParseFMIXmlTest.hpp"
 #include "ParseFMIXml.hpp"
 
@@ -140,4 +142,26 @@ TEST_F(ParseFMIXmlTest, can_parse_default_experiment)
     ASSERT_DOUBLE_EQ(1, xml.default_experiment.startTime);
     ASSERT_DOUBLE_EQ(3, xml.default_experiment.stopTime);
     ASSERT_DOUBLE_EQ(1E-4, xml.default_experiment.tolerance);
+}
+
+TEST_F(ParseFMIXmlTest, can_parse_real_model_variables)
+{
+    ASSERT_EQ(1, xml.real_model_variables.size());
+    ASSERT_EQ(fmi::Alias::NO_ALIAS, xml.real_model_variables.at(0).alias);
+    ASSERT_EQ("Modelica.SIunits.Torque", xml.real_model_variables.at(0).attributes.declaredType);
+    ASSERT_EQ("unit", xml.real_model_variables.at(0).attributes.displayUnit);
+    ASSERT_EQ(false, xml.real_model_variables.at(0).attributes.fixed);
+    ASSERT_EQ(std::numeric_limits<double>::max(), xml.real_model_variables.at(0).attributes.max);
+    ASSERT_EQ(std::numeric_limits<double>::lowest(), xml.real_model_variables.at(0).attributes.min);
+    ASSERT_EQ(1, xml.real_model_variables.at(0).attributes.nominal);
+    ASSERT_EQ("", xml.real_model_variables.at(0).attributes.quantity);
+    ASSERT_EQ(false, xml.real_model_variables.at(0).attributes.relativeQuantity);
+    ASSERT_EQ(1, xml.real_model_variables.at(0).attributes.start);
+    ASSERT_EQ("", xml.real_model_variables.at(0).attributes.unit);
+    ASSERT_EQ(fmi::Causality::NONE, xml.real_model_variables.at(0).causality);
+    ASSERT_EQ("Moment of inertia", xml.real_model_variables.at(0).description);
+    ASSERT_TRUE(xml.real_model_variables.at(0).direct_dependency.empty());
+    ASSERT_EQ("inertia1.J", xml.real_model_variables.at(0).name);
+    ASSERT_EQ(16777217, xml.real_model_variables.at(0).valueReference);
+    ASSERT_EQ(fmi::Variability::PARAMETER, xml.real_model_variables.at(0).variability);
 }

@@ -4,6 +4,9 @@
  *  Created on: May 21, 2015
  *      Author: cady
  */
+
+#include <limits> // std::numeric_limits
+
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 
@@ -50,9 +53,22 @@ void operator>>(const boost::property_tree::ptree& tree, fmi::Xml& xml)
 {
     for (auto v: tree.get_child("fmiModelDescription"))
     {
-        if (v.first == "<xmlattr>") v.second >> xml.attributes;
-        if (v.first == "UnitDefinitions") xml.UnitDefinitions = parse_vector<fmi::BaseUnit>(v.second, "BaseUnit");
-        if (v.first == "DefaultExperiment") v.second >> xml.default_experiment;
+        if (v.first == "<xmlattr>")
+        {
+            v.second >> xml.attributes;
+        }
+        if (v.first == "UnitDefinitions")
+        {
+            xml.UnitDefinitions = parse_vector<fmi::BaseUnit>(v.second, "BaseUnit");
+        }
+        if (v.first == "DefaultExperiment")
+        {
+            v.second >> xml.default_experiment;
+        }
+        if (v.first == "ModelVariables")
+        {
+            xml.real_model_variables = parse_vector<fmi::ScalarVariable<fmi::RealAttributes> >(v.second, "ScalarVariable");
+        }
     }
 }
 
@@ -122,6 +138,98 @@ void operator>>(const boost::property_tree::ptree& tree, fmi::Attributes& out)
     out.numberOfEventsIndicators = tree.get<size_t>("numberOfEventIndicators");
     tree >> out.variableNamingConvention;
     out.version = tree.get<std::string>("version");
+}
+
+fmi::Alias get_alias(const boost::property_tree::ptree& tree, const std::string& str);
+fmi::Alias get_alias(const boost::property_tree::ptree& tree, const std::string& str)
+{
+    const std::string s = tree.get<std::string>(str, "");
+    if (s == "alias")
+    {
+        return fmi::Alias::ALIAS;
+    }
+    if (s == "negatedAlias")
+    {
+        return fmi::Alias::NEGATED_ALIAS;
+    }
+    return fmi::Alias::NO_ALIAS;
+}
+
+fmi::Causality get_causality(const boost::property_tree::ptree& tree, const std::string& str);
+fmi::Causality get_causality(const boost::property_tree::ptree& tree, const std::string& str)
+{
+    const std::string s = tree.get<std::string>(str, "");
+    if (s == "input")
+    {
+        return fmi::Causality::INPUT;
+    }
+    if (s == "output")
+    {
+        return fmi::Causality::OUTPUT;
+    }
+    if (s == "internal")
+    {
+        return fmi::Causality::INTERNAL;
+    }
+    return fmi::Causality::NONE;
+}
+
+fmi::Variability get_variability(const boost::property_tree::ptree& tree, const std::string& str);
+fmi::Variability get_variability(const boost::property_tree::ptree& tree, const std::string& str)
+{
+    const std::string s = tree.get<std::string>(str, "");
+    if (s == "input")
+    {
+        return fmi::Variability::CONSTANT;
+    }
+    if (s == "output")
+    {
+        return fmi::Variability::CONTINUOUS;
+    }
+    if (s == "internal")
+    {
+        return fmi::Variability::DISCRETE;
+    }
+    return fmi::Variability::PARAMETER;
+}
+
+void operator>>(const boost::property_tree::ptree& tree, fmi::ScalarVariable<fmi::RealAttributes>& out)
+{
+    if (tree.find("Real") != tree.not_found())
+    {
+        out.alias = get_alias(tree, "<xmlattr>.alias");
+        tree.get_child("Real") >> out.attributes;
+        out.causality = get_causality(tree, "<xmlattr>.causality");
+        out.description = tree.get<std::string>("<xmlattr>.description");
+        auto t = tree.find("<xmlattr>.DirectDependency");
+        if (t != tree.not_found())
+        {
+            for (auto it = t->second.begin() ; it != t->second.end() ; ++it)
+            {
+                if (it->first == "Name")
+                {
+                    out.direct_dependency.push_back(it->second.get<std::string>("Name"));
+                }
+            }
+        }
+        out.name = tree.get<std::string>("<xmlattr>.name");
+        out.valueReference = tree.get<size_t>("<xmlattr>.valueReference");
+        out.variability = get_variability(tree, "<xmlattr>.variability");
+    }
+}
+
+void operator>>(const boost::property_tree::ptree& tree, fmi::RealAttributes& out)
+{
+    out.declaredType = tree.get<std::string>("<xmlattr>.declaredType", "");
+    out.displayUnit = tree.get<std::string>("<xmlattr>.displayUnit", "unit");
+    out.fixed = tree.get<bool>("<xmlattr>.fixed", false);
+    out.max = tree.get<double>("<xmlattr>.max", std::numeric_limits<double>::max());
+    out.min = tree.get<double>("<xmlattr>.min", std::numeric_limits<double>::lowest());
+    out.nominal = tree.get<double>("<xmlattr>.nominal", 1);
+    out.quantity = tree.get<std::string>("<xmlattr>.quantity","");
+    out.relativeQuantity = tree.get<bool>("<xmlattr>.relativeQuantity", false);
+    out.start = tree.get<double>("<xmlattr>.start");
+    out.unit = tree.get<std::string>("<xmlattr>.unit", "");
 }
 
 fmi::Xml fmi::parse(const std::string& xml)
