@@ -44,9 +44,6 @@ void operator>>(const boost::property_tree::ptree& tree, fmi::Type<fmi::RealType
 void operator>>(const boost::property_tree::ptree& tree, fmi::RealAttributes& out);
 void operator>>(const boost::property_tree::ptree& tree, fmi::ScalarVariable<fmi::RealAttributes>& out);
 void operator>>(const boost::property_tree::ptree& tree, fmi::NamingConvention& out);
-void operator>>(const boost::property_tree::ptree& tree, fmi::Variability& out);
-void operator>>(const boost::property_tree::ptree& tree, fmi::Causality& out);
-void operator>>(const boost::property_tree::ptree& tree, fmi::Alias& out);
 
 
 void operator>>(const boost::property_tree::ptree& tree, fmi::Xml& xml)
