@@ -4,6 +4,7 @@ project(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/FMITest.cpp
               src/calculate_hashTest.cpp
               src/ParseFMIXmlTest.cpp
+              src/random_FMI_XML.cpp
               )
 # ------8<---------------------------------------------->8-----
 
