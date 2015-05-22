@@ -15,11 +15,9 @@ using boost::property_tree::ptree;
 
 template <typename T> typename std::vector<T> parse_vector(const boost::property_tree::ptree& tree, const std::string& name)
 {
-    COUT(name);
     std::vector<T> ret;
     for (auto it = tree.begin() ; it != tree.end() ; ++it)
     {
-        COUT(it->first);
         if (it->first == name)
         {
             T b;
@@ -74,7 +72,6 @@ void operator>>(const boost::property_tree::ptree& tree, fmi::NamingConvention& 
 
 void operator>>(const boost::property_tree::ptree& tree, fmi::DisplayUnitDefinition& out)
 {
-    for (auto it = tree.begin() ; it != tree.end() ; ++it) COUT(it->first);
     out.displayUnit = tree.get<std::string>("<xmlattr>.displayUnit");
     out.gain = tree.get<double>("<xmlattr>.gain");
     out.offset = tree.get<double>("<xmlattr>.offset",0);
