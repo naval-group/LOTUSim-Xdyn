@@ -108,7 +108,7 @@ namespace fmi
     struct RealAttributes
     {
         RealAttributes();
-        double declaredType;
+        std::string declaredType;
         std::string quantity;
         std::string unit;
         std::string displayUnit;
