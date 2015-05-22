@@ -95,7 +95,7 @@ namespace fmi
 
     template <typename T> struct Type
     {
-        Type() : name(), description() {}
+        Type() : name(), description(), type_() {}
         std::string name;
         std::string description;
         T type_;
