@@ -69,6 +69,7 @@ void operator>>(const boost::property_tree::ptree& tree, fmi::Xml& xml)
         {
             xml.real_model_variables = parse_vector<fmi::ScalarVariable<fmi::RealAttributes> >(v.second, "ScalarVariable");
         }
+        if (v.first == "TypeDefinitions") xml.type_definitions = parse_vector<fmi::Type<fmi::RealType> >(v.second, "Type");
     }
 }
 
@@ -229,6 +230,24 @@ void operator>>(const boost::property_tree::ptree& tree, fmi::RealAttributes& ou
     out.quantity = tree.get<std::string>("<xmlattr>.quantity","");
     out.relativeQuantity = tree.get<bool>("<xmlattr>.relativeQuantity", false);
     out.start = tree.get<double>("<xmlattr>.start");
+    out.unit = tree.get<std::string>("<xmlattr>.unit", "");
+}
+
+void operator>>(const boost::property_tree::ptree& tree, fmi::Type<fmi::RealType>& out)
+{
+    out.description = tree.get<std::string>("<xmlattr>.description", "");
+    out.name = tree.get<std::string>("<xmlattr>.name", "");
+    tree.get_child("RealType") >> out.type_;
+}
+
+void operator>>(const boost::property_tree::ptree& tree, fmi::RealType& out)
+{
+    out.displayUnit = tree.get<std::string>("<xmlattr>.description", "unit");
+    out.max = tree.get<double>("<xmlattr>.max", std::numeric_limits<double>::max());
+    out.min = tree.get<double>("<xmlattr>.min", std::numeric_limits<double>::lowest());
+    out.nominal = tree.get<double>("<xmlattr>.nominal", 1);
+    out.quantity = tree.get<std::string>("<xmlattr>.quantity","");
+    out.relativeQuantity = tree.get<bool>("<xmlattr>.relativeQuantity", false);
     out.unit = tree.get<std::string>("<xmlattr>.unit", "");
 }
 

@@ -165,3 +165,27 @@ TEST_F(ParseFMIXmlTest, can_parse_real_model_variables)
     ASSERT_EQ(16777217, xml.real_model_variables.at(0).valueReference);
     ASSERT_EQ(fmi::Variability::PARAMETER, xml.real_model_variables.at(0).variability);
 }
+
+TEST_F(ParseFMIXmlTest, can_parse_type_definitions)
+{
+    ASSERT_EQ(2, xml.type_definitions.size());
+    ASSERT_EQ("", xml.type_definitions.at(0).description);
+    ASSERT_EQ("Modelica.SIunits.Torque", xml.type_definitions.at(0).name);
+    ASSERT_EQ("unit", xml.type_definitions.at(0).type_.displayUnit);
+    ASSERT_DOUBLE_EQ(std::numeric_limits<double>::max(), xml.type_definitions.at(0).type_.max);
+    ASSERT_DOUBLE_EQ(0, xml.type_definitions.at(0).type_.min);
+    ASSERT_DOUBLE_EQ(1, xml.type_definitions.at(0).type_.nominal);
+    ASSERT_EQ("MomentOfInertia", xml.type_definitions.at(0).type_.quantity);
+    ASSERT_EQ(false, xml.type_definitions.at(0).type_.relativeQuantity);
+    ASSERT_EQ("kg.m2", xml.type_definitions.at(0).type_.unit);
+
+    ASSERT_EQ("", xml.type_definitions.at(1).description);
+    ASSERT_EQ("Modelica.SIunits.AngularVelocity", xml.type_definitions.at(1).name);
+    ASSERT_EQ("unit", xml.type_definitions.at(1).type_.displayUnit);
+    ASSERT_DOUBLE_EQ(std::numeric_limits<double>::max(), xml.type_definitions.at(1).type_.max);
+    ASSERT_DOUBLE_EQ(std::numeric_limits<double>::lowest(), xml.type_definitions.at(1).type_.min);
+    ASSERT_DOUBLE_EQ(1, xml.type_definitions.at(1).type_.nominal);
+    ASSERT_EQ("AngularVelocity", xml.type_definitions.at(1).type_.quantity);
+    ASSERT_EQ(false, xml.type_definitions.at(1).type_.relativeQuantity);
+    ASSERT_EQ("rad/s", xml.type_definitions.at(1).type_.unit);
+}
