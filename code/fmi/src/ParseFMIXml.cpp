@@ -32,7 +32,6 @@ void operator>>(const boost::property_tree::ptree& tree, fmi::Xml& out);
 void operator>>(const boost::property_tree::ptree& tree, fmi::DateTime& out);
 void operator>>(const boost::property_tree::ptree& tree, fmi::Attributes& out);
 void operator>>(const boost::property_tree::ptree& tree, fmi::DisplayUnitDefinition& out);
-void operator>>(const boost::property_tree::ptree& tree, std::vector<fmi::BaseUnit>& out);
 void operator>>(const boost::property_tree::ptree& tree, fmi::BaseUnit& out);
 void operator>>(const boost::property_tree::ptree& tree, fmi::DefaultExperiment& out);
 void operator>>(const boost::property_tree::ptree& tree, fmi::Annotation& out);
