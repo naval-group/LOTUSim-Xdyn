@@ -5,6 +5,7 @@ FILE(GLOB SRC src/FMITest.cpp
               src/calculate_hashTest.cpp
               src/ParseFMIXmlTest.cpp
               src/random_FMI_XML.cpp
+              src/EmitFMIXmlTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 

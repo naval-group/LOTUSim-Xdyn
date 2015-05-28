@@ -143,12 +143,12 @@ namespace ssc
         template <> fmi::DateTime TypedScalarDataGenerator<fmi::DateTime>::get() const
         {
             fmi::DateTime ret;
-            ret.day = random<size_t>();
-            ret.hours = random<size_t>();
-            ret.minutes = random<size_t>();
-            ret.month = random<size_t>();
-            ret.seconds = random<size_t>();
-            ret.year = random<size_t>();
+            ret.day = random<size_t>().between(10,31);
+            ret.hours = random<size_t>().between(12,23);
+            ret.minutes = random<size_t>().between(10,59);
+            ret.month = random<size_t>().between(10,12);
+            ret.seconds = random<size_t>().between(10,59);
+            ret.year = random<size_t>().between(1000,9999);
             return ret;
         }
 

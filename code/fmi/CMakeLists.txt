@@ -22,6 +22,7 @@ set(SRC ${CMAKE_CURRENT_BINARY_DIR}/FMI.cpp
         src/calculate_hash.cpp
         src/FMIXml.cpp
         src/ParseFMIXml.cpp
+        src/EmitFMIXml.cpp
         )
 
 # Using C++ 2011

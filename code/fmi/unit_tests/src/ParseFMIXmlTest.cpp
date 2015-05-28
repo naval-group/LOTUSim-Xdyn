@@ -89,57 +89,22 @@ std::string test_xml()
 
 const fmi::Xml xml = fmi::parse(test_xml());
 
-TEST_F(ParseFMIXmlTest, can_parse_author)
+TEST_F(ParseFMIXmlTest, can_parse_attributes)
 {
     ASSERT_EQ("me", xml.attributes.author);
-}
-TEST_F(ParseFMIXmlTest, can_parse_description)
-{
     ASSERT_EQ("Drive train with clutch and brake", xml.attributes.description);
-}
-
-TEST_F(ParseFMIXmlTest, can_parse_version)
-{
     ASSERT_EQ("1.0", xml.attributes.fmiVersion);
-}
-
-TEST_F(ParseFMIXmlTest, can_parse_date_and_time)
-{
     ASSERT_EQ(22, xml.attributes.generationDateAndTime.day);
     ASSERT_EQ(16, xml.attributes.generationDateAndTime.hours);
     ASSERT_EQ(57, xml.attributes.generationDateAndTime.minutes);
     ASSERT_EQ(12, xml.attributes.generationDateAndTime.month);
     ASSERT_EQ(33, xml.attributes.generationDateAndTime.seconds);
     ASSERT_EQ(2009, xml.attributes.generationDateAndTime.year);
-}
-
-TEST_F(ParseFMIXmlTest, can_parse_generation_tool)
-{
     ASSERT_EQ("Dymola Version 7.4, 2010-01-25", xml.attributes.generationTool);
-}
-
-TEST_F(ParseFMIXmlTest, can_parse_guid)
-{
     ASSERT_EQ("{8c4e810f-3df3-4a00-8276-176fa3c9f9e0}", xml.attributes.guid);
-}
-
-TEST_F(ParseFMIXmlTest, can_parse_model_name)
-{
     ASSERT_EQ("Modelica.Mechanics.Rotational.Examples.Friction", xml.attributes.modelName);
-}
-
-TEST_F(ParseFMIXmlTest, can_parse_model_identifier)
-{
     ASSERT_EQ("IDModelica_Mechanics_Rotational_Examples_Friction", xml.attributes.modelidentifier);
-}
-
-TEST_F(ParseFMIXmlTest, can_parse_number_of_event_indicators)
-{
     ASSERT_EQ(34, xml.attributes.numberOfEventsIndicators);
-}
-
-TEST_F(ParseFMIXmlTest, can_parse_naming_convention)
-{
     ASSERT_EQ(fmi::NamingConvention::STRUCTURED, xml.attributes.variableNamingConvention);
 }
 
