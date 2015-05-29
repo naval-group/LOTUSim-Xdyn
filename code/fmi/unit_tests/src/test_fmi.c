@@ -1,4 +1,3 @@
-
 #define MODEL_IDENTIFIER Simulator
 #include "fmiModelFunctions.h"
 #include "fmiModelTypes.h"
@@ -63,6 +62,6 @@ int main()
 {
     fmiComponent c = get_model();
     simulate(c, 0.1, 10);
-    fmiFreeModelInstance(c);    
+    fmiFreeModelInstance(c);
     return 0;
 }
