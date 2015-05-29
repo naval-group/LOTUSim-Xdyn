@@ -106,6 +106,7 @@ TEST_F(ParseFMIXmlTest, can_parse_attributes)
     ASSERT_EQ("IDModelica_Mechanics_Rotational_Examples_Friction", xml.attributes.modelidentifier);
     ASSERT_EQ(34, xml.attributes.numberOfEventsIndicators);
     ASSERT_EQ(fmi::NamingConvention::STRUCTURED, xml.attributes.variableNamingConvention);
+    ASSERT_EQ(6, xml.attributes.numberOfContinuousStates);
 }
 
 TEST_F(ParseFMIXmlTest, can_parse_unit_definitions)

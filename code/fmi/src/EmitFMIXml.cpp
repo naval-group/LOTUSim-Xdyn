@@ -173,6 +173,7 @@ void put(boost::property_tree::ptree& tree, const fmi::Attributes& s)
     tree.put("<xmlattr>.numberOfEventIndicators", s.numberOfEventsIndicators);
     put(tree, s.variableNamingConvention);
     tree.put("<xmlattr>.version", s.version);
+    tree.put("<xmlattr>.numberOfContinuousStates", s.numberOfContinuousStates);
 
 }
 

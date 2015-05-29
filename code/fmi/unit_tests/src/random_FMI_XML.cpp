@@ -176,6 +176,7 @@ namespace ssc
             ret.numberOfEventsIndicators = random<size_t>();
             ret.variableNamingConvention = random<fmi::NamingConvention>();
             ret.version = random<std::string>();
+            ret.numberOfContinuousStates = random<size_t>();
             return ret;
         }
 

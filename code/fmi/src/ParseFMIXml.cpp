@@ -135,6 +135,7 @@ void operator>>(const boost::property_tree::ptree& tree, fmi::Attributes& out)
     out.modelName = tree.get<std::string>("modelName");
     out.modelidentifier = tree.get<std::string>("modelIdentifier");
     out.numberOfEventsIndicators = tree.get<size_t>("numberOfEventIndicators");
+    out.numberOfContinuousStates = tree.get<size_t>("numberOfContinuousStates");
     tree >> out.variableNamingConvention;
     out.version = tree.get<std::string>("version");
 }

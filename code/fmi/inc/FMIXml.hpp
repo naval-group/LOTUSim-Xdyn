@@ -42,6 +42,7 @@ namespace fmi
         DateTime generationDateAndTime;
         NamingConvention variableNamingConvention;
         size_t numberOfEventsIndicators;
+        size_t numberOfContinuousStates;
     };
 
     struct DisplayUnitDefinition

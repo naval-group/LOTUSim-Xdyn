@@ -8,6 +8,7 @@
 #include "EmitFMIXmlTest.hpp"
 #include "EmitFMIXml.hpp"
 #include "ParseFMIXml.hpp"
+#include "yaml_data.hpp"
 
 EmitFMIXmlTest::EmitFMIXmlTest() : a(ssc::random_data_generator::DataGenerator(21212))
 {

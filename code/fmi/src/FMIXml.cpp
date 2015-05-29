@@ -22,7 +22,8 @@ fmi::Attributes::Attributes() :
     generationTool(),
     generationDateAndTime(),
     variableNamingConvention(),
-    numberOfEventsIndicators()
+    numberOfEventsIndicators(),
+    numberOfContinuousStates()
 {
 }
 
