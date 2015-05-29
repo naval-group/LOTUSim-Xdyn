@@ -303,7 +303,7 @@ size_t fmi::API::get_nb_of_states() const
 
 size_t fmi::API::get_nb_of_real_variables() const
 {
-    return command_names.size();
+    return command_names.size() + 13;
 }
 
 void fmi::API::check_guid(const std::string& GUID, const YamlSimulatorInput& input) const
