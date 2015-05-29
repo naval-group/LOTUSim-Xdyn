@@ -16,9 +16,10 @@ include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
 include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
 include_directories(${exceptions_INCLUDE_DIRS})
 
-CONFIGURE_FILE(src/FMI.cpp "${CMAKE_CURRENT_BINARY_DIR}/FMI.cpp" @ONLY)
+CONFIGURE_FILE(src/get_sha.cpp "${CMAKE_CURRENT_BINARY_DIR}/get_sha.cpp" @ONLY)
 
-set(SRC ${CMAKE_CURRENT_BINARY_DIR}/FMI.cpp
+set(SRC src/FMI.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/get_sha.cpp
         src/calculate_hash.cpp
         src/FMIXml.cpp
         src/ParseFMIXml.cpp

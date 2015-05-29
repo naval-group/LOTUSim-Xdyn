@@ -7,7 +7,9 @@
 
 #include "EmitFMIXmlTest.hpp"
 #include "EmitFMIXml.hpp"
+#include "get_sha.hpp"
 #include "ParseFMIXml.hpp"
+#include "SimulatorYamlParser.hpp"
 #include "yaml_data.hpp"
 
 EmitFMIXmlTest::EmitFMIXmlTest() : a(ssc::random_data_generator::DataGenerator(21212))
@@ -284,7 +286,9 @@ TEST_F(EmitFMIXmlTest, example)
 
 TEST_F(EmitFMIXmlTest, can_generate_xml_corresponding_to_simulation)
 {
-    const fmi::Xml xml = fmi::build(test_data::bug_2845());
+    const auto yaml = test_data::bug_2845();
+    const fmi::Xml xml = fmi::build(yaml);
+    ASSERT_EQ(fmi::get_sha(SimulatorYamlParser(yaml).parse()), xml.attributes.guid);
     ASSERT_EQ("SES", xml.attributes.author);
     ASSERT_EQ("Ship & Environment Simulator", xml.attributes.description);
     ASSERT_EQ("1.0", xml.attributes.fmiVersion);

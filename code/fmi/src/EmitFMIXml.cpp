@@ -10,6 +10,7 @@
 
 #include "EmitFMIXml.hpp"
 #include "FMIXml.hpp"
+#include "get_sha.hpp"
 #include "Sim.hpp"
 #include "SimulatorYamlParser.hpp"
 #include "simulator_api.hpp"
@@ -221,9 +222,10 @@ std::string fmi::emit(const fmi::Xml& xml)
     return ss.str();
 }
 
-void fill_common_attributes(fmi::Xml& xml, const std::string& name);
-void fill_common_attributes(fmi::Xml& xml, const std::string& name)
+void fill_common_attributes(fmi::Xml& xml, const YamlSimulatorInput& input);
+void fill_common_attributes(fmi::Xml& xml, const YamlSimulatorInput& input)
 {
+    const std::string name = input.bodies.front().name;
     xml.attributes.author = "SES";
     xml.attributes.description = "Ship & Environment Simulator";
     xml.attributes.fmiVersion = "1.0";
@@ -235,6 +237,7 @@ void fill_common_attributes(fmi::Xml& xml, const std::string& name)
     xml.attributes.generationDateAndTime = now();
     xml.default_experiment.stopTime = 10;
     xml.default_experiment.tolerance = 1E-3;
+    xml.attributes.guid = fmi::get_sha(input);
 }
 
 typedef std::function<std::tuple<double,double,double,double>(const YamlAngle& angle)> GetQuat;
@@ -316,12 +319,11 @@ fmi::Xml fmi::build(const std::string& yaml)
 {
     const SimulatorYamlParser parser(yaml);
     auto input = parser.parse();
-
+    fmi::Xml xml;
+    fill_common_attributes(xml, input);
     for (auto&& body:input.bodies) body.mesh = "";
     const Sim sim(get_system(input, 0));
 
-    fmi::Xml xml;
-    fill_common_attributes(xml, input.bodies.front().name);
     GetQuat get_quaternions = [&sim,&input](const YamlAngle& angle) -> std::tuple<double,double,double,double>
     {
         const ssc::kinematics::EulerAngles e(angle.phi, angle.theta, angle.psi);

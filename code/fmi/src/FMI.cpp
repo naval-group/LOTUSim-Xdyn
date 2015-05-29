@@ -10,8 +10,7 @@
 
 #include <ssc/text_file_reader.hpp>
 
-#include "calculate_hash.hpp"
-#include <boost/functional/hash.hpp>
+#include "get_sha.hpp"
 #include "FMI.hpp"
 #include "FMIException.hpp"
 #include "SimulatorYamlParser.hpp"
@@ -65,17 +64,6 @@ fmiStatus fmiSetDebugLogging(fmiComponent c, fmiBoolean )
 {
     CHECK_COMPONENT(c);
     return fmiOK;
-}
-
-std::string sha(const std::string& s, const YamlSimulatorInput& i);
-std::string sha(const std::string& s, const YamlSimulatorInput& i)
-{
-    std::stringstream ss;
-    boost::hash<YamlSimulatorInput> hash;
-    std::size_t seed = hash(i);
-    boost::hash_combine(seed, s);
-    ss << seed;
-    return ss.str();
 }
 
 fmiStatus fmiSetTime(fmiComponent c, fmiReal time)
@@ -308,7 +296,7 @@ size_t fmi::API::get_nb_of_real_variables() const
 
 void fmi::API::check_guid(const std::string& GUID, const YamlSimulatorInput& input) const
 {
-    const std::string expected_GUID = sha("@GIT_SHA1@", input);
+    const std::string expected_GUID = get_sha(input);
     if (not(GUID.empty()) and (GUID != expected_GUID))
     {
         std::stringstream ss;
