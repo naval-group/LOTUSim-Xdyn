@@ -38,4 +38,13 @@ ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
 
 set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
 
+CONFIGURE_FILE(src/generate_fmi_xml.cpp "${CMAKE_CURRENT_BINARY_DIR}/generate_fmi_xml.cpp" @ONLY)
+ADD_EXECUTABLE(generate_fmi_xml ${CMAKE_CURRENT_BINARY_DIR}/generate_fmi_xml.cpp)
+
+TARGET_LINK_LIBRARIES(generate_fmi_xml x-dyn
+                      ${GRPC_GRPCPP_UNSECURE}
+                      ${PROTOBUF_LIBPROTOBUF})
+
+INSTALL(TARGETS generate_fmi_xml
+        RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
 add_subdirectory(unit_tests)
