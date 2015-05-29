@@ -5,6 +5,8 @@
  *      Author: cady
  */
 
+#include <limits>
+
 #include "FMIXml.hpp"
 
 fmi::DateTime::DateTime() : year(), month(), day(), hours(), minutes(), seconds()
@@ -75,9 +77,9 @@ fmi::RealAttributes::RealAttributes() :
         unit(),
         displayUnit(),
         relativeQuantity(),
-        min(),
-        max(),
-        nominal(),
+        min(std::numeric_limits<double>::lowest()),
+        max(std::numeric_limits<double>::max()),
+        nominal(1),
         start(),
         fixed()
 {}
