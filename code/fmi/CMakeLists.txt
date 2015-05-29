@@ -1,18 +1,18 @@
-cmake_minimum_required(VERSION 2.8.8)
-project(fmi)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
+PROJECT(fmi)
 
-include_directories(inc)
-include_directories(${ssc_INCLUDE_DIRS})
-include_directories(${observers_and_api_INCLUDE_DIRS})
-include_directories(${core_INCLUDE_DIRS})
-include_directories(${external_data_structures_INCLUDE_DIRS})
-include_directories(${mesh_INCLUDE_DIRS})
-include_directories(${hdb_interpolators_INCLUDE_DIRS})
-include_directories(${yaml_parser_INCLUDE_DIRS})
-include_directories(${observers_and_api_INCLUDE_DIRS})
-include_directories(${environment_models_INCLUDE_DIRS})
-include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
-include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(inc)
+INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${observers_and_api_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${core_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${external_data_structures_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${hdb_interpolators_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${yaml_parser_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${observers_and_api_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${environment_models_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
 include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
 include_directories(${exceptions_INCLUDE_DIRS})
 
@@ -30,13 +30,13 @@ set(SRC src/FMI.cpp
 # The -std=c++0x option causes g++ to go into 'strict ANSI' mode so it doesn't declare non-standard functions
 # (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
 # Use -std=gnu++0x instead.
-if(NOT(MSVC))
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
-endif()
+IF(NOT(MSVC))
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
+ENDIF()
 
 ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
 
-set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
+SET(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
 
 CONFIGURE_FILE(src/generate_fmi_xml.cpp "${CMAKE_CURRENT_BINARY_DIR}/generate_fmi_xml.cpp" @ONLY)
 ADD_EXECUTABLE(generate_fmi_xml ${CMAKE_CURRENT_BINARY_DIR}/generate_fmi_xml.cpp)
@@ -47,4 +47,4 @@ TARGET_LINK_LIBRARIES(generate_fmi_xml x-dyn
 
 INSTALL(TARGETS generate_fmi_xml
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
-add_subdirectory(unit_tests)
+ADD_SUBDIRECTORY(unit_tests)
