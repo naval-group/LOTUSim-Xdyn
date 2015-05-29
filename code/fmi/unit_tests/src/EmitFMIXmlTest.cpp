@@ -281,3 +281,96 @@ TEST_F(EmitFMIXmlTest, example)
     ASSERT_EQ(original_xml, parsed_xml);
 //! [EmitFMIXmlTest expected output]
 }
+
+TEST_F(EmitFMIXmlTest, can_generate_xml_corresponding_to_simulation)
+{
+    const fmi::Xml xml = fmi::build(test_data::bug_2845());
+    ASSERT_EQ("SES", xml.attributes.author);
+    ASSERT_EQ("Ship & Environment Simulator", xml.attributes.description);
+    ASSERT_EQ("1.0", xml.attributes.fmiVersion);
+    ASSERT_EQ("SES", xml.attributes.generationTool);
+    ASSERT_EQ("TestShip", xml.attributes.modelName);
+    ASSERT_EQ("TestShip", xml.attributes.modelidentifier);
+    ASSERT_EQ(0, xml.attributes.numberOfEventsIndicators);
+    ASSERT_EQ(13, xml.attributes.numberOfContinuousStates);
+    ASSERT_EQ(fmi::NamingConvention::FLAT, xml.attributes.variableNamingConvention);
+    ASSERT_TRUE(xml.UnitDefinitions.empty());
+    ASSERT_DOUBLE_EQ(0, xml.default_experiment.startTime);
+    ASSERT_DOUBLE_EQ(10, xml.default_experiment.stopTime);
+    ASSERT_DOUBLE_EQ(1E-3, xml.default_experiment.tolerance);
+    ASSERT_EQ(13 /*states*/ + 3 /*commands*/, xml.real_model_variables.size());
+    ASSERT_EQ("x(TestShip)", xml.real_model_variables.at(0).name);
+    ASSERT_EQ("y(TestShip)", xml.real_model_variables.at(1).name);
+    ASSERT_EQ("z(TestShip)", xml.real_model_variables.at(2).name);
+    ASSERT_EQ("u(TestShip)", xml.real_model_variables.at(3).name);
+    ASSERT_EQ("v(TestShip)", xml.real_model_variables.at(4).name);
+    ASSERT_EQ("w(TestShip)", xml.real_model_variables.at(5).name);
+    ASSERT_EQ("p(TestShip)", xml.real_model_variables.at(6).name);
+    ASSERT_EQ("q(TestShip)", xml.real_model_variables.at(7).name);
+    ASSERT_EQ("r(TestShip)", xml.real_model_variables.at(8).name);
+    ASSERT_EQ("qr(TestShip)", xml.real_model_variables.at(9).name);
+    ASSERT_EQ("qi(TestShip)", xml.real_model_variables.at(10).name);
+    ASSERT_EQ("qj(TestShip)", xml.real_model_variables.at(11).name);
+    ASSERT_EQ("qk(TestShip)", xml.real_model_variables.at(12).name);
+    ASSERT_EQ("PropRudd(rpm)", xml.real_model_variables.at(13).name);
+    ASSERT_EQ("PropRudd(P/D)", xml.real_model_variables.at(14).name);
+    ASSERT_EQ("PropRudd(beta)", xml.real_model_variables.at(15).name);
+    for (size_t i = 0 ; i < 16 ; ++i)
+    {
+        ASSERT_EQ(fmi::Alias::NO_ALIAS, xml.real_model_variables.at(i).alias);
+        ASSERT_EQ(fmi::Causality::OUTPUT, xml.real_model_variables.at(i).causality); // Cf. FMI 2.0 p. 72
+        ASSERT_EQ("", xml.real_model_variables.at(i).attributes.declaredType);
+        ASSERT_EQ("", xml.real_model_variables.at(i).attributes.displayUnit);
+        ASSERT_FALSE(xml.real_model_variables.at(i).attributes.fixed);
+        ASSERT_EQ(std::numeric_limits<double>::lowest(), xml.real_model_variables.at(i).attributes.min);
+        ASSERT_EQ(std::numeric_limits<double>::max(), xml.real_model_variables.at(i).attributes.max);
+        ASSERT_EQ(1, xml.real_model_variables.at(i).attributes.nominal);
+        ASSERT_FALSE(xml.real_model_variables.at(i).attributes.relativeQuantity);
+        ASSERT_EQ(i, xml.real_model_variables.at(i).valueReference);
+        ASSERT_EQ("", xml.real_model_variables.at(i).description);
+        ASSERT_TRUE( xml.real_model_variables.at(i).direct_dependency.empty());
+        ASSERT_EQ(fmi::Variability::CONTINUOUS, xml.real_model_variables.at(i).variability);
+    }
+    for (size_t i = 0 ; i < 3 ; ++i)
+    {
+        ASSERT_EQ("Distance", xml.real_model_variables.at(i).attributes.quantity);
+        ASSERT_EQ("m", xml.real_model_variables.at(i).attributes.unit);
+    }
+    ASSERT_EQ("m/s", xml.real_model_variables.at(3).attributes.unit);
+    ASSERT_EQ("m/s", xml.real_model_variables.at(4).attributes.unit);
+    ASSERT_EQ("m/s", xml.real_model_variables.at(5).attributes.unit);
+    ASSERT_EQ("rad/s", xml.real_model_variables.at(6).attributes.unit);
+    ASSERT_EQ("rad/s", xml.real_model_variables.at(7).attributes.unit);
+    ASSERT_EQ("rad/s", xml.real_model_variables.at(8).attributes.unit);
+    for (size_t i = 0 ; i < 7 ; ++i)
+    {
+        ASSERT_EQ("", xml.real_model_variables.at(i+9).attributes.unit);
+    }
+    ASSERT_EQ("Speed", xml.real_model_variables.at(3).attributes.quantity);
+    ASSERT_EQ("Speed", xml.real_model_variables.at(4).attributes.quantity);
+    ASSERT_EQ("Speed", xml.real_model_variables.at(5).attributes.quantity);
+    ASSERT_EQ("Angular velocity", xml.real_model_variables.at(6).attributes.quantity);
+    ASSERT_EQ("Angular velocity", xml.real_model_variables.at(7).attributes.quantity);
+    ASSERT_EQ("Angular velocity", xml.real_model_variables.at(8).attributes.quantity);
+    ASSERT_EQ("", xml.real_model_variables.at(9).attributes.quantity);
+    ASSERT_EQ("", xml.real_model_variables.at(10).attributes.quantity);
+    ASSERT_EQ("", xml.real_model_variables.at(11).attributes.quantity);
+    ASSERT_EQ("", xml.real_model_variables.at(12).attributes.quantity);
+    ASSERT_EQ("", xml.real_model_variables.at(13).attributes.quantity);
+    ASSERT_EQ("", xml.real_model_variables.at(14).attributes.quantity);
+    ASSERT_EQ("", xml.real_model_variables.at(15).attributes.quantity);
+    ASSERT_EQ(0, xml.real_model_variables.at(0).attributes.start);
+    ASSERT_EQ(0, xml.real_model_variables.at(1).attributes.start);
+    ASSERT_DOUBLE_EQ(-0.099, xml.real_model_variables.at(2).attributes.start);
+    ASSERT_DOUBLE_EQ(10*0.51444444444444444444, xml.real_model_variables.at(3).attributes.start);
+    ASSERT_EQ(0, xml.real_model_variables.at(4).attributes.start);
+    ASSERT_EQ(0, xml.real_model_variables.at(5).attributes.start);
+    ASSERT_EQ(0, xml.real_model_variables.at(6).attributes.start);
+    ASSERT_EQ(0, xml.real_model_variables.at(7).attributes.start);
+    ASSERT_EQ(0, xml.real_model_variables.at(8).attributes.start);
+    ASSERT_EQ(0, xml.real_model_variables.at(13).attributes.start);
+    ASSERT_EQ(0, xml.real_model_variables.at(14).attributes.start);
+    ASSERT_EQ(0, xml.real_model_variables.at(15).attributes.start);
+    ASSERT_TRUE(xml.type_definitions.empty());
+    ASSERT_TRUE(xml.vendor_annotations.empty());
+}

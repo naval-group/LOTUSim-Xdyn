@@ -10,10 +10,12 @@
 
 #include <string>
 
+#include "FMIXml.hpp"
+
 namespace fmi
 {
-    struct Xml;
     std::string emit(const Xml& xml);
+    Xml build(const std::string& yaml);
 }
 
 #endif  /* EMITFMIXML_HPP_ */
