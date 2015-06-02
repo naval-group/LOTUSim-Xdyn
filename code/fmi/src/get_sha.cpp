@@ -7,20 +7,16 @@
 
 #include <sstream>
 
-#include <boost/functional/hash.hpp>
-
-#include "calculate_hash.hpp"
-#include "get_sha.hpp"
+#include "calculate_sha1.hpp"
 #include "YamlSimulatorInput.hpp"
+#include "get_sha.hpp"
 
 std::string sha(const std::string& s, const YamlSimulatorInput& i);
 std::string sha(const std::string& s, const YamlSimulatorInput& i)
 {
     std::stringstream ss;
-    boost::hash<YamlSimulatorInput> hash;
-    std::size_t seed = hash(i);
-    boost::hash_combine(seed, s);
-    ss << seed;
+    YamlSha1 yamlSha1(s, i);
+    ss << yamlSha1;
     return ss.str();
 }
 

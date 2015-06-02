@@ -21,6 +21,7 @@ CONFIGURE_FILE(src/get_sha.cpp "${CMAKE_CURRENT_BINARY_DIR}/get_sha.cpp" @ONLY)
 set(SRC src/FMI.cpp
         ${CMAKE_CURRENT_BINARY_DIR}/get_sha.cpp
         src/calculate_hash.cpp
+        src/calculate_sha1.cpp
         src/FMIXml.cpp
         src/ParseFMIXml.cpp
         src/EmitFMIXml.cpp
