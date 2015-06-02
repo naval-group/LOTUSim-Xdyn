@@ -64,28 +64,44 @@ void put(boost::property_tree::ptree& tree, const std::vector<fmi::Tool>& s)
     }
 }
 
+void put(boost::property_tree::ptree& tree, const fmi::RealAttributes& attributes);
+void put(boost::property_tree::ptree& tree, const fmi::RealAttributes& attributes)
+{
+    tree.add("<xmlattr>.declaredType", attributes.declaredType);
+    tree.add("<xmlattr>.displayUnit", attributes.displayUnit);
+    tree.add("<xmlattr>.fixed", attributes.fixed);
+    tree.add("<xmlattr>.max", attributes.max);
+    tree.add("<xmlattr>.min", attributes.min);
+    tree.add("<xmlattr>.nominal", attributes.nominal);
+    tree.add("<xmlattr>.quantity", attributes.quantity);
+    tree.add("<xmlattr>.relativeQuantity", attributes.relativeQuantity);
+    tree.add("<xmlattr>.start", attributes.start);
+    tree.add("<xmlattr>.unit", attributes.unit);
+}
 
 void put(boost::property_tree::ptree& tree, const std::vector<fmi::ScalarVariable<fmi::RealAttributes> >& s);
 void put(boost::property_tree::ptree& tree, const std::vector<fmi::ScalarVariable<fmi::RealAttributes> >& s)
 {
+    boost::property_tree::ptree model_variables;
     for (auto b:s)
     {
-        tree.add("ModelVariables.ScalarVariable.<xmlattr>.name", b.name);
-        tree.add("ModelVariables.ScalarVariable.<xmlattr>.valueReference", b.valueReference);
-        tree.add("ModelVariables.ScalarVariable.<xmlattr>.description", b.description);
+        boost::property_tree::ptree var;
+        var.add("<xmlattr>.name", b.name);
+        var.add("<xmlattr>.valueReference", b.valueReference);
+        var.add("<xmlattr>.description", b.description);
         switch(b.variability)
         {
             case fmi::Variability::CONSTANT:
-                tree.add("ModelVariables.ScalarVariable.<xmlattr>.variability", "constant");
+                var.add("<xmlattr>.variability", "constant");
                 break;
             case fmi::Variability::CONTINUOUS:
-                tree.add("ModelVariables.ScalarVariable.<xmlattr>.variability", "continuous");
+                var.add("<xmlattr>.variability", "continuous");
                 break;
             case fmi::Variability::DISCRETE:
-                tree.add("ModelVariables.ScalarVariable.<xmlattr>.variability", "discrete");
+                var.add("<xmlattr>.variability", "discrete");
                 break;
             case fmi::Variability::PARAMETER:
-                tree.add("ModelVariables.ScalarVariable.<xmlattr>.variability", "parameter");
+                var.add("<xmlattr>.variability", "parameter");
                 break;
             default:
                 break;
@@ -93,16 +109,16 @@ void put(boost::property_tree::ptree& tree, const std::vector<fmi::ScalarVariabl
         switch(b.causality)
         {
             case fmi::Causality::INPUT:
-                tree.add("ModelVariables.ScalarVariable.<xmlattr>.causality", "input");
+                var.add("<xmlattr>.causality", "input");
                 break;
             case fmi::Causality::INTERNAL:
-                tree.add("ModelVariables.ScalarVariable.<xmlattr>.causality", "internal");
+                var.add("<xmlattr>.causality", "internal");
                 break;
             case fmi::Causality::NONE:
-                tree.add("ModelVariables.ScalarVariable.<xmlattr>.causality", "none");
+                var.add("<xmlattr>.causality", "none");
                 break;
             case fmi::Causality::OUTPUT:
-                tree.add("ModelVariables.ScalarVariable.<xmlattr>.causality", "output");
+                var.add("<xmlattr>.causality", "output");
                 break;
             default:
                 break;
@@ -110,18 +126,23 @@ void put(boost::property_tree::ptree& tree, const std::vector<fmi::ScalarVariabl
         switch(b.alias)
         {
             case fmi::Alias::ALIAS:
-                tree.add("ModelVariables.ScalarVariable.<xmlattr>.causality", "alias");
+                var.add("<xmlattr>.alias", "alias");
                 break;
             case fmi::Alias::NEGATED_ALIAS:
-                tree.add("ModelVariables.ScalarVariable.<xmlattr>.causality", "negatedAlias");
+                var.add("<xmlattr>.alias", "negatedAlias");
                 break;
             case fmi::Alias::NO_ALIAS:
-                tree.add("ModelVariables.ScalarVariable.<xmlattr>.causality", "noAlias");
+                var.add("<xmlattr>.alias", "noAlias");
                 break;
             default:
                 break;
         }
+        boost::property_tree::ptree attributes;
+        put(attributes, b.attributes);
+        var.add_child("Real", attributes);
+        model_variables.add_child("ScalarVariable", var);
     }
+    tree.add_child("ModelVariables", model_variables);
 }
 
 
@@ -173,11 +194,27 @@ void put(boost::property_tree::ptree& tree, const fmi::NamingConvention& s)
     }
 }
 
+void twodigits(const size_t d, std::stringstream& ss);
+void twodigits(const size_t d, std::stringstream& ss)
+{
+    ss << std::setfill('0') << std::setw(2) << d;
+}
+
 void put(boost::property_tree::ptree& tree, const fmi::DateTime& s);
 void put(boost::property_tree::ptree& tree, const fmi::DateTime& s)
 {
     std::stringstream ss;
-    ss << s.year << "-" << s.month << "-" << s.day << "T" << s.hours << ":" << s.minutes << ":" << s.seconds << "Z";
+    ss << s.year << "-";
+    twodigits(s.month, ss);
+    ss << "-";
+    twodigits(s.day, ss);
+    ss << "T";
+    twodigits(s.hours, ss);
+    ss << ":";
+    twodigits(s.minutes, ss);
+    ss << ":";
+    twodigits(s.seconds, ss);
+    ss << "Z";
     tree.put("<xmlattr>.generationDateAndTime", ss.str());
 }
 
