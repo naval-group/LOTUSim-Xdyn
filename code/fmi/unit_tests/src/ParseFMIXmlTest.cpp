@@ -132,12 +132,12 @@ TEST_F(ParseFMIXmlTest, can_parse_real_model_variables)
     ASSERT_EQ(fmi::Alias::NO_ALIAS, xml.real_model_variables.at(0).alias);
     ASSERT_EQ("Modelica.SIunits.Torque", xml.real_model_variables.at(0).attributes.declaredType);
     ASSERT_EQ("unit", xml.real_model_variables.at(0).attributes.displayUnit);
-    ASSERT_EQ(false, xml.real_model_variables.at(0).attributes.fixed);
+    ASSERT_FALSE(xml.real_model_variables.at(0).attributes.fixed);
     ASSERT_EQ(std::numeric_limits<double>::max(), xml.real_model_variables.at(0).attributes.max);
     ASSERT_EQ(std::numeric_limits<double>::lowest(), xml.real_model_variables.at(0).attributes.min);
     ASSERT_EQ(1, xml.real_model_variables.at(0).attributes.nominal);
     ASSERT_EQ("", xml.real_model_variables.at(0).attributes.quantity);
-    ASSERT_EQ(false, xml.real_model_variables.at(0).attributes.relativeQuantity);
+    ASSERT_FALSE(xml.real_model_variables.at(0).attributes.relativeQuantity);
     ASSERT_EQ(1, xml.real_model_variables.at(0).attributes.start);
     ASSERT_EQ("", xml.real_model_variables.at(0).attributes.unit);
     ASSERT_EQ(fmi::Causality::NONE, xml.real_model_variables.at(0).causality);
@@ -158,7 +158,7 @@ TEST_F(ParseFMIXmlTest, can_parse_type_definitions)
     ASSERT_DOUBLE_EQ(0, xml.type_definitions.at(0).type_.min);
     ASSERT_DOUBLE_EQ(1, xml.type_definitions.at(0).type_.nominal);
     ASSERT_EQ("MomentOfInertia", xml.type_definitions.at(0).type_.quantity);
-    ASSERT_EQ(false, xml.type_definitions.at(0).type_.relativeQuantity);
+    ASSERT_FALSE(xml.type_definitions.at(0).type_.relativeQuantity);
     ASSERT_EQ("kg.m2", xml.type_definitions.at(0).type_.unit);
 
     ASSERT_EQ("", xml.type_definitions.at(1).description);
@@ -168,7 +168,7 @@ TEST_F(ParseFMIXmlTest, can_parse_type_definitions)
     ASSERT_DOUBLE_EQ(std::numeric_limits<double>::lowest(), xml.type_definitions.at(1).type_.min);
     ASSERT_DOUBLE_EQ(1, xml.type_definitions.at(1).type_.nominal);
     ASSERT_EQ("AngularVelocity", xml.type_definitions.at(1).type_.quantity);
-    ASSERT_EQ(false, xml.type_definitions.at(1).type_.relativeQuantity);
+    ASSERT_FALSE(xml.type_definitions.at(1).type_.relativeQuantity);
     ASSERT_EQ("rad/s", xml.type_definitions.at(1).type_.unit);
 }
 
