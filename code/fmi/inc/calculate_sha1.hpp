@@ -16,6 +16,7 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
+#include <sstream>
 
 /**
  * \brief Evaluates SHA1 of bytes, using boost::uuids::detail::sha1
@@ -23,7 +24,7 @@
  * \note
  *
  * Calling boost::uuids::detail::sha1.get_digest() twice does not return the same
- * result. Member isUpToDate is here to keep track of the calls to
+ * result. Member up_to_dates is here to keep track of the calls to
  * the 'get_digest' and 'append' methods
  * The specific 'get_digest' prototype is also required to use the hash member
  */
@@ -54,13 +55,11 @@ class Sha1
             up_to_date=true;
         }
 
-        void get(unsigned int sha1_hash[5])
+        std::string get()
         {
-            if (not up_to_date) update();
-            for (size_t i=0;i<5;++i)
-            {
-                sha1_hash[i]=hash[i];
-            }
+            std::stringstream ss;
+            ss << *this;
+            return ss.str();
         }
 
         friend std::ostream & operator<<(std::ostream& os, Sha1& sha1)
@@ -70,10 +69,21 @@ class Sha1
             return os << std::hex << std::setfill('0')
                       << std::setw(8) << std::setprecision(8) << hash[0]<< hash[1]<< hash[2]<< hash[3]<< hash[4];
         }
+
     protected:
         boost::uuids::detail::sha1 sha1;
         bool up_to_date;
         unsigned int hash[5];
+
+    private:
+        void get(unsigned int sha1_hash[5])
+        {
+            if (not up_to_date) update();
+            for (size_t i=0;i<5;++i)
+            {
+                sha1_hash[i]=hash[i];
+            }
+        }
 };
 
 template <> void Sha1::append(const std::string&s);

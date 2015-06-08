@@ -33,40 +33,39 @@ TEST_F(calculate_hashTest, can_compute_a_hash_using_boost)
     ASSERT_NE(hash1, hash2);
 }
 
-TEST_F(calculate_hashTest, can_hash_a_string)
+TEST_F(calculate_hashTest, can_calculate_the_same_sha_several_times)
 {
-    const std::string s = "Hello world";
-    unsigned int hash1[5] = {0};
-    unsigned int hash2[5] = {0};
-    unsigned int hash3[5] = {0};
-    Sha1 sha1;
-    sha1.append(s);
-    sha1.get(hash1);
-    sha1.get(hash2);
-    Sha1 sha2;
-    sha2.append(s);
-    sha2.get(hash3);
-    for (size_t i=0;i<5;++i)
-    {
-        ASSERT_EQ(hash1[i], hash2[i]);
-        ASSERT_EQ(hash1[i], hash3[i]);
-    }
+    const std::string s = a.random<std::string>();
+    Sha1 sha;
+    sha.append(s);
+    ASSERT_EQ(sha.get(), sha.get());
+    ASSERT_EQ(sha.get(), sha.get());
 }
 
-TEST_F(calculate_hashTest, can_hash_array_of_doubles)
+TEST_F(calculate_hashTest, two_different_sha_objects_give_the_same_sha)
 {
-    const double v[2] = {1.0,2.0};
-    unsigned int hash1[5] = {0};
-    unsigned int hash2[5] = {0};
+    const std::string s = "Hello world";
     Sha1 sha1;
-    sha1.append(v[0]);
-    sha1.append(v[1]);
-    sha1.get(hash1);
+    sha1.append(s);
     Sha1 sha2;
-    sha2.append(std::vector<double>(v, v + sizeof(v) / sizeof(double)));
-    sha2.get(hash2);
-    for (size_t i=0;i<5;++i) ASSERT_EQ(hash1[i], hash2[i]);
+    sha2.append(s);
+    ASSERT_EQ(sha1.get(), sha2.get());
+}
+
+TEST_F(calculate_hashTest, integer_type_has_the_right_size_otherwise_sha_will_be_inconsistent_accross_platforms)
+{
     ASSERT_EQ(4, sizeof(int));
+}
+
+TEST_F(calculate_hashTest, adding_a_vector_gives_the_same_result_as_adding_doubles_separately)
+{
+    const std::vector<double> data = {1,2};
+    Sha1 sha1;
+    sha1.append(data[0]);
+    sha1.append(data[1]);
+    Sha1 sha2;
+    sha2.append(data);
+    ASSERT_EQ(sha1.get(), sha2.get());
 }
 
 TEST_F(calculate_hashTest, can_hash_YamlCoordinates)
@@ -78,15 +77,9 @@ TEST_F(calculate_hashTest, can_hash_YamlCoordinates)
     c.z = 3;
 //! [calculate_hashTest example]
 //! [calculate_hashTest expected output]
-    unsigned int hash[5] = {0};
     Sha1 sha1;
     sha1_append(sha1,c);
-    sha1.get(hash);
-    ASSERT_EQ(2881807160, hash[0]);
-    ASSERT_EQ(1714918628, hash[1]);
-    ASSERT_EQ(3340119314, hash[2]);
-    ASSERT_EQ(2538060347, hash[3]);
-    ASSERT_EQ(974152203, hash[4]);
+    ASSERT_EQ("abc4e338663794e4c7162d129747ba3b3a10620b", sha1.get());
 //! [calculate_hashTest expected output]
 }
 
