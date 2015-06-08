@@ -101,14 +101,14 @@ void sha1_append(Sha1& sha1, const YamlSimulatorInput& yaml);
 void sha1_append(Sha1& sha1, const YamlAngle& yaml);
 void sha1_append(Sha1& sha1, const YamlSpeed& yaml);
 
-class YamlSha1: public Sha1
+class Sha: public Sha1
 {
     public:
-        YamlSha1(const YamlSimulatorInput& i){append(i);}
-        YamlSha1(const std::string& s, const YamlSimulatorInput& i){Sha1::append(s);append(i);}
+        Sha(const YamlSimulatorInput& i){append(i);}
+        Sha(const std::string& s, const YamlSimulatorInput& i){Sha1::append(s);append(i);}
         void append(const YamlSimulatorInput& yaml){sha1_append(*this,yaml);up_to_date=false;}
     private:
-        YamlSha1():Sha1(){}
+        Sha():Sha1(){}
 };
 
 #endif

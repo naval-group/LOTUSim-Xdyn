@@ -15,7 +15,7 @@ std::string sha(const std::string& s, const YamlSimulatorInput& i);
 std::string sha(const std::string& s, const YamlSimulatorInput& i)
 {
     std::stringstream ss;
-    YamlSha1 yamlSha1(s, i);
+    Sha yamlSha1(s, i);
     ss << yamlSha1;
     return ss.str();
 }
