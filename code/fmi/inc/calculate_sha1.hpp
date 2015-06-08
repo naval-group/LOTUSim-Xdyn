@@ -15,6 +15,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <iomanip>
 
 /**
  * \brief Evaluates SHA1 of bytes, using boost::uuids::detail::sha1
@@ -66,7 +67,8 @@ class Sha1
         {
             unsigned int hash[5]={0};
             sha1.get(hash);
-            return os << hash[0]<< hash[1]<< hash[2]<< hash[3]<< hash[4];
+            return os << std::hex << std::setfill('0')
+                      << std::setw(8) << std::setprecision(8) << hash[0]<< hash[1]<< hash[2]<< hash[3]<< hash[4];
         }
     protected:
         boost::uuids::detail::sha1 sha1;
