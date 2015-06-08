@@ -30,20 +30,69 @@ class Sha1
 {
     public:
         virtual ~Sha1(){}
-        Sha1():sha1(),isUpToDate(false),hash{0,0,0,0,0}{}
-        template<typename T> Sha1(const std::vector<T>&v):sha1(),isUpToDate(false),hash{0,0,0,0,0}{append(v);}
-        template<typename T> Sha1(const T&v):sha1(),isUpToDate(false),hash{0,0,0,0,0}{append(v);}
-        Sha1(const std::vector<std::string>&v):sha1(),isUpToDate(false),hash{0,0,0,0,0}{append(v);}
-        Sha1(const std::string&s):sha1(),isUpToDate(false),hash{0,0,0,0,0}{append(s);}
+        Sha1() : sha1(),up_to_date(false),hash{0,0,0,0,0}
+        {}
 
-        template<typename T> void append(const std::vector<T>&v) {sha1.process_bytes(&v[0], v.size() * sizeof(T));isUpToDate=false;}
-        template<typename T> void append(const T& v) {sha1.process_bytes(&v, sizeof(T));isUpToDate=false;}
-        void append(const std::vector<std::string>&v) {for(size_t i=0;i<v.size();++i)sha1.process_bytes(v[i].c_str(), v[i].size());isUpToDate=false;}
-        void append(const std::string&s){sha1.process_bytes(s.c_str(), s.size());isUpToDate=false;}
+        template<typename T> Sha1(const std::vector<T>& v) : sha1(), up_to_date(false), hash{0,0,0,0,0}
+        {
+            append(v);
+        }
 
-        void update(){sha1.get_digest(hash);isUpToDate=true;}
+        template<typename T> Sha1(const T& v) : sha1(), up_to_date(false), hash{0,0,0,0,0}
+        {
+            append(v);
+        }
 
-        void get(unsigned int sha1_hash[5]){if(not isUpToDate){update();} for(size_t i=0;i<5;++i) sha1_hash[i]=hash[i];}
+        Sha1(const std::vector<std::string>& v) : sha1(), up_to_date(false), hash{0,0,0,0,0}
+        {
+            append(v);
+        }
+
+        Sha1(const std::string& s) : sha1(), up_to_date(false), hash{0,0,0,0,0}
+        {
+            append(s);
+        }
+
+        template<typename T> void append(const std::vector<T>&v)
+        {
+            sha1.process_bytes(&v[0], v.size() * sizeof(T));
+            up_to_date=false;
+        }
+
+        template<typename T> void append(const T& v)
+        {
+            sha1.process_bytes(&v, sizeof(T));up_to_date=false;
+        }
+
+        void append(const std::vector<std::string>&v)
+        {
+            for (size_t i=0;i<v.size();++i)
+            {
+                sha1.process_bytes(v[i].c_str(), v[i].size());
+            }
+            up_to_date=false;
+        }
+
+        void append(const std::string&s)
+        {
+            sha1.process_bytes(s.c_str(), s.size());
+            up_to_date=false;
+        }
+
+        void update()
+        {
+            sha1.get_digest(hash);
+            up_to_date=true;
+        }
+
+        void get(unsigned int sha1_hash[5])
+        {
+            if (not up_to_date) update();
+            for (size_t i=0;i<5;++i)
+            {
+                sha1_hash[i]=hash[i];
+            }
+        }
 
         friend std::ostream & operator<<(std::ostream& os, Sha1& sha1)
         {
@@ -53,7 +102,7 @@ class Sha1
         }
     protected:
         boost::uuids::detail::sha1 sha1;
-        bool isUpToDate;
+        bool up_to_date;
         unsigned int hash[5];
 };
 
@@ -75,7 +124,7 @@ class YamlSha1: public Sha1
     public:
         YamlSha1(const YamlSimulatorInput& i){append(i);}
         YamlSha1(const std::string& s, const YamlSimulatorInput& i){Sha1::append(s);append(i);}
-        void append(const YamlSimulatorInput& yaml){sha1_append(*this,yaml);isUpToDate=false;}
+        void append(const YamlSimulatorInput& yaml){sha1_append(*this,yaml);up_to_date=false;}
     private:
         YamlSha1():Sha1(){}
 };
