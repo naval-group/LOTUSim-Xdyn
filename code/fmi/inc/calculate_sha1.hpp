@@ -30,52 +30,20 @@ class Sha1
 {
     public:
         virtual ~Sha1(){}
-        Sha1() : sha1(),up_to_date(false),hash{0,0,0,0,0}
+        Sha1() : sha1(), up_to_date(false), hash{0,0,0,0,0}
         {}
-
-        template<typename T> Sha1(const std::vector<T>& v) : sha1(), up_to_date(false), hash{0,0,0,0,0}
-        {
-            append(v);
-        }
-
-        template<typename T> Sha1(const T& v) : sha1(), up_to_date(false), hash{0,0,0,0,0}
-        {
-            append(v);
-        }
-
-        Sha1(const std::vector<std::string>& v) : sha1(), up_to_date(false), hash{0,0,0,0,0}
-        {
-            append(v);
-        }
-
-        Sha1(const std::string& s) : sha1(), up_to_date(false), hash{0,0,0,0,0}
-        {
-            append(s);
-        }
 
         template<typename T> void append(const std::vector<T>&v)
         {
-            sha1.process_bytes(&v[0], v.size() * sizeof(T));
-            up_to_date=false;
+            for (size_t i=0;i<v.size();++i)
+            {
+                append(v[i]);
+            }
         }
 
         template<typename T> void append(const T& v)
         {
-            sha1.process_bytes(&v, sizeof(T));up_to_date=false;
-        }
-
-        void append(const std::vector<std::string>&v)
-        {
-            for (size_t i=0;i<v.size();++i)
-            {
-                sha1.process_bytes(v[i].c_str(), v[i].size());
-            }
-            up_to_date=false;
-        }
-
-        void append(const std::string&s)
-        {
-            sha1.process_bytes(s.c_str(), s.size());
+            sha1.process_bytes(&v, sizeof(T));
             up_to_date=false;
         }
 
@@ -105,6 +73,8 @@ class Sha1
         bool up_to_date;
         unsigned int hash[5];
 };
+
+template <> void Sha1::append(const std::string&s);
 
 void sha1_append(Sha1& sha1, const YamlRotation& yaml);
 void sha1_append(Sha1& sha1, const YamlEnvironmentalConstants& yaml);

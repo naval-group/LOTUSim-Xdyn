@@ -39,10 +39,12 @@ TEST_F(calculate_hashTest, can_hash_a_string)
     unsigned int hash1[5] = {0};
     unsigned int hash2[5] = {0};
     unsigned int hash3[5] = {0};
-    Sha1 sha1(s);
+    Sha1 sha1;
+    sha1.append(s);
     sha1.get(hash1);
     sha1.get(hash2);
-    Sha1 sha2(s);
+    Sha1 sha2;
+    sha2.append(s);
     sha2.get(hash3);
     for (size_t i=0;i<5;++i)
     {
@@ -60,7 +62,8 @@ TEST_F(calculate_hashTest, can_hash_array_of_doubles)
     sha1.append(v[0]);
     sha1.append(v[1]);
     sha1.get(hash1);
-    Sha1 sha2(std::vector<double>(v, v + sizeof(v) / sizeof(double)));
+    Sha1 sha2;
+    sha2.append(std::vector<double>(v, v + sizeof(v) / sizeof(double)));
     sha2.get(hash2);
     for (size_t i=0;i<5;++i) ASSERT_EQ(hash1[i], hash2[i]);
     ASSERT_EQ(4, sizeof(int));

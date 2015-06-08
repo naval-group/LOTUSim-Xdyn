@@ -1,5 +1,11 @@
 #include "calculate_sha1.hpp"
 
+template <> void Sha1::append(const std::string&s)
+{
+    sha1.process_bytes(s.c_str(), s.size());
+    up_to_date=false;
+}
+
 void sha1_append(Sha1& sha1, const YamlRotation& yaml)
 {
     sha1.append(yaml.convention);
