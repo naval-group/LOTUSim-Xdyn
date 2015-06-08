@@ -7,7 +7,7 @@
 
 #include <sstream>
 
-#include "calculate_sha1.hpp"
+#include "Sha.hpp"
 #include "YamlSimulatorInput.hpp"
 #include "get_sha.hpp"
 

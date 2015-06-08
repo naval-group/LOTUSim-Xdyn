@@ -1,4 +1,4 @@
-#include "calculate_sha1.hpp"
+#include "Sha.hpp"
 
 template <> void Sha1::append(const std::string&s)
 {

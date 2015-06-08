@@ -7,7 +7,7 @@
 #include <boost/functional/hash.hpp>
 
 #include "calculate_hashTest.hpp"
-#include "calculate_sha1.hpp"
+#include "Sha.hpp"
 
 calculate_hashTest::calculate_hashTest() : a(ssc::random_data_generator::DataGenerator(54212))
 {
