@@ -403,7 +403,11 @@ std::vector<double> fmi::API::get_real(const std::vector<size_t>& value_referenc
 {
     std::vector<double> ret;
     ssc::data_source::DataSource& ds = sim.get_command_listener();
-    for (auto idx:value_references) ret.push_back(ds.get<double>(command_names.at(idx)));
+    for (auto idx:value_references)
+    {
+        if (idx < 13) ret.push_back(sim.state.at(idx));
+        else          ret.push_back(ds.get<double>(command_names.at(idx)));
+    }
     return ret;
 }
 
