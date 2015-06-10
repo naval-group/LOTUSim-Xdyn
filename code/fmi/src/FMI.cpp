@@ -329,6 +329,16 @@ void fmi::API::check_guid(const std::string& GUID, const YamlSimulatorInput& inp
     }
 }
 
+Sim get_sim(const YamlSimulatorInput& input);
+Sim get_sim(const YamlSimulatorInput& input)
+{
+    if (input.bodies.empty()) return get_system(input, 0);
+    const std::string mesh = input.bodies.front().mesh;
+    if (mesh.empty())         return get_system(input, 0);
+    const std::string stl_file = ssc::text_file_reader::TextFileReader(std::string("resources/") + mesh).get_contents();
+                              return get_system(input, stl_file, 0);
+}
+
 fmi::API::API(const std::string& instance_name_,
          const std::string& GUID,
          const fmiCallbackFunctions& callbacks,
@@ -340,7 +350,7 @@ fmi::API::API(const std::string& instance_name_,
       allocate(callbacks.allocateMemory),
       free_memory(callbacks.freeMemory),
       input(SimulatorYamlParser(yaml).parse()),
-      sim(get_system(input, 0)),
+      sim(get_sim(input)),
       t(0),
       command_names(sim.get_command_names())
 {
