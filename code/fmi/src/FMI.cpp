@@ -69,7 +69,7 @@ fmiComponent fmiInstantiateModel (fmiString            instanceName,
     fmiComponent ret = NULL;
     try
     {
-        const ssc::text_file_reader::TextFileReader yaml_reader("simulator_conf.yml");
+        const ssc::text_file_reader::TextFileReader yaml_reader("resources/simulator_conf.yml");
         ret = (fmiComponent)new fmi::API(instanceName, GUID, functions, loggingOn, yaml_reader.get_contents());
     }
     catch(const std::exception& e)
