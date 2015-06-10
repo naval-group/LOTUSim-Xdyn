@@ -1,5 +1,5 @@
 # ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
-set(MODULE_UNDER_TEST fmi)
+set(MODULE_UNDER_TEST fmi_simulator)
 project(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/FMITest.cpp
               src/calculate_hashTest.cpp

@@ -262,12 +262,11 @@ std::string fmi::emit(const fmi::Xml& xml)
 void fill_common_attributes(fmi::Xml& xml, const YamlSimulatorInput& input);
 void fill_common_attributes(fmi::Xml& xml, const YamlSimulatorInput& input)
 {
-    const std::string name = input.bodies.front().name;
     xml.attributes.author = "SES";
     xml.attributes.description = "Ship & Environment Simulator";
     xml.attributes.fmiVersion = "1.0";
-    xml.attributes.modelName = name;
-    xml.attributes.modelidentifier = name;
+    xml.attributes.modelName = "fmi_simulator";
+    xml.attributes.modelidentifier = "fmi_simulator";
     xml.attributes.variableNamingConvention = fmi::NamingConvention::FLAT;
     xml.attributes.numberOfContinuousStates = 13;
     xml.attributes.generationTool = "SES";

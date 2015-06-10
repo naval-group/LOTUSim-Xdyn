@@ -293,8 +293,8 @@ TEST_F(EmitFMIXmlTest, can_generate_xml_corresponding_to_simulation)
     ASSERT_EQ("Ship & Environment Simulator", xml.attributes.description);
     ASSERT_EQ("1.0", xml.attributes.fmiVersion);
     ASSERT_EQ("SES", xml.attributes.generationTool);
-    ASSERT_EQ("TestShip", xml.attributes.modelName);
-    ASSERT_EQ("TestShip", xml.attributes.modelidentifier);
+    ASSERT_EQ("fmi_simulator", xml.attributes.modelName);
+    ASSERT_EQ("fmi_simulator", xml.attributes.modelidentifier);
     ASSERT_EQ(0, xml.attributes.numberOfEventsIndicators);
     ASSERT_EQ(13, xml.attributes.numberOfContinuousStates);
     ASSERT_EQ(fmi::NamingConvention::FLAT, xml.attributes.variableNamingConvention);

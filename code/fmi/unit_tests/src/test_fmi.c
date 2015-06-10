@@ -1,4 +1,4 @@
-#define MODEL_IDENTIFIER Simulator
+#define MODEL_IDENTIFIER fmi_simulator
 #include "fmiModelFunctions.h"
 #include "fmiModelTypes.h"
 

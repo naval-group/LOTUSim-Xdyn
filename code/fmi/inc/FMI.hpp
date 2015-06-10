@@ -11,7 +11,7 @@
 #include <functional>
 #include <string>
 
-#define MODEL_IDENTIFIER Simulator
+#define MODEL_IDENTIFIER fmi_simulator
 extern "C"
 {
     #include "fmiModelFunctions.h"
