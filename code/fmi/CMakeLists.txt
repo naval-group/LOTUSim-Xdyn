@@ -31,7 +31,7 @@ set(SRC src/FMI.cpp
 # (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
 # Use -std=gnu++0x instead.
 IF(NOT(MSVC))
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 ENDIF()
 
 ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
@@ -47,8 +47,8 @@ TARGET_LINK_LIBRARIES(generate_fmi_xml x-dyn
 
 INSTALL(TARGETS generate_fmi_xml
         DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
-        
+
 INSTALL(FILES mk_fmi.py
         DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
-        
+
 ADD_SUBDIRECTORY(unit_tests)
