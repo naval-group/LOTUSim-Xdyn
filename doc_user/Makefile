@@ -26,7 +26,7 @@ concatenated_doc.pmd: \
     tutorial_10.md \
     tutorial_11.md
 	rm -f concatenated_doc.pmd
-	for f in $^ ; do (cat $$f; echo "")  >> concatenated_doc.pmd ; done
+	for f in $^ ; do (cat $$f; echo "") >> concatenated_doc.pmd ; done
 
 m4 :=  docker run -t --rm \
                -v $(shell pwd):/work \
@@ -102,11 +102,23 @@ doc.html: concatenated_doc_pandoc.md images
 	    concatenated_doc_pandoc.md \
 	    -o doc.html
 
+concatenated_doc_pandoc_png.md: concatenated_doc_pandoc.md
+	sed -e 's/svg/png/g' concatenated_doc_pandoc.md > concatenated_doc_pandoc_png.md
+
+doc.docx: concatenated_doc_pandoc_png.md images
+	$(xdyn-pandoc) --title-prefix=XDYN \
+	    -s --latexmathml \
+	    --highlight-style pygments \
+	    -t docx \
+	    -o doc.docx \
+	    concatenated_doc_pandoc.md
+
 clean:
 	rm -f \
 	      concatenated_doc.pmd \
 	      concatenated_doc.md \
-	      concatenated_doc_pandoc.md  \
+	      concatenated_doc_pandoc.md \
+	      concatenated_doc_pandoc_png.md \
 	      doc.html \
 	      pict*.svg
 	rm -rf tuto_execution
