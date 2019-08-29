@@ -1,12 +1,12 @@
 /*
- * InputData.hpp
+ * XdynCommandLineArguments.hpp
  *
  *  Created on: Jun 24, 2014
  *      Author: cady
  */
 
-#ifndef INPUTDATA_HPP_
-#define INPUTDATA_HPP_
+#ifndef XDYNCOMMANDLINEARGUMENTS_HPP_
+#define XDYNCOMMANDLINEARGUMENTS_HPP_
 
 #include <string>
 #include <vector>
@@ -25,4 +25,4 @@ struct XdynCommandLineArguments
     bool empty() const;
 };
 
-#endif /* INPUTDATA_HPP_ */
+#endif /* XDYNCOMMANDLINEARGUMENTS_HPP_ */

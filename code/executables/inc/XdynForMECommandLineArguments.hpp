@@ -1,12 +1,12 @@
 /*
- * InputData.hpp
+ * XdynForMECommandLineArguments.hpp
  *
  *  Created on: Nov 13, 2018
  *      Author: cady
  */
 
-#ifndef INPUTDATAFORME_HPP_
-#define INPUTDATAFORME_HPP_
+#ifndef XDYNFORMECOMMANDLINEARGUMENTS_HPP_
+#define XDYNFORMECOMMANDLINEARGUMENTS_HPP_
 
 #include <string>
 #include <vector>
@@ -24,5 +24,4 @@ struct XdynForMECommandLineArguments
     bool grpc;
 };
 
-
-#endif /* INPUTDATAFORME_HPP_ */
+#endif /* XDYNFORMECOMMANDLINEARGUMENTS_HPP_ */
