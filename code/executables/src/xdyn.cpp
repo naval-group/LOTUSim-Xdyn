@@ -1,5 +1,5 @@
 /*
- * simulator.cpp
+ * xdyn.cpp
  *
  *  Created on: 17 avr. 2014
  *      Author: cady
@@ -9,22 +9,12 @@
 #include <functional>
 #include <iostream>
 #include <google/protobuf/stubs/common.h>
-#include "yaml-cpp/exceptions.h"
-
 #include <ssc/check_ssc_version.hpp>
 #include <ssc/text_file_reader.hpp>
 
-#include <ssc/exception_handling.hpp>
-
 #include "build_observers_description.hpp"
-#include "ConnexionError.hpp"
-#include "InternalErrorException.hpp"
-#include "listeners.hpp"
-#include "MeshException.hpp"
-#include "NumericalErrorException.hpp"
 #include "parse_XdynCommandLineArguments.hpp"
 #include "simulator_api.hpp"
-#include "SurfaceElevationInterface.hpp"
 #include "XdynCommandLineArguments.hpp"
 
 #include <ssc/solver/solve.hpp>
@@ -161,8 +151,6 @@ void run_simulation(const XdynCommandLineArguments& input_data, ErrorReporter& e
     }
 }
 
-
-
 int run(const XdynCommandLineArguments& input_data, ErrorReporter& error_outputter);
 int run(const XdynCommandLineArguments& input_data, ErrorReporter& error_outputter)
 {
@@ -170,12 +158,8 @@ int run(const XdynCommandLineArguments& input_data, ErrorReporter& error_outputt
     return EXIT_SUCCESS;
 }
 
-
-
 int main(int argc, char** argv)
 {
-
-
     XdynCommandLineArguments input_data;
     int error = 0;
     ErrorReporter error_outputter;
