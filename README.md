@@ -28,9 +28,9 @@ on-going.
 
 The easiest way to run xdyn is to use [Docker](https://www.docker.com/):
 
-~~~~~~~{.bash}
+```bash
 docker run sirehna/xdyn
-~~~~~~~
+```
 
 This does not require installing or downloading anything except Docker itself.
 
@@ -77,23 +77,23 @@ You also need [make](https://en.wikipedia.org/wiki/Make_(software)).
 
 Once Docker is installed, use:
 
-~~~~~~~{.bash}
+```bash
 make
-~~~~~~~
+```
 
 to build both the Windows & the Debian versions.
 
 If you only want one of the two versions, you can use:
 
-~~~~~~~{.bash}
+```bash
 make debian
-~~~~~~~
+```
 
 or
 
-~~~~~~~{.bash}
+```bash
 make windows
-~~~~~~~
+```
 
 which performs a cross-compilation for Windows using GCC.
 
@@ -102,17 +102,17 @@ respectively.
 
 If you wish to build only part of the project, use:
 
-~~~~~~~{.bash}
+```bash
 ./ninja_windows.sh package
-~~~~~~~
+```
 
 for example, to build the Windows package (ZIP file containing the xdyn executable)
 
 or
 
-~~~~~~~{.bash}
+```bash
 ./ninja_debian.sh run_all_tests
-~~~~~~~
+```
 
 to rebuild the Debian tests.
 
@@ -122,21 +122,23 @@ Once the build has finished, you can run the tests.
 
 To run the tests for Debian use:
 
-~~~~~~~{.bash}
+```bash
 ./run_all_tests_debian.sh
-~~~~~~~
+```
 
 To run the Windows tests (using Wine in a Docker container) enter:
 
-~~~~~~~{.bash}
+```bash
 ./run_all_tests_windows.sh
-~~~~~~~
+```
 
 The tests are written using Google test. These are both end-to-end tests and
 unit tests. The end-to-end tests can be a bit long so you can disable them
 using Google tests filters:
 
-    ./run_all_tests_debian.sh --gtest_filter=-'*LONG*'
+```bash
+./run_all_tests_debian.sh --gtest_filter=-'*LONG*'
+```
 
 All arguments after the script name are passed to the GTest executable. Please
 refer to [the Google Test documentation for details and other available
@@ -148,18 +150,18 @@ options](https://github.com/google/googletest/blob/master/googletest/docs/advanc
 
 Compile xdyn (`make windows`), install the xdyn executable, then run:
 
-~~~~~~~{.bash}
+```bash
 ./xdyn <yaml file> [xdyn options]
-~~~~~~~
+```
 
 All options can be found in [the documentation](https://sirehna.github.io/xdyn/#ligne-de-commande).
 
 For example, to run the first [tutorial](https://sirehna.github.io/xdyn/#tutoriels),
 from the executables/demos folder, you can run:
 
-~~~~~~~{.bash}
+```bash
 ./xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1
-~~~~~~~
+```
 
 ### Running xdyn on Debian
 
@@ -170,33 +172,33 @@ libgfortran5 (for debian10).
 
 You can then run:
 
-~~~~~~~{.bash}
+```bash
 xdyn <yaml file> [xdyn options]
-~~~~~~~
+```
 
 All options can be found in [the documentation](https://sirehna.github.io/xdyn/#ligne-de-commande).
 
 For example, to run the first [tutorial](https://sirehna.github.io/xdyn/#tutoriels),
 from the executables/demos folder, you can run:
 
-~~~~~~~{.bash}
+```bash
 xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1
-~~~~~~~
+```
 
 ### Running xdyn on Debian with Docker
 
 To create a Docker image containing xdyn, run:
 
-~~~~~~~{.bash}
+```bash
 make debian
 make docker
-~~~~~~~
+```
 
 To run the xdyn Docker container, use:
 
-~~~~~~~{.bash}
+```bash
 docker run -it --rm -u $(id -u):$(id -g) -v $(pwd):/build -w /build/path_to_yaml_file xdyn <yaml file> [xdyn options]
-~~~~~~~
+```
 
 - Flag `--rm` deletes the container (not the image) after exit
 - Flag `-u $(id -u):$(id -g)` launches the container with the permissions
@@ -214,17 +216,24 @@ For example, to run the first [tutorial](https://sirehna.github.io/xdyn/#tutorie
 and display the results in the terminal, assuming we are in the project's root
 directory:
 
-~~~~~~~{.bash}
-docker run -it --rm -u $(id -u):$(id -g) -v $(pwd):/build -w /build/build_debian/executables/demos xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o tsv
-~~~~~~~
+```bash
+docker run -it --rm -u $(id -u):$(id -g) -v $(pwd):/build \
+    -w /build/build_debian/executables/demos \
+    xdyn \
+    tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o tsv
+```
 
 Results can be plotted using [Matplotlib](https://matplotlib.org/) and
 [pandas](https://pandas.pydata.org/) (which can be installed using
 `pip3 install matplotlib pandas`):
 
-~~~~~~~{.bash}
-docker run -it --rm -u $(id -u):$(id -g) -v $(pwd):/build -w /build/build_debian/executables/demos xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o csv | python3 postprocessing/Python/plot.py tutorial_01_plot 0 3
-~~~~~~~
+```bash
+docker run -it --rm -u $(id -u):$(id -g) -v $(pwd):/build \
+    -w /build/build_debian/executables/demos \
+    xdyn \
+    tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o csv | \
+    python3 postprocessing/Python/plot.py tutorial_01_plot 0 3
+```
 
 ## Debugging
 
@@ -234,21 +243,21 @@ The memory analyzer [Valgrind](https://valgrind.org/) can be used during
 development to check for memory leaks and use of uninitialized values.
 To use it, first build a debug version (if you haven't already):
 
-~~~~~~{.bash}
+```bash
 ./ninja_debug.sh run_all_tests
-~~~~~
+```
 
 then run:
 
-~~~~~~{.bash}
+```bash
 ./run_all_tests_valgrind.sh
-~~~~~
+```
 
 This script accepts any [flag `run_all_tests` does](https://gitlab.inria.fr/Phylophile/Treerecs/blob/f6551e06797b52819ba3e630b92315254a944da5/tests/gtest/googletest/docs/AdvancedGuide.md#running-test-programs-advanced-options), in particular filtering:
 
-~~~~~~{.bash}
+```bash
 ./run_all_tests_valgrind.sh --gtest_filter='Gravity*'
-~~~~~
+```
 
 ### GDB
 
@@ -257,15 +266,15 @@ unit tests under [GDB](https://www.gnu.org/software/gdb/).
 
 To debug xdyn, first build a debug version (if you haven't already):
 
-~~~~~~{.bash}
+```bash
 ./ninja_debug.sh xdyn
-~~~~~
+```
 
 Then run:
 
-~~~~~~{.bash}
+```bash
 ./gdb.sh /build/executables/xdyn
-~~~~~~
+```
 
 This will open a GDB prompt. To close it, press Ctrl+D. For more details on how
 to use GDB, refer to [the official GDB
@@ -274,22 +283,22 @@ documentation](https://www.gnu.org/software/gdb/).
 To launch the debugger on the unit tests, first build a debug version (if you
 haven't already):
 
-~~~~~{.bash}
+```bash
 ./ninja_debug.sh run_all_tests
-~~~~~
+```
 
 Then run:
 
-~~~~~{.bash}
+```bash
 ./gdb.sh run_all_tests
-~~~~~
+```
 
 
 ## Deployment
 
 Add additional notes about how to deploy this on a live system.
 
-## Built With
+## Built with
 
 * [CMake](https://cmake.org/) - Used to compile C++ code for various platforms.
 * [Make](https://www.gnu.org/software/make/) - Used for the one-step build described above.
