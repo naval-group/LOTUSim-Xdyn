@@ -258,9 +258,13 @@ clean:
 	rm -rf yaml-cpp
 	@make -C doc_user clean; rm -f doc_user/xdyn.deb doc.html
 
+DOCKER_AS_ROOT=docker run -t --rm -w /work -v $(shell pwd):/work
+DOCKER_AS_USER=$(DOCKER_AS_ROOT) -u $(shell id -u):$(shell id -g)
+GREP=$(DOCKER_AS_USER) --entrypoint /bin/grep bitnami/minideb
+
 lint:
 	@cd code && \
-	if grep --recursive --include={*.cpp,*.c,*.hpp,*.h,*.md,*.yml,*.cmake.*.xml,*.html,*.in,*.txt} \
+	if $(GREP) --recursive --include={*.cpp,*.c,*.hpp,*.h,*.md,*.yml,*.cmake.*.xml,*.html,*.in,*.txt} \
 	        --exclude-dir={eigen,eigen3-hdf5,gcovr,gtest,gmock,google-test,yaml-cpp} -P "\t" . ; \
 	then echo "Tabs found in the lines shown above."; false; \
 	else echo "Repo passed no-tabs check."; fi && \
