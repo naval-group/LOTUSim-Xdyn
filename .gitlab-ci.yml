@@ -1,3 +1,6 @@
+image: sirehna/dind
+services:
+    - docker:dind
 stages:
   - lint
   - build
