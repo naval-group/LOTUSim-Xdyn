@@ -430,3 +430,30 @@ TEST_F(discretizeTest, equal_area_abscissae_should_throw_if_ys_are_not_positive)
         }
     }
 }
+
+TEST_F(discretizeTest, equal_area_abscissae_should_return_equally_spaced_values_if_all_ys_are_0)
+{
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const size_t n = a.random<size_t>().greater_than(1).no().greater_than(10);
+        const std::vector<double> xs = random_increasing_vector_of_size(n);
+        const double xmin = xs.front();
+        const double xmax = xs.back();
+        std::vector<double> ref(n);
+        for (size_t j = 0 ; j < n ; ++j)
+        {
+            ref[j] = ((double)j)/((double)n-1)*(xmax-xmin) + xmin;
+        }
+        const double val = a.random<double>().greater_than(0);
+        const std::vector<double> ys(n, val);
+        for (const auto quadrature:quadratures)
+        {
+            const auto res = equal_area_abscissae(xs, ys, quadrature);
+            ASSERT_EQ(n, res.size());
+            for (size_t j = 0 ; j < n ; ++j)
+            {
+                ASSERT_DOUBLE_EQ(ref.at(j), res.at(j));
+            }
+        }
+    }
+}

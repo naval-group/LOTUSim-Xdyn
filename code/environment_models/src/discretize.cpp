@@ -261,29 +261,32 @@ std::vector<double> equal_area_abscissae(const std::vector<double>& xs, //!< Inp
         const std::vector<double>& ys, //!< Value of the function for each xs
         const TypeOfQuadrature &)
 {
-    for (size_t i = 1 ; i < xs.size() ; ++i)
+    const size_t n = xs.size();
+    if (ys.size() != n)
     {
-        if (xs[i-1] >= xs[i])
-        {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "xs should be strictly increasing.");
-        }
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "xs and ys should have the same number of points.");
     }
-    for (const auto y:ys)
+    if (xs.size() == 1)
     {
-        if (y < 0)
+        return xs;
+    }
+    std::vector<double> ret(n);
+    for (size_t i = 0 ; i < n ; ++i)
+    {
+        if (ys[i] < 0)
         {
             THROW(__PRETTY_FUNCTION__, InvalidInputException, "All values in ys should be positive.");
         }
-    }
-    if (xs.size() == ys.size())
-    {
-        if (xs.size() == 1)
+        if (i > 0)
         {
-            return xs;
+            if (xs[i-1] >= xs[i])
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "xs should be strictly increasing.");
+            }
         }
-        return std::vector<double>();
+        ret[i] = ((double)i)/((double) n - 1)*(xs[n-1]-xs[0]) + xs[0];
     }
-    THROW(__PRETTY_FUNCTION__, InvalidInputException, "xs and ys should have the same number of points.");
+    return ret;
 }
 
 double dynamic_pressure_factor_sh(const double k,              //!< Wave number (in 1/m)
