@@ -10,7 +10,6 @@
 
 #include "gtest/gtest.h"
 #include <ssc/random_data_generator.hpp>
-#include "YamlRadiationDamping.hpp"
 
 class discretizeTest : public ::testing::Test
 {
@@ -21,8 +20,6 @@ class discretizeTest : public ::testing::Test
         virtual void TearDown();
         std::vector<double> random_increasing_vector_of_size(const size_t n) const;
         ssc::random_data_generator::DataGenerator a;
-        const std::vector<TypeOfQuadrature> quadratures;
-
 };
 
 #endif  /* DISCRETIZETEST_HPP_ */

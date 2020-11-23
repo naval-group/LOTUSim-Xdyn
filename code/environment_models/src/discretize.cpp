@@ -258,8 +258,8 @@ double dynamic_pressure_factor(const double k,              //!< Wave number (in
 }
 
 std::vector<double> equal_area_abscissae(const std::vector<double>& xs, //!< Input abscissae at which the function is defined
-        const std::vector<double>& ys, //!< Value of the function for each xs
-        const TypeOfQuadrature &)
+        const std::vector<double>& ys //!< Value of the function for each xs
+        )
 {
     const size_t n = xs.size();
     if (ys.size() != n)

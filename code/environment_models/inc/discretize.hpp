@@ -73,8 +73,7 @@ DiscreteDirectionalWaveSpectrum discretize(const WaveSpectralDensity& S,      //
 */
 std::vector<double> equal_area_abscissae(
         const std::vector<double>& xs, //!< Input abscissae at which the function is defined
-        const std::vector<double>& ys, //!< Value of the function for each xs
-        const TypeOfQuadrature& type_of_quadrature //!< Algorithm to use for quadrature (numerical integration)
+        const std::vector<double>& ys //!< Value of the function for each xs
          );
 
 /**  \brief Utility function used by the discretize function. Infinite depth approximation. This is where the stretching is taken into account.
