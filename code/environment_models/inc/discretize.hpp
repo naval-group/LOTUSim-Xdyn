@@ -9,6 +9,7 @@
 #define DISCRETIZE_HPP_
 
 #include "DiscreteDirectionalWaveSpectrum.hpp"
+#include "YamlRadiationDamping.hpp"
 
 class Stretching;
 class WaveSpectralDensity;
@@ -57,6 +58,24 @@ DiscreteDirectionalWaveSpectrum discretize(const WaveSpectralDensity& S,      //
                                            const double h,                    //!< Water depth (in meters)
                                            const Stretching& stretching       //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
                                            );
+
+/**  \author cady
+ *  \date Nov 23, 2020
+ *  \brief Calculates consecutive intervals where a function has constant area.
+* \param `xs` Vector of strictly increasing abscissae
+* \param `ys` Values of the function at each `xs`.
+* \returns `x` a vector of abscissae between xmin and xmax (x[0] == xs[0] and
+* x[n-1] == xs[n-1] where n denotes the number of values in `xs` and `ys`).
+* \details If `f` denotes a function such that ys[i] = f(xs[i]), this function
+* returns a list of increasing `x`-values such that integrating f between x[i-1]
+* and x[i] will give a constant value, for each i between 1 and n-1.
+* \snippet /unit_tests/src/discretizeTest.cpp discretizeTest equal_area_abscissae_example
+*/
+std::vector<double> equal_area_abscissae(
+        const std::vector<double>& xs, //!< Input abscissae at which the function is defined
+        const std::vector<double>& ys, //!< Value of the function for each xs
+        const TypeOfQuadrature& type_of_quadrature //!< Algorithm to use for quadrature (numerical integration)
+         );
 
 /**  \brief Utility function used by the discretize function. Infinite depth approximation. This is where the stretching is taken into account.
   *  \returns Factor \f$f(k,z)\f$ such that \f$p_{\mbox{dyn}}=\rho g \eta_a f(k,z)\f$ (no unit), infinite depth approximation

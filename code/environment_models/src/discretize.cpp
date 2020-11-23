@@ -257,6 +257,13 @@ double dynamic_pressure_factor(const double k,              //!< Wave number (in
     return cosh(k*(h-stretching.rescaled_z(z,eta)))/cosh(k*h);
 }
 
+std::vector<double> equal_area_abscissae(const std::vector<double> &, //!< Input abscissae at which the function is defined
+        const std::vector<double> &, //!< Value of the function for each xs
+        const TypeOfQuadrature &)
+{
+    return std::vector<double>();
+}
+
 double dynamic_pressure_factor_sh(const double k,              //!< Wave number (in 1/m)
                                   const double z,              //!< z-position in the NED frame (in meters)
                                   const double h,              //!< Average water depth (in meters)

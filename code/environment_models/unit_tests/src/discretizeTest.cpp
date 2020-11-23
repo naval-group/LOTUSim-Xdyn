@@ -308,3 +308,16 @@ TEST_F(discretizeTest, dynamic_pressure_factor)
     ASSERT_DOUBLE_EQ((exp(0.14)+exp(-0.14))/(exp(0.08)+exp(-0.08)), dynamic_pressure_factor(0.2,-0.3,0.4,-0.5,s));
     //! [discretizeTest dynamic_pressure_factor example]
 }
+
+TEST_F(discretizeTest, equal_area_abscissae_should_return_empty_list_if_xs_and_ys_are_empty)
+{
+    const std::vector<double> xs;
+    const std::vector<double> ys;
+    ASSERT_TRUE(equal_area_abscissae(xs, ys, TypeOfQuadrature::BURCHER).empty());
+    ASSERT_TRUE(equal_area_abscissae(xs, ys, TypeOfQuadrature::CLENSHAW_CURTIS).empty());
+    ASSERT_TRUE(equal_area_abscissae(xs, ys, TypeOfQuadrature::FILON).empty());
+    ASSERT_TRUE(equal_area_abscissae(xs, ys, TypeOfQuadrature::GAUSS_KRONROD).empty());
+    ASSERT_TRUE(equal_area_abscissae(xs, ys, TypeOfQuadrature::RECTANGLE).empty());
+    ASSERT_TRUE(equal_area_abscissae(xs, ys, TypeOfQuadrature::SIMPSON).empty());
+    ASSERT_TRUE(equal_area_abscissae(xs, ys, TypeOfQuadrature::TRAPEZOIDAL).empty());
+}
