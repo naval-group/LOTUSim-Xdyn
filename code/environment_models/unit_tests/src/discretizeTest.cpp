@@ -379,6 +379,22 @@ TEST_F(discretizeTest, equal_area_abscissae_should_return_xs_if_xs_has_one_point
     }
 }
 
+TEST_F(discretizeTest, equal_area_abscissae_should_return_xs_if_xs_has_two_points)
+{
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const std::vector<double> xs = random_increasing_vector_of_size(2);
+        const std::vector<double> ys = {a.random<double>().greater_than(0),a.random<double>().greater_than(0)};
+        for (const auto quadrature:quadratures)
+        {
+            const auto ret = equal_area_abscissae(xs, ys, quadrature);
+            ASSERT_EQ(2, ret.size());
+            ASSERT_DOUBLE_EQ(xs[0], ret.at(0));
+            ASSERT_DOUBLE_EQ(xs[1], ret.at(1));
+        }
+    }
+}
+
 TEST_F(discretizeTest, equal_area_abscissae_should_throw_if_xs_are_not_increasing)
 {
     for (size_t i = 0 ; i < 1000 ; ++i)
