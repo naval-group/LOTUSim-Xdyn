@@ -37,6 +37,21 @@ void discretizeTest::TearDown()
 {
 }
 
+std::vector<double> discretizeTest::random_increasing_vector_of_size(const size_t n) const
+{
+    if (n <= 0)
+    {
+        return std::vector<double>();
+    }
+    std::vector<double> ret(n, a.random<double>().between(-1e6, 1e6));
+    for (size_t i = 1 ; i < n ; ++i)
+    {
+        const double increment = a.random<double>().between(0, 1e3).but_not(0);
+        ret[i] = ret[i-1] + increment;
+    }
+    return ret;
+}
+
 TEST_F(discretizeTest, example)
 {
 //! [discretizeTest example]
@@ -369,13 +384,8 @@ TEST_F(discretizeTest, equal_area_abscissae_should_throw_if_xs_are_not_increasin
     for (size_t i = 0 ; i < 1000 ; ++i)
     {
         const size_t n = a.random<size_t>().greater_than(1).no().greater_than(10);
-        std::vector<double> xs = std::vector<double>(n, a.random<double>());
+        std::vector<double> xs = random_increasing_vector_of_size(n);
         const std::vector<double> ys = a.random_vector_of<double>().of_size(n).greater_than(0);
-        const double dx = a.random<double>().greater_than(0);
-        for (size_t j = 1 ; j < n ; ++j)
-        {
-            xs[j] = xs[j-1] + dx;
-        }
         const size_t k1 = a.random<size_t>().between(0, n-1);
         const size_t k2 = a.random<size_t>().between(0, n-1).but_not(k1);
         const double val = xs[k1];
@@ -393,13 +403,8 @@ TEST_F(discretizeTest, equal_area_abscissae_should_throw_if_xs_are_not_strictly_
     for (size_t i = 0 ; i < 1000 ; ++i)
     {
         const size_t n = a.random<size_t>().greater_than(1).no().greater_than(10);
-        std::vector<double> xs = std::vector<double>(n, a.random<double>());
+        std::vector<double> xs = random_increasing_vector_of_size(n);
         const std::vector<double> ys = a.random_vector_of<double>().of_size(n).greater_than(0);
-        const double dx = a.random<double>().greater_than(0);
-        for (size_t j = 1 ; j < n ; ++j)
-        {
-            xs[j] = xs[j-1] + dx;
-        }
         const size_t k = a.random<size_t>().between(1, n-1);
         xs[k] = xs[k-1];
 
@@ -415,12 +420,7 @@ TEST_F(discretizeTest, equal_area_abscissae_should_throw_if_ys_are_not_positive)
     for (size_t i = 0 ; i < 1000 ; ++i)
     {
         const size_t n = a.random<size_t>().greater_than(1).no().greater_than(10);
-        std::vector<double> xs = std::vector<double>(n, a.random<double>());
-        const double dx = a.random<double>().greater_than(0);
-        for (size_t j = 1 ; j < n ; ++j)
-        {
-            xs[j] = xs[j-1] + dx;
-        }
+        const std::vector<double> xs = random_increasing_vector_of_size(n);
         std::vector<double> ys = a.random_vector_of<double>().of_size(n).greater_than(0);
         const size_t k = a.random<size_t>().between(0, n-1);
         ys[k] = -ys[k];

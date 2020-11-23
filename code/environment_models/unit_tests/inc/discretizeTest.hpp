@@ -19,6 +19,7 @@ class discretizeTest : public ::testing::Test
         virtual ~discretizeTest();
         virtual void SetUp();
         virtual void TearDown();
+        std::vector<double> random_increasing_vector_of_size(const size_t n) const;
         ssc::random_data_generator::DataGenerator a;
         const std::vector<TypeOfQuadrature> quadratures;
 
