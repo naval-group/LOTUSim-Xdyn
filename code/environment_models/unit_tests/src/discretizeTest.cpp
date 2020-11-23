@@ -321,3 +321,24 @@ TEST_F(discretizeTest, equal_area_abscissae_should_return_empty_list_if_xs_and_y
     ASSERT_TRUE(equal_area_abscissae(xs, ys, TypeOfQuadrature::SIMPSON).empty());
     ASSERT_TRUE(equal_area_abscissae(xs, ys, TypeOfQuadrature::TRAPEZOIDAL).empty());
 }
+
+TEST_F(discretizeTest, equal_area_abscissae_should_throw_if_xs_and_ys_do_not_have_the_same_size)
+{
+    ASSERT_THROW(equal_area_abscissae(std::vector<double>(), std::vector<double>(1, 1)), InvalidInputException);
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const size_t nx = a.random<size_t>().no().greater_than(1000);
+        const size_t dn = a.random<size_t>().between(100,200);
+        const size_t ny = nx + dn;
+        const std::vector<double> xs = a.random_vector_of<double>().of_size(nx);
+        const std::vector<double> ys = a.random_vector_of<double>().of_size(ny);
+        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::BURCHER), InvalidInputException);
+        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::CLENSHAW_CURTIS), InvalidInputException);
+        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::FILON), InvalidInputException);
+        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::GAUSS_KRONROD), InvalidInputException);
+        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::RECTANGLE), InvalidInputException);
+        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::SIMPSON), InvalidInputException);
+        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::TRAPEZOIDAL), InvalidInputException);
+    }
+}
+
