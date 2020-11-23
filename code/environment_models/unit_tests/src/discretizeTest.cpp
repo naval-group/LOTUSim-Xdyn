@@ -357,3 +357,19 @@ TEST_F(discretizeTest, equal_area_abscissae_should_return_one_point_if_xs_has_on
         ASSERT_EQ(1, equal_area_abscissae(xs, ys, TypeOfQuadrature::TRAPEZOIDAL).size());
     }
 }
+
+TEST_F(discretizeTest, equal_area_abscissae_should_return_xs_if_xs_has_one_point)
+{
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const std::vector<double> xs(1, a.random<double>());
+        const std::vector<double> ys(1, a.random<double>());
+        ASSERT_DOUBLE_EQ(xs[0], equal_area_abscissae(xs, ys, TypeOfQuadrature::BURCHER).at(0));
+        ASSERT_DOUBLE_EQ(xs[0], equal_area_abscissae(xs, ys, TypeOfQuadrature::CLENSHAW_CURTIS).at(0));
+        ASSERT_DOUBLE_EQ(xs[0], equal_area_abscissae(xs, ys, TypeOfQuadrature::FILON).at(0));
+        ASSERT_DOUBLE_EQ(xs[0], equal_area_abscissae(xs, ys, TypeOfQuadrature::GAUSS_KRONROD).at(0));
+        ASSERT_DOUBLE_EQ(xs[0], equal_area_abscissae(xs, ys, TypeOfQuadrature::RECTANGLE).at(0));
+        ASSERT_DOUBLE_EQ(xs[0], equal_area_abscissae(xs, ys, TypeOfQuadrature::SIMPSON).at(0));
+        ASSERT_DOUBLE_EQ(xs[0], equal_area_abscissae(xs, ys, TypeOfQuadrature::TRAPEZOIDAL).at(0));
+    }
+}

@@ -265,7 +265,7 @@ std::vector<double> equal_area_abscissae(const std::vector<double>& xs, //!< Inp
     {
         if (xs.size() == 1)
         {
-            return std::vector<double>(1,0);
+            return xs;
         }
         return std::vector<double>();
     }
