@@ -176,9 +176,9 @@ FlatDiscreteDirectionalWaveSpectrum flatten(
 /**
  * \brief Only select the most important spectrum components & create single vector.
  * \details Output spectrum represents at least `ratio * Energy`
- *  It No need to loop on all frequencies & all directions: we only select
+ *  No need to loop on all frequencies & all directions: we only select
  *  the most important ones (i.e. those representing a given ratio of the total
- *  energy in the spectrum.
+ *  energy in the spectrum).
  * \returns A flat spectrum (i.e. one where the freq & direct. loops have been unrolled)
  * \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest flatten_example
  */
