@@ -261,6 +261,13 @@ std::vector<double> equal_area_abscissae(const std::vector<double>& xs, //!< Inp
         const std::vector<double>& ys, //!< Value of the function for each xs
         const TypeOfQuadrature &)
 {
+    for (size_t i = 1 ; i < xs.size() ; ++i)
+    {
+        if (xs[i-1] > xs[i])
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "xs should be strictly increasing.");
+        }
+    }
     if (xs.size() == ys.size())
     {
         if (xs.size() == 1)
