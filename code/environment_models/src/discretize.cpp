@@ -268,6 +268,13 @@ std::vector<double> equal_area_abscissae(const std::vector<double>& xs, //!< Inp
             THROW(__PRETTY_FUNCTION__, InvalidInputException, "xs should be strictly increasing.");
         }
     }
+    for (const auto y:ys)
+    {
+        if (y < 0)
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "All values in ys should be positive.");
+        }
+    }
     if (xs.size() == ys.size())
     {
         if (xs.size() == 1)

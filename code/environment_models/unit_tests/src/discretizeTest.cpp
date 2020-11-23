@@ -331,7 +331,7 @@ TEST_F(discretizeTest, equal_area_abscissae_should_throw_if_xs_and_ys_do_not_hav
         const size_t dn = a.random<size_t>().between(100,200);
         const size_t ny = nx + dn;
         const std::vector<double> xs = a.random_vector_of<double>().of_size(nx);
-        const std::vector<double> ys = a.random_vector_of<double>().of_size(ny);
+        const std::vector<double> ys = a.random_vector_of<double>().of_size(ny).greater_than(0);
         ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::BURCHER), InvalidInputException);
         ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::CLENSHAW_CURTIS), InvalidInputException);
         ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::FILON), InvalidInputException);
@@ -347,7 +347,7 @@ TEST_F(discretizeTest, equal_area_abscissae_should_return_one_point_if_xs_has_on
     for (size_t i = 0 ; i < 1000 ; ++i)
     {
         const std::vector<double> xs(1, a.random<double>());
-        const std::vector<double> ys(1, a.random<double>());
+        const std::vector<double> ys(1, std::abs(a.random<double>()));
         ASSERT_EQ(1, equal_area_abscissae(xs, ys, TypeOfQuadrature::BURCHER).size());
         ASSERT_EQ(1, equal_area_abscissae(xs, ys, TypeOfQuadrature::CLENSHAW_CURTIS).size());
         ASSERT_EQ(1, equal_area_abscissae(xs, ys, TypeOfQuadrature::FILON).size());
@@ -363,7 +363,7 @@ TEST_F(discretizeTest, equal_area_abscissae_should_return_xs_if_xs_has_one_point
     for (size_t i = 0 ; i < 1000 ; ++i)
     {
         const std::vector<double> xs(1, a.random<double>());
-        const std::vector<double> ys(1, a.random<double>());
+        const std::vector<double> ys(1, std::abs(a.random<double>()));
         ASSERT_DOUBLE_EQ(xs[0], equal_area_abscissae(xs, ys, TypeOfQuadrature::BURCHER).at(0));
         ASSERT_DOUBLE_EQ(xs[0], equal_area_abscissae(xs, ys, TypeOfQuadrature::CLENSHAW_CURTIS).at(0));
         ASSERT_DOUBLE_EQ(xs[0], equal_area_abscissae(xs, ys, TypeOfQuadrature::FILON).at(0));
@@ -380,7 +380,7 @@ TEST_F(discretizeTest, equal_area_abscissae_should_throw_if_xs_are_not_increasin
     {
         const size_t n = a.random<size_t>().greater_than(1).no().greater_than(10);
         std::vector<double> xs = std::vector<double>(n, a.random<double>());
-        const std::vector<double> ys = a.random_vector_of<double>().of_size(n);
+        const std::vector<double> ys = a.random_vector_of<double>().of_size(n).greater_than(0);
         const double dx = a.random<double>().greater_than(0);
         for (size_t j = 1 ; j < n ; ++j)
         {
@@ -407,7 +407,7 @@ TEST_F(discretizeTest, equal_area_abscissae_should_throw_if_xs_are_not_strictly_
     {
         const size_t n = a.random<size_t>().greater_than(1).no().greater_than(10);
         std::vector<double> xs = std::vector<double>(n, a.random<double>());
-        const std::vector<double> ys = a.random_vector_of<double>().of_size(n);
+        const std::vector<double> ys = a.random_vector_of<double>().of_size(n).greater_than(0);
         const double dx = a.random<double>().greater_than(0);
         for (size_t j = 1 ; j < n ; ++j)
         {
@@ -415,6 +415,30 @@ TEST_F(discretizeTest, equal_area_abscissae_should_throw_if_xs_are_not_strictly_
         }
         const size_t k = a.random<size_t>().between(1, n-1);
         xs[k] = xs[k-1];
+        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::BURCHER), InvalidInputException);
+        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::CLENSHAW_CURTIS), InvalidInputException);
+        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::FILON), InvalidInputException);
+        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::GAUSS_KRONROD), InvalidInputException);
+        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::RECTANGLE), InvalidInputException);
+        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::SIMPSON), InvalidInputException);
+        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::TRAPEZOIDAL), InvalidInputException);
+    }
+}
+
+TEST_F(discretizeTest, equal_area_abscissae_should_throw_if_ys_are_not_positive)
+{
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const size_t n = a.random<size_t>().greater_than(1).no().greater_than(10);
+        std::vector<double> xs = std::vector<double>(n, a.random<double>());
+        const double dx = a.random<double>().greater_than(0);
+        for (size_t j = 1 ; j < n ; ++j)
+        {
+            xs[j] = xs[j-1] + dx;
+        }
+        std::vector<double> ys = a.random_vector_of<double>().of_size(n).greater_than(0);
+        const size_t k = a.random<size_t>().between(0, n-1);
+        ys[k] = -ys[k];
         ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::BURCHER), InvalidInputException);
         ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::CLENSHAW_CURTIS), InvalidInputException);
         ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::FILON), InvalidInputException);
