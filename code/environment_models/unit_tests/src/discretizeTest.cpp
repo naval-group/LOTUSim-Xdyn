@@ -342,3 +342,18 @@ TEST_F(discretizeTest, equal_area_abscissae_should_throw_if_xs_and_ys_do_not_hav
     }
 }
 
+TEST_F(discretizeTest, equal_area_abscissae_should_return_one_point_if_xs_has_one_point)
+{
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const std::vector<double> xs(1, a.random<double>());
+        const std::vector<double> ys(1, a.random<double>());
+        ASSERT_EQ(1, equal_area_abscissae(xs, ys, TypeOfQuadrature::BURCHER).size());
+        ASSERT_EQ(1, equal_area_abscissae(xs, ys, TypeOfQuadrature::CLENSHAW_CURTIS).size());
+        ASSERT_EQ(1, equal_area_abscissae(xs, ys, TypeOfQuadrature::FILON).size());
+        ASSERT_EQ(1, equal_area_abscissae(xs, ys, TypeOfQuadrature::GAUSS_KRONROD).size());
+        ASSERT_EQ(1, equal_area_abscissae(xs, ys, TypeOfQuadrature::RECTANGLE).size());
+        ASSERT_EQ(1, equal_area_abscissae(xs, ys, TypeOfQuadrature::SIMPSON).size());
+        ASSERT_EQ(1, equal_area_abscissae(xs, ys, TypeOfQuadrature::TRAPEZOIDAL).size());
+    }
+}

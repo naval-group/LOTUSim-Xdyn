@@ -263,6 +263,10 @@ std::vector<double> equal_area_abscissae(const std::vector<double>& xs, //!< Inp
 {
     if (xs.size() == ys.size())
     {
+        if (xs.size() == 1)
+        {
+            return std::vector<double>(1,0);
+        }
         return std::vector<double>();
     }
     THROW(__PRETTY_FUNCTION__, InvalidInputException, "xs and ys should have the same number of points.");
