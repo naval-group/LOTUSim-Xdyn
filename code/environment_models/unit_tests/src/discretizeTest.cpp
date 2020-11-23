@@ -19,7 +19,9 @@
 #include "Stretching.hpp"
 #include "YamlWaveModelInput.hpp"
 
-discretizeTest::discretizeTest() : a(ssc::random_data_generator::DataGenerator(8421))
+discretizeTest::discretizeTest()
+    : a(ssc::random_data_generator::DataGenerator(8421))
+    , quadratures({TypeOfQuadrature::BURCHER, TypeOfQuadrature::CLENSHAW_CURTIS, TypeOfQuadrature::FILON, TypeOfQuadrature::GAUSS_KRONROD, TypeOfQuadrature::RECTANGLE, TypeOfQuadrature::SIMPSON, TypeOfQuadrature::TRAPEZOIDAL})
 {
 }
 
@@ -313,13 +315,10 @@ TEST_F(discretizeTest, equal_area_abscissae_should_return_empty_list_if_xs_and_y
 {
     const std::vector<double> xs;
     const std::vector<double> ys;
-    ASSERT_TRUE(equal_area_abscissae(xs, ys, TypeOfQuadrature::BURCHER).empty());
-    ASSERT_TRUE(equal_area_abscissae(xs, ys, TypeOfQuadrature::CLENSHAW_CURTIS).empty());
-    ASSERT_TRUE(equal_area_abscissae(xs, ys, TypeOfQuadrature::FILON).empty());
-    ASSERT_TRUE(equal_area_abscissae(xs, ys, TypeOfQuadrature::GAUSS_KRONROD).empty());
-    ASSERT_TRUE(equal_area_abscissae(xs, ys, TypeOfQuadrature::RECTANGLE).empty());
-    ASSERT_TRUE(equal_area_abscissae(xs, ys, TypeOfQuadrature::SIMPSON).empty());
-    ASSERT_TRUE(equal_area_abscissae(xs, ys, TypeOfQuadrature::TRAPEZOIDAL).empty());
+    for (const auto quadrature:quadratures)
+    {
+        ASSERT_TRUE(equal_area_abscissae(xs, ys, quadrature).empty());
+    }
 }
 
 TEST_F(discretizeTest, equal_area_abscissae_should_throw_if_xs_and_ys_do_not_have_the_same_size)
@@ -332,13 +331,10 @@ TEST_F(discretizeTest, equal_area_abscissae_should_throw_if_xs_and_ys_do_not_hav
         const size_t ny = nx + dn;
         const std::vector<double> xs = a.random_vector_of<double>().of_size(nx);
         const std::vector<double> ys = a.random_vector_of<double>().of_size(ny).greater_than(0);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::BURCHER), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::CLENSHAW_CURTIS), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::FILON), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::GAUSS_KRONROD), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::RECTANGLE), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::SIMPSON), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::TRAPEZOIDAL), InvalidInputException);
+        for (const auto quadrature:quadratures)
+        {
+            ASSERT_THROW(equal_area_abscissae(xs, ys, quadrature), InvalidInputException);
+        }
     }
 }
 
@@ -348,13 +344,10 @@ TEST_F(discretizeTest, equal_area_abscissae_should_return_one_point_if_xs_has_on
     {
         const std::vector<double> xs(1, a.random<double>());
         const std::vector<double> ys(1, std::abs(a.random<double>()));
-        ASSERT_EQ(1, equal_area_abscissae(xs, ys, TypeOfQuadrature::BURCHER).size());
-        ASSERT_EQ(1, equal_area_abscissae(xs, ys, TypeOfQuadrature::CLENSHAW_CURTIS).size());
-        ASSERT_EQ(1, equal_area_abscissae(xs, ys, TypeOfQuadrature::FILON).size());
-        ASSERT_EQ(1, equal_area_abscissae(xs, ys, TypeOfQuadrature::GAUSS_KRONROD).size());
-        ASSERT_EQ(1, equal_area_abscissae(xs, ys, TypeOfQuadrature::RECTANGLE).size());
-        ASSERT_EQ(1, equal_area_abscissae(xs, ys, TypeOfQuadrature::SIMPSON).size());
-        ASSERT_EQ(1, equal_area_abscissae(xs, ys, TypeOfQuadrature::TRAPEZOIDAL).size());
+        for (const auto quadrature:quadratures)
+        {
+            ASSERT_EQ(1, equal_area_abscissae(xs, ys, quadrature).size());
+        }
     }
 }
 
@@ -364,13 +357,10 @@ TEST_F(discretizeTest, equal_area_abscissae_should_return_xs_if_xs_has_one_point
     {
         const std::vector<double> xs(1, a.random<double>());
         const std::vector<double> ys(1, std::abs(a.random<double>()));
-        ASSERT_DOUBLE_EQ(xs[0], equal_area_abscissae(xs, ys, TypeOfQuadrature::BURCHER).at(0));
-        ASSERT_DOUBLE_EQ(xs[0], equal_area_abscissae(xs, ys, TypeOfQuadrature::CLENSHAW_CURTIS).at(0));
-        ASSERT_DOUBLE_EQ(xs[0], equal_area_abscissae(xs, ys, TypeOfQuadrature::FILON).at(0));
-        ASSERT_DOUBLE_EQ(xs[0], equal_area_abscissae(xs, ys, TypeOfQuadrature::GAUSS_KRONROD).at(0));
-        ASSERT_DOUBLE_EQ(xs[0], equal_area_abscissae(xs, ys, TypeOfQuadrature::RECTANGLE).at(0));
-        ASSERT_DOUBLE_EQ(xs[0], equal_area_abscissae(xs, ys, TypeOfQuadrature::SIMPSON).at(0));
-        ASSERT_DOUBLE_EQ(xs[0], equal_area_abscissae(xs, ys, TypeOfQuadrature::TRAPEZOIDAL).at(0));
+        for (const auto quadrature:quadratures)
+        {
+            ASSERT_DOUBLE_EQ(xs[0], equal_area_abscissae(xs, ys, quadrature).at(0));
+        }
     }
 }
 
@@ -391,13 +381,10 @@ TEST_F(discretizeTest, equal_area_abscissae_should_throw_if_xs_are_not_increasin
         const double val = xs[k1];
         xs[k1] = xs[k2];
         xs[k2] = val;
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::BURCHER), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::CLENSHAW_CURTIS), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::FILON), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::GAUSS_KRONROD), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::RECTANGLE), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::SIMPSON), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::TRAPEZOIDAL), InvalidInputException);
+        for (const auto quadrature:quadratures)
+        {
+            ASSERT_THROW(equal_area_abscissae(xs, ys, quadrature), InvalidInputException);
+        }
     }
 }
 
@@ -415,13 +402,11 @@ TEST_F(discretizeTest, equal_area_abscissae_should_throw_if_xs_are_not_strictly_
         }
         const size_t k = a.random<size_t>().between(1, n-1);
         xs[k] = xs[k-1];
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::BURCHER), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::CLENSHAW_CURTIS), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::FILON), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::GAUSS_KRONROD), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::RECTANGLE), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::SIMPSON), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::TRAPEZOIDAL), InvalidInputException);
+
+        for (const auto quadrature:quadratures)
+        {
+            ASSERT_THROW(equal_area_abscissae(xs, ys, quadrature), InvalidInputException);
+        }
     }
 }
 
@@ -439,12 +424,9 @@ TEST_F(discretizeTest, equal_area_abscissae_should_throw_if_ys_are_not_positive)
         std::vector<double> ys = a.random_vector_of<double>().of_size(n).greater_than(0);
         const size_t k = a.random<size_t>().between(0, n-1);
         ys[k] = -ys[k];
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::BURCHER), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::CLENSHAW_CURTIS), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::FILON), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::GAUSS_KRONROD), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::RECTANGLE), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::SIMPSON), InvalidInputException);
-        ASSERT_THROW(equal_area_abscissae(xs, ys, TypeOfQuadrature::TRAPEZOIDAL), InvalidInputException);
+        for (const auto quadrature:quadratures)
+        {
+            ASSERT_THROW(equal_area_abscissae(xs, ys, quadrature), InvalidInputException);
+        }
     }
 }
