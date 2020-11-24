@@ -457,3 +457,15 @@ TEST_F(discretizeTest, area_curve_should_return_list_of_same_size_as_inputs)
     const std::vector<double> ys_big = a.random_vector_of<double>().of_size(1e5).greater_than(0);
     ASSERT_EQ(1e5, area_curve(xs_big, ys_big).size());
 }
+
+TEST_F(discretizeTest, area_curve_should_throw_if_xs_and_ys_do_not_have_the_same_size)
+{
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const size_t nx = a.random<size_t>().no().greater_than(1000);
+        const size_t ny = a.random<size_t>().no().greater_than(1000).but_not(nx);
+        const std::vector<double> xs = random_increasing_vector_of_size(nx);
+        const std::vector<double> ys = a.random_vector_of<double>().of_size(ny).greater_than(0);
+        ASSERT_THROW(area_curve(xs, ys), InvalidInputException);
+    }
+}

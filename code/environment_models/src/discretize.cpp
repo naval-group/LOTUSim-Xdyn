@@ -257,8 +257,13 @@ double dynamic_pressure_factor(const double k,              //!< Wave number (in
     return cosh(k*(h-stretching.rescaled_z(z,eta)))/cosh(k*h);
 }
 
-std::vector<double> area_curve(const std::vector<double>& xs, const std::vector<double>& )
+std::vector<double> area_curve(const std::vector<double>& xs, const std::vector<double>& ys)
 {
+    const size_t n = xs.size();
+    if (ys.size() != n)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "xs and ys should have the same number of points.");
+    }
     return xs;
 }
 
