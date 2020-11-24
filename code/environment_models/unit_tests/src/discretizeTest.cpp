@@ -522,3 +522,18 @@ TEST_F(discretizeTest, area_curve_first_value_always_zero)
         ASSERT_DOUBLE_EQ(0, area_curve(xs, ys).at(0));
     }
 }
+
+TEST_F(discretizeTest, area_curve_should_return_zero_if_ys_are_zero)
+{
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const size_t n = a.random<size_t>().greater_than(1).no().greater_than(10);
+        const std::vector<double> xs = random_increasing_vector_of_size(n);
+        const std::vector<double> ys(n, 0);
+        const auto ret = area_curve(xs, ys);
+        for (const auto r:ret)
+        {
+            ASSERT_DOUBLE_EQ(0, r);
+        }
+    }
+}

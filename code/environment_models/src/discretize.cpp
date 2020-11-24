@@ -275,12 +275,11 @@ std::vector<double> area_curve(const std::vector<double>& xs, const std::vector<
             THROW(__PRETTY_FUNCTION__, InvalidInputException, "All values in ys should be positive.");
         }
     }
-    std::vector<double> ret = xs;
     if (n > 0)
     {
-        ret[0] = 0;
+        return std::vector<double>(xs.size(), 0);
     }
-    return ret;
+    return std::vector<double>();
 }
 
 std::vector<double> equal_area_abscissae(const std::vector<double>& xs, //!< Input abscissae at which the function is defined
