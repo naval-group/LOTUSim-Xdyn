@@ -63,7 +63,7 @@ DiscreteDirectionalWaveSpectrum discretize(const WaveSpectralDensity& S,      //
  *  \date Nov 23, 2020
  *  \brief Calculates consecutive intervals where a function has constant area.
 * \param `xs` Vector of strictly increasing abscissae
-* \param `ys` Values of the function at each `xs`.
+* \param `ys` Positive values of the function at each `xs`.
 * \returns `x` a vector of abscissae between xmin and xmax (x[0] == xs[0] and
 * x[n-1] == xs[n-1] where n denotes the number of values in `xs` and `ys`).
 * \details If `f` denotes a function such that ys[i] = f(xs[i]), this function
@@ -75,6 +75,16 @@ std::vector<double> equal_area_abscissae(
         const std::vector<double>& xs, //!< Input abscissae at which the function is defined
         const std::vector<double>& ys //!< Value of the function for each xs
          );
+
+/**
+ * \author cady
+ * \date Nov 24, 2020
+ * \brief Calculates the cumulative integral using trapezoidal quadrature.
+ * \param xs Vector of strictly increasing abscissae.
+ * \param ys Positive values of the function at each `xs`.
+ * \return For each x, integral of ys from xmin to x.
+ */
+std::vector<double> area_curve(const std::vector<double>& xs, const std::vector<double>& ys);
 
 /**  \brief Utility function used by the discretize function. Infinite depth approximation. This is where the stretching is taken into account.
   *  \returns Factor \f$f(k,z)\f$ such that \f$p_{\mbox{dyn}}=\rho g \eta_a f(k,z)\f$ (no unit), infinite depth approximation

@@ -444,3 +444,16 @@ TEST_F(discretizeTest, equal_area_abscissae_should_return_equally_spaced_values_
         }
     }
 }
+
+TEST_F(discretizeTest, area_curve_should_return_list_of_same_size_as_inputs)
+{
+    for (size_t n = 0 ; n < 1000 ; ++n)
+    {
+        const std::vector<double> xs = random_increasing_vector_of_size(n);
+        const std::vector<double> ys = a.random_vector_of<double>().of_size(n).greater_than(0);
+        ASSERT_EQ(n, area_curve(xs, ys).size());
+    }
+    const std::vector<double> xs_big = random_increasing_vector_of_size(1e5);
+    const std::vector<double> ys_big = a.random_vector_of<double>().of_size(1e5).greater_than(0);
+    ASSERT_EQ(1e5, area_curve(xs_big, ys_big).size());
+}

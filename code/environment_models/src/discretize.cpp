@@ -257,6 +257,11 @@ double dynamic_pressure_factor(const double k,              //!< Wave number (in
     return cosh(k*(h-stretching.rescaled_z(z,eta)))/cosh(k*h);
 }
 
+std::vector<double> area_curve(const std::vector<double>& xs, const std::vector<double>& )
+{
+    return xs;
+}
+
 std::vector<double> equal_area_abscissae(const std::vector<double>& xs, //!< Input abscissae at which the function is defined
         const std::vector<double>& ys //!< Value of the function for each xs
         )
