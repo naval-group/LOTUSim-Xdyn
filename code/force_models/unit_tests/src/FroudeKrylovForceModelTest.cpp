@@ -58,7 +58,7 @@ TR1(shared_ptr)<WaveModel> FroudeKrylovForceModelTest::get_wave_model() const
     ys.h = 0;
     ys.delta = 1;
     const Stretching ss(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, ss);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, ss, false);
     int random_seed = 0;
     return TR1(shared_ptr)<WaveModel>(new Airy(A, random_seed));
 }
@@ -125,7 +125,7 @@ TEST_F(FroudeKrylovForceModelTest, validate_formula_against_sos_stab)
     ys.h = 0;
     ys.delta = 1;
     const Stretching ss(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss, false);
     const Airy wave(A, phi);
 
     const std::vector<double> x{-0.1, 0.1, 0, 0, 0, 0};
@@ -165,7 +165,7 @@ TEST_F(FroudeKrylovForceModelTest, validation_against_sos_stab)
     ys.h = 0;
     ys.delta = 1;
     const Stretching ss(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss, false);
 
     const EnvironmentAndFrames env = get_environment_and_frames(TR1(shared_ptr)<WaveModel>(new Airy(A, phi)));
 

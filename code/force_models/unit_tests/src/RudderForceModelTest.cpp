@@ -231,7 +231,7 @@ TR1(shared_ptr)<WaveModel> RudderForceModelTest::get_wave_model() const
     ys.h = 0;
     ys.delta = 1;
     const Stretching ss(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss, false);
 
     return TR1(shared_ptr)<WaveModel>(new Airy(A, phi));
 }

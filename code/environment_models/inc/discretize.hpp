@@ -41,7 +41,8 @@ DiscreteDirectionalWaveSpectrum discretize(const WaveSpectralDensity& S,      //
                                            const double omega_min,            //!< Upper bound of the angular frequency range (in rad/s)
                                            const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
                                            const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
-                                           const Stretching& stretching       //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
+                                           const Stretching& stretching,      //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
+                                           const bool equal_energy_bins       //!< Choose omegas so the integral of S between two successive omegas is constant
                                            );
 
 /**  \author cec
@@ -56,7 +57,8 @@ DiscreteDirectionalWaveSpectrum discretize(const WaveSpectralDensity& S,      //
                                            const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
                                            const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
                                            const double h,                    //!< Water depth (in meters)
-                                           const Stretching& stretching       //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
+                                           const Stretching& stretching,      //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
+                                           const bool equal_energy_bins       //!< Choose omegas so the integral of S between two successive omegas is constant
                                            );
 
 /**  \author cady

@@ -55,7 +55,7 @@ TEST_F(AiryTest, single_frequency_single_direction_at_one_point)
     ys.h = 0;
     ys.delta = 1;
     const Stretching s(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, s);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, s, false);
     int random_seed = 0;
     const Airy wave(A, random_seed);
 
@@ -85,7 +85,7 @@ TEST_F(AiryTest, serialized_spectrum_should_have_all_the_information_we_need)
     ys.h = 0;
     ys.delta = 1;
     const Stretching s(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, s);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, s, false);
     int random_seed = 0;
     const Airy wave(A, random_seed);
     const DiscreteDirectionalWaveSpectrum serialized_spectrum = wave.get_spectrum();
@@ -111,7 +111,7 @@ TEST_F(AiryTest, two_frequencies_single_direction_at_one_point)
     ys.h = 0;
     ys.delta = 1;
     const Stretching s(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs)+DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, s);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs)+DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, s, false);
     int random_seed = 0;
     const Airy wave(A, random_seed);
 
@@ -138,7 +138,7 @@ TEST_F(AiryTest, one_frequency_two_directions_at_one_point)
     ys.h = 0;
     ys.delta = 1;
     const Stretching s(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0)+DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, s);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0)+DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, s, false);
     int random_seed = 0;
     const Airy wave(A, random_seed);
 
@@ -165,7 +165,7 @@ TEST_F(AiryTest, bug)
     ys.h = 0;
     ys.delta = 1;
     const Stretching ss(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(BretschneiderSpectrum(Hs, Tp), Cos2sDirectionalSpreading(psi0, s), omega_min, omega_max, nfreq, ss);
+    const DiscreteDirectionalWaveSpectrum A = discretize(BretschneiderSpectrum(Hs, Tp), Cos2sDirectionalSpreading(psi0, s), omega_min, omega_max, nfreq, ss, false);
     int random_seed = 0;
     const Airy wave(A, random_seed);
 
@@ -190,7 +190,7 @@ TEST_F(AiryTest, dynamic_pressure)
     ys.h = 0;
     ys.delta = 1;
     const Stretching ss(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, ss);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, ss, false);
     int random_seed = 0;
     const Airy wave(A, random_seed);
 
@@ -247,7 +247,7 @@ TEST_F(AiryTest, should_be_able_to_reproduce_results_from_sos_stab)
     ys.h = 0;
     ys.delta = 1;
     const Stretching ss(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss, false);
     const Airy wave(A, phi);
 
     std::vector<double> x{-0.1}; std::vector<double> y{0};
@@ -280,7 +280,7 @@ TEST_F(AiryTest, dynamic_pressure_compare_with_sos_stab)
     ys.h = 0;
     ys.delta = 1;
     const Stretching ss(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss, false);
     const Airy wave(A, phi);
 
     std::vector<double> x{-0.1, 0.1, 0, 0, 0, 0};
@@ -315,7 +315,7 @@ TEST_F(AiryTest, norm_of_orbital_velocity_should_only_depend_on_z)
     ys.h = 0;
     ys.delta = 1;
     const Stretching ss(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss, false);
     const Airy wave(A, phi);
 
     std::vector<double> x{0};
@@ -353,7 +353,7 @@ TEST_F(AiryTest, orbital_velocity_non_regression_test)
     ys.h = 0;
     ys.delta = 1;
     const Stretching ss(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss, false);
     const Airy wave(A, phi);
 
     ssc::kinematics::PointMatrix V;
@@ -413,7 +413,7 @@ TEST_F(AiryTest, orbital_velocity_sanity_check)
 
     for (size_t i = 0 ; i < 100 ; ++i)
     {
-        const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
+        const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss, false);
         const Airy wave(A, a.random<double>().between(-PI,PI));
         const std::vector<double> x {a.random<double>().between(-100,100)};
         const std::vector<double> y {a.random<double>().between(-100,100)};
@@ -447,7 +447,7 @@ TEST_F(AiryTest, orbital_velocity_and_elevation_should_have_opposite_signs)
 
     for (size_t i = 0 ; i < 100 ; ++i)
     {
-        const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
+        const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss, false);
         const Airy wave(A, a.random<double>().between(-PI,PI));
         const std::vector<double> x{a.random<double>().between(-100,100)};
         const std::vector<double> y{a.random<double>().between(-100,100)};
@@ -475,8 +475,8 @@ TEST_F(AiryTest, should_get_different_results_when_using_two_different_spectra)
     y.h = 0;
     y.delta = 1;
     const Stretching s(y);
-    const DiscreteDirectionalWaveSpectrum A1 = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, s);
-    const DiscreteDirectionalWaveSpectrum A2 = discretize(DiracSpectralDensity(omega0, 10*Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, s);
+    const DiscreteDirectionalWaveSpectrum A1 = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, s, false);
+    const DiscreteDirectionalWaveSpectrum A2 = discretize(DiracSpectralDensity(omega0, 10*Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, s, false);
     const Airy wave1(A1, 0);
     const Airy wave2(A2, 0);
     const std::vector<double> rao_module = {1};// {{1,2,3},{4,5,6},{7,8,9},{0,1,2},{3,4,5},{6,7,8},{9,0,1},{2,3,4},{5,6,7},{8,9,0}};
@@ -518,7 +518,7 @@ TEST_F(AiryTest, RAO_non_regression_test)
     ys.h = 0;
     ys.delta = 1;
     const Stretching ss(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss, false);
     const Airy wave(A, 0.0);
     const std::vector<double> rao_module = {1};// {{1,2,3},{4,5,6},{7,8,9},{0,1,2},{3,4,5},{6,7,8},{9,0,1},{2,3,4},{5,6,7},{8,9,0}};
     const std::vector<double> rao_phase = {9}; //{{9,8,7},{6,5,4},{1,4,7},{8,5,2},{7,5,3},{1,5,9},{4,5,6},{7,8,9},{6,5,4},{4,8,6}};
@@ -536,7 +536,7 @@ TEST_F(AiryTest, should_respect_dirac_inputs)
     const size_t nfreq = 11;
     YamlStretching ys;
     const Stretching ss(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss, false);
     const Airy wave(A, 0.0);
     FlatDiscreteDirectionalWaveSpectrum s = wave.get_flat_spectrum();
     ASSERT_EQ(1, s.a.size());
@@ -576,7 +576,7 @@ TEST_F(AiryTest, orbital_velocities_and_dynamic_pressure_should_decrease_with_de
     const double t = 0;
     const Stretching stretching(ys);
     const DiracSpectralDensity S(omega0, Hs);
-    const DiscreteDirectionalWaveSpectrum A = discretize(S, DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, h, stretching);
+    const DiscreteDirectionalWaveSpectrum A = discretize(S, DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, h, stretching, false);
     const double random_phase = a.random<double>().between(-PI,PI);
     const Airy wave(A, random_phase);
     const double k = S.get_wave_number(omega0,h);
@@ -622,7 +622,7 @@ TEST_F(AiryTest, orbital_velocities_and_dynamic_pressure_should_decrease_with_de
     const double t = 0;
     const Stretching stretching(ys);
     const DiracSpectralDensity S(omega0, Hs);
-    const DiscreteDirectionalWaveSpectrum A = discretize(S, DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, stretching);
+    const DiscreteDirectionalWaveSpectrum A = discretize(S, DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, stretching, false);
     const double random_phase = a.random<double>().between(-PI,PI);
     const Airy wave(A, random_phase);
     const double k = S.get_wave_number(omega0);
@@ -672,7 +672,7 @@ TEST_F(AiryTest, total_pressure_should_always_be_positive_in_finite_depth)
     const double t = 0;
     const Stretching stretching(ys);
     const DiracSpectralDensity S(omega0, Hs);
-    const DiscreteDirectionalWaveSpectrum A = discretize(S, DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, h, stretching);
+    const DiscreteDirectionalWaveSpectrum A = discretize(S, DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, h, stretching, false);
     const double random_phase = a.random<double>().between(-PI,PI);
     const Airy wave(A, random_phase);
 
@@ -707,7 +707,7 @@ TEST_F(AiryTest, total_pressure_should_always_be_positive_in_infinite_depth)
     const double t = 0;
     const Stretching stretching(ys);
     const DiracSpectralDensity S(omega0, Hs);
-    const DiscreteDirectionalWaveSpectrum A = discretize(S, DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, stretching);
+    const DiscreteDirectionalWaveSpectrum A = discretize(S, DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, stretching, false);
     const double random_phase = a.random<double>().between(-PI,PI);
     const Airy wave(A, random_phase);
 
@@ -743,7 +743,7 @@ TEST_F(AiryTest, dynamic_pressure_and_orbital_velocities_should_be_0_outside_wat
     const Stretching stretching(ys);
     const DiracSpectralDensity S(omega0, Hs);
     const double h = 40;
-    const DiscreteDirectionalWaveSpectrum A = discretize(S, DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, h, stretching);
+    const DiscreteDirectionalWaveSpectrum A = discretize(S, DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, h, stretching, false);
     const double random_phase = a.random<double>().between(-PI,PI);
     const Airy wave(A, random_phase);
 
@@ -785,7 +785,7 @@ TEST_F(AiryTest, get_dynamic_pressure_and_orbital_velocities_should_be_0_above_w
     const double t = 0;
     const Stretching stretching(ys);
     const DiracSpectralDensity S(omega0, Hs);
-    const DiscreteDirectionalWaveSpectrum A = discretize(S, DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, stretching);
+    const DiscreteDirectionalWaveSpectrum A = discretize(S, DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, stretching, false);
     const double random_phase = a.random<double>().between(-PI,PI);
     const Airy wave(A, random_phase);
 

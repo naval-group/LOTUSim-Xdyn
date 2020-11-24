@@ -64,7 +64,7 @@ TR1(shared_ptr)<WaveModel> get_wave_model()
     ys.h = 0;
     ys.delta = 1;
     const Stretching ss(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, ss);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, ss, false);
     int random_seed = 0;
     return TR1(shared_ptr)<WaveModel>(new Airy(A, random_seed));
 }

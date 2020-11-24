@@ -38,7 +38,7 @@ int main(int , char** )
     ys.delta = 1;//0;
     const double h = 20;
     const Stretching stretching(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, h, stretching);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, h, stretching, false);
     const double random_phase = a.random<double>().between(-PI,PI);
     const Airy wave(A, random_phase);
 

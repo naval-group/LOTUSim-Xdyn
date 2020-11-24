@@ -42,7 +42,8 @@ class SumOfWaveSpectralDensities : public WaveSpectralDensity
           */
         std::vector<double> get_angular_frequencies(const double omega_min, //!< Minimum angular frequency (in rad/s)
                                                     const double omega_max, //!< Maximum angular frequency (in rad/s)
-                                                    const size_t n          //!< Number of angular frequencies to return
+                                                    const size_t n,         //!< Number of angular frequencies to return
+                                                    const bool equal_energy_bins       //!< Choose omegas so the integral of S between two successive omegas is constant
                                                     ) const;
 
     private:

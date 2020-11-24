@@ -41,7 +41,7 @@ class DiracSpectralDensity : public WaveSpectralDensity
           *  \brief A vector containing only omega0 (in rad/s)
           *  \snippet environment_models/unit_tests/src/DiracSpectralDensityTest.cpp DiracSpectralDensityTest get_omega0_example
           */
-        std::vector<double> get_angular_frequencies(const double omega_min, const double omega_max, const size_t n) const;
+        std::vector<double> get_angular_frequencies(const double omega_min, const double omega_max, const size_t n, const bool constant_energy_bins) const;
 
         WaveSpectralDensity* clone() const;
 

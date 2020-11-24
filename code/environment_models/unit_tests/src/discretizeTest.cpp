@@ -63,7 +63,7 @@ TEST_F(discretizeTest, example)
     const Cos2sDirectionalSpreading D(PI/4, 2);
     YamlStretching y;
     const Stretching s(y);
-    const DiscreteDirectionalWaveSpectrum A = discretize(S, D, 0.01, 3, 1000, s);
+    const DiscreteDirectionalWaveSpectrum A = discretize(S, D, 0.01, 3, 1000, s, false);
 //! [discretizeTest example]
 //! [discretizeTest expected output]
     ASSERT_EQ(1000, A.Dj.size());
@@ -79,7 +79,7 @@ TEST_F(discretizeTest, Dirac_in_frequency)
     const Cos2sDirectionalSpreading D(PI/4, 2);
     YamlStretching y;
     const Stretching s(y);
-    const DiscreteDirectionalWaveSpectrum A = discretize(S, D, 0.01, 3, 1000, s);
+    const DiscreteDirectionalWaveSpectrum A = discretize(S, D, 0.01, 3, 1000, s, false);
     ASSERT_EQ(1000, A.Dj.size());
     ASSERT_EQ(1, A.Si.size());
     ASSERT_DOUBLE_EQ(Hs*Hs/8, A.Si.front());
@@ -94,7 +94,7 @@ TEST_F(discretizeTest, Dirac_in_direction)
     const DiracDirectionalSpreading D(PI/4);
     YamlStretching y;
     const Stretching s(y);
-    const DiscreteDirectionalWaveSpectrum A = discretize(S, D, 0.01, 3, 1000, s);
+    const DiscreteDirectionalWaveSpectrum A = discretize(S, D, 0.01, 3, 1000, s, false);
     ASSERT_EQ(1, A.Dj.size());
     ASSERT_EQ(1000, A.Si.size());
     ASSERT_DOUBLE_EQ(1, A.Dj.front());
@@ -112,7 +112,7 @@ TEST_F(discretizeTest, should_throw_if_omega_min_is_negative)
     const size_t nfreq = a.random<size_t>();
     YamlStretching y;
     const Stretching s(y);
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s), InvalidInputException);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s, false), InvalidInputException);
 }
 
 TEST_F(discretizeTest, should_throw_if_omega_min_is_zero)
@@ -127,7 +127,7 @@ TEST_F(discretizeTest, should_throw_if_omega_min_is_zero)
     const size_t nfreq = a.random<size_t>();
     YamlStretching y;
     const Stretching s(y);
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s), InvalidInputException);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s, false), InvalidInputException);
 }
 
 TEST_F(discretizeTest, should_throw_if_omega_max_is_negative)
@@ -142,7 +142,7 @@ TEST_F(discretizeTest, should_throw_if_omega_max_is_negative)
     const size_t nfreq = a.random<size_t>();
     YamlStretching y;
     const Stretching s(y);
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s), InvalidInputException);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s, false), InvalidInputException);
 }
 
 TEST_F(discretizeTest, should_throw_if_omega_max_is_zero)
@@ -157,7 +157,7 @@ TEST_F(discretizeTest, should_throw_if_omega_max_is_zero)
     const size_t nfreq = a.random<size_t>();
     YamlStretching y;
     const Stretching s(y);
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s), InvalidInputException);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s, false), InvalidInputException);
 }
 
 TEST_F(discretizeTest, should_throw_if_omega_max_is_lower_than_omega_min)
@@ -172,7 +172,7 @@ TEST_F(discretizeTest, should_throw_if_omega_max_is_lower_than_omega_min)
     const size_t nfreq = a.random<size_t>();
     YamlStretching y;
     const Stretching s(y);
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s), InvalidInputException);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s, false), InvalidInputException);
 }
 
 TEST_F(discretizeTest, should_throw_if_nfreq_is_zero)
@@ -187,7 +187,7 @@ TEST_F(discretizeTest, should_throw_if_nfreq_is_zero)
     const size_t nfreq = 0;
     YamlStretching y;
     const Stretching s(y);
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s), InvalidInputException);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s, false), InvalidInputException);
 }
 
 TEST_F(discretizeTest, should_throw_if_nfreq_is_one_but_omega_min_is_not_omega_max)
@@ -202,7 +202,7 @@ TEST_F(discretizeTest, should_throw_if_nfreq_is_one_but_omega_min_is_not_omega_m
     const size_t nfreq = 1;
     YamlStretching y;
     const Stretching s(y);
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s), InvalidInputException);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s, false), InvalidInputException);
 }
 
 TEST_F(discretizeTest, should_throw_if_omega_min_equals_omega_max_but_nfreq_is_not_one)
@@ -217,7 +217,7 @@ TEST_F(discretizeTest, should_throw_if_omega_min_equals_omega_max_but_nfreq_is_n
     const size_t nfreq = a.random<size_t>().but_not(1);
     YamlStretching y;
     const Stretching s(y);
-    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s), InvalidInputException);
+    ASSERT_THROW(discretize(S, D, omega_min, omega_max, nfreq, s, false), InvalidInputException);
 }
 
 /**
@@ -643,4 +643,43 @@ TEST_F(discretizeTest, equal_area_abscissae_should_return_equally_spaced_values_
     ASSERT_NEAR(std::sqrt(10), res[2], EPS);
     ASSERT_NEAR(4, res[3], EPS);
     ASSERT_NEAR(5.5, res[4], EPS);
+}
+
+TEST_F(discretizeTest, equal_energy_bins)
+{
+//! [equal_energy_bins example]
+    const double Hs = 3;
+    const double Tp = 4;
+    const double gamma = 1.4;
+    const JonswapSpectrum S(Hs, Tp, gamma);
+    const Cos2sDirectionalSpreading D(PI/4, 2);
+    YamlStretching y;
+    const Stretching s(y);
+    const DiscreteDirectionalWaveSpectrum A = discretize(S, D, 0.01, 3, 1000, s, true);
+//! [equal_energy_bins example]
+//! [equal_energy_bins expected output]
+    ASSERT_NEAR(0.01, A.omega[0], EPS);
+    ASSERT_NEAR(1.025029449067951, A.omega[1], EPS);
+    ASSERT_NEAR(1.0525530074258682, A.omega[2], EPS);
+    ASSERT_NEAR(1.0842190871695854, A.omega[4], EPS);
+    ASSERT_NEAR(1.128270684351939, A.omega[9], EPS);
+    ASSERT_NEAR(1.3472975072489475, A.omega[99], EPS);
+    ASSERT_NEAR(3, A.omega[999], EPS);
+    ASSERT_EQ(1000, A.omega.size());
+    const DiscreteDirectionalWaveSpectrum B = discretize(S, D, 0.01, 3, 10, s, true);
+    //! [equal_energy_bins example]
+    //! [equal_energy_bins expected output]
+    ASSERT_EQ(10, B.omega.size());
+    ASSERT_NEAR(0.01, B.omega[0], EPS);
+    ASSERT_NEAR(1.3266362675988099, B.omega[1], EPS);
+    ASSERT_NEAR(1.4718706793919485, B.omega[2], EPS);
+    ASSERT_NEAR(1.5894739415969286, B.omega[3], EPS);
+    ASSERT_NEAR(1.6915444316496033, B.omega[4], EPS);
+    ASSERT_NEAR(1.80136306541316, B.omega[5], EPS);
+    ASSERT_NEAR(1.9390777413117828, B.omega[6], EPS);
+    ASSERT_NEAR(2.1335838860523002, B.omega[7], EPS);
+    ASSERT_NEAR(2.4226798199184207, B.omega[8], EPS);
+    ASSERT_NEAR(3, B.omega[9], EPS);
+
+//! [equal_energy_bins expected output]
 }
