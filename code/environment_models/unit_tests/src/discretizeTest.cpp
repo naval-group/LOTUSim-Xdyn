@@ -469,3 +469,19 @@ TEST_F(discretizeTest, area_curve_should_throw_if_xs_and_ys_do_not_have_the_same
         ASSERT_THROW(area_curve(xs, ys), InvalidInputException);
     }
 }
+
+TEST_F(discretizeTest, area_curve_should_throw_if_xs_are_not_increasing)
+{
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const size_t n = a.random<size_t>().greater_than(1).no().greater_than(10);
+        std::vector<double> xs = random_increasing_vector_of_size(n);
+        const std::vector<double> ys = a.random_vector_of<double>().of_size(n).greater_than(0);
+        const size_t k1 = a.random<size_t>().between(0, n-1);
+        const size_t k2 = a.random<size_t>().between(0, n-1).but_not(k1);
+        const double val = xs[k1];
+        xs[k1] = xs[k2];
+        xs[k2] = val;
+        ASSERT_THROW(area_curve(xs, ys), InvalidInputException);
+    }
+}
