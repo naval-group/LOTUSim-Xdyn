@@ -10,8 +10,6 @@
 #define PI M_PI
 #define EPS (1E-10)
 
-#include <ssc/macros.hpp>
-
 #include "discretizeTest.hpp"
 #include "discretize.hpp"
 #include "JonswapSpectrum.hpp"
@@ -21,6 +19,7 @@
 #include "InvalidInputException.hpp"
 #include "Stretching.hpp"
 #include "YamlWaveModelInput.hpp"
+#include <ssc/macros.hpp>
 
 discretizeTest::discretizeTest()
     : a(ssc::random_data_generator::DataGenerator(8421))
@@ -589,5 +588,27 @@ TEST_F(discretizeTest, area_curve_can_integrate_two_rectangles)
         ASSERT_DOUBLE_EQ(0, ret.at(0));
         ASSERT_SMALL_RELATIVE_ERROR((xb-xa)*ya, ret.at(1), EPS);
         ASSERT_SMALL_RELATIVE_ERROR((xc-xa)*ya, ret.at(2), EPS);
+    }
+}
+
+TEST_F(discretizeTest, area_curve_can_integrate_rectangle_after_lots_of_zeros)
+{
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const size_t nb_of_zeros = a.random<size_t>().between(0, 10000);
+        std::vector<double> xs = random_increasing_vector_of_size(nb_of_zeros+2);
+        std::vector<double> ys(nb_of_zeros, 0);
+        const double ya = a.random<double>().greater_than(0);
+        const double yb = ya;
+        ys.push_back(ya);
+        ys.push_back(yb);
+        const std::vector<double> ret = area_curve(xs, ys);
+        ASSERT_EQ(nb_of_zeros+2, ret.size());
+        for (size_t k = 0 ; k < nb_of_zeros ; ++k)
+        {
+            ASSERT_DOUBLE_EQ(0, ret.at(k));
+        }
+        ASSERT_SMALL_RELATIVE_ERROR(0.5*(xs[nb_of_zeros]-xs[nb_of_zeros-1])*ya, ret.at(nb_of_zeros), EPS);
+        ASSERT_SMALL_RELATIVE_ERROR(ret.at(nb_of_zeros) + (xs[nb_of_zeros+1]-xs[nb_of_zeros])*ya, ret.at(nb_of_zeros+1), EPS);
     }
 }
