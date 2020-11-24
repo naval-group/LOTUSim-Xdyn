@@ -278,7 +278,7 @@ std::vector<double> area_curve(const std::vector<double>& xs, const std::vector<
     std::vector<double> ret(xs.size(), 0);
     if (n == 2)
     {
-        ret[1] = (xs[1] - xs[0])*ys[0];
+        ret[1] = 0.5*(xs[1] - xs[0])*(ys[0]+ys[1]);
     }
     return ret;
 }

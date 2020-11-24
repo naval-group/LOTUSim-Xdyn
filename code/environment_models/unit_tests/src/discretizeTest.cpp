@@ -553,3 +553,19 @@ TEST_F(discretizeTest, area_curve_can_integrate_rectangle)
         ASSERT_DOUBLE_EQ((xb-xa)*ya, ret.at(1));
     }
 }
+
+TEST_F(discretizeTest, area_curve_can_integrate_trapeze)
+{
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const double xa = a.random<double>();
+        const double xb = a.random<double>().greater_than(xa);
+        const double ya = a.random<double>().greater_than(0);
+        const double yb = a.random<double>().greater_than(0);
+        const std::vector<double> xs = {xa, xb};
+        const std::vector<double> ys = {ya, yb};
+        const std::vector<double> ret = area_curve(xs, ys);
+        ASSERT_DOUBLE_EQ(0, ret.at(0));
+        ASSERT_DOUBLE_EQ((xb-xa)*(ya+yb)/2, ret.at(1));
+    }
+}
