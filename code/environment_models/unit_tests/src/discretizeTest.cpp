@@ -8,6 +8,9 @@
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
+#define EPS (1E-10)
+
+#include <ssc/macros.hpp>
 
 #include "discretizeTest.hpp"
 #include "discretize.hpp"
@@ -567,5 +570,24 @@ TEST_F(discretizeTest, area_curve_can_integrate_trapeze)
         const std::vector<double> ret = area_curve(xs, ys);
         ASSERT_DOUBLE_EQ(0, ret.at(0));
         ASSERT_DOUBLE_EQ((xb-xa)*(ya+yb)/2, ret.at(1));
+    }
+}
+
+TEST_F(discretizeTest, area_curve_can_integrate_two_rectangles)
+{
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const double xa = a.random<double>();
+        const double xb = a.random<double>().greater_than(xa);
+        const double xc = a.random<double>().greater_than(xb);
+        const double ya = a.random<double>().greater_than(0);
+        const double yb = ya;
+        const double yc = ya;
+        const std::vector<double> xs = {xa, xb, xc};
+        const std::vector<double> ys = {ya, yb, yc};
+        const std::vector<double> ret = area_curve(xs, ys);
+        ASSERT_DOUBLE_EQ(0, ret.at(0));
+        ASSERT_SMALL_RELATIVE_ERROR((xb-xa)*ya, ret.at(1), EPS);
+        ASSERT_SMALL_RELATIVE_ERROR((xc-xa)*ya, ret.at(2), EPS);
     }
 }
