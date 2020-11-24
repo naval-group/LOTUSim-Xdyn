@@ -317,29 +317,13 @@ std::vector<double> equal_area_abscissae(const std::vector<double>& xs, //!< Inp
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "xs and ys should have the same number of points.");
     }
-    if (xs.size() == 1)
-    {
-        return xs;
-    }
-    if (n == 0)
-    {
-        return xs;
-    }
     std::vector<double> ret = xs;
-    const auto as = area_curve(xs, ys);
-    const double target_area = n ? as.back()/((double)n-1) : 0;
-    for (size_t i = 0 ; i < n-1 ; ++i)
+    if (n > 0)
     {
-        if (ys[i] < 0)
+        const auto as = area_curve(xs, ys);
+        const double target_area = as.back()/((double)n-1);
+        for (size_t i = 1 ; i < n-1 ; ++i)
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "All values in ys should be positive.");
-        }
-        if (i > 0)
-        {
-            if (xs[i-1] >= xs[i])
-            {
-                THROW(__PRETTY_FUNCTION__, InvalidInputException, "xs should be strictly increasing.");
-            }
             ret[i] = find_given_area((double)i*target_area, xs, ys, as);
         }
     }
