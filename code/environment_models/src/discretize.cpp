@@ -264,11 +264,15 @@ std::vector<double> area_curve(const std::vector<double>& xs, const std::vector<
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "xs and ys should have the same number of points.");
     }
-    for (size_t i = 1 ; i < n ; ++i)
+    for (size_t i = 0 ; i < n ; ++i)
     {
-        if (xs[i-1] >= xs[i])
+        if ((i>0) && (xs[i-1] >= xs[i]))
         {
             THROW(__PRETTY_FUNCTION__, InvalidInputException, "xs should be strictly increasing.");
+        }
+        if (ys[i] < 0)
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "All values in ys should be positive.");
         }
     }
     return xs;
