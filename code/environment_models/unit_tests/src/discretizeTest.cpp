@@ -485,3 +485,16 @@ TEST_F(discretizeTest, area_curve_should_throw_if_xs_are_not_increasing)
         ASSERT_THROW(area_curve(xs, ys), InvalidInputException);
     }
 }
+
+TEST_F(discretizeTest, area_curve_should_throw_if_xs_are_not_strictly_increasing)
+{
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        const size_t n = a.random<size_t>().greater_than(1).no().greater_than(10);
+        std::vector<double> xs = random_increasing_vector_of_size(n);
+        const std::vector<double> ys = a.random_vector_of<double>().of_size(n).greater_than(0);
+        const size_t k = a.random<size_t>().between(1, n-1);
+        xs[k] = xs[k-1];
+        ASSERT_THROW(area_curve(xs, ys), InvalidInputException);
+    }
+}

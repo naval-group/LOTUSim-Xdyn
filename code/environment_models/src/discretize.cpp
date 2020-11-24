@@ -266,7 +266,7 @@ std::vector<double> area_curve(const std::vector<double>& xs, const std::vector<
     }
     for (size_t i = 1 ; i < n ; ++i)
     {
-        if (xs[i-1] > xs[i])
+        if (xs[i-1] >= xs[i])
         {
             THROW(__PRETTY_FUNCTION__, InvalidInputException, "xs should be strictly increasing.");
         }
