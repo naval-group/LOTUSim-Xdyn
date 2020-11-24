@@ -442,7 +442,7 @@ TEST_F(discretizeTest, equal_area_abscissae_should_return_equally_spaced_values_
         ASSERT_EQ(n, res.size());
         for (size_t j = 0 ; j < n ; ++j)
         {
-            ASSERT_DOUBLE_EQ(ref.at(j), res.at(j));
+            ASSERT_SMALL_RELATIVE_ERROR(ref.at(j), res.at(j), EPS);
         }
     }
 }
@@ -630,4 +630,17 @@ TEST_F(discretizeTest, can_find_given_area_in_area_curve_2)
     ASSERT_NEAR(4, find_given_area(9, xs, ys, area_curve(xs, ys)), EPS);
     ASSERT_NEAR(5, find_given_area(11, xs, ys, area_curve(xs, ys)), EPS);
     ASSERT_NEAR(2.5, find_given_area(4, xs, ys, area_curve(xs, ys)), EPS);
+}
+
+TEST_F(discretizeTest, equal_area_abscissae_should_return_equally_spaced_values_for_test_case)
+{
+    const std::vector<double> xs = {1,2,3,4,5.5};
+    const std::vector<double> ys = {2,3,3,4,0};
+    const auto res = equal_area_abscissae(xs, ys);
+    ASSERT_EQ(5, res.size());
+    ASSERT_NEAR(1, res[0], EPS);
+    ASSERT_NEAR(2+1./6., res[1], EPS);
+    ASSERT_NEAR(std::sqrt(10), res[2], EPS);
+    ASSERT_NEAR(4, res[3], EPS);
+    ASSERT_NEAR(5.5, res[4], EPS);
 }

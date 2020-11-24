@@ -321,8 +321,14 @@ std::vector<double> equal_area_abscissae(const std::vector<double>& xs, //!< Inp
     {
         return xs;
     }
-    std::vector<double> ret(n);
-    for (size_t i = 0 ; i < n ; ++i)
+    if (n == 0)
+    {
+        return xs;
+    }
+    std::vector<double> ret = xs;
+    const auto as = area_curve(xs, ys);
+    const double target_area = n ? as.back()/((double)n-1) : 0;
+    for (size_t i = 0 ; i < n-1 ; ++i)
     {
         if (ys[i] < 0)
         {
@@ -334,8 +340,8 @@ std::vector<double> equal_area_abscissae(const std::vector<double>& xs, //!< Inp
             {
                 THROW(__PRETTY_FUNCTION__, InvalidInputException, "xs should be strictly increasing.");
             }
+            ret[i] = find_given_area((double)i*target_area, xs, ys, as);
         }
-        ret[i] = ((double)i)/((double) n - 1)*(xs[n-1]-xs[0]) + xs[0];
     }
     return ret;
 }
