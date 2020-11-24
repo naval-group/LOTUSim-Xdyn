@@ -86,6 +86,18 @@ std::vector<double> equal_area_abscissae(
  */
 std::vector<double> area_curve(const std::vector<double>& xs, const std::vector<double>& ys);
 
+/**
+ * \author cady
+ * \date Nov 24, 2020
+ * \brief Finds the abscissa at which the area curve has a given value.
+ * \details This is not a simple linear interpolation because integrating half
+ * of an interval does not necessarily give half the area.
+ * \param xs Abscissae at which the area curve is defined.
+ * \param as Area curve.
+ * \return Abscissa at which the integral has the given value.
+ */
+double find_given_area(const double target_area, const std::vector<double>& xs, const std::vector<double>& ys, const std::vector<double>& as);
+
 /**  \brief Utility function used by the discretize function. Infinite depth approximation. This is where the stretching is taken into account.
   *  \returns Factor \f$f(k,z)\f$ such that \f$p_{\mbox{dyn}}=\rho g \eta_a f(k,z)\f$ (no unit), infinite depth approximation
   *  \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest dynamic_pressure_factor example

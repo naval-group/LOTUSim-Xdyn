@@ -283,6 +283,31 @@ std::vector<double> area_curve(const std::vector<double>& xs, const std::vector<
     return ret;
 }
 
+double find_given_area_single_interval(const double target_area, const double xa, const double xb, const double ya, const double yb);
+double find_given_area_single_interval(const double target_area, const double xa, const double xb, const double ya, const double yb)
+{
+    const double alpha = (yb - ya)/(xb - xa);
+    const double beta = ya - xa*alpha;
+    if (alpha == 0)
+    {
+        return xa + target_area/beta;
+    }
+    const double delta = beta*beta + alpha * (alpha*xa*xa + 2*beta*xa + 2*target_area);
+    return (std::sqrt(delta)-beta)/alpha;
+}
+
+double find_given_area(const double target_area, const std::vector<double>& xs, const std::vector<double>& ys, const std::vector<double>& as)
+{
+    for (size_t i = 1 ; i < xs.size() ; ++i)
+    {
+        if ((target_area>=as.at(i-1)) && (target_area<=as.at(i)))
+        {
+            return find_given_area_single_interval(target_area-as.at(i-1), xs[i-1], xs[i], ys[i-1], ys[i]);
+        }
+    }
+    return as.back();
+}
+
 std::vector<double> equal_area_abscissae(const std::vector<double>& xs, //!< Input abscissae at which the function is defined
         const std::vector<double>& ys //!< Value of the function for each xs
         )
