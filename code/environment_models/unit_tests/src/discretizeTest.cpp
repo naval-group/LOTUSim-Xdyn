@@ -617,19 +617,19 @@ TEST_F(discretizeTest, can_find_given_area_in_area_curve)
 {
     const std::vector<double> xs = {0, 8};
     const std::vector<double> ys = {0, 8};
-    ASSERT_NEAR(2, find_given_area(2, xs, ys, area_curve(xs, ys)), EPS);
+    ASSERT_NEAR(2, find_integration_bound_yielding_target_area(2, xs, ys, area_curve(xs, ys)), EPS);
 }
 
 TEST_F(discretizeTest, can_find_given_area_in_area_curve_2)
 {
     const std::vector<double> xs = {1,2,3,4,5};
     const std::vector<double> ys = {2,3,3,4,0};
-    ASSERT_NEAR(1, find_given_area(0, xs, ys, area_curve(xs, ys)), EPS);
-    ASSERT_NEAR(2, find_given_area(2.5, xs, ys, area_curve(xs, ys)), EPS);
-    ASSERT_NEAR(3, find_given_area(5.5, xs, ys, area_curve(xs, ys)), EPS);
-    ASSERT_NEAR(4, find_given_area(9, xs, ys, area_curve(xs, ys)), EPS);
-    ASSERT_NEAR(5, find_given_area(11, xs, ys, area_curve(xs, ys)), EPS);
-    ASSERT_NEAR(2.5, find_given_area(4, xs, ys, area_curve(xs, ys)), EPS);
+    ASSERT_NEAR(1, find_integration_bound_yielding_target_area(0, xs, ys, area_curve(xs, ys)), EPS);
+    ASSERT_NEAR(2, find_integration_bound_yielding_target_area(2.5, xs, ys, area_curve(xs, ys)), EPS);
+    ASSERT_NEAR(3, find_integration_bound_yielding_target_area(5.5, xs, ys, area_curve(xs, ys)), EPS);
+    ASSERT_NEAR(4, find_integration_bound_yielding_target_area(9, xs, ys, area_curve(xs, ys)), EPS);
+    ASSERT_NEAR(5, find_integration_bound_yielding_target_area(11, xs, ys, area_curve(xs, ys)), EPS);
+    ASSERT_NEAR(2.5, find_integration_bound_yielding_target_area(4, xs, ys, area_curve(xs, ys)), EPS);
 }
 
 TEST_F(discretizeTest, equal_area_abscissae_should_return_equally_spaced_values_for_test_case)

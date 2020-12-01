@@ -98,7 +98,7 @@ std::vector<double> area_curve(const std::vector<double>& xs, const std::vector<
  * \param as Area curve.
  * \return Abscissa at which the integral has the given value.
  */
-double find_given_area(const double target_area, const std::vector<double>& xs, const std::vector<double>& ys, const std::vector<double>& as);
+double find_integration_bound_yielding_target_area(const double target_area, const std::vector<double>& xs, const std::vector<double>& ys, const std::vector<double>& as);
 
 /**  \brief Utility function used by the discretize function. Infinite depth approximation. This is where the stretching is taken into account.
   *  \returns Factor \f$f(k,z)\f$ such that \f$p_{\mbox{dyn}}=\rho g \eta_a f(k,z)\f$ (no unit), infinite depth approximation

@@ -287,8 +287,8 @@ std::vector<double> area_curve(const std::vector<double>& xs, const std::vector<
     return ret;
 }
 
-double find_given_area_single_interval(const double target_area, const double xa, const double xb, const double ya, const double yb);
-double find_given_area_single_interval(const double target_area, const double xa, const double xb, const double ya, const double yb)
+double find_integration_bound_yielding_target_area_on_a_segment(const double target_area, const double xa, const double xb, const double ya, const double yb);
+double find_integration_bound_yielding_target_area_on_a_segment(const double target_area, const double xa, const double xb, const double ya, const double yb)
 {
     const double alpha = (yb - ya)/(xb - xa);
     const double beta = ya - xa*alpha;
@@ -300,13 +300,13 @@ double find_given_area_single_interval(const double target_area, const double xa
     return (std::sqrt(delta)-beta)/alpha;
 }
 
-double find_given_area(const double target_area, const std::vector<double>& xs, const std::vector<double>& ys, const std::vector<double>& as)
+double find_integration_bound_yielding_target_area(const double target_area, const std::vector<double>& xs, const std::vector<double>& ys, const std::vector<double>& as)
 {
     for (size_t i = 1 ; i < xs.size() ; ++i)
     {
         if ((target_area>=as.at(i-1)) && (target_area<=as.at(i)))
         {
-            return find_given_area_single_interval(target_area-as.at(i-1), xs[i-1], xs[i], ys[i-1], ys[i]);
+            return find_integration_bound_yielding_target_area_on_a_segment(target_area-as.at(i-1), xs[i-1], xs[i], ys[i-1], ys[i]);
         }
     }
     return as.back();
@@ -328,7 +328,7 @@ std::vector<double> equal_area_abscissae(const std::vector<double>& xs, //!< Inp
         const double target_area = as.back()/((double)n-1);
         for (size_t i = 1 ; i < n-1 ; ++i)
         {
-            ret[i] = find_given_area((double)i*target_area, xs, ys, as);
+            ret[i] = find_integration_bound_yielding_target_area((double)i*target_area, xs, ys, as);
         }
     }
     return ret;
