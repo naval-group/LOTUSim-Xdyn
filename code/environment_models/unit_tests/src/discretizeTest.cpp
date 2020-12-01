@@ -423,7 +423,7 @@ TEST_F(discretizeTest, equal_area_abscissae_should_throw_if_ys_are_not_positive)
     }
 }
 
-TEST_F(discretizeTest, equal_area_abscissae_should_return_equally_spaced_values_if_all_ys_are_0)
+TEST_F(discretizeTest, equal_area_abscissae_should_return_equally_spaced_values_if_all_ys_are_identical)
 {
     for (size_t i = 0 ; i < 1000 ; ++i)
     {
