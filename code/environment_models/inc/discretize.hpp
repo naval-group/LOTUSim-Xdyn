@@ -74,7 +74,10 @@ DiscreteDirectionalWaveSpectrum discretize(const WaveSpectralDensity& S,      //
 * \details If `f` denotes a function such that ys[i] = f(xs[i]), this function
 * returns a list of increasing `x`-values such that integrating f between x[i-1]
 * and x[i] will give a constant value, for each i between 1 and n-1.
-* \snippet /unit_tests/src/discretizeTest.cpp discretizeTest equal_area_abscissae_example
+  *  \section ex1 Example
+  *  \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest equal_area_abscissae_example
+  *  \section ex1 Expected output
+  *  \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest equal_area_abscissae_expected_output
 */
 std::vector<double> equal_area_abscissae(
         const std::vector<double>& xs, //!< Input abscissae at which the function is defined

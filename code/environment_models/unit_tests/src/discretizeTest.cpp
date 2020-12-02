@@ -634,6 +634,7 @@ TEST_F(discretizeTest, can_find_given_area_in_area_curve_2)
 
 TEST_F(discretizeTest, equal_area_abscissae_should_return_equally_spaced_values_for_test_case)
 {
+    //! [discretizeTest example]
     const std::vector<double> xs = {1,2,3,4,5.5};
     const std::vector<double> ys = {2,3,3,4,0};
     const auto res = equal_area_abscissae(xs, ys);
@@ -647,7 +648,7 @@ TEST_F(discretizeTest, equal_area_abscissae_should_return_equally_spaced_values_
 
 TEST_F(discretizeTest, equal_energy_bins)
 {
-//! [discretizeTest example]
+//! [discretizeTest equal_area_abscissae_example]
     const double Hs = 3;
     const double Tp = 4;
     const double gamma = 1.4;
@@ -656,8 +657,8 @@ TEST_F(discretizeTest, equal_energy_bins)
     YamlStretching y;
     const Stretching s(y);
     const DiscreteDirectionalWaveSpectrum A = discretize(S, D, 0.01, 3, 1000, s, true);
-//! [discretizeTest example]
-//! [discretizeTest expected output]
+//! [discretizeTest equal_area_abscissae_example]
+//! [discretizeTest equal_area_abscissae_expected_output]
     ASSERT_NEAR(0.01, A.omega[0], EPS);
     ASSERT_NEAR(1.025029449067951, A.omega[1], EPS);
     ASSERT_NEAR(1.0525530074258682, A.omega[2], EPS);
@@ -678,5 +679,5 @@ TEST_F(discretizeTest, equal_energy_bins)
     ASSERT_NEAR(2.1335838860523002, B.omega[7], EPS);
     ASSERT_NEAR(2.4226798199184207, B.omega[8], EPS);
     ASSERT_NEAR(3, B.omega[9], EPS);
-//! [discretizeTest expected output]
+    //! [discretizeTest equal_area_abscissae_expected_output]
 }
