@@ -48,7 +48,7 @@ WaveModelPtr SurfaceElevationFromWavesTest::get_model(const double psi0, const d
     y.h = 0;
     y.delta = 1;
     const Stretching s(y);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, water_depth, s);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, water_depth, s, false);
     return WaveModelPtr(new Airy(A, phase));
 }
 
@@ -72,7 +72,7 @@ WaveModelPtr SurfaceElevationFromWavesTest::get_model(const size_t nfreq) const
     y.h = 0;
     y.delta = 1;
     const Stretching s(y);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, s);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, s, false);
     int random_seed = 0;
     return WaveModelPtr(new Airy(A, random_seed));
 }

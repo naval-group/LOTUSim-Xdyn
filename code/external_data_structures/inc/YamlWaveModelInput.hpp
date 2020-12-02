@@ -19,6 +19,7 @@ struct YamlDiscretization
     double omega_min;       //!< First angular frequency (in rad/s)
     double omega_max;       //!< Last angular frequency (in rad/s)
     double energy_fraction; //!< Between 0 and 1: sum(S(omega[i]).S(psi[j]),taken into account)/sum(S(omega[i]).S(psi[j]),total)
+    bool equal_energy_bins; //!< False (by default) or true. When false, omegas are sampled regularly between omega_min and omega_max. When true, they are sampled such that the integral of the spectrum is constant between two consecutive omega values.
 };
 
 struct YamlStretching

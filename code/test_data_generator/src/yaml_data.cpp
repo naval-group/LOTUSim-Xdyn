@@ -1681,6 +1681,7 @@ std::string test_data::waves_for_parser_validation_only()
        << "   omega min: {value: 0.1, unit: rad/s}\n"
        << "   omega max: {value: 6, unit: deg/s}\n"
        << "   energy fraction: 0.123\n"
+       << "   equal energy bins: true\n"
        << "spectra:\n"
        << "  - model: airy\n"
        << "    seed of the random data generator: 0\n"

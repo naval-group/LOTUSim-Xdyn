@@ -94,9 +94,9 @@ DiscreteDirectionalWaveSpectrum SurfaceElevationBuilder<SurfaceElevationFromWave
     WaveDirectionalSpreadingPtr directional_spreading = parse_directional_spreading(spectrum);
     if (spectrum.depth>0)
     {
-        return discretize(*spectral_density, *directional_spreading, discretization.omega_min, discretization.omega_max, discretization.n, Stretching(spectrum.stretching));
+        return discretize(*spectral_density, *directional_spreading, discretization.omega_min, discretization.omega_max, discretization.n, Stretching(spectrum.stretching), discretization.equal_energy_bins);
     }
-    return discretize(*spectral_density, *directional_spreading, discretization.omega_min, discretization.omega_max, discretization.n, spectrum.depth, Stretching(spectrum.stretching));
+    return discretize(*spectral_density, *directional_spreading, discretization.omega_min, discretization.omega_max, discretization.n, spectrum.depth, Stretching(spectrum.stretching), discretization.equal_energy_bins);
 }
 
 WaveModelPtr SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse_wave_model(const YamlDiscretization& discretization, const YamlSpectra& spectrum) const

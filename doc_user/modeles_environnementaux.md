@@ -1090,11 +1090,13 @@ aléatoire. On obtient ainsi un signal apériodique.
 
 La performance de l'implémentation des modèles de houle est cruciale : en
 effet, la pression dynamique et la pression statique étant intégrées sur toutes
-les facettes du maillage (dans le cas d'un modèle non-linéaire), ces modèles sont évalués de nombreuses fois par pas
-de calcul. Comme le nombre de composantes sommées pour calculer les élévations
-et pressions dynamiques est potentiellement important, on ne sélectionne
-que les produits $`S(\omega_i)D(\gamma_j)`$ contribuant de manière significative
-à l'énergie totale.
+les facettes du maillage (dans le cas d'un modèle non-linéaire), ces modèles
+sont évalués de nombreuses fois par pas de calcul. Comme le nombre de
+composantes sommées pour calculer les élévations et pressions dynamiques est
+potentiellement important, on ne sélectionne que les produits
+$`S(\omega_i)D(\gamma_j)`$ contribuant de manière significative à l'énergie
+totale.
+
 Pour ce faire, on classe ces produits par ordre décroissant et l'on sélectionne
 les $`n`$ premiers de façon à ce que leur somme représente une fraction
 prédéterminée de la puissance totale. De cette manière, on réduit
@@ -1116,6 +1118,7 @@ discretization:
     omega min: {value: 0.1, unit: rad/s}
     omega max: {value: 6, unit: rad/s}
     energy fraction: 0.999
+    equal energy bins: true
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - `n` : nombre de points (nombre de fréquences ou nombre de directions)
@@ -1125,6 +1128,12 @@ discretization:
 directionnel $`S_i\cdot D_j`$ sont classés par ordre décroissant. On calcule la
 somme cumulative et l'on s'arrête lorsque l'énergie accumulée vaut `energy
 fraction` de l'énergie totale.
+- `equal energy bins` : paramètre optionnel pouvant prendre les valeurs
+  `true` ou `false` (par défaut). Lorsqu'il est à `false` (ou absent), la
+  discrétisation des pulsations est faite de façon régulière (le pas entre deux
+  omegas est constant). Lorsqu'il est à `true`, les pulsations sont discrétisées
+  de façon à ce que l'intégrale (par la méthode des trapèzes) du spectre entre
+  deux pulsations successives soit constante.
 
 ## Sorties
 

@@ -41,7 +41,7 @@ class DummyWaveSpectralDensity : public WaveSpectralDensity
 TEST_F(WaveSpectralDensityTest, bug_detected_by_FS)
 {
     DummyWaveSpectralDensity wsd;
-    const auto omega = wsd.get_angular_frequencies(1,1,1);
+    const auto omega = wsd.get_angular_frequencies(1,1,1, false);
     ASSERT_EQ(1, omega.size());
     ASSERT_DOUBLE_EQ(1, omega.front());
 }

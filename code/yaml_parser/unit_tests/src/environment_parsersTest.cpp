@@ -188,7 +188,7 @@ TEST_F(environment_parsersTest, clearer_error_message_if_missing_unit_value)
     }
     catch (const InvalidInputException& e)
     {
-        ASSERT_EQ("Error parsing section wave/spectra: In file /opt/share/code/yaml_parser/src/environment_parsers.cpp, line 114, function void operator>>(const YAML::Node&, YamlStretching&): Error parsing wave stretching parameters ('wave/spectra/stretching' section in the YAML file): In file /opt/share/code/yaml_parser/src/environment_parsers.cpp, line 106, function void operator>>(const YAML::Node&, YamlStretching&): Error parsing wave stretching parameters 'h': was expecting an object with fields 'unit' and 'value', e.g.:\n\th: {unit: 'm', value: 101}\nbut got the following error trying to parse it: yaml-cpp: error at line 0, column 0: bad dereference",e.get_message());
+        ASSERT_EQ("Error parsing section wave/spectra: In file /opt/share/code/yaml_parser/src/environment_parsers.cpp, line 121, function void operator>>(const YAML::Node&, YamlStretching&): Error parsing wave stretching parameters ('wave/spectra/stretching' section in the YAML file): In file /opt/share/code/yaml_parser/src/environment_parsers.cpp, line 113, function void operator>>(const YAML::Node&, YamlStretching&): Error parsing wave stretching parameters 'h': was expecting an object with fields 'unit' and 'value', e.g.:\n\th: {unit: 'm', value: 101}\nbut got the following error trying to parse it: yaml-cpp: error at line 0, column 0: bad dereference",e.get_message());
     }
     ASSERT_THROW(parse_waves(wave_yaml), InvalidInputException);
 }
@@ -204,3 +204,11 @@ TEST_F(environment_parsersTest, can_parse_grpc_data)
     ASSERT_EQ(yaml_string, yaml_grpc.rest_of_the_yaml);
 }
 
+TEST_F(environment_parsersTest, can_parse_equal_energy_bins_parameter)
+{
+    ASSERT_TRUE(yaml.discretization.equal_energy_bins);
+    std::string wave_yaml = test_data::waves_for_parser_validation_only();
+    boost::replace_all(wave_yaml, "equal energy bins: true", "equal energy bins: false");
+    const auto res = parse_waves(wave_yaml);
+    ASSERT_FALSE(res.discretization.equal_energy_bins);
+}

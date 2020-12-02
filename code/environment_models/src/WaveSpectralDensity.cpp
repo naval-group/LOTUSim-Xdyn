@@ -5,7 +5,7 @@
  *      Author: cady
  */
 #include "WaveSpectralDensity.hpp"
-
+#include "discretize.hpp"
 #include "SumOfWaveSpectralDensities.hpp"
 #include "WaveNumberFunctor.hpp"
 #include "InvalidInputException.hpp"
@@ -30,7 +30,8 @@ WaveSpectralDensity::~WaveSpectralDensity()
 
 std::vector<double> WaveSpectralDensity::get_angular_frequencies(const double omega_min, //!< Minimum angular frequency (in rad/s)
                                                                  const double omega_max, //!< Minimum angular frequency (in rad/s)
-                                                                 const size_t n          //!< Number of angular frequencies to return
+                                                                 const size_t n,         //!< Number of angular frequencies to return
+                                                                 const bool equal_energy_bins       //!< Choose omegas so the integral of S between two successive omegas is constant
                                                                 ) const
 {
     if (std::isinf(omega_min))
@@ -84,6 +85,15 @@ std::vector<double> WaveSpectralDensity::get_angular_frequencies(const double om
     for (size_t i = 1 ; i <= n ; ++i)
     {
         omega[i-1] = omega_min + double(i-1)/double(n-1)*Domega;
+    }
+    if (equal_energy_bins)
+    {
+        std::vector<double> S(n, 0);
+        for (size_t i = 0 ; i < n ; ++i)
+        {
+            S[i] = this->operator()(omega[i]);
+        }
+        omega = equal_area_abscissae(omega, S);
     }
     return omega;
 }

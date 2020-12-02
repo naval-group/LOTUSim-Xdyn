@@ -23,18 +23,20 @@ DiscreteDirectionalWaveSpectrum common(
         const WaveDirectionalSpreading& D, //!< Spatial spectrum
         const double omega_min,            //!< Lower bound of the angular frequency range (in rad/s)
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
-        const size_t nfreq                 //!< Number of frequencies & number of directions in discrete spectrum
+        const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
+        const bool equal_energy_bins       //!< Choose omegas so that integral of S between two successive omegas is constant
         );
 DiscreteDirectionalWaveSpectrum common(
         const WaveSpectralDensity& S,      //!< Frequency spectrum
         const WaveDirectionalSpreading& D, //!< Spatial spectrum
         const double omega_min,            //!< Lower bound of the angular frequency range (in rad/s)
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
-        const size_t nfreq                 //!< Number of frequencies & number of directions in discrete spectrum
+        const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
+        const bool equal_energy_bins       //!< Choose omegas so that integral of S between two successive omegas is constant
         )
 {
     DiscreteDirectionalWaveSpectrum ret;
-    ret.omega = S.get_angular_frequencies(omega_min, omega_max, nfreq);
+    ret.omega = S.get_angular_frequencies(omega_min, omega_max, nfreq, equal_energy_bins);
     ret.psi = D.get_directions(nfreq);
     ret.Si.reserve(ret.omega.size());
     ret.Dj.reserve(ret.psi.size());
@@ -49,10 +51,11 @@ DiscreteDirectionalWaveSpectrum discretize(
         const double omega_min,            //!< Lower bound of the angular frequency range (in rad/s)
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
         const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
-        const Stretching& stretching       //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
+        const Stretching& stretching,      //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
+        const bool equal_energy_bins       //!< Choose omegas so the integral of S between two successive omegas is constant
         )
 {
-    DiscreteDirectionalWaveSpectrum ret = common(S,D,omega_min,omega_max,nfreq);
+    DiscreteDirectionalWaveSpectrum ret = common(S, D, omega_min, omega_max, nfreq, equal_energy_bins);
     ret.k.reserve(ret.omega.size());
     for (const auto omega:ret.omega) ret.k.push_back(S.get_wave_number(omega));
     ret.pdyn_factor = [stretching](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,eta,stretching);};
@@ -73,10 +76,11 @@ DiscreteDirectionalWaveSpectrum discretize(
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
         const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
         const double h,                    //!< Water depth (in meters)
-        const Stretching& stretching       //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
+        const Stretching& stretching,      //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
+        const bool equal_energy_bins       //!< Choose omegas so the integral of S between two successive omegas is constant
         )
 {
-    DiscreteDirectionalWaveSpectrum ret = common(S,D,omega_min,omega_max,nfreq);
+    DiscreteDirectionalWaveSpectrum ret = common(S, D, omega_min, omega_max, nfreq, equal_energy_bins);
     ret.k.reserve(ret.omega.size());
     for (const auto omega:ret.omega) ret.k.push_back(S.get_wave_number(omega,h));
     for (size_t i = 0 ; i < ret.k.size() ; ++i)
@@ -176,9 +180,9 @@ FlatDiscreteDirectionalWaveSpectrum flatten(
 /**
  * \brief Only select the most important spectrum components & create single vector.
  * \details Output spectrum represents at least `ratio * Energy`
- *  It No need to loop on all frequencies & all directions: we only select
+ *  No need to loop on all frequencies & all directions: we only select
  *  the most important ones (i.e. those representing a given ratio of the total
- *  energy in the spectrum.
+ *  energy in the spectrum).
  * \returns A flat spectrum (i.e. one where the freq & direct. loops have been unrolled)
  * \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest flatten_example
  */
@@ -255,6 +259,79 @@ double dynamic_pressure_factor(const double k,              //!< Wave number (in
     if (eta != 0 && z<eta) return 0;
     if (z>h) return 0;
     return cosh(k*(h-stretching.rescaled_z(z,eta)))/cosh(k*h);
+}
+
+std::vector<double> area_curve(const std::vector<double>& xs, const std::vector<double>& ys)
+{
+    const size_t n = xs.size();
+    if (ys.size() != n)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "xs and ys should have the same number of points.");
+    }
+    std::vector<double> ret(n, 0);
+    for (size_t i = 0 ; i < n ; ++i)
+    {
+        if (ys[i] < 0)
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "All values in ys should be positive.");
+        }
+        if (i>0)
+        {
+            if (xs[i-1] >= xs[i])
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "xs should be strictly increasing.");
+            }
+            ret[i] = ret[i-1] + 0.5*(ys[i] + ys[i-1])*(xs[i] - xs[i-1]);
+        }
+    }
+    return ret;
+}
+
+double find_integration_bound_yielding_target_area_on_a_segment(const double target_area, const double xa, const double xb, const double ya, const double yb);
+double find_integration_bound_yielding_target_area_on_a_segment(const double target_area, const double xa, const double xb, const double ya, const double yb)
+{
+    const double alpha = (yb - ya)/(xb - xa);
+    const double beta = ya - xa*alpha;
+    if (alpha == 0)
+    {
+        return xa + target_area/beta;
+    }
+    const double delta = beta*beta + alpha * (alpha*xa*xa + 2*beta*xa + 2*target_area);
+    return (std::sqrt(delta)-beta)/alpha;
+}
+
+double find_integration_bound_yielding_target_area(const double target_area, const std::vector<double>& xs, const std::vector<double>& ys, const std::vector<double>& as)
+{
+    for (size_t i = 1 ; i < xs.size() ; ++i)
+    {
+        if ((target_area>=as.at(i-1)) && (target_area<=as.at(i)))
+        {
+            return find_integration_bound_yielding_target_area_on_a_segment(target_area-as.at(i-1), xs[i-1], xs[i], ys[i-1], ys[i]);
+        }
+    }
+    return as.back();
+}
+
+std::vector<double> equal_area_abscissae(const std::vector<double>& xs, //!< Input abscissae at which the function is defined
+        const std::vector<double>& ys //!< Value of the function for each xs
+        )
+{
+    const size_t n = xs.size();
+    if (ys.size() != n)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "xs and ys should have the same number of points.");
+    }
+    std::vector<double> ret = xs;
+    if (n > 0)
+    {
+        const auto as = area_curve(xs, ys);
+        const double target_area = as.back()/((double)n-1);
+        for (size_t i = 1 ; i < n-1 ; ++i)
+        {
+            ret[i] = find_integration_bound_yielding_target_area((double)i*target_area, xs, ys, as);
+        }
+    }
+    return ret;
 }
 
 double dynamic_pressure_factor_sh(const double k,              //!< Wave number (in 1/m)

@@ -1,7 +1,7 @@
 # Dockerfile with xdyn, a python interpreter, various python libraries, and
 # pandoc
 #
-FROM python:3.7
+FROM python@sha256:0bb57c218e452ace5a4d55ee3c56e3c57e29c7f43cf55192acf7289becff4b0e
 
 # Install
 # - gcc to build psutil package used by pandoc-eqnos
@@ -26,17 +26,17 @@ RUN apt-get update && \
 
 RUN python3 -m pip install -U pip && \
     python3 -m pip install \
-        h5py==2.10.0 \
-        jupyter_client==5.3.4 \
-        matplotlib==3.2.0 \
-        numpy==1.18.1 \
-        pandas==1.0.1 \
-        pandoc-eqnos==2.1.1 \
-        pandoc-fignos==2.2.0 \
-        pweave==0.30.1 \
-        pyyaml==5.3 \
-        xlrd==1.2.0 \
-        xlwt==1.3.0 \
+        h5py==3.1.0\
+        jupyter_client==6.1.7 \
+        matplotlib==3.3.3\
+        numpy==1.19.4\
+        pandas==1.1.4\
+        pandoc-eqnos==2.4.0\
+        pandoc-fignos==2.4.0\
+        pweave==0.30.3\
+        pyyaml==5.3.1\
+        xlrd==1.2.0\
+        xlwt==1.3.0\
         && \
     mkdir -p /tmp_build/report
 

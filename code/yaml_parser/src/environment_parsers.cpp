@@ -89,6 +89,13 @@ void operator >> (const YAML::Node& node, YamlDiscretization& g)
     ssc::yaml_parser::parse_uv(node["omega min"], g.omega_min);
     ssc::yaml_parser::parse_uv(node["omega max"], g.omega_max);
     node["energy fraction"] >> g.energy_fraction;
+    try
+    {
+        node["equal energy bins"]         >> g.equal_energy_bins;
+    }
+    catch(std::exception& ) // Nothing to do: 'equal energy bins' section is not mandatory
+    {
+    }
 }
 
 void operator >> (const YAML::Node& node, YamlStretching& g)
