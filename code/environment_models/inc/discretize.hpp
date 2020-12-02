@@ -34,7 +34,10 @@ FlatDiscreteDirectionalWaveSpectrum filter(
   *  \date Aug 1, 2014, 5:04:24 PM
   *  \brief Discretize a wave spectrum
   *  \details Infinite depth hypothesis (for the wave number)
-  *  \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest discretize_example
+  *  \section ex1 Example
+  *  \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest example
+  *  \section ex1 Expected output
+  *  \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest expected output
   */
 DiscreteDirectionalWaveSpectrum discretize(const WaveSpectralDensity& S,      //!< Frequency spectrum
                                            const WaveDirectionalSpreading& D, //!< Spatial spectrum

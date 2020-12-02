@@ -647,7 +647,7 @@ TEST_F(discretizeTest, equal_area_abscissae_should_return_equally_spaced_values_
 
 TEST_F(discretizeTest, equal_energy_bins)
 {
-//! [equal_energy_bins example]
+//! [discretizeTest example]
     const double Hs = 3;
     const double Tp = 4;
     const double gamma = 1.4;
@@ -656,8 +656,8 @@ TEST_F(discretizeTest, equal_energy_bins)
     YamlStretching y;
     const Stretching s(y);
     const DiscreteDirectionalWaveSpectrum A = discretize(S, D, 0.01, 3, 1000, s, true);
-//! [equal_energy_bins example]
-//! [equal_energy_bins expected output]
+//! [discretizeTest example]
+//! [discretizeTest expected output]
     ASSERT_NEAR(0.01, A.omega[0], EPS);
     ASSERT_NEAR(1.025029449067951, A.omega[1], EPS);
     ASSERT_NEAR(1.0525530074258682, A.omega[2], EPS);
@@ -667,8 +667,6 @@ TEST_F(discretizeTest, equal_energy_bins)
     ASSERT_NEAR(3, A.omega[999], EPS);
     ASSERT_EQ(1000, A.omega.size());
     const DiscreteDirectionalWaveSpectrum B = discretize(S, D, 0.01, 3, 10, s, true);
-    //! [equal_energy_bins example]
-    //! [equal_energy_bins expected output]
     ASSERT_EQ(10, B.omega.size());
     ASSERT_NEAR(0.01, B.omega[0], EPS);
     ASSERT_NEAR(1.3266362675988099, B.omega[1], EPS);
@@ -680,6 +678,5 @@ TEST_F(discretizeTest, equal_energy_bins)
     ASSERT_NEAR(2.1335838860523002, B.omega[7], EPS);
     ASSERT_NEAR(2.4226798199184207, B.omega[8], EPS);
     ASSERT_NEAR(3, B.omega[9], EPS);
-
-//! [equal_energy_bins expected output]
+//! [discretizeTest expected output]
 }
