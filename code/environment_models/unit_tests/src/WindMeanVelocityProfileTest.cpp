@@ -67,7 +67,7 @@ TEST_F(WindMeanVelocityProfileTest, PowerLawWindVelocityProfile_returns_right_va
 	input.z_ref=10;
 	PowerLawWindVelocityProfile wind_model(input);
 	Eigen::Vector3d position;
-	position << a.random<double>(), a.random<double>(), -abs(a.random<double>());
+	position << a.random<double>(), a.random<double>(), -fabs(a.random<double>());
 	double time(a.random<double>());
 	Eigen::Vector3d wind_vector(wind_model.get_wind(position,time));
 	double wind_velocity = input.velocity*pow(-position(2)/input.z_ref,input.alpha);
@@ -105,7 +105,7 @@ TEST_F(WindMeanVelocityProfileTest, LogWindVelocityProfile_returns_right_value)
 	input.z_ref = 10;
 	LogWindVelocityProfile wind_model(input);
 	Eigen::Vector3d position;
-	position << a.random<double>(), a.random<double>(), -abs(a.random<double>());
+	position << a.random<double>(), a.random<double>(), -fabs(a.random<double>());
 	double time(a.random<double>());
 	Eigen::Vector3d wind_vector(wind_model.get_wind(position,time));
 	double wind_velocity = input.velocity*log(-position(2)/input.z0)/log(input.z_ref/input.z0);
