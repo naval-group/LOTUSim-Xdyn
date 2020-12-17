@@ -11,6 +11,7 @@ FILE(GLOB SRC src/generate_body_for_tests.cpp
               src/random_kinematics.cpp
               src/BlockedDOFTest.cpp
               src/WrenchTest.cpp
+              src/EnvironmentAndFramesTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
