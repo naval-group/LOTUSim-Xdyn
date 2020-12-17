@@ -171,6 +171,7 @@ TEST_F(SimulatorBuilderTest, wind_model_is_available_from_env)
 TEST_F(SimulatorBuilderTest, can_get_rho_air)
 {
     builder.can_parse<DefaultSurfaceElevation>();
-    const auto env = builder.get_environment();
+    builder.can_parse<DefaultWindModel>();
+    const auto env = builder.build_environment_and_frames();
     ASSERT_DOUBLE_EQ(1.225,env.get_rho_air());
 }
