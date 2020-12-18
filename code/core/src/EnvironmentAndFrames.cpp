@@ -15,7 +15,7 @@
 using namespace ssc::kinematics;
 
 EnvironmentAndFrames::EnvironmentAndFrames() : w(),
-											   wind(),
+                                               wind(),
                                                k(KinematicsPtr(new Kinematics())),
                                                rho(0),
                                                nu(0),
