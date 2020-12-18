@@ -160,7 +160,7 @@ class SimulatorBuilder
             return *this;
         }
 
-        /**  \brief Add the capacity to parse certain YAML inputs for wind models (eg. cRPC wind model)
+        /**  \brief Add the capacity to parse certain YAML inputs for wind models (eg. gRPC wind model)
          *  \details This method must not be called with any parameters: the
          *  default parameter is only there so we can use boost::enable_if. This
          *  allows us to use can_parse for several types derived from a few
