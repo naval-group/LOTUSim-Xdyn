@@ -24,24 +24,25 @@ typedef std::function<boost::optional<WindMeanVelocityProfilePtr>(const YamlMode
 class WindMeanVelocityProfile : public WindModel
 {
 public:
-	struct Input{
-		Input();
-		double velocity;
-		double direction;
-	};
+    struct Input
+    {
+        Input();
+        double velocity;
+        double direction;
+    };
 
-	WindMeanVelocityProfile(const Input& input);
-	virtual ~WindMeanVelocityProfile();
+    WindMeanVelocityProfile(const Input& input);
+    virtual ~WindMeanVelocityProfile();
 
-	Eigen::Vector3d get_wind(const Eigen::Vector3d& position, const double t) const override;
-	virtual double get_wind_velocity(const double z) const=0;
-	static Input parse(const std::string& yaml_input);
+    Eigen::Vector3d get_wind(const Eigen::Vector3d& position, const double t) const override;
+    virtual double get_wind_velocity(const double z) const =0;
+    static Input parse(const std::string& yaml_input);
 
 protected:
-	double velocity;
+    double velocity;
 
 private:
-	Eigen::Vector3d direction;
+    Eigen::Vector3d direction;
 };
 
 #endif /* ENVIRONMENT_MODELS_INC_WINDMEANVELOCITYPROFILE_HPP_ */

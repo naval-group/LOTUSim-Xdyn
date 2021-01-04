@@ -15,17 +15,17 @@
 #include <ssc/text_file_reader.hpp>
 
 SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_, const double t0_, const ssc::data_source::DataSource& command_listener_) :
-                                        input(input_),
-                                        builder(TR1(shared_ptr)<BodyBuilder>(new  BodyBuilder(input.rotations))),
-                                        force_parsers(),
-                                        controllable_force_parsers(),
-                                        surface_elevation_parsers(),
-                                        wave_parsers(TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> >(new std::vector<WaveModelBuilderPtr>())),
-                                        directional_spreading_parsers(TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >(new std::vector<DirectionalSpreadingBuilderPtr>())),
-                                        spectrum_parsers(TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >(new std::vector<SpectrumBuilderPtr>())),
-										wind_model_parsers(),
-                                        command_listener(command_listener_),
-                                        t0(t0_)
+        input(input_),
+        builder(TR1(shared_ptr)<BodyBuilder>(new BodyBuilder(input.rotations))),
+        force_parsers(),
+        controllable_force_parsers(),
+        surface_elevation_parsers(),
+        wave_parsers(TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> >(new std::vector<WaveModelBuilderPtr>())),
+        directional_spreading_parsers(TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >(new std::vector<DirectionalSpreadingBuilderPtr>())),
+        spectrum_parsers(TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >(new std::vector<SpectrumBuilderPtr>())),
+        wind_model_parsers(),
+        command_listener(command_listener_),
+        t0(t0_)
 {
 }
 
@@ -99,16 +99,16 @@ void SimulatorBuilder::set_environment_models(EnvironmentAndFrames& env) const
         }
         for(auto parser:wind_model_parsers)
         {
-        	boost::optional<WindModelPtr> w = parser(*that_model);
-        	if (w)
-        	{
-        		if (env.wind)
-        		{
-        			THROW(__PRETTY_FUNCTION__, InternalErrorException, "More than one wind model was defined.");
-        		}
-        		env.wind = w.get();
-        		env_model_successfully_parsed = true;
-        	}
+            boost::optional<WindModelPtr> w = parser(*that_model);
+            if (w)
+            {
+                if(env.wind)
+                {
+                    THROW(__PRETTY_FUNCTION__, InternalErrorException, "More than one wind model was defined.");
+                }
+                env.wind = w.get();
+                env_model_successfully_parsed = true;
+            }
         }
         if (not(env_model_successfully_parsed))
         {

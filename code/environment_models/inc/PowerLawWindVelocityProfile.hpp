@@ -13,24 +13,24 @@
 class PowerLawWindVelocityProfile : public WindMeanVelocityProfile
 {
 public:
-	struct Input : public WindMeanVelocityProfile::Input
-	{
-		Input();
-		Input(const WindMeanVelocityProfile::Input& parent);
-		double alpha;
-		double z_ref;
-	};
+    struct Input : public WindMeanVelocityProfile::Input
+    {
+        Input();
+        Input(const WindMeanVelocityProfile::Input& parent);
+        double alpha;
+        double z_ref;
+    };
 
-	PowerLawWindVelocityProfile(const Input& input);
-	virtual ~PowerLawWindVelocityProfile();
+    PowerLawWindVelocityProfile(const Input& input);
+    virtual ~PowerLawWindVelocityProfile();
 
-	virtual double get_wind_velocity(const double z) const override;
-	static std::string model_name();
-	static Input parse(const std::string& yaml_input);
+    virtual double get_wind_velocity(const double z) const override;
+    static std::string model_name();
+    static Input parse(const std::string& yaml_input);
 
 private:
-	double alpha;
-	double z_ref;
+    double alpha;
+    double z_ref;
 };
 
 #endif /* ENVIRONMENT_MODELS_INC_POWERLAWWINDVELOCITYPROFILE_HPP_ */

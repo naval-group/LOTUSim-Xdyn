@@ -7,8 +7,11 @@
 
 #include "WindModel.hpp"
 
+WindModel::WindModel()
+{
+}
 
-WindModel::WindModel(){}
-
-WindModel::~WindModel(){}
+WindModel::~WindModel()
+{
+}
 

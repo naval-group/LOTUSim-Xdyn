@@ -14,11 +14,11 @@
 class WindMeanVelocityProfileTest : public ::testing::Test
 {
 public:
-	WindMeanVelocityProfileTest ();
-	virtual ~WindMeanVelocityProfileTest ();
-	virtual void SetUp();
-	virtual void TearDown();
-	ssc::random_data_generator::DataGenerator a;
+    WindMeanVelocityProfileTest();
+    virtual ~WindMeanVelocityProfileTest();
+    virtual void SetUp();
+    virtual void TearDown();
+    ssc::random_data_generator::DataGenerator a;
 };
 
 #endif /* ENVIRONMENT_MODELS_UNIT_TESTS_UNIFORMWINDVELOCITYPROFILETEST_HPP_ */

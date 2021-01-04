@@ -13,24 +13,24 @@
 class LogWindVelocityProfile : public WindMeanVelocityProfile
 {
 public:
-	struct Input : public WindMeanVelocityProfile::Input
-	{
-		Input();
-		Input(const WindMeanVelocityProfile::Input& parent);
-		double z0;
-		double z_ref;
-	};
+    struct Input : public WindMeanVelocityProfile::Input
+    {
+        Input();
+        Input(const WindMeanVelocityProfile::Input& parent);
+        double z0;
+        double z_ref;
+    };
 
-	LogWindVelocityProfile(const Input& input);
-	virtual ~LogWindVelocityProfile();
+    LogWindVelocityProfile(const Input& input);
+    virtual ~LogWindVelocityProfile();
 
-	virtual double get_wind_velocity(const double z) const override;
-	static std::string model_name();
-	static Input parse(const std::string& yaml_input);
+    virtual double get_wind_velocity(const double z) const override;
+    static std::string model_name();
+    static Input parse(const std::string& yaml_input);
 
 private:
-	double z0;
-	double z_ref;
+    double z0;
+    double z_ref;
 };
 
 #endif /* ENVIRONMENT_MODELS_INC_LOGWINDVELOCITYPROFILE_HPP_ */

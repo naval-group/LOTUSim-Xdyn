@@ -16,12 +16,12 @@
 class UniformWindVelocityProfile : public WindMeanVelocityProfile
 {
 public:
-	UniformWindVelocityProfile(const Input& input);
-	virtual ~UniformWindVelocityProfile();
+    UniformWindVelocityProfile(const Input& input);
+    virtual ~UniformWindVelocityProfile();
 
-	virtual double get_wind_velocity(const double z) const override;
-	static std::string model_name();
-	static Input parse(const std::string& yaml_input);
+    virtual double get_wind_velocity(const double z) const override;
+    static std::string model_name();
+    static Input parse(const std::string& yaml_input);
 };
 
 #endif /* ENVIRONMENT_MODELS_INC_UNIFORMWINDVELOCITYPROFILE_HPP_ */
