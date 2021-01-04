@@ -59,20 +59,15 @@ void SimulatorBuilder::add_initial_transforms(const std::vector<BodyPtr>& bodies
     }
 }
 
-EnvironmentAndFrames SimulatorBuilder::get_environment() const
+EnvironmentAndFrames SimulatorBuilder::build_environment_and_frames() const
 {
     EnvironmentAndFrames env;
     env.g = input.environmental_constants.g;
     env.rho = input.environmental_constants.rho;
     env.nu = input.environmental_constants.nu;
     env.rot = input.rotations;
-    set_environment_models(env);
     env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
-    return env;
-}
 
-void SimulatorBuilder::set_environment_models(EnvironmentAndFrames& env) const
-{
     if (surface_elevation_parsers.empty())
     {
     	THROW(__PRETTY_FUNCTION__, InternalErrorException, "No wave parser defined. Need to call SimulatorBuilder::can_parse<T> with e.g. T=DefaultWaveModel");
@@ -115,6 +110,7 @@ void SimulatorBuilder::set_environment_models(EnvironmentAndFrames& env) const
             THROW(__PRETTY_FUNCTION__, InvalidInputException, "Simulator does not understand environment model '" << that_model->model << "'");
         }
     }
+    return env;
 }
 
 std::vector<ListOfForces> SimulatorBuilder::get_forces(const EnvironmentAndFrames& env) const
@@ -261,7 +257,7 @@ std::vector<bool> SimulatorBuilder::are_there_surface_forces_acting_on_body(cons
 
 Sim SimulatorBuilder::build(const MeshMap& meshes) const
 {
-    auto env = get_environment();
+    auto env = build_environment_and_frames();
     const auto forces = get_forces(env);
     const auto controlled_forces = get_controlled_forces(env);
     auto history_length = get_max_history_length(forces, controlled_forces);

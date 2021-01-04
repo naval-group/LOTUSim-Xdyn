@@ -63,7 +63,7 @@ TEST_F(SimulatorBuilderTest, can_get_rho_and_g)
 {
     builder.can_parse<DefaultSurfaceElevation>();
     builder.can_parse<DefaultWindModel>();
-    const auto env = builder.get_environment();
+    const auto env = builder.build_environment_and_frames();
     ASSERT_DOUBLE_EQ(9.81,env.g);
     ASSERT_DOUBLE_EQ(1000,env.rho);
 }
@@ -110,13 +110,13 @@ TEST_F(SimulatorBuilderTest, kinematics_contains_ned_to_body_transform)
 TEST_F(SimulatorBuilderTest, should_throw_if_no_wave_parser_defined)
 {
     builder.can_parse<DefaultWindModel>();
-    ASSERT_THROW(builder.get_environment(), InternalErrorException);
+    ASSERT_THROW(builder.build_environment_and_frames(), InternalErrorException);
 }
 
 TEST_F(SimulatorBuilderTest, should_throw_if_no_wind_parser_defined)
 {
     builder.can_parse<DefaultSurfaceElevation>();
-    ASSERT_THROW(builder.get_environment(), InternalErrorException);
+    ASSERT_THROW(builder.build_environment_and_frames(), InternalErrorException);
 }
 
 TEST_F(SimulatorBuilderTest, should_throw_if_attempting_to_define_wave_model_twice)
@@ -129,7 +129,7 @@ TEST_F(SimulatorBuilderTest, should_throw_if_attempting_to_define_wave_model_twi
     SimulatorBuilder builder2(input2, 0);
     builder2.can_parse<DefaultSurfaceElevation>();
     builder2.can_parse<DefaultWindModel>();
-    ASSERT_THROW(builder2.get_environment(), InternalErrorException);
+    ASSERT_THROW(builder2.build_environment_and_frames(), InternalErrorException);
 }
 
 TEST_F(SimulatorBuilderTest, should_throw_if_attempting_to_define_wind_model_twice)
@@ -142,7 +142,7 @@ TEST_F(SimulatorBuilderTest, should_throw_if_attempting_to_define_wind_model_twi
     SimulatorBuilder builder2(input2, 0);
     builder2.can_parse<DefaultSurfaceElevation>();
     builder2.can_parse<DefaultWindModel>();
-    ASSERT_THROW(builder2.get_environment(), InternalErrorException);
+    ASSERT_THROW(builder2.build_environment_and_frames(), InternalErrorException);
 }
 
 TEST_F(SimulatorBuilderTest, get_forces_should_throw_if_there_is_anything_it_cannot_parse)
@@ -153,7 +153,7 @@ TEST_F(SimulatorBuilderTest, get_forces_should_throw_if_there_is_anything_it_can
     const std::string name = input.bodies.front().name;
     m[name] = two_triangles();
     const auto bodies = builder.get_bodies(m, std::vector<bool>(1,false), std::map<std::string,double>());
-    const auto env = builder.get_environment();
+    const auto env = builder.build_environment_and_frames();
     ASSERT_THROW(builder.get_forces(env), InvalidInputException);
 }
 
@@ -161,7 +161,7 @@ TEST_F(SimulatorBuilderTest, wind_model_is_available_from_env)
 {
     builder.can_parse<DefaultSurfaceElevation>();
     builder.can_parse<DefaultWindModel>();
-    const auto env = builder.get_environment();
+    const auto env = builder.build_environment_and_frames();
     Eigen::Vector3d position;
     position << a.random<double>(), a.random<double>(), -abs(a.random<double>());
     double time(a.random<double>());

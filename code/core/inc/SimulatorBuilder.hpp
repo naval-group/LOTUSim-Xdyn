@@ -177,7 +177,7 @@ class SimulatorBuilder
         }
 
         std::vector<BodyPtr> get_bodies(const MeshMap& meshes, const std::vector<bool>& bodies_contain_surface_forces, std::map<std::string,double> Tmax) const;
-        EnvironmentAndFrames get_environment() const;
+        EnvironmentAndFrames build_environment_and_frames() const;
         std::vector<ListOfForces> get_forces(const EnvironmentAndFrames& env) const;
         std::vector<ListOfControlledForces> get_controlled_forces(const EnvironmentAndFrames& env) const;
         StateType get_initial_states() const;
