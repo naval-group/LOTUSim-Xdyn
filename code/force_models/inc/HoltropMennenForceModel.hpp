@@ -45,12 +45,12 @@ public:
     static Input parse(const std::string& yaml);
     static std::string model_name();
 
-    double Rf(const BodyStates& states) const;
-    double Rapp(const BodyStates& states) const;
-    double Rw(const BodyStates& states) const;
-    double Rb(const BodyStates& states) const;
-    double Rtr(const BodyStates& states) const;
-    double Ra(const BodyStates& states) const;
+    double Rf(const BodyStates& states) const;   // Frictional resistance over the hull
+    double Rapp(const BodyStates& states) const; // Frictional resistance over the appendages
+    double Rw(const BodyStates& states) const;   // Wave-making resistance
+    double Rb(const BodyStates& states) const;   // Bulbous bow influence
+    double Rtr(const BodyStates& states) const;  // Immersed transom stern influence
+    double Ra(const BodyStates& states) const;   // Correlation term between model and full scale
 
     // Getters for optional input values that can be computed by empirical formulae inside the model
     double get_iE() const;
