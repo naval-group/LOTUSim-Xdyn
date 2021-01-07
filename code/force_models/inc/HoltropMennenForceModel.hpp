@@ -36,8 +36,8 @@ public:
         double At;
         double Sapp;
         double Cstern;
-        boost::optional<double> form_coeff_hull;
-        double form_coeff_app;
+        boost::optional<double> hull_form_coeff;
+        double app_form_coeff;
         bool apply_on_ship_speed_direction;
     };
     HoltropMennenForceModel(const Input& data, const std::string& body_name, const EnvironmentAndFrames& env);
@@ -97,8 +97,8 @@ private:
     const double Sapp;
     const double Cstern;
     const double c14;
-    const double form_coeff_hull;
-    const double form_coeff_app;
+    const double hull_form_coeff;
+    const double app_form_coeff;
     const double Cb;
     const std::function<double(double, double)> Rw_a;
     const std::function<double(double, double)> Rw_b;

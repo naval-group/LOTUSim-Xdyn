@@ -36,8 +36,8 @@ HoltropMennenForceModel::Input::Input() :
         At(),
         Sapp(),
         Cstern(),
-        form_coeff_hull(),
-        form_coeff_app(),
+        hull_form_coeff(),
+        app_form_coeff(),
         apply_on_ship_speed_direction(false)
 {
 }
@@ -80,9 +80,9 @@ HoltropMennenForceModel::Input HoltropMennenForceModel::parse(const std::string&
     {
         double hull_form_coeff;
         node["1+k1"] >> hull_form_coeff;
-        ret.form_coeff_hull = hull_form_coeff;
+        ret.hull_form_coeff = hull_form_coeff;
     }
-    node["1+k2"] >> ret.form_coeff_app;
+    node["1+k2"] >> ret.app_form_coeff;
     if(node.FindValue("apply on ship speed direction")) node["apply on ship speed direction"] >> ret.apply_on_ship_speed_direction;
     return ret;
 }
@@ -129,8 +129,8 @@ HoltropMennenForceModel::HoltropMennenForceModel(const Input& data, const std::s
         Sapp(data.Sapp),
         Cstern(data.Cstern),
         c14(1 + 0.011 * Cstern),
-        form_coeff_hull(data.form_coeff_hull.is_initialized() ? data.form_coeff_hull.get() : 0.93 + 0.487118 * c14 * std::pow(B / Lpp, 1.06806) * std::pow(T / L, 0.46106) * std::pow(L / Lr, 0.121563) * std::pow(std::pow(L, 3.) / Vol, 0.36486) * std::pow(1 - Cp, -0.604247)),
-        form_coeff_app(data.form_coeff_app),
+        hull_form_coeff(data.hull_form_coeff.is_initialized() ? data.hull_form_coeff.get() : 0.93 + 0.487118 * c14 * std::pow(B / Lpp, 1.06806) * std::pow(T / L, 0.46106) * std::pow(L / Lr, 0.121563) * std::pow(std::pow(L, 3.) / Vol, 0.36486) * std::pow(1 - Cp, -0.604247)),
+        app_form_coeff(data.app_form_coeff),
         Rw_a([&](double Fn, double m4) {return c1*c2*c5*Vol*env.rho*env.g*std::exp(m1*std::pow(Fn,d)+m4*cos(lambda*std::pow(Fn,-2.)));}),
         Rw_b([&](double Fn, double m4) {return c17*c2*c5*Vol*env.rho*env.g*std::exp(m3*std::pow(Fn,d)+m4*cos(lambda*std::pow(Fn,-2.)));})
 {
@@ -166,7 +166,7 @@ double HoltropMennenForceModel::Rf(const BodyStates& states) const
     const double Re = states.u() * L / nu;
     const double Cf = 0.075 / std::pow(std::log10(Re) - 2, 2.);
     const double Rf = Cf * 0.5 * rho * std::pow(states.u(), 2.) * S;
-    return form_coeff_hull * Rf;
+    return hull_form_coeff * Rf;
 }
 
 double HoltropMennenForceModel::Rapp(const BodyStates& states) const
@@ -174,7 +174,7 @@ double HoltropMennenForceModel::Rapp(const BodyStates& states) const
     const double Re = states.u() * L / nu;
     const double Cf = 0.075 / std::pow(std::log10(Re) - 2, 2.);
     const double Rapp = Cf * 0.5 * rho * std::pow(states.u(), 2.) * Sapp;
-    return form_coeff_app * Rapp;
+    return app_form_coeff * Rapp;
 }
 
 double HoltropMennenForceModel::Rw(const BodyStates& states) const
@@ -240,5 +240,5 @@ double HoltropMennenForceModel::get_S() const
 
 double HoltropMennenForceModel::get_hull_form_coeff() const
 {
-    return form_coeff_hull;
+    return hull_form_coeff;
 }
