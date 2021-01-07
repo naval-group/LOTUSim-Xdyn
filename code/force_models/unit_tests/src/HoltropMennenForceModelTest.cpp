@@ -72,7 +72,7 @@ HoltropMennenForceModel::Input get_Holtrop_Mennen_1982_input()
     input.At = 16;
     input.Sapp = 50;
     input.Cstern = 10;
-    input.form_coeff_app = 1.5;
+    input.app_form_coeff = 1.5;
     return input;
 }
 
@@ -94,7 +94,7 @@ HoltropMennenForceModel::Input get_Holtrop_1984_input()
     input.At = 10;
     input.Sapp = 50;
     input.Cstern = 0;
-    input.form_coeff_app = 3;
+    input.app_form_coeff = 3;
     input.iE = 25;
     return input;
 }
@@ -116,7 +116,7 @@ BodyStates get_steady_forward_speed_states(double u = 0.)
     rotations.convention.push_back("z");
     rotations.convention.push_back("y'");
     rotations.convention.push_back("x''");
-    auto angle = states.convert(ssc::kinematics::EulerAngles(0, 0, 0), rotations);
+    const auto angle = states.convert(ssc::kinematics::EulerAngles(0, 0, 0), rotations);
     states.qr.record(0, std::get<0>(angle));
     states.qi.record(0, std::get<1>(angle));
     states.qj.record(0, std::get<2>(angle));
@@ -126,7 +126,7 @@ BodyStates get_steady_forward_speed_states(double u = 0.)
 
 TEST_F(HoltropMennenForceModelTest, can_parse)
 {
-    auto input = HoltropMennenForceModel::parse(get_yaml_input_with_optional());
+    const auto input = HoltropMennenForceModel::parse(get_yaml_input_with_optional());
     ASSERT_DOUBLE_EQ(input.Lwl, 325.5);
     ASSERT_DOUBLE_EQ(input.Lpp, 320);
     ASSERT_DOUBLE_EQ(input.B, 58);
@@ -141,28 +141,28 @@ TEST_F(HoltropMennenForceModelTest, can_parse)
     ASSERT_DOUBLE_EQ(input.At, 0);
     ASSERT_DOUBLE_EQ(input.Sapp, 273.3);
     ASSERT_DOUBLE_EQ(input.Cstern, 0);
-    ASSERT_DOUBLE_EQ(input.form_coeff_app, 2);
+    ASSERT_DOUBLE_EQ(input.app_form_coeff, 2);
     ASSERT_TRUE(input.apply_on_ship_speed_direction);
     ASSERT_TRUE(input.S.is_initialized());
     ASSERT_DOUBLE_EQ(input.S.get(), 27194);
     ASSERT_TRUE(input.iE.is_initialized());
     ASSERT_DOUBLE_EQ(input.iE.get(), 25);
-    ASSERT_TRUE(input.form_coeff_hull.is_initialized());
-    ASSERT_DOUBLE_EQ(input.form_coeff_hull.get(), 1.5);
+    ASSERT_TRUE(input.hull_form_coeff.is_initialized());
+    ASSERT_DOUBLE_EQ(input.hull_form_coeff.get(), 1.5);
 }
 
 TEST_F(HoltropMennenForceModelTest, can_ignore_optional_inputs)
 {
-    auto input = HoltropMennenForceModel::parse(get_yaml_input_without_optional());
+    const auto input = HoltropMennenForceModel::parse(get_yaml_input_without_optional());
     ASSERT_FALSE(input.apply_on_ship_speed_direction);
     ASSERT_FALSE(input.S.is_initialized());
     ASSERT_FALSE(input.iE.is_initialized());
-    ASSERT_FALSE(input.form_coeff_hull.is_initialized());
+    ASSERT_FALSE(input.hull_form_coeff.is_initialized());
 }
 
 TEST_F(HoltropMennenForceModelTest, no_resistance_at_zero_speed)
 {
-    auto input = get_Holtrop_Mennen_1982_input();
+    const auto input = get_Holtrop_Mennen_1982_input();
     auto force_model = HoltropMennenForceModel(input, "body", env);
     auto states = get_steady_forward_speed_states(0);
     ASSERT_DOUBLE_EQ(0,force_model(states, 0).X());
@@ -171,7 +171,7 @@ TEST_F(HoltropMennenForceModelTest, no_resistance_at_zero_speed)
 TEST_F(HoltropMennenForceModelTest, numerical_example_1982)
 {
     // Example from Holtrop & Mennen's original 1984 paper
-    auto input = get_Holtrop_Mennen_1982_input();
+    const auto input = get_Holtrop_Mennen_1982_input();
     auto force_model = HoltropMennenForceModel(input, "body", env);
     BodyStates states = get_steady_forward_speed_states(25. * 1852./3600.);
     // Constant intermediate values
@@ -191,7 +191,7 @@ TEST_F(HoltropMennenForceModelTest, numerical_example_1982)
 TEST_F(HoltropMennenForceModelTest, numerical_example_1984)
 {
     // Example from Holtrop's 1984 paper (revision of the Holtrop-Mennen method)
-    auto input = get_Holtrop_1984_input();
+    const auto input = get_Holtrop_1984_input();
     auto force_model = HoltropMennenForceModel(input, "body", env);
     BodyStates states;
     // Constant intermediate values
