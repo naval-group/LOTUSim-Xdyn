@@ -40,9 +40,39 @@ public:
         double app_form_coeff;
         bool apply_on_ship_speed_direction;
     };
-    HoltropMennenForceModel(const Input& data, const std::string& body_name, const EnvironmentAndFrames& env);
+    struct DerivedData : Input
+    {
+        DerivedData(const Input& base_data);
+        double S;
+        double iE;
+        double hull_form_coeff;
+        double c7;
+        double c4;
+        double T;
+        double m3;
+        double c15;
+        double Pb;
+        double c3;
+        double c2;
+        double Ca;
+        double c17;
+        double Cp;
+        double c16;
+        double m1;
+        double Lr;
+        double lambda;
+        double c1;
+        double c5;
+        double c14;
+        double Cb;
+
+    private:
+        DerivedData(); // Deactivated
+    };
+    HoltropMennenForceModel(const DerivedData& data, const std::string& body_name, const EnvironmentAndFrames& env);
+    HoltropMennenForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env);
     ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const override;
-    static Input parse(const std::string& yaml);
+    static DerivedData parse(const std::string& yaml);
     static std::string model_name();
 
     double Rf(const BodyStates& states) const;   // Frictional resistance over the hull
@@ -80,9 +110,9 @@ private:
     const double Pb;
     const double c3;
     const double c2;
-    double Ca;
+    const double Ca;
     const double Cm;
-    double S;
+    const double S;
     const double c17;
     const double Cp;
     const double c16;
