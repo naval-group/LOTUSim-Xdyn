@@ -504,8 +504,11 @@ On décompose donc la résistance de remorquage en deux composantes :
 - la résistance de vagues, due à la création d'un champs de vague par le
   navire.
 
-En pratique, on effectue une interpolation de la courbe de résistance
-à l'avancement en fonction de la vitesse du solide par rapport au repère NED
+### Courbe de résistance
+
+#### Description
+
+Un moyen simple d'obtenir l'effort de résistance à l'avancement est d'interpoler une courbe de résistance en fonction de la vitesse du solide par rapport au repère NED
 projetée sur l'axe X du [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) (que l'on note $`u`$).
 La courbe de résistance à l'avancement est obtenue au préalable (et non calculée par xdyn) et renseignée dans le fichier YAML.
 
@@ -517,7 +520,7 @@ est :
 \tau_{\textrm{res}} =\left[\begin{array}{c}X\\Y\\Z\\K\\M\\N\end{array}\right] =\left[\begin{array}{c}-f(u)\\0\\0\\0\\0\\0\end{array}\right]
 ```
 
-### Paramétrage
+#### Paramétrage
 
 Ce modèle est accessible par la clef [`resistance
 curve`](#r%C3%A9sistance-%C3%A0-lavancement).
@@ -535,6 +538,104 @@ NED. L'interpolation est faite en utilisant des splines cubiques.
 
 Cet effort est orienté suivant l'axe $`-x`$ du repère body.
 
+### Modèle de Holtrop & Mennen
+
+#### Description
+
+Lorsqu'on n'a pas accès à une courbe de résistance à l'avancement, on peut utiliser des modèles empiriques (au prix d'une précisison réduite). C'est notamment utile lorsque la forme de la carène n'est pas connue, mais qu'on à accès aux principales dimensions d'un navire.
+
+Le modèle proposé par Holtrop & Mennen en 1984 (puis révisé par Holtrop en 1984) est basé sur une regression sur plusieurs centaines de carènes de navires. A partir des principales caracrétistiques géométriques du navire, il permet d'avoir une estimation des différentes composantes de l'effort de résistance (résistance de vague, de frottement...) avec une précision de l'ordre de 20-30%.
+
+#### Décomposition des efforts
+
+Le modèle de Holtrop & Mennen décompose l'effort de résistance à l'avancement de la façon suivante :
+
+```math
+F_{tot} = F_W + F_F + F_{App} + F_A + F_B + F_{Tr}
+```
+où :
+- $`F_W`$ est la résistance de vague
+- $`F_F`$ est la force de frottement sur la carène
+- $`F_{App}`$ est la force de frottement sur les appendices
+- $`F_A`$ est une composante de corrélation modèle/échelle réelle
+- $`F_B`$ est la force liée au bulbe d'étrave
+- $`F_{Tr}`$ est la résistance dûe à un tableau arrière partiellement immergé
+
+Pour plus de détails sur la formulation, voire les deux articles en référence (Holtrop & Mennen 1982, Holtrop 1984).
+
+#### Paramètres d'entrée
+
+Même si le modèle de Holtrop & Mennen ne nécessite pas de connaître la forme de la carène, un certain nombre de paramètres doivent être renseignés. Certaines valeurs sont optionnelles car elles peuvent être évaluées par des formules empiriques issues des régressions, mais il est préférable d'utiliser une valeur connue lorsque celle-ci est disponible.
+
+- $`Lwl`$ : longueur de la surface de flottaison
+- $`Lpp`$ : longueur entre les parallèles
+- $`B`$ : maître-beau
+- $`Ta`$ : tirant d'eau arrière
+- $`Tf`$ : tirant d'eau avant
+- $`Vol`$ : déplacement (volumique)
+- [optionnel] $`S`$ : surface mouillée
+- $`lcb`$ : position du centre de flottaison sur l'axe longitudinal, en % de $`Lwl`$, avec comme origine le milieu du navire (entre les 2 parallèles). Par exemple, un navire de longueur ($`Lwl = 50m`$) dont le centre de flottaison est placé 1.5m en avant du milieu (entre parallèles), aura $`lcb = 3%`$ (des valeurs négatives sont possibles).
+- $`Cm`$ : coefficient de section médiane 
+- $`Cwp`$ : coefficient de plan de flottaison
+- $`Abt`$ : aire transversale du bulbe d'étrave (nulle si pas de bulbe d'étrave)
+- $`hb`$ : position verticale de centre de l'aire $`Abt`$ par rapport à la quille
+- $`At`$ : aire transversale immergée du tableau arrière (nulle si tableau arrière non-immergé)
+- $`Sapp`$ : surface mouillée total des appendices
+- [optionnel] $`iE`$ : demi-angle horizontal de poupe (angle formé entre la ligne de flottaison au repos et le plan de symétrie du navire)
+- [optionnel] $`1+k1`$ : coefficient de forme de la carène
+- $`1+k2`$ : coefficient de forme total des appendices. Il est donné approximativement pour chaque type d'appendice, et est à sommer pour prendre en compte plusieurs appendices.
+
+Appendice | Coefficient de forme 1+k2
+--------- | -------------------------
+Safran sur skeg | 1.5 - 2.0
+Safran sur étambot | 1.3 - 1.5
+Safrans suspendus compensés avec hélices jumelles | 2.8
+Chaise d'arbre | 3.0
+Skeg | 1.5 - 2.0
+Bulbe d'arbre | 2.0
+Arbres hélices | 2.0 - 4.0
+Stabilisateurs | 2.8
+Dôme de sonar | 2.7
+Quilles anto-roulis | 1.4
+
+- $`Cstern`$ : coefficient de forme de la poupe, dont la valeur est fixée pour chaque type de poupe.
+
+Forme de la poupe | Coefficient Cstern
+----------------- | ------------------
+Forme de barge | -25
+Sections en 'V' | -10
+Sections standardes | 0
+Sections en 'U' | +10 
+
+#### Paramétrage
+
+Le modèle de Holtrop & Mennen peut être paramétré dans Xdyn de la façon suivante :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: Holtrop & Mennen
+  Lwl: {value: 325.5, unit: m}
+  Lpp: {value: 320, unit: m}
+  B: {value: 58, unit: m}
+  Ta: {value: 20.8, unit: m}
+  Tf: {value: 20.8, unit: m}
+  Vol: {value: 312622, unit: m^3}
+  lcb: 3.48
+  S: {value: 27194, unit: m^2}
+  Abt: {value: 25, unit: m^2}
+  hb: {value: 2.5, unit: m}
+  Cm: 0.998
+  Cwp: 0.83
+  At: {value: 0, unit: m^2}
+  Sapp: {value: 273.3, unit: m^2}
+  Cstern: 0
+  iE: {value: 25, unit: deg}
+  1+k1: 1.5
+  1+k2: 2
+  apply on ship speed direction: true
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+La clé booléenne `apply on ship speed direction` permet de projeter l'effort sur la direction du vecteur vitesse du navire plutôt que sur l'axe longitudinal. Cela n'est pas recommandé en temps normal car le modèle suppose une vitesse uniquement sur l'axe longitudinal. En revanche, cela permet de simuler dans une moindre mesure des efforts latéraux en l'absence de modèle additionnel et lorsque le navire dérive (attention cependant, les efforts latéraux obtenus n'ont fait l'objet d'aucune validation !).
+
 ### Références
 
 - *Dynamique du Navire*, 1986, P. Devauchelle, Bibliothèque de L'Institut
@@ -542,6 +643,8 @@ Français d'Aide à la Formation Professionnelle Maritime, ISBN 2-225-80669-1,
 pages 58, 81 et 97
 - *Hydrodynamique navale : théorie et modèles*, 2009, A. Bovis, Presses de
 l'ENSTA, page 205 et 337
+- *An approximate power prediction method*, 1982, J. Holtrop et G.G.J. Mennen, International Shipbuilding Progress, vol. 29, no. 335, pp. 166-170.
+- *A statistical re-analysis of resistance and propuslion data*, 1984, J. Holtrop, International Shipbuilding Progress, vol. 31, no. 363, pp. 272-276.
 
 ## Efforts d'amortissement visqueux
 
