@@ -15,16 +15,17 @@
 #include <ssc/text_file_reader.hpp>
 
 SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_, const double t0_, const ssc::data_source::DataSource& command_listener_) :
-                                        input(input_),
-                                        builder(TR1(shared_ptr)<BodyBuilder>(new  BodyBuilder(input.rotations))),
-                                        force_parsers(),
-                                        controllable_force_parsers(),
-                                        surface_elevation_parsers(),
-                                        wave_parsers(TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> >(new std::vector<WaveModelBuilderPtr>())),
-                                        directional_spreading_parsers(TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >(new std::vector<DirectionalSpreadingBuilderPtr>())),
-                                        spectrum_parsers(TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >(new std::vector<SpectrumBuilderPtr>())),
-                                        command_listener(command_listener_),
-                                        t0(t0_)
+        input(input_),
+        builder(TR1(shared_ptr)<BodyBuilder>(new BodyBuilder(input.rotations))),
+        force_parsers(),
+        controllable_force_parsers(),
+        surface_elevation_parsers(),
+        wave_parsers(TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> >(new std::vector<WaveModelBuilderPtr>())),
+        directional_spreading_parsers(TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >(new std::vector<DirectionalSpreadingBuilderPtr>())),
+        spectrum_parsers(TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >(new std::vector<SpectrumBuilderPtr>())),
+        wind_model_parsers(),
+        command_listener(command_listener_),
+        t0(t0_)
 {
 }
 
@@ -58,47 +59,58 @@ void SimulatorBuilder::add_initial_transforms(const std::vector<BodyPtr>& bodies
     }
 }
 
-EnvironmentAndFrames SimulatorBuilder::get_environment() const
+EnvironmentAndFrames SimulatorBuilder::build_environment_and_frames() const
 {
     EnvironmentAndFrames env;
     env.g = input.environmental_constants.g;
     env.rho = input.environmental_constants.rho;
     env.nu = input.environmental_constants.nu;
     env.rot = input.rotations;
-    env.w = get_wave();
     env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
-    return env;
-}
 
-SurfaceElevationPtr SimulatorBuilder::get_wave() const
-{
     if (surface_elevation_parsers.empty())
     {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No wave parser defined. Need to call SimulatorBuilder::can_parse<T> with e.g. T=DefaultWaveModel");
+    	THROW(__PRETTY_FUNCTION__, InternalErrorException, "No wave parser defined. Need to call SimulatorBuilder::can_parse<T> with e.g. T=DefaultWaveModel");
     }
-    SurfaceElevationPtr ret;
+    if (wind_model_parsers.empty())
+    {
+    	THROW(__PRETTY_FUNCTION__, InternalErrorException, "No wind parser defined. Need to call SimulatorBuilder::can_parse<T> with e.g. T=DefaultWindModel");
+    }
     for (auto that_model=input.environment.begin() ; that_model != input.environment.end() ; ++that_model)
     {
-        bool wave_model_successfully_parsed = false;
+        bool env_model_successfully_parsed = false;
         for (auto that_parser=surface_elevation_parsers.begin() ; that_parser != surface_elevation_parsers.end() ; ++that_parser)
         {
             boost::optional<SurfaceElevationPtr> w = (*that_parser)->try_to_parse(that_model->model, that_model->yaml);
             if (w)
             {
-                if (ret.use_count())
+                if (env.w)
                 {
                     THROW(__PRETTY_FUNCTION__, InternalErrorException, "More than one wave model was defined.");
                 }
-                ret = w.get();
-                wave_model_successfully_parsed = true;
+                env.w = w.get();
+                env_model_successfully_parsed = true;
             }
         }
-        if (not(wave_model_successfully_parsed))
+        for(auto parser:wind_model_parsers)
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Simulator does not understand wave model '" << that_model->model << "'");
+            boost::optional<WindModelPtr> w = parser(*that_model);
+            if (w)
+            {
+                if(env.wind)
+                {
+                    THROW(__PRETTY_FUNCTION__, InternalErrorException, "More than one wind model was defined.");
+                }
+                env.wind = w.get();
+                env_model_successfully_parsed = true;
+            }
+        }
+        if (not(env_model_successfully_parsed))
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Simulator does not understand environment model '" << that_model->model << "'");
         }
     }
-    return ret;
+    return env;
 }
 
 std::vector<ListOfForces> SimulatorBuilder::get_forces(const EnvironmentAndFrames& env) const
@@ -245,7 +257,7 @@ std::vector<bool> SimulatorBuilder::are_there_surface_forces_acting_on_body(cons
 
 Sim SimulatorBuilder::build(const MeshMap& meshes) const
 {
-    auto env = get_environment();
+    auto env = build_environment_and_frames();
     const auto forces = get_forces(env);
     const auto controlled_forces = get_controlled_forces(env);
     auto history_length = get_max_history_length(forces, controlled_forces);

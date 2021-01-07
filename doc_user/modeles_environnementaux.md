@@ -1,12 +1,14 @@
 # Modèles d'environnement
 
-Les modèles d'environnement sont les modèles de houle (et, à terme, de vent, de courant...) utilisés par xdyn. Actuellement, seuls des modèles de houle sont implémentés. Leur paramétrisation figure dans la section `environment` du fichier YAML d'entrée. Elle peut être vide (par exemple, lors de la simulation simple du [tutoriel 1](#tutoriel-1-balle-en-chute-libre)).
+Les modèles d'environnement sont les modèles de houle et de vent (et, à terme, de courant...) utilisés par xdyn. Actuellement, seuls des modèles de houle et de vent sont implémentés. Leur paramétrisation figure dans la section `environment` du fichier YAML d'entrée. Elle peut être vide (par exemple, lors de la simulation simple du [tutoriel 1](#tutoriel-1-balle-en-chute-libre)).
 
-Les modèles de houle interviennent pour le calcul des [efforts
+Les [modèles de houle](#modèles-de-houle) interviennent pour le calcul des [efforts
 hydrostatiques non-linéaires](#efforts-hydrostatiques-non-lin%C3%A9aires)
 (par le truchement de l'élévation de la surface libre), les [efforts de Froude-Krylov](#calcul-des-efforts-dexcitation)
 (par le biais de la pression dynamique), le calcul des efforts de diffraction (via le fréquentiel)
 et le modèle de safran (prise en compte des vitesses orbitales).
+
+Les [modèles de vent](#modèles-de-vent) sont notamment utilisés pour les modèles de voiles et autres systèmes de propulsion éolienne. À l'heure actuelle, seuls des modèles de vent constants sont implémentés, mais à terme des modèles de turbulence sur représentation spectrale seront ajoutés.
 
 ## Constantes environnementales
 
@@ -36,8 +38,9 @@ message d'erreur du type :
 unknow unit : hhm
 ~~~~~
 
+## Modèles de houle
 
-## Simulation sans houle
+### Simulation sans houle
 
 Pour simuler une surface libre parfaitement plane, on opère de la façon
 suivante :
@@ -54,14 +57,14 @@ libre dans le repère NED.
 
 Dans ce cas, les efforts d'excitation (Froude-Krylov et radiation) seront nuls.
 
-## Houle d'Airy
+### Houle d'Airy
 
 On peut définir une houle comme étant une somme de plusieurs spectres
 directionnels, c'est-à-dire un spectre de puissance et une dispersion spatiale.
 Pour dériver l'expression générale d'une houle composée de plusieurs spectres,
 on commence par le cas d'une houle monochromatique et monodirectionnelle.
 
-### Expression du potentiel de vitesse de la houle
+#### Expression du potentiel de vitesse de la houle
 
 Soit $`V(x,y,z,t)=(u,v,w)`$ la vitesse du fluide au point de coordonnées $`(x,y,z)`$
 (dans le repère NED) et à l'instant $`t`$.
@@ -160,7 +163,7 @@ qui est le potentiel utilisé par le logiciel AQUA+.
 - $`x,y,z`$ sont les coordonnées du point considéré, exprimées dans le repère NED,
 - $`k`$ est le nombre d'onde, traduisant la périodicité spatiale.
 
-### Relation entre le nombre d'onde et la pulsation
+#### Relation entre le nombre d'onde et la pulsation
 
 Il existe une relation entre $`k`$ et $`\omega`$, appelée relation de dispersion, et qui s'écrit :
 
@@ -177,7 +180,7 @@ En profondeur infinie ($`k\cdot h > 3`$), cette relation tend vers :
 \omega^2 \sim g\cdot k
 ```
 
-### Élévation de la houle
+#### Élévation de la houle
 
 L'élévation de la houle découle de la deuxième condition de surface libre :
 
@@ -237,7 +240,7 @@ On obtient, en définitive :
 y\cdot \sin(\gamma))-\omega_i\cdot t+\phi_{i})
 ```
 
-### Pression dynamique
+#### Pression dynamique
 
 L'expression de la pression dynamique (champs de pression de la houle
 incidente), utilisée par le modèle de
@@ -276,7 +279,7 @@ e^{-k_i\cdot z}\sin(k_i\cdot(x\cdot\cos(\gamma)+ y\cdot
 \sin(\gamma))-\omega_i\cdot t+\phi_{i})
 ```
 
-### Pression totale
+#### Pression totale
 
 On peut démontrer que la pression totale (somme de la pression hydrostatique et de la pression dynamique) est positive.
 
@@ -337,7 +340,7 @@ p_{\textrm{tot}}\geq 0
 ```
 
 
-### Houle irrégulière
+#### Houle irrégulière
 
 Le potentiel de vitesse de la houle a été jusqu'ici exprimé pour une seule
 fréquence et une seule direction.
@@ -375,9 +378,9 @@ a_{i,j}\frac{\cosh(k_i\cdot(h-z))}{\cosh(k_i\cdot h)}\sin(k_i\cdot(x\cdot
 \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})
 ```
 
-### Vitesse orbitale
+#### Vitesse orbitale
 
-#### En profondeur finie
+##### En profondeur finie
 
 La vitesse $`V(x,y,z,t) = (u,v,w)`$ orbitale de la houle est définie par :
 
@@ -405,7 +408,7 @@ a_{i,j}
 \cos(k_i\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})
 ```
 
-#### En profondeur infinie
+##### En profondeur infinie
 
 Lorsque $`k_i\cdot h >3`$, les cosinus hyperboliques peuvent être considérés comme
 équivalents à des exponentielles (erreur relative inférieure à
@@ -437,7 +440,7 @@ e^{-k_i z}
 \cos(k\cdot(x\cdot \cos(\gamma_j)+ y\cdot \sin(\gamma_j))-\omega_i\cdot t+\phi_{i,j})
 ```
 
-#### Évolution de la vitesse orbitale sur la surface libre
+##### Évolution de la vitesse orbitale sur la surface libre
 
 L'expression de l'élévation de la surface libre contient un terme en sinus.
 Les vitesses orbitales en $`u`$ et en $`w`$ contiennent des termes en cosinus et
@@ -448,7 +451,7 @@ en plusieurs points de la surface libre dans le plan (X,Z) :
 
 ![](images/orbital_velocities.svg)
 
-### Paramétrisation des modèles de houle
+#### Paramétrisation des modèles de houle
 
 Les spectres directionnels de houle d'Airy sont paramétrés de la façon suivante :
 
@@ -481,7 +484,7 @@ Les spectres directionnels de houle d'Airy sont paramétrés de la façon suivan
 - `directional spreading` : étalement directionnel. Cf. infra.
 - `spectral density` : densité spectrale de puissance. Cf. infra.
 
-## Densités spectrales de puissance
+### Densités spectrales de puissance
 
 La formulation des spectres de houles a été développée de façon semi-empirique
 depuis les années 50. Suivant le spectre, l'état de mer peut être complètement
@@ -494,7 +497,7 @@ plateformes la réponse du navire va varier suivant le type d'état de mer.
 Il faut noter que l'on ne peut pas faire varier
 l'état de mer au cours d'une même simulation.
 
-### Dirac
+#### Dirac
 
 La plus simple densité spectrale de puissance est aussi la moins réaliste car elle
 correspond à une houle monochromatique, c'est-à-dire à une seule fonction sinusoïdale :
@@ -527,7 +530,7 @@ L'amplitude de la houle sera égale à `Hs/2`.
 Ce spectre a essentiellement un intérêt pour l'établissement de fonctions de transfert ou la
 comparaison de réponses sur une houle maitrisée mais il n'est pas représentatif de conditions réelles.
 
-### Bretschneider
+#### Bretschneider
 
 La fonction analytique la plus souvent utilisée pour représenter des états
 de mer partiellement ou totalement développés a été proposée en 1959 par Bretschneider.
@@ -608,7 +611,7 @@ spectral density:
     Tp: {value: 15, unit: s}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-### Pierson-Moskowitz
+#### Pierson-Moskowitz
 
 À la fin des années 40, plusieurs navires météorologiques étaient stationnés
 dans l'océan Pacifique et l'Atlantique Nord. Ces navires notaient la météo
@@ -704,7 +707,7 @@ spectral density:
     Tp: {value: 15, unit: s}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-### JONSWAP
+#### JONSWAP
 
 Le spectre JONSWAP (Joint North Sea Wave Project) a été proposé en
 1973 par Hasselmann et al. après avoir dépouillé des mesures faites lors
@@ -746,9 +749,9 @@ spectral density:
     gamma: 1.2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Étalements directionnels
+### Étalements directionnels
 
-### Dirac
+#### Dirac
 
 Lorsque cet étalement est choisi, la houle est mono-directionnelle.
 
@@ -762,9 +765,9 @@ La direction de propagation est donnée par `waves propagating to`, dans le
 repère NED (0° correspond à des vagues se propageant du Sud vers le Nord, 45° à
 des vagues se propageant du Sud-Ouest au Nord-Est, -90° à des vagues se
 propageant de l'Est vers l'Ouest). Il n'y a pas de bornes particulières pour
-cette angle (outre la taille maximale des flottants).
+cet angle (outre la taille maximale des flottants).
 
-### Cos2s
+#### Cos2s
 
 L'étalement est donné par :
 
@@ -789,9 +792,9 @@ directional spreading:
 
 La direction de propagation $`\gamma_0`$ est donnée par `waves propagating to`.
 
-## Stretching de la houle
+### Stretching de la houle
 
-### Description
+#### Description
 
 La formulation d'Airy n'est pas valable au-dessus du plan $`z=0`$. Cela signifie
 que l'on ne peut pas l'utiliser dans une formulation non-linéaire où l'on
@@ -799,7 +802,7 @@ cherche à connaître les pressions dynamiques et les vitesses orbitales pour
 $`z<0`$. Les modèles de stretching sont une solution de contournement qui consiste à
 prendre comme référence non pas le plan $`z=0`$ mais la surface libre déformée.
 
-### Utilisation dans xdyn
+#### Utilisation dans xdyn
 
 Pour mémoire, la paramétrisation du modèle de houle est effectuée par un YAML du type :
 
@@ -832,7 +835,7 @@ delta-stretching:
 - [modèle de Wheeler](#stretching-de-wheeler), si $`h`$ vaut la profondeur `depth` et $`\Delta=0`$,
 - [delta stretching](#delta-stretching) pour toute autre valeur.
 
-### Justifications théoriques
+#### Justifications théoriques
 
 Sous les hypothèses du modèle de [houle irrégulière linéaire](#houle-irr%C3%A9guli%C3%A8re) détaillées ci-dessus, la vitesse
 orbitale des particules d'eau par rapport au référentiel NED (projetée sur l'axe
@@ -889,7 +892,7 @@ méthodes reviennent à étirer l'axe $`z`$ (d'où le nom de stretching).
 Ce qui suit est une présentation non-exhaustive de quelques modèles de
 stretching (extrapolation linéaire, modèle de Wheeler et delta-stretching).
 
-#### Stretching linéaire sans extrapolation
+##### Stretching linéaire sans extrapolation
 
 Outre l'absence de stretching, le modèle le plus simple revient à bloquer la
 vitesse orbitale au-dessus du niveau de la mer $`z=0`$ :
@@ -901,7 +904,7 @@ vitesse orbitale au-dessus du niveau de la mer $`z=0`$ :
 On obtient ainsi une rupture du profil de vitesse
 peu physique. Ce modèle n'est pas implémenté dans xdyn.
 
-#### Stretching par extrapolation linéaire
+##### Stretching par extrapolation linéaire
 
 Ce modèle revient à prolonger le modèle de vitesse par une tangente :
 
@@ -912,7 +915,7 @@ u(x,y,z,t) \sim u(x,y,0,t) - z\cdot \frac{\partial u}{\partial z} (x,y,0,t)
 Ce modèle peut être utilisé dans xdyn en fixant `h` à la profondeur d'eau
 `depth` et `delta: 1`.
 
-#### Stretching de Wheeler
+##### Stretching de Wheeler
 
 
 La vitesse orbitale s'écrit :
@@ -988,7 +991,7 @@ Ce modèle étant une forme particulière du modèle de delta-stretching, on peu
 l'utiliser dans xdyn en fixant $`h`$ à la profondeur de l'eau `depth` et
 `delta: 0`.
 
-#### Stretching de Chakrabarti
+##### Stretching de Chakrabarti
 
 Dans ce modèle, on n'agit que sur la profondeur d'eau au dénominateur de la
 fonction $`f`$
@@ -1017,7 +1020,7 @@ de Chakrabarti sous-estime les vitesses orbitales dans les crêtes.
 Ce modèle n'étant pas un dérivé du modèle de delta-stretching, il n'est pas
 accessible dans xdyn.
 
-#### Delta-stretching
+##### Delta-stretching
 
 Il s'agit d'une généralisation du modèle de Wheeler qui permet de passer
 continument de ce dernier au modèle d'extrapolation linéaire. En jouant sur ses
@@ -1049,7 +1052,7 @@ On prend donc :
   linéaire.
 
 
-#### Choix du modèle de stretching
+##### Choix du modèle de stretching
 
 Comme les modèles de stretching n'ont pas vraiment de justification théorique,
 la seule manière de les choisir est de comparer directement avec les profils de
@@ -1064,20 +1067,20 @@ Les trois graphes ci-dessous montrent l'influence du modèle de stretching sur l
 pression dynamique (et montrent aussi qu'il n'est pas pris en compte dans le
 calcul de la vitesse orbitale).
 
-##### Sans stretching
+###### Sans stretching
 
 ![](images/waves_without_stretching.png)
 
-##### Extrapolation linéaire
+###### Extrapolation linéaire
 
 ![](images/waves_extrapolation_stretching.png)
 
-##### Stretching de Wheeler
+###### Stretching de Wheeler
 
 ![](images/waves_wheeler_stretching.png)
 
 
-## Discrétisation des spectres et des étalements
+### Discrétisation des spectres et des étalements
 
 Les étalements et les spectres présentés précédemment sont continus. Afin d'en
 réaliser l'implémentation informatique, il faut les discrétiser. Si l'on
@@ -1135,7 +1138,7 @@ fraction` de l'énergie totale.
   de façon à ce que l'intégrale (par la méthode des trapèzes) du spectre entre
   deux pulsations successives soit constante.
 
-## Sorties
+### Sorties
 
 On peut sortir les hauteurs de houle calculées sur un maillage (défini dans un
 repère fixe ou mobile). En fait, on peut même choisir de ne faire qu'une
@@ -1212,7 +1215,7 @@ waves:
     - z: [-3.60794,-3.60793,-3.60793,-3.60792,-3.60791,-3.68851,-3.6885,-3.6885,-3.68849,-3.68849]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Utilisation d'un modèle de houle distant
+### Utilisation d'un modèle de houle distant
 
 xdyn permet d'utiliser des modèles de houle sur un serveur distant. L'intérêt
 est que l'on peut ainsi mettre en oeuvre des modèles de houle qui ne sont pas
@@ -1220,7 +1223,7 @@ implémentés dans le code d'xdyn. Ces modèles peuvent être implémentés dans
 langage informatique que l'on souhaite (Python, Java, Go...) et utilisables
 comme les modèles de houle "internes" de xdyn.
 
-### Technologie utilisée
+#### Technologie utilisée
 
 La technologie utilisée pour ce faire s'appelle "[gRPC](https://grpc.io/)" et
 permet de définir rapidement des services en C++, Java, Python, Ruby, Node.js,
@@ -1239,7 +1242,7 @@ en Python, en C++, en Java... Par exemple, on pourrait implémenter un modèle
 de capteur de houle en Java en utilisant un modèle de houle externe écrit,
 mettons, en Python.
 
-### Interface pour les modèles de houle
+#### Interface pour les modèles de houle
 
 Le fichier de définition de l'interface des modèles de houle est disponible à
 l'adresse suivante :
@@ -1250,7 +1253,7 @@ Ce fichier est nécessaire si l'on souhaite implémenter un modèle de houle dis
 (un serveur de houle) appelable par xdyn, mais il n'est pas nécessaire pour
 utiliser depuis xdyn un modèle de houle existant satisfaisant cette interface.
 
-### Paramétrage dans xdyn
+#### Paramétrage dans xdyn
 
 Un modèle sans paramètre tournant sur un serveur accessible à l'adresse
 http://localhost:50001 est paramétré comme suit :
@@ -1275,13 +1278,13 @@ de JONSWAP pourrait être paramétré de la façon suivante :
   waves propagating to: 90
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-### Exemple d'utilisation
+#### Exemple d'utilisation
 
 Le [tutoriel 9](#tutoriel-9-utilisation-dun-modèle-de-houle-distant) détaille
 la mise en oeuvre de la simulation.
 
 
-## Références
+### Références
 - *Environmental Conditions and Environmental Loads*, April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
 - *Hydrodynamique des Structures Offshore*, 2002, Bernard Molin, Editions TECHNIP, ISBN 2-7108-0815-3, page 70, 78 pour le stretching
 - *Sea Loads on Ships And Offshore Structures*, 1990, O. M. Faltinsen, Cambridge Ocean Technology Series, ISBN 0-521-37285-2, pages 27
@@ -1294,3 +1297,89 @@ la mise en oeuvre de la simulation.
 - http://web.mit.edu/13.42/www/handouts/reading-wavespectra.pdf
 - *A Fourier approximation method for steady waves*, 1981, Rienecker, M.M. and Fenton, J.D., Journal of Fluid Mechanics
 - *A new numerical method for surface hydrodynamics*, 1987, West, B.J. and Brueckner, R.S and Janda, M. and Milder, M. and Milton R.L, Journal of Geophysics Research
+
+## Modèles de vent
+
+Les seuls modèles de vent actuellement implémentés dans Xdyn sont des modèles 'statiques' : ils font varier le vent dans l'espace mais pas dans le temps. Plus particulièrement, ils définissent un profil de vent qui fait évoluer la vitesse du vent avec l'altitude (mais pas sa direction).
+
+### Simulation sans vent
+
+Pour lancer une simulation sans vent, il suffit de spécifier le modèle `no wind` dans la section `environmental models`, comme suit :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+  - model: no wind
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+À noter que ce modèle est le modèle de vent par défaut. Il sera donc présent dans tous les cas si aucun autre modèle de vent n'est défini.
+
+### Vent uniforme
+
+Le modèle de vent le plus simple est le modèle de vent uniforme, qui résulte en une vitesse identique en tout point de l'espace et constante dans le  temps. Un tel modèle se paramètre de la façon suivante :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+  - model: uniform wind
+    velocity: {unit: m/s, value: 8}
+    direction: {unit: deg, value: 135}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+La direction du vent suit la [même convention que pour la houle](#section_Direction_houle).
+
+### Loi de puissance
+
+#### Formulation
+
+La loi de puissance pour le profil de vitesse du vent fait évoluer la vitesse du vent selon son altitude `z` :
+
+```math
+U(z) = U_r\cdot(\frac{z}{z_r})^\alpha
+```
+
+où $`U_r`$ est la vitesse moyenne de référence donnée à l'altitude $`z_r`$, et $`\alpha`$ est un coefficient empirique qui dépend notamment de la rugosité du terrain. Sur terre, on le choisit généralement à $`0.143`$, mais sur mer une valeur de $`0.11`$ est plus appropriée.
+
+#### Paramétrage
+
+Le profil de vitesse de vent en loi de puissance se paramètre de la façon suivante :
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+  - model: power law wind profile
+    velocity: {unit: m/s, value: 8}
+    direction: {unit: deg, value: 135}
+    reference height: {unit: m, value: 10}
+    alpha: 0.11
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+### Profil logarithmique
+
+#### Formulation
+
+La loi logarithmique pour le profil de vitesse du vent fait évoluer la vitesse du vent selon son altitude `z` :
+
+```math
+U(z) = \frac{u_\star}{\kappa} ln(\frac{z-d}{z_0})
+```
+
+où $`u_\star`$ est la vitesse de friction, $`\kappa`$ est la constante de Von Karman ($`~0.41`$), $`d`$ est le plan de vitesse nulle (altidude à laquelle la vitesse du vent s'annule) et $`z_0`$ est la longueur de rugosité.
+
+Si la vitesse $`U_r`$ est connue à une altitude $`z_r`$, on peut en déduire la vitesse à n'importe quelle autre altitude :
+
+```math
+U(z) = U_r\cdot\frac{ln((z-d)/z_0)}{ln((z_r-d)/z_0)}
+```
+C'est cette description qui a été choisie pour le modèle implémenté dans Xdyn, avec un plan de vitesse nulle à altitude zéro ($`d = 0`$, hypothèse réaliste en mer).
+
+La longueur de rugosité peut $`z_0`$ être reliée à la vitesse de friction $`u_\star`$ à l'aide de modèles tels que Charnock ou Volkov (le modèle de Volkov prend en compte la houle pour la rugosité de la mer). Dans Xdyn, le choix de la valeur de $`z_0`$ est laissé à l'utilisateur. Des valeurs entre $`0.001m`$ et $`0.005m`$ sont usuelles en mer, avec une valeur de $`0.002m`$ qui peut servir par défaut.
+
+#### Paramétrage
+
+Le profil de vitesse de vent logarithmique se paramètre de la façon suivante :
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+  - model: power law wind profile
+    velocity: {unit: m/s, value: 8}
+    direction: {unit: deg, value: 135}
+    reference height: {unit: m, value: 10}
+    roughness length: {unit: m, value: 0.002}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+### Références
+- [*Wind profile power law*](https://en.wikipedia.org/wiki/Wind_profile_power_law), article Wikipedia en anglais, consulté le 18/12/2020.
+- [*Log wind profile*](https://en.wikipedia.org/wiki/Log_wind_profile), article Wikipedia en anglais, consulté le 18/12/2020.
+- [*Roughness length*](https://en.wikipedia.org/wiki/Roughness_length), article Wikipedia en anglais, consulté le 18/12/2020.
