@@ -34,13 +34,24 @@ void HoltropMennenForceModelTest::TearDown()
 {
 }
 
-std::string get_yaml_input()
+std::string get_yaml_input_with_optional()
+{
+    std::stringstream ss;
+    ss  << "Lwl: {value: 325.5,unit: m}\n" << "Lpp: {value: 320,unit: m}\n" << "B: {value: 58,unit: m}\n" << "Ta: {value: 20.8,unit: m}\n"
+        << "Tf: {value: 20.8,unit: m}\n" << "Vol: {value: 312622,unit: m^3}\n" << "S: {value: 27194, unit: m^2}\n" << "lcb: 3.48\n"
+        << "Abt: {value: 25,unit: m^2}\n" << "hb: {value: 2.5,unit: m}\n" << "Cm: 0.998\n" << "Cwp: 0.83\n" << "At: {value: 0,unit: m^2}\n"
+        << "Sapp: {value: 273.3,unit: m^2}\n" << "Cstern: 0\n" << "1+k2: 2\n" << "apply on ship speed direction: true\n"
+        << "iE: {value: 25, unit: deg}\n" << "1+k1: 1.5\n";
+    return ss.str();
+}
+
+std::string get_yaml_input_without_optional()
 {
     std::stringstream ss;
     ss  << "Lwl: {value: 325.5,unit: m}\n" << "Lpp: {value: 320,unit: m}\n" << "B: {value: 58,unit: m}\n" << "Ta: {value: 20.8,unit: m}\n"
         << "Tf: {value: 20.8,unit: m}\n" << "Vol: {value: 312622,unit: m^3}\n" << "lcb: 3.48\n"
         << "Abt: {value: 25,unit: m^2}\n" << "hb: {value: 2.5,unit: m}\n" << "Cm: 0.998\n" << "Cwp: 0.83\n" << "At: {value: 0,unit: m^2}\n"
-        << "Sapp: {value: 273.3,unit: m^2}\n" << "Cstern: 0\n" << "1+k2: 2\n" << "apply on ship speed direction: false\n";
+        << "Sapp: {value: 273.3,unit: m^2}\n" << "Cstern: 0\n" << "1+k2: 2\n";
     return ss.str();
 }
 
@@ -115,7 +126,7 @@ BodyStates get_steady_forward_speed_states(double u = 0.)
 
 TEST_F(HoltropMennenForceModelTest, can_parse)
 {
-    auto input = HoltropMennenForceModel::parse(get_yaml_input());
+    auto input = HoltropMennenForceModel::parse(get_yaml_input_with_optional());
     ASSERT_DOUBLE_EQ(input.Lwl, 325.5);
     ASSERT_DOUBLE_EQ(input.Lpp, 320);
     ASSERT_DOUBLE_EQ(input.B, 58);
@@ -131,6 +142,18 @@ TEST_F(HoltropMennenForceModelTest, can_parse)
     ASSERT_DOUBLE_EQ(input.Sapp, 273.3);
     ASSERT_DOUBLE_EQ(input.Cstern, 0);
     ASSERT_DOUBLE_EQ(input.form_coeff_app, 2);
+    ASSERT_TRUE(input.apply_on_ship_speed_direction);
+    ASSERT_TRUE(input.S.is_initialized());
+    ASSERT_DOUBLE_EQ(input.S.get(), 27194);
+    ASSERT_TRUE(input.iE.is_initialized());
+    ASSERT_DOUBLE_EQ(input.iE.get(), 25);
+    ASSERT_TRUE(input.form_coeff_hull.is_initialized());
+    ASSERT_DOUBLE_EQ(input.form_coeff_hull.get(), 1.5);
+}
+
+TEST_F(HoltropMennenForceModelTest, can_ignore_optional_inputs)
+{
+    auto input = HoltropMennenForceModel::parse(get_yaml_input_without_optional());
     ASSERT_FALSE(input.apply_on_ship_speed_direction);
     ASSERT_FALSE(input.S.is_initialized());
     ASSERT_FALSE(input.iE.is_initialized());
