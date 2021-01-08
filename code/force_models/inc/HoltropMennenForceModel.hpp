@@ -33,98 +33,145 @@ public:
         double app_form_coeff;
         bool apply_on_ship_speed_direction;
     };
-    struct DerivedData : Input
-    {
-        DerivedData(const Input& base_data);
-        double S;
-        double iE;
-        double hull_form_coeff;
-        double c7;
-        double c4;
-        double T;
-        double m3;
-        double c15;
-        double Pb;
-        double c3;
-        double c2;
-        double Ca;
-        double c17;
-        double Cp;
-        double c16;
-        double m1;
-        double Lr;
-        double lambda;
-        double c1;
-        double c5;
-        double c14;
-        double Cb;
-
-    private:
-        DerivedData(); // Deactivated
-    };
-    HoltropMennenForceModel(const DerivedData& data, const std::string& body_name, const EnvironmentAndFrames& env);
     HoltropMennenForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env);
     ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const override;
-    static DerivedData parse(const std::string& yaml);
+    static Input parse(const std::string& yaml);
     static std::string model_name();
 
-    double Rf(const BodyStates& states) const;   // Frictional resistance over the hull
-    double Rapp(const BodyStates& states) const; // Frictional resistance over the appendages
-    double Rw(const BodyStates& states) const;   // Wave-making resistance
-    double Rb(const BodyStates& states) const;   // Bulbous bow influence
-    double Rtr(const BodyStates& states) const;  // Immersed transom stern influence
-    double Ra(const BodyStates& states) const;   // Correlation term between model and full scale
+    double get_Rf(const BodyStates& states) const;   // Frictional resistance over the hull
+    double get_Rapp(const BodyStates& states) const; // Frictional resistance over the appendages
+    double get_Rw(const BodyStates& states) const;   // Wave-making resistance
+    double get_Rb(const BodyStates& states) const;   // Bulbous bow influence
+    double get_Rtr(const BodyStates& states) const;  // Immersed transom stern influence
+    double get_Ra(const BodyStates& states) const;   // Correlation term between model and full scale
 
-    // Getters for optional input values that can be computed by empirical formulae inside the model
-    double get_iE() const;
-    double get_S() const;
-    double get_hull_form_coeff() const;
+    static double get_iE(const Input& input, const double Cp, const double Lr);
+    static double get_S(const Input& input, const double T, const double Cb);
+    static double get_hull_form_coeff(const Input& input, const double T, const double Lr, const double Cp, const double c14);
+    static double get_c7(const Input& input);
+    static double get_c4(const Input& input);
+    static double get_T(const Input& input);
+    static double get_Cb(const Input& input, const double T);
+    static double get_Cp(const Input& input, const double T);
+    static double get_m3(const Input& input, const double T);
+    static double get_c15(const Input& input);
+    static double get_Pb(const Input& input);
+    static double get_c3(const Input& input, const double T);
+    static double get_c2(const double c3);
+    static double get_Ca(const Input& input, const double Cb, const double c2, const double c4);
+    static double get_c17(const Input& input);
+    static double get_c16(const double Cp);
+    static double get_m1(const Input& input, const double T, const double c16);
+    static double get_Lr(const Input& input, const double Cp);
+    static double get_lambda(const Input& input, const double Cp);
+    static double get_c1(const Input& input, const double T, const double c7, const double iE);
+    static double get_c5(const Input& input, const double T);
+    static double get_c14(const Input& input);
+
+    class Computer
+    {
+    public:
+        virtual double compute(const BodyStates& states) const = 0;
+        Computer(const Input& input, const EnvironmentAndFrames& env);
+        virtual ~Computer(){}
+
+    protected:
+        const Input input;
+        const double rho;
+        const double nu;
+        const double g;
+    };
+
+    class RfComputer : public Computer
+    {
+    public:
+        RfComputer(const Input& input, const EnvironmentAndFrames& env);
+        double compute(const BodyStates& states) const override;
+        virtual ~RfComputer(){}
+
+    private:
+        RfComputer(); // Deactivated
+        const double S;
+        const double hull_form_coeff;
+    };
+
+    class RappComputer : public Computer
+    {
+    public:
+        RappComputer(const Input& input, const EnvironmentAndFrames& env);
+        double compute(const BodyStates& states) const override;
+        virtual ~RappComputer(){}
+
+    private:
+        RappComputer(); // Deactivated
+    };
+
+    class RwComputer : public Computer
+    {
+    public:
+        RwComputer(const Input& input, const EnvironmentAndFrames& env);
+        double compute(const BodyStates& states) const override;
+        virtual ~RwComputer(){}
+
+    private:
+        RwComputer(); // Deactivated
+        const double c15;
+        const double c1;
+        const double c2;
+        const double c5;
+        const double c17;
+        const double m1;
+        const double m3;
+        const double d;
+        const double lambda;
+        const std::function<double(double, double)> Rw_a;
+        const std::function<double(double, double)> Rw_b;
+    };
+
+    class RbComputer : public Computer
+    {
+    public:
+        RbComputer(const Input& input, const EnvironmentAndFrames& env);
+        double compute(const BodyStates& states) const override;
+        virtual ~RbComputer(){}
+
+    private:
+        RbComputer(); // Deactivated
+        const double Pb;
+    };
+
+    class RtrComputer : public Computer
+    {
+    public:
+        RtrComputer(const Input& input, const EnvironmentAndFrames& env);
+        double compute(const BodyStates& states) const override;
+        virtual ~RtrComputer(){}
+
+    private:
+        RtrComputer(); // Deactivated
+    };
+
+    class RaComputer : public Computer
+    {
+    public:
+        RaComputer(const Input& input, const EnvironmentAndFrames& env);
+        double compute(const BodyStates& states) const override;
+        virtual ~RaComputer(){}
+
+    private:
+        RaComputer(); // Deactivated
+        const double S;
+        const double Ca;
+    };
 
 private:
-    const double rho;
-    const double nu;
-    const double g;
-    bool apply_on_ship_speed_direction; // This parameters allows to apply the force on the ship's speed direction rather than the X-axis.
-    const double d;
-    const double L;
-    const double Lpp;
-    const double B;
-    const double c7;
-    const double Ta;
-    const double Tf;
-    const double c4;
-    const double T;
-    const double m3;
-    const double Vol;
-    const double c15;
-    const double lcb;
-    const double Abt;
-    const double hb;
-    const double Pb;
-    const double c3;
-    const double c2;
-    const double Ca;
-    const double Cm;
-    const double S;
-    const double c17;
-    const double Cp;
-    const double c16;
-    const double m1;
-    const double Lr;
-    const double lambda;
-    const double Cwp;
-    const double iE;
-    const double c1;
-    const double At;
-    const double c5;
-    const double Sapp;
-    const double Cstern;
-    const double c14;
-    const double hull_form_coeff;
-    const double app_form_coeff;
-    const double Cb;
-    const std::function<double(double, double)> Rw_a;
-    const std::function<double(double, double)> Rw_b;
+    const bool apply_on_ship_speed_direction;
+    const RfComputer Rf;
+    const RappComputer Rapp;
+    const RwComputer Rw;
+    const RbComputer Rb;
+    const RtrComputer Rtr;
+    const RaComputer Ra;
 };
 
 #endif /* FORCE_MODELS_INC_HOLTROPMENNENFORCEMODEL_HPP_ */
