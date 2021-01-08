@@ -84,7 +84,7 @@ private:
     const double rho;
     const double nu;
     const double g;
-    bool apply_on_ship_speed_direction;
+    bool apply_on_ship_speed_direction; // This parameters allows to apply the force on the ship's speed direction rather than the X-axis.
     const double d;
     const double L;
     const double Lpp;
