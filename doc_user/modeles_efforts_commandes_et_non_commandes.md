@@ -544,7 +544,9 @@ Cet effort est orienté suivant l'axe $`-x`$ du repère body.
 
 Lorsqu'on n'a pas accès à une courbe de résistance à l'avancement, on peut utiliser des modèles empiriques (au prix d'une précisison réduite). C'est notamment utile lorsque la forme de la carène n'est pas connue, mais qu'on à accès aux principales dimensions d'un navire.
 
-Le modèle proposé par Holtrop & Mennen en 1984 (puis révisé par Holtrop en 1984) est basé sur une regression sur plusieurs centaines de carènes de navires. A partir des principales caracrétistiques géométriques du navire, il permet d'avoir une estimation des différentes composantes de l'effort de résistance (résistance de vague, de frottement...) avec une précision de l'ordre de 20-30%.
+Le modèle proposé par Holtrop & Mennen en 1982 (puis révisé par Holtrop en 1984) est basé sur une regression sur plusieurs centaines de carènes de navires. A partir des principales caractéristiques géométriques du navire, il permet d'avoir une estimation des différentes composantes de l'effort de résistance (résistance de vague, de frottement...) avec une précision de l'ordre de 20-30%.
+
+Ce modèle n'est valable que pour des navires à déplacement, dans la limite des navires utilisés lors des régressions, c'est-à-dire des navires de commerce de grandes dimensions. De plus, ce modèle est basé sur des formes de carènes utilisées dans les années précedent les régressions, et n'est donc pas toujours adapté aux évolutions récentes de formes de navires.
 
 #### Décomposition des efforts
 
@@ -609,7 +611,7 @@ Sections en 'U' | +10
 
 #### Paramétrage
 
-Le modèle de Holtrop & Mennen peut être paramétré dans Xdyn de la façon suivante :
+Le modèle de Holtrop & Mennen peut être paramétré dans xdyn de la façon suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: Holtrop & Mennen
