@@ -1,10 +1,3 @@
-/*
- * HoltropMennenForceModelTest.hpp
- *
- *  Created on: 5 janv. 2021
- *      Author: mcharlou2016
- */
-
 #ifndef FORCE_MODELS_UNIT_TESTS_INC_HOLTROPMENNENFORCEMODELTEST_HPP_
 #define FORCE_MODELS_UNIT_TESTS_INC_HOLTROPMENNENFORCEMODELTEST_HPP_
 

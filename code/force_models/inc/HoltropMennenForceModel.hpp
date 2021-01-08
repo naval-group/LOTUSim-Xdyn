@@ -1,10 +1,3 @@
-/*
- * HoltropMennenForceModel.hpp
- *
- *  Created on: 16 janv. 2020
- *      Author: mcharlou2016
- */
-
 #ifndef FORCE_MODELS_INC_HOLTROPMENNENFORCEMODEL_HPP_
 #define FORCE_MODELS_INC_HOLTROPMENNENFORCEMODEL_HPP_
 

@@ -1,10 +1,3 @@
-/*
- * HoltropMennenForceModelTest.cpp
- *
- *  Created on: 5 janv. 2021
- *      Author: mcharlou2016
- */
-
 #include <string>
 #include <sstream>
 #include <vector>

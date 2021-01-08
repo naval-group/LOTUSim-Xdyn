@@ -1,10 +1,3 @@
-/*
- * HoltropMennenForceModel.cpp
- *
- *  Created on: 16 janv. 2020
- *      Author: mcharlou2016
- */
-
 #include <cmath>
 #include "yaml.h"
 #include <ssc/yaml_parser.hpp>
