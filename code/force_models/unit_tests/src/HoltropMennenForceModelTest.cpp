@@ -163,7 +163,12 @@ TEST_F(HoltropMennenForceModelTest, no_resistance_at_zero_speed)
 
 TEST_F(HoltropMennenForceModelTest, numerical_example_1982)
 {
-    // Example from Holtrop & Mennen's original 1984 paper (tolerance is based on the precision given in the paper)
+    // Example from Holtrop & Mennen's original 1982 paper (tolerance is based on the precision given in the paper)
+    /* Note:
+     * Holtrop & Mennen's original 1982 method was revised by Holtrop in 1984. A number of formulae changed, in particular for the friction and wave components of the force.
+     * In consequence, some of the checks in this test have rather large margins because the values in the 1982 paper used the early version of the model, but the 1984 version is used in xdyn.
+     * All the values that have large margins in this test are properly tested with the 1984 test.
+     */
     const auto input = get_Holtrop_Mennen_1982_input();
     const HoltropMennenForceModel::DerivedData derived_data(input);
     // Checking derived input values
@@ -192,7 +197,7 @@ TEST_F(HoltropMennenForceModelTest, numerical_example_1982)
     EXPECT_NEAR(557110,force_model.Rw(states),5000); // Large margin because the formulae were revised in 1984
     EXPECT_NEAR(49,force_model.Rb(states),1);
     EXPECT_NEAR(0.,force_model.Rtr(states),1);
-    EXPECT_NEAR(221980,force_model.Ra(states),1500); // Somewhat large margin because of what appears to be a rounding error in the reference paper
+    EXPECT_NEAR(220572,force_model.Ra(states),1); // Note: there seems to be a rounding error in the original paper (Ra = 221980 N)
     EXPECT_NEAR(1793260,-force_model(states,0).X(),200000); // large margin to account for all the margins
 }
 
