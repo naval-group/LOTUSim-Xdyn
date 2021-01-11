@@ -172,25 +172,26 @@ TEST_F(HoltropMennenForceModelTest, numerical_example_1982)
     const auto input = get_Holtrop_Mennen_1982_input();
     const HoltropMennenForceModel::DerivedData derived_data(input);
     // Checking derived input values
-    EXPECT_NEAR(0.5833,derived_data.Cp,0.0001);
-    EXPECT_NEAR(81.385,derived_data.Lr,0.001);
     EXPECT_NEAR(0.1561,derived_data.c7,0.0001);
-    EXPECT_NEAR(1.398,derived_data.c1,0.001);
-    EXPECT_NEAR(0.7595,derived_data.c2,0.0001);
-    EXPECT_NEAR(0.02119,derived_data.c3,0.00001);
-    EXPECT_NEAR(0.9592,derived_data.c5,0.0001);
-    EXPECT_NEAR(-2.1274,derived_data.m1,0.0001);
-    EXPECT_NEAR(-1.69385,derived_data.c15,0.00001); // Note: there is a sign error for the value of c15 in the original 1982 paper
-    EXPECT_NEAR(0.6513,derived_data.lambda,0.0001);
-    EXPECT_NEAR(0.6261,derived_data.Pb,0.0001);
     EXPECT_NEAR(0.04,derived_data.c4,0.01);
+    EXPECT_NEAR(0.5833,derived_data.Cp,0.0001);
+    EXPECT_NEAR(-1.69385,derived_data.c15,0.00001); // Note: there is a sign error for the value of c15 in the original 1982 paper
+    EXPECT_NEAR(0.6261,derived_data.Pb,0.0001);
+    EXPECT_NEAR(0.02119,derived_data.c3,0.00001);
+    EXPECT_NEAR(0.7595,derived_data.c2,0.0001);
     EXPECT_NEAR(0.000352,derived_data.Ca,0.000001);
-    auto force_model = HoltropMennenForceModel(derived_data, "body", env);
+    EXPECT_NEAR(-2.1274,derived_data.m1,0.0001);
+    EXPECT_NEAR(81.385,derived_data.Lr,0.001);
+    EXPECT_NEAR(0.6513,derived_data.lambda,0.0001);
+    EXPECT_NEAR(1.398,derived_data.c1,0.001);
+    EXPECT_NEAR(0.9592,derived_data.c5,0.0001);
+
+    auto force_model = HoltropMennenForceModel(input, "body", env);
     BodyStates states = get_steady_forward_speed_states(25. * 1852./3600.);
     // Constant intermediate values
-    EXPECT_NEAR(7381.45,force_model.get_S(),0.01);
-    EXPECT_NEAR(12.08,force_model.get_iE(),0.01);
-    EXPECT_NEAR(1.156,force_model.get_hull_form_coeff(),0.05); // Large margin because the formulae were revised in 1984
+    EXPECT_NEAR(7381.45,derived_data.S,0.01);
+    EXPECT_NEAR(12.08,derived_data.iE,0.01);
+    EXPECT_NEAR(1.156,derived_data.hull_form_coeff,0.05); // Large margin because the formulae were revised in 1984
     // Resulting forces
     EXPECT_NEAR(869630,force_model.Rf(states),200000); // Large margin because the formulae were revised in 1984
     EXPECT_NEAR(8830,force_model.Rapp(states),10);
@@ -217,11 +218,11 @@ TEST_F(HoltropMennenForceModelTest, numerical_example_1984)
     EXPECT_NEAR(0.7440,derived_data.lambda,0.0001);
     EXPECT_NEAR(1.0,derived_data.c2,0.1);
     EXPECT_NEAR(-1.69385,derived_data.c15,0.00001);
-    auto force_model = HoltropMennenForceModel(derived_data, "body", env);
+    auto force_model = HoltropMennenForceModel(input, "body", env);
     BodyStates states;
     // Constant intermediate values
-    EXPECT_NEAR(1.297,force_model.get_hull_form_coeff(),0.001);
-    EXPECT_NEAR(584.9,force_model.get_S(),0.1);
+    EXPECT_NEAR(1.297,derived_data.hull_form_coeff,0.001);
+    EXPECT_NEAR(584.9,derived_data.S,0.1);
     // Numerical values given in Holtrop (1982)
     const std::vector<double> speed_kts({25,27,29,31,33,35});
     const std::vector<double> Rw({475000,512000,539000,564000,590000,618000});
