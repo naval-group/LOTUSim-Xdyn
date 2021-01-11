@@ -1339,6 +1339,7 @@ où $`U_r`$ est la vitesse moyenne de référence donnée à l'altitude $`z_r`$,
 #### Paramétrage
 
 Le profil de vitesse de vent en loi de puissance se paramètre de la façon suivante :
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
   - model: power law wind profile
     velocity: {unit: m/s, value: 8}
@@ -1371,6 +1372,7 @@ La longueur de rugosité peut $`z_0`$ être reliée à la vitesse de friction $`
 #### Paramétrage
 
 Le profil de vitesse de vent logarithmique se paramètre de la façon suivante :
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
   - model: power law wind profile
     velocity: {unit: m/s, value: 8}
