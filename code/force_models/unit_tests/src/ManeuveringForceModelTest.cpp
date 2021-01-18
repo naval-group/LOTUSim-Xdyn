@@ -311,7 +311,7 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_simple_maneuvering_model)
     states.x.record(t, 1024);
     states.y.record(t, 400);
     ssc::data_source::DataSource command_listener;
-    const auto F = force(states, t, command_listener, env.k, states.G);
+    const auto F = force(states, t, env, command_listener);
 
     ASSERT_EQ("some body", F.get_frame());
     ASSERT_DOUBLE_EQ(320032, F.X());
@@ -398,7 +398,7 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model_with_same_
     command_listener.set("test(c)", 0.);
 
     ManeuveringForceModel force(data,"TestShip", env);
-    const auto F = force(states, t, command_listener, env.k, states.G);
+    const auto F = force(states, t, env, command_listener);
 
     ASSERT_EQ("TestShip", F.get_frame());
     ASSERT_DOUBLE_EQ(-93470409.32377005, F.X());
@@ -431,7 +431,7 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model_with_same_
     command_listener.set("test(c)", 0.);
 
     ManeuveringForceModel force(data,"TestShip", env);
-    const auto F = force(states, t, command_listener, env.k, states.G);
+    const auto F = force(states, t, env, command_listener);
 
     ASSERT_EQ("TestShip", F.get_frame());
     ASSERT_DOUBLE_EQ(-160307.53008106418, F.X());
@@ -489,7 +489,7 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model)
     command_listener.set("test(c)", 0.);
 
     ManeuveringForceModel force(data,"TestShip", env);
-    const auto F = force(states, t, command_listener, env.k, states.G);
+    const auto F = force(states, t, env, command_listener);
 
     ASSERT_EQ("TestShip", F.get_frame());
     ASSERT_NEAR(-154542121.87051487, F.X(), 1e-7);
@@ -522,7 +522,7 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model2)
     command_listener.set("test(c)", 0.);
 
     ManeuveringForceModel force(data,"TestShip", env);
-    const auto F = force(states, t, command_listener, env.k, states.G);
+    const auto F = force(states, t, env, command_listener);
 
     ASSERT_EQ("TestShip", F.get_frame());
     ASSERT_NEAR(-276711.3255011981, F.X(), 1e-9);
@@ -578,7 +578,7 @@ TEST_F(ManeuveringForceModelTest, can_use_euler_angles_in_maneuvering_with_same_
     ssc::data_source::DataSource command_listener;
 
     ManeuveringForceModel force(data,"TestShip", env);
-    const auto F = force(states, t, command_listener, env.k, states.G);
+    const auto F = force(states, t, env, command_listener);
     ASSERT_DOUBLE_EQ(angles.phi, (double)F.X());
     ASSERT_DOUBLE_EQ(angles.theta, (double)F.Y());
     ASSERT_DOUBLE_EQ(angles.psi, (double)F.Z());
@@ -651,7 +651,7 @@ TEST_F(ManeuveringForceModelTest, can_use_euler_angles_in_maneuvering)
     ssc::data_source::DataSource command_listener;
 
     ManeuveringForceModel force(data,"TestShip", env);
-    const auto F = force(states, t, command_listener, env.k, states.G);
+    const auto F = force(states, t, env, command_listener);
     ASSERT_NEAR(1.917565962059328, (double)F.X(), 1e-14);
     ASSERT_NEAR(-0.8788836899394064, (double)F.Y(), 1e-14);
     ASSERT_NEAR(-0.8088077018359574, (double)F.Z(), 1e-14);

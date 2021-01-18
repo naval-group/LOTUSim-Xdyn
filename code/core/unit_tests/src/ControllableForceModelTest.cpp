@@ -11,8 +11,8 @@
 #include "ControllableForceModel.hpp"
 #include "random_kinematics.hpp"
 
-EnvironmentAndFrames get_env(ssc::random_data_generator::DataGenerator& a);
-EnvironmentAndFrames get_env(ssc::random_data_generator::DataGenerator& a)
+EnvironmentAndFrames make_env(ssc::random_data_generator::DataGenerator& a);
+EnvironmentAndFrames make_env(ssc::random_data_generator::DataGenerator& a)
 {
     EnvironmentAndFrames env;
     env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics());
@@ -27,7 +27,7 @@ class RandomControllableForce : public ControllableForceModel
     public:
 
         RandomControllableForce(ssc::random_data_generator::DataGenerator& a_)
-             : ControllableForceModel("mock", std::vector<std::string>(), YamlPosition(), "body", get_env(a_)), a(a_)
+             : ControllableForceModel("mock", std::vector<std::string>(), YamlPosition(), "body", make_env(a_)), a(a_)
         {
         }
 
@@ -43,9 +43,9 @@ class RandomControllableForce : public ControllableForceModel
             return ret;
         }
 
-        ssc::kinematics::KinematicsPtr get_k() const
+        EnvironmentAndFrames get_env() const
         {
-            return env.k;
+            return env;
         }
 
     private:
@@ -78,7 +78,7 @@ TEST_F(ControllableForceModelTest, bug_2838)
     const double t = a.random<double>();
 
 
-    auto w = F(states, t, command_listener, F.get_k(), states.G);
+    auto w = F(states, t, F.get_env(), command_listener);
 //! [ControllableForceModelTest example]
 //! [ControllableForceModelTest expected output]
     ASSERT_EQ("body", w.get_frame());

@@ -50,13 +50,13 @@ std::map<std::string,double> ControllableForceModel::get_commands(ssc::data_sour
     return ret;
 }
 
-ssc::kinematics::Wrench ControllableForceModel::operator()(const BodyStates& states, const double t, ssc::data_source::DataSource& command_listener, const ssc::kinematics::KinematicsPtr& k, const ssc::kinematics::Point& G)
+ssc::kinematics::Wrench ControllableForceModel::operator()(const BodyStates& states, const double t, const EnvironmentAndFrames& env, ssc::data_source::DataSource& command_listener)
 {
     const auto F = get_force(states,t,get_commands(command_listener,t));
     const Eigen::Vector3d force(F(0),F(1),F(2));
     const Eigen::Vector3d torque(F(3),F(4),F(5));
     const auto tau_in_internal_frame = ssc::kinematics::UnsafeWrench(ssc::kinematics::Point(name, 0, 0, 0), force, torque);
-    ssc::kinematics::Transform T = k->get(body_name, name);
+    ssc::kinematics::Transform T = env.k->get(body_name, name);
 
     // Origin of the internal frame is P
     // G is the point (not the origin) of the body frame where the forces are summed
@@ -65,7 +65,7 @@ ssc::kinematics::Wrench ControllableForceModel::operator()(const BodyStates& sta
 
     const auto rot_from_internal_frame_to_body_frame = T.get_rot();
     const auto OP = T.get_point().v;
-    const auto GO = -G.v;
+    const auto GO = -states.G.v;
     const auto GP = GO + OP;
     const auto force_in_G_expressed_in_body_frame = rot_from_internal_frame_to_body_frame*force;
     const Eigen::Vector3d torque_in_G_expressed_in_body_frame = rot_from_internal_frame_to_body_frame * torque + GP.cross(force_in_G_expressed_in_body_frame);
