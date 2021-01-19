@@ -66,7 +66,7 @@ AbstractWageningen::AbstractWageningen(const Yaml& input, const std::string& bod
 {
 }
 
-ssc::kinematics::Vector6d AbstractWageningen::get_force(const BodyStates& states, const double, const std::map<std::string,double>& commands) const
+ssc::kinematics::Vector6d AbstractWageningen::get_force(const BodyStates& states, const double, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
 {
     ssc::kinematics::Vector6d tau = ssc::kinematics::Vector6d::Zero();
     const double n2 = commands.at("rpm")*commands.at("rpm")/(4*PI*PI); // In turns per second (Hz)

@@ -60,7 +60,7 @@ SimpleStationKeepingController::SimpleStationKeepingController(const Yaml& input
 
 }
 
-ssc::kinematics::Vector6d SimpleStationKeepingController::get_force(const BodyStates& states, const double, const std::map<std::string,double>& commands) const
+ssc::kinematics::Vector6d SimpleStationKeepingController::get_force(const BodyStates& states, const double, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
 {
     ssc::kinematics::Vector6d ret = ssc::kinematics::Vector6d::Zero();
 

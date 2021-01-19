@@ -274,7 +274,7 @@ GRPCForceModel::GRPCForceModel(const TR1(shared_ptr)<Impl>& pimpl_, const std::s
 {
 }
 
-ssc::kinematics::Vector6d GRPCForceModel::get_force(const BodyStates& states, const double t, const std::map<std::string,double>& commands) const
+ssc::kinematics::Vector6d GRPCForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
 {
     const auto ret = pimpl->force(t, states, commands, env, get_name());
     return ret;

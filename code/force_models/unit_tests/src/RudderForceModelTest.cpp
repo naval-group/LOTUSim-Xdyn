@@ -308,7 +308,7 @@ TEST_F(RudderForceModelTest, force_and_torque)
     commands["P/D"] = 1.2;
     commands["beta"] = PI/6;
 
-    const auto F = rudder.get_force(states, t, commands);
+    const auto F = rudder.get_force(states, t, env, commands);
     ASSERT_DOUBLE_EQ(2208573.9553180891, (double)F(0));
     ASSERT_DOUBLE_EQ(777997.67996840423, (double)F(1));
     ASSERT_DOUBLE_EQ(0, (double)F(2));

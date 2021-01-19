@@ -61,7 +61,7 @@ TEST_F(SimpleHeadingKeepingControllerTest, force_and_torque)
     std::map<std::string,double> commands;
     commands["psi_co"] = 5;
 
-    const auto F = w.get_force(states, a.random<double>(),commands);
+    const auto F = w.get_force(states, a.random<double>(), env, commands);
 
     ASSERT_NEAR(0, (double)F(0), EPS);
     ASSERT_NEAR(0, (double)F(1), EPS);

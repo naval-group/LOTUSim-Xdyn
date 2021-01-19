@@ -77,7 +77,7 @@ TEST_F(SimpleStationKeepingControllerTest, force_and_torque)
     commands["y_co"] = 6;
     commands["psi_co"] = 7;
 
-    const auto F = w.get_force(states, a.random<double>(),commands);
+    const auto F = w.get_force(states, a.random<double>(), env, commands);
 
     ASSERT_NEAR(4*1*(5-x)-2*0.9*4*1*8, (double)F(0), EPS);
     ASSERT_NEAR(5*9*(6-y)-2*0.85*5*3*9, (double)F(1), EPS);
