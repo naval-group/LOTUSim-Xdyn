@@ -10,10 +10,10 @@
 
 
 #include "EnvironmentAndFrames.hpp"
-#include "ForceModel.hpp"
+#include "ControllableForceModel.hpp"
 #include <ssc/kinematics.hpp>
 
-class ConstantForceModel : public ForceModel
+class ConstantForceModel : public ControllableForceModel
 {
     public:
         struct Input
@@ -32,17 +32,14 @@ class ConstantForceModel : public ForceModel
         };
 
         ConstantForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env);
-        ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
+        ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const override;
         static Input parse(const std::string& yaml);
         static std::string model_name();
 
     private:
         ConstantForceModel();
-        EnvironmentAndFrames env;
-        std::string internal_frame;
         Eigen::Matrix<double, 3, 1> force;
         Eigen::Matrix<double, 3, 1> torque;
-        Eigen::Matrix<double, 3, 1> point_of_application_in_internal_frame;
 };
 
 
