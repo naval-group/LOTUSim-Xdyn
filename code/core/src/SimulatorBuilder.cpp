@@ -113,12 +113,14 @@ EnvironmentAndFrames SimulatorBuilder::build_environment_and_frames() const
     return env;
 }
 
-std::vector<ListOfForces> SimulatorBuilder::get_forces(const EnvironmentAndFrames& env) const
+std::vector<ListOfForces> SimulatorBuilder::get_forces(const EnvironmentAndFrames& env, std::vector<ListOfControlledForces>& controlled_forces) const
 {
     std::vector<ListOfForces> forces;
-    for (const auto body:input.bodies)
+    for(size_t i=0 ; i<input.bodies.size() ; i++)
     {
-        forces.push_back(forces_from(body, env));
+        auto body = input.bodies.at(i);
+        ListOfControlledForces& L_CF = controlled_forces.at(i);
+        forces.push_back(forces_from(body, env, L_CF));
     }
     return forces;
 }
@@ -151,12 +153,12 @@ std::vector<ListOfControlledForces> SimulatorBuilder::get_controlled_forces(cons
     return forces;
 }
 
-ListOfForces SimulatorBuilder::forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const
+ListOfForces SimulatorBuilder::forces_from(const YamlBody& body, const EnvironmentAndFrames& env, ListOfControlledForces& L_CF) const
 {
     ListOfForces ret;
     for (auto that_force_model = body.external_forces.begin() ; that_force_model!= body.external_forces.end() ; ++that_force_model)
     {
-        add(*that_force_model, ret, body.name, env);
+        add(*that_force_model, ret, body.name, env, L_CF);
     }
     return ret;
 }
@@ -195,7 +197,7 @@ template <typename T> bool could_parse(const std::vector<T>& parsers, const Yaml
     return false;
 }
 
-void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const std::string& body_name, const EnvironmentAndFrames& env) const
+void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const std::string& body_name, const EnvironmentAndFrames& env, ListOfControlledForces& L_CF) const
 {
     bool parsed = false;
     for (auto try_to_parse:force_parsers)
@@ -212,9 +214,12 @@ void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const std::s
     {
         if (could_parse(controllable_force_parsers, model, body_name, env))
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Model '" << model.model << "' is in the wrong section: it's in the 'external forces' section whereas it should be in the 'controlled forces' section.");
+            add(model, L_CF, body_name, env);
         }
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Simulator does not know model '" << model.model << "': maybe the name is misspelt or you are using an outdated version of this simulator, or maybe you put a controlled force (eg. maneuvering, propeller+rudder, etc.) in the 'external forces' section.");
+        else
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Simulator does not know model '" << model.model << "': maybe the name is misspelt or you are using an outdated version of this simulator, or maybe you put a controlled force (eg. maneuvering, propeller+rudder, etc.) in the 'external forces' section.");
+        }
     }
 }
 
@@ -258,12 +263,12 @@ std::vector<bool> SimulatorBuilder::are_there_surface_forces_acting_on_body(cons
 Sim SimulatorBuilder::build(const MeshMap& meshes) const
 {
     auto env = build_environment_and_frames();
-    const auto forces = get_forces(env);
-    const auto controlled_forces = get_controlled_forces(env);
+    auto controlled_forces = get_controlled_forces(env);
+    const auto forces = get_forces(env, controlled_forces);
     auto history_length = get_max_history_length(forces, controlled_forces);
     const auto bodies = get_bodies(meshes, are_there_surface_forces_acting_on_body(forces), history_length);
     add_initial_transforms(bodies, env.k);
-    return Sim(bodies, forces, get_controlled_forces(env), env, get_initial_states(), command_listener);
+    return Sim(bodies, forces, controlled_forces, env, get_initial_states(), command_listener);
 }
 
 StateType SimulatorBuilder::get_initial_states() const
