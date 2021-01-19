@@ -254,7 +254,7 @@ TEST_F(RudderForceModelTest, DISABLED_ship_speed_relative_to_the_fluid)
     BodyWithoutSurfaceForces b(states,0,BlockedDOF(""));
     b.update_kinematics(s, env.k);
 
-    ssc::kinematics::Point Vship_water = F.get_ship_speed(states, t);
+    ssc::kinematics::Point Vship_water = F.get_ship_speed(states, t, env);
 
     ASSERT_DOUBLE_EQ(3.0621974344648351, Vship_water.x());
     ASSERT_DOUBLE_EQ(4, Vship_water.y());

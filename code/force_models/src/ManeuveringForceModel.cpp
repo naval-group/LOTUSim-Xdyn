@@ -72,20 +72,23 @@ ManeuveringForceModel::ManeuveringForceModel(const Yaml& data, const std::string
         m(),
         ds(new ssc::data_source::DataSource())
 {
-    env.k->add(make_transform(data.frame_of_reference, data.name, env.rot));
+    env_.k->add(make_transform(data.frame_of_reference, data.name, env_.rot));
     for (auto var2expr:data.var2expr)
     {
-        m[var2expr.first] = maneuvering::compile(var2expr.second, env.rot);
+        m[var2expr.first] = maneuvering::compile(var2expr.second, env_.rot);
     }
-    ds->set("g", env.g);
-    ds->set("nu", env.nu);
-    ds->set("rho", env.rho);
+    ds->set("g", env_.g);
+    ds->set("nu", env_.nu);
+    ds->set("rho", env_.rho);
     maneuvering::build_ds(*ds, m);
 }
 
 ssc::kinematics::Vector6d ManeuveringForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
 {
     ds->check_in(__PRETTY_FUNCTION__);
+    ds->set("g", env.g);
+    ds->set("nu", env.nu);
+    ds->set("rho", env.rho);
     ds->set("states", states);
     ds->set("t", t);
     for (const auto command:commands) ds->set(command.first, command.second);

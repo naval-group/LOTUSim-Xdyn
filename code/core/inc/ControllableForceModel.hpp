@@ -86,7 +86,6 @@ class ControllableForceModel
 
     protected:
         virtual void extra_observations(Observer& observer) const;
-        EnvironmentAndFrames env;
         std::vector<std::string> commands;
 
     private:

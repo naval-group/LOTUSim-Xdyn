@@ -26,8 +26,8 @@ class RandomControllableForce : public ControllableForceModel
 {
     public:
 
-        RandomControllableForce(ssc::random_data_generator::DataGenerator& a_)
-             : ControllableForceModel("mock", std::vector<std::string>(), YamlPosition(), "body", make_env(a_)), a(a_)
+        RandomControllableForce(ssc::random_data_generator::DataGenerator& a_, const EnvironmentAndFrames& env)
+             : ControllableForceModel("mock", std::vector<std::string>(), YamlPosition(), "body", env), a(a_)
         {
         }
 
@@ -41,11 +41,6 @@ class RandomControllableForce : public ControllableForceModel
             ret(4) = a.random<double>().between(200,300);
             ret(5) = a.random<double>().between(-300,-200);
             return ret;
-        }
-
-        EnvironmentAndFrames get_env() const
-        {
-            return env;
         }
 
     private:
@@ -72,13 +67,14 @@ TEST_F(ControllableForceModelTest, bug_2838)
 {
 //! [ControllableForceModelTest example]
     ssc::data_source::DataSource command_listener;
-    RandomControllableForce F(a);
+    EnvironmentAndFrames env = make_env(a);
+    RandomControllableForce F(a, env);
     BodyStates states;
     states.G = ssc::kinematics::Point("body", 1, 2, 3);
     const double t = a.random<double>();
 
 
-    auto w = F(states, t, F.get_env(), command_listener);
+    auto w = F(states, t, env, command_listener);
 //! [ControllableForceModelTest example]
 //! [ControllableForceModelTest expected output]
     ASSERT_EQ("body", w.get_frame());

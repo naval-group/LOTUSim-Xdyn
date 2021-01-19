@@ -18,15 +18,14 @@
 #define PI M_PI
 
 ControllableForceModel::ControllableForceModel(const std::string& name_, const std::vector<std::string>& commands_, const YamlPosition& internal_frame, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-    env(env_),
     commands(commands_),
     name(name_),
     body_name(body_name_),
     position_of_frame(internal_frame),
     latest_force_in_body_frame(),
-    from_internal_frame_to_a_known_frame(make_transform(position_of_frame, name, env.rot))
+    from_internal_frame_to_a_known_frame(make_transform(position_of_frame, name, env_.rot))
 {
-    env.k->add(from_internal_frame_to_a_known_frame);
+    env_.k->add(from_internal_frame_to_a_known_frame);
 }
 
 ControllableForceModel::~ControllableForceModel()
