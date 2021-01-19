@@ -7,6 +7,7 @@
 
 #include "ControllableForceModel.hpp"
 #include "InvalidInputException.hpp"
+#include "InternalErrorException.hpp"
 #include "ForceModel.hpp"
 #include "Observer.hpp"
 #include "yaml2eigen.hpp"
@@ -72,6 +73,16 @@ ssc::kinematics::Wrench ControllableForceModel::operator()(const BodyStates& sta
     latest_force_in_body_frame = tau_in_body_frame_at_G;
 
     return tau_in_body_frame_at_G;
+}
+
+ssc::kinematics::Wrench ControllableForceModel::operator()(const BodyStates& states, const double t, const EnvironmentAndFrames& env)
+{
+    if(not(commands.empty()))
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Invalid use of ControllableForceModel.operator() with a controlled force: a DataSource must be provided.");
+    }
+    ssc::data_source::DataSource ds;
+    return operator()(states, t, env, ds);
 }
 
 double ControllableForceModel::get_command(const std::string& command_name, ssc::data_source::DataSource& command_listener, const double t) const
