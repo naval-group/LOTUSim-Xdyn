@@ -646,7 +646,7 @@ TEST_F(ForceTests, hydrostatic_plus_froude_krylov)
     EXPECT_NEAR(-1026*0.5*9.81*1/36., F.K(),EPS);
 }
 
-DiffractionForceModel ForceTests::get_diffraction_force_model(const YamlModel& waves, const std::string& diffraction_yaml, const std::string& hdb_file_contents) const
+EnvironmentAndFrames ForceTests::get_env(const YamlModel& waves) const
 {
     const std::string yaml = test_data::test_ship_waves_test();
     const std::string stl = test_data::single_facet();
@@ -663,6 +663,15 @@ DiffractionForceModel ForceTests::get_diffraction_force_model(const YamlModel& w
     const auto env = sys.get_env();
     const ssc::kinematics::Transform T(ssc::kinematics::Point("NED",0,0,0), "Anthineas");
     env.k->add(T);
+    return env;
+}
+
+DiffractionForceModel ForceTests::get_diffraction_force_model(const EnvironmentAndFrames& env, const std::string& diffraction_yaml, const std::string& hdb_file_contents) const
+{
+    const std::string yaml = test_data::test_ship_waves_test();
+    const std::string stl = test_data::single_facet();
+    auto input = SimulatorYamlParser(yaml).parse();
+    YamlBody body = input.bodies.front();
     const YamlDiffraction data = DiffractionForceModel::parse(diffraction_yaml);
     return DiffractionForceModel(data, body.name, env, hdb_file_contents);
 }
@@ -725,6 +734,7 @@ BodyStates get_whole_body_state_with_psi_equal_to(const double psi)
     states.convention.convention.push_back("y'");
     states.convention.convention.push_back("x''");
     states.name = "Anthineas";
+    states.G = ssc::kinematics::Point(states.name,0,0,0);
     return states;
 }
 
@@ -745,6 +755,7 @@ BodyStates get_whole_body_state(const double x, const double y, const double z, 
     states.convention.convention.push_back("y'");
     states.convention.convention.push_back("x''");
     states.name = "Anthineas";
+    states.G = ssc::kinematics::Point(states.name,0,0,0);
     return states;
 }
 
@@ -752,11 +763,12 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_and_no_incidence_no_in
 {
     const YamlModel regular_waves_Hs_1_propagating_to_north_Tp_equals_4 = get_regular_wave(0, 2, 4);
     const std::string config_such_that_rao_point_is_zero = get_diffraction_conf(0,0,0);
-    const DiffractionForceModel F = get_diffraction_force_model(regular_waves_Hs_1_propagating_to_north_Tp_equals_4, config_such_that_rao_point_is_zero, test_data::bug_3210());
+    const auto env = get_env(regular_waves_Hs_1_propagating_to_north_Tp_equals_4);
+    DiffractionForceModel F = get_diffraction_force_model(env, config_such_that_rao_point_is_zero, test_data::bug_3210());
 
     const auto states = get_whole_body_state_with_psi_equal_to(0);
     const double t = 0;
-    const auto tau = F(states, t);
+    const auto tau = F(states, t, env);
     // Line in HDB corresponding to module (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_MOD_001]   0.000000):
     // 5.084407E+04  0.000000E+00  3.997774E+05  0.000000E+00  3.209051E+07  0.000000E+00
     const std::vector<double> module = {5.084407E+04,  0.000000E+00,  3.997774E+05,  0.000000E+00,  3.209051E+07,  0.000000E+00};
@@ -776,10 +788,11 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_but_incidence_30_no_in
 {
     const YamlModel regular_waves_Hs_1_propagating_to_north_Tp_equals_4 = get_regular_wave(-30, 2, 4);
     const std::string config_such_that_rao_point_is_zero = get_diffraction_conf(0,0,0);
-    const DiffractionForceModel F = get_diffraction_force_model(regular_waves_Hs_1_propagating_to_north_Tp_equals_4, config_such_that_rao_point_is_zero, test_data::bug_3210());
+    const auto env = get_env(regular_waves_Hs_1_propagating_to_north_Tp_equals_4);
+    DiffractionForceModel F = get_diffraction_force_model(env, config_such_that_rao_point_is_zero, test_data::bug_3210());
     const auto states = get_whole_body_state_with_psi_equal_to(0);
     const double t = 0;
-    const auto tau = F(states, t);
+    const auto tau = F(states, t, env);
     // Line in HDB corresponding to module (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_MOD_001]   30.00000):
     // 8.567009E+04  3.284304E+05  5.820626E+05  1.460688E+06  3.140660E+07  2.301511E+07
     const std::vector<double> module = {8.567009E+04,  3.284304E+05,  5.820626E+05,  1.460688E+06,  3.140660E+07,  2.301511E+07};
@@ -798,10 +811,11 @@ TEST_F(ForceTests, bug_3210_interpolation_in_incidence_no_interpolation_in_perio
 {
     const YamlModel regular_waves_Hs_1_propagating_to_north_Tp_equals_4 = get_regular_wave(-15, 2, 4);
     const std::string config_such_that_rao_point_is_zero = get_diffraction_conf(0,0,0);
-    const DiffractionForceModel F = get_diffraction_force_model(regular_waves_Hs_1_propagating_to_north_Tp_equals_4, config_such_that_rao_point_is_zero, test_data::bug_3210());
+    const auto env = get_env(regular_waves_Hs_1_propagating_to_north_Tp_equals_4);
+    DiffractionForceModel F = get_diffraction_force_model(env, config_such_that_rao_point_is_zero, test_data::bug_3210());
     const auto states = get_whole_body_state_with_psi_equal_to(0);
     const double t = 0;
-    const auto tau = F(states, t);
+    const auto tau = F(states, t, env);
     // Interpolate at 15° using the following lines of the HDB file (see two previous tests):
     // 5.084407E+04  0.000000E+00  3.997774E+05  0.000000E+00  3.209051E+07  0.000000E+00
     // 8.567009E+04  3.284304E+05  5.820626E+05  1.460688E+06  3.140660E+07  2.301511E+07
@@ -836,10 +850,11 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_interpolation_in_perio
 {
     const YamlModel regular_waves_Hs_1_propagating_to_north_Tp_equals_10 = get_regular_wave(-30, 2, 10);
     const std::string config_such_that_rao_point_is_zero = get_diffraction_conf(0,0,0);
-    const DiffractionForceModel F = get_diffraction_force_model(regular_waves_Hs_1_propagating_to_north_Tp_equals_10, config_such_that_rao_point_is_zero, test_data::bug_3210());
+    const auto env = get_env(regular_waves_Hs_1_propagating_to_north_Tp_equals_10);
+    DiffractionForceModel F = get_diffraction_force_model(env, config_such_that_rao_point_is_zero, test_data::bug_3210());
     const auto states = get_whole_body_state_with_psi_equal_to(0);
     const double t = 0;
-    const auto tau = F(states, t);
+    const auto tau = F(states, t, env);
     // Interpolate at Tp=10s using the following lines of the HDB file (see two previous tests):
     // 8.567009E+04  3.284304E+05  5.820626E+05  1.460688E+06  3.140660E+07  2.301511E+07
     // 3.275670E+03  3.409648E+04  3.283568E+05  1.685674E+04  2.255748E+06  4.594584E+05
@@ -875,10 +890,11 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_no_interpolation_in_pe
 {
     const YamlModel regular_waves_Hs_1_propagating_to_north_Tp_equals_4 = get_regular_wave(0, 2, 4);
     const std::string config_such_that_rao_point_is_not_zero = get_diffraction_conf(1,2,3);
-    const DiffractionForceModel F = get_diffraction_force_model(regular_waves_Hs_1_propagating_to_north_Tp_equals_4, config_such_that_rao_point_is_not_zero, test_data::bug_3210());
+    const auto env = get_env(regular_waves_Hs_1_propagating_to_north_Tp_equals_4);
+    DiffractionForceModel F = get_diffraction_force_model(env, config_such_that_rao_point_is_not_zero, test_data::bug_3210());
     const auto states = get_whole_body_state_with_psi_equal_to(0);
     const double t = 0;
-    const auto tau = F(states, t);
+    const auto tau = F(states, t, env);
     // Line in HDB corresponding to module (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_MOD_001]   0.000000):
     // 5.084407E+04  0.000000E+00  3.997774E+05  0.000000E+00  3.209051E+07  0.000000E+00
     const std::vector<double> module = {5.084407E+04,  0.000000E+00,  3.997774E+05,  0.000000E+00,  3.209051E+07,  0.000000E+00};
@@ -899,10 +915,11 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_no_interpolation_in_pe
 {
     const YamlModel regular_waves_Hs_1_propagating_to_north_Tp_equals_4 = get_regular_wave(0, 2, 4);
     const std::string config_such_that_rao_point_is_not_zero = get_diffraction_conf(1,2,3);
-    const DiffractionForceModel F = get_diffraction_force_model(regular_waves_Hs_1_propagating_to_north_Tp_equals_4, config_such_that_rao_point_is_not_zero, test_data::bug_3210());
+    const auto env = get_env(regular_waves_Hs_1_propagating_to_north_Tp_equals_4);
+    DiffractionForceModel F = get_diffraction_force_model(env, config_such_that_rao_point_is_not_zero, test_data::bug_3210());
     const auto states = get_whole_body_state_with_psi_equal_to(0);
     const double t = 5;
-    const auto tau = F(states, t);
+    const auto tau = F(states, t, env);
     // Line in HDB corresponding to module (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_MOD_001]   0.000000):
     // 5.084407E+04  0.000000E+00  3.997774E+05  0.000000E+00  3.209051E+07  0.000000E+00
     const std::vector<double> module = {5.084407E+04,  0.000000E+00,  3.997774E+05,  0.000000E+00,  3.209051E+07,  0.000000E+00};
@@ -923,10 +940,11 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_interpolation_in_perio
 {
     const YamlModel regular_waves_Hs_1_propagating_to_north_Tp_equals_10 = get_regular_wave(30, 2, 10);
     const std::string config_such_that_rao_point_is_not_zero = get_diffraction_conf(1,2,3);
-    const DiffractionForceModel F = get_diffraction_force_model(regular_waves_Hs_1_propagating_to_north_Tp_equals_10, config_such_that_rao_point_is_not_zero, test_data::bug_3210());
+    const auto env = get_env(regular_waves_Hs_1_propagating_to_north_Tp_equals_10);
+    DiffractionForceModel F = get_diffraction_force_model(env, config_such_that_rao_point_is_not_zero, test_data::bug_3210());
     const auto states = get_whole_body_state_with_psi_equal_to(0);
     const double t = 3;
-    const auto tau = F(states, t);
+    const auto tau = F(states, t, env);
     // Interpolate at Tp=10s using the following lines of the HDB file (see two previous tests):
     // 8.567009E+04  3.284304E+05  5.820626E+05  1.460688E+06  3.140660E+07  2.301511E+07
     // 3.275670E+03  3.409648E+04  3.283568E+05  1.685674E+04  2.255748E+06  4.594584E+05
@@ -964,10 +982,11 @@ TEST_F(ForceTests, bug_3210_interpolation_with_non_zero_psi_in_incidence_no_inte
 {
     const YamlModel regular_waves_Hs_1_propagating_to_north_Tp_equals_4 = get_regular_wave(-3, 2, 4);
     const std::string config_such_that_rao_point_is_zero = get_diffraction_conf(0,0,0);
-    const DiffractionForceModel F = get_diffraction_force_model(regular_waves_Hs_1_propagating_to_north_Tp_equals_4, config_such_that_rao_point_is_zero, test_data::bug_3210());
+    const auto env = get_env(regular_waves_Hs_1_propagating_to_north_Tp_equals_4);
+    DiffractionForceModel F = get_diffraction_force_model(env, config_such_that_rao_point_is_zero, test_data::bug_3210());
     const auto states = get_whole_body_state_with_psi_equal_to(12);
     const double t = 0;
-    const auto tau = F(states, t);
+    const auto tau = F(states, t, env);
     // Interpolate at 15° using the following lines of the HDB file (see two previous tests):
     // 5.084407E+04  0.000000E+00  3.997774E+05  0.000000E+00  3.209051E+07  0.000000E+00
     // 8.567009E+04  3.284304E+05  5.820626E+05  1.460688E+06  3.140660E+07  2.301511E+07
@@ -1005,9 +1024,10 @@ TEST_F(ForceTests, bug_3239_reference_frame_is_incorrect)
     const double Tp_in_seconds = 4;
     const YamlModel regular_waves_Hs_1_propagating_to_north_Tp_equals_4 = get_regular_wave(propagation_angle_in_ned_frame_in_degrees, Hs_in_meters, Tp_in_seconds);
     const std::string config_such_that_rao_point_is_zero = get_diffraction_conf(23,29,31);
-    const DiffractionForceModel F = get_diffraction_force_model(regular_waves_Hs_1_propagating_to_north_Tp_equals_4, config_such_that_rao_point_is_zero, test_data::bug_3210());
+    const auto env = get_env(regular_waves_Hs_1_propagating_to_north_Tp_equals_4);
+    DiffractionForceModel F = get_diffraction_force_model(env, config_such_that_rao_point_is_zero, test_data::bug_3210());
     const auto states = get_whole_body_state(0,0,0,0,0,0);
     const double t = 0;
-    const auto tau = F(states, t);
+    const auto tau = F(states, t, env);
     ASSERT_EQ("Anthineas", tau.get_frame());
 }
