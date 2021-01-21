@@ -22,10 +22,10 @@ ControllableForceModel::ControllableForceModel(const std::string& name_, const s
     commands(commands_),
     name(name_),
     body_name(body_name_),
-    latest_force_in_body_frame(),
-    from_internal_frame_to_a_known_frame(make_transform(internal_frame, name, env_.rot))
+    known_reference_frame(internal_frame.frame),
+    latest_force_in_body_frame()
 {
-    env_.k->add(from_internal_frame_to_a_known_frame);
+    env_.k->add(make_transform(internal_frame, name, env_.rot));
 }
 
 ControllableForceModel::~ControllableForceModel()
@@ -106,11 +106,10 @@ double ControllableForceModel::get_command(const std::string& command_name, ssc:
 
 ssc::kinematics::Transform ControllableForceModel::get_transform_from_body_to_internal_frame(const ssc::kinematics::KinematicsPtr& k) const
 {
-    ssc::kinematics::Transform Tbody_to_internal;
     bool internal_frame_exists = false;
     try
     {
-        k->get(body_name, from_internal_frame_to_a_known_frame.get_from_frame());
+        k->get(body_name, known_reference_frame);
         internal_frame_exists = true;
     }
     catch (const ssc::kinematics::KinematicsException& e)
@@ -118,7 +117,7 @@ ssc::kinematics::Transform ControllableForceModel::get_transform_from_body_to_in
     }
     try
     {
-        k->get("NED", from_internal_frame_to_a_known_frame.get_from_frame());
+        k->get("NED", known_reference_frame);
         internal_frame_exists = true;
     }
     catch (const ssc::kinematics::KinematicsException& e)
@@ -126,8 +125,9 @@ ssc::kinematics::Transform ControllableForceModel::get_transform_from_body_to_in
     }
     if (not(internal_frame_exists))
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, "When computing controlled force model '" << name << "' we were unable to find frame '" << from_internal_frame_to_a_known_frame.get_from_frame() << "' used to express the reference frame in which the forces are expressed. Use 'NED' or '" << body_name << "' in the 'frame' section perhaps?");
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "When computing force model '" << name << "' we were unable to find frame '" << known_reference_frame << "' used to express the reference frame in which the forces are expressed. Use 'NED' or '" << body_name << "' in the 'frame' section perhaps?");
     }
+    ssc::kinematics::Transform Tbody_to_internal;
     try
     {
         Tbody_to_internal = k->get(body_name, name);

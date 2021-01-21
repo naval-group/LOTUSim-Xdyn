@@ -97,8 +97,8 @@ class ControllableForceModel
 
         std::string name;
         std::string body_name;
+        std::string known_reference_frame;
         ssc::kinematics::Wrench latest_force_in_body_frame;
-        ssc::kinematics::Transform from_internal_frame_to_a_known_frame;
 };
 
 #endif /* CONTROLLABLEFORCEMODEL_HPP_ */
