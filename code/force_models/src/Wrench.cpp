@@ -1,3 +1,4 @@
+#include "InternalErrorException.hpp"
 #include "Wrench.hpp"
 
 Wrench::Wrench(const ssc::kinematics::Point& P, const std::string& frame_):
@@ -48,6 +49,67 @@ ssc::kinematics::Vector6d Wrench::to_vector() const
 {
     double v[6] = {X(),Y(),Z(),K(),M(),N()};
     return Eigen::Map<ssc::kinematics::Vector6d>(v);
+}
+
+void Wrench::change_frame(const std::string new_frame, const ssc::kinematics::RotationMatrix& R)
+{
+    force = R * force;
+    torque = R * torque;
+    frame = new_frame;
+}
+
+void Wrench::change_frame(const std::string new_frame, const ssc::kinematics::KinematicsPtr k)
+{
+    ssc::kinematics::RotationMatrix R = k->get(new_frame,frame).get_rot().inverse();
+    change_frame(new_frame, R);
+}
+
+void Wrench::transport_to(const ssc::kinematics::Point& P, const ssc::kinematics::KinematicsPtr k)
+{
+    auto BA = get_BA(P, k);
+    torque = torque + BA.cross(force);
+    point = P;
+}
+
+void Wrench::change_point_and_frame(const ssc::kinematics::Point& P, const std::string new_frame, const ssc::kinematics::KinematicsPtr k)
+{
+    transport_to(P, k);
+    change_frame(new_frame, k);
+}
+
+ssc::kinematics::Point operator*(const ssc::kinematics::Point& P, const ssc::kinematics::Transform T);
+ssc::kinematics::Point operator*(const ssc::kinematics::Point& P, const ssc::kinematics::Transform T)
+{
+    if (P.get_frame() != T.get_from_frame())
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, std::string("Frames don't match: transform goes from ") + T.get_from_frame() + " to " + T.get_to_frame() + ", but point lies in " + P.get_frame());
+    }
+    return ssc::kinematics::Point(T.get_to_frame(), T.inverse().get_point().v + T.get_rot().inverse()*P.v);
+}
+
+Eigen::Vector3d Wrench::get_BA(const ssc::kinematics::Point& B, const ssc::kinematics::KinematicsPtr k) const
+{
+    Eigen::Vector3d B_coord;
+    if(B.get_frame() == frame)
+    {
+        B_coord = B.v;
+    }
+    else
+    {
+        auto B_in_force_frame = B*k->get(B.get_frame(),frame);
+        B_coord = B_in_force_frame.v;
+    }
+    Eigen::Vector3d A_coord;
+    if(point.get_frame() == frame)
+    {
+        A_coord = point.v;
+    }
+    else
+    {
+        auto A_in_force_frame = point*k->get(point.get_frame(),frame);
+        A_coord = A_in_force_frame.v;
+    }
+    return A_coord - B_coord;
 }
 
 std::ostream& operator<<(std::ostream& os, const Wrench& w)
