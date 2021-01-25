@@ -1,5 +1,6 @@
-#include "InternalErrorException.hpp"
 #include "Wrench.hpp"
+
+#include "InternalErrorException.hpp"
 
 Wrench::Wrench(const ssc::kinematics::Point& P, const std::string& frame_):
         force(Eigen::Vector3d(0, 0, 0)),

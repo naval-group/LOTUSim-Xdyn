@@ -1,10 +1,11 @@
-#include <cmath>
 #include "Wrench.hpp"
+#include "WrenchTest.hpp"
+
+#include <cmath>
 #include "yaml2eigen.hpp"
 #include "YamlPosition.hpp"
 #include "YamlRotation.hpp"
 
-#include "WrenchTest.hpp"
 
 WrenchTest::WrenchTest(): a(ssc::random_data_generator::DataGenerator(267953))
 {

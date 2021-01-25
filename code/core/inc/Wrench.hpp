@@ -1,5 +1,5 @@
-#ifndef FORCE_MODELS_INC_WRENCH_HPP_
-#define FORCE_MODELS_INC_WRENCH_HPP_
+#ifndef CORE_INC_WRENCH_HPP_
+#define CORE_INC_WRENCH_HPP_
 
 #include <string>
 #include <ssc/kinematics.hpp>
@@ -50,4 +50,4 @@ private:
 
 std::ostream& operator<<(std::ostream& os, const Wrench& w);
 
-#endif /* FORCE_MODELS_INC_WRENCH_HPP_ */
+#endif /* CORE_INC_WRENCH_HPP_ */
