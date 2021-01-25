@@ -5,7 +5,7 @@
 #include "yaml2eigen.hpp"
 #include "YamlPosition.hpp"
 #include "YamlRotation.hpp"
-
+#include "yaml2eigen.hpp"
 
 WrenchTest::WrenchTest(): a(ssc::random_data_generator::DataGenerator(267953))
 {
@@ -32,23 +32,29 @@ TEST_F(WrenchTest, CanChangeFrame)
 {
     const ssc::kinematics::KinematicsPtr k(new ssc::kinematics::Kinematics);
     const double psi = 30 * M_PI / 180;
-    const YamlPosition position(YamlCoordinates(a.random<double>(), a.random<double>(), a.random<double>()), YamlAngle(0, 0, psi), "frame2");
+    const YamlAngle angles(0,0,psi);
+    const YamlPosition position(YamlCoordinates(a.random<double>(), a.random<double>(), a.random<double>()), angles, "frame2");
     YamlRotation rotation_convention("angle", { "z", "y'", "x''" });
     k->add(make_transform(position, "frame1", rotation_convention));
     const ssc::kinematics::Point P("frame1", 1, 2, 3);
-    ssc::kinematics::Vector6d force;
-    force << a.random<double>(), a.random<double>(), a.random<double>(), a.random<double>(), a.random<double>(), a.random<double>();
-    Wrench wrench(P, "frame2", force);
+    Eigen::Vector3d force;
+    force << a.random<double>(), a.random<double>(), a.random<double>();
+    Eigen::Vector3d torque;
+    torque << a.random<double>(), a.random<double>(), a.random<double>();
+    Wrench wrench(P, "frame2", force, torque);
     wrench.change_frame("frame1", k);
     ASSERT_EQ("frame1", wrench.get_frame());
     ASSERT_EQ(P.get_frame(), wrench.get_point().get_frame());
     ASSERT_TRUE(P.v.isApprox(wrench.get_point().v));
-    ASSERT_DOUBLE_EQ(force(0) * std::cos(psi) - force(1) * sin(psi), wrench.X());
-    ASSERT_DOUBLE_EQ(force(0) * std::sin(psi) + force(1) * cos(psi), wrench.Y());
-    ASSERT_DOUBLE_EQ(force(2), wrench.Z());
-    ASSERT_DOUBLE_EQ(force(3) * std::cos(psi) - force(4) * sin(psi), wrench.K());
-    ASSERT_DOUBLE_EQ(force(3) * std::sin(psi) + force(4) * cos(psi), wrench.M());
-    ASSERT_DOUBLE_EQ(force(5), wrench.N());
+    const ssc::kinematics::RotationMatrix R = angle2matrix(angles, rotation_convention);
+    auto Rforce = R.inverse()*force;
+    auto Rtorque = R.inverse()*torque;
+    ASSERT_DOUBLE_EQ(Rforce(0), wrench.X());
+    ASSERT_DOUBLE_EQ(Rforce(1), wrench.Y());
+    ASSERT_DOUBLE_EQ(Rforce(2), wrench.Z());
+    ASSERT_DOUBLE_EQ(Rtorque(0), wrench.K());
+    ASSERT_DOUBLE_EQ(Rtorque(1), wrench.M());
+    ASSERT_DOUBLE_EQ(Rtorque(2), wrench.N());
 }
 
 TEST_F(WrenchTest, CanChangePointInSameFrame)

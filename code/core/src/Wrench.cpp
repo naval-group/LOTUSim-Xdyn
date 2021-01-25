@@ -61,7 +61,7 @@ void Wrench::change_frame(const std::string new_frame, const ssc::kinematics::Ro
 
 void Wrench::change_frame(const std::string new_frame, const ssc::kinematics::KinematicsPtr k)
 {
-    ssc::kinematics::RotationMatrix R = k->get(new_frame,frame).get_rot().inverse();
+    ssc::kinematics::RotationMatrix R = k->get(new_frame,frame).get_rot();
     change_frame(new_frame, R);
 }
 
