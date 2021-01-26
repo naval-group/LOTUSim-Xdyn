@@ -218,16 +218,16 @@ ssc::kinematics::Vector6d RudderForceModel::get_rudder_force(const BodyStates& s
     return w.in_wake + w.outside_wake;
 }
 
-ssc::kinematics::Vector6d RudderForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
+Wrench RudderForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
 {
-    const ssc::kinematics::Vector6d propeller_force = propulsion.get_force(states, t, env, commands);
+    const ssc::kinematics::Vector6d propeller_force = propulsion.get_force(states, t, env, commands).to_vector();
     const ssc::kinematics::Vector6d rudder_force = get_rudder_force(states, t, env, commands, (double)propeller_force.norm());
     const std::string frame = translation_from_rudder_to_propeller.get_frame();
     const ssc::kinematics::Wrench prop(frame, propeller_force);
     const ssc::kinematics::Wrench rudder_wrench(ssc::kinematics::Point(frame,0,0,0), rudder_force);
     rudder_wrench.change_point_of_application(translation_from_rudder_to_propeller);
     const ssc::kinematics::Wrench Ftot = rudder_wrench + prop;
-    return Ftot.to_vector();
+    return Wrench(ssc::kinematics::Point(name,0,0,0), name, Ftot.to_vector());
 }
 
 ssc::kinematics::Point RudderForceModel::get_ship_speed(const BodyStates& states, const double t, const EnvironmentAndFrames& env) const

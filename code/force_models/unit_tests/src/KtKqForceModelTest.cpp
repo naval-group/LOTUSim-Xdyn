@@ -72,11 +72,11 @@ TEST_F(KtKqForceModelTest, force)
     std::map<std::string,double> commands;
     commands["rpm"] = 5*(2*PI);
 
-    ASSERT_NEAR(306063.03332753148, w.get_force(states, a.random<double>(), env, commands)(0), EPS);
-    ASSERT_EQ(0, w.get_force(states, a.random<double>(), env, commands)(1));
-    ASSERT_EQ(0, w.get_force(states, a.random<double>(), env, commands)(2));
-    ASSERT_EQ(0, w.get_force(states, a.random<double>(), env, commands)(4));
-    ASSERT_EQ(0, w.get_force(states, a.random<double>(), env, commands)(5));
+    ASSERT_NEAR(306063.03332753148, w.get_force(states, a.random<double>(), env, commands).X(), EPS);
+    ASSERT_EQ(0, w.get_force(states, a.random<double>(), env, commands).Y());
+    ASSERT_EQ(0, w.get_force(states, a.random<double>(), env, commands).Z());
+    ASSERT_EQ(0, w.get_force(states, a.random<double>(), env, commands).M());
+    ASSERT_EQ(0, w.get_force(states, a.random<double>(), env, commands).N());
 }
 
 TEST_F(KtKqForceModelTest, clarify_exception_message_for_Kt_Kq_interpolation_errors)
@@ -91,6 +91,6 @@ TEST_F(KtKqForceModelTest, clarify_exception_message_for_Kt_Kq_interpolation_err
 
     std::map<std::string,double> commands;
     commands["rpm"] = 2*PI*0.025;
-    EXPECT_THROW( w.get_force(states, a.random<double>(), env, commands)(0), NumericalErrorException);
+    EXPECT_THROW( w.get_force(states, a.random<double>(), env, commands).X(), NumericalErrorException);
 }
 

@@ -361,11 +361,11 @@ TEST_F(WageningenControlledForceModelTest, force)
     commands["rpm"] = 5*(2*PI);
     commands["P/D"] = 0.5;
 
-    ASSERT_NEAR(0.3*1024*25*16*0.18587823151195928539, w.get_force(states, a.random<double>(), env, commands)(0), EPS);
-    ASSERT_EQ(0, w.get_force(states, a.random<double>(), env, commands)(1));
-    ASSERT_EQ(0, w.get_force(states, a.random<double>(), env, commands)(2));
-    ASSERT_EQ(0, w.get_force(states, a.random<double>(), env, commands)(4));
-    ASSERT_EQ(0, w.get_force(states, a.random<double>(), env, commands)(5));
+    ASSERT_NEAR(0.3*1024*25*16*0.18587823151195928539, w.get_force(states, a.random<double>(), env, commands).X(), EPS);
+    ASSERT_EQ(0, w.get_force(states, a.random<double>(), env, commands).Y());
+    ASSERT_EQ(0, w.get_force(states, a.random<double>(), env, commands).Z());
+    ASSERT_EQ(0, w.get_force(states, a.random<double>(), env, commands).M());
+    ASSERT_EQ(0, w.get_force(states, a.random<double>(), env, commands).N());
 }
 
 TEST_F(WageningenControlledForceModelTest, torque)
@@ -381,7 +381,7 @@ TEST_F(WageningenControlledForceModelTest, torque)
     commands["rpm"] = 5*(2*PI);
     commands["P/D"] = 0.5;
 
-    ASSERT_NEAR(-1024*25*32*0.015890316523410611543, w.get_force(states, a.random<double>(), env, commands)(3), EPS);
+    ASSERT_NEAR(-1024*25*32*0.015890316523410611543, w.get_force(states, a.random<double>(), env, commands).K(), EPS);
 }
 
 TEST_F(WageningenControlledForceModelTest, torque_should_have_sign_corresponding_to_rotation)
@@ -399,8 +399,8 @@ TEST_F(WageningenControlledForceModelTest, torque_should_have_sign_corresponding
     std::map<std::string,double> commands;
     commands["rpm"] = a.random<double>().between(states.u(),2*states.u());
     commands["P/D"] = a.random<double>().between(0.5,1.4);
-    ASSERT_GT(0, w_clockwise.get_force(states, a.random<double>(), env, commands)(3));
-    ASSERT_LT(0, w_anti_clockwise.get_force(states, a.random<double>(), env, commands)(3));
+    ASSERT_GT(0, w_clockwise.get_force(states, a.random<double>(), env, commands).K());
+    ASSERT_LT(0, w_anti_clockwise.get_force(states, a.random<double>(), env, commands).K());
 }
 
 TEST_F(WageningenControlledForceModelTest, bug_2825_can_use_propeller_with_rpm_zero)
@@ -416,12 +416,12 @@ TEST_F(WageningenControlledForceModelTest, bug_2825_can_use_propeller_with_rpm_z
     commands["rpm"] = 0;
     commands["P/D"] = 0.5;
 
-    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands)(0), EPS);
-    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands)(1), EPS);
-    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands)(2), EPS);
-    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands)(3), EPS);
-    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands)(4), EPS);
-    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands)(5), EPS);
+    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands).X(), EPS);
+    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands).Y(), EPS);
+    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands).Z(), EPS);
+    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands).K(), EPS);
+    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands).M(), EPS);
+    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands).N(), EPS);
 }
 
 TEST_F(WageningenControlledForceModelTest, bug_2825_can_use_propeller_with_rpm_near_zero)
@@ -437,10 +437,10 @@ TEST_F(WageningenControlledForceModelTest, bug_2825_can_use_propeller_with_rpm_n
     commands["rpm"] = 1e-16;
     commands["P/D"] = 0.5;
 
-    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands)(0), EPS);
-    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands)(1), EPS);
-    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands)(2), EPS);
-    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands)(3), EPS);
-    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands)(4), EPS);
-    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands)(5), EPS);
+    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands).X(), EPS);
+    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands).Y(), EPS);
+    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands).Z(), EPS);
+    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands).K(), EPS);
+    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands).M(), EPS);
+    ASSERT_NEAR(0, w.get_force(states, a.random<double>(), env, commands).N(), EPS);
 }

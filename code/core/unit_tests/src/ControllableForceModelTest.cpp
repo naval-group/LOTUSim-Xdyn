@@ -31,7 +31,7 @@ class RandomControllableForce : public ControllableForceModel
         {
         }
 
-        ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
+        Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
         {
             ssc::kinematics::Vector6d ret;
             ret(0) = a.random<double>().between(2,3);
@@ -40,7 +40,7 @@ class RandomControllableForce : public ControllableForceModel
             ret(3) = a.random<double>().between(-30,-20);
             ret(4) = a.random<double>().between(200,300);
             ret(5) = a.random<double>().between(-300,-200);
-            return ret;
+            return Wrench(ssc::kinematics::Point(name,0,0,0),name,ret);
         }
 
     private:

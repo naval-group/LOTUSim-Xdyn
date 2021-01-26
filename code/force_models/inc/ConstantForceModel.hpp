@@ -32,7 +32,7 @@ class ConstantForceModel : public ControllableForceModel
         };
 
         ConstantForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env);
-        ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const override;
+        Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const override;
         static Input parse(const std::string& yaml);
         static std::string model_name();
 

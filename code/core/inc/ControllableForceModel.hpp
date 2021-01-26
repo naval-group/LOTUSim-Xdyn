@@ -17,6 +17,7 @@
 #include "yaml-cpp/exceptions.h"
 #include "InvalidInputException.hpp"
 #include "YamlBody.hpp"
+#include "Wrench.hpp"
 
 #include "EnvironmentAndFrames.hpp"
 #include "YamlPosition.hpp"
@@ -48,7 +49,7 @@ class ControllableForceModel
         virtual ~ControllableForceModel();
         ssc::kinematics::Wrench operator()(const BodyStates& states, const double t, const EnvironmentAndFrames& env, ssc::data_source::DataSource& command_listener);
         ssc::kinematics::Wrench operator()(const BodyStates& states, const double t, const EnvironmentAndFrames& env);
-        virtual ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const = 0;
+        virtual Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const = 0;
         std::string get_name() const;
         virtual double get_Tmax() const; // Can be overloaded if model needs access to History (not a problem, just has to say how much history to keep)
         std::string get_body_name() const;
@@ -88,6 +89,8 @@ class ControllableForceModel
     protected:
         virtual void extra_observations(Observer& observer) const;
         std::vector<std::string> commands;
+        std::string name;
+        std::string body_name;
 
     private:
         ControllableForceModel(); // Deactivated
@@ -95,8 +98,6 @@ class ControllableForceModel
         std::map<std::string,double> get_commands(ssc::data_source::DataSource& command_listener, const double t) const;
         ssc::kinematics::Transform get_transform_from_body_to_internal_frame(const ssc::kinematics::KinematicsPtr& k) const;
 
-        std::string name;
-        std::string body_name;
         std::string known_reference_frame;
         ssc::kinematics::Wrench latest_force_in_body_frame;
 };

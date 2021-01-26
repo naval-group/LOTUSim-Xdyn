@@ -1,4 +1,5 @@
 #include "Wrench.hpp"
+#include <iostream>
 
 #include "InternalErrorException.hpp"
 

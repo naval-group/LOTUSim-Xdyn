@@ -28,7 +28,7 @@ class DiffractionForceModel : public ControllableForceModel
         typedef YamlDiffraction Input;
         DiffractionForceModel(const Input& data, const std::string& body_name, const EnvironmentAndFrames& env);
         DiffractionForceModel(const Input& data, const std::string& body_name, const EnvironmentAndFrames& env, const std::string& hdb_file_contents);
-        ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const override;
+        Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const override;
         static Input parse(const std::string& yaml);
         static std::string model_name();
 

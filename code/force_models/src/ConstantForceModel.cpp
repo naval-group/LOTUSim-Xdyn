@@ -64,10 +64,8 @@ ConstantForceModel::ConstantForceModel(const ConstantForceModel::Input& input, c
             , input.N;
 }
 
-ssc::kinematics::Vector6d ConstantForceModel::get_force(const BodyStates&, const double, const EnvironmentAndFrames&, const std::map<std::string,double>&) const
+Wrench ConstantForceModel::get_force(const BodyStates&, const double, const EnvironmentAndFrames&, const std::map<std::string,double>&) const
 {
-    ssc::kinematics::Vector6d ret;
-    ret << force, torque;
-    return ret;
+    return Wrench(ssc::kinematics::Point(name,0,0,0), name, force, torque);
 }
 

@@ -197,9 +197,9 @@ DiffractionForceModel::DiffractionForceModel(const Input& data, const std::strin
 {
 }
 
-ssc::kinematics::Vector6d DiffractionForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
+Wrench DiffractionForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
 {
-    return pimpl->evaluate(states.G, states.name, t, env, states.get_angles().psi);
+    return Wrench(ssc::kinematics::Point(name,0,0,0), name, pimpl->evaluate(states.G, states.name, t, env, states.get_angles().psi));
 }
 
 DiffractionForceModel::Input DiffractionForceModel::parse(const std::string& yaml)
