@@ -62,13 +62,13 @@ void Wrench::change_frame(const std::string new_frame, const ssc::kinematics::Ro
 
 void Wrench::change_frame(const std::string new_frame, const ssc::kinematics::KinematicsPtr k)
 {
-    ssc::kinematics::RotationMatrix R = k->get(new_frame,frame).get_rot();
+    const ssc::kinematics::RotationMatrix R = k->get(new_frame,frame).get_rot();
     change_frame(new_frame, R);
 }
 
 void Wrench::transport_to(const ssc::kinematics::Point& P, const ssc::kinematics::KinematicsPtr k)
 {
-    auto BA = get_BA(P, k);
+    const auto BA = get_BA(P, k);
     torque = torque + BA.cross(force);
     point = P;
 }
@@ -77,6 +77,34 @@ void Wrench::change_point_and_frame(const ssc::kinematics::Point& P, const std::
 {
     transport_to(P, k);
     change_frame(new_frame, k);
+}
+
+Wrench Wrench::change_frame(const std::string new_frame, const ssc::kinematics::RotationMatrix& R) const
+{
+    Wrench ret(*this);
+    ret.change_frame(new_frame, R);
+    return ret;
+}
+
+Wrench Wrench::change_frame(const std::string new_frame, const ssc::kinematics::KinematicsPtr k) const
+{
+    Wrench ret(*this);
+    ret.change_frame(new_frame, k);
+    return ret;
+}
+
+Wrench Wrench::transport_to(const ssc::kinematics::Point& P, const ssc::kinematics::KinematicsPtr k) const
+{
+    Wrench ret(*this);
+    ret.transport_to(P, k);
+    return ret;
+}
+
+Wrench Wrench::change_point_and_frame(const ssc::kinematics::Point& P, const std::string new_frame, const ssc::kinematics::KinematicsPtr k) const
+{
+    Wrench ret(*this);
+    ret.change_point_and_frame(P, new_frame, k);
+    return ret;
 }
 
 ssc::kinematics::Point operator*(const ssc::kinematics::Point& P, const ssc::kinematics::Transform T);
