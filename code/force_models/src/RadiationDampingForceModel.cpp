@@ -161,7 +161,7 @@ class RadiationDampingForceModel::Impl
             }
         }
 
-        ssc::kinematics::Wrench get_wrench(const BodyStates& states)
+        Wrench get_wrench(const BodyStates& states)
         {
             ssc::kinematics::Vector6d W;
             const ssc::kinematics::Point H(states.name,H0);
@@ -172,7 +172,7 @@ class RadiationDampingForceModel::Impl
             W(3) = -get_convolution_for_axis(3, states);
             W(4) = -get_convolution_for_axis(4, states);
             W(5) = -get_convolution_for_axis(5, states);
-            return ssc::kinematics::Wrench(states.name,W);
+            return Wrench(H, states.name, W);
         }
 
         double get_Tmax() const
@@ -194,8 +194,9 @@ class RadiationDampingForceModel::Impl
 };
 
 
-RadiationDampingForceModel::RadiationDampingForceModel(const RadiationDampingForceModel::Input& input, const std::string& body_name_, const EnvironmentAndFrames& ) : ForceModel("radiation damping", body_name_),
-pimpl(new Impl(input.hdb, input.yaml))
+RadiationDampingForceModel::RadiationDampingForceModel(const RadiationDampingForceModel::Input& input, const std::string& body_name, const EnvironmentAndFrames& env) :
+        ControllableForceModel("radiation damping", {}, body_name, env),
+        pimpl(new Impl(input.hdb, input.yaml))
 {
 }
 
@@ -204,7 +205,7 @@ double RadiationDampingForceModel::get_Tmax() const
     return pimpl->get_Tmax();
 }
 
-ssc::kinematics::Wrench RadiationDampingForceModel::operator()(const BodyStates& states, const double ) const
+Wrench RadiationDampingForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames&, const std::map<std::string,double>&) const
 {
     return pimpl->get_wrench(states);
 }

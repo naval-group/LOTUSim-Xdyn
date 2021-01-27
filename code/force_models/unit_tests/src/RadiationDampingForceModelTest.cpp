@@ -109,24 +109,25 @@ TEST_F(RadiationDampingForceModelTest, example)
     RadiationDampingForceModel::Input input;
     input.hdb = get_hdb_data();
     input.yaml = yaml;
-    RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
-    ASSERT_EQ("radiation damping", F.model_name());
+    const EnvironmentAndFrames env;
     const std::string body_name = a.random<std::string>();
+    RadiationDampingForceModel F(input, body_name, env);
+    ASSERT_EQ("radiation damping", F.model_name());
     BodyStates states(100);
     states.name = body_name;
 //! [RadiationDampingForceModelTest example]
 //! [RadiationDampingForceModelTest expected output]
     record(states, 0, 1);
-    auto Frad = F(states,0);
+    auto Frad = F.get_force(states, 0, env, {});
     ASSERT_EQ(0, Frad.X());
     ASSERT_EQ(0, Frad.Y());
     ASSERT_EQ(0, Frad.Z());
     ASSERT_EQ(0, Frad.K());
     ASSERT_EQ(0, Frad.M());
     ASSERT_EQ(0, Frad.N());
-    ASSERT_EQ(body_name, F(states, 0).get_frame());
+    ASSERT_EQ(body_name, F.get_force(states, 0, env, {}).get_frame());
     record(states, 100, 1);
-    Frad = F(states,100);
+    Frad = F.get_force(states, 100, env, {});
 
     const double Fexpected = -ssc::integrate::ClenshawCurtisCosine(test_data::analytical_K,0).integrate_f(yaml.tau_min,yaml.tau_max);
     ASSERT_DOUBLE_EQ(Frad.X(),Frad.Y());
@@ -190,7 +191,8 @@ TEST_F(RadiationDampingForceModelTest, matrix_product_should_be_done_properly)
     input.hdb = get_hdb_data(not(only_diagonal_terms));
     input.yaml = get_yaml_data(false);
     input.yaml.type_of_quadrature_for_convolution = TypeOfQuadrature::RECTANGLE;
-    const RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
+    EnvironmentAndFrames env;
+    RadiationDampingForceModel F(input, "", env);
     BodyStates states(100);
     const double tmin = 0.20943950000000000067;
     const double tmax = 10;
@@ -212,7 +214,7 @@ TEST_F(RadiationDampingForceModelTest, matrix_product_should_be_done_properly)
     record(states, tmax-t0+eps, 0);
     record(states, tmax, 0);
 
-    const auto Frad = F(states,0);
+    const auto Frad = F.get_force(states, 0, env, {});
     // This is the result of the discrete Fourier transform: it does not
     // exactly match the value given by the (analytical) continuous Fourier
     // transform.

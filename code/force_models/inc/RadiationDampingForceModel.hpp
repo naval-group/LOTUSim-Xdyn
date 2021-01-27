@@ -11,14 +11,14 @@
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 
-#include "ForceModel.hpp"
+#include "ControllableForceModel.hpp"
 #include "YamlRadiationDamping.hpp"
 
 class HDBParser;
 
 struct EnvironmentAndFrames;
 
-class RadiationDampingForceModel : public ForceModel
+class RadiationDampingForceModel : public ControllableForceModel
 {
     public:
         struct Input
@@ -28,7 +28,7 @@ class RadiationDampingForceModel : public ForceModel
             YamlRadiationDamping yaml;
         };
         RadiationDampingForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env);
-        ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
+        Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const override;
         static Input parse(const std::string& yaml, const bool parse_hdb=true);
         static std::string model_name();
         double get_Tmax() const;
