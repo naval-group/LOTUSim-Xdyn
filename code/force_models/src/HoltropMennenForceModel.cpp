@@ -110,7 +110,7 @@ HoltropMennenForceModel::DerivedData::DerivedData(const Input& base_data) :
 }
 
 HoltropMennenForceModel::HoltropMennenForceModel(const Input& data, const std::string& body_name, const EnvironmentAndFrames& env_) :
-        ForceModel(HoltropMennenForceModel::model_name(), body_name),
+        ControllableForceModel(HoltropMennenForceModel::model_name(), {}, body_name, env_),
         d(-0.9),
         env(env_),
         input(data),
@@ -129,9 +129,9 @@ double HoltropMennenForceModel::Rw_b(const double Fn, const double m4) const
     return derived.c17*derived.c2*derived.c5*gravity_force*std::exp(derived.m3*std::pow(Fn,d)+m4*cos(derived.lambda*std::pow(Fn,-2.)));
 }
 
-ssc::kinematics::Wrench HoltropMennenForceModel::operator()(const BodyStates& states, const double t) const
+Wrench HoltropMennenForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
 {
-    ssc::kinematics::Wrench tau(states.G);
+    Wrench tau(states.hydrodynamic_forces_calculation_point, body_name);
     if(states.u() > 0)
     {
         double R = Rf(states) + Rapp(states) + Rw(states) + Rb(states) + Rtr(states) + Ra(states);

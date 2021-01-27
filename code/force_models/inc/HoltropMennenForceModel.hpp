@@ -5,10 +5,10 @@
 #include <boost/optional.hpp>
 #include <ssc/kinematics.hpp>
 
-#include "ForceModel.hpp"
+#include "ControllableForceModel.hpp"
 #include "EnvironmentAndFrames.hpp"
 
-class HoltropMennenForceModel : public ForceModel
+class HoltropMennenForceModel : public ControllableForceModel
 {
     public:
         struct Input
@@ -68,7 +68,7 @@ class HoltropMennenForceModel : public ForceModel
         };
 
         HoltropMennenForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env);
-        ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const override;
+        Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const override;
         static Input parse(const std::string& yaml);
         static std::string model_name();
 
