@@ -46,6 +46,7 @@ class ControllableForceModel
 {
     public:
         ControllableForceModel(const std::string& name, const std::vector<std::string>& commands, const YamlPosition& internal_frame, const std::string& body_name_, const EnvironmentAndFrames& env);
+        ControllableForceModel(const std::string& name, const std::vector<std::string>& commands, const std::string& body_name_, const EnvironmentAndFrames& env);
         virtual ~ControllableForceModel();
         ssc::kinematics::Wrench operator()(const BodyStates& states, const double t, const EnvironmentAndFrames& env, ssc::data_source::DataSource& command_listener);
         ssc::kinematics::Wrench operator()(const BodyStates& states, const double t, const EnvironmentAndFrames& env);
@@ -84,7 +85,7 @@ class ControllableForceModel
             return parser;
         }
 
-        void feed(Observer& observer, ssc::kinematics::KinematicsPtr& k, const ssc::kinematics::Point& G) const;
+        void feed(Observer& observer, ssc::kinematics::KinematicsPtr& k) const;
 
     protected:
         virtual void extra_observations(Observer& observer) const;
@@ -96,8 +97,9 @@ class ControllableForceModel
         ControllableForceModel(); // Deactivated
         double get_command(const std::string& command_name, ssc::data_source::DataSource& command_listener, const double t) const;
         std::map<std::string,double> get_commands(ssc::data_source::DataSource& command_listener, const double t) const;
-        ssc::kinematics::Transform get_transform_from_body_to_internal_frame(const ssc::kinematics::KinematicsPtr& k) const;
+        void can_find_internal_frame(const ssc::kinematics::KinematicsPtr& k) const;
 
+        bool has_internal_frame;
         std::string known_reference_frame;
         ssc::kinematics::Wrench latest_force_in_body_frame;
 };
