@@ -57,7 +57,8 @@ LinearHydrostaticForceModel::Input LinearHydrostaticForceModel::parse(const std:
     return ret;
 }
 
-LinearHydrostaticForceModel::LinearHydrostaticForceModel(const Input& input, const std::string& body_name_, const EnvironmentAndFrames& env_) : ForceModel(model_name(), body_name_),
+LinearHydrostaticForceModel::LinearHydrostaticForceModel(const Input& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
+        ControllableForceModel(model_name(), {}, body_name_, env_),
         K(),
         P1(body_name_, input.x1, input.y1, 0),
         P2(body_name_, input.x2, input.y2, 0),
@@ -120,7 +121,7 @@ std::vector<double> LinearHydrostaticForceModel::get_zH(const double t) const
     return {};
 }
 
-ssc::kinematics::Wrench LinearHydrostaticForceModel::operator()(const BodyStates& states, const double t) const
+Wrench LinearHydrostaticForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>&) const
 {
     const auto z = get_zH(t);
     const double zbar = compute_zbar(z);
@@ -130,7 +131,5 @@ ssc::kinematics::Wrench LinearHydrostaticForceModel::operator()(const BodyStates
     const Eigen::Vector3d v(states.z() - zbar - z_eq, angles.phi - phibar - phi_eq, angles.theta - thetabar - theta_eq);
     const Eigen::Vector3d F = -K*v;
 
-    return ssc::kinematics::Wrench(states.G,
-                                   Eigen::Vector3d(0,0,F(0)),
-                                   Eigen::Vector3d(F(1),F(2),0));
+    return Wrench(states.G, body_name, Eigen::Vector3d(0, 0, F(0)), Eigen::Vector3d(F(1),F(2),0));
 }

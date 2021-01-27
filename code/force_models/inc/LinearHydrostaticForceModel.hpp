@@ -9,10 +9,10 @@
 #define LINEARHYDROSTATICFORCEMODEL_HPP_
 
 #include "EnvironmentAndFrames.hpp"
-#include "ForceModel.hpp"
+#include "ControllableForceModel.hpp"
 #include <ssc/kinematics.hpp>
 
-class LinearHydrostaticForceModel : public ForceModel
+class LinearHydrostaticForceModel : public ControllableForceModel
 {
     public:
         struct Input
@@ -34,7 +34,7 @@ class LinearHydrostaticForceModel : public ForceModel
             double y4;
         };
         LinearHydrostaticForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env);
-        ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
+        Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const override;
         static Input parse(const std::string& yaml);
         static std::string model_name();
 
