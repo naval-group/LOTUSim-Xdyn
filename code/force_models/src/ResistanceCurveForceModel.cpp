@@ -39,7 +39,9 @@ ResistanceCurveForceModel::Yaml::Yaml() : Va(), R()
 {
 }
 
-ResistanceCurveForceModel::ResistanceCurveForceModel(const Yaml& data, const std::string& body_name_, const EnvironmentAndFrames&) : ForceModel(model_name(), body_name_), pimpl(new Impl(data))
+ResistanceCurveForceModel::ResistanceCurveForceModel(const Yaml& data, const std::string& body_name, const EnvironmentAndFrames& env) :
+        ControllableForceModel(model_name(), {}, body_name, env),
+        pimpl(new Impl(data))
 {
 }
 
@@ -55,9 +57,9 @@ ResistanceCurveForceModel::Yaml ResistanceCurveForceModel::parse(const std::stri
     return ret;
 }
 
-ssc::kinematics::Wrench ResistanceCurveForceModel::operator()(const BodyStates& states, const double ) const
+Wrench ResistanceCurveForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames&, const std::map<std::string,double>&) const
 {
     ssc::kinematics::Vector6d tau = ssc::kinematics::Vector6d::Zero();
     tau(0) = -pimpl->get_resistance(states.u());
-    return ssc::kinematics::Wrench(states.hydrodynamic_forces_calculation_point, tau);
+    return Wrench(states.hydrodynamic_forces_calculation_point, body_name, tau);
 }
