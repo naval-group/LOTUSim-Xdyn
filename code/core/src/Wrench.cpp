@@ -62,15 +62,35 @@ void Wrench::change_frame(const std::string new_frame, const ssc::kinematics::Ro
 
 void Wrench::change_frame(const std::string new_frame, const ssc::kinematics::KinematicsPtr k)
 {
-    const ssc::kinematics::RotationMatrix R = k->get(new_frame,frame).get_rot();
-    change_frame(new_frame, R);
+    if(new_frame!=frame)
+    {
+        const ssc::kinematics::RotationMatrix R = k->get(new_frame,frame).get_rot();
+        change_frame(new_frame, R);
+    }
+
+}
+
+bool operator!=(const ssc::kinematics::Point& A, const ssc::kinematics::Point& B);
+bool operator!=(const ssc::kinematics::Point& A, const ssc::kinematics::Point& B)
+{
+    if(A.get_frame()==B.get_frame() && A.v.isApprox(B.v))
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
 }
 
 void Wrench::transport_to(const ssc::kinematics::Point& P, const ssc::kinematics::KinematicsPtr k)
 {
-    const auto BA = get_BA(P, k);
-    torque = torque + BA.cross(force);
-    point = P;
+    if(P!=point)
+    {
+        const auto BA = get_BA(P, k);
+        torque = torque + BA.cross(force);
+        point = P;
+    }
 }
 
 void Wrench::change_point_and_frame(const ssc::kinematics::Point& P, const std::string new_frame, const ssc::kinematics::KinematicsPtr k)
