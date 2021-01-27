@@ -12,11 +12,13 @@
 #include "Body.hpp"
 
 
-DampingForceModel::DampingForceModel(const std::string& name_, const std::string& body_name_, const Eigen::Matrix<double,6,6>& D_) : ForceModel(name_, body_name_), D(D_)
+DampingForceModel::DampingForceModel(const std::string& name_, const std::string& body_name_, const EnvironmentAndFrames& env, const Eigen::Matrix<double,6,6>& D_) :
+        ControllableForceModel(name_, {}, body_name_, env),
+        D(D_)
 {
 }
 
-ssc::kinematics::Wrench DampingForceModel::operator()(const BodyStates& states, const double) const
+Wrench DampingForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
 {
     Eigen::Matrix<double, 6, 1> W;
     W <<states.u(),
@@ -25,6 +27,6 @@ ssc::kinematics::Wrench DampingForceModel::operator()(const BodyStates& states, 
         states.p(),
         states.q(),
         states.r();
-    return ssc::kinematics::Wrench(states.hydrodynamic_forces_calculation_point, get_force_and_torque(D, W));
+    return Wrench(states.hydrodynamic_forces_calculation_point, body_name, get_force_and_torque(D, W));
 }
 

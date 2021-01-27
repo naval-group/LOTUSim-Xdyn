@@ -15,7 +15,8 @@
 
 std::string LinearDampingForceModel::model_name() {return "linear damping";}
 
-LinearDampingForceModel::LinearDampingForceModel(const Eigen::Matrix<double,6,6>& D_, const std::string& body_name_, const EnvironmentAndFrames&) : DampingForceModel("linear damping", body_name_, D_)
+LinearDampingForceModel::LinearDampingForceModel(const Eigen::Matrix<double,6,6>& D_, const std::string& body_name_, const EnvironmentAndFrames& env) :
+        DampingForceModel("linear damping", body_name_, env, D_)
 {
 }
 

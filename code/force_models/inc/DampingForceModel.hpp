@@ -8,7 +8,7 @@
 #ifndef DAMPINGFORCEMODEL_HPP_
 #define DAMPINGFORCEMODEL_HPP_
 
-#include "ForceModel.hpp"
+#include "ControllableForceModel.hpp"
 #include <Eigen/Dense>
 #include <ssc/kinematics.hpp>
 
@@ -18,11 +18,11 @@ class Body;
  *  \addtogroup model_wrappers
  *  \ingroup model_wrappers
  */
-class DampingForceModel : public ForceModel
+class DampingForceModel : public ControllableForceModel
 {
     public:
-        DampingForceModel(const std::string& name, const std::string& body_name, const Eigen::Matrix<double,6,6>& D);
-        ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
+        DampingForceModel(const std::string& name, const std::string& body_name, const EnvironmentAndFrames& env, const Eigen::Matrix<double,6,6>& D);
+        Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const override;
 
     private:
         virtual Eigen::Matrix<double, 6, 1> get_force_and_torque(const Eigen::Matrix<double,6,6>& D, const Eigen::Matrix<double, 6, 1>& W) const = 0;
