@@ -44,6 +44,9 @@ public:
     Wrench transport_to(const ssc::kinematics::Point& P, const ssc::kinematics::KinematicsPtr k) const;
     Wrench change_point_and_frame(const ssc::kinematics::Point& P, const std::string new_frame, const ssc::kinematics::KinematicsPtr k) const;
 
+    void add(const Wrench& other, const ssc::kinematics::KinematicsPtr k);
+    Wrench add(const Wrench& other, const ssc::kinematics::KinematicsPtr k) const;
+
 private:
     Wrench(); // Deactivated
 
@@ -52,6 +55,8 @@ private:
     ssc::kinematics::Point point;
     std::string frame;
 };
+
+Wrench operator+(const Wrench& lhs, const Wrench& rhs);
 
 std::ostream& operator<<(std::ostream& os, const Wrench& w);
 

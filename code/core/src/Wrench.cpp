@@ -127,6 +127,20 @@ Wrench Wrench::change_point_and_frame(const ssc::kinematics::Point& P, const std
     return ret;
 }
 
+void Wrench::add(const Wrench& other, const ssc::kinematics::KinematicsPtr k)
+{
+    Wrench other_wrench = other.change_point_and_frame(point, frame, k);
+    force += other_wrench.force;
+    torque += other_wrench.torque;
+}
+
+Wrench Wrench::add(const Wrench& other, const ssc::kinematics::KinematicsPtr k) const
+{
+    Wrench ret(*this);
+    ret.add(other, k);
+    return ret;
+}
+
 ssc::kinematics::Point operator*(const ssc::kinematics::Point& P, const ssc::kinematics::Transform T);
 ssc::kinematics::Point operator*(const ssc::kinematics::Point& P, const ssc::kinematics::Transform T)
 {
@@ -160,6 +174,19 @@ Eigen::Vector3d Wrench::get_BA(const ssc::kinematics::Point& B, const ssc::kinem
         A_coord = A_in_force_frame.v;
     }
     return A_coord - B_coord;
+}
+
+Wrench operator+(const Wrench& lhs, const Wrench& rhs)
+{
+    if (lhs.get_point() != rhs.get_point())
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Points don't match: LHS is expressed at point " << lhs.get_point() << " and RHS at point " << rhs.get_point());
+    }
+    if (lhs.get_frame() != rhs.get_frame())
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Frames don't match: LHS is expressed in frame " << lhs.get_frame() << " and RHS in frame " << rhs.get_frame());
+    }
+    return Wrench(lhs.get_point(), lhs.get_frame(), lhs.force + rhs.force, lhs.torque + rhs.torque);
 }
 
 std::ostream& operator<<(std::ostream& os, const Wrench& w)
