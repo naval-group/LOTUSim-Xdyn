@@ -55,14 +55,14 @@ class ForceTester
 
         template <typename ForceType> ForceTester& add()
         {
-            forces.push_back(ControllableForcePtr(new ForceType(body->get_name(), env)));
+            forces.push_back(ForcePtr(new ForceType(body->get_name(), env)));
             return *this;
         }
 
         template <typename ForceType> ForceTester& add(const std::string& yaml)
         {
             const typename ForceType::Yaml params = ForceType::parse(yaml);
-            forces.push_back(ControllableForcePtr(new ForceType(params, body->get_name(), env)));
+            forces.push_back(ForcePtr(new ForceType(params, body->get_name(), env)));
             return *this;
         }
 
@@ -84,7 +84,7 @@ class ForceTester
         ForceTester();
         Sim make_sim(const std::string& yaml, const std::string& stl) const;
         Sim make_sim(const std::string& yaml, const VectorOfVectorOfPoints& stl) const;
-        std::vector<ControllableForcePtr> forces;
+        std::vector<ForcePtr> forces;
         BodyPtr body;
         EnvironmentAndFrames env;
         double current_instant;

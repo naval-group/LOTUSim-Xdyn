@@ -27,9 +27,9 @@ struct BodyStates;
 struct YamlRotation;
 
 class ForceModel;
-typedef TR1(shared_ptr)<ForceModel> ControllableForcePtr;
-typedef std::vector<ControllableForcePtr> ListOfControlledForces;
-typedef std::function<boost::optional<ControllableForcePtr>(const YamlModel&, const std::string&, const EnvironmentAndFrames&)> ControllableForceParser;
+typedef TR1(shared_ptr)<ForceModel> ForcePtr;
+typedef std::vector<ForcePtr> ListOfControlledForces;
+typedef std::function<boost::optional<ForcePtr>(const YamlModel&, const std::string&, const EnvironmentAndFrames&)> ControllableForceParser;
 
 class Observer;
 
@@ -70,15 +70,15 @@ class ForceModel
         template <typename ControllableForceType>
         static typename boost::enable_if<HasParse<ControllableForceType>, ControllableForceParser>::type build_parser()
         {
-            auto parser = [](const YamlModel& yaml, const std::string& body_name, const EnvironmentAndFrames& env) -> boost::optional<ControllableForcePtr>
+            auto parser = [](const YamlModel& yaml, const std::string& body_name, const EnvironmentAndFrames& env) -> boost::optional<ForcePtr>
                           {
-                              boost::optional<ControllableForcePtr> ret;
+                              boost::optional<ForcePtr> ret;
                               if (yaml.model == ControllableForceType::model_name())
                               {
                                   std::string context = "Invalid input data for model '" + ControllableForceType::model_name() + "'.";
                                   try
                                   {
-                                      ret.reset(ControllableForcePtr(new ControllableForceType(ControllableForceType::parse(yaml.yaml), body_name, env)));
+                                      ret.reset(ForcePtr(new ControllableForceType(ControllableForceType::parse(yaml.yaml), body_name, env)));
                                   }
                                   catch (const InvalidInputException& exception)
                                   {
@@ -100,12 +100,12 @@ class ForceModel
         template <typename ControllableForceType>
         static typename boost::disable_if<HasParse<ControllableForceType>, ControllableForceParser>::type build_parser()
         {
-            auto parser = [](const YamlModel& yaml, const std::string& body, const EnvironmentAndFrames& env) -> boost::optional<ControllableForcePtr>
+            auto parser = [](const YamlModel& yaml, const std::string& body, const EnvironmentAndFrames& env) -> boost::optional<ForcePtr>
             {
-                boost::optional<ControllableForcePtr> ret;
+                boost::optional<ForcePtr> ret;
                 if (yaml.model == ControllableForceType::model_name())
                 {
-                    ret.reset(ControllableForcePtr(new ControllableForceType(body, env)));
+                    ret.reset(ForcePtr(new ControllableForceType(body, env)));
                 }
                 return ret;
             };

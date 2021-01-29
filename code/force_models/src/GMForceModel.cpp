@@ -39,7 +39,7 @@ GMForceModel::GMForceModel(const Yaml& data, const std::string& body_name_, cons
     YamlModel data_for_hs;
     data_for_hs.index_of_first_line_in_global_yaml = data.index_of_first_line_in_global_yaml;
     data_for_hs.model = data.name_of_hydrostatic_force_model;
-    boost::optional<ControllableForcePtr> f = data.try_to_parse(data_for_hs, get_body_name(), env);
+    boost::optional<ForcePtr> f = data.try_to_parse(data_for_hs, get_body_name(), env);
     if (f)
     {
         underlying_hs_force_model = f.get();

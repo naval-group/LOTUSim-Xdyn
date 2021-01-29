@@ -54,7 +54,7 @@ class GMForceModel : public ImmersedSurfaceForceModel
                 const double t) const;
         double pe(const BodyStates& states, const std::vector<double>& x, const EnvironmentAndFrames& env) const;
 
-        ControllableForcePtr underlying_hs_force_model;
+        ForcePtr underlying_hs_force_model;
         double dphi;
         EnvironmentAndFrames env;
         TR1(shared_ptr)<double> GM;

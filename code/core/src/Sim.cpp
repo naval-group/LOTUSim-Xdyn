@@ -56,7 +56,7 @@ class Sim::Impl
 
         std::vector<BodyPtr> bodies;
         std::map<std::string,BodyPtr> name2bodyptr;
-        std::map<std::string,std::vector<ControllableForcePtr> > controlled_forces;
+        std::map<std::string,std::vector<ForcePtr> > controlled_forces;
         EnvironmentAndFrames env;
         StateType _dx_dt;
         ssc::data_source::DataSource command_listener;
@@ -64,7 +64,7 @@ class Sim::Impl
         std::map<std::string,ssc::kinematics::UnsafeWrench> sum_of_forces_in_NED_frame;
 };
 
-std::map<std::string,std::vector<ControllableForcePtr> > Sim::get_forces() const
+std::map<std::string,std::vector<ForcePtr> > Sim::get_forces() const
 {
     return pimpl->controlled_forces;
 }
