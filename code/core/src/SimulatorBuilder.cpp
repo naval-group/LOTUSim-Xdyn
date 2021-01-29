@@ -112,7 +112,7 @@ EnvironmentAndFrames SimulatorBuilder::build_environment_and_frames() const
     return env;
 }
 
-std::map<std::string, double> SimulatorBuilder::get_max_history_length(const std::vector<ListOfControlledForces>& controlled_forces_for_all_bodies) const
+std::map<std::string, double> SimulatorBuilder::get_max_history_length(const std::vector<ListOfForces>& controlled_forces_for_all_bodies) const
 {
     std::map<std::string, double> ret;
     for (const auto forces:controlled_forces_for_all_bodies)
@@ -124,9 +124,9 @@ std::map<std::string, double> SimulatorBuilder::get_max_history_length(const std
     return ret;
 }
 
-std::vector<ListOfControlledForces> SimulatorBuilder::get_controlled_forces(const EnvironmentAndFrames& env) const
+std::vector<ListOfForces> SimulatorBuilder::get_controlled_forces(const EnvironmentAndFrames& env) const
 {
-    std::vector<ListOfControlledForces> forces;
+    std::vector<ListOfForces> forces;
     for (auto that_body=input.bodies.begin() ; that_body != input.bodies.end() ; ++that_body)
     {
         forces.push_back(controlled_forces_from(*that_body, env));
@@ -134,9 +134,9 @@ std::vector<ListOfControlledForces> SimulatorBuilder::get_controlled_forces(cons
     return forces;
 }
 
-ListOfControlledForces SimulatorBuilder::controlled_forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const
+ListOfForces SimulatorBuilder::controlled_forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const
 {
-    ListOfControlledForces ret;
+    ListOfForces ret;
     for (auto that_force_model = body.external_forces.begin() ; that_force_model!= body.external_forces.end() ; ++that_force_model)
     {
         add(*that_force_model, ret, body.name, env);
@@ -144,7 +144,7 @@ ListOfControlledForces SimulatorBuilder::controlled_forces_from(const YamlBody& 
     return ret;
 }
 
-void SimulatorBuilder::add(const YamlModel& model, ListOfControlledForces& L, const std::string& name, const EnvironmentAndFrames& env) const
+void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const std::string& name, const EnvironmentAndFrames& env) const
 {
     bool parsed = false;
     for (auto try_to_parse:controllable_force_parsers)
@@ -162,7 +162,7 @@ void SimulatorBuilder::add(const YamlModel& model, ListOfControlledForces& L, co
     }
 }
 
-std::vector<bool> SimulatorBuilder::are_there_surface_forces_acting_on_body(const std::vector<ListOfControlledForces>& forces) const
+std::vector<bool> SimulatorBuilder::are_there_surface_forces_acting_on_body(const std::vector<ListOfForces>& forces) const
 {
     std::vector<bool> ret;
     for (auto forces_acting_on_body:forces)

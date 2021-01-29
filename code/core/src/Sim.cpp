@@ -22,7 +22,7 @@ class Sim::Impl
 {
     public:
         Impl(const std::vector<BodyPtr>& bodies_,
-             const std::vector<ListOfControlledForces>& controlled_forces_,
+             const std::vector<ListOfForces>& controlled_forces_,
              const EnvironmentAndFrames& env_,
              const StateType& x,
              const ssc::data_source::DataSource& command_listener_) :
@@ -80,7 +80,7 @@ EnvironmentAndFrames Sim::get_env() const
 }
 
 Sim::Sim(const std::vector<BodyPtr>& bodies,
-         const std::vector<ListOfControlledForces>& controlled_forces,
+         const std::vector<ListOfForces>& controlled_forces,
          const EnvironmentAndFrames& env,
          const StateType& x,
          const ssc::data_source::DataSource& command_listener) : state(x), pimpl(new Impl(bodies, controlled_forces, env, x, command_listener))

@@ -27,7 +27,7 @@ class Sim
 {
     public:
         Sim(const std::vector<BodyPtr>& bodies,
-            const std::vector<ListOfControlledForces>& controllable_forces,
+            const std::vector<ListOfForces>& forces,
             const EnvironmentAndFrames& env,
             const StateType& x,
             const ssc::data_source::DataSource& command_listener);

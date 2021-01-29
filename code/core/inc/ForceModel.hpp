@@ -28,7 +28,7 @@ struct YamlRotation;
 
 class ForceModel;
 typedef TR1(shared_ptr)<ForceModel> ForcePtr;
-typedef std::vector<ForcePtr> ListOfControlledForces;
+typedef std::vector<ForcePtr> ListOfForces;
 typedef std::function<boost::optional<ForcePtr>(const YamlModel&, const std::string&, const EnvironmentAndFrames&)> ForceParser;
 
 class Observer;

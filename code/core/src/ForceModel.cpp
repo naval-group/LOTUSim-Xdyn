@@ -1,5 +1,5 @@
 /*
- * ControllableForceModel.cpp
+ * ForceModel.cpp
  *
  *  Created on: Oct 22, 2014
  *      Author: cady
@@ -73,7 +73,7 @@ ssc::kinematics::Wrench ForceModel::operator()(const BodyStates& states, const d
 {
     if(not(commands.empty()))
     {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Invalid use of ControllableForceModel.operator() with a controlled force: a DataSource must be provided.");
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Invalid use of ForceModel.operator() with a controlled force: a DataSource must be provided.");
     }
     ssc::data_source::DataSource ds;
     return operator()(states, t, env, ds);
@@ -130,7 +130,7 @@ void ForceModel::can_find_internal_frame(const ssc::kinematics::KinematicsPtr& k
         }
         catch (const ssc::kinematics::KinematicsException& e)
         {
-            THROW(__PRETTY_FUNCTION__, InternalErrorException, "When computing force model '" << name << "' we were unable to find frame '" << name << "' used to express the reference frame in which the forces are expressed. If the force model uses an internal frame, it must be provided in the ControllableForceModel constructor.");
+            THROW(__PRETTY_FUNCTION__, InternalErrorException, "When computing force model '" << name << "' we were unable to find frame '" << name << "' used to express the reference frame in which the forces are expressed. If the force model uses an internal frame, it must be provided in the ForceModel constructor.");
         }
     }
 }
@@ -139,7 +139,7 @@ void ForceModel::feed(Observer& observer, ssc::kinematics::KinematicsPtr& k) con
 {
     // G is the point in which 'latest_force_in_body_frame' is expressed (sum of forces)
     // O is the origin of the NED frame
-    // P is the origin of the ControllableForceModel's internal frame
+    // P is the origin of the ForceModel's internal frame
 
     const Wrench tau_in_body_frame_at_G(latest_force_in_body_frame.get_point(), latest_force_in_body_frame.get_frame(), latest_force_in_body_frame.to_vector());
     const Wrench tau_in_ned_frame_at_G = tau_in_body_frame_at_G.change_frame("NED", k);
