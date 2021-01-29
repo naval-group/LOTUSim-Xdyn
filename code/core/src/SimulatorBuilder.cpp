@@ -17,7 +17,7 @@
 SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_, const double t0_, const ssc::data_source::DataSource& command_listener_) :
         input(input_),
         builder(TR1(shared_ptr)<BodyBuilder>(new BodyBuilder(input.rotations))),
-        controllable_force_parsers(),
+        force_parsers(),
         surface_elevation_parsers(),
         wave_parsers(TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> >(new std::vector<WaveModelBuilderPtr>())),
         directional_spreading_parsers(TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >(new std::vector<DirectionalSpreadingBuilderPtr>())),
@@ -147,7 +147,7 @@ ListOfForces SimulatorBuilder::controlled_forces_from(const YamlBody& body, cons
 void SimulatorBuilder::add(const YamlModel& model, ListOfForces& L, const std::string& name, const EnvironmentAndFrames& env) const
 {
     bool parsed = false;
-    for (auto try_to_parse:controllable_force_parsers)
+    for (auto try_to_parse:force_parsers)
     {
         boost::optional<ForcePtr> f = try_to_parse(model, name, env);
         if (f)

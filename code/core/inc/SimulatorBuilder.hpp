@@ -124,7 +124,7 @@ class SimulatorBuilder
         template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<ForceModel,T> >::type* dummy = 0)
         {
             (void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
-            controllable_force_parsers.push_back(ForceModel::build_parser<T>());
+            force_parsers.push_back(ForceModel::build_parser<T>());
             return *this;
         }
 
@@ -185,7 +185,7 @@ class SimulatorBuilder
 
         YamlSimulatorInput input;
         TR1(shared_ptr)<BodyBuilder> builder;
-        std::vector<ForceParser> controllable_force_parsers;
+        std::vector<ForceParser> force_parsers;
         std::vector<SurfaceElevationBuilderPtr> surface_elevation_parsers;
         TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> > wave_parsers;
         TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> > directional_spreading_parsers;
