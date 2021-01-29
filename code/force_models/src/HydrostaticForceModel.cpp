@@ -18,7 +18,7 @@
 std::string HydrostaticForceModel::model_name(){return "hydrostatic";}
 
 HydrostaticForceModel::HydrostaticForceModel(const std::string& body_name_, const EnvironmentAndFrames& env) :
-        ControllableForceModel(model_name(), {}, body_name_, env),
+        ForceModel(model_name(), {}, body_name_, env),
         centre_of_buoyancy(new Eigen::Vector3d())
 {
 }

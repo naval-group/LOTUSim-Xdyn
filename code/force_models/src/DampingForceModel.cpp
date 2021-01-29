@@ -13,7 +13,7 @@
 
 
 DampingForceModel::DampingForceModel(const std::string& name_, const std::string& body_name_, const EnvironmentAndFrames& env, const Eigen::Matrix<double,6,6>& D_) :
-        ControllableForceModel(name_, {}, body_name_, env),
+        ForceModel(name_, {}, body_name_, env),
         D(D_)
 {
 }

@@ -186,13 +186,13 @@ class DiffractionForceModel::Impl
 };
 
 DiffractionForceModel::DiffractionForceModel(const YamlDiffraction& data, const std::string& body_name_, const EnvironmentAndFrames& env):
-        ControllableForceModel("diffraction", {}, YamlPosition(data.calculation_point, YamlAngle(), body_name_), body_name_, env),
+        ForceModel("diffraction", {}, YamlPosition(data.calculation_point, YamlAngle(), body_name_), body_name_, env),
         pimpl(new Impl(data, env, hdb_from_file(data.hdb_filename), body_name_))
 {
 }
 
 DiffractionForceModel::DiffractionForceModel(const Input& data, const std::string& body_name_, const EnvironmentAndFrames& env, const std::string& hdb_file_contents):
-        ControllableForceModel("diffraction", {}, YamlPosition(data.calculation_point, YamlAngle(), body_name_), body_name_, env),
+        ForceModel("diffraction", {}, YamlPosition(data.calculation_point, YamlAngle(), body_name_), body_name_, env),
         pimpl(new Impl(data, env, HDBParser(hdb_file_contents), body_name_))
 {
 }

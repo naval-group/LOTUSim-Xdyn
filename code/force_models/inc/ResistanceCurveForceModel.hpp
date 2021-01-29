@@ -10,7 +10,7 @@
 
 #include <ssc/macros.hpp>
 
-#include "ControllableForceModel.hpp"
+#include "ForceModel.hpp"
 
 struct EnvironmentAndFrames;
 
@@ -23,7 +23,7 @@ struct EnvironmentAndFrames;
  *  \section ex2 Expected output
  *  \snippet model_wrappers/unit_tests/src/ResistanceCurveForceModelTest.cpp ResistanceCurveForceModelTest expected output
  */
-class ResistanceCurveForceModel : public ControllableForceModel
+class ResistanceCurveForceModel : public ForceModel
 {
     public:
         struct Yaml

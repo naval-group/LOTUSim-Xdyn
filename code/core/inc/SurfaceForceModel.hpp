@@ -9,7 +9,7 @@
 #define SURFACEFORCEMODEL_HPP_
 
 #include "EnvironmentAndFrames.hpp"
-#include "ControllableForceModel.hpp"
+#include "ForceModel.hpp"
 #include "GeometricTypes3d.hpp"
 #include "MeshIntersector.hpp"
 
@@ -45,7 +45,7 @@ class ZGCalculator
  *  \section ex2 Expected output
  *  \snippet model_wrappers/unit_tests/src/SurfaceForceModelTest.cpp SurfaceForceModelTest expected output
  */
-class SurfaceForceModel : public ControllableForceModel
+class SurfaceForceModel : public ForceModel
 {
     public:
         struct DF

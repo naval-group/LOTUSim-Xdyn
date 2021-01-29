@@ -8,9 +8,9 @@
 #ifndef SIMPLESTATIONKEEPINGCONTROLLER_HPP_
 #define SIMPLESTATIONKEEPINGCONTROLLER_HPP_
 
-#include "ControllableForceModel.hpp"
+#include "ForceModel.hpp"
 
-class SimpleStationKeepingController : public ControllableForceModel
+class SimpleStationKeepingController : public ForceModel
 {
     public:
         struct Yaml

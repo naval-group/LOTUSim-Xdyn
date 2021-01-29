@@ -85,8 +85,8 @@ EnvironmentAndFrames get_env()
     return env;
 }
 
-void test(ControllableForceModel& F, const EnvironmentAndFrames& env, const size_t n);
-void test(ControllableForceModel& F, const EnvironmentAndFrames& env, const size_t n)
+void test(ForceModel& F, const EnvironmentAndFrames& env, const size_t n);
+void test(ForceModel& F, const EnvironmentAndFrames& env, const size_t n)
 {
     BodyPtr body = get_body(BODY, test_ship());
     const double t = 0;

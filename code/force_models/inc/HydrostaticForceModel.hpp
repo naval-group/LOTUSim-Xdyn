@@ -8,10 +8,10 @@
 #ifndef HYDROSTATICFORCEMODEL_HPP_
 #define HYDROSTATICFORCEMODEL_HPP_
 
-#include "ControllableForceModel.hpp"
 #include <Eigen/Dense>
 #include <ssc/kinematics.hpp>
 
+#include "ForceModel.hpp"
 #include "EnvironmentAndFrames.hpp"
 
 class Body;
@@ -20,7 +20,7 @@ class Body;
  *  \addtogroup model_wrappers
  *  \ingroup model_wrappers
  */
-class HydrostaticForceModel : public ControllableForceModel
+class HydrostaticForceModel : public ForceModel
 {
     public:
         HydrostaticForceModel(const std::string& body_name, const EnvironmentAndFrames& env_);

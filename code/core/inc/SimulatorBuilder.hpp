@@ -121,10 +121,10 @@ class SimulatorBuilder
           *  \returns *this (so we can chain calls to can_parse)
           *  \snippet simulator/unit_tests/src/SimulatorBuilderTest.cpp SimulatorBuilderTest can_parse_example
           */
-        template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<ControllableForceModel,T> >::type* dummy = 0)
+        template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<ForceModel,T> >::type* dummy = 0)
         {
             (void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
-            controllable_force_parsers.push_back(ControllableForceModel::build_parser<T>());
+            controllable_force_parsers.push_back(ForceModel::build_parser<T>());
             return *this;
         }
 

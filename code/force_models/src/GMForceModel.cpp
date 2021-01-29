@@ -66,17 +66,17 @@ GMForceModel::Yaml GMForceModel::parse(const std::string& yaml)
     ssc::yaml_parser::parse_uv(node["roll step"], ret.roll_step);
     if (ret.name_of_hydrostatic_force_model == "hydrostatic")
     {
-        ret.try_to_parse = ControllableForceModel::build_parser<HydrostaticForceModel>();
+        ret.try_to_parse = ForceModel::build_parser<HydrostaticForceModel>();
         return ret;
     }
     if (ret.name_of_hydrostatic_force_model == "non-linear hydrostatic (exact)")
     {
-        ret.try_to_parse = ControllableForceModel::build_parser<ExactHydrostaticForceModel>();
+        ret.try_to_parse = ForceModel::build_parser<ExactHydrostaticForceModel>();
         return ret;
     }
     if (ret.name_of_hydrostatic_force_model == "non-linear hydrostatic (fast)")
     {
-        ret.try_to_parse = ControllableForceModel::build_parser<FastHydrostaticForceModel>();
+        ret.try_to_parse = ForceModel::build_parser<FastHydrostaticForceModel>();
         return ret;
     }
     THROW(__PRETTY_FUNCTION__, InvalidInputException, "Couldn't find any suitable hydrostatic force model: "

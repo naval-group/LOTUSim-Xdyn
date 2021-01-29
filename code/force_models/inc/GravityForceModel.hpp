@@ -8,13 +8,13 @@
 #ifndef GRAVITYFORCEMODEL_HPP_
 #define GRAVITYFORCEMODEL_HPP_
 
-#include "ControllableForceModel.hpp"
 #include <ssc/kinematics.hpp>
+#include "ForceModel.hpp"
 
 class Body;
 struct EnvironmentAndFrames;
 
-class GravityForceModel : public ControllableForceModel
+class GravityForceModel : public ForceModel
 {
     public:
         GravityForceModel(const std::string& body_name, const EnvironmentAndFrames& env);

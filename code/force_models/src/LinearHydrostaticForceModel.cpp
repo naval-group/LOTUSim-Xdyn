@@ -58,7 +58,7 @@ LinearHydrostaticForceModel::Input LinearHydrostaticForceModel::parse(const std:
 }
 
 LinearHydrostaticForceModel::LinearHydrostaticForceModel(const Input& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-        ControllableForceModel(model_name(), {}, body_name_, env_),
+        ForceModel(model_name(), {}, body_name_, env_),
         K(),
         P1(body_name_, input.x1, input.y1, 0),
         P2(body_name_, input.x2, input.y2, 0),

@@ -5,10 +5,10 @@
 #include <boost/optional.hpp>
 #include <ssc/kinematics.hpp>
 
-#include "ControllableForceModel.hpp"
+#include "ForceModel.hpp"
 #include "EnvironmentAndFrames.hpp"
 
-class HoltropMennenForceModel : public ControllableForceModel
+class HoltropMennenForceModel : public ForceModel
 {
     public:
         struct Input

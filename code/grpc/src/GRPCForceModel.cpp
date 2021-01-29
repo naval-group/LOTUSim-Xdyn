@@ -267,7 +267,7 @@ GRPCForceModel::GRPCForceModel(const GRPCForceModel::Input& input, const std::st
 }
 
 GRPCForceModel::GRPCForceModel(const TR1(shared_ptr)<Impl>& pimpl_, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-        ControllableForceModel(pimpl_->get_input().name, pimpl_->get_commands(), pimpl_->get_transformation_to_model_frame(), body_name_, env_),
+        ForceModel(pimpl_->get_input().name, pimpl_->get_commands(), pimpl_->get_transformation_to_model_frame(), body_name_, env_),
         pimpl(pimpl_),
         env(env_)
 

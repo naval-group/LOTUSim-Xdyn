@@ -9,7 +9,7 @@
 #include "SurfaceForceModel.hpp"
 
 SurfaceForceModel::SurfaceForceModel(const std::string& name_, const std::string& body_name, const EnvironmentAndFrames& env) :
-        ControllableForceModel(name_, {}, body_name, env),
+        ForceModel(name_, {}, body_name, env),
         g_in_NED(ssc::kinematics::Point("NED", 0, 0, env.g)),
         zg_calculator(new ZGCalculator())
 {

@@ -15,7 +15,7 @@
 std::string GravityForceModel::model_name(){return "gravity";}
 
 GravityForceModel::GravityForceModel(const std::string& body_name_, const EnvironmentAndFrames& env) :
-        ControllableForceModel("gravity", {}, body_name_, env),
+        ForceModel("gravity", {}, body_name_, env),
         g(env.g),
         k(env.k)
 {}

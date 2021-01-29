@@ -14,7 +14,7 @@
 #include "Body.hpp"
 #include "StateMacros.hpp"
 #include "EnvironmentAndFrames.hpp"
-#include "ControllableForceModel.hpp"
+#include "ForceModel.hpp"
 #include "SurfaceElevationGrid.hpp"
 #include "State.hpp"
 

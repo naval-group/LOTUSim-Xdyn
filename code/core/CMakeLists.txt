@@ -12,7 +12,7 @@ set(SRC src/update_kinematics.cpp
         src/BodyStates.cpp
         src/BodyBuilder.cpp
         src/EnvironmentAndFrames.cpp
-        src/ControllableForceModel.cpp
+        src/ForceModel.cpp
         src/SurfaceElevationFromWaves.cpp
         src/SurfaceElevationInterface.cpp
         src/SurfaceForceModel.cpp

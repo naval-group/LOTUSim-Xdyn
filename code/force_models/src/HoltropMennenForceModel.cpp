@@ -110,7 +110,7 @@ HoltropMennenForceModel::DerivedData::DerivedData(const Input& base_data) :
 }
 
 HoltropMennenForceModel::HoltropMennenForceModel(const Input& data, const std::string& body_name, const EnvironmentAndFrames& env_) :
-        ControllableForceModel(HoltropMennenForceModel::model_name(), {}, body_name, env_),
+        ForceModel(HoltropMennenForceModel::model_name(), {}, body_name, env_),
         d(-0.9),
         env(env_),
         input(data),

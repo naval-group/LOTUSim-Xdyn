@@ -1,12 +1,12 @@
 /*
- * ControllableForceModel.hpp
+ * ForceModel.hpp
  *
  *  Created on: Oct 22, 2014
  *      Author: cady
  */
 
-#ifndef CONTROLLABLEFORCEMODEL_HPP_
-#define CONTROLLABLEFORCEMODEL_HPP_
+#ifndef FORCEMODEL_HPP_
+#define FORCEMODEL_HPP_
 
 #include <map>
 
@@ -26,8 +26,8 @@ namespace ssc { namespace data_source { class DataSource;}}
 struct BodyStates;
 struct YamlRotation;
 
-class ControllableForceModel;
-typedef TR1(shared_ptr)<ControllableForceModel> ControllableForcePtr;
+class ForceModel;
+typedef TR1(shared_ptr)<ForceModel> ControllableForcePtr;
 typedef std::vector<ControllableForcePtr> ListOfControlledForces;
 typedef std::function<boost::optional<ControllableForcePtr>(const YamlModel&, const std::string&, const EnvironmentAndFrames&)> ControllableForceParser;
 
@@ -53,12 +53,12 @@ struct HasParse
  *  \section ex2 Expected output
  *  \snippet model_wrappers/unit_tests/src/ControllableForceModelTest.cpp ControllableForceModelTest expected output
  */
-class ControllableForceModel
+class ForceModel
 {
     public:
-        ControllableForceModel(const std::string& name, const std::vector<std::string>& commands, const YamlPosition& internal_frame, const std::string& body_name_, const EnvironmentAndFrames& env);
-        ControllableForceModel(const std::string& name, const std::vector<std::string>& commands, const std::string& body_name_, const EnvironmentAndFrames& env);
-        virtual ~ControllableForceModel();
+        ForceModel(const std::string& name, const std::vector<std::string>& commands, const YamlPosition& internal_frame, const std::string& body_name_, const EnvironmentAndFrames& env);
+        ForceModel(const std::string& name, const std::vector<std::string>& commands, const std::string& body_name_, const EnvironmentAndFrames& env);
+        virtual ~ForceModel();
         ssc::kinematics::Wrench operator()(const BodyStates& states, const double t, const EnvironmentAndFrames& env, ssc::data_source::DataSource& command_listener);
         ssc::kinematics::Wrench operator()(const BodyStates& states, const double t, const EnvironmentAndFrames& env);
         virtual Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const = 0;
@@ -121,7 +121,7 @@ class ControllableForceModel
         std::string body_name;
 
     private:
-        ControllableForceModel(); // Deactivated
+        ForceModel(); // Deactivated
         double get_command(const std::string& command_name, ssc::data_source::DataSource& command_listener, const double t) const;
         std::map<std::string,double> get_commands(ssc::data_source::DataSource& command_listener, const double t) const;
         void can_find_internal_frame(const ssc::kinematics::KinematicsPtr& k) const;
@@ -131,4 +131,4 @@ class ControllableForceModel
         ssc::kinematics::Wrench latest_force_in_body_frame;
 };
 
-#endif /* CONTROLLABLEFORCEMODEL_HPP_ */
+#endif /* FORCEMODEL_HPP_ */

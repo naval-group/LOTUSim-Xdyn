@@ -8,9 +8,9 @@
 #ifndef DAMPINGFORCEMODEL_HPP_
 #define DAMPINGFORCEMODEL_HPP_
 
-#include "ControllableForceModel.hpp"
 #include <Eigen/Dense>
 #include <ssc/kinematics.hpp>
+#include "ForceModel.hpp"
 
 class Body;
 
@@ -18,7 +18,7 @@ class Body;
  *  \addtogroup model_wrappers
  *  \ingroup model_wrappers
  */
-class DampingForceModel : public ControllableForceModel
+class DampingForceModel : public ForceModel
 {
     public:
         DampingForceModel(const std::string& name, const std::string& body_name, const EnvironmentAndFrames& env, const Eigen::Matrix<double,6,6>& D);

@@ -8,9 +8,8 @@
 
 #include <ssc/macros.hpp>
 
+#include "ForceModel.hpp"
 #include "EnvironmentAndFrames.hpp"
-#include "ControllableForceModel.hpp"
-
 #include "YamlDiffraction.hpp"
 
 /** \brief Diffraction forces
@@ -22,7 +21,7 @@
  *  \section ex2 Expected output
  *  \snippet model_wrappers/unit_tests/src/DiffractionForceModelTest.cpp DiffractionForceModelTest expected output
  */
-class DiffractionForceModel : public ControllableForceModel
+class DiffractionForceModel : public ForceModel
 {
     public:
         typedef YamlDiffraction Input;

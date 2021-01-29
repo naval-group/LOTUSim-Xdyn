@@ -8,9 +8,9 @@
 #ifndef RESULTANTFORCECOMPUTER_HPP_
 #define RESULTANTFORCECOMPUTER_HPP_
 
+#include "ForceModel.hpp"
 #include "Body.hpp"
 #include "EnvironmentAndFrames.hpp"
-#include "ControllableForceModel.hpp"
 #include "GZTypes.hpp"
 
 class Sim;

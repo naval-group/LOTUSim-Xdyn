@@ -68,7 +68,7 @@ ManeuveringForceModel::Yaml ManeuveringForceModel::parse(const std::string& yaml
 }
 
 ManeuveringForceModel::ManeuveringForceModel(const Yaml& data, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-        ControllableForceModel(data.name, data.commands, data.frame_of_reference, body_name_, env_),
+        ForceModel(data.name, data.commands, data.frame_of_reference, body_name_, env_),
         m(),
         ds(new ssc::data_source::DataSource())
 {

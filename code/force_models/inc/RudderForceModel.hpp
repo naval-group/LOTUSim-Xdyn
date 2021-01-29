@@ -10,7 +10,7 @@
 
 #include "WageningenControlledForceModel.hpp"
 
-class RudderForceModel : public ControllableForceModel
+class RudderForceModel : public ForceModel
 {
     public:
         struct Yaml : WageningenControlledForceModel::Yaml

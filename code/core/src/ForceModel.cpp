@@ -5,7 +5,8 @@
  *      Author: cady
  */
 
-#include "ControllableForceModel.hpp"
+#include "ForceModel.hpp"
+
 #include "InvalidInputException.hpp"
 #include "InternalErrorException.hpp"
 #include "Observer.hpp"
@@ -17,7 +18,7 @@
 #include <cmath>
 #define PI M_PI
 
-ControllableForceModel::ControllableForceModel(const std::string& name_, const std::vector<std::string>& commands_, const YamlPosition& internal_frame, const std::string& body_name_, const EnvironmentAndFrames& env_) :
+ForceModel::ForceModel(const std::string& name_, const std::vector<std::string>& commands_, const YamlPosition& internal_frame, const std::string& body_name_, const EnvironmentAndFrames& env_) :
     commands(commands_),
     name(name_),
     body_name(body_name_),
@@ -28,7 +29,7 @@ ControllableForceModel::ControllableForceModel(const std::string& name_, const s
     env_.k->add(make_transform(internal_frame, name, env_.rot));
 }
 
-ControllableForceModel::ControllableForceModel(const std::string& name_, const std::vector<std::string>& commands_, const std::string& body_name_, const EnvironmentAndFrames&) :
+ForceModel::ForceModel(const std::string& name_, const std::vector<std::string>& commands_, const std::string& body_name_, const EnvironmentAndFrames&) :
     commands(commands_),
     name(name_),
     body_name(body_name_),
@@ -38,16 +39,16 @@ ControllableForceModel::ControllableForceModel(const std::string& name_, const s
 {
 }
 
-ControllableForceModel::~ControllableForceModel()
+ForceModel::~ForceModel()
 {
 }
 
-std::string ControllableForceModel::get_name() const
+std::string ForceModel::get_name() const
 {
     return name;
 }
 
-std::map<std::string,double> ControllableForceModel::get_commands(ssc::data_source::DataSource& command_listener, const double t) const
+std::map<std::string,double> ForceModel::get_commands(ssc::data_source::DataSource& command_listener, const double t) const
 {
     std::map<std::string,double> ret;
     for (auto that_command = commands.begin() ; that_command != commands.end() ; ++that_command)
@@ -59,7 +60,7 @@ std::map<std::string,double> ControllableForceModel::get_commands(ssc::data_sour
     return ret;
 }
 
-ssc::kinematics::Wrench ControllableForceModel::operator()(const BodyStates& states, const double t, const EnvironmentAndFrames& env, ssc::data_source::DataSource& command_listener)
+ssc::kinematics::Wrench ForceModel::operator()(const BodyStates& states, const double t, const EnvironmentAndFrames& env, ssc::data_source::DataSource& command_listener)
 {
     auto F = get_force(states, t, env, get_commands(command_listener,t));
     can_find_internal_frame(env.k);
@@ -68,7 +69,7 @@ ssc::kinematics::Wrench ControllableForceModel::operator()(const BodyStates& sta
     return latest_force_in_body_frame;
 }
 
-ssc::kinematics::Wrench ControllableForceModel::operator()(const BodyStates& states, const double t, const EnvironmentAndFrames& env)
+ssc::kinematics::Wrench ForceModel::operator()(const BodyStates& states, const double t, const EnvironmentAndFrames& env)
 {
     if(not(commands.empty()))
     {
@@ -78,7 +79,7 @@ ssc::kinematics::Wrench ControllableForceModel::operator()(const BodyStates& sta
     return operator()(states, t, env, ds);
 }
 
-double ControllableForceModel::get_command(const std::string& command_name, ssc::data_source::DataSource& command_listener, const double t) const
+double ForceModel::get_command(const std::string& command_name, ssc::data_source::DataSource& command_listener, const double t) const
 {
     double ret = 0;
     try
@@ -98,7 +99,7 @@ double ControllableForceModel::get_command(const std::string& command_name, ssc:
     return ret;
 }
 
-void ControllableForceModel::can_find_internal_frame(const ssc::kinematics::KinematicsPtr& k) const
+void ForceModel::can_find_internal_frame(const ssc::kinematics::KinematicsPtr& k) const
 {
     if(has_internal_frame)
     {
@@ -134,7 +135,7 @@ void ControllableForceModel::can_find_internal_frame(const ssc::kinematics::Kine
     }
 }
 
-void ControllableForceModel::feed(Observer& observer, ssc::kinematics::KinematicsPtr& k) const
+void ForceModel::feed(Observer& observer, ssc::kinematics::KinematicsPtr& k) const
 {
     // G is the point in which 'latest_force_in_body_frame' is expressed (sum of forces)
     // O is the origin of the NED frame
@@ -172,22 +173,22 @@ void ControllableForceModel::feed(Observer& observer, ssc::kinematics::Kinematic
     extra_observations(observer);
 }
 
-double ControllableForceModel::get_Tmax() const
+double ForceModel::get_Tmax() const
 {
     return 0.;
 }
 
-std::string ControllableForceModel::get_body_name() const
+std::string ForceModel::get_body_name() const
 {
     return body_name;
 }
 
 
-bool ControllableForceModel::is_a_surface_force_model() const
+bool ForceModel::is_a_surface_force_model() const
 {
     return false;
 }
 
-void ControllableForceModel::extra_observations(Observer&) const
+void ForceModel::extra_observations(Observer&) const
 {
 }

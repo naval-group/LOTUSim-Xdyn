@@ -10,10 +10,10 @@
 
 
 #include "EnvironmentAndFrames.hpp"
-#include "ControllableForceModel.hpp"
 #include <ssc/kinematics.hpp>
+#include "ForceModel.hpp"
 
-class ConstantForceModel : public ControllableForceModel
+class ConstantForceModel : public ForceModel
 {
     public:
         struct Input

@@ -9,10 +9,10 @@
 #define LINEARHYDROSTATICFORCEMODEL_HPP_
 
 #include "EnvironmentAndFrames.hpp"
-#include "ControllableForceModel.hpp"
 #include <ssc/kinematics.hpp>
+#include "ForceModel.hpp"
 
-class LinearHydrostaticForceModel : public ControllableForceModel
+class LinearHydrostaticForceModel : public ForceModel
 {
     public:
         struct Input

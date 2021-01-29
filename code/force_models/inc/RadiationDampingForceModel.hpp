@@ -11,14 +11,14 @@
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 
-#include "ControllableForceModel.hpp"
+#include "ForceModel.hpp"
 #include "YamlRadiationDamping.hpp"
 
 class HDBParser;
 
 struct EnvironmentAndFrames;
 
-class RadiationDampingForceModel : public ControllableForceModel
+class RadiationDampingForceModel : public ForceModel
 {
     public:
         struct Input

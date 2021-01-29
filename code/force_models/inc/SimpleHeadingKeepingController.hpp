@@ -8,9 +8,9 @@
 #ifndef SIMPLEHEADINGKEEPINGCONTROLLER_HPP_
 #define SIMPLEHEADINGKEEPINGCONTROLLER_HPP_
 
-#include "ControllableForceModel.hpp"
+#include "ForceModel.hpp"
 
-class SimpleHeadingKeepingController : public ControllableForceModel
+class SimpleHeadingKeepingController : public ForceModel
 {
     public:
         struct Yaml

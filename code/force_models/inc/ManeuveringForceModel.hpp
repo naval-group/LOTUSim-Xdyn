@@ -13,14 +13,14 @@
 #include <ssc/data_source.hpp>
 #include <ssc/macros.hpp>
 
-#include "ControllableForceModel.hpp"
 #include "YamlPosition.hpp"
 #include "ManeuveringInternal.hpp"
 
 
 #include TR1INC(memory)
+#include "ForceModel.hpp"
 
-class ManeuveringForceModel : public ControllableForceModel
+class ManeuveringForceModel : public ForceModel
 {
     public:
 

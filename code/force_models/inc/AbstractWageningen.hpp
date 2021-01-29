@@ -8,7 +8,7 @@
 #ifndef ABSTRACTWAGENINGEN_HPP_
 #define ABSTRACTWAGENINGEN_HPP_
 
-#include "ControllableForceModel.hpp"
+#include "ForceModel.hpp"
 
 /** \details This class was created to
  *  \addtogroup module
@@ -18,7 +18,7 @@
  *  \section ex2 Expected output
  *  \snippet module/unit_tests/src/AbstractWageningenTest.cpp AbstractWageningenTest expected output
  */
-class AbstractWageningen : public ControllableForceModel
+class AbstractWageningen : public ForceModel
 {
     public:
         struct Yaml

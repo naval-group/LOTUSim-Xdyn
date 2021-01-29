@@ -5,10 +5,11 @@
  *      Author: cady
  */
 
+#include "ForceModel.hpp"
+
 #include <ssc/data_source.hpp>
 
 #include "ControllableForceModelTest.hpp"
-#include "ControllableForceModel.hpp"
 #include "random_kinematics.hpp"
 
 EnvironmentAndFrames make_env(ssc::random_data_generator::DataGenerator& a);
@@ -22,12 +23,12 @@ EnvironmentAndFrames make_env(ssc::random_data_generator::DataGenerator& a)
     return env;
 }
 
-class RandomControllableForce : public ControllableForceModel
+class RandomControllableForce : public ForceModel
 {
     public:
 
         RandomControllableForce(ssc::random_data_generator::DataGenerator& a_, const EnvironmentAndFrames& env)
-             : ControllableForceModel("mock", std::vector<std::string>(), YamlPosition(), "body", env), a(a_)
+             : ForceModel("mock", std::vector<std::string>(), YamlPosition(), "body", env), a(a_)
         {
         }
 
