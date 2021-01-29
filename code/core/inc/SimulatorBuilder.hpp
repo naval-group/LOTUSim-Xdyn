@@ -185,7 +185,7 @@ class SimulatorBuilder
 
         YamlSimulatorInput input;
         TR1(shared_ptr)<BodyBuilder> builder;
-        std::vector<ControllableForceParser> controllable_force_parsers;
+        std::vector<ForceParser> controllable_force_parsers;
         std::vector<SurfaceElevationBuilderPtr> surface_elevation_parsers;
         TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> > wave_parsers;
         TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> > directional_spreading_parsers;

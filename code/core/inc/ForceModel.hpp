@@ -29,7 +29,7 @@ struct YamlRotation;
 class ForceModel;
 typedef TR1(shared_ptr)<ForceModel> ForcePtr;
 typedef std::vector<ForcePtr> ListOfControlledForces;
-typedef std::function<boost::optional<ForcePtr>(const YamlModel&, const std::string&, const EnvironmentAndFrames&)> ControllableForceParser;
+typedef std::function<boost::optional<ForcePtr>(const YamlModel&, const std::string&, const EnvironmentAndFrames&)> ForceParser;
 
 class Observer;
 
@@ -68,7 +68,7 @@ class ForceModel
         virtual bool is_a_surface_force_model() const;
 
         template <typename ControllableForceType>
-        static typename boost::enable_if<HasParse<ControllableForceType>, ControllableForceParser>::type build_parser()
+        static typename boost::enable_if<HasParse<ControllableForceType>, ForceParser>::type build_parser()
         {
             auto parser = [](const YamlModel& yaml, const std::string& body_name, const EnvironmentAndFrames& env) -> boost::optional<ForcePtr>
                           {
@@ -98,7 +98,7 @@ class ForceModel
         }
 
         template <typename ControllableForceType>
-        static typename boost::disable_if<HasParse<ControllableForceType>, ControllableForceParser>::type build_parser()
+        static typename boost::disable_if<HasParse<ControllableForceType>, ForceParser>::type build_parser()
         {
             auto parser = [](const YamlModel& yaml, const std::string& body, const EnvironmentAndFrames& env) -> boost::optional<ForcePtr>
             {
