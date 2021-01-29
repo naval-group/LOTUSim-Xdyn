@@ -22,8 +22,6 @@
 #include "EnvironmentAndFrames.hpp"
 #include "YamlPosition.hpp"
 
-#include "ForceModel.hpp" // for HasParse SFINAE test
-
 namespace ssc { namespace data_source { class DataSource;}}
 struct BodyStates;
 struct YamlRotation;
@@ -34,6 +32,17 @@ typedef std::vector<ControllableForcePtr> ListOfControlledForces;
 typedef std::function<boost::optional<ControllableForcePtr>(const YamlModel&, const std::string&, const EnvironmentAndFrames&)> ControllableForceParser;
 
 class Observer;
+
+// SFINAE test for 'parse' method
+template<typename T>
+struct HasParse
+{
+    typedef char yes[1];
+    typedef char no [2];
+    template<typename U> static yes &check(decltype(&U::parse));
+    template<typename U> static no &check(...);
+    static const bool value = sizeof(check<T>(0)) == sizeof(yes);
+};
 
 /** \brief These force models read commands from a DataSource.
  *  \details Provides facilities to the derived classes to retrieve the commands
