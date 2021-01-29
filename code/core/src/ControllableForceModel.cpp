@@ -8,7 +8,6 @@
 #include "ControllableForceModel.hpp"
 #include "InvalidInputException.hpp"
 #include "InternalErrorException.hpp"
-#include "ForceModel.hpp"
 #include "Observer.hpp"
 #include "yaml2eigen.hpp"
 
