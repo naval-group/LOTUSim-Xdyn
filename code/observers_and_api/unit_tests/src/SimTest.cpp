@@ -602,7 +602,7 @@ TEST_F(SimTest, bug_2984)
 {
     const auto yaml = test_data::bug_2984();
     auto input = SimulatorYamlParser(yaml).parse();
-    boost::replace_all(input.bodies[0].controlled_forces[0].yaml
+    boost::replace_all(input.bodies[0].external_forces[0].yaml
             ,"  phi:\n"
              "    unit: rad\n"
              "    value: 0\n"

@@ -141,10 +141,6 @@ ListOfControlledForces SimulatorBuilder::controlled_forces_from(const YamlBody& 
     {
         add(*that_force_model, ret, body.name, env);
     }
-    for (auto that_force_model = body.controlled_forces.begin() ; that_force_model!= body.controlled_forces.end() ; ++that_force_model)
-    {
-        add(*that_force_model, ret, body.name, env);
-    }
     return ret;
 }
 

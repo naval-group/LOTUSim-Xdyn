@@ -57,7 +57,6 @@ struct YamlBody
     YamlSpeed initial_velocity_of_body_frame_relative_to_NED_projected_in_body;
     YamlDynamics dynamics;
     std::vector<YamlModel> external_forces;
-    std::vector<YamlModel> controlled_forces;
     YamlBlockedDOF blocked_dof;
 };
 

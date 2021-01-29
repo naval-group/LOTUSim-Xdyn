@@ -14,7 +14,6 @@ Sim GZ::make_sim(const std::string& yaml, const std::string& stl)
 {
     auto input = SimulatorYamlParser(yaml).parse();
     YamlBody body = input.bodies.front();
-    body.controlled_forces.clear();
     body.external_forces.clear();
     YamlModel gravity, hydrostatic, waves;
     gravity.model = "gravity";

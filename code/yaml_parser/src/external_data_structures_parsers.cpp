@@ -103,7 +103,10 @@ void operator >> (const YAML::Node& node, YamlBody& b)
     node["name"] >> b.name;
     try_to_parse(node, "mesh", b.mesh);
     try_to_parse(node, "external forces", b.external_forces);
-    try_to_parse(node, "controlled forces", b.controlled_forces);
+    // operator>>(YAML::Node, std::vector<T>) clears the vector before parsing, so we cannot just do try_to_parse(node, "controlled forces", b.external_forces)
+    std::vector<YamlModel> controlled_forces;
+    try_to_parse(node, "controlled forces", controlled_forces);
+    b.external_forces.insert(b.external_forces.end(), controlled_forces.begin(), controlled_forces.end());
     try
     {
         node["position of body frame relative to mesh"]             >> b.position_of_body_frame_relative_to_mesh;

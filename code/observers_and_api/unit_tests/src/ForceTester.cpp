@@ -22,7 +22,6 @@ Sim ForceTester::make_sim(const std::string& yaml, const std::string& stl) const
 {
     auto input = SimulatorYamlParser(yaml).parse();
     YamlBody body = input.bodies.front();
-    body.controlled_forces.clear();
     body.external_forces.clear();
     YamlModel waves, hydrostatic;
     hydrostatic.model = "non-linear hydrostatic (exact)"; // So the builder creates a BodyWithSurfaceForces object
@@ -41,7 +40,6 @@ Sim ForceTester::make_sim(const std::string& yaml, const VectorOfVectorOfPoints&
 {
     auto input = SimulatorYamlParser(yaml).parse();
     YamlBody body = input.bodies.front();
-    body.controlled_forces.clear();
     body.external_forces.clear();
     YamlModel waves, hydrostatic;
     hydrostatic.model = "non-linear hydrostatic (exact)"; // So the builder creates a BodyWithSurfaceForces object

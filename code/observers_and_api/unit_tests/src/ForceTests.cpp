@@ -652,7 +652,6 @@ EnvironmentAndFrames ForceTests::get_env(const YamlModel& waves, const std::stri
     const std::string stl = test_data::single_facet();
     auto input = SimulatorYamlParser(yaml).parse();
     YamlBody body = input.bodies.front();
-    body.controlled_forces.clear();
     body.external_forces.clear();
 
     input.bodies[0] = body;
