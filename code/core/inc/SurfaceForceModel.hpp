@@ -9,7 +9,7 @@
 #define SURFACEFORCEMODEL_HPP_
 
 #include "EnvironmentAndFrames.hpp"
-#include "ForceModel.hpp"
+#include "ControllableForceModel.hpp"
 #include "GeometricTypes3d.hpp"
 #include "MeshIntersector.hpp"
 
@@ -45,7 +45,7 @@ class ZGCalculator
  *  \section ex2 Expected output
  *  \snippet model_wrappers/unit_tests/src/SurfaceForceModelTest.cpp SurfaceForceModelTest expected output
  */
-class SurfaceForceModel : public ForceModel
+class SurfaceForceModel : public ControllableForceModel
 {
     public:
         struct DF
@@ -60,7 +60,7 @@ class SurfaceForceModel : public ForceModel
 
         SurfaceForceModel(const std::string& name, const std::string& body_name_, const EnvironmentAndFrames& env);
         virtual ~SurfaceForceModel();
-        ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
+        Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const override;
         virtual std::function<DF(const FacetIterator &,
                                  const size_t,
                                  const EnvironmentAndFrames &,
@@ -75,7 +75,7 @@ class SurfaceForceModel : public ForceModel
 
     /**  \brief Compute potential energy of the hydrostatic force model
       */
-        double potential_energy(const BodyStates& states, const std::vector<double>& x) const;
+        double potential_energy(const BodyStates& states, const std::vector<double>& x, const EnvironmentAndFrames& env) const;
 
         bool is_a_surface_force_model() const;
 
@@ -84,9 +84,6 @@ class SurfaceForceModel : public ForceModel
         virtual FacetIterator begin(const MeshIntersectorPtr& intersector) const = 0;
         virtual FacetIterator end(const MeshIntersectorPtr& intersector) const = 0;
         virtual double pe(const BodyStates& states, const std::vector<double>& x, const EnvironmentAndFrames& env) const = 0;
-
-    protected:
-        EnvironmentAndFrames env;
 
     private:
         ssc::kinematics::Point g_in_NED;

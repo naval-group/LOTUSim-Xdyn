@@ -245,7 +245,7 @@ void SimulatorBuilder::add(const YamlModel& model, ListOfControlledForces& L, co
     }
 }
 
-std::vector<bool> SimulatorBuilder::are_there_surface_forces_acting_on_body(const std::vector<ListOfForces>& forces) const
+std::vector<bool> SimulatorBuilder::are_there_surface_forces_acting_on_body(const std::vector<ListOfControlledForces>& forces) const
 {
     std::vector<bool> ret;
     for (auto forces_acting_on_body:forces)
@@ -266,7 +266,7 @@ Sim SimulatorBuilder::build(const MeshMap& meshes) const
     auto controlled_forces = get_controlled_forces(env);
     const auto forces = get_forces(env, controlled_forces);
     auto history_length = get_max_history_length(forces, controlled_forces);
-    const auto bodies = get_bodies(meshes, are_there_surface_forces_acting_on_body(forces), history_length);
+    const auto bodies = get_bodies(meshes, are_there_surface_forces_acting_on_body(controlled_forces), history_length);
     add_initial_transforms(bodies, env.k);
     return Sim(bodies, forces, controlled_forces, env, get_initial_states(), command_listener);
 }

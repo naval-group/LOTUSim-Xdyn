@@ -51,11 +51,12 @@ GZ::Resultant GZ::ResultantForceComputer::resultant(const ::GZ::State& point)
 
     body->update(env,x,current_instant);
 
-    gravity->update(body->get_states(),current_instant);
-    hydrostatic->update(body->get_states(),current_instant);
-    const auto gravity_force = gravity->get_force_in_ned_frame();
-    const auto hydrostatic_force = hydrostatic->get_force_in_ned_frame();
-    const double gz = calculate_gz(*hydrostatic, env);
+    Wrench gravity_force = gravity->get_force(body->get_states(), current_instant, env, {});
+    gravity_force.change_point_and_frame(body->get_states().G, "NED", env.k);
+    Wrench hydrostatic_force = hydrostatic->get_force(body->get_states(), current_instant, env, {});
+    hydrostatic_force.change_point_and_frame(body->get_states().G, "NED", env.k);
+
+    const double gz = calculate_gz(env.k->get("NED", body->get_name()), ssc::kinematics::Wrench(hydrostatic_force.get_point(), hydrostatic_force.to_vector()));
     auto sum_of_forces = gravity_force
                        + hydrostatic_force;
 

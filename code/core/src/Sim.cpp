@@ -67,9 +67,9 @@ class Sim::Impl
         std::map<std::string,ssc::kinematics::UnsafeWrench> sum_of_forces_in_NED_frame;
 };
 
-std::map<std::string,std::vector<ForcePtr> > Sim::get_forces() const
+std::map<std::string,std::vector<ControllableForcePtr> > Sim::get_forces() const
 {
-    return pimpl->forces;
+    return pimpl->controlled_forces;
 }
 
 std::vector<BodyPtr> Sim::get_bodies() const

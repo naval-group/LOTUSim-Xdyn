@@ -10,7 +10,7 @@
 
 #include "Body.hpp"
 #include "EnvironmentAndFrames.hpp"
-#include "ForceModel.hpp"
+#include "ControllableForceModel.hpp"
 #include "GZTypes.hpp"
 
 class Sim;
@@ -41,7 +41,7 @@ namespace GZ
             BodyPtr body;
             EnvironmentAndFrames env;
             TR1(shared_ptr)<GravityForceModel> gravity;
-            ForcePtr hydrostatic;
+            ControllableForcePtr hydrostatic;
             double current_instant;
             ssc::kinematics::Point G;
             double dz;

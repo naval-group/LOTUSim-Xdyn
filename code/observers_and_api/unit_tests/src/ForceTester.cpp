@@ -117,10 +117,10 @@ ssc::kinematics::Wrench ForceTester::force_in_ned(const double x,
 {
     std::vector<double> states = set_states(x, y, z, phi, theta, psi);
     ssc::kinematics::Wrench ret;
-    if (not(forces.empty())) ret = forces.front()->operator()(body->get_states(), current_instant);
+    if (not(forces.empty())) ret = forces.front()->operator()(body->get_states(), current_instant, env);
     for (size_t i = 1 ; i < forces.size() ; ++i)
     {
-        auto f = forces.at(i)->operator()(body->get_states(), current_instant);
+        auto f = forces.at(i)->operator()(body->get_states(), current_instant, env);
         ret = ret + f;
     }
 
@@ -198,7 +198,7 @@ EPoint ForceTester::center_of_buoyancy_in_ned_frame(const double x,
         const auto hs = dynamic_cast<HydrostaticForceModel*>(force.get());
         if (hs)
         {
-            hs->operator()(body->get_states(), current_instant++);
+            hs->operator()(body->get_states(), current_instant++, env);
             return (Tned2body*hs->get_centre_of_buoyancy()).v;
         }
     }
@@ -219,7 +219,7 @@ boost::optional<double> ForceTester::gm(const double x,
         if (force->get_name() == "GM")
         {
             GMForceModel* F = static_cast<GMForceModel*>(force.get());
-            F->operator ()(body->get_states(), 0);
+            F->operator ()(body->get_states(), 0, env);
             ret = F->get_GM();
         }
     }

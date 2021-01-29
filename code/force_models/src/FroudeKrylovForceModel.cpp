@@ -12,7 +12,7 @@
 
 std::string FroudeKrylovForceModel::model_name() {return "non-linear Froude-Krylov";}
 
-FroudeKrylovForceModel::FroudeKrylovForceModel(const std::string& body_name_, const EnvironmentAndFrames& env_) : ImmersedSurfaceForceModel(model_name(), body_name_, env_)
+FroudeKrylovForceModel::FroudeKrylovForceModel(const std::string& body_name_, const EnvironmentAndFrames& env) : ImmersedSurfaceForceModel(model_name(), body_name_, env)
 {
     if (env.w.use_count()==0)
     {

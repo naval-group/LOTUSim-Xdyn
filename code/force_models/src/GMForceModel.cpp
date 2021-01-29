@@ -39,7 +39,7 @@ GMForceModel::GMForceModel(const Yaml& data, const std::string& body_name_, cons
     YamlModel data_for_hs;
     data_for_hs.index_of_first_line_in_global_yaml = data.index_of_first_line_in_global_yaml;
     data_for_hs.model = data.name_of_hydrostatic_force_model;
-    boost::optional<ForcePtr> f = data.try_to_parse(data_for_hs, get_body_name(), env);
+    boost::optional<ControllableForcePtr> f = data.try_to_parse(data_for_hs, get_body_name(), env);
     if (f)
     {
         underlying_hs_force_model = f.get();
@@ -66,17 +66,17 @@ GMForceModel::Yaml GMForceModel::parse(const std::string& yaml)
     ssc::yaml_parser::parse_uv(node["roll step"], ret.roll_step);
     if (ret.name_of_hydrostatic_force_model == "hydrostatic")
     {
-        ret.try_to_parse = ForceModel::build_parser<HydrostaticForceModel>();
+        ret.try_to_parse = ControllableForceModel::build_parser<HydrostaticForceModel>();
         return ret;
     }
     if (ret.name_of_hydrostatic_force_model == "non-linear hydrostatic (exact)")
     {
-        ret.try_to_parse = ForceModel::build_parser<ExactHydrostaticForceModel>();
+        ret.try_to_parse = ControllableForceModel::build_parser<ExactHydrostaticForceModel>();
         return ret;
     }
     if (ret.name_of_hydrostatic_force_model == "non-linear hydrostatic (fast)")
     {
-        ret.try_to_parse = ForceModel::build_parser<FastHydrostaticForceModel>();
+        ret.try_to_parse = ControllableForceModel::build_parser<FastHydrostaticForceModel>();
         return ret;
     }
     THROW(__PRETTY_FUNCTION__, InvalidInputException, "Couldn't find any suitable hydrostatic force model: "
@@ -98,22 +98,23 @@ BodyStates GMForceModel::get_shifted_states(const BodyStates& states,
     return new_states;
 }
 
-double GMForceModel::get_gz_for_shifted_states(const BodyStates& states, const double t) const
+double GMForceModel::get_gz_for_shifted_states(const BodyStates& states, const double t, const EnvironmentAndFrames& env) const
 {
     BodyStates new_states = get_shifted_states(states, t);
     BodyWithSurfaceForces body_for_gm(new_states, 0, BlockedDOF(""));
     body_for_gm.reset_history();
     body_for_gm.update(env, new_states.get_current_state_values(0), t);
-    underlying_hs_force_model->update(body_for_gm.get_states(), t);
-    return calculate_gz(*underlying_hs_force_model, env);
+    const auto ret = underlying_hs_force_model->get_force(body_for_gm.get_states(), t, env, {});
+    const auto hydrostatic_force_in_NED = ret.change_point_and_frame(ssc::kinematics::Point("NED",0,0,0),"NED",env.k);
+    return calculate_gz(env.k->get("NED", body_name), ssc::kinematics::Wrench(hydrostatic_force_in_NED.get_point(), hydrostatic_force_in_NED.to_vector()));
 }
 
-ssc::kinematics::Wrench GMForceModel::operator()(const BodyStates& states, const double t) const
+Wrench GMForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
 {
-    underlying_hs_force_model->update(states, t);
-    const auto ret = underlying_hs_force_model->get_force_in_body_frame();
-    const double gz1 = calculate_gz(*underlying_hs_force_model, env);
-    const double gz2 = get_gz_for_shifted_states(states, t);
+    const auto ret = underlying_hs_force_model->get_force(states, t, env, {});
+    const auto hydrostatic_force_in_NED = ret.change_point_and_frame(ssc::kinematics::Point("NED",0,0,0),"NED",env.k);
+    const double gz1 = calculate_gz(env.k->get("NED", body_name), ssc::kinematics::Wrench(hydrostatic_force_in_NED.get_point(), hydrostatic_force_in_NED.to_vector()));
+    const double gz2 = get_gz_for_shifted_states(states, t, env);
     *GM = (gz1-gz2)/dphi;
     *GZ = (gz1+gz2)/2;
     return ret;

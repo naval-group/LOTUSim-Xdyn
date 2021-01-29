@@ -27,7 +27,7 @@ class GMForceModel : public ImmersedSurfaceForceModel
             Yaml();
             std::string name_of_hydrostatic_force_model;
             double roll_step;
-            ForceParser try_to_parse;
+            ControllableForceParser try_to_parse;
         };
         GMForceModel(const Yaml& data, const std::string& body_name, const EnvironmentAndFrames& env);
         std::function<DF(const FacetIterator &,
@@ -42,19 +42,19 @@ class GMForceModel : public ImmersedSurfaceForceModel
                                   const double t
                                  ) const;
         static Yaml parse(const std::string& yaml);
-        ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
+        Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const;
         void extra_observations(Observer& ) const;
         static std::string model_name();
         double get_GM() const;
 
     private:
         GMForceModel();
-        double get_gz_for_shifted_states(const BodyStates& states, const double t) const;
+        double get_gz_for_shifted_states(const BodyStates& states, const double t, const EnvironmentAndFrames& env) const;
         BodyStates get_shifted_states(const BodyStates& states,
                 const double t) const;
         double pe(const BodyStates& states, const std::vector<double>& x, const EnvironmentAndFrames& env) const;
 
-        ForcePtr underlying_hs_force_model;
+        ControllableForcePtr underlying_hs_force_model;
         double dphi;
         EnvironmentAndFrames env;
         TR1(shared_ptr)<double> GM;

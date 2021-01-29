@@ -15,7 +15,7 @@ std::string FastHydrostaticForceModel::model_name(){return "non-linear hydrostat
 
 FastHydrostaticForceModel::FastHydrostaticForceModel(const std::string& body_name_, const EnvironmentAndFrames& env_) : ImmersedSurfaceForceModel(model_name(), body_name_, env_)
 {
-    if (env.w.use_count()==0)
+    if (env_.w.use_count()==0)
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "Force model '" << model_name << "' needs a wave model, even if it's 'no waves'");
     }
@@ -25,10 +25,10 @@ FastHydrostaticForceModel::FastHydrostaticForceModel(const std::string& force_na
 {
 }
 
-double FastHydrostaticForceModel::gz() const
+/**double FastHydrostaticForceModel::gz(const EnvironmentAndFrames& env) const
 {
     return calculate_gz(env.k->get("NED", get_body_name()), get_force_in_ned_frame());
-}
+}*/
 
 std::string FastHydrostaticForceModel::get_name() const
 {
@@ -69,7 +69,7 @@ double FastHydrostaticForceModel::pe(const BodyStates& states, const std::vector
     return -env.rho*env.g*immersed_volume*zC;
 }
 
-void FastHydrostaticForceModel::extra_observations(Observer& observer) const
+/*void FastHydrostaticForceModel::extra_observations(Observer& observer) const
 {
     observer.write(gz(),DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),get_body_name(),"GZ"},std::string("GZ(")+get_name()+","+get_body_name()+")"));
-}
+}*/

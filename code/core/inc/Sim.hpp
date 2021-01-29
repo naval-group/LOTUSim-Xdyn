@@ -58,7 +58,7 @@ class Sim
 
         void set_bodystates(const State& state_history);
 
-        std::map<std::string,std::vector<ForcePtr> > get_forces() const;
+        std::map<std::string,std::vector<ControllableForcePtr> > get_forces() const;
         std::vector<BodyPtr> get_bodies() const;
         EnvironmentAndFrames get_env() const;
 
