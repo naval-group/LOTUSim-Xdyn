@@ -23,11 +23,11 @@ EnvironmentAndFrames make_env(ssc::random_data_generator::DataGenerator& a)
     return env;
 }
 
-class RandomControllableForce : public ForceModel
+class RandomForce : public ForceModel
 {
     public:
 
-        RandomControllableForce(ssc::random_data_generator::DataGenerator& a_, const EnvironmentAndFrames& env)
+        RandomForce(ssc::random_data_generator::DataGenerator& a_, const EnvironmentAndFrames& env)
              : ForceModel("mock", std::vector<std::string>(), YamlPosition(), "body", env), a(a_)
         {
         }
@@ -69,7 +69,7 @@ TEST_F(ForceModelTest, bug_2838)
 //! [ForceModelTest example]
     ssc::data_source::DataSource command_listener;
     EnvironmentAndFrames env = make_env(a);
-    RandomControllableForce F(a, env);
+    RandomForce F(a, env);
     BodyStates states;
     states.G = ssc::kinematics::Point("body", 1, 2, 3);
     const double t = a.random<double>();
