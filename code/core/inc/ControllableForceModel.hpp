@@ -56,6 +56,7 @@ class ControllableForceModel
         std::string get_name() const;
         virtual double get_Tmax() const; // Can be overloaded if model needs access to History (not a problem, just has to say how much history to keep)
         std::string get_body_name() const;
+        virtual bool is_a_surface_force_model() const;
 
         template <typename ControllableForceType>
         static typename boost::enable_if<HasParse<ControllableForceType>, ControllableForceParser>::type build_parser()

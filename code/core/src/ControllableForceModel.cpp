@@ -183,6 +183,12 @@ std::string ControllableForceModel::get_body_name() const
     return body_name;
 }
 
+
+bool ControllableForceModel::is_a_surface_force_model() const
+{
+    return false;
+}
+
 void ControllableForceModel::extra_observations(Observer&) const
 {
 }
