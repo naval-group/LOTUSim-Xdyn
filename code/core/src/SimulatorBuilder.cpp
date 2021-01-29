@@ -268,7 +268,7 @@ Sim SimulatorBuilder::build(const MeshMap& meshes) const
     auto history_length = get_max_history_length(forces, controlled_forces);
     const auto bodies = get_bodies(meshes, are_there_surface_forces_acting_on_body(controlled_forces), history_length);
     add_initial_transforms(bodies, env.k);
-    return Sim(bodies, forces, controlled_forces, env, get_initial_states(), command_listener);
+    return Sim(bodies, controlled_forces, env, get_initial_states(), command_listener);
 }
 
 StateType SimulatorBuilder::get_initial_states() const
