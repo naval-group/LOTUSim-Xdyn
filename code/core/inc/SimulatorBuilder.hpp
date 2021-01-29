@@ -96,22 +96,6 @@ class SimulatorBuilder
             return *this;
         }
 
-        /**  \brief Add the capacity to parse certain YAML inputs for forces
-          *  \details This method must not be called with any parameters: the
-          *  default parameter is only there so we can use boost::enable_if. This
-          *  allows us to use can_parse for several types derived from a few
-          *  base classes (WaveModelInterface, ForceModel...) & the compiler will
-          *  automagically choose the right version of can_parse.
-          *  \returns *this (so we can chain calls to can_parse)
-          *  \snippet simulator/unit_tests/src/SimulatorBuilderTest.cpp SimulatorBuilderTest can_parse_example
-          */
-        template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<ForceModel,T> >::type* dummy = 0)
-        {
-            (void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
-            force_parsers.push_back(ForceModel::build_parser<T>());
-            return *this;
-        }
-
         /**  \brief Add the capacity to parse certain YAML inputs for wave directional spreadings (eg. cos2s)
           *  \details This method must not be called with any parameters: the
           *  default parameter is only there so we can use boost::enable_if. This
@@ -178,7 +162,6 @@ class SimulatorBuilder
 
         std::vector<BodyPtr> get_bodies(const MeshMap& meshes, const std::vector<bool>& bodies_contain_surface_forces, std::map<std::string,double> Tmax) const;
         EnvironmentAndFrames build_environment_and_frames() const;
-        std::vector<ListOfForces> get_forces(const EnvironmentAndFrames& env, std::vector<ListOfControlledForces>& controlled_forces) const;
         std::vector<ListOfControlledForces> get_controlled_forces(const EnvironmentAndFrames& env) const;
         StateType get_initial_states() const;
         YamlSimulatorInput get_parsed_yaml() const;
@@ -194,17 +177,14 @@ class SimulatorBuilder
 
     private:
         SimulatorBuilder(); // Disabled
-        std::map<std::string, double> get_max_history_length(const std::vector<ListOfForces>& forces_for_all_bodies, const std::vector<ListOfControlledForces>& controlled_forces_for_all_bodies) const;
+        std::map<std::string, double> get_max_history_length(const std::vector<ListOfControlledForces>& controlled_forces_for_all_bodies) const;
         void set_environment_models(EnvironmentAndFrames& env) const;
-        ListOfForces forces_from(const YamlBody& body, const EnvironmentAndFrames& env, ListOfControlledForces& L_CF) const;
         ListOfControlledForces controlled_forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const;
-        void add(const YamlModel& model, ListOfForces& L, const std::string& name, const EnvironmentAndFrames& env, ListOfControlledForces& L_CF) const;
         void add(const YamlModel& model, ListOfControlledForces& L, const std::string& name, const EnvironmentAndFrames& env) const;
         VectorOfVectorOfPoints get_mesh(const YamlBody& body) const;
 
         YamlSimulatorInput input;
         TR1(shared_ptr)<BodyBuilder> builder;
-        std::vector<ForceParser> force_parsers;
         std::vector<ControllableForceParser> controllable_force_parsers;
         std::vector<SurfaceElevationBuilderPtr> surface_elevation_parsers;
         TR1(shared_ptr)<std::vector<WaveModelBuilderPtr> > wave_parsers;
