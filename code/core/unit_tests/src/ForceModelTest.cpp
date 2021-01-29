@@ -1,15 +1,15 @@
 /*
- * ControllableForceModelTest.cpp
+ * ForceModelTest.cpp
  *
  *  Created on: May 11, 2015
  *      Author: cady
  */
 
+#include "../inc/ForceModelTest.hpp"
 #include "ForceModel.hpp"
 
 #include <ssc/data_source.hpp>
 
-#include "ControllableForceModelTest.hpp"
 #include "random_kinematics.hpp"
 
 EnvironmentAndFrames make_env(ssc::random_data_generator::DataGenerator& a);
@@ -48,25 +48,25 @@ class RandomControllableForce : public ForceModel
         ssc::random_data_generator::DataGenerator a;
 };
 
-ControllableForceModelTest::ControllableForceModelTest() : a(ssc::random_data_generator::DataGenerator(545121))
+ForceModelTest::ForceModelTest() : a(ssc::random_data_generator::DataGenerator(545121))
 {
 }
 
-ControllableForceModelTest::~ControllableForceModelTest()
+ForceModelTest::~ForceModelTest()
 {
 }
 
-void ControllableForceModelTest::SetUp()
+void ForceModelTest::SetUp()
 {
 }
 
-void ControllableForceModelTest::TearDown()
+void ForceModelTest::TearDown()
 {
 }
 
-TEST_F(ControllableForceModelTest, bug_2838)
+TEST_F(ForceModelTest, bug_2838)
 {
-//! [ControllableForceModelTest example]
+//! [ForceModelTest example]
     ssc::data_source::DataSource command_listener;
     EnvironmentAndFrames env = make_env(a);
     RandomControllableForce F(a, env);
@@ -76,10 +76,10 @@ TEST_F(ControllableForceModelTest, bug_2838)
 
 
     auto w = F(states, t, env, command_listener);
-//! [ControllableForceModelTest example]
-//! [ControllableForceModelTest expected output]
+//! [ForceModelTest example]
+//! [ForceModelTest expected output]
     ASSERT_EQ("body", w.get_frame());
     ASSERT_NEAR((states.G - w.get_point()).norm(), 0, 1E-10);
-//! [ControllableForceModelTest expected output]
+//! [ForceModelTest expected output]
 }
 

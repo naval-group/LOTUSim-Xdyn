@@ -49,9 +49,9 @@ struct HasParse
  *  \addtogroup model_wrappers
  *  \ingroup model_wrappers
  *  \section ex1 Example
- *  \snippet model_wrappers/unit_tests/src/ControllableForceModelTest.cpp ControllableForceModelTest example
+ *  \snippet model_wrappers/unit_tests/src/ForceModelTest.cpp ForceModelTest example
  *  \section ex2 Expected output
- *  \snippet model_wrappers/unit_tests/src/ControllableForceModelTest.cpp ControllableForceModelTest expected output
+ *  \snippet model_wrappers/unit_tests/src/ForceModelTest.cpp ForceModelTest expected output
  */
 class ForceModel
 {
