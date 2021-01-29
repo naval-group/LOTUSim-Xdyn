@@ -154,7 +154,7 @@ TEST_F(SimulatorBuilderTest, get_forces_should_throw_if_there_is_anything_it_can
     m[name] = two_triangles();
     const auto bodies = builder.get_bodies(m, std::vector<bool>(1,false), std::map<std::string,double>());
     const auto env = builder.build_environment_and_frames();
-    ASSERT_THROW(builder.get_controlled_forces(env), InvalidInputException);
+    ASSERT_THROW(builder.get_forces(env), InvalidInputException);
 }
 
 TEST_F(SimulatorBuilderTest, wind_model_is_available_from_env)

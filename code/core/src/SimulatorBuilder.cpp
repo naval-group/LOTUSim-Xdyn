@@ -112,10 +112,10 @@ EnvironmentAndFrames SimulatorBuilder::build_environment_and_frames() const
     return env;
 }
 
-std::map<std::string, double> SimulatorBuilder::get_max_history_length(const std::vector<ListOfForces>& controlled_forces_for_all_bodies) const
+std::map<std::string, double> SimulatorBuilder::get_max_history_length(const std::vector<ListOfForces>& forces_for_all_bodies) const
 {
     std::map<std::string, double> ret;
-    for (const auto forces:controlled_forces_for_all_bodies)
+    for (const auto forces:forces_for_all_bodies)
     {
         double Tmax = 0;
         for (const auto force:forces) Tmax = std::max(Tmax, force->get_Tmax());
@@ -124,17 +124,17 @@ std::map<std::string, double> SimulatorBuilder::get_max_history_length(const std
     return ret;
 }
 
-std::vector<ListOfForces> SimulatorBuilder::get_controlled_forces(const EnvironmentAndFrames& env) const
+std::vector<ListOfForces> SimulatorBuilder::get_forces(const EnvironmentAndFrames& env) const
 {
     std::vector<ListOfForces> forces;
     for (auto that_body=input.bodies.begin() ; that_body != input.bodies.end() ; ++that_body)
     {
-        forces.push_back(controlled_forces_from(*that_body, env));
+        forces.push_back(forces_from(*that_body, env));
     }
     return forces;
 }
 
-ListOfForces SimulatorBuilder::controlled_forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const
+ListOfForces SimulatorBuilder::forces_from(const YamlBody& body, const EnvironmentAndFrames& env) const
 {
     ListOfForces ret;
     for (auto that_force_model = body.external_forces.begin() ; that_force_model!= body.external_forces.end() ; ++that_force_model)
@@ -180,11 +180,11 @@ std::vector<bool> SimulatorBuilder::are_there_surface_forces_acting_on_body(cons
 Sim SimulatorBuilder::build(const MeshMap& meshes) const
 {
     auto env = build_environment_and_frames();
-    auto controlled_forces = get_controlled_forces(env);
-    auto history_length = get_max_history_length(controlled_forces);
-    const auto bodies = get_bodies(meshes, are_there_surface_forces_acting_on_body(controlled_forces), history_length);
+    auto forces = get_forces(env);
+    auto history_length = get_max_history_length(forces);
+    const auto bodies = get_bodies(meshes, are_there_surface_forces_acting_on_body(forces), history_length);
     add_initial_transforms(bodies, env.k);
-    return Sim(bodies, controlled_forces, env, get_initial_states(), command_listener);
+    return Sim(bodies, forces, env, get_initial_states(), command_listener);
 }
 
 StateType SimulatorBuilder::get_initial_states() const
