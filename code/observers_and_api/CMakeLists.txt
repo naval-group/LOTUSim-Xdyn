@@ -19,7 +19,6 @@ set(SRC src/simulator_api.cpp
         ${CMAKE_BINARY_DIR}/demoMatLab.cpp
         ${CMAKE_BINARY_DIR}/demoPython.cpp
         src/MapObserver.cpp
-        src/SimStepper.cpp
         src/ConfBuilder.cpp
         src/HistoryParser.cpp
         src/XdynForCS.cpp

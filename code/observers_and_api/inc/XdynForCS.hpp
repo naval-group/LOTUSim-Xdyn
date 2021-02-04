@@ -2,8 +2,9 @@
 #define OBSERVERS_AND_API_INC_SIMSERVER_HPP_
 
 #include "ConfBuilder.hpp"
-#include "SimStepper.hpp"
 #include "HistoryParser.hpp"
+#include "YamlState.hpp"
+#include "YamlSimServerInputs.hpp"
 
 class XdynForCS
 {
@@ -21,11 +22,15 @@ class XdynForCS
         std::vector<YamlState> play_one_step(const SimServerInputs& raw_yaml);
         std::vector<YamlState> play_one_step(const YamlSimServerInputs& inputs);
 
+        std::vector<YamlState> step(const SimServerInputs& input, double Dt);
+
     private :
-        XdynForCS();
+        XdynForCS(); // Deactivated
+
         ConfBuilder builder;
         const double dt;
-        SimStepper stepper;
+        Sim sim;
+        const std::string solver;
 };
 
 #endif /* OBSERVERS_AND_API_INC_SIMSERVER_HPP_ */
