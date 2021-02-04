@@ -9,7 +9,7 @@
 #include "CosimulationServiceImpl.hpp"
 #include "YamlSimServerInputs.hpp"
 
-CosimulationServiceImpl::CosimulationServiceImpl(const TR1(shared_ptr)<SimServer>& simserver_):
+CosimulationServiceImpl::CosimulationServiceImpl(const TR1(shared_ptr)<XdynForCS>& simserver_):
 simserver(simserver_)
 {}
 

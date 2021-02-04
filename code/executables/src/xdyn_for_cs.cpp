@@ -30,7 +30,7 @@ std::string replace_newlines_by_spaces(std::string str)
 
 struct SimulationMessage : public MessageHandler
 {
-    SimulationMessage(const TR1(shared_ptr)<SimServer>& simserver, const bool verbose_) : sim_server(simserver), verbose(verbose_)
+    SimulationMessage(const TR1(shared_ptr)<XdynForCS>& simserver, const bool verbose_) : sim_server(simserver), verbose(verbose_)
     {
     }
     void operator()(const Message& msg)
@@ -50,16 +50,16 @@ struct SimulationMessage : public MessageHandler
     }
 
     private:
-        TR1(shared_ptr)<SimServer> sim_server;
+        TR1(shared_ptr)<XdynForCS> sim_server;
         const bool verbose;
 };
 
-TR1(shared_ptr)<SimServer> get_SimServer(const XdynForCSCommandLineArguments& input_data);
-TR1(shared_ptr)<SimServer> get_SimServer(const XdynForCSCommandLineArguments& input_data)
+TR1(shared_ptr)<XdynForCS> get_SimServer(const XdynForCSCommandLineArguments& input_data);
+TR1(shared_ptr)<XdynForCS> get_SimServer(const XdynForCSCommandLineArguments& input_data)
 {
     const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_filenames);
     const auto yaml = yaml_reader.get_contents();
-    return TR1(shared_ptr)<SimServer>(new SimServer(yaml, input_data.solver, input_data.initial_timestep));
+    return TR1(shared_ptr)<XdynForCS>(new XdynForCS(yaml, input_data.solver, input_data.initial_timestep));
 }
 
 void start_ws_server(const XdynForCSCommandLineArguments& input_data);

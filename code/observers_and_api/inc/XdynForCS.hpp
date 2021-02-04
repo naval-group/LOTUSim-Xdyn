@@ -5,14 +5,14 @@
 #include "SimStepper.hpp"
 #include "HistoryParser.hpp"
 
-class SimServer
+class XdynForCS
 {
     public :
-        SimServer(const std::string& yaml_model,
+        XdynForCS(const std::string& yaml_model,
                   const std::string& solver,
                   const double dt);
 
-        SimServer(const std::string& yaml_model,
+        XdynForCS(const std::string& yaml_model,
                   const VectorOfVectorOfPoints& mesh,
                   const std::string& solver,
                   const double dt);
@@ -22,7 +22,7 @@ class SimServer
         std::vector<YamlState> play_one_step(const YamlSimServerInputs& inputs);
 
     private :
-        SimServer();
+        XdynForCS();
         ConfBuilder builder;
         const double dt;
         SimStepper stepper;
