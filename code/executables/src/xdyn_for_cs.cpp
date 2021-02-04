@@ -5,13 +5,12 @@
 #include "CosimulationServiceImpl.hpp"
 
 #include "JSONWebSocketServer.hpp"
+#include "gRPCProtoBufServer.hpp"
 
 #include <ssc/websocket/WebSocketServer.hpp>
 #include <ssc/text_file_reader.hpp>
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
-#include <google/protobuf/stubs/common.h>
-#include <grpcpp/grpcpp.h>
 #include <sstream>
 #include <functional>
 
@@ -73,18 +72,9 @@ void start_ws_server(const XdynForCSCommandLineArguments& input_data)
 void start_grpc_server(const XdynForCSCommandLineArguments& input_data);
 void start_grpc_server(const XdynForCSCommandLineArguments& input_data)
 {
-    std::stringstream ss;
-    ss << "0.0.0.0:" << input_data.port;
-    const std::string server_address = ss.str();
-    CosimulationServiceImpl service(get_SimServer(input_data));
-
-    grpc::ServerBuilder builder;
-    builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
-    builder.RegisterService(&service);
-    std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
-    std::cout << "gRPC server listening on " << server_address << std::endl;
-    server->Wait();
-    std::cout << std::endl << "Gracefully stopping the gRPC server..." << std::endl;
+    std::shared_ptr<grpc::Service> handler(new CosimulationServiceImpl(get_SimServer(input_data)));
+    gRPCProtoBufServer server(handler);
+    server.start(input_data.port);
 }
 
 int main(int argc, char** argv)
