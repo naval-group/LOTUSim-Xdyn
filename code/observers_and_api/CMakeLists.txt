@@ -59,6 +59,7 @@ include_directories(${environment_models_INCLUDE_DIRS})
 include_directories(${external_file_formats_INCLUDE_DIRS})
 include_directories(${parser_extensions_INCLUDE_DIRS})
 include_directories(${grpc_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${GRPC_INCLUDE_DIR})
 
 add_library(${PROJECT_NAME} OBJECT ${SRC})
 set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
