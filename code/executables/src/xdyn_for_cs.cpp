@@ -4,6 +4,8 @@
 #include "parse_XdynForCSCommandLineArguments.hpp"
 #include "CosimulationServiceImpl.hpp"
 
+#include "JSONWebSocketServer.hpp"
+
 #include <ssc/websocket/WebSocketServer.hpp>
 #include <ssc/text_file_reader.hpp>
 #include <ssc/macros.hpp>
@@ -14,10 +16,6 @@
 #include <functional>
 
 using namespace ssc::websocket;
-
-#define ADDRESS "127.0.0.1"
-#define WEBSOCKET_ADDRESS "ws://" ADDRESS
-#define WEBSOCKET_PORT    1234
 
 #include <ssc/check_ssc_version.hpp>
 CHECK_SSC_VERSION(8,0)
@@ -56,20 +54,6 @@ struct SimulationMessage : public MessageHandler
         const bool verbose;
 };
 
-
-// For handling Ctrl+C
-#include <unistd.h>
-#include <cstdio>
-#include <csignal>
-
-volatile sig_atomic_t stop;
-
-void inthand(int);
-void inthand(int)
-{
-    stop = 1;
-}
-
 TR1(shared_ptr)<SimServer> get_SimServer(const XdynForCSCommandLineArguments& input_data);
 TR1(shared_ptr)<SimServer> get_SimServer(const XdynForCSCommandLineArguments& input_data)
 {
@@ -81,12 +65,9 @@ TR1(shared_ptr)<SimServer> get_SimServer(const XdynForCSCommandLineArguments& in
 void start_ws_server(const XdynForCSCommandLineArguments& input_data);
 void start_ws_server(const XdynForCSCommandLineArguments& input_data)
 {
-    SimulationMessage handler(get_SimServer(input_data), input_data.verbose);
-    std::cout << "Starting websocket server on " << ADDRESS << ":" << input_data.port << " (press Ctrl+C to terminate)" << std::endl;
-    TR1(shared_ptr)<ssc::websocket::Server> w(new ssc::websocket::Server(handler, input_data.port, input_data.show_websocket_debug_information));
-    signal(SIGINT, inthand);
-    while(!stop){}
-    std::cout << std::endl << "Gracefully stopping the websocket server..." << std::endl;
+    std::shared_ptr<MessageHandler> handler(new SimulationMessage(get_SimServer(input_data), input_data.verbose));
+    JSONWebSocketServer server(handler);
+    server.start(input_data.port, input_data.show_websocket_debug_information);
 }
 
 void start_grpc_server(const XdynForCSCommandLineArguments& input_data);
