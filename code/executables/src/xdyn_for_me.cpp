@@ -17,11 +17,10 @@
 #include "XdynForMECommandLineArguments.hpp"
 
 #include "JSONWebSocketServer.hpp"
+#include "gRPCProtoBufServer.hpp"
 
 #include <ssc/text_file_reader.hpp>
 #include <ssc/websocket.hpp>
-
-#include <google/protobuf/stubs/common.h>
 
 #include <ssc/check_ssc_version.hpp>
 CHECK_SSC_VERSION(8,0)
@@ -110,13 +109,9 @@ void start_grpc_server(const XdynForMECommandLineArguments& input_data)
     const auto yaml = yaml_reader.get_contents();
     XdynForME xdyn(yaml);
     ModelExchangeServiceImpl service(xdyn);
-    grpc::ServerBuilder builder;
-    builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
-    builder.RegisterService(&service);
-    std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
-    std::cout << "gRPC server listening on " << server_address << std::endl;
-    server->Wait();
-    std::cout << std::endl << "Gracefully stopping the gRPC server..." << std::endl;
+    std::shared_ptr<grpc::Service> handler(new ModelExchangeServiceImpl(xdyn));
+    gRPCProtoBufServer server(handler);
+    server.start(input_data.port);
 }
 
 int main(int argc, char** argv)
