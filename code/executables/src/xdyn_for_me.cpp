@@ -16,29 +16,15 @@
 #include "report_xdyn_exceptions_to_user.hpp"
 #include "XdynForMECommandLineArguments.hpp"
 
+#include "JSONWebSocketServer.hpp"
+
 #include <ssc/text_file_reader.hpp>
 #include <ssc/websocket.hpp>
 
 #include <google/protobuf/stubs/common.h>
 
-#define ADDRESS "127.0.0.1"
-#define WEBSOCKET_ADDRESS "ws://" ADDRESS
-
 #include <ssc/check_ssc_version.hpp>
 CHECK_SSC_VERSION(8,0)
-
-// For handling Ctrl+C
-#include <unistd.h>
-#include <cstdio>
-#include <csignal>
-
-volatile sig_atomic_t stop;
-
-void inthand(int);
-void inthand(int)
-{
-    stop = 1;
-}
 
 #include <boost/algorithm/string/replace.hpp>
 std::string replace_newlines_by_spaces(std::string str);
@@ -109,12 +95,9 @@ void start_ws_server(const XdynForMECommandLineArguments& input_data)
     const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_filenames);
     const auto yaml = yaml_reader.get_contents();
     TR1(shared_ptr)<XdynForME> sim_server (new XdynForME(yaml));
-    SimulationMessage handler(sim_server, input_data.verbose);
-    TR1(shared_ptr)<ssc::websocket::Server> w(new ssc::websocket::Server(handler, input_data.port, input_data.show_websocket_debug_information));
-    std::cout << "Starting websocket server on " << ADDRESS << ":" << input_data.port << " (press Ctrl+C to terminate)" << std::endl;
-    signal(SIGINT, inthand);
-    while(!stop){}
-    std::cout << std::endl << "Gracefully stopping the websocket server..." << std::endl;
+    std::shared_ptr<ssc::websocket::MessageHandler> handler(new SimulationMessage(sim_server, input_data.verbose));
+    JSONWebSocketServer server(handler);
+    server.start(input_data.port, input_data.show_websocket_debug_information);
 }
 
 void start_grpc_server(const XdynForMECommandLineArguments& input_data);
