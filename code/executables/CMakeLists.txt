@@ -243,6 +243,7 @@ ADD_EXECUTABLE(xdyn-for-me
         src/report_xdyn_exceptions_to_user.cpp
         src/XdynForMECommandLineArguments.cpp
         src/xdyn_for_me.cpp
+        src/JSONModelExchangeHandler.cpp
         src/ModelExchangeServiceImpl.cpp
         "${model_exchange_proto_srcs}"
         "${model_exchange_grpc_srcs}"
