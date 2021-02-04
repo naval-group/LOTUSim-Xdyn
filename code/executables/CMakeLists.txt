@@ -222,6 +222,7 @@ ADD_EXECUTABLE(xdyn-for-cs
         src/XdynForCSCommandLineArguments.cpp
         src/XdynCommandLineArguments.cpp
         src/xdyn_for_cs.cpp
+        src/JSONCoSimulationHandler.cpp
         src/CosimulationServiceImpl.cpp
         "${cosimulation_proto_srcs}"
         "${cosimulation_grpc_srcs}"
