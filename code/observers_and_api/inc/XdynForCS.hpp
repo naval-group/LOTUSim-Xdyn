@@ -2,9 +2,9 @@
 #define OBSERVERS_AND_API_INC_SIMSERVER_HPP_
 
 #include "ConfBuilder.hpp"
-#include "HistoryParser.hpp"
 #include "YamlState.hpp"
 #include "YamlSimServerInputs.hpp"
+#include "SimServerInputs.hpp"
 
 class XdynForCS
 {

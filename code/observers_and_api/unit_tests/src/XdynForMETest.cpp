@@ -13,6 +13,9 @@
 #include "XdynForMETest.hpp"
 #define EPS 1E-8
 #include <ssc/macros.hpp>
+
+#include "JSONSerializer.hpp"
+
 XdynForMETest::XdynForMETest() : a(ssc::random_data_generator::DataGenerator(123456789))
 {
 }
@@ -39,7 +42,7 @@ TEST_F(XdynForMETest, test_falling_ball_with_yaml)
 
     XdynForME xdyn_for_me(yaml);
     const std::string input_yaml = test_data::complete_yaml_message_for_falling_ball();
-    SimServerInputs server_inputs = parse_SimServerInputs(input_yaml, xdyn_for_me.get_Tmax());
+    SimServerInputs server_inputs(deserialize(input_yaml), xdyn_for_me.get_Tmax());
     const std::vector<double> dx_dt = xdyn_for_me.calculate_dx_dt(server_inputs);
 
 
@@ -83,7 +86,7 @@ TEST_F(XdynForMETest, complete_test_with_commands_and_delay)
                 ", {\"t\": 10,  \"x\": 14.0, \"y\": 2.0, \"z\": 12.3, \"u\": 0.0, \"v\": 0.0, \"w\": 0.0, \"p\": 0,   \"q\": 0,     \"r\": 0,   \"qr\": 1.1, \"qi\": 2.2, \"qj\": 3.3, \"qk\": 4.4}\n"
                 "],\n"
                 "\"commands\": {\"F1(command1)\": 20, \"F1(a)\": 4.5, \"F1(b)\": 5.7}}";
-    SimServerInputs server_inputs = parse_SimServerInputs(input_yaml, xdyn_for_me.get_Tmax());
+    SimServerInputs server_inputs(deserialize(input_yaml), xdyn_for_me.get_Tmax());
     const std::vector<double> dx_dt = xdyn_for_me.calculate_dx_dt(server_inputs);
 
     ASSERT_EQ(13, dx_dt.size());
@@ -120,7 +123,7 @@ TEST_F(XdynForMETest, complete_test_with_commands_and_delay_just_test_quaternion
                 ", {\"t\": 10,  \"x\": 14.0, \"y\": 2.0, \"z\": 12.3, \"u\": 0.0, \"v\": 0.0, \"w\": 0.0, \"p\": 11,  \"q\": 22,    \"r\": 33,  \"qr\": 1.1, \"qi\": 2.2, \"qj\": 3.3, \"qk\": 4.4}\n"
                 "],\n"
                 "\"commands\": {\"F1(command1)\": 20, \"F1(a)\": 4.5, \"F1(b)\": 5.7}}";
-    SimServerInputs server_inputs = parse_SimServerInputs(input_yaml, xdyn_for_me.get_Tmax());
+    SimServerInputs server_inputs(deserialize(input_yaml), xdyn_for_me.get_Tmax());
     const std::vector<double> dx_dt = xdyn_for_me.calculate_dx_dt(server_inputs);
 
     // q1 = qr r + qi i + qj j + qk k

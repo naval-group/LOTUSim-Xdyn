@@ -1,7 +1,7 @@
 #include <functional>
 
 #include "XdynForCS.hpp"
-#include "HistoryParser.hpp"
+#include "JSONSerializer.hpp"
 #include "SimServerInputs.hpp"
 #include "simulator_api.hpp"
 
@@ -27,7 +27,7 @@ XdynForCS::XdynForCS(const std::string& yaml_model,
 
 std::vector<YamlState> XdynForCS::play_one_step(const std::string& raw_yaml)
 {
-    return play_one_step(parse_SimServerInputs(raw_yaml, builder.Tmax));
+    return play_one_step(deserialize(raw_yaml));
 }
 
 std::vector<YamlState> XdynForCS::play_one_step(const YamlSimServerInputs& inputs)

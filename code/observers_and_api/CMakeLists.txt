@@ -20,7 +20,7 @@ set(SRC src/simulator_api.cpp
         ${CMAKE_BINARY_DIR}/demoPython.cpp
         src/MapObserver.cpp
         src/ConfBuilder.cpp
-        src/HistoryParser.cpp
+        src/JSONSerializer.cpp
         src/XdynForCS.cpp
         src/XdynForME.cpp
         src/SimServerInputs.cpp

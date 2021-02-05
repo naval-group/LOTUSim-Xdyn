@@ -10,8 +10,8 @@
 
 #include <string>
 
+#include "SimServerInputs.hpp"
 #include "ConfBuilder.hpp"
-#include "HistoryParser.hpp"
 
 class XdynForME
 {

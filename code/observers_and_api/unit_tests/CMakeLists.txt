@@ -13,10 +13,10 @@ FILE(GLOB SRC
         src/MapObserverTest.cpp
         src/ObserverTests.cpp
         src/ConfBuilderTest.cpp
-        src/HistoryParserTest.cpp
         src/XdynForCSTest.cpp
         src/XdynForMETest.cpp
         src/EverythingObserverTest.cpp
+        src/JSONSerializerTest.cpp
         )
 # ------8<---------------------------------------------->8-----
 
