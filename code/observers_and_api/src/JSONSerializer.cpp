@@ -64,8 +64,10 @@ YamlSimServerInputs deserialize(const std::string& input)
     return infos;
 }
 
-void write(rapidjson::Writer<rapidjson::StringBuffer>& writer, const std::map<std::string, double>& m);
-void write(rapidjson::Writer<rapidjson::StringBuffer>& writer, const std::map<std::string, double>& m)
+typedef rapidjson::Writer<rapidjson::StringBuffer, rapidjson::UTF8<>, rapidjson::UTF8<>, rapidjson::CrtAllocator, rapidjson::kWriteNanAndInfFlag> InfNaNWriter;
+
+void write(InfNaNWriter& writer, const std::map<std::string, double>& m);
+void write(InfNaNWriter& writer, const std::map<std::string, double>& m)
 {
     writer.StartObject();
     for (const auto key_value:m)
@@ -81,7 +83,7 @@ void write(rapidjson::Writer<rapidjson::StringBuffer>& writer, const std::map<st
 std::string serialize(const std::vector<YamlState>& states)
 {
     rapidjson::StringBuffer s;
-    rapidjson::Writer<rapidjson::StringBuffer> writer(s);
+    InfNaNWriter writer(s);
 
     writer.StartArray();
     for (auto state:states)
