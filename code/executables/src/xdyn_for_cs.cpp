@@ -3,8 +3,7 @@
 #include "parse_XdynForCSCommandLineArguments.hpp"
 #include "XdynForCSCommandLineArguments.hpp"
 
-#include "gRPCProtoBufServer.hpp"
-#include "CosimulationServiceImpl.hpp"
+#include "gRPCServer.hpp"
 #include "JSONWebSocketServer.hpp"
 
 #include <ssc/text_file_reader.hpp>
@@ -31,8 +30,7 @@ void start_grpc_server(const XdynForCSCommandLineArguments& input_data);
 void start_grpc_server(const XdynForCSCommandLineArguments& input_data)
 {
     XdynForCS simserver = get_SimServer(input_data);
-    std::shared_ptr<grpc::Service> handler(new CosimulationServiceImpl(simserver));
-    gRPCProtoBufServer server(handler);
+    gRPCServer<XdynForCS> server(simserver);
     server.start(input_data.port);
 }
 
