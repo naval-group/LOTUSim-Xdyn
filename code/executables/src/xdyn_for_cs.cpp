@@ -8,8 +8,6 @@
 #include "JSONWebSocketServer.hpp"
 
 #include <ssc/text_file_reader.hpp>
-#include <ssc/websocket.hpp>
-
 #include <ssc/check_ssc_version.hpp>
 
 CHECK_SSC_VERSION(8,0)
