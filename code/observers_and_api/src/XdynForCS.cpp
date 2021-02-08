@@ -37,10 +37,6 @@ std::vector<YamlState> XdynForCS::play_one_step(const YamlSimServerInputs& input
 
 std::vector<YamlState> XdynForCS::play_one_step(const SimServerInputs& simstepperinfo)
 {
-    if (simstepperinfo.Dt <= 0)
-    {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Dt should be greater than 0 but got Dt = " << simstepperinfo.Dt);
-    }
     return handle(simstepperinfo);
 }
 
@@ -87,6 +83,10 @@ std::function<YamlState(const Res&)> convert_with_angles(const BodyPtr& body)
 
 std::vector<YamlState> XdynForCS::handle(const SimServerInputs& infos)
 {
+    if (infos.Dt <= 0)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Dt should be greater than 0 but got Dt = " << infos.Dt);
+    }
     const double tstart = infos.t;
     const double Dt = infos.Dt;
     sim.reset_history();
