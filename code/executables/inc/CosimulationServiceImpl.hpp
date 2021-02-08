@@ -18,12 +18,12 @@
  */
 class CosimulationServiceImpl final : public Cosimulation::Service {
     public:
-        explicit CosimulationServiceImpl(const TR1(shared_ptr)<XdynForCS>& simserver);
+        explicit CosimulationServiceImpl(const XdynForCS& simserver);
         grpc::Status step_quaternion(grpc::ServerContext* context, const CosimulationRequestQuaternion* request, CosimulationResponse* response) override;
         grpc::Status step_euler_321(grpc::ServerContext* context, const CosimulationRequestEuler* request, CosimulationResponse* response) override;
 
     private:
-        TR1(shared_ptr)<XdynForCS> simserver;
+        XdynForCS simserver;
 };
 
 #endif /* EXECUTABLES_INC_XDYNFORCSGRPC_HPP_ */

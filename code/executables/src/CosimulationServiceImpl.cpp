@@ -9,8 +9,8 @@
 #include "CosimulationServiceImpl.hpp"
 #include "YamlSimServerInputs.hpp"
 
-CosimulationServiceImpl::CosimulationServiceImpl(const TR1(shared_ptr)<XdynForCS>& simserver_):
-simserver(simserver_)
+CosimulationServiceImpl::CosimulationServiceImpl(const XdynForCS& simserver_):
+        simserver(simserver_)
 {}
 
 #define SIZE size()
@@ -229,7 +229,7 @@ grpc::Status CosimulationServiceImpl::step_euler_321(
         return precond;
     }
     const YamlSimServerInputs inputs = from_grpc(context, request);
-    const std::vector<YamlState> output = simserver->play_one_step(inputs);
+    const std::vector<YamlState> output = simserver.play_one_step(inputs);
     const grpc::Status postcond = to_grpc(context, output, response);
     return postcond;
 }
@@ -245,7 +245,7 @@ grpc::Status CosimulationServiceImpl::step_quaternion(
         return precond;
     }
     const YamlSimServerInputs inputs = from_grpc(context, request);
-    const std::vector<YamlState> output = simserver->play_one_step(inputs);
+    const std::vector<YamlState> output = simserver.play_one_step(inputs);
     const grpc::Status postcond = to_grpc(context, output, response);
     return postcond;
 }

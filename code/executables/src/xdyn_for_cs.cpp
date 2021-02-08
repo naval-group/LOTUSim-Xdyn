@@ -8,8 +8,6 @@
 #include "JSONWebSocketServer.hpp"
 
 #include <ssc/text_file_reader.hpp>
-#include <ssc/macros.hpp>
-#include TR1INC(memory)
 #include <ssc/websocket.hpp>
 
 #include <ssc/check_ssc_version.hpp>
@@ -34,7 +32,7 @@ void start_ws_server(const XdynForCSCommandLineArguments& input_data)
 void start_grpc_server(const XdynForCSCommandLineArguments& input_data);
 void start_grpc_server(const XdynForCSCommandLineArguments& input_data)
 {
-    TR1(shared_ptr)<XdynForCS> simserver(new XdynForCS(get_SimServer(input_data)));
+    XdynForCS simserver = get_SimServer(input_data);
     std::shared_ptr<grpc::Service> handler(new CosimulationServiceImpl(simserver));
     gRPCProtoBufServer server(handler);
     server.start(input_data.port);
