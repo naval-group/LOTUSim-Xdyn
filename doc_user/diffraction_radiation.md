@@ -398,7 +398,7 @@ En effectuant le changement de variable $`\tau\leftarrow t-\tau`$ on a :
 $`F_R = \omega^2 A \cos(\omega t) + \omega \int_0^{+\infty} K(\tau)
 \sin(\omega(t-\tau))d\tau`$
 
-En développant $`\sin(\omega(t-\tau)`$ on obtient :
+En développant $`\sin(\omega(t-\tau))`$ on obtient :
 
 $`F_R = \omega^2\left[A - \frac{1}{\omega}\int_0^{\infty}
 K(\tau)\sin(\omega\tau)d\tau\right]\cos(\omega t) +
