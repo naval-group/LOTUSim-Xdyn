@@ -14,15 +14,15 @@
 #include "report_xdyn_exceptions_to_user.hpp"
 #include "XdynForMECommandLineArguments.hpp"
 
-#include "JSONWebSocketServer.hpp"
-#include "JSONModelExchangeHandler.hpp"
 #include "gRPCProtoBufServer.hpp"
 #include "ModelExchangeServiceImpl.hpp"
+#include "JSONWebSocketServer.hpp"
 
 #include <ssc/text_file_reader.hpp>
 #include <ssc/websocket.hpp>
 
 #include <ssc/check_ssc_version.hpp>
+
 CHECK_SSC_VERSION(8,0)
 
 void start_ws_server(const XdynForMECommandLineArguments& input_data);
@@ -30,9 +30,7 @@ void start_ws_server(const XdynForMECommandLineArguments& input_data)
 {
     const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_filenames);
     const auto yaml = yaml_reader.get_contents();
-    TR1(shared_ptr)<XdynForME> sim_server (new XdynForME(yaml));
-    std::shared_ptr<ssc::websocket::MessageHandler> handler(new JSONModelExchangeHandler(sim_server, input_data.verbose));
-    JSONWebSocketServer server(handler);
+    JSONWebSocketServer<XdynForME> server(XdynForME(yaml), input_data.verbose);
     server.start(input_data.port, input_data.show_websocket_debug_information);
 }
 

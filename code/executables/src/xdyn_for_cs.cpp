@@ -3,10 +3,9 @@
 #include "parse_XdynForCSCommandLineArguments.hpp"
 #include "XdynForCSCommandLineArguments.hpp"
 
-#include "JSONWebSocketServer.hpp"
-#include "JSONCoSimulationHandler.hpp"
 #include "gRPCProtoBufServer.hpp"
 #include "CosimulationServiceImpl.hpp"
+#include "JSONWebSocketServer.hpp"
 
 #include <ssc/text_file_reader.hpp>
 #include <ssc/macros.hpp>
@@ -14,28 +13,29 @@
 #include <ssc/websocket.hpp>
 
 #include <ssc/check_ssc_version.hpp>
+
 CHECK_SSC_VERSION(8,0)
 
-TR1(shared_ptr)<XdynForCS> get_SimServer(const XdynForCSCommandLineArguments& input_data);
-TR1(shared_ptr)<XdynForCS> get_SimServer(const XdynForCSCommandLineArguments& input_data)
+XdynForCS get_SimServer(const XdynForCSCommandLineArguments& input_data);
+XdynForCS get_SimServer(const XdynForCSCommandLineArguments& input_data)
 {
     const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_filenames);
     const auto yaml = yaml_reader.get_contents();
-    return TR1(shared_ptr)<XdynForCS>(new XdynForCS(yaml, input_data.solver, input_data.initial_timestep));
+    return XdynForCS(yaml, input_data.solver, input_data.initial_timestep);
 }
 
 void start_ws_server(const XdynForCSCommandLineArguments& input_data);
 void start_ws_server(const XdynForCSCommandLineArguments& input_data)
 {
-    std::shared_ptr<ssc::websocket::MessageHandler> handler(new JSONCoSimulationHandler(get_SimServer(input_data), input_data.verbose));
-    JSONWebSocketServer server(handler);
+    JSONWebSocketServer<XdynForCS> server(get_SimServer(input_data), input_data.verbose);
     server.start(input_data.port, input_data.show_websocket_debug_information);
 }
 
 void start_grpc_server(const XdynForCSCommandLineArguments& input_data);
 void start_grpc_server(const XdynForCSCommandLineArguments& input_data)
 {
-    std::shared_ptr<grpc::Service> handler(new CosimulationServiceImpl(get_SimServer(input_data)));
+    TR1(shared_ptr)<XdynForCS> simserver(new XdynForCS(get_SimServer(input_data)));
+    std::shared_ptr<grpc::Service> handler(new CosimulationServiceImpl(simserver));
     gRPCProtoBufServer server(handler);
     server.start(input_data.port);
 }

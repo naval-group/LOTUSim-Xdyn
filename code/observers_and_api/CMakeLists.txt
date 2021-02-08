@@ -25,7 +25,6 @@ set(SRC src/simulator_api.cpp
         src/XdynForME.cpp
         src/SimServerInputs.cpp
         src/EverythingObserver.cpp
-        src/JSONWebSocketServer.cpp
         src/gRPCProtoBufServer.cpp
         )
 
