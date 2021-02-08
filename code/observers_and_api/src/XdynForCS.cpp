@@ -120,3 +120,8 @@ std::vector<YamlState> XdynForCS::handle(const SimServerInputs& infos)
     }
     return ret;
 }
+
+double XdynForCS::get_Tmax() const
+{
+    return builder.Tmax;
+}

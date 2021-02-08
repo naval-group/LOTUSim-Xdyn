@@ -23,6 +23,7 @@ class XdynForCS
         std::vector<YamlState> play_one_step(const YamlSimServerInputs& inputs);
 
         std::vector<YamlState> handle(const SimServerInputs& input);
+        double get_Tmax() const;
 
     private :
         XdynForCS(); // Deactivated
