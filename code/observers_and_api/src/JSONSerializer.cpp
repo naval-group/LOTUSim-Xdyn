@@ -104,7 +104,7 @@ std::string serialize(const std::vector<YamlState>& states)
         WRITE_KEY_VALUE("phi", state.phi);
         WRITE_KEY_VALUE("theta", state.theta);
         WRITE_KEY_VALUE("psi", state.psi);
-        writer.Key("extra observations");
+        writer.Key("extra_observations");
         write(writer, state.extra_observations);
         writer.EndObject();
     }
