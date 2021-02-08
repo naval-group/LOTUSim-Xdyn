@@ -1,15 +1,4 @@
-/*
- * xdyn_for_me.cpp
- *
- *  Created on: Nov 13, 2018
- *      Author: cady
- */
-
-#include <iomanip> // std::setprecision
-
 #include "XdynForME.hpp"
-
-#include "display_command_line_arguments.hpp"
 #include "parse_XdynForMECommandLineArguments.hpp"
 #include "report_xdyn_exceptions_to_user.hpp"
 #include "XdynForMECommandLineArguments.hpp"
@@ -19,8 +8,6 @@
 #include "JSONWebSocketServer.hpp"
 
 #include <ssc/text_file_reader.hpp>
-#include <ssc/websocket.hpp>
-
 #include <ssc/check_ssc_version.hpp>
 
 CHECK_SSC_VERSION(8,0)
