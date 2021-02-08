@@ -22,7 +22,7 @@ class XdynForCS
         std::vector<YamlState> play_one_step(const SimServerInputs& raw_yaml);
         std::vector<YamlState> play_one_step(const YamlSimServerInputs& inputs);
 
-        std::vector<YamlState> step(const SimServerInputs& input);
+        std::vector<YamlState> handle(const SimServerInputs& input);
 
     private :
         XdynForCS(); // Deactivated

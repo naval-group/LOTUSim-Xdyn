@@ -37,7 +37,7 @@ void JSONModelExchangeHandler::operator()(const ssc::websocket::Message& msg)
     const auto f = [&input_yaml, this, &msg]()
         {
             SimServerInputs server_inputs(deserialize(input_yaml), sim_server->get_Tmax());
-            const std::vector<double> dx_dt = sim_server->calculate_dx_dt(server_inputs);
+            const std::vector<double> dx_dt = sim_server->handle(server_inputs);
             const std::string output_json = serialize(dx_dt);
             if (verbose)
             {

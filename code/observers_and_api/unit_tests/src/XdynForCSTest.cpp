@@ -106,7 +106,7 @@ TEST_F(XdynForCSTest, can_compute_one_step_with_euler_solver)
 
     SimServerInputs infos(y, Dt);
 
-    const std::vector<YamlState> res = simstepper.step(infos);
+    const std::vector<YamlState> res = simstepper.handle(infos);
 //! [SimStepperTest example]
 
 //! [SimStepperTest expected output]
@@ -151,8 +151,8 @@ TEST_F(XdynForCSTest, can_compute_same_step_several_times)
     y.Dt = Dt;
     y.states = std::vector<YamlState>(1, YamlState(t_start, x0, y0 ,z0 ,u0 ,v0 ,w0 ,0 ,0 ,0 ,1 ,0 ,0 ,0));
     const SimServerInputs infos(y, Dt);
-    std::vector<YamlState> res = simstepper.step(infos);
-    res = simstepper.step(infos);
+    std::vector<YamlState> res = simstepper.handle(infos);
+    res = simstepper.handle(infos);
 //! [SimStepperTest can_compute_one_step_with_euler_solver]
 
 //! [SimStepperTest can_compute_one_step_with_euler_solver output]
@@ -199,7 +199,7 @@ TEST_F(XdynForCSTest, wrong_solver_must_raise_exception)
 //! [SimStepperTest wrong_solver_must_raise_exception]
 
 //! [SimStepperTest wrong_solver_must_raise_exception output]
-    ASSERT_THROW(simstepper.step(SimServerInputs(y, Dt)), InvalidInputException);
+    ASSERT_THROW(simstepper.handle(SimServerInputs(y, Dt)), InvalidInputException);
 //! [SimStepperTest expected output]
 }
 

@@ -43,7 +43,7 @@ TEST_F(XdynForMETest, test_falling_ball_with_yaml)
     XdynForME xdyn_for_me(yaml);
     const std::string input_yaml = test_data::complete_yaml_message_for_falling_ball();
     SimServerInputs server_inputs(deserialize(input_yaml), xdyn_for_me.get_Tmax());
-    const std::vector<double> dx_dt = xdyn_for_me.calculate_dx_dt(server_inputs);
+    const std::vector<double> dx_dt = xdyn_for_me.handle(server_inputs);
 
 
 //! [XdynForMETest example]
@@ -87,7 +87,7 @@ TEST_F(XdynForMETest, complete_test_with_commands_and_delay)
                 "],\n"
                 "\"commands\": {\"F1(command1)\": 20, \"F1(a)\": 4.5, \"F1(b)\": 5.7}}";
     SimServerInputs server_inputs(deserialize(input_yaml), xdyn_for_me.get_Tmax());
-    const std::vector<double> dx_dt = xdyn_for_me.calculate_dx_dt(server_inputs);
+    const std::vector<double> dx_dt = xdyn_for_me.handle(server_inputs);
 
     ASSERT_EQ(13, dx_dt.size());
     ASSERT_NEAR(0,              dx_dt[0], EPS); // dx/dt = u
@@ -124,7 +124,7 @@ TEST_F(XdynForMETest, complete_test_with_commands_and_delay_just_test_quaternion
                 "],\n"
                 "\"commands\": {\"F1(command1)\": 20, \"F1(a)\": 4.5, \"F1(b)\": 5.7}}";
     SimServerInputs server_inputs(deserialize(input_yaml), xdyn_for_me.get_Tmax());
-    const std::vector<double> dx_dt = xdyn_for_me.calculate_dx_dt(server_inputs);
+    const std::vector<double> dx_dt = xdyn_for_me.handle(server_inputs);
 
     // q1 = qr r + qi i + qj j + qk k
     // q2 =         p i +  q j +  r k

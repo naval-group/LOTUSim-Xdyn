@@ -41,7 +41,7 @@ std::vector<YamlState> XdynForCS::play_one_step(const SimServerInputs& simsteppe
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "Dt should be greater than 0 but got Dt = " << simstepperinfo.Dt);
     }
-    return step(simstepperinfo);
+    return handle(simstepperinfo);
 }
 
 YamlState convert_without_angles(const Res& res);
@@ -85,7 +85,7 @@ std::function<YamlState(const Res&)> convert_with_angles(const BodyPtr& body)
             };
 }
 
-std::vector<YamlState> XdynForCS::step(const SimServerInputs& infos)
+std::vector<YamlState> XdynForCS::handle(const SimServerInputs& infos)
 {
     const double tstart = infos.t;
     const double Dt = infos.Dt;

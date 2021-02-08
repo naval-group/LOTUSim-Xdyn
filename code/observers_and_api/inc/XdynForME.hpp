@@ -17,7 +17,7 @@ class XdynForME
 {
     public :
         XdynForME(const std::string& yaml_model);
-        StateType calculate_dx_dt(const SimServerInputs& raw_yaml);
+        StateType handle(const SimServerInputs& raw_yaml);
         double get_Tmax() const;
 
     private :
