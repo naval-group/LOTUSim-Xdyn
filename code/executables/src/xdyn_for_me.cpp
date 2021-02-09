@@ -3,7 +3,8 @@
 #include "report_xdyn_exceptions_to_user.hpp"
 #include "XdynForMECommandLineArguments.hpp"
 
-#include "gRPCServer.hpp"
+#include "gRPCProtoBufServer.hpp"
+#include "ModelExchangeServiceImpl.hpp"
 #include "JSONWebSocketServer.hpp"
 
 #include <ssc/text_file_reader.hpp>
@@ -25,8 +26,10 @@ void start_grpc_server(const XdynForMECommandLineArguments& input_data)
 {
     const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_filenames);
     const auto yaml = yaml_reader.get_contents();
-    XdynForME simserver(yaml);
-    gRPCServer<XdynForME> server(simserver);
+    XdynForME xdyn(yaml);
+    ModelExchangeServiceImpl service(xdyn);
+    std::shared_ptr<grpc::Service> handler(new ModelExchangeServiceImpl(xdyn));
+    gRPCProtoBufServer server(handler);
     server.start(input_data.port);
 }
 
