@@ -45,7 +45,7 @@ class Cosim:
         self.request.states.psi[:] = [state['psi']]
         self.request.Dt = Dt
         res = self.xdyn_stub.step_euler_321(self.request)
-        return {'t': res.all_states.t,
+        ret = {'t': res.all_states.t,
                 'x': res.all_states.x,
                 'y': res.all_states.y,
                 'z': res.all_states.z,
@@ -61,7 +61,11 @@ class Cosim:
                 'qk': res.all_states.qk,
                 'phi': res.all_states.phi,
                 'theta': res.all_states.theta,
-                'psi': res.all_states.psi}
+                'psi': res.all_states.psi,
+                'extra_observations': {}}
+        for key, vector in res.extra_observations.items():
+            ret['extra_observations'][key] = vector.value
+        return ret;
 
 
 EPS = 1E-6
@@ -134,3 +138,8 @@ class Tests(unittest.TestCase):
         assert len(self.res['t']) == len(self.res['phi'])
         assert len(self.res['t']) == len(self.res['theta'])
         assert len(self.res['t']) == len(self.res['psi'])
+        
+    def test_can_get_extra_observations(self):
+        """Extra observations should be available."""
+        assert 'Fz(gravity,ball,ball)' in self.res['extra_observations']
+        assert len(self.res['extra_observations']['Fz(gravity,ball,ball)']) == len(self.res['t'])

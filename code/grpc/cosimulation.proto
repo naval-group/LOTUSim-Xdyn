@@ -97,9 +97,15 @@ message CosimulationStates
     repeated double psi = 17; // First "321" Euler angle. Always expressed in rotation convention [psi, theta', phi'']
 }
 
+message VectorOfDoubles
+{
+	repeated double value = 1; // A vector of doubles for an extra observation. Necessary to use in map as maps cannot take repeated fields directly.
+}
+
 message CosimulationResponse
 {
     CosimulationStates all_states = 1; // All intermediate simulation states (at the minor timestep dt, not Dt), including the last one.
     CosimulationState last_state = 2; // Just the last state
+    map<string,VectorOfDoubles> extra_observations = 3; // All extra observations (at the minor timesteps)
 }
 
