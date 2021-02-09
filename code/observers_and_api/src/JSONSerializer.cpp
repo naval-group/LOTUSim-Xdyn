@@ -1,6 +1,7 @@
 #include <iomanip> // std::setprecision
 
 #include <ssc/json.hpp>
+#include <ssc/json/rapidjson/document.h>
 #include <ssc/json/rapidjson/writer.h>
 #include <ssc/json/rapidjson/stringbuffer.h>
 
@@ -78,42 +79,72 @@ void write(InfNaNWriter& writer, const std::map<std::string, double>& m)
     writer.EndObject();
 }
 
-#define WRITE_KEY_VALUE(key, value) writer.Key(key); writer.Double(value);
+#define ADD_ARRAY(key, doc) doc.AddMember(key,rapidjson::Value(rapidjson::kArrayType).Move(), doc.GetAllocator())
+#define PUSH_BACK(array, value, doc) array.PushBack(value, doc.GetAllocator())
 
 std::string serialize(const std::vector<YamlState>& states)
 {
-    rapidjson::StringBuffer s;
-    InfNaNWriter writer(s);
+    rapidjson::Document doc(rapidjson::kObjectType);
 
-    writer.StartArray();
-    for (auto state:states)
+    // Initialization
+    ADD_ARRAY("t", doc);
+    ADD_ARRAY("x", doc);
+    ADD_ARRAY("y", doc);
+    ADD_ARRAY("z", doc);
+    ADD_ARRAY("u", doc);
+    ADD_ARRAY("v", doc);
+    ADD_ARRAY("w", doc);
+    ADD_ARRAY("p", doc);
+    ADD_ARRAY("q", doc);
+    ADD_ARRAY("r", doc);
+    ADD_ARRAY("qr", doc);
+    ADD_ARRAY("qi", doc);
+    ADD_ARRAY("qj", doc);
+    ADD_ARRAY("qk", doc);
+    ADD_ARRAY("phi", doc);
+    ADD_ARRAY("theta", doc);
+    ADD_ARRAY("psi", doc);
+    doc.AddMember("extra_observations",rapidjson::Value(rapidjson::kObjectType).Move(), doc.GetAllocator());
+    for(auto extra_obs:states.at(0).extra_observations)
     {
-        writer.StartObject();
-        WRITE_KEY_VALUE("t", state.t);
-        WRITE_KEY_VALUE("x", state.x);
-        WRITE_KEY_VALUE("y", state.y);
-        WRITE_KEY_VALUE("z", state.z);
-        WRITE_KEY_VALUE("u", state.u);
-        WRITE_KEY_VALUE("v", state.v);
-        WRITE_KEY_VALUE("w", state.w);
-        WRITE_KEY_VALUE("p", state.p);
-        WRITE_KEY_VALUE("q", state.q);
-        WRITE_KEY_VALUE("r", state.r);
-        WRITE_KEY_VALUE("qr", state.qr);
-        WRITE_KEY_VALUE("qi", state.qi);
-        WRITE_KEY_VALUE("qj", state.qj);
-        WRITE_KEY_VALUE("qk", state.qk);
-        WRITE_KEY_VALUE("phi", state.phi);
-        WRITE_KEY_VALUE("theta", state.theta);
-        WRITE_KEY_VALUE("psi", state.psi);
-        writer.Key("extra_observations");
-        write(writer, state.extra_observations);
-        writer.EndObject();
+        rapidjson::Value field_name(extra_obs.first.c_str(), doc.GetAllocator());
+        doc["extra_observations"].AddMember(field_name, rapidjson::Value(rapidjson::kArrayType).Move(), doc.GetAllocator());
     }
-    writer.EndArray();
 
-    return s.GetString();
+    // Writing
+    for(auto state:states)
+    {
+        PUSH_BACK(doc["t"], state.t, doc);
+        PUSH_BACK(doc["x"], state.t, doc);
+        PUSH_BACK(doc["y"], state.t, doc);
+        PUSH_BACK(doc["z"], state.t, doc);
+        PUSH_BACK(doc["u"], state.t, doc);
+        PUSH_BACK(doc["v"], state.t, doc);
+        PUSH_BACK(doc["w"], state.t, doc);
+        PUSH_BACK(doc["p"], state.t, doc);
+        PUSH_BACK(doc["q"], state.t, doc);
+        PUSH_BACK(doc["r"], state.t, doc);
+        PUSH_BACK(doc["qr"], state.t, doc);
+        PUSH_BACK(doc["qi"], state.t, doc);
+        PUSH_BACK(doc["qj"], state.t, doc);
+        PUSH_BACK(doc["qk"], state.t, doc);
+        PUSH_BACK(doc["phi"], state.t, doc);
+        PUSH_BACK(doc["theta"], state.t, doc);
+        PUSH_BACK(doc["psi"], state.t, doc);
+        for(auto obs:state.extra_observations)
+            {
+                PUSH_BACK(doc["extra_observations"][obs.first.c_str()], obs.second, doc);
+            }
+    }
+
+    // Dumping to string
+    rapidjson::StringBuffer buffer;
+    InfNaNWriter writer(buffer);
+    doc.Accept(writer);
+    return buffer.GetString();
 }
+
+#define WRITE_KEY_VALUE(key, value) writer.Key(key); writer.Double(value);
 
 std::string serialize(const std::vector<double>& dx_dt)
 {
