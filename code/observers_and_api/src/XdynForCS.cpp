@@ -4,6 +4,7 @@
 #include "JSONSerializer.hpp"
 #include "SimServerInputs.hpp"
 #include "simulator_api.hpp"
+#include "CoSimulationObserver.hpp"
 
 XdynForCS::XdynForCS(const std::string& yaml_model, const std::string& solver, const double dt):
         builder(yaml_model),
@@ -92,33 +93,24 @@ std::vector<YamlState> XdynForCS::handle(const SimServerInputs& infos)
     sim.reset_history();
     sim.set_bodystates(infos.full_state_history);
     sim.set_command_listener(infos.commands);
-    std::vector<Res> results;
+    CoSimulationObserver observer({}, sim.get_bodies().at(0)->get_name());
     if(solver == "euler")
     {
-        results = simulate<ssc::solver::EulerStepper>(sim, tstart, tstart+Dt, dt);
+        simulate<ssc::solver::EulerStepper>(sim, tstart, tstart+Dt, dt, observer);
     }
     else if (solver == "rk4")
     {
-        results = simulate<ssc::solver::RK4Stepper>(sim, tstart, tstart+Dt, dt);
+        simulate<ssc::solver::RK4Stepper>(sim, tstart, tstart+Dt, dt, observer);
     }
     else if (solver == "rkck")
     {
-        results = simulate<ssc::solver::RKCK>(sim, tstart, tstart+Dt, dt);
+        simulate<ssc::solver::RKCK>(sim, tstart, tstart+Dt, dt, observer);
     }
     else
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "unknown solver");
     }
-    std::vector<YamlState> ret(results.size());
-    if (not(sim.get_bodies().empty()))
-    {
-        std::transform(results.begin(), results.end(), ret.begin(), convert_with_angles(sim.get_bodies().at(0)));
-    }
-    else
-    {
-        std::transform(results.begin(), results.end(), ret.begin(), convert_without_angles);
-    }
-    return ret;
+    return observer.get();
 }
 
 double XdynForCS::get_Tmax() const
