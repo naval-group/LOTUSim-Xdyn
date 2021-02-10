@@ -62,6 +62,24 @@ YamlSimServerInputs deserialize(const std::string& input)
             }
         }
     }
+    if (document.HasMember("requested_output"))
+    {
+        const rapidjson::Value& commands = document["requested_output"];
+        if (not(commands.IsArray()) && not(commands.IsNull()))
+        {
+            THROW(__PRETTY_FUNCTION__, ssc::json::Exception, "'commands' should be a JSON array: got " << ssc::json::print_type(commands))
+        }
+        else
+        {
+            if (not(commands.IsNull()))
+            {
+                for (rapidjson::Value::ConstValueIterator it = commands.Begin(); it != commands.End(); ++it)
+                {
+                    infos.requested_output.push_back(it->GetString());
+                }
+            }
+        }
+    }
     return infos;
 }
 

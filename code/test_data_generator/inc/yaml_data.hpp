@@ -69,6 +69,7 @@ namespace test_data
     std::string test_ship_linear_hydrostatics_with_waves();
     std::string dummy_history();
     std::string complete_yaml_message_from_gui();
+    std::string JSON_message_with_requested_output();
     std::string complete_yaml_message_for_falling_ball();
     std::string bug_2963_hs_fast();
     std::string bug_2963_hs_exact();

@@ -4324,6 +4324,34 @@ std::string test_data::complete_yaml_message_from_gui()
     return ss.str();
 }
 
+std::string test_data::JSON_message_with_requested_output()
+{
+    std::stringstream ss;
+    ss << "{\"Dt\": 2.0, " << std::endl
+       << "\"states\":[" << std::endl
+       << "{\"t\": 1234.5, "
+       << "\"x\": 90, "
+       << "\"y\": 91, "
+       << "\"z\": 92, "
+       << "\"u\": 93, "
+       << "\"v\": 94, "
+       << "\"w\": 95, "
+       << "\"p\": 96, "
+       << "\"q\": 97, "
+       << "\"r\": 98, "
+       << "\"qr\": 99, "
+       << "\"qi\": 100, "
+       << "\"qj\": 101, "
+       << "\"qk\": 102}]" << std::endl
+       <<",\"commands\":" << std::endl
+       <<"  {\"RPM\": 1.2," << std::endl
+       <<"  \"B1\": 0.1}"
+       <<",\"requested_output\":" << std::endl
+       <<"  [\"Fx(force,body,NED)\","
+       <<"  \"By(body)\"]}";
+    return ss.str();
+}
+
 std::string test_data::simserver_message_without_Dt()
 {
     std::stringstream ss;

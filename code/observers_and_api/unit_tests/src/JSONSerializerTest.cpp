@@ -1,3 +1,7 @@
+#include <algorithm>
+#include <vector>
+#include <iostream>
+
 #include "JSONSerializer.hpp"
 #include "SimServerInputs.hpp"
 #include "yaml_data.hpp"
@@ -57,6 +61,13 @@ TEST_F(JSONSerializerTest, can_parse_commands)
     YamlSimServerInputs yinfos = deserialize(test_data::complete_yaml_message_from_gui());
     ASSERT_EQ(yinfos.commands.find("RPM")->second, 1.2);
     ASSERT_EQ(yinfos.commands.find("B1")->second, 0.1);
+}
+
+TEST_F(JSONSerializerTest, can_parse_requested_output)
+{
+    YamlSimServerInputs yinfos = deserialize(test_data::JSON_message_with_requested_output());
+    ASSERT_TRUE(std::find(yinfos.requested_output.begin(), yinfos.requested_output.end(), "Fx(force,body,NED)") != yinfos.requested_output.end());
+    ASSERT_TRUE(std::find(yinfos.requested_output.begin(), yinfos.requested_output.end(), "By(body)") != yinfos.requested_output.end());
 }
 
 TEST_F(JSONSerializerTest, Dt_should_not_be_compulsory)
