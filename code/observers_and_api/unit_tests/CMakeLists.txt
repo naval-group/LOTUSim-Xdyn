@@ -17,6 +17,7 @@ FILE(GLOB SRC
         src/XdynForMETest.cpp
         src/EverythingObserverTest.cpp
         src/JSONSerializerTest.cpp
+        src/CoSimulationObserverTest.cpp
         )
 # ------8<---------------------------------------------->8-----
 

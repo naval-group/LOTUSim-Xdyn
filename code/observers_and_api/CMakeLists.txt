@@ -26,6 +26,7 @@ set(SRC src/simulator_api.cpp
         src/SimServerInputs.cpp
         src/EverythingObserver.cpp
         src/gRPCProtoBufServer.cpp
+        src/CoSimulationObserver.cpp
         )
 
 # Using C++ 2011
