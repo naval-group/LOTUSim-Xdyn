@@ -35,6 +35,13 @@ template <typename StepperType> std::vector<Res> simulate(Sim& sys, const double
     return ret;
 }
 
+template <typename StepperType, typename ObserverType> void simulate(Sim& sys, const double tstart, const double tend, const double dt, ObserverType& observer)
+{
+    ForceStates force_states = [&sys](std::vector<double>&states, const double t){sys.force_states(states, t);};
+    quicksolve<StepperType, ObserverType, ForceStates>(sys, tstart, tend, dt, observer, force_states);
+    observer.observe(sys, tend);
+}
+
 template <typename StepperType> std::vector<Res> simulate(const std::string& yaml, const double tstart, const double tend, const double dt)
 {
     Sim sys = get_system(yaml, tstart);
