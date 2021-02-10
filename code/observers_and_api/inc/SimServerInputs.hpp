@@ -24,6 +24,7 @@ struct SimServerInputs
     State state_history_except_last_point;
     State full_state_history;
     std::map<std::string, double> commands;
+    std::vector<std::string> requested_output;
     private: SimServerInputs(); // Disabled
 };
 

@@ -4,5 +4,6 @@ YamlSimServerInputs::YamlSimServerInputs()
     : Dt()
     , states()
     , commands()
+    , requested_output()
 {
 }

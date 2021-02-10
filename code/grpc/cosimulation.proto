@@ -11,6 +11,7 @@ message CosimulationRequestQuaternion
     float Dt = 1; // Strictly positive float: simulation duration (in seconds). The solver will integrate the ship states from t0 to t0 + Dt, where t0 is the last date in the t list in the states structure, and return the states at t0 + Dt. The simulation will run with a stop size of dt, dt being specified from the command line. t0 is therefore present both in the request and the response, with the same associated values.
     CosimulationStatesQuaternion states = 2; // State history
     map<string,float> commands = 3; // Commands at t0 (for controlled forces)
+    repeated string requested_output = 4; // Variables to output in the 'extra_observations' section of the server response
 }
 
 message CosimulationRequestEuler
@@ -18,6 +19,7 @@ message CosimulationRequestEuler
     float Dt = 1; // Strictly positive float: simulation duration (in seconds). The solver will integrate the ship states from t0 to t0 + Dt, where t0 is the last date in the t list in the states structure, and return the states at t0 + Dt. The simulation will run with a stop size of dt, dt being specified from the command line. t0 is therefore present both in the request and the response, with the same associated values.
     CosimulationStatesEuler states = 2; // State history
     map<string,float> commands = 3; // Commands at t0 (for controlled forces)
+    repeated string requested_output = 4; // Variables to output in the 'extra_observations' section of the server response
 }
 
 message CosimulationStatesQuaternion

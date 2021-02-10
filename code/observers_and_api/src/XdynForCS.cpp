@@ -93,7 +93,7 @@ std::vector<YamlState> XdynForCS::handle(const SimServerInputs& infos)
     sim.reset_history();
     sim.set_bodystates(infos.full_state_history);
     sim.set_command_listener(infos.commands);
-    CoSimulationObserver observer({}, sim.get_bodies().at(0)->get_name());
+    CoSimulationObserver observer(infos.requested_output, sim.get_bodies().at(0)->get_name());
     if(solver == "euler")
     {
         simulate<ssc::solver::EulerStepper>(sim, tstart, tstart+Dt, dt, observer);
