@@ -37,11 +37,6 @@ CoSimulationObserver::~CoSimulationObserver()
 {
 }
 
-void CoSimulationObserver::observe(const Sim& sys, const double t)
-{
-    Observer::observe_everything(sys, t);
-}
-
 std::vector<YamlState> CoSimulationObserver::get() const
 {
     return states;

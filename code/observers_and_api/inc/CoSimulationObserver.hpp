@@ -12,8 +12,6 @@ public:
     CoSimulationObserver(const std::vector<std::string>& optional_data, const std::string& body_name);
     virtual ~CoSimulationObserver();
 
-    void observe(const Sim& sys, const double t) override;
-
     std::vector<YamlState> get() const;
 
 private:
