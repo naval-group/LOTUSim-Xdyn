@@ -34,7 +34,6 @@ class GRPCForceModel : public ForceModel
         class Impl;
         TR1(shared_ptr)<Impl> pimpl;
         GRPCForceModel(const TR1(shared_ptr)<Impl>& pimpl, const std::string& body_name, const EnvironmentAndFrames& env);
-        EnvironmentAndFrames env;
 
 };
 
