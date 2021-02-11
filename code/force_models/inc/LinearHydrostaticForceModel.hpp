@@ -40,7 +40,7 @@ class LinearHydrostaticForceModel : public ForceModel
 
     private:
         LinearHydrostaticForceModel();
-        std::vector<double> get_zH(const double t) const;
+        std::vector<double> get_zH(const double t, const EnvironmentAndFrames& env) const;
         double compute_zbar(const std::vector<double>& z) const;
         double compute_thetabar(const std::vector<double>& z) const;
         double compute_phibar(const std::vector<double>& z) const;
@@ -52,7 +52,6 @@ class LinearHydrostaticForceModel : public ForceModel
         double z_eq;
         double theta_eq;
         double phi_eq;
-        EnvironmentAndFrames env;
         double d12;
         double d34;
         double d13;

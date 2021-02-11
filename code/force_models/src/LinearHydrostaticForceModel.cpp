@@ -57,8 +57,8 @@ LinearHydrostaticForceModel::Input LinearHydrostaticForceModel::parse(const std:
     return ret;
 }
 
-LinearHydrostaticForceModel::LinearHydrostaticForceModel(const Input& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-        ForceModel(model_name(), {}, body_name_, env_),
+LinearHydrostaticForceModel::LinearHydrostaticForceModel(const Input& input, const std::string& body_name_, const EnvironmentAndFrames& env) :
+        ForceModel(model_name(), {}, body_name_, env),
         K(),
         P1(body_name_, input.x1, input.y1, 0),
         P2(body_name_, input.x2, input.y2, 0),
@@ -67,7 +67,6 @@ LinearHydrostaticForceModel::LinearHydrostaticForceModel(const Input& input, con
         z_eq(input.z_eq),
         theta_eq(input.theta_eq),
         phi_eq(input.phi_eq),
-        env(env_),
         d12((P1-P2).norm()),
         d34((P3-P4).norm()),
         d13((P1-P3).norm()),
@@ -99,7 +98,7 @@ double LinearHydrostaticForceModel::compute_thetabar(const std::vector<double>& 
     return 0.5*(atan(z[1]-z[3])/d24 + atan(z[0]-z[2])/d13);
 }
 
-std::vector<double> LinearHydrostaticForceModel::get_zH(const double t) const
+std::vector<double> LinearHydrostaticForceModel::get_zH(const double t, const EnvironmentAndFrames& env) const
 {
     auto T = env.k->get("NED", P1.get_frame());
     T.swap();
@@ -123,7 +122,7 @@ std::vector<double> LinearHydrostaticForceModel::get_zH(const double t) const
 
 Wrench LinearHydrostaticForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>&) const
 {
-    const auto z = get_zH(t);
+    const auto z = get_zH(t, env);
     const double zbar = compute_zbar(z);
     const double phibar = compute_phibar(z);
     const double thetabar = compute_thetabar(z);
