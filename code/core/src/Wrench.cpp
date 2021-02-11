@@ -74,14 +74,9 @@ void Wrench::change_frame(const std::string& new_frame, const ssc::kinematics::K
 bool operator!=(const ssc::kinematics::Point& A, const ssc::kinematics::Point& B);
 bool operator!=(const ssc::kinematics::Point& A, const ssc::kinematics::Point& B)
 {
-    if(A.get_frame()==B.get_frame() && A.v.isApprox(B.v))
-    {
-        return false;
-    }
-    else
-    {
-        return true;
-    }
+    const bool same_frame = A.get_frame() == B.get_frame();
+    const bool coordinates_are_about_the_same = A.v.isApprox(B.v);
+    return not(same_frame && coordinates_are_about_the_same);
 }
 
 void Wrench::transport_to(const ssc::kinematics::Point& P, const ssc::kinematics::KinematicsPtr& k)
