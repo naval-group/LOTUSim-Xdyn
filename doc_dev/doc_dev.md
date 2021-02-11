@@ -761,9 +761,10 @@ Il faut ensuite décider du type d'effort :
 La documentation du modèle d'effort doit être mise dans le fichier Markdown
 `XDYN_ROOT/doc_user/modeles_efforts.md`.
 
-Ensuite, il y a plusieurs cas de figure : 
-- Le modèle a besoin de paramètres (auquel cas il faut définir un parseur) ou pas ;
-- Le modèle est commandé (auquel cas il doit préciser les commandes dont il a besoin), ou pas.
+Ensuite, il faut :
+
+- écrire un parseur (si le modèle a besoin de paramètres)
+- le cas échéant, définir ses commandes
 
 ### Disposition communes à tous les modèles d'efforts
 
@@ -808,11 +809,11 @@ l'environnement (`EnvironmentAndFrames`), des valeurs des commandes requises et 
 
 L'objet `EnvironmentAndFrames` qui sert à décrire l'environnement contient les différentes
 variables d'environnement définies dans le fichier YAML d'entrée, ainsi que les modèles de
-houle et de vent (si présents).
+houle et de vent (le cas échéant).
 
 #### Format de renvoi de l'effort calculé
 
-La méthode `get_force` doit renvoyer un objet de type `Wrench` qui décrit l'effort.
+La méthode `get_force` doit renvoyer un objet de type `Wrench` qui définit le torseur d'effort.
 Cet objet contient les informations suivantes :
 - Les 3 composantes de force
 - Les 3 composantes de moment
@@ -869,7 +870,7 @@ prendre la structure `Input` en premier paramètre :
 GMForceModel(const Input& input_data, const std::string body_name, const EnvironmentAndFrames& env);
 ~~~~~~~~~~~
 
-**Le type de renvoi de la fonction `parse` doit impérativement être le même que le type du premier 
+**Le type de retour de la fonction `parse` doit impérativement être le même que le type du premier 
 paramètre du constructeur !**
 
 ### Spécification des commandes (pour les modèles d'efforts commandés)
@@ -902,7 +903,7 @@ Si le modèle d'effort ne nécessite aucune commande, un vecteur vide (`{}`) doi
 constructeur de `ForceModel`.
 
 ### Intégration dans X-DYN
-Quelque soit les caractéristiques du modèle d'efforts, l'intégration dans X-DYN se
+Quelles que soient les caractéristiques du modèle d'efforts, l'intégration dans xdyn se
 fait de façon identique. Il faut ajouter une ligne à la fonction `get_builder`
 définie dans le fichier `simulator_api.cpp` dans le module `observers_and_api` :
 
