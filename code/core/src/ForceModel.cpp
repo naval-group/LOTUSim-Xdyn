@@ -71,7 +71,7 @@ ssc::kinematics::Wrench ForceModel::operator()(const BodyStates& states, const d
 
 ssc::kinematics::Wrench ForceModel::operator()(const BodyStates& states, const double t, const EnvironmentAndFrames& env)
 {
-    if(not(commands.empty()))
+    if (not(commands.empty()))
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "This force model needs commands (namely " << commands << ") but you didn't supply any to ForceModel::operator(). Please note there are two versions of ForceModel::operator(): one with a DataSource (which must contain the force commands) and another without. In this case you need the version with the DataSource.");
     }
@@ -100,7 +100,7 @@ double ForceModel::get_command(const std::string& command_name, ssc::data_source
 
 void ForceModel::can_find_internal_frame(const ssc::kinematics::KinematicsPtr& k) const
 {
-    if(has_internal_frame)
+    if (has_internal_frame)
     {
         bool reference_frame_exists = false;
         try
@@ -143,7 +143,7 @@ void ForceModel::feed(Observer& observer, ssc::kinematics::KinematicsPtr& k) con
     const Wrench tau_in_body_frame_at_G(latest_force_in_body_frame.get_point(), latest_force_in_body_frame.get_frame(), latest_force_in_body_frame.to_vector());
     const Wrench tau_in_ned_frame_at_G = tau_in_body_frame_at_G.change_frame("NED", k);
 
-    if(has_internal_frame)
+    if (has_internal_frame)
     {
         can_find_internal_frame(k);
         const Wrench tau_in_internal_frame_at_P = tau_in_body_frame_at_G.change_point_and_frame(ssc::kinematics::Point(name,0,0,0), name, k);

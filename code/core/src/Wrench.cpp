@@ -62,7 +62,7 @@ void Wrench::change_frame(const std::string& new_frame, const ssc::kinematics::R
 
 void Wrench::change_frame(const std::string& new_frame, const ssc::kinematics::KinematicsPtr& k)
 {
-    if(new_frame!=frame)
+    if (new_frame != frame)
     {
         const ssc::kinematics::RotationMatrix R = k->get(new_frame,frame).get_rot();
         change_frame(new_frame, R);
@@ -85,7 +85,7 @@ bool operator!=(const ssc::kinematics::Point& A, const ssc::kinematics::Point& B
 
 void Wrench::transport_to(const ssc::kinematics::Point& P, const ssc::kinematics::KinematicsPtr& k)
 {
-    if(P!=point)
+    if (P != point)
     {
         const auto BA = get_BA(P, k);
         torque = torque + BA.cross(force);
