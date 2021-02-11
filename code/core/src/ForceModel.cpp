@@ -73,7 +73,7 @@ ssc::kinematics::Wrench ForceModel::operator()(const BodyStates& states, const d
 {
     if(not(commands.empty()))
     {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "Invalid use of ForceModel.operator() with a controlled force: a DataSource must be provided.");
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "This force model needs commands (namely " << commands << ") but you didn't supply any to ForceModel::operator(). Please note there are two versions of ForceModel::operator(): one with a DataSource (which must contain the force commands) and another without. In this case you need the version with the DataSource.");
     }
     ssc::data_source::DataSource ds;
     return operator()(states, t, env, ds);
