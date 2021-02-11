@@ -53,14 +53,14 @@ ssc::kinematics::Vector6d Wrench::to_vector() const
     return Eigen::Map<ssc::kinematics::Vector6d>(v);
 }
 
-void Wrench::change_frame(const std::string new_frame, const ssc::kinematics::RotationMatrix& R)
+void Wrench::change_frame(const std::string& new_frame, const ssc::kinematics::RotationMatrix& R)
 {
     force = R * force;
     torque = R * torque;
     frame = new_frame;
 }
 
-void Wrench::change_frame(const std::string new_frame, const ssc::kinematics::KinematicsPtr k)
+void Wrench::change_frame(const std::string& new_frame, const ssc::kinematics::KinematicsPtr& k)
 {
     if(new_frame!=frame)
     {
@@ -83,7 +83,7 @@ bool operator!=(const ssc::kinematics::Point& A, const ssc::kinematics::Point& B
     }
 }
 
-void Wrench::transport_to(const ssc::kinematics::Point& P, const ssc::kinematics::KinematicsPtr k)
+void Wrench::transport_to(const ssc::kinematics::Point& P, const ssc::kinematics::KinematicsPtr& k)
 {
     if(P!=point)
     {
@@ -93,56 +93,56 @@ void Wrench::transport_to(const ssc::kinematics::Point& P, const ssc::kinematics
     }
 }
 
-void Wrench::change_point_and_frame(const ssc::kinematics::Point& P, const std::string new_frame, const ssc::kinematics::KinematicsPtr k)
+void Wrench::change_point_and_frame(const ssc::kinematics::Point& P, const std::string new_frame, const ssc::kinematics::KinematicsPtr& k)
 {
     transport_to(P, k);
     change_frame(new_frame, k);
 }
 
-Wrench Wrench::change_frame(const std::string new_frame, const ssc::kinematics::RotationMatrix& R) const
+Wrench Wrench::change_frame(const std::string& new_frame, const ssc::kinematics::RotationMatrix& R) const
 {
     Wrench ret(*this);
     ret.change_frame(new_frame, R);
     return ret;
 }
 
-Wrench Wrench::change_frame(const std::string new_frame, const ssc::kinematics::KinematicsPtr k) const
+Wrench Wrench::change_frame(const std::string& new_frame, const ssc::kinematics::KinematicsPtr& k) const
 {
     Wrench ret(*this);
     ret.change_frame(new_frame, k);
     return ret;
 }
 
-Wrench Wrench::transport_to(const ssc::kinematics::Point& P, const ssc::kinematics::KinematicsPtr k) const
+Wrench Wrench::transport_to(const ssc::kinematics::Point& P, const ssc::kinematics::KinematicsPtr& k) const
 {
     Wrench ret(*this);
     ret.transport_to(P, k);
     return ret;
 }
 
-Wrench Wrench::change_point_and_frame(const ssc::kinematics::Point& P, const std::string new_frame, const ssc::kinematics::KinematicsPtr k) const
+Wrench Wrench::change_point_and_frame(const ssc::kinematics::Point& P, const std::string new_frame, const ssc::kinematics::KinematicsPtr& k) const
 {
     Wrench ret(*this);
     ret.change_point_and_frame(P, new_frame, k);
     return ret;
 }
 
-void Wrench::add(const Wrench& other, const ssc::kinematics::KinematicsPtr k)
+void Wrench::add(const Wrench& other, const ssc::kinematics::KinematicsPtr& k)
 {
     Wrench other_wrench = other.change_point_and_frame(point, frame, k);
     force += other_wrench.force;
     torque += other_wrench.torque;
 }
 
-Wrench Wrench::add(const Wrench& other, const ssc::kinematics::KinematicsPtr k) const
+Wrench Wrench::add(const Wrench& other, const ssc::kinematics::KinematicsPtr& k) const
 {
     Wrench ret(*this);
     ret.add(other, k);
     return ret;
 }
 
-ssc::kinematics::Point operator*(const ssc::kinematics::Point& P, const ssc::kinematics::Transform T);
-ssc::kinematics::Point operator*(const ssc::kinematics::Point& P, const ssc::kinematics::Transform T)
+ssc::kinematics::Point operator*(const ssc::kinematics::Point& P, const ssc::kinematics::Transform& T);
+ssc::kinematics::Point operator*(const ssc::kinematics::Point& P, const ssc::kinematics::Transform& T)
 {
     if (P.get_frame() != T.get_from_frame())
     {
@@ -151,7 +151,7 @@ ssc::kinematics::Point operator*(const ssc::kinematics::Point& P, const ssc::kin
     return ssc::kinematics::Point(T.get_to_frame(), T.inverse().get_point().v + T.get_rot().inverse()*P.v);
 }
 
-Eigen::Vector3d Wrench::get_BA(const ssc::kinematics::Point& B, const ssc::kinematics::KinematicsPtr k) const
+Eigen::Vector3d Wrench::get_BA(const ssc::kinematics::Point& B, const ssc::kinematics::KinematicsPtr& k) const
 {
     Eigen::Vector3d B_coord;
     if(B.get_frame() == frame)

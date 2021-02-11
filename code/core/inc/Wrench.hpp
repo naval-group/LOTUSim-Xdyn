@@ -34,23 +34,23 @@ public:
 
     ssc::kinematics::Vector6d to_vector() const;
 
-    void change_frame(const std::string new_frame, const ssc::kinematics::RotationMatrix& R);
-    void change_frame(const std::string new_frame, const ssc::kinematics::KinematicsPtr k);
-    void transport_to(const ssc::kinematics::Point& P, const ssc::kinematics::KinematicsPtr k);
-    void change_point_and_frame(const ssc::kinematics::Point& P, const std::string new_frame, const ssc::kinematics::KinematicsPtr k);
+    void change_frame(const std::string& new_frame, const ssc::kinematics::RotationMatrix& R);
+    void change_frame(const std::string& new_frame, const ssc::kinematics::KinematicsPtr& k);
+    void transport_to(const ssc::kinematics::Point& P, const ssc::kinematics::KinematicsPtr& k);
+    void change_point_and_frame(const ssc::kinematics::Point& P, const std::string new_frame, const ssc::kinematics::KinematicsPtr& k);
 
-    Wrench change_frame(const std::string new_frame, const ssc::kinematics::RotationMatrix& R) const;
-    Wrench change_frame(const std::string new_frame, const ssc::kinematics::KinematicsPtr k) const;
-    Wrench transport_to(const ssc::kinematics::Point& P, const ssc::kinematics::KinematicsPtr k) const;
-    Wrench change_point_and_frame(const ssc::kinematics::Point& P, const std::string new_frame, const ssc::kinematics::KinematicsPtr k) const;
+    Wrench change_frame(const std::string& new_frame, const ssc::kinematics::RotationMatrix& R) const;
+    Wrench change_frame(const std::string& new_frame, const ssc::kinematics::KinematicsPtr& k) const;
+    Wrench transport_to(const ssc::kinematics::Point& P, const ssc::kinematics::KinematicsPtr& k) const;
+    Wrench change_point_and_frame(const ssc::kinematics::Point& P, const std::string new_frame, const ssc::kinematics::KinematicsPtr& k) const;
 
-    void add(const Wrench& other, const ssc::kinematics::KinematicsPtr k);
-    Wrench add(const Wrench& other, const ssc::kinematics::KinematicsPtr k) const;
+    void add(const Wrench& other, const ssc::kinematics::KinematicsPtr& k);
+    Wrench add(const Wrench& other, const ssc::kinematics::KinematicsPtr& k) const;
 
 private:
     Wrench(); // Deactivated
 
-    Eigen::Vector3d get_BA(const ssc::kinematics::Point& B, const ssc::kinematics::KinematicsPtr k) const;
+    Eigen::Vector3d get_BA(const ssc::kinematics::Point& B, const ssc::kinematics::KinematicsPtr& k) const;
 
     ssc::kinematics::Point point;
     std::string frame;
