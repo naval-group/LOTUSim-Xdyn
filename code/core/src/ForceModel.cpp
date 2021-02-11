@@ -129,7 +129,7 @@ void ForceModel::can_find_internal_frame(const ssc::kinematics::KinematicsPtr& k
         }
         catch (const ssc::kinematics::KinematicsException& e)
         {
-            THROW(__PRETTY_FUNCTION__, InternalErrorException, "When computing force model '" << name << "' we were unable to find frame '" << name << "' used to express the reference frame in which the forces are expressed. If the force model uses an internal frame, it must be provided in the ForceModel constructor.");
+            THROW(__PRETTY_FUNCTION__, InternalErrorException, "When computing force model '" << name << "' we were unable to find frame '" << name << "' in which the forces are expressed. If the force model uses an internal frame, it must be provided to the ForceModel constructor.");
         }
     }
 }
