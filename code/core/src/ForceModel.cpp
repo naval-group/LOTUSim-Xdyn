@@ -18,7 +18,7 @@
 #include <cmath>
 #define PI M_PI
 
-ForceModel::ForceModel(const std::string& name_, const std::vector<std::string>& commands_, const YamlPosition& internal_frame, const std::string& body_name_, const EnvironmentAndFrames& env_) :
+ForceModel::ForceModel(const std::string& name_, const std::vector<std::string>& commands_, const YamlPosition& internal_frame, const std::string& body_name_, const EnvironmentAndFrames& env) :
     commands(commands_),
     name(name_),
     body_name(body_name_),
@@ -26,7 +26,7 @@ ForceModel::ForceModel(const std::string& name_, const std::vector<std::string>&
     known_reference_frame(internal_frame.frame),
     latest_force_in_body_frame(ssc::kinematics::Point(body_name))
 {
-    env_.k->add(make_transform(internal_frame, name, env_.rot));
+    env.k->add(make_transform(internal_frame, name, env.rot));
 }
 
 ForceModel::ForceModel(const std::string& name_, const std::vector<std::string>& commands_, const std::string& body_name_, const EnvironmentAndFrames&) :

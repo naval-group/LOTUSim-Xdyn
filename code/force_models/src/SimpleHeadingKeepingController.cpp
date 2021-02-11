@@ -35,8 +35,8 @@ SimpleHeadingKeepingController::Yaml SimpleHeadingKeepingController::parse(const
     return ret;
 }
 
-SimpleHeadingKeepingController::SimpleHeadingKeepingController(const Yaml& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-        ForceModel(input.name, {"psi_co"}, YamlPosition(YamlCoordinates(),YamlAngle(), body_name_), body_name_, env_),
+SimpleHeadingKeepingController::SimpleHeadingKeepingController(const Yaml& input, const std::string& body_name_, const EnvironmentAndFrames& env) :
+        ForceModel(input.name, {"psi_co"}, YamlPosition(YamlCoordinates(),YamlAngle(), body_name_), body_name_, env),
         ksi(input.ksi),
         omega0(2*PI/input.Tp),
         rotation_convention("angle", {"z","y'","x''"})

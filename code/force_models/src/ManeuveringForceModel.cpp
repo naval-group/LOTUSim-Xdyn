@@ -67,19 +67,19 @@ ManeuveringForceModel::Yaml ManeuveringForceModel::parse(const std::string& yaml
     return ret;
 }
 
-ManeuveringForceModel::ManeuveringForceModel(const Yaml& data, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-        ForceModel(data.name, data.commands, data.frame_of_reference, body_name_, env_),
+ManeuveringForceModel::ManeuveringForceModel(const Yaml& data, const std::string& body_name_, const EnvironmentAndFrames& env) :
+        ForceModel(data.name, data.commands, data.frame_of_reference, body_name_, env),
         m(),
         ds(new ssc::data_source::DataSource())
 {
-    env_.k->add(make_transform(data.frame_of_reference, data.name, env_.rot));
+    env.k->add(make_transform(data.frame_of_reference, data.name, env.rot));
     for (auto var2expr:data.var2expr)
     {
-        m[var2expr.first] = maneuvering::compile(var2expr.second, env_.rot);
+        m[var2expr.first] = maneuvering::compile(var2expr.second, env.rot);
     }
-    ds->set("g", env_.g);
-    ds->set("nu", env_.nu);
-    ds->set("rho", env_.rho);
+    ds->set("g", env.g);
+    ds->set("nu", env.nu);
+    ds->set("rho", env.rho);
     maneuvering::build_ds(*ds, m);
 }
 

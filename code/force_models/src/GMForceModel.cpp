@@ -24,11 +24,11 @@ GMForceModel::Yaml::Yaml() : name_of_hydrostatic_force_model(), roll_step(0)
 {
 }
 
-GMForceModel::GMForceModel(const Yaml& data, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-        ImmersedSurfaceForceModel(model_name(), body_name_, env_)
+GMForceModel::GMForceModel(const Yaml& data, const std::string& body_name_, const EnvironmentAndFrames& env) :
+        ImmersedSurfaceForceModel(model_name(), body_name_, env)
 , underlying_hs_force_model()
 , dphi(data.roll_step)
-, env(env_)
+, env(env)
 , GM(new double(0))
 , GZ(new double(0))
 {

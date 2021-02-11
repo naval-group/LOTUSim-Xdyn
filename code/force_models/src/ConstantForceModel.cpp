@@ -51,8 +51,8 @@ ConstantForceModel::Input ConstantForceModel::parse(const std::string& yaml)
     return ret;
 }
 
-ConstantForceModel::ConstantForceModel(const ConstantForceModel::Input& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-        ForceModel(model_name(), {}, YamlPosition(YamlCoordinates(input.x, input.y, input.z),YamlAngle(),input.frame), body_name_, env_),
+ConstantForceModel::ConstantForceModel(const ConstantForceModel::Input& input, const std::string& body_name_, const EnvironmentAndFrames& env) :
+        ForceModel(model_name(), {}, YamlPosition(YamlCoordinates(input.x, input.y, input.z),YamlAngle(),input.frame), body_name_, env),
         force(),
         torque()
 {

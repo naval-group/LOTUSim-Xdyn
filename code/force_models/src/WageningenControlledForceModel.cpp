@@ -44,8 +44,8 @@ double WageningenControlledForceModel::get_Kq(const std::map<std::string,double>
     return Kq(Z, AE_A0, P_D, J);
 }
 
-WageningenControlledForceModel::WageningenControlledForceModel(const Yaml& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-            AbstractWageningen(input, body_name_, env_),
+WageningenControlledForceModel::WageningenControlledForceModel(const Yaml& input, const std::string& body_name_, const EnvironmentAndFrames& env) :
+            AbstractWageningen(input, body_name_, env),
             Z(input.number_of_blades),
             AE_A0(input.blade_area_ratio),
             ct{0.00880496,-0.204554,0.166351,0.158114,-0.147581,-0.481497,0.415437,0.0144043,-0.0530054,0.0143481,0.0606826,-0.0125894,0.0109689,-0.133698,0.00638407,-0.00132718,0.168496,-0.0507214,0.0854559,-0.0504475,0.010465,-0.00648272,-0.00841728,0.0168424,-0.00102296,-0.0317791,0.018604,-0.00410798,-0.000606848,-0.0049819,0.0025983,-0.000560528,-0.00163652,-0.000328787,0.000116502,0.000690904,0.00421749,0.0000565229,-0.00146564},

@@ -59,8 +59,8 @@ KtKqForceModel::Yaml KtKqForceModel::parse(const std::string& yaml)
     return ret;
 }
 
-KtKqForceModel::KtKqForceModel(const Yaml& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-            AbstractWageningen(input, body_name_, env_), pimpl(new Impl(input.J, input.Kt, input.Kq))
+KtKqForceModel::KtKqForceModel(const Yaml& input, const std::string& body_name_, const EnvironmentAndFrames& env) :
+            AbstractWageningen(input, body_name_, env), pimpl(new Impl(input.J, input.Kt, input.Kq))
 {
 }
 

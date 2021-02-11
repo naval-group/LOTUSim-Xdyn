@@ -54,8 +54,8 @@ double AbstractWageningen::advance_ratio(const BodyStates& states, const std::ma
     return (1-w)*Va/n/D;
 }
 
-AbstractWageningen::AbstractWageningen(const Yaml& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-            ForceModel(input.name,{"rpm"},input.position_of_propeller_frame, body_name_, env_),
+AbstractWageningen::AbstractWageningen(const Yaml& input, const std::string& body_name_, const EnvironmentAndFrames& env) :
+            ForceModel(input.name,{"rpm"},input.position_of_propeller_frame, body_name_, env),
             w(input.wake_coefficient),
             eta_R(input.relative_rotative_efficiency),
             t(input.thrust_deduction_factor),

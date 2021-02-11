@@ -74,20 +74,20 @@ class DiffractionForceModel::Impl
 {
     public:
 
-        Impl(const YamlDiffraction& data, const EnvironmentAndFrames& env_, const HDBParser& hdb, const std::string& body_name)
+        Impl(const YamlDiffraction& data, const EnvironmentAndFrames& env, const HDBParser& hdb, const std::string& body_name)
           : initialized(false),
         H0(data.calculation_point.x,data.calculation_point.y,data.calculation_point.z),
         rao(DiffractionInterpolator(hdb,std::vector<double>(),std::vector<double>(),data.mirror)),
         periods_for_each_direction(),
         psis()
         {
-            if (env_.w.use_count()>0)
+            if (env.w.use_count()>0)
             {
                 // For each directional spectrum (i.e. for each direction), the wave angular frequencies the spectrum was discretized at.
                 // periods[direction][omega]
                 try
                 {
-                    periods_for_each_direction = convert_to_periods(env_.w->get_wave_angular_frequency_for_each_model());
+                    periods_for_each_direction = convert_to_periods(env.w->get_wave_angular_frequency_for_each_model());
                 }
                 catch (const ssc::exception_handling::Exception& e)
                 {
@@ -100,7 +100,7 @@ class DiffractionForceModel::Impl
                 }
                 try
                 {
-                    psis = env_.w->get_wave_directions_for_each_model();
+                    psis = env.w->get_wave_directions_for_each_model();
                 }
                 catch (const ssc::exception_handling::Exception& e)
                 {
