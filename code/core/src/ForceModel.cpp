@@ -118,7 +118,7 @@ void ForceModel::can_find_internal_frame(const ssc::kinematics::KinematicsPtr& k
         }
         if (not(reference_frame_exists))
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "When computing force model '" << name << "' we were unable to find frame '" << known_reference_frame << "' used to express the reference frame in which the forces are expressed. Use 'NED' or '" << body_name << "' in the 'frame' section perhaps?");
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "When computing force model '" << name << "' we were unable to find frame '" << known_reference_frame << "' used as base frame of the frame in which the forces are expressed. Use 'NED' or '" << body_name << "' in the 'frame' section perhaps?");
         }
         try
         {
