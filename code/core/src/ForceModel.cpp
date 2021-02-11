@@ -39,10 +39,6 @@ ForceModel::ForceModel(const std::string& name_, const std::vector<std::string>&
 {
 }
 
-ForceModel::~ForceModel()
-{
-}
-
 std::string ForceModel::get_name() const
 {
     return name;
