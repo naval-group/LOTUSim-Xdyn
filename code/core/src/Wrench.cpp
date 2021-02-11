@@ -49,8 +49,9 @@ Eigen::Vector3d Wrench::get_torque() const
 
 ssc::kinematics::Vector6d Wrench::to_vector() const
 {
-    double v[6] = {X(),Y(),Z(),K(),M(),N()};
-    return Eigen::Map<ssc::kinematics::Vector6d>(v);
+    ssc::kinematics::Vector6d ret;
+    ret << force, torque;
+    return ret;
 }
 
 void Wrench::change_frame(const std::string& new_frame, const ssc::kinematics::RotationMatrix& R)
