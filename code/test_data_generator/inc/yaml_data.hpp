@@ -70,6 +70,7 @@ namespace test_data
     std::string dummy_history();
     std::string complete_yaml_message_from_gui();
     std::string JSON_message_with_requested_output();
+    std::string JSON_server_request_GM_cube_with_output();
     std::string complete_yaml_message_for_falling_ball();
     std::string bug_2963_hs_fast();
     std::string bug_2963_hs_exact();

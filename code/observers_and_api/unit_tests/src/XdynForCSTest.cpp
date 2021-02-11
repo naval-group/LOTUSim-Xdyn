@@ -71,7 +71,7 @@ TEST_F(XdynForCSTest, can_get_extra_observations)
     const std::string yaml_model = test_data::GM_cube();
     const std::string solver = "euler";
     XdynForCS sim_server(yaml_model, unit_cube(), solver, dt);
-    const std::vector<YamlState> outputs = sim_server.play_one_step(test_data::complete_yaml_message_for_falling_ball());
+    const std::vector<YamlState> outputs = sim_server.play_one_step(test_data::JSON_server_request_GM_cube_with_output());
     ASSERT_EQ(11, outputs.size());
     ASSERT_FALSE(outputs.front().extra_observations. empty());
     for (const auto output:outputs)

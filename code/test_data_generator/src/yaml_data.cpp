@@ -4352,6 +4352,35 @@ std::string test_data::JSON_message_with_requested_output()
     return ss.str();
 }
 
+std::string test_data::JSON_server_request_GM_cube_with_output()
+{
+    std::stringstream ss;
+    ss << "{\"Dt\": 10.0, " << std::endl
+       << "\"states\":" << std::endl
+       << "[ {\"t\": 1.87, "
+       << "\"x\": 4.0,"
+       << "\"y\": 8.0, "
+       << "\"z\": 12.0, "
+       << "\"u\": 1.0, "
+       << "\"v\": 0.0, "
+       << "\"w\": 0.0, "
+       << "\"p\": 0.0, "
+       << "\"q\": 0.0, "
+       << "\"r\": 0.0, "
+       << "\"qr\": 1.0, "
+       << "\"qi\": 0.0, "
+       << "\"qj\": 0.0, "
+       << "\"qk\": 0.0}]" << std::endl
+       <<",\"commands\": null," << std::endl
+       <<"\"requested_output\":" << std::endl
+       <<"  [\"GM(cube)\","
+       <<"  \"GZ(cube)\"]}";
+
+    return ss.str();
+}
+
+
+
 std::string test_data::simserver_message_without_Dt()
 {
     std::stringstream ss;
