@@ -16,7 +16,7 @@ WrenchTest::~WrenchTest()
 {
 }
 
-TEST_F(WrenchTest, CanGetMembers)
+TEST_F(WrenchTest, can_get_members)
 {
     const std::string frame("expression_frame");
     const ssc::kinematics::Point application_point("point_frame", a.random<double>(), a.random<double>(), a.random<double>());
@@ -29,7 +29,7 @@ TEST_F(WrenchTest, CanGetMembers)
     ASSERT_TRUE(force.isApprox(wrench.to_vector()));
 }
 
-TEST_F(WrenchTest, CanChangeFrame)
+TEST_F(WrenchTest, can_change_frame)
 {
     const ssc::kinematics::KinematicsPtr k(new ssc::kinematics::Kinematics);
     const double psi = 30 * M_PI / 180;
@@ -58,7 +58,7 @@ TEST_F(WrenchTest, CanChangeFrame)
     ASSERT_DOUBLE_EQ(Rtorque(2), wrench.N());
 }
 
-TEST_F(WrenchTest, CanChangePointInSameFrame)
+TEST_F(WrenchTest, can_change_point_in_same_frame)
 {
     const ssc::kinematics::KinematicsPtr k(new ssc::kinematics::Kinematics);
     const ssc::kinematics::Point A("frame1", 1, 2, 3);
@@ -76,7 +76,7 @@ TEST_F(WrenchTest, CanChangePointInSameFrame)
     ASSERT_TRUE((torque + (A.v - B.v).cross(force)).isApprox(wrench.get_torque()));
 }
 
-TEST_F(WrenchTest, CanChangePointInDifferentFrame)
+TEST_F(WrenchTest, can_change_point_in_different_frame)
 {
     const ssc::kinematics::KinematicsPtr k(new ssc::kinematics::Kinematics);
     const double psi = 30 * M_PI / 180;
@@ -102,7 +102,7 @@ TEST_F(WrenchTest, CanChangePointInDifferentFrame)
     ASSERT_TRUE((torque + BA_2.cross(force)).isApprox(wrench.get_torque()));
 }
 
-TEST_F(WrenchTest, OperatorAdditionWorks)
+TEST_F(WrenchTest, addition_operator_works)
 {
     const ssc::kinematics::Point A("frame1", 1, 2, 3);
     ssc::kinematics::Vector6d force1;
@@ -118,7 +118,7 @@ TEST_F(WrenchTest, OperatorAdditionWorks)
     ASSERT_TRUE((force1+force2).isApprox(wrench3.to_vector()));
 }
 
-TEST_F(WrenchTest, OperatorAdditionThrowsIfDifferentPointOrFrame)
+TEST_F(WrenchTest, addition_operator_throws_if_different_point_or_frame)
 {
     const ssc::kinematics::Point A("frame1", 1, 2, 3);
     ssc::kinematics::Vector6d force1;
@@ -139,7 +139,7 @@ TEST_F(WrenchTest, OperatorAdditionThrowsIfDifferentPointOrFrame)
     ASSERT_THROW(wrench1 + wrench3, InternalErrorException);
 }
 
-TEST_F(WrenchTest, CanAddOtherWrench)
+TEST_F(WrenchTest, can_add_wrenches_in_different_frames_and_point_using_method_add_instead_of_plus_operator)
 {
     const ssc::kinematics::KinematicsPtr k(new ssc::kinematics::Kinematics);
     const double psi = 30 * M_PI / 180;
