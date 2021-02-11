@@ -201,12 +201,12 @@ TEST_F(HoltropMennenForceModelTest, numerical_example_1982)
     // Constant intermediate values
     EXPECT_NEAR(1.156,derived_data.hull_form_coeff,0.05); // Large margin because the formulae were revised in 1984
     // Resulting forces
-    EXPECT_NEAR(869630,force_model.Rf(states),200000); // Large margin because the formulae were revised in 1984
-    EXPECT_NEAR(8830,force_model.Rapp(states),10);
-    EXPECT_NEAR(557110,force_model.Rw(states),5000); // Large margin because the formulae were revised in 1984
-    EXPECT_NEAR(49,force_model.Rb(states),1);
-    EXPECT_NEAR(0.,force_model.Rtr(states),1);
-    EXPECT_NEAR(220572,force_model.Ra(states),1); // Note: there seems to be a rounding error in the original paper (Ra = 221980 N)
+    EXPECT_NEAR(869630,force_model.Rf(states, env),200000); // Large margin because the formulae were revised in 1984
+    EXPECT_NEAR(8830,force_model.Rapp(states, env),10);
+    EXPECT_NEAR(557110,force_model.Rw(states, env),5000); // Large margin because the formulae were revised in 1984
+    EXPECT_NEAR(49,force_model.Rb(states, env),1);
+    EXPECT_NEAR(0.,force_model.Rtr(states, env),1);
+    EXPECT_NEAR(220572,force_model.Ra(states, env),1); // Note: there seems to be a rounding error in the original paper (Ra = 221980 N)
     EXPECT_NEAR(1793260,-force_model(states, 0, env).X(),200000); // large margin to account for all the margins
 }
 
@@ -240,9 +240,9 @@ TEST_F(HoltropMennenForceModelTest, numerical_example_1984)
     for(size_t i = 0 ; i<speed_kts.size() ; i++)
     {
         states = get_steady_forward_speed_states(speed_kts.at(i) * 1852/3600, "body");
-        EXPECT_NEAR(force_model.Rw(states),Rw.at(i),1000);
-        EXPECT_NEAR(force_model.Rapp(states),Rapp.at(i),1000);
-        EXPECT_NEAR(force_model.Rtr(states),Rtr.at(i),1000);
+        EXPECT_NEAR(force_model.Rw(states, env),Rw.at(i),1000);
+        EXPECT_NEAR(force_model.Rapp(states, env),Rapp.at(i),1000);
+        EXPECT_NEAR(force_model.Rtr(states, env),Rtr.at(i),1000);
         EXPECT_NEAR(-force_model(states, 0, env).X(),R.at(i),R.at(i)/100);
     }
 }
