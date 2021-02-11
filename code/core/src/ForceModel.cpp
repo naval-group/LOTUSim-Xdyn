@@ -75,7 +75,8 @@ ssc::kinematics::Wrench ForceModel::operator()(const BodyStates& states, const d
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "This force model needs commands (namely " << commands << ") but you didn't supply any to ForceModel::operator(). Please note there are two versions of ForceModel::operator(): one with a DataSource (which must contain the force commands) and another without. In this case you need the version with the DataSource.");
     }
-    return operator()(states, t, env, ssc::data_source::DataSource());
+    ssc::data_source::DataSource ds;
+    return operator()(states, t, env, ds);
 }
 
 double ForceModel::get_command(const std::string& command_name, ssc::data_source::DataSource& command_listener, const double t) const
