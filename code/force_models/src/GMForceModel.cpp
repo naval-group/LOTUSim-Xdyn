@@ -104,9 +104,9 @@ double GMForceModel::get_gz_for_shifted_states(const BodyStates& states, const d
     BodyWithSurfaceForces body_for_gm(new_states, 0, BlockedDOF(""));
     body_for_gm.reset_history();
     body_for_gm.update(env, new_states.get_current_state_values(0), t);
-    const auto ret = underlying_hs_force_model->get_force(body_for_gm.get_states(), t, env, {});
-    const auto hydrostatic_force_in_NED = ret.change_point_and_frame(ssc::kinematics::Point("NED",0,0,0),"NED",env.k);
-    return calculate_gz(env.k->get("NED", body_name), ssc::kinematics::Wrench(hydrostatic_force_in_NED.get_point(), hydrostatic_force_in_NED.to_vector()));
+    const auto hs_force = underlying_hs_force_model->get_force(body_for_gm.get_states(), t, env, {});
+    const auto hs_force_in_NED = hs_force.change_point_and_frame(ssc::kinematics::Point("NED",0,0,0),"NED",env.k);
+    return calculate_gz(env.k->get("NED", body_name), ssc::kinematics::Wrench(hs_force_in_NED.get_point(), hs_force_in_NED.to_vector()));
 }
 
 Wrench GMForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
