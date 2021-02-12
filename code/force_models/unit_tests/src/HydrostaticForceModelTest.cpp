@@ -77,7 +77,7 @@ TEST_F(HydrostaticForceModelTest, example)
     ASSERT_EQ("non-linear hydrostatic (fast)",F.model_name());
     const double t = a.random<double>();
     body->update_intersection_with_free_surface(env, t);
-    const ssc::kinematics::Wrench Fhs = F(body->get_states(), t);
+    const ssc::kinematics::Wrench Fhs = F(body->get_states(), t, env);
 //! [HydrostaticModuleTest example]
 //! [HydrostaticModuleTest expected output]
     const double dz = 2./3;
@@ -147,7 +147,7 @@ TEST_F(HydrostaticForceModelTest, DISABLED_oriented_fully_immerged_rectangle)
     ASSERT_DOUBLE_EQ(0.0, states.mesh_to_body(2,1));
 
     FastHydrostaticForceModel F(BODY, env);
-    const ssc::kinematics::Wrench Fhs = F(states,a.random<double>());
+    const ssc::kinematics::Wrench Fhs = F(states, a.random<double>(), env);
 
     ASSERT_EQ(3,(size_t)states.mesh->nodes.rows());
     ASSERT_EQ(4,(size_t)states.mesh->nodes.cols());
@@ -219,7 +219,7 @@ TEST_F(HydrostaticForceModelTest, potential_energy_half_immersed_cube_fast)
     for (size_t i = 0 ; i < 4 ; ++i) dz.push_back(-0.5);
     FastHydrostaticForceModel F(BODY, env);
     states.intersector->update_intersection_with_free_surface(dz,dz);
-    const double Ep = F.potential_energy(states, x);
+    const double Ep = F.potential_energy(states, x, env);
     ASSERT_DOUBLE_EQ(-1024*0.5*9.81*0.25, Ep);
 }
 
@@ -243,6 +243,6 @@ TEST_F(HydrostaticForceModelTest, potential_energy_half_immersed_cube_exact)
     states.intersector->update_intersection_with_free_surface(dz,dz);
 
     ExactHydrostaticForceModel F(BODY, env);
-    const double Ep = F.potential_energy(states, x);
+    const double Ep = F.potential_energy(states, x, env);
     ASSERT_DOUBLE_EQ(-1024*0.5*9.81*0.25, Ep);
 }

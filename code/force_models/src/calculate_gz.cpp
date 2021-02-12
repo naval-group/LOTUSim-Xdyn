@@ -20,7 +20,3 @@ double calculate_gz(const ssc::kinematics::Transform& body2ned,
     return (cos_psi_cos_theta*mx + sin_psi_cos_theta*my)/fz/Xbody_projected_in_NED_frame.norm();
 }
 
-double calculate_gz(const ForceModel& F, const EnvironmentAndFrames& env)
-{
-    return calculate_gz(env.k->get("NED", F.get_body_name()), F.get_force_in_ned_frame());
-}

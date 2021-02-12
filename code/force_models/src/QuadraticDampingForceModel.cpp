@@ -15,7 +15,8 @@
 
 std::string QuadraticDampingForceModel::model_name() {return "quadratic damping";}
 
-QuadraticDampingForceModel::QuadraticDampingForceModel(const QuadraticDampingForceModel::Input& D_, const std::string& body_name_, const EnvironmentAndFrames&) : DampingForceModel("quadratic damping", body_name_, D_)
+QuadraticDampingForceModel::QuadraticDampingForceModel(const QuadraticDampingForceModel::Input& D_, const std::string& body_name_, const EnvironmentAndFrames& env) :
+        DampingForceModel("quadratic damping", body_name_, env, D_)
 {
 }
 

@@ -24,11 +24,11 @@ GMForceModel::Yaml::Yaml() : name_of_hydrostatic_force_model(), roll_step(0)
 {
 }
 
-GMForceModel::GMForceModel(const Yaml& data, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-        ImmersedSurfaceForceModel(model_name(), body_name_, env_)
+GMForceModel::GMForceModel(const Yaml& data, const std::string& body_name_, const EnvironmentAndFrames& env) :
+        ImmersedSurfaceForceModel(model_name(), body_name_, env)
 , underlying_hs_force_model()
 , dphi(data.roll_step)
-, env(env_)
+, env(env)
 , GM(new double(0))
 , GZ(new double(0))
 {
@@ -98,22 +98,23 @@ BodyStates GMForceModel::get_shifted_states(const BodyStates& states,
     return new_states;
 }
 
-double GMForceModel::get_gz_for_shifted_states(const BodyStates& states, const double t) const
+double GMForceModel::get_gz_for_shifted_states(const BodyStates& states, const double t, const EnvironmentAndFrames& env) const
 {
     BodyStates new_states = get_shifted_states(states, t);
     BodyWithSurfaceForces body_for_gm(new_states, 0, BlockedDOF(""));
     body_for_gm.reset_history();
     body_for_gm.update(env, new_states.get_current_state_values(0), t);
-    underlying_hs_force_model->update(body_for_gm.get_states(), t);
-    return calculate_gz(*underlying_hs_force_model, env);
+    const auto hs_force = underlying_hs_force_model->get_force(body_for_gm.get_states(), t, env, {});
+    const auto hs_force_in_NED = hs_force.change_point_and_frame(ssc::kinematics::Point("NED",0,0,0),"NED",env.k);
+    return calculate_gz(env.k->get("NED", body_name), ssc::kinematics::Wrench(hs_force_in_NED.get_point(), hs_force_in_NED.to_vector()));
 }
 
-ssc::kinematics::Wrench GMForceModel::operator()(const BodyStates& states, const double t) const
+Wrench GMForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
 {
-    underlying_hs_force_model->update(states, t);
-    const auto ret = underlying_hs_force_model->get_force_in_body_frame();
-    const double gz1 = calculate_gz(*underlying_hs_force_model, env);
-    const double gz2 = get_gz_for_shifted_states(states, t);
+    const auto ret = underlying_hs_force_model->get_force(states, t, env, {});
+    const auto hydrostatic_force_in_NED = ret.change_point_and_frame(ssc::kinematics::Point("NED",0,0,0),"NED",env.k);
+    const double gz1 = calculate_gz(env.k->get("NED", body_name), ssc::kinematics::Wrench(hydrostatic_force_in_NED.get_point(), hydrostatic_force_in_NED.to_vector()));
+    const double gz2 = get_gz_for_shifted_states(states, t, env);
     *GM = (gz1-gz2)/dphi;
     *GZ = (gz1+gz2)/2;
     return ret;

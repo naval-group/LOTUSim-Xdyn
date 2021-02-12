@@ -85,21 +85,21 @@ EnvironmentAndFrames get_env()
     return env;
 }
 
-void test(const ForceModel& F, const EnvironmentAndFrames& env, const size_t n);
-void test(const ForceModel& F, const EnvironmentAndFrames& env, size_t n)
+void test(ForceModel& F, const EnvironmentAndFrames& env, const size_t n);
+void test(ForceModel& F, const EnvironmentAndFrames& env, const size_t n)
 {
     BodyPtr body = get_body(BODY, test_ship());
     const double t = 0;
     body->update_intersection_with_free_surface(env, t);
-    ssc::kinematics::Wrench Fhs;
-    for (size_t i = 0 ; i < n ; ++i) F(body->get_states(), t);
+    for (size_t i = 0 ; i < n ; ++i) F(body->get_states(), t, env);
 }
 
 int main(int argc, char* argv[])
 {
     const size_t n = argc>1 ? (size_t)atoi(argv[1]) : N;
     auto env = get_env();
-    test(FroudeKrylovForceModel(BODY, env), env, n);
+    auto F = FroudeKrylovForceModel(BODY, env);
+    test(F, env, n);
     //test(FastHydrostaticForceModel(env), env, N);
     google::protobuf::ShutdownProtobufLibrary();
     return 0;

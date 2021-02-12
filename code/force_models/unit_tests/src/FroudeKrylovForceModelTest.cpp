@@ -93,7 +93,7 @@ TEST_F(FroudeKrylovForceModelTest, example)
     ASSERT_EQ("non-linear Froude-Krylov", F.model_name());
     const double t = 0;
     body->update_intersection_with_free_surface(env, t);
-    const ssc::kinematics::Wrench Ffk = F(body->get_states(), t);
+    const ssc::kinematics::Wrench Ffk = F(body->get_states(), t, env);
 //! [FroudeKrylovForceModelTest example]
 //! [FroudeKrylovForceModelTest expected output]
     ASSERT_DOUBLE_EQ(-11056.734651002685, Ffk.X());
@@ -175,7 +175,7 @@ TEST_F(FroudeKrylovForceModelTest, validation_against_sos_stab)
 
     FroudeKrylovForceModel F(BODY, env);
     body->update_intersection_with_free_surface(env, t);
-    const ssc::kinematics::Wrench Ffk = F(states, t);
+    const ssc::kinematics::Wrench Ffk = F(states, t, env);
     ASSERT_NEAR(-0.56219471494913797, Ffk.X(), EPS);
     ASSERT_NEAR(0, Ffk.Y(), EPS);
     ASSERT_NEAR(-0.27603603957852307, Ffk.Z(), EPS);

@@ -92,7 +92,7 @@ HoltropMennenForceModel::Input get_Holtrop_1984_input()
     return input;
 }
 
-BodyStates get_steady_forward_speed_states(double u = 0.)
+BodyStates get_steady_forward_speed_states(double u = 0., const std::string& body_name = "body")
 {
     BodyStates states;
     states.x.record(0, 0);
@@ -114,6 +114,8 @@ BodyStates get_steady_forward_speed_states(double u = 0.)
     states.qi.record(0, std::get<1>(angle));
     states.qj.record(0, std::get<2>(angle));
     states.qk.record(0, std::get<3>(angle));
+    states.G = ssc::kinematics::Point(body_name);
+    states.hydrodynamic_forces_calculation_point = ssc::kinematics::Point(body_name);
     return states;
 }
 
@@ -157,8 +159,8 @@ TEST_F(HoltropMennenForceModelTest, no_resistance_at_zero_speed)
 {
     const auto input = get_Holtrop_Mennen_1982_input();
     auto force_model = HoltropMennenForceModel(input, "body", env);
-    auto states = get_steady_forward_speed_states(0);
-    ASSERT_DOUBLE_EQ(0,force_model(states, 0).X());
+    auto states = get_steady_forward_speed_states(0, "body");
+    ASSERT_DOUBLE_EQ(0, force_model(states, 0, env).X());
 }
 
 TEST_F(HoltropMennenForceModelTest, numerical_example_1982)
@@ -195,17 +197,17 @@ TEST_F(HoltropMennenForceModelTest, numerical_example_1982)
     EXPECT_NEAR(1.11,derived_data.c14,0.0001);
 
     auto force_model = HoltropMennenForceModel(input, "body", env);
-    BodyStates states = get_steady_forward_speed_states(25. * 1852./3600.);
+    BodyStates states = get_steady_forward_speed_states(25. * 1852./3600., "body");
     // Constant intermediate values
     EXPECT_NEAR(1.156,derived_data.hull_form_coeff,0.05); // Large margin because the formulae were revised in 1984
     // Resulting forces
-    EXPECT_NEAR(869630,force_model.Rf(states),200000); // Large margin because the formulae were revised in 1984
-    EXPECT_NEAR(8830,force_model.Rapp(states),10);
-    EXPECT_NEAR(557110,force_model.Rw(states),5000); // Large margin because the formulae were revised in 1984
-    EXPECT_NEAR(49,force_model.Rb(states),1);
-    EXPECT_NEAR(0.,force_model.Rtr(states),1);
-    EXPECT_NEAR(220572,force_model.Ra(states),1); // Note: there seems to be a rounding error in the original paper (Ra = 221980 N)
-    EXPECT_NEAR(1793260,-force_model(states,0).X(),200000); // large margin to account for all the margins
+    EXPECT_NEAR(869630,force_model.Rf(states, env),200000); // Large margin because the formulae were revised in 1984
+    EXPECT_NEAR(8830,force_model.Rapp(states, env),10);
+    EXPECT_NEAR(557110,force_model.Rw(states, env),5000); // Large margin because the formulae were revised in 1984
+    EXPECT_NEAR(49,force_model.Rb(states, env),1);
+    EXPECT_NEAR(0.,force_model.Rtr(states, env),1);
+    EXPECT_NEAR(220572,force_model.Ra(states, env),1); // Note: there seems to be a rounding error in the original paper (Ra = 221980 N)
+    EXPECT_NEAR(1793260,-force_model(states, 0, env).X(),200000); // large margin to account for all the margins
 }
 
 TEST_F(HoltropMennenForceModelTest, numerical_example_1984)
@@ -237,10 +239,10 @@ TEST_F(HoltropMennenForceModelTest, numerical_example_1984)
     const std::vector<double> R({662000,715000,756000,807000,864000,925000});
     for(size_t i = 0 ; i<speed_kts.size() ; i++)
     {
-        states = get_steady_forward_speed_states(speed_kts.at(i) * 1852/3600);
-        EXPECT_NEAR(force_model.Rw(states),Rw.at(i),1000);
-        EXPECT_NEAR(force_model.Rapp(states),Rapp.at(i),1000);
-        EXPECT_NEAR(force_model.Rtr(states),Rtr.at(i),1000);
-        EXPECT_NEAR(-force_model(states,0).X(),R.at(i),R.at(i)/100);
+        states = get_steady_forward_speed_states(speed_kts.at(i) * 1852/3600, "body");
+        EXPECT_NEAR(force_model.Rw(states, env),Rw.at(i),1000);
+        EXPECT_NEAR(force_model.Rapp(states, env),Rapp.at(i),1000);
+        EXPECT_NEAR(force_model.Rtr(states, env),Rtr.at(i),1000);
+        EXPECT_NEAR(-force_model(states, 0, env).X(),R.at(i),R.at(i)/100);
     }
 }

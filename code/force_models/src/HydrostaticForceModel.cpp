@@ -17,8 +17,9 @@
 
 std::string HydrostaticForceModel::model_name(){return "hydrostatic";}
 
-HydrostaticForceModel::HydrostaticForceModel(const std::string& body_name_, const EnvironmentAndFrames& env_) : ForceModel(model_name(), body_name_),
-env(env_), centre_of_buoyancy(new Eigen::Vector3d())
+HydrostaticForceModel::HydrostaticForceModel(const std::string& body_name_, const EnvironmentAndFrames& env) :
+        ForceModel(model_name(), {}, body_name_, env),
+        centre_of_buoyancy(new Eigen::Vector3d())
 {
 }
 
@@ -27,14 +28,8 @@ bool HydrostaticForceModel::is_a_surface_force_model() const
     return true;
 }
 
-ssc::kinematics::Wrench HydrostaticForceModel::operator()(const BodyStates& states, const double) const
+Wrench HydrostaticForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
 {
-    const auto body = states.name;
-    const auto mesh = std::string("mesh(") + body + ")";
-    auto Tned2body = env.k->get(body, "NED");
-    Tned2body.swap();
-    auto TG2body = env.k->get(states.G.get_frame(), body);
-
     auto C = states.intersector->center_of_mass_immersed();
 
     if (C.all_facets_are_in_same_plane) C.volume = 0;
@@ -42,7 +37,7 @@ ssc::kinematics::Wrench HydrostaticForceModel::operator()(const BodyStates& stat
     for (size_t i = 0 ; i < 3 ; ++i) centre_of_buoyancy->operator()(i) = C.G(i);
 
     // Coordinates of the center of buoyancy in the BODY frame
-    const ssc::kinematics::Point B(body, C.G);
+    const ssc::kinematics::Point B(states.name, C.G);
 
     ssc::kinematics::Vector6d w;
 
@@ -52,15 +47,7 @@ ssc::kinematics::Wrench HydrostaticForceModel::operator()(const BodyStates& stat
          0,
          0,
          0;
-
-    // The coordinates of the center of buoyancy (in the NED frame) are given by Tned2body.inverse()*B
-    ssc::kinematics::Wrench ret(Tned2body.inverse()*B,w);
-    const auto G = TG2body*states.G;
-    ret = ret.change_frame_but_keep_ref_point(Tned2body);
-    ssc::kinematics::Wrench ret2(B, ret.force, ret.torque);
-    ret2 = ret2.change_point_of_application(G);
-    ssc::kinematics::Wrench ret3(states.G, ret2.force, ret2.torque);
-    return ret3;
+    return Wrench(B, "NED", w);
 }
 
 ssc::kinematics::Point HydrostaticForceModel::get_centre_of_buoyancy() const
@@ -75,6 +62,6 @@ void HydrostaticForceModel::extra_observations(Observer& observer) const
     observer.write(centre_of_buoyancy->operator()(0),DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"Bx"},std::string("Bx")));
     observer.write(centre_of_buoyancy->operator()(1),DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"By"},std::string("By")));
     observer.write(centre_of_buoyancy->operator()(2),DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"Bz"},std::string("Bz")));
-    const double gz = calculate_gz(*this, env);
-    observer.write(gz,DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),get_body_name(),"GZ"},std::string("GZ(")+get_name()+","+get_body_name()+")"));
+    //const double gz = calculate_gz(*this, env);
+    //observer.write(gz,DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),get_body_name(),"GZ"},std::string("GZ(")+get_name()+","+get_body_name()+")"));
 }

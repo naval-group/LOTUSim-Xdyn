@@ -19,6 +19,11 @@ YamlPosition::YamlPosition(const YamlCoordinates& c, const YamlAngle& a, const s
 {
 }
 
+YamlPosition YamlPosition::Origin(const std::string& frame)
+{
+    return YamlPosition(YamlCoordinates(0,0,0), YamlAngle(0,0,0), frame);
+}
+
 std::ostream& operator<<(std::ostream& os, const YamlPosition& w)
 {
     os << std::endl

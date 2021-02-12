@@ -11,6 +11,7 @@
 struct YamlCoordinates
 {
     YamlCoordinates();
+    YamlCoordinates(const double x, const double y, const double z);
     virtual ~YamlCoordinates(){}
     double x;
     double y;

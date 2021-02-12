@@ -2257,7 +2257,7 @@ std::string test_data::propulsion_and_resistance()
        << "        hydrodynamic forces calculation point in body frame:\n"
        << "            x: {value: 0.696, unit: m}\n"
        << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << "            z: {value: 0.432, unit: m}\n"
        << "        centre of inertia:\n"
        << "            frame: TestShip\n"
        << "            x: {value: 0.258, unit: m}\n"

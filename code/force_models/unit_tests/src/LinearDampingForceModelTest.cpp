@@ -99,7 +99,7 @@ TEST_F(LinearDampingForceModelTest, example)
         states.p.record(0, p = a.random<double>().between(-10.0,+10.0));
         states.q.record(0, q = a.random<double>().between(-10.0,+10.0));
         states.r.record(0, r = a.random<double>().between(-10.0,+10.0));
-        const ssc::kinematics::Wrench f = F(states,a.random<double>());
+        const ssc::kinematics::Wrench f = F(states, a.random<double>(), env);
         ASSERT_EQ(BODY, f.get_frame());
         for (int j=0;j<3;++j)
         {

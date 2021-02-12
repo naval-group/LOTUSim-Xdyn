@@ -45,7 +45,7 @@ TEST_F(GravityForceModelTest, example)
     BodyStates states = get_body(BODY)->get_states();
     states.solid_body_inertia->operator()(2,2) = 100;
 
-    const ssc::kinematics::Wrench f = F(states, a.random<double>());
+    const auto f = F(states, a.random<double>(), env);
 //! [GravityForceModelTest example]
 //! [GravityForceModelTest expected output]
     ASSERT_EQ(BODY, f.get_frame());
@@ -98,7 +98,7 @@ TEST_F(GravityForceModelTest, example_with_an_orientation)
     BodyStates states = get_body(BODY)->get_states();
     states.solid_body_inertia->operator()(2,2) = 100;
 
-    const Wrench f = F(states,a.random<double>());
+    const auto f = F(states,a.random<double>(), env);
     ASSERT_EQ(BODY, f.get_frame());
     ASSERT_NEAR(0, f.K(),EPS);
     ASSERT_NEAR(0, f.M(),EPS);

@@ -15,7 +15,6 @@
 #include "StateMacros.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "ForceModel.hpp"
-#include "ControllableForceModel.hpp"
 #include "SurfaceElevationGrid.hpp"
 #include "State.hpp"
 
@@ -29,7 +28,6 @@ class Sim
     public:
         Sim(const std::vector<BodyPtr>& bodies,
             const std::vector<ListOfForces>& forces,
-            const std::vector<ListOfControlledForces>& controllable_forces,
             const EnvironmentAndFrames& env,
             const StateType& x,
             const ssc::data_source::DataSource& command_listener);

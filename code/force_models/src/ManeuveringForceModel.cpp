@@ -67,8 +67,8 @@ ManeuveringForceModel::Yaml ManeuveringForceModel::parse(const std::string& yaml
     return ret;
 }
 
-ManeuveringForceModel::ManeuveringForceModel(const Yaml& data, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-        ControllableForceModel(data.name, data.commands, data.frame_of_reference, body_name_, env_),
+ManeuveringForceModel::ManeuveringForceModel(const Yaml& data, const std::string& body_name_, const EnvironmentAndFrames& env) :
+        ForceModel(data.name, data.commands, data.frame_of_reference, body_name_, env),
         m(),
         ds(new ssc::data_source::DataSource())
 {
@@ -83,9 +83,12 @@ ManeuveringForceModel::ManeuveringForceModel(const Yaml& data, const std::string
     maneuvering::build_ds(*ds, m);
 }
 
-ssc::kinematics::Vector6d ManeuveringForceModel::get_force(const BodyStates& states, const double t, const std::map<std::string,double>& commands) const
+Wrench ManeuveringForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
 {
     ds->check_in(__PRETTY_FUNCTION__);
+    ds->set("g", env.g);
+    ds->set("nu", env.nu);
+    ds->set("rho", env.rho);
     ds->set("states", states);
     ds->set("t", t);
     for (const auto command:commands) ds->set(command.first, command.second);
@@ -98,7 +101,7 @@ ssc::kinematics::Vector6d ManeuveringForceModel::get_force(const BodyStates& sta
     tau(4) = ds->get<double>("M");
     tau(5) = ds->get<double>("N");
     ds->check_out();
-    return tau;
+    return Wrench(ssc::kinematics::Point(name,0,0,0), name, tau);
 }
 
 double ManeuveringForceModel::get_Tmax() const

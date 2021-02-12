@@ -13,12 +13,12 @@
 
 class DefaultWindModelTest : public ::testing::Test
 {
-protected:
-	DefaultWindModelTest ();
-	virtual ~DefaultWindModelTest ();
-	virtual void SetUp();
-	virtual void TearDown();
-	ssc::random_data_generator::DataGenerator a;
+    protected:
+        DefaultWindModelTest ();
+        virtual ~DefaultWindModelTest ();
+        virtual void SetUp();
+        virtual void TearDown();
+        ssc::random_data_generator::DataGenerator a;
 };
 
 #endif /* ENVIRONMENT_MODELS_UNIT_TESTS_INC_DEFAULTWINDMODELTEST_HPP_ */

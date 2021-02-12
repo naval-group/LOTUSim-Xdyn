@@ -21,6 +21,7 @@ struct YamlPosition
     YamlCoordinates coordinates;
     YamlAngle angle;
     std::string frame;
+    static YamlPosition Origin(const std::string& frame);
 };
 
 std::ostream& operator<<(std::ostream& os, const YamlPosition& w);

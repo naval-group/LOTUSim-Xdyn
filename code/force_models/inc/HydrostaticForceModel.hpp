@@ -8,10 +8,10 @@
 #ifndef HYDROSTATICFORCEMODEL_HPP_
 #define HYDROSTATICFORCEMODEL_HPP_
 
-#include "ForceModel.hpp"
 #include <Eigen/Dense>
 #include <ssc/kinematics.hpp>
 
+#include "ForceModel.hpp"
 #include "EnvironmentAndFrames.hpp"
 
 class Body;
@@ -23,8 +23,8 @@ class Body;
 class HydrostaticForceModel : public ForceModel
 {
     public:
-        HydrostaticForceModel(const std::string& body_name, const EnvironmentAndFrames& env_);
-        ssc::kinematics::Wrench operator()(const BodyStates& states, const double t) const;
+        HydrostaticForceModel(const std::string& body_name, const EnvironmentAndFrames& env);
+        Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const;
         static std::string model_name();
         bool is_a_surface_force_model() const;
         void extra_observations(Observer& ) const;
@@ -32,7 +32,6 @@ class HydrostaticForceModel : public ForceModel
 
     private:
         HydrostaticForceModel();
-        EnvironmentAndFrames env;
         TR1(shared_ptr)<Eigen::Vector3d> centre_of_buoyancy;
 };
 

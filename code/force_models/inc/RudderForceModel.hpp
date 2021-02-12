@@ -10,7 +10,7 @@
 
 #include "WageningenControlledForceModel.hpp"
 
-class RudderForceModel : public ControllableForceModel
+class RudderForceModel : public ForceModel
 {
     public:
         struct Yaml : WageningenControlledForceModel::Yaml
@@ -26,9 +26,9 @@ class RudderForceModel : public ControllableForceModel
         };
 
         RudderForceModel(const Yaml& input, const std::string& body_name, const EnvironmentAndFrames& env);
-        ssc::kinematics::Vector6d get_force(const BodyStates& states, const double t, const std::map<std::string,double>& commands) const;
-        ssc::kinematics::Vector6d get_rudder_force(const BodyStates& states, const double t, const std::map<std::string,double>& commands, const double T) const;
-        ssc::kinematics::Point get_ship_speed(const BodyStates& states, const double t) const;
+        Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const;
+        ssc::kinematics::Vector6d get_rudder_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands, const double T) const;
+        ssc::kinematics::Point get_ship_speed(const BodyStates& states, const double t, const EnvironmentAndFrames& env) const;
         static Yaml parse(const std::string& yaml);
         static std::string model_name();
 

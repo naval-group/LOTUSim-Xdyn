@@ -47,8 +47,8 @@ SimpleStationKeepingController::Yaml SimpleStationKeepingController::parse(const
     return ret;
 }
 
-SimpleStationKeepingController::SimpleStationKeepingController(const Yaml& input, const std::string& body_name_, const EnvironmentAndFrames& env_) :
-        ControllableForceModel(input.name, {"x_co", "y_co", "psi_co"}, YamlPosition(YamlCoordinates(),YamlAngle(), body_name_), body_name_, env_),
+SimpleStationKeepingController::SimpleStationKeepingController(const Yaml& input, const std::string& body_name_, const EnvironmentAndFrames& env) :
+        ForceModel(input.name, {"x_co", "y_co", "psi_co"}, YamlPosition(YamlCoordinates(),YamlAngle(), body_name_), body_name_, env),
         ksi_x(input.ksi_x),
         omega_x(2*PI/input.T_x),
         ksi_y(input.ksi_y),
@@ -60,9 +60,9 @@ SimpleStationKeepingController::SimpleStationKeepingController(const Yaml& input
 
 }
 
-ssc::kinematics::Vector6d SimpleStationKeepingController::get_force(const BodyStates& states, const double, const std::map<std::string,double>& commands) const
+Wrench SimpleStationKeepingController::get_force(const BodyStates& states, const double, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
 {
-    ssc::kinematics::Vector6d ret = ssc::kinematics::Vector6d::Zero();
+    Wrench ret(ssc::kinematics::Point(body_name,0,0,0), body_name);
 
     const auto angles = states.get_angles(rotation_convention);
     const double delta_x = commands.at("x_co") - states.x();
@@ -77,9 +77,9 @@ ssc::kinematics::Vector6d SimpleStationKeepingController::get_force(const BodySt
     const double K_v = 2*ksi_y*omega_y*sigma_yy;
     const double K_psi = sigma_psipsi*omega_psi*omega_psi;
     const double K_r = 2*ksi_psi*omega_psi*sigma_psipsi;
-    ret(0) = K_x*delta_x - K_u*states.u();
-    ret(1) = K_y*delta_y - K_v*states.v();
-    ret(5) = K_psi*delta_psi - K_r*states.r();
+    ret.X() = K_x*delta_x - K_u*states.u();
+    ret.Y() = K_y*delta_y - K_v*states.v();
+    ret.N() = K_psi*delta_psi - K_r*states.r();
     return ret;
 }
 

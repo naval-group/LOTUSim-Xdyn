@@ -13,6 +13,7 @@
 #include "yaml_data.hpp"
 #include "TriMeshTestData.hpp"
 #include <ssc/kinematics.hpp>
+#include <ssc/data_source.hpp>
 
 #define BODY "body 1"
 
@@ -162,7 +163,7 @@ TEST_F(ConstantForceModelTest, ship_at_45_deg)
     const double theta = 0;
     const double psi = 45 * DEG;
     auto states = get_states(phi, theta, psi, env);
-    const auto W = get_constant_force(env)(states, a.random<double>());
+    const auto W = get_constant_force(env)(states, a.random<double>(), env);
     ASSERT_DOUBLE_EQ(10e3*std::sqrt(2)/2 + 20e3*sqrt(2)/2, (double)W.X());
     ASSERT_DOUBLE_EQ(-10e3*sqrt(2)/2+20e3*std::sqrt(2)/2, (double)W.Y());
     ASSERT_DOUBLE_EQ(30e3, (double)W.Z());
@@ -175,7 +176,7 @@ TEST_F(ConstantForceModelTest, ship_at_30_deg)
     const double theta = 0;
     const double psi = 30 * DEG;
     auto states = get_states(phi, theta, psi, env);
-    const auto W = get_constant_force(env)(states, a.random<double>());
+    const auto W = get_constant_force(env)(states, a.random<double>(), env);
     ASSERT_DOUBLE_EQ(10e3*std::sqrt(3)/2 + 20e3*sqrt(1)/2, (double)W.X());
     ASSERT_DOUBLE_EQ(-10e3*sqrt(1)/2+20e3*std::sqrt(3)/2, (double)W.Y());
     ASSERT_DOUBLE_EQ(30e3, (double)W.Z());

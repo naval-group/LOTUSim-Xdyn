@@ -254,7 +254,7 @@ TEST_F(RudderForceModelTest, DISABLED_ship_speed_relative_to_the_fluid)
     BodyWithoutSurfaceForces b(states,0,BlockedDOF(""));
     b.update_kinematics(s, env.k);
 
-    ssc::kinematics::Point Vship_water = F.get_ship_speed(states, t);
+    ssc::kinematics::Point Vship_water = F.get_ship_speed(states, t, env);
 
     ASSERT_DOUBLE_EQ(3.0621974344648351, Vship_water.x());
     ASSERT_DOUBLE_EQ(4, Vship_water.y());
@@ -308,11 +308,11 @@ TEST_F(RudderForceModelTest, force_and_torque)
     commands["P/D"] = 1.2;
     commands["beta"] = PI/6;
 
-    const auto F = rudder.get_force(states, t, commands);
-    ASSERT_DOUBLE_EQ(2208573.9553180891, (double)F(0));
-    ASSERT_DOUBLE_EQ(777997.67996840423, (double)F(1));
-    ASSERT_DOUBLE_EQ(0, (double)F(2));
-    ASSERT_DOUBLE_EQ(-2793416.1021430148, (double)F(3));
-    ASSERT_DOUBLE_EQ(0, (double)F(4));
-    ASSERT_DOUBLE_EQ(-855797.44796524453, (double)F(5));
+    const auto F = rudder.get_force(states, t, env, commands);
+    ASSERT_DOUBLE_EQ(2208573.9553180891, (double)F.X());
+    ASSERT_DOUBLE_EQ(777997.67996840423, (double)F.Y());
+    ASSERT_DOUBLE_EQ(0, (double)F.Z());
+    ASSERT_DOUBLE_EQ(-2793416.1021430148, (double)F.K());
+    ASSERT_DOUBLE_EQ(0, (double)F.M());
+    ASSERT_DOUBLE_EQ(-855797.44796524453, (double)F.N());
 }

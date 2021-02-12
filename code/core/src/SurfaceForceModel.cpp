@@ -8,8 +8,8 @@
 #include "BodyStates.hpp"
 #include "SurfaceForceModel.hpp"
 
-SurfaceForceModel::SurfaceForceModel(const std::string& name_, const std::string& body_name_, const EnvironmentAndFrames& env_) : ForceModel(name_, body_name_),
-        env(env_),
+SurfaceForceModel::SurfaceForceModel(const std::string& name_, const std::string& body_name, const EnvironmentAndFrames& env) :
+        ForceModel(name_, {}, body_name, env),
         g_in_NED(ssc::kinematics::Point("NED", 0, 0, env.g)),
         zg_calculator(new ZGCalculator())
 {
@@ -19,10 +19,10 @@ SurfaceForceModel::~SurfaceForceModel()
 {
 }
 
-ssc::kinematics::Wrench SurfaceForceModel::operator()(const BodyStates& states, const double t) const
+Wrench SurfaceForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>&) const
 {
     zg_calculator->update_transform(env.k->get("NED", states.name));
-    ssc::kinematics::UnsafeWrench F(states.G);
+    Wrench F(states.G, body_name);
     const double orientation_factor = states.intersector->mesh->orientation_factor;
 
     const auto b = begin(states.intersector);
@@ -52,7 +52,7 @@ ssc::kinematics::Wrench SurfaceForceModel::operator()(const BodyStates& states, 
     return F;
 }
 
-double SurfaceForceModel::potential_energy(const BodyStates& states, const std::vector<double>& x) const
+double SurfaceForceModel::potential_energy(const BodyStates& states, const std::vector<double>& x, const EnvironmentAndFrames& env) const
 {
     return pe(states, x, env);
 }

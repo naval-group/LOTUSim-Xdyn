@@ -109,10 +109,9 @@ HoltropMennenForceModel::DerivedData::DerivedData(const Input& base_data) :
 {
 }
 
-HoltropMennenForceModel::HoltropMennenForceModel(const Input& data, const std::string& body_name, const EnvironmentAndFrames& env_) :
-        ForceModel(HoltropMennenForceModel::model_name(), body_name),
+HoltropMennenForceModel::HoltropMennenForceModel(const Input& data, const std::string& body_name, const EnvironmentAndFrames& env) :
+        ForceModel(HoltropMennenForceModel::model_name(), {}, body_name, env),
         d(-0.9),
-        env(env_),
         input(data),
         derived(data),
         gravity_force(input.Vol*env.rho*env.g)
@@ -129,12 +128,12 @@ double HoltropMennenForceModel::Rw_b(const double Fn, const double m4) const
     return derived.c17*derived.c2*derived.c5*gravity_force*std::exp(derived.m3*std::pow(Fn,d)+m4*cos(derived.lambda*std::pow(Fn,-2.)));
 }
 
-ssc::kinematics::Wrench HoltropMennenForceModel::operator()(const BodyStates& states, const double t) const
+Wrench HoltropMennenForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
 {
-    ssc::kinematics::Wrench tau(states.G);
+    Wrench tau(states.hydrodynamic_forces_calculation_point, body_name);
     if(states.u() > 0)
     {
-        double R = Rf(states) + Rapp(states) + Rw(states) + Rb(states) + Rtr(states) + Ra(states);
+        double R = Rf(states, env) + Rapp(states, env) + Rw(states, env) + Rb(states, env) + Rtr(states, env) + Ra(states, env);
         if(!apply_on_ship_speed_direction)
         {
             tau.X() = -R;
@@ -151,21 +150,21 @@ ssc::kinematics::Wrench HoltropMennenForceModel::operator()(const BodyStates& st
     return tau;
 }
 
-double HoltropMennenForceModel::Rf(const BodyStates& states) const
+double HoltropMennenForceModel::Rf(const BodyStates& states, const EnvironmentAndFrames& env) const
 {
     const double Re = states.u() * input.Lwl / env.nu;
     const double Cf = 0.075 / std::pow(std::log10(Re) - 2, 2.);
     return derived.hull_form_coeff *  Cf * 0.5 * env.rho * std::pow(states.u(), 2.) * derived.S;
 }
 
-double HoltropMennenForceModel::Rapp(const BodyStates& states) const
+double HoltropMennenForceModel::Rapp(const BodyStates& states, const EnvironmentAndFrames& env) const
 {
     const double Re = states.u() * input.Lwl / env.nu;
     const double Cf = 0.075 / std::pow(std::log10(Re) - 2, 2.);
     return input.app_form_coeff * Cf * 0.5 * env.rho * std::pow(states.u(), 2.) * input.Sapp;
 }
 
-double HoltropMennenForceModel::Rw(const BodyStates& states) const
+double HoltropMennenForceModel::Rw(const BodyStates& states, const EnvironmentAndFrames& env) const
 {
     const double Fn = states.u() / std::sqrt(env.g * input.Lwl);
     double m4 = derived.c15 * 0.4 * std::exp(-0.034 * std::pow(Fn, -3.29));
@@ -186,7 +185,7 @@ double HoltropMennenForceModel::Rw(const BodyStates& states) const
     return Rw_a(0.4, m4) + (Fn - 0.4) * (Rw_b(0.55, m4) - Rw_a(0.4, m4)) / 0.15;
 }
 
-double HoltropMennenForceModel::Rb(const BodyStates& states) const
+double HoltropMennenForceModel::Rb(const BodyStates& states, const EnvironmentAndFrames& env) const
 {
     if(input.Abt != 0)
     {
@@ -196,14 +195,14 @@ double HoltropMennenForceModel::Rb(const BodyStates& states) const
     return 0;
 }
 
-double HoltropMennenForceModel::Rtr(const BodyStates& states) const
+double HoltropMennenForceModel::Rtr(const BodyStates& states, const EnvironmentAndFrames& env) const
 {
     const double FnT = states.u() / std::sqrt(2 * env.g * input.At / (input.B + input.B * input.Cwp));
     const double c6 = (FnT < 5 ? 0.2 * (1 - 0.2 * FnT) : 0);
     return 0.5 * env.rho * std::pow(states.u(), 2.) * input.At * c6;
 }
 
-double HoltropMennenForceModel::Ra(const BodyStates& states) const
+double HoltropMennenForceModel::Ra(const BodyStates& states, const EnvironmentAndFrames& env) const
 {
     return 0.5 * env.rho * std::pow(states.u(), 2.) * derived.S * derived.Ca;
 }
