@@ -31,56 +31,95 @@ TEST_F(WrenchTest, can_get_members)
 
 TEST_F(WrenchTest, can_change_frame)
 {
+
+    // Python code to reproduce the test:
+    /*
+    import numpy as np
+
+    phi = np.radians(12)
+    theta = np.radians(47)
+    psi = np.radians(31)
+
+    Rz = np.array([[np.cos(psi), -np.sin(psi), 0],
+                   [np.sin(psi),  np.cos(psi), 0],
+                   [0          ,  0          , 1]])
+
+    Ry = np.array([[ np.cos(theta), 0, np.sin(theta)],
+                   [ 0            , 1, 0            ],
+                   [-np.sin(theta), 0, np.cos(theta)]])
+
+    Rx = np.array([[1, 0          ,  0          ],
+                   [0, np.cos(phi), -np.sin(phi)],
+                   [0, np.sin(phi),  np.cos(phi)]])
+
+    force = np.array([1000, 2000, 3000])
+    torque = np.array([4000, 5000, 6000])
+
+    R_force = force.dot(Rz).dot(Ry).dot(Rx)
+    R_torque = torque.dot(Rz).dot(Ry).dot(Rx)
+    */
     const ssc::kinematics::KinematicsPtr k(new ssc::kinematics::Kinematics);
-    const double psi = 30 * M_PI / 180;
-    const YamlAngle angles(0,0,psi);
+    const YamlAngle angles(12 * M_PI / 180, 47 * M_PI / 180, 31 * M_PI / 180);
     const YamlPosition position(YamlCoordinates(a.random<double>(), a.random<double>(), a.random<double>()), angles, "frame2");
     YamlRotation rotation_convention("angle", { "z", "y'", "x''" });
     k->add(make_transform(position, "frame1", rotation_convention));
     const ssc::kinematics::Point P("frame1", 1, 2, 3);
     Eigen::Vector3d force;
-    force << a.random<double>(), a.random<double>(), a.random<double>();
+    force << 1000, 2000, 3000;
     Eigen::Vector3d torque;
-    torque << a.random<double>(), a.random<double>(), a.random<double>();
+    torque << 4000, 5000, 6000;
     Wrench wrench(P, "frame2", force, torque);
     wrench.change_frame("frame1", k);
     ASSERT_EQ("frame1", wrench.get_frame());
     ASSERT_EQ(P.get_frame(), wrench.get_point().get_frame());
     ASSERT_TRUE(P.v.isApprox(wrench.get_point().v));
-    const ssc::kinematics::RotationMatrix R = angle2matrix(angles, rotation_convention);
-    auto Rforce = R.inverse()*force;
-    auto Rtorque = R.inverse()*torque;
-    ASSERT_DOUBLE_EQ(Rforce(0), wrench.X());
-    ASSERT_DOUBLE_EQ(Rforce(1), wrench.Y());
-    ASSERT_DOUBLE_EQ(Rforce(2), wrench.Z());
-    ASSERT_DOUBLE_EQ(Rtorque(0), wrench.K());
-    ASSERT_DOUBLE_EQ(Rtorque(1), wrench.M());
-    ASSERT_DOUBLE_EQ(Rtorque(2), wrench.N());
+    const double epsilon = 1e-8;
+    ASSERT_NEAR(-906.96416656, wrench.X(), epsilon);
+    ASSERT_NEAR(1885.44386495, wrench.Y(), epsilon);
+    ASSERT_NEAR(3102.01828375, wrench.Z(), epsilon);
+    ASSERT_NEAR(-293.49982391, wrench.K(), epsilon);
+    ASSERT_NEAR(3940.74904089, wrench.M(), epsilon);
+    ASSERT_NEAR(7834.81683577, wrench.N(), epsilon);
 }
 
 TEST_F(WrenchTest, can_change_point_in_same_frame)
 {
+    // Python code to reproduce the test:
+    /*
+    import numpy as np
+
+    force = np.array([1000, 2000, 3000])
+    torque = np.array([4000, 5000, 6000])
+
+    A = np.array([1, 2, 3])
+    B = np.array([6, 5, 4])
+
+    torque_B =  torque + np.cross(A - B, force)
+     */
     const ssc::kinematics::KinematicsPtr k(new ssc::kinematics::Kinematics);
     const ssc::kinematics::Point A("frame1", 1, 2, 3);
-    const ssc::kinematics::Point B("frame1", 4, 5, 6);
+    const ssc::kinematics::Point B("frame1", 6, 5, 4);
     Eigen::Vector3d force;
-    force << a.random<double>(), a.random<double>(), a.random<double>();
+    force << 1000, 2000, 3000;
     Eigen::Vector3d torque;
-    torque << a.random<double>(), a.random<double>(), a.random<double>();
+    torque << 4000, 5000, 6000;
     Wrench wrench(A, "frame1", force, torque);
     wrench.transport_to(B, k);
     ASSERT_EQ("frame1", wrench.get_frame());
     ASSERT_EQ(B.get_frame(), wrench.get_point().get_frame());
     ASSERT_TRUE(B.v.isApprox(wrench.get_point().v));
     ASSERT_TRUE(force.isApprox(wrench.get_force()));
-    ASSERT_TRUE((torque + (A.v - B.v).cross(force)).isApprox(wrench.get_torque()));
+    ASSERT_DOUBLE_EQ(-3000, wrench.K());
+    ASSERT_DOUBLE_EQ(19000, wrench.M());
+    ASSERT_DOUBLE_EQ(-1000, wrench.N());
 }
 
 TEST_F(WrenchTest, can_change_point_in_different_frame)
 {
     const ssc::kinematics::KinematicsPtr k(new ssc::kinematics::Kinematics);
-    const double psi = 30 * M_PI / 180;
-    const YamlPosition position(YamlCoordinates(10,0,0), YamlAngle(0, 0, 90*M_PI/180), "frame1");
+    const YamlPosition position(YamlCoordinates(a.random<double>(),a.random<double>(),a.random<double>()),
+                                YamlAngle(a.random<double>(), a.random<double>(), a.random<double>()),
+                                "frame1");
     YamlRotation rotation_convention("angle", { "z", "y'", "x''" });
     auto T_from_1_to_2 = make_transform(position, "frame2", rotation_convention);
     k->add(T_from_1_to_2);
