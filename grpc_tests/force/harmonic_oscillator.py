@@ -29,7 +29,7 @@ class HarmonicOscillator(force.Model):
                 'Mx': 0,
                 'My': 0,
                 'Mz': 0,
-                'extra_observations': {'k': 2}}
+                'extra_observations': {'k': 2, 'harmonic_oscillator_time': states.t[0]}}
 
 
 if __name__ == '__main__':

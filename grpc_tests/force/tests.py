@@ -45,3 +45,16 @@ def test_extra_observations():
     for result in results:
         assert 'k(TestShip)' in result['extra_observations']
         assert result['extra_observations']['k(TestShip)'] == 2
+        
+def test_extra_observations_are_in_sync_with_time():
+    state = {"Dt": 2,
+             "states": [{"t": 0, "x": 0, "y": 8, "z": 12, "u": 1, "v": 0,
+                         "w": 0, "p": 0, "q": 1, "r": 0, "qr": 1, "qi": 0,
+                         "qj": 0, "qk": 0}],
+             "commands": {"parametric oscillator(omega)": 3}}
+    results = run(state)
+    for result in results:
+        assert 'harmonic_oscillator_time(TestShip)' in result['extra_observations']
+        harmonic_oscillator_time = result['extra_observations']['harmonic_oscillator_time(TestShip)']
+        t = result['t']
+        assert abs(harmonic_oscillator_time - t) <= t*1e-6
