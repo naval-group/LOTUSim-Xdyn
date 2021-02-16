@@ -160,6 +160,25 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const BodyP
     return pimpl->sum_of_forces_in_body_frame[body->get_name()];
 }
 
+void Sim::initialize()
+{
+    for (auto body: pimpl->bodies)
+    {
+        const auto states = body->get_states();
+        const auto t = states.u.get_current_time();
+        const Eigen::Vector3d uvw(states.u(), states.v(), states.w());
+        const Eigen::Vector3d pqr(states.p(), states.q(), states.r());
+        pimpl->sum_of_forces_in_body_frame[body->get_name()] = ssc::kinematics::UnsafeWrench(coriolis_and_centripetal(states.G,states.solid_body_inertia.get(),uvw, pqr));
+        const auto forces = pimpl->forces[body->get_name()];
+        for (auto force:forces)
+        {
+            const ssc::kinematics::Wrench tau = force->operator()(states, t, pimpl->env, pimpl->command_listener);
+            pimpl->sum_of_forces_in_body_frame[body->get_name()] += tau;
+        }
+        pimpl->sum_of_forces_in_NED_frame[body->get_name()] = project_into_NED_frame(pimpl->sum_of_forces_in_body_frame[body->get_name()], states.get_rot_from_ned_to_body());
+    }
+}
+
 ssc::kinematics::PointMatrix Sim::get_waves(const double t//!< Current instant
                                                   ) const
 {
