@@ -67,7 +67,7 @@ class Sim
         /** \brief This function calls all force models from the current body states.
           * \detail This should be called before the first call to Sim::output if the initial state (at construction) is to be recorded.
           */
-        void initialize();
+        void initialize_system_outputs_before_observation();
 
     private:
 

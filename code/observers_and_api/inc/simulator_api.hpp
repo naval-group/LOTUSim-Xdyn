@@ -28,7 +28,7 @@ typedef std::function<void(std::vector<double>&, const double)> ForceStates;
 
 template <typename StepperType> std::vector<Res> simulate(Sim& sys, const double tstart, const double tend, const double dt)
 {
-    sys.initialize();
+    sys.initialize_system_outputs_before_observation();
     EverythingObserver observer;
     ForceStates force_states = [&sys](std::vector<double>&states, const double t){sys.force_states(states, t);};
     quicksolve<StepperType, EverythingObserver, ForceStates>(sys, tstart, tend, dt, observer, force_states);
@@ -84,7 +84,7 @@ template <typename StepperType> std::vector<Res> simulate(const YamlSimulatorInp
 template <typename StepperType> std::vector<Res> simulate(const YamlSimulatorInput& yaml, const VectorOfVectorOfPoints& mesh, const double tstart, const double tend, const double dt, ssc::data_source::DataSource& commands)
 {
     Sim sys = get_system(yaml, mesh, tstart, commands);
-    sys.initialize();
+    sys.initialize_system_outputs_before_observation();
     SimObserver observer;
     ssc::solver::quicksolve<StepperType>(sys, tstart, tend, dt, observer);
     return observer.get();
