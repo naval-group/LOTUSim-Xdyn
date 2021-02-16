@@ -29,6 +29,7 @@ void quicksolve(Sim& sys, const double t0, const double tend, double dt, Observe
     ssc::solver::DefaultScheduler scheduler(t0, tend, dt);
     ssc::solver::DefaultEventHandler event_handler;
     const double tstart = scheduler.get_time();
+    sys.initialize_system_outputs_before_observation();
     observer.observe(sys,tstart);
     int i = 0;
     while(scheduler.has_more_time_events())
