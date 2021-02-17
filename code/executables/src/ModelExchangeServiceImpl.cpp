@@ -127,6 +127,11 @@ YamlSimServerInputs from_grpc(grpc::ServerContext* , const ModelExchangeRequestE
             server_inputs.states[i].qj = std::get<2>(quaternion);
             server_inputs.states[i].qk = std::get<3>(quaternion);
         }
+        server_inputs.requested_output.clear();
+        for (int i = 0 ; i < request->requested_output_size() ; i++)
+        {
+            server_inputs.requested_output.push_back(request->requested_output(i));
+        }
     }
     return server_inputs;
 }
@@ -159,6 +164,11 @@ YamlSimServerInputs from_grpc(grpc::ServerContext* , const ModelExchangeRequestQ
             server_inputs.states[i].qi = request->states().qi(i);
             server_inputs.states[i].qj = request->states().qj(i);
             server_inputs.states[i].qk = request->states().qk(i);
+        }
+        server_inputs.requested_output.clear();
+        for (int i = 0 ; i < request->requested_output_size() ; i++)
+        {
+            server_inputs.requested_output.push_back(request->requested_output(i));
         }
     }
     return server_inputs;
