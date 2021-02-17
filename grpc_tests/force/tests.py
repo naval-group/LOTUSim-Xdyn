@@ -56,7 +56,8 @@ def test_extra_observations():
              "states": [{"t": 0, "x": 0, "y": 8, "z": 12, "u": 1, "v": 0,
                          "w": 0, "p": 0, "q": 1, "r": 0, "qr": 1, "qi": 0,
                          "qj": 0, "qk": 0}],
-             "commands": {"parametric oscillator(omega)": 3}}
+             "commands": {"parametric oscillator(omega)": 3},
+             "requested_output": ["k(TestShip)"]}
     results = run(state)
     assert 'k(TestShip)' in results['extra_observations']
     for result in results['extra_observations']['k(TestShip)']:
@@ -67,7 +68,8 @@ def test_extra_observations_are_in_sync_with_time():
              "states": [{"t": 0, "x": 0, "y": 8, "z": 12, "u": 1, "v": 0,
                          "w": 0, "p": 0, "q": 1, "r": 0, "qr": 1, "qi": 0,
                          "qj": 0, "qk": 0}],
-             "commands": {"parametric oscillator(omega)": 3}}
+             "commands": {"parametric oscillator(omega)": 3},
+             "requested_output": ["harmonic_oscillator_time(TestShip)"]}
     results = run(state)
     assert 'harmonic_oscillator_time(TestShip)' in results['extra_observations']
     for i, harmonic_oscillator_time in enumerate(results['extra_observations']['harmonic_oscillator_time(TestShip)']):

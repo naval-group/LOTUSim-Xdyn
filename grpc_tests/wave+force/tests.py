@@ -29,7 +29,8 @@ def test_should_get_phases():
     state = {"Dt": 2,
              "states": [{"t": 0, "x": 0, "y": 8, "z": 12, "u": 1, "v": 0,
                          "w": 0, "p": 0, "q": 1, "r": 0, "qr": 1, "qi": 0,
-                         "qj": 0, "qk": 0}]}
+                         "qj": 0, "qk": 0}],
+             "requested_output": ["phase0(TestBody)"]}
     results = run(state)
     assert 'phase0(TestBody)' in results['extra_observations']
     for phase0 in results['extra_observations']['phase0(TestBody)']:

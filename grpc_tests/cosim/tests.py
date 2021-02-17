@@ -28,7 +28,7 @@ class Cosim:
         self.xdyn_stub = cosimulation_pb2_grpc.CosimulationStub(xdyn_channel)
         self.request = CosimulationRequestEuler()
 
-    def step(self, state, Dt):
+    def step(self, state, Dt, requested_output):
         """Run a cosimulation step."""
         self.request.states.t[:] = [state['t']]
         self.request.states.x[:] = [state['x']]
@@ -44,6 +44,7 @@ class Cosim:
         self.request.states.theta[:] = [state['theta']]
         self.request.states.psi[:] = [state['psi']]
         self.request.Dt = Dt
+        self.request.requested_output[:] = requested_output
         res = self.xdyn_stub.step_euler_321(self.request)
         ret = {'t': res.all_states.t,
                 'x': res.all_states.x,
@@ -91,7 +92,8 @@ class Tests(unittest.TestCase):
                  'phi': 0,
                  'theta': 0,
                  'psi': 0}
-        self.res = self.cosim.step(state, 3)
+        requested_output = ['Fz(gravity,ball,ball)']
+        self.res = self.cosim.step(state, 3, requested_output)
 
     def test_can_run_a_single_cosimulation(self):
         """Make sure the cosimulation results are correct."""
