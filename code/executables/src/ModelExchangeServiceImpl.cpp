@@ -196,6 +196,10 @@ grpc::Status to_grpc(grpc::ServerContext* , const YamlState& state_derivatives, 
     d_dt->set_psi(state_derivatives.psi);
     d_dt->set_t(state_derivatives.t);
     response->set_allocated_d_dt(d_dt);
+    for(auto obs:state_derivatives.extra_observations)
+    {
+        response->mutable_extra_observations()->operator[](obs.first) = obs.second;
+    }
     return grpc::Status::OK;
 }
 

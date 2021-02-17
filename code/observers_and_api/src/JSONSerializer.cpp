@@ -167,7 +167,7 @@ std::string serialize(const std::vector<YamlState>& states)
 std::string serialize(const YamlState& d_dt)
 {
     rapidjson::StringBuffer s;
-    rapidjson::Writer<rapidjson::StringBuffer> writer(s);
+    InfNaNWriter writer(s);
     writer.StartArray();
     WRITE_KEY_VALUE("t", d_dt.t);
     WRITE_KEY_VALUE("dx_dt", d_dt.x);
@@ -186,6 +186,8 @@ std::string serialize(const YamlState& d_dt)
     WRITE_KEY_VALUE("dphi_dt", d_dt.phi);
     WRITE_KEY_VALUE("dtheta_dt", d_dt.theta);
     WRITE_KEY_VALUE("dpsi_dt", d_dt.psi);
+    writer.Key("extra_observations");
+    write(writer, d_dt.extra_observations);
     writer.EndObject();
     return s.GetString();
 }
