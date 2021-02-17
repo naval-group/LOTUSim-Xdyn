@@ -9,6 +9,6 @@
 
 YamlSimServerInputs deserialize(const std::string& input);
 std::string serialize(const std::vector<YamlState>& states);
-std::string serialize(const std::vector<double>& dx_dt);
+std::string serialize(const YamlState& dx_dt);
 
 #endif /* OBSERVERS_AND_API_INC_JSONSERIALIZER_HPP_ */

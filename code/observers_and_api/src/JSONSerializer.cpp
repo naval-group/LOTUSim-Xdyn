@@ -164,24 +164,24 @@ std::string serialize(const std::vector<YamlState>& states)
 
 #define WRITE_KEY_VALUE(key, value) writer.Key(key); writer.Double(value);
 
-std::string serialize(const std::vector<double>& dx_dt)
+std::string serialize(const YamlState& d_dt)
 {
     rapidjson::StringBuffer s;
     rapidjson::Writer<rapidjson::StringBuffer> writer(s);
     writer.StartArray();
-    WRITE_KEY_VALUE("dx_dt", dx_dt[0]);
-    WRITE_KEY_VALUE("dy_dt", dx_dt[1]);
-    WRITE_KEY_VALUE("dz_dt", dx_dt[2]);
-    WRITE_KEY_VALUE("du_dt", dx_dt[3]);
-    WRITE_KEY_VALUE("dv_dt", dx_dt[4]);
-    WRITE_KEY_VALUE("dw_dt", dx_dt[5]);
-    WRITE_KEY_VALUE("dp_dt", dx_dt[6]);
-    WRITE_KEY_VALUE("dq_dt", dx_dt[7]);
-    WRITE_KEY_VALUE("dr_dt", dx_dt[8]);
-    WRITE_KEY_VALUE("dqr_dt", dx_dt[9]);
-    WRITE_KEY_VALUE("dqi_dt", dx_dt[10]);
-    WRITE_KEY_VALUE("dqj_dt", dx_dt[11]);
-    WRITE_KEY_VALUE("dqk_dt", dx_dt[12]);
+    WRITE_KEY_VALUE("dx_dt", d_dt.x);
+    WRITE_KEY_VALUE("dy_dt", d_dt.y);
+    WRITE_KEY_VALUE("dz_dt", d_dt.z);
+    WRITE_KEY_VALUE("du_dt", d_dt.u);
+    WRITE_KEY_VALUE("dv_dt", d_dt.v);
+    WRITE_KEY_VALUE("dw_dt", d_dt.w);
+    WRITE_KEY_VALUE("dp_dt", d_dt.p);
+    WRITE_KEY_VALUE("dq_dt", d_dt.q);
+    WRITE_KEY_VALUE("dr_dt", d_dt.r);
+    WRITE_KEY_VALUE("dqr_dt", d_dt.qr);
+    WRITE_KEY_VALUE("dqi_dt", d_dt.qi);
+    WRITE_KEY_VALUE("dqj_dt", d_dt.qj);
+    WRITE_KEY_VALUE("dqk_dt", d_dt.qk);
     writer.EndObject();
     return s.GetString();
 }

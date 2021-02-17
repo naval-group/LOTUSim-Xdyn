@@ -43,25 +43,24 @@ TEST_F(XdynForMETest, test_falling_ball_with_yaml)
     XdynForME xdyn_for_me(yaml);
     const std::string input_yaml = test_data::complete_yaml_message_for_falling_ball();
     SimServerInputs server_inputs(deserialize(input_yaml), xdyn_for_me.get_Tmax());
-    const std::vector<double> dx_dt = xdyn_for_me.handle(server_inputs);
+    const YamlState d_dt = xdyn_for_me.handle(server_inputs);
 
 
 //! [XdynForMETest example]
 //! [XdynForMETest expected output]
-    ASSERT_EQ(13, dx_dt.size());
-    ASSERT_NEAR(1,              dx_dt[0], EPS);
-    ASSERT_NEAR(0,                       dx_dt[1], EPS);
-    ASSERT_NEAR(0,dx_dt[2], EPS);
-    ASSERT_NEAR(0,                       dx_dt[3], EPS);
-    ASSERT_NEAR(0.0,                       dx_dt[4], EPS);
-    ASSERT_NEAR(g,               dx_dt[5], EPS);
-    ASSERT_NEAR(0,                         dx_dt[6], EPS);
-    ASSERT_NEAR(0,                         dx_dt[7], EPS);
-    ASSERT_NEAR(0,                         dx_dt[8], EPS);
-    ASSERT_NEAR(0,                         dx_dt[9], EPS);
-    ASSERT_NEAR(0,                         dx_dt[10], EPS);
-    ASSERT_NEAR(0,                         dx_dt[11], EPS);
-    ASSERT_NEAR(0,                         dx_dt[12], EPS);
+    ASSERT_NEAR(1, d_dt.x, EPS);
+    ASSERT_NEAR(0, d_dt.y, EPS);
+    ASSERT_NEAR(0, d_dt.z, EPS);
+    ASSERT_NEAR(0, d_dt.u, EPS);
+    ASSERT_NEAR(0, d_dt.v, EPS);
+    ASSERT_NEAR(g, d_dt.w, EPS);
+    ASSERT_NEAR(0, d_dt.p, EPS);
+    ASSERT_NEAR(0, d_dt.q, EPS);
+    ASSERT_NEAR(0, d_dt.r, EPS);
+    ASSERT_NEAR(0, d_dt.qr, EPS);
+    ASSERT_NEAR(0, d_dt.qi, EPS);
+    ASSERT_NEAR(0, d_dt.qj, EPS);
+    ASSERT_NEAR(0, d_dt.qk, EPS);
 //! [XdynForMETest expected output]
 }
 
@@ -87,18 +86,17 @@ TEST_F(XdynForMETest, complete_test_with_commands_and_delay)
                 "],\n"
                 "\"commands\": {\"F1(command1)\": 20, \"F1(a)\": 4.5, \"F1(b)\": 5.7}}";
     SimServerInputs server_inputs(deserialize(input_yaml), xdyn_for_me.get_Tmax());
-    const std::vector<double> dx_dt = xdyn_for_me.handle(server_inputs);
+    const YamlState d_dt = xdyn_for_me.handle(server_inputs);
 
-    ASSERT_EQ(13, dx_dt.size());
-    ASSERT_NEAR(0,              dx_dt[0], EPS); // dx/dt = u
-    ASSERT_NEAR(0,            dx_dt[1], EPS); // dy/dt = v
-    ASSERT_NEAR(0,            dx_dt[2], EPS); // dz/dt = w
-    ASSERT_NEAR(14,             dx_dt[3], EPS); // m du/dt = Fx
-    ASSERT_NEAR(8,              dx_dt[4], EPS); // m dv/dt = Fy
-    ASSERT_NEAR(20*12.3,        dx_dt[5], EPS); // m dw/dt = Fz
-    ASSERT_NEAR(5.7*1.4,        dx_dt[6], EPS); // m OGx dp/dt = Mx
-    ASSERT_NEAR(0.23 + 20*4.4 + 2*5.7*12 + 0.123/4.5,          dx_dt[7], EPS); // m OGy dq/dt = My
-    ASSERT_NEAR(0,          dx_dt[8], EPS); // m OGz dr/dt = Mz
+    ASSERT_NEAR(0, d_dt.x, EPS); // dx/dt = u
+    ASSERT_NEAR(0, d_dt.y, EPS); // dy/dt = v
+    ASSERT_NEAR(0, d_dt.z, EPS); // dz/dt = w
+    ASSERT_NEAR(14, d_dt.u, EPS); // m du/dt = Fx
+    ASSERT_NEAR(8, d_dt.v, EPS); // m dv/dt = Fy
+    ASSERT_NEAR(20 * 12.3, d_dt.w, EPS); // m dw/dt = Fz
+    ASSERT_NEAR(5.7 * 1.4, d_dt.p, EPS); // m OGx dp/dt = Mx
+    ASSERT_NEAR(0.23 + 20 * 4.4 + 2 * 5.7 * 12 + 0.123 / 4.5, d_dt.q, EPS); // m OGy dq/dt = My
+    ASSERT_NEAR(0, d_dt.r, EPS); // m OGz dr/dt = Mz
 }
 
 TEST_F(XdynForMETest, complete_test_with_commands_and_delay_just_test_quaternions)
@@ -124,7 +122,7 @@ TEST_F(XdynForMETest, complete_test_with_commands_and_delay_just_test_quaternion
                 "],\n"
                 "\"commands\": {\"F1(command1)\": 20, \"F1(a)\": 4.5, \"F1(b)\": 5.7}}";
     SimServerInputs server_inputs(deserialize(input_yaml), xdyn_for_me.get_Tmax());
-    const std::vector<double> dx_dt = xdyn_for_me.handle(server_inputs);
+    const YamlState d_dt = xdyn_for_me.handle(server_inputs);
 
     // q1 = qr r + qi i + qj j + qk k
     // q2 =         p i +  q j +  r k
@@ -152,8 +150,8 @@ TEST_F(XdynForMETest, complete_test_with_commands_and_delay_just_test_quaternion
     const double dqi_dt = 0.5*(a1*b2 + b1*a2 + c1*d2 - d1*c2);
     const double dqj_dt = 0.5*(a1*c2 - b1*d2 + c1*a2 + d1*b2);
 
-    EXPECT_NEAR(dqr_dt,          dx_dt[9], EPS);
-    EXPECT_NEAR(dqi_dt,          dx_dt[10], EPS);
-    EXPECT_NEAR(dqj_dt,          dx_dt[11], EPS);
-    EXPECT_NEAR(dqk_dt,          dx_dt[12], EPS);
+    EXPECT_NEAR(dqr_dt, d_dt.qr, EPS);
+    EXPECT_NEAR(dqi_dt, d_dt.qi, EPS);
+    EXPECT_NEAR(dqj_dt, d_dt.qj, EPS);
+    EXPECT_NEAR(dqk_dt, d_dt.qk, EPS);
 }

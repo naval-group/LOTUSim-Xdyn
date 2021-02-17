@@ -174,53 +174,27 @@ YamlSimServerInputs from_grpc(grpc::ServerContext* , const ModelExchangeRequestQ
     return server_inputs;
 }
 
-std::tuple<double, double, double> get_euler_derivative(const StateType& state);
-std::tuple<double, double, double> get_euler_derivative(const StateType& state)
+grpc::Status to_grpc(grpc::ServerContext* context, const YamlState& state_derivatives, ModelExchangeResponse* response);
+grpc::Status to_grpc(grpc::ServerContext* , const YamlState& state_derivatives, ModelExchangeResponse* response)
 {
-    YamlRotation rot;
-    rot.order_by = "angle";
-    rot.convention = {"z", "y'", "x''"};
-    const ssc::kinematics::RotationMatrix R = Eigen::Quaternion<double>(state[9],state[10],state[11],state[12]).matrix();
-    const ssc::kinematics::EulerAngles angles = BodyStates::convert(R, rot);
-    const double cos_phi = std::cos(angles.phi);
-    const double sin_phi = std::sin(angles.phi);
-    const double cos_theta = std::cos(angles.theta);
-    const double tan_theta = std::tan(angles.theta);
-    const double p = state[6];
-    const double q = state[7];
-    const double r = state[8];
-    const double dphi_dt = p + sin_phi*tan_theta *q + cos_phi*tan_theta*r;
-    const double dtheta_dt = cos_phi*q - sin_phi*r;
-    const double dpsi_dt = sin_phi/cos_theta*q + cos_phi/cos_theta*r;
-    return std::tuple<double, double, double>(dphi_dt, dtheta_dt, dpsi_dt);
-}
-
-grpc::Status to_grpc(grpc::ServerContext* context, const StateType& res, ModelExchangeResponse* response, const SimServerInputs& inputs);
-grpc::Status to_grpc(grpc::ServerContext* , const StateType& res, ModelExchangeResponse* response, const SimServerInputs& inputs)
-{
-    if (res.size() != 13)
-    {
-        return grpc::Status(grpc::StatusCode::INTERNAL, "We didn't get 13 states back from XdynForME::calculate_dx_dt. This should never happen and is a bug in xdyn's gRPC implementation. Please contact xdyn's support team!");
-    }
     ModelExchangeStateDerivatives* d_dt = new ModelExchangeStateDerivatives();
-    d_dt->set_x(res[0]);
-    d_dt->set_y(res[1]);
-    d_dt->set_z(res[2]);
-    d_dt->set_u(res[3]);
-    d_dt->set_v(res[4]);
-    d_dt->set_w(res[5]);
-    d_dt->set_p(res[6]);
-    d_dt->set_q(res[7]);
-    d_dt->set_r(res[8]);
-    d_dt->set_qr(res[9]);
-    d_dt->set_qi(res[10]);
-    d_dt->set_qj(res[11]);
-    d_dt->set_qk(res[12]);
-    const std::tuple<double, double, double> deuler_dt = get_euler_derivative(inputs.state_at_t);
-    d_dt->set_phi(std::get<0>(deuler_dt));
-    d_dt->set_theta(std::get<1>(deuler_dt));
-    d_dt->set_psi(std::get<2>(deuler_dt));
-    d_dt->set_t(inputs.t);
+    d_dt->set_x(state_derivatives.x);
+    d_dt->set_y(state_derivatives.y);
+    d_dt->set_z(state_derivatives.z);
+    d_dt->set_u(state_derivatives.u);
+    d_dt->set_v(state_derivatives.v);
+    d_dt->set_w(state_derivatives.w);
+    d_dt->set_p(state_derivatives.p);
+    d_dt->set_q(state_derivatives.q);
+    d_dt->set_r(state_derivatives.r);
+    d_dt->set_qr(state_derivatives.qr);
+    d_dt->set_qi(state_derivatives.qi);
+    d_dt->set_qj(state_derivatives.qj);
+    d_dt->set_qk(state_derivatives.qk);
+    d_dt->set_phi(state_derivatives.phi);
+    d_dt->set_theta(state_derivatives.theta);
+    d_dt->set_psi(state_derivatives.psi);
+    d_dt->set_t(state_derivatives.t);
     response->set_allocated_d_dt(d_dt);
     return grpc::Status::OK;
 }
@@ -236,8 +210,8 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_euler_321(
         return precond;
     }
     const SimServerInputs inputs(from_grpc(context, request), xdyn.get_Tmax());
-    const StateType output = xdyn.handle(inputs);
-    const grpc::Status postcond = to_grpc(context, output, response, inputs);
+    const YamlState output = xdyn.handle(inputs);
+    const grpc::Status postcond = to_grpc(context, output, response);
     return postcond;
 }
 
@@ -256,8 +230,7 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_quaternion(
     {
         return grpc::Status(grpc::StatusCode::INTERNAL, "We didn't get any states as input (inputs.states is empty): we need at least one to set the initial conditions. This error was detected in ModelExchangeServiceImpl::dx_dt_quaternion");
     }
-    const double t = inputs.states.back().t;
-    const StateType output = xdyn.handle(SimServerInputs(inputs, xdyn.get_Tmax()));
-    const grpc::Status postcond = to_grpc(context, output, response, t);
+    const YamlState output = xdyn.handle(SimServerInputs(inputs, xdyn.get_Tmax()));
+    const grpc::Status postcond = to_grpc(context, output, response);
     return postcond;
 }

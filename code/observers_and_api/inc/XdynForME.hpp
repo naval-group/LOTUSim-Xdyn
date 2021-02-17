@@ -12,12 +12,13 @@
 
 #include "SimServerInputs.hpp"
 #include "ConfBuilder.hpp"
+#include "YamlState.hpp"
 
 class XdynForME
 {
     public :
         XdynForME(const std::string& yaml_model);
-        StateType handle(const SimServerInputs& raw_yaml);
+        YamlState handle(const SimServerInputs& raw_yaml);
         double get_Tmax() const;
 
     private :
