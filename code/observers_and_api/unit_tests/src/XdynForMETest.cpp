@@ -155,3 +155,32 @@ TEST_F(XdynForMETest, complete_test_with_commands_and_delay_just_test_quaternion
     EXPECT_NEAR(dqj_dt, d_dt.qj, EPS);
     EXPECT_NEAR(dqk_dt, d_dt.qk, EPS);
 }
+
+TEST_F(XdynForMETest, can_get_extra_observations)
+{
+    const std::string yaml = test_data::simserver_test_with_commands_and_delay();
+    XdynForME xdyn_for_me(yaml);
+    const std::string input_yaml =
+                "{\"Dt\": 10.0,\n"
+                "\"states\":\n"
+                "[ {\"t\": 0.0, \"x\": 4.0,  \"y\": 8.0, \"z\": 12.0, \"u\": 1.0, \"v\": 0.0, \"w\": 0.0, \"p\": 0.0, \"q\": 0.0,   \"r\": 0.0, \"qr\": 1.0, \"qi\": 0.0, \"qj\": 0.0, \"qk\": 0.0}\n"
+                ", {\"t\": 1.0, \"x\": 5.0,  \"y\": 7.0, \"z\": 13.0, \"u\": 1.1, \"v\": 0.0, \"w\": 0.0, \"p\": 0.0, \"q\": 0.0,   \"r\": 0.0, \"qr\": 1.0, \"qi\": 0.0, \"qj\": 0.0, \"qk\": 0.0}\n"
+                ", {\"t\": 2.0, \"x\": 6.0,  \"y\": 6.0, \"z\": 14.0, \"u\": 1.2, \"v\": 0.0, \"w\": 0.0, \"p\": 0.0, \"q\": 0.0,   \"r\": 0.0, \"qr\": 1.0, \"qi\": 0.0, \"qj\": 0.0, \"qk\": 0.0}\n"
+                ", {\"t\": 3.0, \"x\": 7.0,  \"y\": 5.0, \"z\": 15.0, \"u\": 1.3, \"v\": 0.0, \"w\": 0.0, \"p\": 0.0, \"q\": 0.0,   \"r\": 0.0, \"qr\": 1.0, \"qi\": 0.0, \"qj\": 0.0, \"qk\": 0.0}\n"
+                ", {\"t\": 4.0, \"x\": 8.0,  \"y\": 4.0, \"z\": 16.0, \"u\": 1.4, \"v\": 0.23,\"w\": 0.0, \"p\": 0.0, \"q\": 0.0,   \"r\": 0.0, \"qr\": 1.0, \"qi\": 0.0, \"qj\": 0.0, \"qk\": 0.0}\n"
+                ", {\"t\": 5.0, \"x\": 9.0,  \"y\": 3.0, \"z\": 17.0, \"u\": 1.5, \"v\": 0.0, \"w\": 4.4, \"p\": 0.0, \"q\": 0.0,   \"r\": 0.0, \"qr\": 1.0, \"qi\": 0.0, \"qj\": 0.0, \"qk\": 0.0}\n"
+                ", {\"t\": 6.0, \"x\": 10.0, \"y\": 2.0, \"z\": 18.0, \"u\": 1.6, \"v\": 0.0, \"w\": 0.0, \"p\": 12.0,\"q\": 0.0,   \"r\": 0.0, \"qr\": 1.0, \"qi\": 0.0, \"qj\": 0.0, \"qk\": 0.0}\n"
+                ", {\"t\": 7.0, \"x\": 11.0, \"y\": 1.0, \"z\": 19.0, \"u\": 1.7, \"v\": 0.0, \"w\": 0.0, \"p\": 0.0, \"q\": 0.123, \"r\": 0.0, \"qr\": 1.0, \"qi\": 0.0, \"qj\": 0.0, \"qk\": 0.0}\n"
+                ", {\"t\": 8.0, \"x\": 12.0, \"y\": 0.0, \"z\": 12.1, \"u\": 1.8, \"v\": 0.0, \"w\": 0.0, \"p\": 0.0, \"q\": 0.0,   \"r\": 0.0, \"qr\": 1.0, \"qi\": 0.0, \"qj\": 0.0, \"qk\": 0.0}\n"
+                ", {\"t\": 9.0, \"x\": 13.0, \"y\": 1.0, \"z\": 12.2, \"u\": 1.9, \"v\": 0.0, \"w\": 0.0, \"p\": 0.0, \"q\": 0.0,   \"r\": 0.0, \"qr\": 1.0, \"qi\": 0.0, \"qj\": 0.0, \"qk\": 0.0}\n"
+                ", {\"t\": 10,  \"x\": 14.0, \"y\": 2.0, \"z\": 12.3, \"u\": 0.0, \"v\": 0.0, \"w\": 0.0, \"p\": 0,   \"q\": 0,     \"r\": 0,   \"qr\": 1.1, \"qi\": 2.2, \"qj\": 3.3, \"qk\": 4.4}\n"
+                "],\n"
+                "\"commands\": {\"F1(command1)\": 20, \"F1(a)\": 4.5, \"F1(b)\": 5.7},"
+                "\"requested_output\": [\"Fx(F1,ball,ball)\",\"My(F1,ball,ball)\"]}";
+    SimServerInputs server_inputs(deserialize(input_yaml), xdyn_for_me.get_Tmax());
+    const YamlState d_dt = xdyn_for_me.handle(server_inputs);
+
+    ASSERT_FALSE(d_dt.extra_observations. empty());
+    ASSERT_NE(d_dt.extra_observations.find("Fx(F1,ball,ball)"), d_dt.extra_observations.end());
+    ASSERT_NE(d_dt.extra_observations.find("My(F1,ball,ball)"), d_dt.extra_observations.end());
+}
