@@ -237,7 +237,7 @@ grpc::Status CosimulationServiceImpl::step_euler_321(
         return precond;
     }
     const YamlSimServerInputs inputs = from_grpc(context, request);
-    const std::vector<YamlState> output = simserver.play_one_step(inputs);
+    const std::vector<YamlState> output = simserver.handle(inputs);
     const grpc::Status postcond = to_grpc(context, output, response);
     return postcond;
 }
@@ -253,7 +253,7 @@ grpc::Status CosimulationServiceImpl::step_quaternion(
         return precond;
     }
     const YamlSimServerInputs inputs = from_grpc(context, request);
-    const std::vector<YamlState> output = simserver.play_one_step(inputs);
+    const std::vector<YamlState> output = simserver.handle(inputs);
     const grpc::Status postcond = to_grpc(context, output, response);
     return postcond;
 }

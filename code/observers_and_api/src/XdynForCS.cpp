@@ -25,75 +25,23 @@ XdynForCS::XdynForCS(const std::string& yaml_model,
 {
 }
 
-
-std::vector<YamlState> XdynForCS::play_one_step(const std::string& raw_yaml)
+std::vector<YamlState> XdynForCS::handle(const YamlSimServerInputs& request)
 {
-    return play_one_step(deserialize(raw_yaml));
+    return handle(SimServerInputs(request, builder.Tmax));
 }
 
-std::vector<YamlState> XdynForCS::play_one_step(const YamlSimServerInputs& inputs)
+std::vector<YamlState> XdynForCS::handle(const SimServerInputs& request)
 {
-    return play_one_step(SimServerInputs(inputs, builder.Tmax));
-}
-
-std::vector<YamlState> XdynForCS::play_one_step(const SimServerInputs& simstepperinfo)
-{
-    return handle(simstepperinfo);
-}
-
-YamlState convert_without_angles(const Res& res);
-YamlState convert_without_angles(const Res& res)
-{
-    YamlState ret;
-    ret.t     = res.t;
-    ret.x     = res.x[0];
-    ret.y     = res.x[1];
-    ret.z     = res.x[2];
-    ret.u     = res.x[3];
-    ret.v     = res.x[4];
-    ret.w     = res.x[5];
-    ret.p     = res.x[6];
-    ret.q     = res.x[7];
-    ret.r     = res.x[8];
-    ret.qr    = res.x[9];
-    ret.qi    = res.x[10];
-    ret.qj    = res.x[11];
-    ret.qk    = res.x[12];
-    ret.phi   = 0;
-    ret.theta = 0;
-    ret.psi   = 0;
-    ret.extra_observations = res.extra_observations;
-    return ret;
-}
-
-std::function<YamlState(const Res&)> convert_with_angles(const BodyPtr& body);
-std::function<YamlState(const Res&)> convert_with_angles(const BodyPtr& body)
-{
-    return [&body](const Res& res)
-            {
-                YamlState ret = convert_without_angles(res);
-                const State new_state(ret,0);
-                body->set_states_history(new_state);
-                const auto angles = body->get_states().get_angles();
-                ret.phi = angles.phi;
-                ret.theta = angles.theta;
-                ret.psi = angles.psi;
-                return ret;
-            };
-}
-
-std::vector<YamlState> XdynForCS::handle(const SimServerInputs& infos)
-{
-    if (infos.Dt <= 0)
+    if (request.Dt <= 0)
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Dt should be greater than 0 but got Dt = " << infos.Dt);
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Dt should be greater than 0 but got Dt = " << request.Dt);
     }
-    const double tstart = infos.t;
-    const double Dt = infos.Dt;
+    const double tstart = request.t;
+    const double Dt = request.Dt;
     sim.reset_history();
-    sim.set_bodystates(infos.full_state_history);
-    sim.set_command_listener(infos.commands);
-    CoSimulationObserver observer(infos.requested_output, sim.get_bodies().at(0)->get_name());
+    sim.set_bodystates(request.full_state_history);
+    sim.set_command_listener(request.commands);
+    CoSimulationObserver observer(request.requested_output, sim.get_bodies().at(0)->get_name());
     if(solver == "euler")
     {
         simulate<ssc::solver::EulerStepper>(sim, tstart, tstart+Dt, dt, observer);

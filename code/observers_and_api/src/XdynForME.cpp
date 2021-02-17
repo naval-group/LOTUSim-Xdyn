@@ -19,6 +19,11 @@ double XdynForME::get_Tmax() const
     return builder.Tmax;
 }
 
+YamlState XdynForME::handle(const YamlSimServerInputs& request)
+{
+    return handle(SimServerInputs(request, get_Tmax()));
+}
+
 std::tuple<double, double, double> get_euler_derivative(const StateType& state);
 std::tuple<double, double, double> get_euler_derivative(const StateType& state)
 {
@@ -40,20 +45,20 @@ std::tuple<double, double, double> get_euler_derivative(const StateType& state)
     return std::tuple<double, double, double>(dphi_dt, dtheta_dt, dpsi_dt);
 }
 
-YamlState XdynForME::handle(const SimServerInputs& server_inputs)
+YamlState XdynForME::handle(const SimServerInputs& request)
 {
-    const double t = server_inputs.t;
-    builder.sim.set_bodystates(server_inputs.state_history_except_last_point);
-    builder.sim.set_command_listener(server_inputs.commands);
+    const double t = request.t;
+    builder.sim.set_bodystates(request.state_history_except_last_point);
+    builder.sim.set_command_listener(request.commands);
 
     StateType dx_dt(13, 0);
     // Here we use a CoSimulationObserver, but only for the requested extra observations.
-    CoSimulationObserver observer(server_inputs.requested_output, builder.sim.get_bodies().at(0)->get_name());
-    builder.sim.dx_dt(server_inputs.state_at_t, dx_dt, t);
-    observer.observe(builder.sim, server_inputs.t);
+    CoSimulationObserver observer(request.requested_output, builder.sim.get_bodies().at(0)->get_name());
+    builder.sim.dx_dt(request.state_at_t, dx_dt, t);
+    observer.observe(builder.sim, request.t);
 
     YamlState state_derivatives;
-    state_derivatives.t = server_inputs.t;
+    state_derivatives.t = request.t;
     state_derivatives.x = dx_dt[0];
     state_derivatives.y = dx_dt[1];
     state_derivatives.z = dx_dt[2];

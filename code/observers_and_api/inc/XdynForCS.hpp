@@ -18,11 +18,8 @@ class XdynForCS
                   const std::string& solver,
                   const double dt);
 
-        std::vector<YamlState> play_one_step(const std::string& raw_yaml);
-        std::vector<YamlState> play_one_step(const SimServerInputs& raw_yaml);
-        std::vector<YamlState> play_one_step(const YamlSimServerInputs& inputs);
-
-        std::vector<YamlState> handle(const SimServerInputs& input);
+        std::vector<YamlState> handle(const YamlSimServerInputs& request);
+        std::vector<YamlState> handle(const SimServerInputs& request);
         double get_Tmax() const;
 
     private :

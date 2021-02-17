@@ -18,7 +18,8 @@ class XdynForME
 {
     public :
         XdynForME(const std::string& yaml_model);
-        YamlState handle(const SimServerInputs& raw_yaml);
+        YamlState handle(const YamlSimServerInputs& request);
+        YamlState handle(const SimServerInputs& request);
         double get_Tmax() const;
 
     private :

@@ -42,8 +42,7 @@ TEST_F(XdynForMETest, test_falling_ball_with_yaml)
 
     XdynForME xdyn_for_me(yaml);
     const std::string input_yaml = test_data::complete_yaml_message_for_falling_ball();
-    SimServerInputs server_inputs(deserialize(input_yaml), xdyn_for_me.get_Tmax());
-    const YamlState d_dt = xdyn_for_me.handle(server_inputs);
+    const YamlState d_dt = xdyn_for_me.handle(deserialize(input_yaml));
 
 
 //! [XdynForMETest example]
@@ -85,8 +84,7 @@ TEST_F(XdynForMETest, complete_test_with_commands_and_delay)
                 ", {\"t\": 10,  \"x\": 14.0, \"y\": 2.0, \"z\": 12.3, \"u\": 0.0, \"v\": 0.0, \"w\": 0.0, \"p\": 0,   \"q\": 0,     \"r\": 0,   \"qr\": 1.1, \"qi\": 2.2, \"qj\": 3.3, \"qk\": 4.4}\n"
                 "],\n"
                 "\"commands\": {\"F1(command1)\": 20, \"F1(a)\": 4.5, \"F1(b)\": 5.7}}";
-    SimServerInputs server_inputs(deserialize(input_yaml), xdyn_for_me.get_Tmax());
-    const YamlState d_dt = xdyn_for_me.handle(server_inputs);
+    const YamlState d_dt = xdyn_for_me.handle(deserialize(input_yaml));
 
     ASSERT_NEAR(0, d_dt.x, EPS); // dx/dt = u
     ASSERT_NEAR(0, d_dt.y, EPS); // dy/dt = v
@@ -121,8 +119,7 @@ TEST_F(XdynForMETest, complete_test_with_commands_and_delay_just_test_quaternion
                 ", {\"t\": 10,  \"x\": 14.0, \"y\": 2.0, \"z\": 12.3, \"u\": 0.0, \"v\": 0.0, \"w\": 0.0, \"p\": 11,  \"q\": 22,    \"r\": 33,  \"qr\": 1.1, \"qi\": 2.2, \"qj\": 3.3, \"qk\": 4.4}\n"
                 "],\n"
                 "\"commands\": {\"F1(command1)\": 20, \"F1(a)\": 4.5, \"F1(b)\": 5.7}}";
-    SimServerInputs server_inputs(deserialize(input_yaml), xdyn_for_me.get_Tmax());
-    const YamlState d_dt = xdyn_for_me.handle(server_inputs);
+    const YamlState d_dt = xdyn_for_me.handle(deserialize(input_yaml));
 
     // q1 = qr r + qi i + qj j + qk k
     // q2 =         p i +  q j +  r k
@@ -177,8 +174,7 @@ TEST_F(XdynForMETest, can_get_extra_observations)
                 "],\n"
                 "\"commands\": {\"F1(command1)\": 20, \"F1(a)\": 4.5, \"F1(b)\": 5.7},"
                 "\"requested_output\": [\"Fx(F1,ball,ball)\",\"My(F1,ball,ball)\"]}";
-    SimServerInputs server_inputs(deserialize(input_yaml), xdyn_for_me.get_Tmax());
-    const YamlState d_dt = xdyn_for_me.handle(server_inputs);
+    const YamlState d_dt = xdyn_for_me.handle(deserialize(input_yaml));
 
     ASSERT_FALSE(d_dt.extra_observations. empty());
     ASSERT_NE(d_dt.extra_observations.find("Fx(F1,ball,ball)"), d_dt.extra_observations.end());

@@ -4,6 +4,7 @@
 #include "TriMeshTestData.hpp"
 #include "XdynForCS.hpp"
 #include "XdynForCSTest.hpp"
+#include "JSONSerializer.hpp"
 #define EPS 1E-8
 
 XdynForCSTest::XdynForCSTest() : a(ssc::random_data_generator::DataGenerator(123456789))
@@ -34,7 +35,8 @@ TEST_F(XdynForCSTest, test_falling_ball_with_yaml)
     const std::string yaml_model = test_data::falling_ball_example();
     const std::string solver = "euler";
     XdynForCS sim_server(yaml_model, solver, dt);
-    const std::vector<YamlState> outputs = sim_server.play_one_step(test_data::complete_yaml_message_for_falling_ball());
+    auto JSON_request = test_data::complete_yaml_message_for_falling_ball();
+    const std::vector<YamlState> outputs = sim_server.handle(deserialize(JSON_request));
 
 //! [SimServerTest example]
 //! [SimServerTest expected output]
@@ -62,7 +64,8 @@ TEST_F(XdynForCSTest, should_throw_if_Dt_is_not_strictly_positive)
     const std::string yaml_model = test_data::falling_ball_example();
     const std::string solver = "euler";
     XdynForCS sim_server(yaml_model, solver, dt);
-    ASSERT_THROW(sim_server.play_one_step(test_data::invalid_json_for_cs()), InvalidInputException);
+    auto JSON_request = test_data::invalid_json_for_cs();
+    ASSERT_THROW(sim_server.handle(deserialize(JSON_request)), InvalidInputException);
 }
 
 TEST_F(XdynForCSTest, can_get_extra_observations)
@@ -71,7 +74,8 @@ TEST_F(XdynForCSTest, can_get_extra_observations)
     const std::string yaml_model = test_data::GM_cube();
     const std::string solver = "euler";
     XdynForCS sim_server(yaml_model, unit_cube(), solver, dt);
-    const std::vector<YamlState> outputs = sim_server.play_one_step(test_data::JSON_server_request_GM_cube_with_output());
+    auto JSON_request = test_data::JSON_server_request_GM_cube_with_output();
+    const std::vector<YamlState> outputs = sim_server.handle(deserialize(JSON_request));
     ASSERT_EQ(11, outputs.size());
     ASSERT_FALSE(outputs.front().extra_observations. empty());
     for (const auto output:outputs)

@@ -213,7 +213,7 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_euler_321(
     {
         return precond;
     }
-    const SimServerInputs inputs(from_grpc(context, request), xdyn.get_Tmax());
+    const YamlSimServerInputs inputs(from_grpc(context, request));
     const YamlState output = xdyn.handle(inputs);
     const grpc::Status postcond = to_grpc(context, output, response);
     return postcond;
@@ -234,7 +234,7 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_quaternion(
     {
         return grpc::Status(grpc::StatusCode::INTERNAL, "We didn't get any states as input (inputs.states is empty): we need at least one to set the initial conditions. This error was detected in ModelExchangeServiceImpl::dx_dt_quaternion");
     }
-    const YamlState output = xdyn.handle(SimServerInputs(inputs, xdyn.get_Tmax()));
+    const YamlState output = xdyn.handle(inputs);
     const grpc::Status postcond = to_grpc(context, output, response);
     return postcond;
 }
