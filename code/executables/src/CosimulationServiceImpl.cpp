@@ -124,9 +124,8 @@ YamlSimServerInputs from_grpc(grpc::ServerContext* , const CosimulationRequestEu
             server_inputs.states[i].qj = std::get<2>(quaternion);
             server_inputs.states[i].qk = std::get<3>(quaternion);
         }
-        std::vector<std::string> requested_output(request->requested_output().begin(),
-                                                  request->requested_output().end());
-        server_inputs.requested_output = requested_output;
+        server_inputs.requested_output = std::vector<std::string>(request->requested_output().begin(),
+                                                                  request->requested_output().end());
     }
     return server_inputs;
 }
@@ -160,6 +159,8 @@ YamlSimServerInputs from_grpc(grpc::ServerContext* , const CosimulationRequestQu
             server_inputs.states[i].qj = request->states().qj(i);
             server_inputs.states[i].qk = request->states().qk(i);
         }
+        server_inputs.requested_output = std::vector<std::string>(request->requested_output().begin(),
+                                                                  request->requested_output().end());
     }
     return server_inputs;
 }
