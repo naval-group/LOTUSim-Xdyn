@@ -97,9 +97,9 @@ TEST_F(XdynForCSTest, can_compute_one_step_with_euler_solver)
 
     const std::string input_yaml(test_data::falling_ball_example());
     XdynForCS simstepper(input_yaml, solver, dt); // SimStepper's creator controls the stability of the numerical integration
-    const double x0=4;
-    const double y0=8;
-    const double z0=12;
+    const double x0 = 4;
+    const double y0 = 8;
+    const double z0 = 12;
     const double u0 = 1;
     const double v0 = 0;
     const double w0 = 0;
@@ -144,9 +144,9 @@ TEST_F(XdynForCSTest, can_compute_same_step_several_times)
 
     std::string input_yaml(test_data::falling_ball_example());
     XdynForCS simstepper(input_yaml, solver, dt); // SimStepper's creator controls the stability of the numerical integration
-    const double x0=4;
-    const double y0=8;
-    const double z0=12;
+    const double x0 = 4;
+    const double y0 = 8;
+    const double z0 = 12;
     const double u0 = 1;
     const double v0 = 0;
     const double w0 = 0;
@@ -189,9 +189,9 @@ TEST_F(XdynForCSTest, wrong_solver_must_raise_exception)
 
     std::string input_yaml(test_data::falling_ball_example());
     XdynForCS simstepper(input_yaml, solver, dt); // SimStepper's creator controls the stability of the numerical integration
-    const double x0=4;
-    const double y0=8;
-    const double z0=12;
+    const double x0 = 4;
+    const double y0 = 8;
+    const double z0 = 12;
     const double u0 = 1;
     const double v0 = 0;
     const double w0 = 0;
