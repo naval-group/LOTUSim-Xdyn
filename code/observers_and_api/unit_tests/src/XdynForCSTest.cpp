@@ -35,7 +35,7 @@ TEST_F(XdynForCSTest, test_falling_ball_with_yaml)
     const std::string yaml_model = test_data::falling_ball_example();
     const std::string solver = "euler";
     XdynForCS sim_server(yaml_model, solver, dt);
-    auto JSON_request = test_data::complete_yaml_message_for_falling_ball();
+    const auto JSON_request = test_data::complete_yaml_message_for_falling_ball();
     const std::vector<YamlState> outputs = sim_server.handle(deserialize(JSON_request));
 
 //! [SimServerTest example]
@@ -74,7 +74,7 @@ TEST_F(XdynForCSTest, can_get_extra_observations)
     const std::string yaml_model = test_data::GM_cube();
     const std::string solver = "euler";
     XdynForCS sim_server(yaml_model, unit_cube(), solver, dt);
-    auto JSON_request = test_data::JSON_server_request_GM_cube_with_output();
+    const auto JSON_request = test_data::JSON_server_request_GM_cube_with_output();
     const std::vector<YamlState> outputs = sim_server.handle(deserialize(JSON_request));
     ASSERT_EQ(11, outputs.size());
     ASSERT_FALSE(outputs.front().extra_observations. empty());
@@ -95,7 +95,7 @@ TEST_F(XdynForCSTest, can_compute_one_step_with_euler_solver)
     const double Dt = 10;
     const double t_end = t_start+Dt;
 
-    std::string input_yaml(test_data::falling_ball_example());
+    const std::string input_yaml(test_data::falling_ball_example());
     XdynForCS simstepper(input_yaml, solver, dt); // SimStepper's creator controls the stability of the numerical integration
     const double x0=4;
     const double y0=8;

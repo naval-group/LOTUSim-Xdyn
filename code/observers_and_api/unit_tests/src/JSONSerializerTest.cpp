@@ -27,10 +27,10 @@ JSONSerializerTest::~JSONSerializerTest()
 
 TEST_F(JSONSerializerTest, can_parse_simple_history)
 {
-    double t_list[5] = {0,0.1,0.2,0.3,0.4};
-    double x0=90, y0=91, z0=92, u0=93, v0=94, w0=95, p0=96, q0=97, r0=98, qr0=99, qi0=100, qj0=101, qk0=102;
-    double state_step = -20;
-    size_t size_test = 5;
+    const double t_list[5] = {0,0.1,0.2,0.3,0.4};
+    const double x0=90, y0=91, z0=92, u0=93, v0=94, w0=95, p0=96, q0=97, r0=98, qr0=99, qi0=100, qj0=101, qk0=102;
+    const double state_step = -20;
+    const size_t size_test = 5;
 
     YamlSimServerInputs history = deserialize(test_data::dummy_history());
 
