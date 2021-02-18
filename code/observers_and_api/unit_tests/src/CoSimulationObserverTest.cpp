@@ -23,7 +23,7 @@ TEST_F(CoSimulationObserverTest, RequestedAdditionalVariablesAreAvailable)
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, tend, dt, observer);
     auto results = observer.get();
 
-    for(auto res:results)
+    for(const auto& res:results)
     {
         ASSERT_TRUE(res.extra_observations.find("Fz(gravity,ball,ball)") != res.extra_observations.end());
     }
