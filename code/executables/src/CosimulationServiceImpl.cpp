@@ -199,7 +199,7 @@ grpc::Status to_grpc(grpc::ServerContext* , const std::vector<YamlState>& res, C
         all_states->add_psi(s.psi);
         all_states->add_t(s.t);
 
-        for(auto obs:s.extra_observations)
+        for(const auto& obs:s.extra_observations)
         {
             response->mutable_extra_observations()->operator[](obs.first).add_value(obs.second);
         }
