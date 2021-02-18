@@ -10,14 +10,17 @@
 
 #include <string>
 
+#include "SimServerInputs.hpp"
 #include "ConfBuilder.hpp"
-#include "HistoryParser.hpp"
+#include "YamlState.hpp"
 
 class XdynForME
 {
     public :
         XdynForME(const std::string& yaml_model);
-        StateType calculate_dx_dt(const SimServerInputs& raw_yaml);
+        YamlState handle(const YamlSimServerInputs& request);
+        YamlState handle(const SimServerInputs& request);
+        YamlState compute_state_derivatives(const SimServerInputs& request);
         double get_Tmax() const;
 
     private :

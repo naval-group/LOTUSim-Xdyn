@@ -31,4 +31,20 @@ def test_should_get_the_right_number_of_results_from_xdyn_in_cosim_mode():
                          "qj": 0, "qk": 0}]}
 
     res = run(state)
-    assert len(res) == 21
+    assert len(res['t']) == 21
+    assert len(res['x']) == 21
+    assert len(res['y']) == 21
+    assert len(res['z']) == 21
+    assert len(res['u']) == 21
+    assert len(res['v']) == 21
+    assert len(res['w']) == 21
+    assert len(res['p']) == 21
+    assert len(res['q']) == 21
+    assert len(res['r']) == 21
+    assert len(res['qr']) == 21
+    assert len(res['qi']) == 21
+    assert len(res['qj']) == 21
+    assert len(res['qk']) == 21
+    assert len(res['phi']) == 21
+    assert len(res['theta']) == 21
+    assert len(res['psi']) == 21

@@ -29,7 +29,7 @@ class XDyn:
             xdyn_channel)
         self.request = ModelExchangeRequestEuler()
 
-    def dx_dt(self, state):
+    def dx_dt(self, state, requested_output):
         """Run a cosimulation step."""
         self.request.states.t[:] = [state['t']]
         self.request.states.x[:] = [state['x']]
@@ -44,6 +44,7 @@ class XDyn:
         self.request.states.phi[:] = [state['phi']]
         self.request.states.theta[:] = [state['theta']]
         self.request.states.psi[:] = [state['psi']]
+        self.request.requested_output[:] = requested_output
         res = self.xdyn_stub.dx_dt_euler_321(self.request)
         return {'t': res.d_dt.t,
                 'x': res.d_dt.x,
@@ -61,7 +62,8 @@ class XDyn:
                 'qk': res.d_dt.qk,
                 'phi': res.d_dt.phi,
                 'theta': res.d_dt.theta,
-                'psi': res.d_dt.psi}
+                'psi': res.d_dt.psi,
+                'extra_observations': res.extra_observations}
 
 
 EPS = 1E-6
@@ -88,7 +90,8 @@ class Tests(unittest.TestCase):
                               'phi': 0,
                               'theta': 0,
                               'psi': 0}
-        self.d_dt = self.xdyn.dx_dt(self.initial_state)
+        requested_output = ['Fz(gravity,ball,ball)','My(gravity,ball,ball)']
+        self.d_dt = self.xdyn.dx_dt(self.initial_state, requested_output)
 
     def test_can_call_the_model_over_grpc(self):
         """Make sure the derivatives resul are correct."""
@@ -109,3 +112,8 @@ class Tests(unittest.TestCase):
         assert abs(self.d_dt['phi']) < EPS
         assert abs(self.d_dt['theta']) < EPS
         assert abs(self.d_dt['psi']) < EPS
+
+    def test_can_get_extra_observations(self):
+        """Extra observations should be available."""
+        assert 'Fz(gravity,ball,ball)' in self.d_dt['extra_observations']
+        assert 'My(gravity,ball,ball)' in self.d_dt['extra_observations']

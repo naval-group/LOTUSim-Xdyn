@@ -19,13 +19,15 @@ set(SRC src/simulator_api.cpp
         ${CMAKE_BINARY_DIR}/demoMatLab.cpp
         ${CMAKE_BINARY_DIR}/demoPython.cpp
         src/MapObserver.cpp
-        src/SimStepper.cpp
         src/ConfBuilder.cpp
-        src/HistoryParser.cpp
+        src/JSONSerializer.cpp
         src/XdynForCS.cpp
         src/XdynForME.cpp
         src/SimServerInputs.cpp
         src/EverythingObserver.cpp
+        src/gRPCProtoBufServer.cpp
+        src/SimulationServerObserver.cpp
+        src/CoSimulationObserver.cpp
         )
 
 # Using C++ 2011
@@ -56,7 +58,8 @@ include_directories(${yaml_parser_INCLUDE_DIRS})
 include_directories(${environment_models_INCLUDE_DIRS})
 include_directories(${external_file_formats_INCLUDE_DIRS})
 include_directories(${parser_extensions_INCLUDE_DIRS})
-include_directories(${grpc_INCLUDE_DIRS})
+include_directories(${grpc_INCLUDE_DIRS}) # For the code/grpc folder
+INCLUDE_DIRECTORIES(SYSTEM ${GRPC_INCLUDE_DIR}) # For the gRPC library
 
 add_library(${PROJECT_NAME} OBJECT ${SRC})
 set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")

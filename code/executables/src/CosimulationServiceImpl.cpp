@@ -9,8 +9,8 @@
 #include "CosimulationServiceImpl.hpp"
 #include "YamlSimServerInputs.hpp"
 
-CosimulationServiceImpl::CosimulationServiceImpl(const TR1(shared_ptr)<SimServer>& simserver_):
-simserver(simserver_)
+CosimulationServiceImpl::CosimulationServiceImpl(const XdynForCS& simserver_):
+        simserver(simserver_)
 {}
 
 #define SIZE size()
@@ -124,6 +124,8 @@ YamlSimServerInputs from_grpc(grpc::ServerContext* , const CosimulationRequestEu
             server_inputs.states[i].qj = std::get<2>(quaternion);
             server_inputs.states[i].qk = std::get<3>(quaternion);
         }
+        server_inputs.requested_output = std::vector<std::string>(request->requested_output().begin(),
+                                                                  request->requested_output().end());
     }
     return server_inputs;
 }
@@ -157,6 +159,8 @@ YamlSimServerInputs from_grpc(grpc::ServerContext* , const CosimulationRequestQu
             server_inputs.states[i].qj = request->states().qj(i);
             server_inputs.states[i].qk = request->states().qk(i);
         }
+        server_inputs.requested_output = std::vector<std::string>(request->requested_output().begin(),
+                                                                  request->requested_output().end());
     }
     return server_inputs;
 }
@@ -194,6 +198,11 @@ grpc::Status to_grpc(grpc::ServerContext* , const std::vector<YamlState>& res, C
         all_states->add_theta(s.theta);
         all_states->add_psi(s.psi);
         all_states->add_t(s.t);
+
+        for(const auto& obs:s.extra_observations)
+        {
+            response->mutable_extra_observations()->operator[](obs.first).add_value(obs.second);
+        }
     }
 
     last_state->set_t(state.t);
@@ -229,7 +238,7 @@ grpc::Status CosimulationServiceImpl::step_euler_321(
         return precond;
     }
     const YamlSimServerInputs inputs = from_grpc(context, request);
-    const std::vector<YamlState> output = simserver->play_one_step(inputs);
+    const std::vector<YamlState> output = simserver.handle(inputs);
     const grpc::Status postcond = to_grpc(context, output, response);
     return postcond;
 }
@@ -245,7 +254,7 @@ grpc::Status CosimulationServiceImpl::step_quaternion(
         return precond;
     }
     const YamlSimServerInputs inputs = from_grpc(context, request);
-    const std::vector<YamlState> output = simserver->play_one_step(inputs);
+    const std::vector<YamlState> output = simserver.handle(inputs);
     const grpc::Status postcond = to_grpc(context, output, response);
     return postcond;
 }

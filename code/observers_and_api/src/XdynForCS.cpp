@@ -1,40 +1,72 @@
-#include "XdynForCS.hpp"
-#include "HistoryParser.hpp"
-#include "SimServerInputs.hpp"
+#include <functional>
 
-SimServer::SimServer(const std::string& yaml_model, const std::string& solver, const double dt)
-    : builder(yaml_model)
-    , dt(dt)
-    , stepper(builder, solver, dt)
+#include "XdynForCS.hpp"
+#include "JSONSerializer.hpp"
+#include "SimServerInputs.hpp"
+#include "simulator_api.hpp"
+#include "CoSimulationObserver.hpp"
+
+XdynForCS::XdynForCS(const std::string& yaml_model, const std::string& solver, const double dt):
+        builder(yaml_model),
+        dt(dt),
+        sim(builder.sim),
+        solver(solver)
 {
 }
 
-SimServer::SimServer(const std::string& yaml_model,
+XdynForCS::XdynForCS(const std::string& yaml_model,
                   const VectorOfVectorOfPoints& mesh,
                   const std::string& solver,
-                  const double dt)
-: builder(yaml_model, mesh)
-, dt(dt)
-, stepper(builder, solver, dt)
+                  const double dt):
+        builder(yaml_model, mesh),
+        dt(dt),
+        sim(builder.sim),
+        solver(solver)
 {
 }
 
-
-std::vector<YamlState> SimServer::play_one_step(const std::string& raw_yaml)
+std::vector<YamlState> XdynForCS::handle(const YamlSimServerInputs& request)
 {
-    return play_one_step(parse_SimServerInputs(raw_yaml, builder.Tmax));
+    return handle(SimServerInputs(request, builder.Tmax));
 }
 
-std::vector<YamlState> SimServer::play_one_step(const YamlSimServerInputs& inputs)
+std::vector<YamlState> XdynForCS::handle(const SimServerInputs& request)
 {
-    return play_one_step(SimServerInputs(inputs, builder.Tmax));
+    return play_one_step(request);
 }
 
-std::vector<YamlState> SimServer::play_one_step(const SimServerInputs& simstepperinfo)
+std::vector<YamlState> XdynForCS::play_one_step(const SimServerInputs& request)
 {
-    if (simstepperinfo.Dt <= 0)
+    if (request.Dt <= 0)
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Dt should be greater than 0 but got Dt = " << simstepperinfo.Dt);
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Dt should be greater than 0 but got Dt = " << request.Dt);
     }
-    return stepper.step(simstepperinfo, simstepperinfo.Dt);
+    const double tstart = request.t;
+    const double Dt = request.Dt;
+    sim.reset_history();
+    sim.set_bodystates(request.full_state_history);
+    sim.set_command_listener(request.commands);
+    CoSimulationObserver observer(request.requested_output, sim.get_bodies().at(0)->get_name());
+    if(solver == "euler")
+    {
+        simulate<ssc::solver::EulerStepper>(sim, tstart, tstart+Dt, dt, observer);
+    }
+    else if (solver == "rk4")
+    {
+        simulate<ssc::solver::RK4Stepper>(sim, tstart, tstart+Dt, dt, observer);
+    }
+    else if (solver == "rkck")
+    {
+        simulate<ssc::solver::RKCK>(sim, tstart, tstart+Dt, dt, observer);
+    }
+    else
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "unknown solver");
+    }
+    return observer.get();
+}
+
+double XdynForCS::get_Tmax() const
+{
+    return builder.Tmax;
 }
