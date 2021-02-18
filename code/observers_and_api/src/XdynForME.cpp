@@ -8,7 +8,7 @@
 #include <tuple>
 
 #include "XdynForME.hpp"
-#include "CoSimulationObserver.hpp"
+#include "SimulationServerObserver.hpp"
 
 XdynForME::XdynForME(const std::string& yaml_model) :builder(yaml_model)
 {
@@ -58,7 +58,7 @@ YamlState XdynForME::compute_state_derivatives(const SimServerInputs& request)
 
     StateType dx_dt(13, 0);
     // Here we use a CoSimulationObserver, but only for the requested extra observations.
-    CoSimulationObserver observer(request.requested_output, builder.sim.get_bodies().at(0)->get_name());
+    SimulationServerObserver observer(request.requested_output);
     builder.sim.dx_dt(request.state_at_t, dx_dt, t);
     observer.observe(builder.sim, request.t);
 
