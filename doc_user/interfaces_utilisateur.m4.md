@@ -461,7 +461,8 @@ externe, par exemple Matlab ou Simulink.
 | Entrées    | Type                                                             | Détail                                                                                                                                                                                                                                                                  |
 | ---------- | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `states`   | Liste d’éléments de type « État »                                | Historique des états jusqu’au temps courant t. Si les modèles utilisés ne nécessitent pas d'historique, cette liste peut n'avoir qu'un seul élément.                                                                                                                    |
-| `commands` | Liste de clefs-valeurs (dictionnaire)                            | État des actionneurs au temps t                                                                                                                                                                                                                                         |
+| `commands` | Liste de clefs-valeurs (dictionnaire)                            | État des actionneurs au temps t                                                                 |
+| `requested_output` | Liste de chaînes de caractères             | Valeurs calculées par xdyn à renvoyer par le serveur (par exemples, les composantes des forces forces, avec la même syntaxe que pour la section 'output' du fichier YAML d'entrée) |
 
 Chaque élément de type « État » est composé des éléments suivants:
 
@@ -522,13 +523,17 @@ Exemple d'entrée:
   ],
   "commands": {
     "beta": 0.1
-  }
+  },
+  "requested_output": [
+    "Fz(gravity,body,NED)",
+    "My(hydrostatic,body,body)"
+  ]
 }
 ~~~~
 
 La sortie du "Model Exchange" correspond à la dérivée des états
 à savoir `dx/dt`, `dy/dt`, `dz/dt`, `du/dt`, `dv/dt`, `dw/dt`,
-`dp/dt`, `dq/dt`, `dr/dt`, `dqr/dt`, `dqi/dt`, `dqj/dt`, `dqk/dt`.
+`dp/dt`, `dq/dt`, `dr/dt`, `dqr/dt`, `dqi/dt`, `dqj/dt`, `dqk/dt`, `dphi/dt`, `dtheta/dt`, `dpsi/dt`.
 
 | Sorties   | Type      | Détail                                                                                                                                                                                                                             |
 | --------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -545,6 +550,13 @@ La sortie du "Model Exchange" correspond à la dérivée des états
 | `dqi/dt`  | Flottant  | Dérivée par rapport au temps de la première partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                        |
 | `dqj/dt`  | Flottant  | Dérivée par rapport au temps de la seconde partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                         |
 | `dqk/dt`  | Flottant  | Dérivée par rapport au temps de la troisième partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                       |
+| `dphi/dt`  | Flottant  | Dérivée par rapport au temps de l'angle de roulis/gîte du navire par rapport au sol (BODY/NED)                                                                                       |
+| `dtheta/dt`  | Flottant  | Dérivée par rapport au temps de l'angle de tangage/assiette par rapport au sol (BODY/NED)                                                                                       |
+| `dpsi/dt`  | Flottant  | Dérivée par rapport au temps de l'angle de lacet par rapport au sol (BODY/NED)                                                                                       |
+
+Il est important de noter que les dérivés des angles d'Euler sont calculées selon la convention d'angles `z, y', x''` (`id = 12` dans le tableau des conventions). Les autres conventions ne sont pas supportées pour le moment.
+
+En plus des dérivées des états, le serveur renvoit dans la section "extra_observations" du JSON les valeurs des variables demandées dans la section "requested_output" de la requête.
 
 Exemple de sortie:
 
@@ -562,7 +574,14 @@ Exemple de sortie:
   "dqr_dt": 0,
   "dqi_dt": 0,
   "dqj_dt": 0,
-  "dqk_dt": 0
+  "dqk_dt": 0,
+  "dphi_dt": 0,
+  "dtheta_dt": 0,
+  "dpsi_dt": 0,
+  "extra_observations": {
+    "Fz(gravity,body,NED)": 2.135e3,
+    "My(hydrostatic,body,body)": 4.984e4
+  }
 }
 ~~~~
 
@@ -592,7 +611,8 @@ include({{model_exchange.proto}})
 | `commands` | Liste de clefs-valeurs (dictionnaire)  | État des actionneurs au temps `t`. Commande au sens de xdyn (modèle d'effort commandé) au temps t0 (début de la                                        |
 |            |                                        | simulation, i.e. date du dernier élément de la liste `states`). Le plus souvent, correspond à l'état interne                                            |
 |            |                                        | d'un modèle d'actionneur (safran ou hélice par exemple) dans xdyn et dont on souhaite simuler la dynamique                                             |
-|            |                                        | en dehors d'xdyn.
+|            |                                        | en dehors d'xdyn. |
+| `requested_output` | Liste de chaînes de caractères  | Valeurs calculées par xdyn à renvoyer par le serveur (par exemples, les composantes des forces forces, avec la même syntaxe que pour la section 'output' du fichier YAML d'entrée) |
 
 Chaque élément de type « État » est composé des éléments suivants:
 
@@ -654,7 +674,11 @@ Exemple d'entrée:
   ],
   "commands": {
     "beta": 0.1
-  }
+  },
+  "requested_output": [
+    "Fz(gravity,body,NED)",
+    "My(hydrostatic,body,body)"
+  ]
 }
 ~~~~
 
@@ -689,46 +713,29 @@ le travail du client du serveur, mais n'est pas utilisée en interne par xdyn.
 Exemple de sortie:
 
 ~~~~{.json}
-[
-  {
-    "t": 10,
-    "x": 0,
-    "y": 8,
-    "z": 12,
-    "u": 1,
-    "v": 0,
-    "w": 0,
-    "p": 0,
-    "q": 1,
-    "r": 0,
-    "qr": 1,
-    "qi": 0,
-    "qj": 0,
-    "qk": 0,
-    "phi": 0,
-    "theta": 0,
-    "psi": 0
-  },
-  {
-    "t": 10.1,
-    "x": 0.0999968,
-    "y": 8,
-    "z": 12.0491,
-    "u": 0.897068,
-    "v": 0,
-    "w": 1.07593,
-    "p": 0,
-    "q": 1,
-    "r": 0,
-    "qr": 0.99875,
-    "qi": 0,
-    "qj": 0.0499792,
-    "qk": 0,
-    "phi": 0,
-    "theta": 0.1,
-    "psi": 0
+{
+  "t": [10,10.1],
+  "x": [0,0.0999968],
+  "y": [8,8],
+  "z": [12,12.0491],
+  "u": [1,0.897068],
+  "v": [0,0],
+  "w": [0,1.07593],
+  "p": [0,0],
+  "q": [1,1],
+  "r": [0,0],
+  "qr": [1,0.99875],
+  "qi": [0,0],
+  "qj": [0,0.0499792],
+  "qk": [0,0],
+  "phi": [0,0],
+  "theta": [0,0.1],
+  "psi": [0,0],
+  "extra_observations": {
+    "Fz(gravity,body,NED)": [2.135e3, 2.135e3],
+    "My(hydrostatic,body,body)": [4.984e4, 5.247e4] 
   }
-]
+}
 ~~~~
 
 Comme pour le "model exchange", la représentation textuelle de ces nombres
