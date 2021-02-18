@@ -1,25 +1,26 @@
+#include "SimulationServerObserverTest.hpp"
+
 #include "yaml_data.hpp"
 #include "parse_output.hpp"
 #include "simulator_api.hpp"
 
-#include "CoSimulationObserver.hpp"
-#include "CoSimulationObserverTest.hpp"
+#include "SimulationServerObserver.hpp"
 
-CoSimulationObserverTest::CoSimulationObserverTest() : a(ssc::random_data_generator::DataGenerator(7926843))
+SimulationServerObserverTest::SimulationServerObserverTest() : a(ssc::random_data_generator::DataGenerator(7926843))
 {
 }
 
-CoSimulationObserverTest::~CoSimulationObserverTest()
+SimulationServerObserverTest::~SimulationServerObserverTest()
 {
 }
 
-TEST_F(CoSimulationObserverTest, requested_additional_variables_are_available)
+TEST_F(SimulationServerObserverTest, requested_additional_variables_are_available)
 {
     const double dt = 1;
     const double tend = 10;
     auto sys = get_system(test_data::falling_ball_example(), 0);
 
-    CoSimulationObserver observer({"Fz(gravity,ball,ball)"}, sys.get_bodies().at(0)->get_name());
+    SimulationServerObserver observer({"Fz(gravity,ball,ball)"});
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, tend, dt, observer);
     auto results = observer.get();
 
