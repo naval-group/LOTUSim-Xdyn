@@ -13,7 +13,7 @@ CoSimulationObserverTest::~CoSimulationObserverTest()
 {
 }
 
-TEST_F(CoSimulationObserverTest, RequestedAdditionalVariablesAreAvailable)
+TEST_F(CoSimulationObserverTest, requested_additional_variables_are_available)
 {
     const double dt = 1;
     const double tend = 10;
