@@ -32,6 +32,11 @@ std::vector<YamlState> XdynForCS::handle(const YamlSimServerInputs& request)
 
 std::vector<YamlState> XdynForCS::handle(const SimServerInputs& request)
 {
+    return play_one_step(request);
+}
+
+std::vector<YamlState> XdynForCS::play_one_step(const SimServerInputs& request)
+{
     if (request.Dt <= 0)
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "Dt should be greater than 0 but got Dt = " << request.Dt);

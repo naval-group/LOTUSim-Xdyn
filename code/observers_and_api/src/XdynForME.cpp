@@ -47,6 +47,11 @@ std::tuple<double, double, double> get_euler_derivative(const StateType& state)
 
 YamlState XdynForME::handle(const SimServerInputs& request)
 {
+    return compute_state_derivatives(request);
+}
+
+YamlState XdynForME::compute_state_derivatives(const SimServerInputs& request)
+{
     const double t = request.t;
     builder.sim.set_bodystates(request.state_history_except_last_point);
     builder.sim.set_command_listener(request.commands);
