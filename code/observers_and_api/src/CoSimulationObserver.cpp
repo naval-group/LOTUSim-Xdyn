@@ -25,8 +25,8 @@ std::vector<std::string> add_CS_data_to_optional_data(const std::vector<std::str
     return base;
 }
 
-CoSimulationObserver::CoSimulationObserver(const std::vector<std::string>& optional_data, const std::string& body_name_):
-        Observer(add_CS_data_to_optional_data(optional_data, body_name_)),
+CoSimulationObserver::CoSimulationObserver(const std::vector<std::string>& extra_fields_to_serialize, const std::string& body_name_):
+        Observer(add_CS_data_to_optional_data(extra_fields_to_serialize, body_name_)),
         current_state(),
         states(),
         body_name(body_name_)

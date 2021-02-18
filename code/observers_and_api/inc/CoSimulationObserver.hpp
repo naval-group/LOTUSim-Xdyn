@@ -9,7 +9,7 @@
 class CoSimulationObserver : public Observer
 {
 public:
-    CoSimulationObserver(const std::vector<std::string>& optional_data, const std::string& body_name);
+    CoSimulationObserver(const std::vector<std::string>& extra_fields_to_serialize, const std::string& body_name);
     virtual ~CoSimulationObserver();
 
     std::vector<YamlState> get() const;
