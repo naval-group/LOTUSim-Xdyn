@@ -26,31 +26,23 @@ std::vector<std::string> add_CS_data_to_optional_data(const std::vector<std::str
 }
 
 CoSimulationObserver::CoSimulationObserver(const std::vector<std::string>& extra_fields_to_serialize, const std::string& body_name_):
-        Observer(add_CS_data_to_optional_data(extra_fields_to_serialize, body_name_)),
-        current_state(),
-        states(),
+        SimulationServerObserver(add_CS_data_to_optional_data(extra_fields_to_serialize, body_name_)),
         body_name(body_name_)
 {
 }
 
-CoSimulationObserver::~CoSimulationObserver()
-{
-}
-
-std::vector<YamlState> CoSimulationObserver::get() const
-{
-    return states;
-}
-
 std::function<void()> CoSimulationObserver::get_serializer(const double val, const DataAddressing& address)
 {
-    return [this, val, address]()
+    if(address.name=="t")
     {
-        if(address.name=="t")
+        return [this, val, address]()
         {
             current_state.t = val;
-        }
-        else if(address.address.at(0)=="states" && address.address.at(1)==body_name)
+        };
+    }
+    else if(address.address.at(0)=="states" && address.address.at(1)==body_name)
+    {
+        return [this, val, address]()
         {
             if(address.address.at(2)=="X")
             {
@@ -119,29 +111,10 @@ std::function<void()> CoSimulationObserver::get_serializer(const double val, con
                     current_state.qk = val;
                 }
             }
-        }
-        else
-        {
-            current_state.extra_observations[address.name] = val;
-        }
-    };
-}
-
-std::function<void()> CoSimulationObserver::get_initializer(const double, const DataAddressing&)
-{
-    return [](){};
-}
-
-void CoSimulationObserver::flush_after_initialization()
-{
-}
-
-void CoSimulationObserver::flush_after_write()
-{
-    states.push_back(current_state);
-    current_state = YamlState();
-}
-
-void CoSimulationObserver::flush_value_during_write()
-{
+        };
+    }
+    else
+    {
+        return SimulationServerObserver::get_serializer(val, address);
+    }
 }
