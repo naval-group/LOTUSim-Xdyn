@@ -38,7 +38,7 @@ class JSONWebSocketServer
         {
             std::cout << "Starting websocket server on " << ADDRESS << ":" << port << " (press Ctrl+C to terminate)" << std::endl;
             std::shared_ptr<ssc::websocket::Server> w(new ssc::websocket::Server(handler, port, debug));
-            signal(SIGINT, inthand);
+            signal(SIGINT, stop_simulation);
             while(!stop)
             {
                 std::this_thread::sleep_for(std::chrono::milliseconds(500));
@@ -47,7 +47,7 @@ class JSONWebSocketServer
         }
 
     private:
-        static void inthand(int)
+        static void stop_simulation(int)
         {
             stop = 1;
         }
