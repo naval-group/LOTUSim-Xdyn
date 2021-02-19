@@ -14,6 +14,7 @@
 #include "SurfaceElevationInterface.hpp"
 #include "WindModel.hpp"
 #include <ssc/kinematics.hpp>
+#include <boost/optional.hpp>
 
 class Observer;
 
@@ -28,6 +29,12 @@ struct EnvironmentAndFrames
     double nu;
     double g;
     YamlRotation rot;
+
+    void set_rho_air(const double value);
+    double get_rho_air() const;
+
+private:
+    boost::optional<double> rho_air;
 };
 
 #endif /* ENVIRONMENTANDFRAMES_HPP_ */

@@ -167,3 +167,11 @@ TEST_F(SimulatorBuilderTest, wind_model_is_available_from_env)
     double time(a.random<double>());
     ASSERT_NO_THROW(Eigen::Vector3d wind = env.wind->get_wind(position, time));
 }
+
+TEST_F(SimulatorBuilderTest, can_get_rho_air)
+{
+    builder.can_parse<DefaultSurfaceElevation>();
+    builder.can_parse<DefaultWindModel>();
+    const auto env = builder.build_environment_and_frames();
+    ASSERT_DOUBLE_EQ(1.225,env.get_rho_air());
+}
