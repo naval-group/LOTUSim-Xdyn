@@ -30,7 +30,7 @@ struct EnvironmentAndFrames
     double g;
     YamlRotation rot;
 
-    void set_rho_air(double value);
+    void set_rho_air(const double value);
     double get_rho_air() const;
 
 private:
