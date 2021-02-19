@@ -77,7 +77,7 @@ double EnvironmentAndFrames::get_rho_air() const
 {
 	if(not(rho_air.is_initialized()))
 	{
-		THROW(__PRETTY_FUNCTION__, InvalidInputException,"The value of rho_air was requested, but was not specified in the input YAML file. Make sure the key 'air rho' is present in the 'environmental constants' section.")
+		THROW(__PRETTY_FUNCTION__, InvalidInputException,"The value of air density was requested, but was not specified in the input YAML file. Make sure the key 'air rho' is present in the 'environmental constants' section.")
 	}
 	return rho_air.get();
 }
