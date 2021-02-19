@@ -68,7 +68,7 @@ void EnvironmentAndFrames::feed(
     }
 }
 
-void EnvironmentAndFrames::set_rho_air(double value)
+void EnvironmentAndFrames::set_rho_air(const double value)
 {
 	rho_air = value;
 }
