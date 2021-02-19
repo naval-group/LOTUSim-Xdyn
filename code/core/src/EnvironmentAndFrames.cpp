@@ -29,7 +29,7 @@ EnvironmentAndFrames::EnvironmentAndFrames() : w(),
     }
     if (rho_air && rho_air<0.0)
     {
-    	THROW(__PRETTY_FUNCTION__, InvalidInputException, "air rho can not be negative");
+    	THROW(__PRETTY_FUNCTION__, InvalidInputException, "Air density cannot be negative");
     }
     if (nu<0.0)
     {
