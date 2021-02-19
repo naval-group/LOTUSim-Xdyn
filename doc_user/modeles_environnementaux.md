@@ -23,10 +23,10 @@ environmental constants:
     g: {value: 9.81, unit: m/s^2}
     rho: {value: 1025, unit: kg/m^3}
     nu: {value: 1.18e-6, unit: m^2/s}
-    rho_air: {value: 1.225, unit: kg/m^3}
+    air rho: {value: 1.225, unit: kg/m^3}
 ~~~~~~~~~~~~~~
 
-On peu de plus y ajouter la masse volumique de l'air avec la clé `rho_air`, qui est nécessaire pour tous les modèles aérodynamiques. Cette donnée est optionelle en l'absence de modèles aérodynamiques. 
+De plus on peut y ajouter la masse volumique de l'air avec la clé `air rho`, qui est nécessaire pour tous les modèles aérodynamiques. Cette donnée est optionelle en l'absence de modèles aérodynamiques. 
 
 Ces quatre constantes sont l'ensemble de toutes les constantes environnementales
 actuellement utilisées par les modèles d'xdyn.
