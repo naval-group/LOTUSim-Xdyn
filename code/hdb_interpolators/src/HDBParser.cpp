@@ -29,7 +29,7 @@
 class HDBParser::Impl
 {
     public:
-        Impl() : omega_rad(), tree(), M(), Br(), Tmin(0), diffraction_module(), diffraction_phase(), froude_krylov_module(), froude_krylov_phase()
+        Impl() : omega_rad(), tree(), M(), Ma(), Br(), Tmin(0), diffraction_module(), diffraction_phase(), froude_krylov_module(), froude_krylov_phase()
         {
         }
 
@@ -37,6 +37,7 @@ class HDBParser::Impl
         : omega_rad()
         , tree(hdb::parse(data))
         , M()
+        , Ma()
         , Br()
         , Tmin(0)
         , diffraction_module(get_diffraction_module())
@@ -45,15 +46,16 @@ class HDBParser::Impl
         , froude_krylov_phase(get_froude_krylov_phase())
         {
             bool allow_queries_outside_bounds;
-            const TimestampedMatrices Ma = get_added_mass_array();
+            const TimestampedMatrices M_a = get_added_mass_array();
             const TimestampedMatrices B_r = get_radiation_damping_array();
-            const auto x = get_Tp(Ma);
+            const auto x = get_Tp(M_a);
             Tmin = x.front();
             for (size_t i = 0 ; i < 6 ; ++i)
             {
                 for (size_t j = 0 ; j < 6 ; ++j)
                 {
-                    M[i][j] = ssc::interpolation::SplineVariableStep(x, get_Mij_for_each_Tp(Ma,i,j), allow_queries_outside_bounds=true);
+                    Ma[i][j] = get_Mij_for_each_Tp(M_a, i, j);
+                    M[i][j] = ssc::interpolation::SplineVariableStep(x, Ma[i][j], allow_queries_outside_bounds=true);
                     Br[i][j] = get_Mij_for_each_Tp(B_r, i, j);
                 }
             }
@@ -317,6 +319,12 @@ class HDBParser::Impl
             return get_added_mass(Tmin);
         }
 
+        std::vector<double> get_added_mass_coeff(const size_t i, const size_t j) const
+        {
+            const auto v = Ma[i][j];
+            return std::vector<double>(v.rbegin(), v.rend());
+        }
+
         std::vector<double> get_radiation_damping_coeff(const size_t i, const size_t j) const
         {
             const auto v = Br[i][j];
@@ -422,6 +430,7 @@ class HDBParser::Impl
 
         hdb::AST tree;
         std::array<std::array<ssc::interpolation::SplineVariableStep,6>,6> M;
+        std::array<std::array<std::vector<double>,6>,6> Ma;
         std::array<std::array<std::vector<double>,6>,6> Br;
         double Tmin;
         boost::variant<RAOData,std::string> diffraction_module;
@@ -490,6 +499,11 @@ std::vector<double> HDBParser::get_angular_frequencies() const
 {
     return pimpl->omega_rad;
 
+}
+
+std::vector<double> HDBParser::get_added_mass_coeff(const size_t i, const size_t j) const
+{
+    return pimpl->get_added_mass_coeff(i, j);
 }
 
 std::vector<double> HDBParser::get_radiation_damping_coeff(const size_t i, const size_t j) const
