@@ -231,3 +231,9 @@ TEST_F(HDBParserTest, bug_3238)
     ASSERT_THROW(data.get_diffraction_module(), InvalidInputException);
     ASSERT_THROW(data.get_diffraction_phase(), InvalidInputException);
 }
+
+TEST_F(HDBParserTest, can_get_forward_speed)
+{
+    HDBParser data(test_data::test_ship_hdb());
+    ASSERT_DOUBLE_EQ(data.get_forward_speed(), 0.);
+}
