@@ -23,6 +23,7 @@
 
 #include <cassert>
 #include <array>
+#include <functional>
 
 #define _USE_MATH_DEFINE
 #include <cmath>
@@ -140,6 +141,7 @@ class RadiationDampingForceModel::Impl
                 if (his.get_duration() >= Tmin)
                 {
                     // Integrate up to Tmax if possible, but never exceed the history length
+                    std::function<double(double)> reverse_history = [his](double tau){return his(tau);};
                     const double co = builder.convolution(his, K[i][k], Tmin, std::min(Tmax, his.get_duration()));
                     K_X_dot += co;
                 }
