@@ -10,6 +10,9 @@
 #include <list>
 #include <set>
 #include <sstream>
+#include <limits>
+#include <algorithm>
+#include <functional>
 
 #define _USE_MATH_DEFINE
 #include <cmath>
@@ -48,26 +51,36 @@ class HDBParser::Impl
             bool allow_queries_outside_bounds;
             const TimestampedMatrices M_a = get_added_mass_array();
             const TimestampedMatrices B_r = get_radiation_damping_array();
-            const auto x = get_Tp(M_a);
-            Tmin = x.front();
+            const auto periods = get_periods();
+            std::function<bool(double, double)> double_eq = [](double d1, double d2){return fabs(d1 - d2) <= std::numeric_limits<double>::epsilon();};
+            for (auto T = periods.rbegin() ; T != periods.rend() ; ++T)
+            {
+                if(double_eq(*T, 0.))
+                {
+                    THROW(__PRETTY_FUNCTION__, InvalidInputException, "Zero period detected: cannot compute angular frequency. Check the HDB file.");
+                }
+                omega_rad.push_back(2*PI/ *T);
+            }
+            Tmin = periods.front();
+            const auto added_mass_periods = get_Tp(M_a);
+            if ((added_mass_periods.size() != periods.size()) || not(std::equal(periods.begin(), periods.end(), added_mass_periods.begin(), double_eq)))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "The declared periods ('List_calculated_periods' section) and the added mass periods do not match in the HDB file.");
+            }
+            const auto radiation_damping_periods = get_Tp(B_r);
+            if ((radiation_damping_periods.size() != periods.size()) || not(std::equal(periods.begin(), periods.end(), radiation_damping_periods.begin(), double_eq)))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "The declared periods ('List_calculated_periods' section) and the radiation damping periods do not match in the HDB file.");
+            }
+
             for (size_t i = 0 ; i < 6 ; ++i)
             {
                 for (size_t j = 0 ; j < 6 ; ++j)
                 {
                     Ma[i][j] = get_Mij_for_each_Tp(M_a, i, j);
-                    M[i][j] = ssc::interpolation::SplineVariableStep(x, Ma[i][j], allow_queries_outside_bounds=true);
+                    M[i][j] = ssc::interpolation::SplineVariableStep(periods, Ma[i][j], allow_queries_outside_bounds=true);
                     Br[i][j] = get_Mij_for_each_Tp(B_r, i, j);
                 }
-            }
-
-            auto v = get_Tp(B_r);
-            for (auto it = v.rbegin(); it != v.rend() ; ++it)
-            {
-                if(*it==0)
-                {
-                    THROW(__PRETTY_FUNCTION__, InvalidInputException, "Zero period detected: cannot compute angular frequency. Check Added_mass_Radiation_Damping section of the HDB file.");
-                }
-                omega_rad.push_back(2*PI/ *it);
             }
         }
 
@@ -144,6 +157,28 @@ class HDBParser::Impl
                  */
             }
             return matrices;
+        }
+
+        std::vector<double> get_vector(const std::string& header) const
+        {
+            bool found_section(false);
+            std::vector<double> ret;
+            for (const auto& section:tree.vector_sections)
+            {
+                if (section.header == header)
+                {
+                    found_section = true;
+                    for(const auto& value:section.values)
+                    {
+                        ret.push_back(value);
+                    }
+                }
+            }
+            if (not(found_section))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find vector section '" << header << "' in HDB file");
+            }
+            return ret;
         }
 
         TimestampedMatrices get_matrix(const std::string& header, const std::string& matrix) const
@@ -229,6 +264,11 @@ class HDBParser::Impl
             psi_l.sort();
             ret.psi.insert(ret.psi.begin(),psi_l.begin(), psi_l.end());
             return ret;
+        }
+
+        std::vector<double> get_periods() const
+        {
+            return get_vector("List_calculated_periods");
         }
 
         boost::variant<RAOData,std::string> get_diffraction_module() const
