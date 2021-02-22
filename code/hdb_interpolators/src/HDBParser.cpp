@@ -159,6 +159,25 @@ class HDBParser::Impl
             return matrices;
         }
 
+        double get_value(const std::string& key) const
+        {
+            bool found_key(false);
+            double ret;
+            for (const auto& section:tree.value_keys)
+            {
+                if (section.header == key)
+                {
+                    found_key = true;
+                    ret = section.value;
+                }
+            }
+            if (not(found_key))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find key-value section '" << key << "' in HDB file");
+            }
+            return ret;
+        }
+
         std::vector<double> get_vector(const std::string& header) const
         {
             bool found_section(false);
@@ -451,6 +470,11 @@ class HDBParser::Impl
             return ret->periods;
         }
 
+        double get_forward_speed() const
+        {
+            return get_value("FORWARD_SPEED");
+        }
+
         std::vector<double> omega_rad;
 
     private:
@@ -490,6 +514,11 @@ HDBParser::HDBParser() : pimpl(new Impl())
 
 HDBParser::~HDBParser()
 {
+}
+
+double HDBParser::get_forward_speed() const
+{
+    return pimpl->get_forward_speed();
 }
 
 TimestampedMatrices HDBParser::get_added_mass_array() const

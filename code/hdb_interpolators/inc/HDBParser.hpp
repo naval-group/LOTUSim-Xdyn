@@ -29,6 +29,7 @@ class HDBParser
     public:
         HDBParser(const std::string& data);
         virtual ~HDBParser();
+        double get_forward_speed() const;
         TimestampedMatrices get_added_mass_array() const;
         TimestampedMatrices get_radiation_damping_array() const;
         RAOData get_diffraction_module() const;
