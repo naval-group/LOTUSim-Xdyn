@@ -127,7 +127,7 @@ TEST_F(HDBParserTest, can_retrieve_added_mass_at_Tp_0)
 TEST_F(HDBParserTest, can_retrieve_angular_frequencies_for_radiation_damping)
 {
     const HDBParser data(test_data::test_ship_hdb());
-    const auto angular_frequencies = data.get_radiation_damping_angular_frequencies();
+    const auto angular_frequencies = data.get_angular_frequencies();
     ASSERT_EQ(6,        angular_frequencies.size());
     ASSERT_EQ(2*PI/1.,  angular_frequencies.at(5));
     ASSERT_EQ(2*PI/2.,  angular_frequencies.at(4));

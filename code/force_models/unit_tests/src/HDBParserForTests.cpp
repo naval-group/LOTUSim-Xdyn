@@ -13,7 +13,7 @@ HDBParserForTests::HDBParserForTests(const std::vector<double>& omega_, const st
 {
 }
 
-std::vector<double> HDBParserForTests::get_radiation_damping_angular_frequencies() const
+std::vector<double> HDBParserForTests::get_angular_frequencies() const
 {
     return omega;
 }

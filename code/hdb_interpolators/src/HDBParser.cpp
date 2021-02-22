@@ -486,7 +486,7 @@ Eigen::Matrix<double,6,6> HDBParser::get_added_mass(const double Tp //!< Period 
     return pimpl->get_added_mass(Tp);
 }
 
-std::vector<double> HDBParser::get_radiation_damping_angular_frequencies() const
+std::vector<double> HDBParser::get_angular_frequencies() const
 {
     return pimpl->omega_rad;
 
