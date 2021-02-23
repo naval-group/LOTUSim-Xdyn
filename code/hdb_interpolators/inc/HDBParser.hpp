@@ -34,7 +34,7 @@ class HDBParser
         TimestampedMatrices get_radiation_damping_array() const;
         RAOData get_diffraction_module() const;
         RAOData get_diffraction_phase() const;
-        Eigen::Matrix<double,6,6> get_added_mass() const;
+        virtual Eigen::Matrix<double,6,6> get_added_mass() const;
         Eigen::Matrix<double,6,6> get_added_mass(const double Tp //!< Period at which to interpolate the added mass
                                                 ) const; // const doesn't really mean anything here as the members are hidden inside a pimpl
         virtual std::vector<double> get_angular_frequencies() const;

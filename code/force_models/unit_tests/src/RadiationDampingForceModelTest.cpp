@@ -38,15 +38,25 @@ void RadiationDampingForceModelTest::TearDown()
 {
 }
 
-TR1(shared_ptr)<HDBParser> RadiationDampingForceModelTest::get_hdb_data(const bool only_diagonal_terms) const
+double compute_Ma_from_K(const double omega, const double A, std::function<double(double)> K, const double tau_min, const double tau_max);
+double compute_Ma_from_K(const double omega, const double A, std::function<double(double)> K, const double tau_min, const double tau_max)
+{
+    const std::function<double(double)> g = [omega, K](double tau){return K(tau)*sin(omega*tau);};
+    return A - (1/omega)*ssc::integrate::Simpson(g).integrate_f(tau_min, tau_max, 1e-2);
+}
+
+TR1(shared_ptr)<HDBParser> RadiationDampingForceModelTest::get_hdb_data(const YamlRadiationDamping yaml, const bool only_diagonal_terms) const
 {
     std::vector<double> Br;
+    std::vector<double> Ma;
     const double omega_min = 0.01;
     const double omega_max = 40;
     const size_t N = 460;
+    const double A = 1000;
     const auto omegas = RadiationDampingBuilder(TypeOfQuadrature::FILON,TypeOfQuadrature::GAUSS_KRONROD).build_exponential_intervals(omega_min, omega_max, N);
     for (auto omega:omegas) Br.push_back(test_data::analytical_Br(omega));
-    return TR1(shared_ptr)<HDBParser>(new HDBParserForTests(omegas, Br, only_diagonal_terms));
+    for (auto omega:omegas) Ma.push_back(compute_Ma_from_K(omega, A, test_data::analytical_K, yaml.tau_min, yaml.tau_max));
+    return TR1(shared_ptr)<HDBParser>(new HDBParserForTests(omegas, Ma, Br, only_diagonal_terms));
 }
 
 YamlRadiationDamping RadiationDampingForceModelTest::get_yaml_data(const bool show_debug) const
@@ -121,7 +131,7 @@ TEST_F(RadiationDampingForceModelTest, example)
 //! [RadiationDampingForceModelTest example]
     const auto yaml = get_yaml_data(false);
     RadiationDampingForceModel::Input input;
-    input.hdb = get_hdb_data();
+    input.hdb = get_hdb_data(yaml);
     input.yaml = yaml;
     const EnvironmentAndFrames env;
     const std::string body_name = a.random<std::string>();
@@ -156,7 +166,7 @@ TEST_F(RadiationDampingForceModelTest, results_are_zero_for_constant_velocity)
 {
     const auto yaml = get_yaml_data(false);
     RadiationDampingForceModel::Input input;
-    input.hdb = get_hdb_data();
+    input.hdb = get_hdb_data(yaml);
     input.yaml = yaml;
     const EnvironmentAndFrames env;
     const std::string body_name = a.random<std::string>();
@@ -198,7 +208,7 @@ TEST_F(RadiationDampingForceModelTest, velocity_offset_should_not_change_the_res
 {
     const auto yaml = get_yaml_data(false);
     RadiationDampingForceModel::Input input;
-    input.hdb = get_hdb_data();
+    input.hdb = get_hdb_data(yaml);
     input.yaml = yaml;
     const EnvironmentAndFrames env;
     const std::string body_name = a.random<std::string>();
@@ -232,8 +242,8 @@ TEST_F(RadiationDampingForceModelTest, should_print_debugging_information_if_req
     ASSERT_TRUE(debug.str().empty());
     // Call the radiation damping model
     RadiationDampingForceModel::Input input;
-    input.hdb = get_hdb_data();
     input.yaml = get_yaml_data(true);
+    input.hdb = get_hdb_data(input.yaml);
     RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
     ASSERT_FALSE(debug.str().empty());
     // Restore cerr's buffer
@@ -247,8 +257,8 @@ TEST_F(RadiationDampingForceModelTest, should_not_print_debugging_information_if
     std::streambuf* orig =std::cerr.rdbuf(debug.rdbuf());
     // Call the radiation damping model
     RadiationDampingForceModel::Input input;
-    input.hdb = get_hdb_data();
     input.yaml = get_yaml_data(false);
+    input.hdb = get_hdb_data(input.yaml);
     RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
     ASSERT_TRUE(debug.str().empty());
     // Restore cerr's buffer
@@ -258,8 +268,8 @@ TEST_F(RadiationDampingForceModelTest, should_not_print_debugging_information_if
 TEST_F(RadiationDampingForceModelTest, force_model_knows_history_length)
 {
     RadiationDampingForceModel::Input input;
-    input.hdb = get_hdb_data();
     input.yaml = get_yaml_data(false);
+    input.hdb = get_hdb_data(input.yaml);
     const RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
     ASSERT_DOUBLE_EQ(input.yaml.tau_max, F.get_Tmax());
 }
@@ -268,9 +278,9 @@ TEST_F(RadiationDampingForceModelTest, force_model_knows_history_length)
 TEST_F(RadiationDampingForceModelTest, matrix_product_should_be_done_properly)
 {
     RadiationDampingForceModel::Input input;
-    const bool only_diagonal_terms = true;
-    input.hdb = get_hdb_data(not(only_diagonal_terms));
     input.yaml = get_yaml_data(false);
+    const bool only_diagonal_terms = true;
+    input.hdb = get_hdb_data(input.yaml, not(only_diagonal_terms));
     input.yaml.type_of_quadrature_for_convolution = TypeOfQuadrature::RECTANGLE;
     EnvironmentAndFrames env;
     RadiationDampingForceModel F(input, "", env);

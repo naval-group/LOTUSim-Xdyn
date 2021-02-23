@@ -7,9 +7,9 @@
 
 #include "HDBParserForTests.hpp"
 
-HDBParserForTests::HDBParserForTests(const std::vector<double>& omega_, const std::vector<double>& Br_, const bool only_diagonal_terms_)
+HDBParserForTests::HDBParserForTests(const std::vector<double>& omega_, const std::vector<double>& Ma_, const std::vector<double>& Br_, const bool only_diagonal_terms_)
 : omega(omega_)
-, Br(Br_), only_diagonal_terms(only_diagonal_terms_)
+, Ma(Ma_), Br(Br_), only_diagonal_terms(only_diagonal_terms_)
 {
 }
 
@@ -38,4 +38,39 @@ std::vector<double> HDBParserForTests::get_radiation_damping_coeff(const size_t 
         return ret;
     }
     return std::vector<double>(Br.size(),0);
+}
+
+std::vector<double> HDBParserForTests::get_added_mass_coeff(const size_t i, const size_t j) const
+{
+    if (only_diagonal_terms)
+    {
+        if (i == j)
+        {
+            return Ma;
+        }
+    }
+    else
+    {
+        std::vector<double> ret;
+        ret.reserve(Ma.size());
+        for (const auto ma:Ma)
+        {
+            ret.push_back((10*(i+1)+(j+1))*ma);
+        }
+        return ret;
+    }
+    return std::vector<double>(Ma.size(),0);
+}
+
+Eigen::Matrix<double, 6, 6> HDBParserForTests::get_added_mass() const
+{
+    Eigen::Matrix<double, 6, 6> ret;
+    for (size_t i = 0 ; i < 6 ; i++)
+    {
+        for(size_t j = 0 ; j < 6 ; j++)
+        {
+            ret(i, j) = get_added_mass_coeff(i, j).back();
+        }
+    }
+    return ret;
 }
