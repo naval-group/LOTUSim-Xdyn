@@ -88,6 +88,7 @@ TEST_F(RadiationDampingForceModelTest, parser)
     ASSERT_DOUBLE_EQ(0.696, r.calculation_point_in_body_frame.x);
     ASSERT_DOUBLE_EQ(0, r.calculation_point_in_body_frame.y);
     ASSERT_DOUBLE_EQ(1.418, r.calculation_point_in_body_frame.z);
+    ASSERT_TRUE(r.forward_speed_correction);
 }
 
 void record(BodyStates& states, const double t, const double value);
