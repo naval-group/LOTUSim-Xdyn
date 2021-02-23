@@ -132,7 +132,7 @@ class RadiationDampingForceModel::Impl
             return builder.build_retardation_function(Br,taus,1E-3,omega.front(),omega.back());
         }
 
-        double get_convolution_for_axis(const size_t i, const BodyStates& states)
+        double get_convolution_for_axis(const size_t i, const BodyStates& states, const std::array<double, 6>& average_velocities)
         {
             double K_X_dot = 0;
             for (size_t k = 0 ; k < 6 ; ++k)
@@ -140,13 +140,24 @@ class RadiationDampingForceModel::Impl
                 const History his = get_velocity_history_from_index(k, states);
                 if (his.get_duration() >= Tmin)
                 {
+                    // Removing the average velocity to get only the oscillation velocity
+                    std::function<double(double)> reverse_history = [&his, &average_velocities, k](double tau){return his(tau) - average_velocities[k];};
                     // Integrate up to Tmax if possible, but never exceed the history length
-                    std::function<double(double)> reverse_history = [his](double tau){return his(tau);};
-                    const double co = builder.convolution(his, K[i][k], Tmin, std::min(Tmax, his.get_duration()));
+                    const double co = builder.convolution(reverse_history, K[i][k], Tmin, std::min(Tmax, his.get_duration()));
                     K_X_dot += co;
                 }
             }
             return K_X_dot;
+        }
+
+        std::array<double, 6> get_average_velocities(const BodyStates& states)
+        {
+            std::array<double, 6> ret;
+            for (size_t i = 0 ; i < 6 ; i++)
+            {
+                ret[i] = get_velocity_history_from_index(i, states).average(Tmax);
+            }
+            return ret;
         }
 
         History get_velocity_history_from_index(const size_t i, const BodyStates& states) const
@@ -167,13 +178,14 @@ class RadiationDampingForceModel::Impl
         {
             ssc::kinematics::Vector6d W;
             const ssc::kinematics::Point H(states.name,H0);
+            const auto average_velocities = get_average_velocities(states);
 
-            W(0) = -get_convolution_for_axis(0, states);
-            W(1) = -get_convolution_for_axis(1, states);
-            W(2) = -get_convolution_for_axis(2, states);
-            W(3) = -get_convolution_for_axis(3, states);
-            W(4) = -get_convolution_for_axis(4, states);
-            W(5) = -get_convolution_for_axis(5, states);
+            W(0) = -get_convolution_for_axis(0, states, average_velocities);
+            W(1) = -get_convolution_for_axis(1, states, average_velocities);
+            W(2) = -get_convolution_for_axis(2, states, average_velocities);
+            W(3) = -get_convolution_for_axis(3, states, average_velocities);
+            W(4) = -get_convolution_for_axis(4, states, average_velocities);
+            W(5) = -get_convolution_for_axis(5, states, average_velocities);
             return Wrench(H, states.name, W);
         }
 

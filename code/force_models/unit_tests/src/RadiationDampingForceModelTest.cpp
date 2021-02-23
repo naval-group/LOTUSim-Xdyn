@@ -102,6 +102,20 @@ void record(BodyStates& states, const double t, const double u, const double v, 
     states.r.record(t, r);
 }
 
+double record_sine(BodyStates& states, const double tstart, const double T, const unsigned int Nperiods, const unsigned int Nsteps);
+double record_sine(BodyStates& states, const double tstart, const double T, const unsigned int Nperiods, const unsigned int Nsteps)
+{
+    const double tend = tstart + T*Nperiods;
+    const double dt = (tend-tstart)/Nsteps;
+    for (unsigned int i = 0 ; i <= Nsteps ; i++)
+    {
+        double t = tstart + i*dt;
+        record(states, t, sin(2*PI*(t-tstart)/T));
+    }
+    return tend;
+}
+
+
 TEST_F(RadiationDampingForceModelTest, example)
 {
 //! [RadiationDampingForceModelTest example]
@@ -117,19 +131,14 @@ TEST_F(RadiationDampingForceModelTest, example)
     states.name = body_name;
 //! [RadiationDampingForceModelTest example]
 //! [RadiationDampingForceModelTest expected output]
-    record(states, 0, 1);
-    auto Frad = F.get_force(states, 0, env, {});
-    ASSERT_EQ(0, Frad.X());
-    ASSERT_EQ(0, Frad.Y());
-    ASSERT_EQ(0, Frad.Z());
-    ASSERT_EQ(0, Frad.K());
-    ASSERT_EQ(0, Frad.M());
-    ASSERT_EQ(0, Frad.N());
-    ASSERT_EQ(body_name, F.get_force(states, 0, env, {}).get_frame());
-    record(states, 100, 1);
-    Frad = F.get_force(states, 100, env, {});
+    const auto T = 10;
+    const auto t = record_sine(states, 0, T, 10, 100);
 
-    const double Fexpected = -ssc::integrate::ClenshawCurtisCosine(test_data::analytical_K,0).integrate_f(yaml.tau_min,yaml.tau_max);
+    const auto K = test_data::analytical_K;
+    std::function<double(double)> g = [K, T](double t){return K(t)*sin(-2*PI*t/T);};
+    const double Fexpected = -ssc::integrate::ClenshawCurtisCosine(g,0).integrate_f(yaml.tau_min,yaml.tau_max);
+
+    const auto Frad = F.get_force(states, 100, env, {});
     ASSERT_DOUBLE_EQ(Frad.X(),Frad.Y());
     ASSERT_DOUBLE_EQ(Frad.X(),Frad.Z());
     ASSERT_DOUBLE_EQ(Frad.K(),Frad.M());
@@ -141,6 +150,78 @@ TEST_F(RadiationDampingForceModelTest, example)
     ASSERT_SMALL_RELATIVE_ERROR(Fexpected, Frad.M(), EPS);
     ASSERT_SMALL_RELATIVE_ERROR(Fexpected, Frad.N(), EPS);
 //! [RadiationDampingForceModelTest expected output]
+}
+
+TEST_F(RadiationDampingForceModelTest, results_are_zero_for_constant_velocity)
+{
+    const auto yaml = get_yaml_data(false);
+    RadiationDampingForceModel::Input input;
+    input.hdb = get_hdb_data();
+    input.yaml = yaml;
+    const EnvironmentAndFrames env;
+    const std::string body_name = a.random<std::string>();
+    RadiationDampingForceModel F(input, body_name, env);
+    ASSERT_EQ("radiation damping", F.model_name());
+    BodyStates states(100);
+    states.name = body_name;
+    const double velocity = a.random<double>();
+    record(states, 0, velocity);
+    record(states, 100, velocity);
+
+    const auto Frad = F.get_force(states, 100, env, {});
+    ASSERT_DOUBLE_EQ(Frad.X(),Frad.Y());
+    ASSERT_DOUBLE_EQ(Frad.X(),Frad.Z());
+    ASSERT_DOUBLE_EQ(Frad.K(),Frad.M());
+    ASSERT_DOUBLE_EQ(Frad.M(),Frad.N());
+    ASSERT_SMALL_RELATIVE_ERROR(0, Frad.X(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(0, Frad.Y(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(0, Frad.Z(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(0, Frad.K(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(0, Frad.M(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(0, Frad.N(), EPS);
+}
+
+double record_offset_sine(BodyStates& states, const double tstart, const double T, const unsigned int Nperiods, const unsigned int Nsteps, const double offset);
+double record_offset_sine(BodyStates& states, const double tstart, const double T, const unsigned int Nperiods, const unsigned int Nsteps, const double offset)
+{
+    const double tend = tstart + T*Nperiods;
+    const double dt = (tend-tstart)/Nsteps;
+    for (unsigned int i = 0 ; i <= Nsteps ; i++)
+    {
+        double t = tstart + i*dt;
+        record(states, t, offset + sin(2*PI*(t-tstart)/T));
+    }
+    return tend;
+}
+
+TEST_F(RadiationDampingForceModelTest, velocity_offset_should_not_change_the_result)
+{
+    const auto yaml = get_yaml_data(false);
+    RadiationDampingForceModel::Input input;
+    input.hdb = get_hdb_data();
+    input.yaml = yaml;
+    const EnvironmentAndFrames env;
+    const std::string body_name = a.random<std::string>();
+    RadiationDampingForceModel F(input, body_name, env);
+    ASSERT_EQ("radiation damping", F.model_name());
+    BodyStates states1(100);
+    states1.name = body_name;
+    const double T_sine = 10;
+    record_sine(states1, 0, T_sine, 10, 100);
+
+    BodyStates states2(100);
+    states2.name = body_name;
+    const double offset = a.random<double>();
+    record_offset_sine(states2, 0, T_sine, 10, 100, offset);
+
+    const auto Frad1 = F.get_force(states1, 100, env, {});
+    const auto Frad2 = F.get_force(states2, 100, env, {});
+    ASSERT_SMALL_RELATIVE_ERROR(Frad1.X(), Frad2.X(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Frad1.Y(), Frad2.Y(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Frad1.Z(), Frad2.Z(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Frad1.K(), Frad2.K(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Frad1.M(), Frad2.M(), EPS);
+    ASSERT_SMALL_RELATIVE_ERROR(Frad1.N(), Frad2.N(), EPS);
 }
 
 TEST_F(RadiationDampingForceModelTest, should_print_debugging_information_if_required_by_yaml_data)
