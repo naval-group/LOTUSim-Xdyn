@@ -176,7 +176,7 @@ TEST_F(HistoryTest, history_should_not_grow_indefinitely)
     ASSERT_DOUBLE_EQ(1, h(4));
     ASSERT_EQ(3, h.size());
     ASSERT_DOUBLE_EQ(4, h.get_duration());
-    ASSERT_DOUBLE_EQ(0, h(4.1));
+    ASSERT_DOUBLE_EQ(1, h(4.1));
     h.record(t-5, 4);
     ASSERT_EQ(3, h.size());
     ASSERT_DOUBLE_EQ(4, h.get_duration());
@@ -379,4 +379,22 @@ TEST_F(HistoryTest, can_get_list_of_values)
             }
         }
     }
+}
+
+TEST_F(HistoryTest, values_before_oldest_should_be_equal_to_oldest)
+{
+    const double Tmax = 10;
+    History h(Tmax);
+    h.record(0, a.random<double>());
+    ASSERT_DOUBLE_EQ(h.get_duration(), 0);
+    ASSERT_DOUBLE_EQ(h(h.get_duration()+1), h(0));
+    h.record(5, a.random<double>());
+    ASSERT_DOUBLE_EQ(h.get_duration(), 5);
+    ASSERT_DOUBLE_EQ(h(h.get_duration()+1), h(5));
+    h.record(Tmax, a.random<double>());
+    ASSERT_DOUBLE_EQ(h.get_duration(), Tmax);
+    ASSERT_DOUBLE_EQ(h(h.get_duration()+1), h(Tmax));
+    ASSERT_DOUBLE_EQ(h.get_duration(), Tmax);
+    h.record(Tmax + 5, a.random<double>());
+    ASSERT_DOUBLE_EQ(h(h.get_duration()+1), h(Tmax));
 }
