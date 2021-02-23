@@ -21,6 +21,7 @@
 
 #include "yaml.h"
 
+#include <Eigen/Dense>
 #include <cassert>
 #include <array>
 #include <functional>
@@ -92,18 +93,23 @@ class CSVWriter
 class RadiationDampingForceModel::Impl
 {
     public:
-        Impl(const TR1(shared_ptr)<HDBParser>& parser, const YamlRadiationDamping& yaml) : hdb{parser}, builder(RadiationDampingBuilder(yaml.type_of_quadrature_for_convolution, yaml.type_of_quadrature_for_cos_transform)), Kb(),
-        omega(parser->get_angular_frequencies()), taus(), n(yaml.nb_of_points_for_retardation_function_discretization), Tmin(yaml.tau_min), Tmax(yaml.tau_max),
+        Impl(const TR1(shared_ptr)<HDBParser>& parser, const YamlRadiationDamping& yaml) : hdb{parser}, builder(RadiationDampingBuilder(yaml.type_of_quadrature_for_convolution, yaml.type_of_quadrature_for_cos_transform)),
+        A(), Ka(), Kb(), omega(parser->get_angular_frequencies()), taus(),
+        n(yaml.nb_of_points_for_retardation_function_discretization), Tmin(yaml.tau_min), Tmax(yaml.tau_max),
         H0(yaml.calculation_point_in_body_frame.x,yaml.calculation_point_in_body_frame.y,yaml.calculation_point_in_body_frame.y)
         {
             CSVWriter omega_writer(std::cerr, "omega", omega);
             taus = builder.build_regular_intervals(Tmin,Tmax,n);
             CSVWriter tau_writer(std::cerr, "tau", taus);
 
+            A = parser->get_added_mass();
+
             for (size_t i = 0 ; i < 6 ; ++i)
             {
                 for (size_t j = 0 ; j < 6 ; ++j)
                 {
+                    const auto Ma = get_Ma(i,j);
+                    Ka[i][j] = [this, Ma, i, j](double tau){return get_K(Ma)(tau) - A(i,j);};
                     const auto Br = get_Br(i,j);
                     Kb[i][j] = get_K(Br);
                     if (yaml.output_Br_and_K)
@@ -120,6 +126,11 @@ class RadiationDampingForceModel::Impl
                 std::cerr << std::endl << "Debugging information for retardation functions K:" << std::endl;
                 tau_writer.print();
             }
+        }
+
+        std::function<double(double)> get_Ma(const size_t i, const size_t j) const
+        {
+            return builder.build_interpolator(omega, hdb->get_added_mass_coeff(i, j));
         }
 
         std::function<double(double)> get_Br(const size_t i, const size_t j) const
@@ -198,6 +209,8 @@ class RadiationDampingForceModel::Impl
         Impl();
         TR1(shared_ptr)<HDBParser> hdb;
         RadiationDampingBuilder builder;
+        Eigen::Matrix<double, 6, 6> A;
+        std::array<std::array<std::function<double(double)>,6>, 6> Ka;
         std::array<std::array<std::function<double(double)>,6>, 6> Kb;
         std::vector<double> omega;
         std::vector<double> taus;
