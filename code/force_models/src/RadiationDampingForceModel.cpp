@@ -92,7 +92,7 @@ class CSVWriter
 class RadiationDampingForceModel::Impl
 {
     public:
-        Impl(const TR1(shared_ptr)<HDBParser>& parser, const YamlRadiationDamping& yaml) : hdb{parser}, builder(RadiationDampingBuilder(yaml.type_of_quadrature_for_convolution, yaml.type_of_quadrature_for_cos_transform)), K(),
+        Impl(const TR1(shared_ptr)<HDBParser>& parser, const YamlRadiationDamping& yaml) : hdb{parser}, builder(RadiationDampingBuilder(yaml.type_of_quadrature_for_convolution, yaml.type_of_quadrature_for_cos_transform)), Kb(),
         omega(parser->get_angular_frequencies()), taus(), n(yaml.nb_of_points_for_retardation_function_discretization), Tmin(yaml.tau_min), Tmax(yaml.tau_max),
         H0(yaml.calculation_point_in_body_frame.x,yaml.calculation_point_in_body_frame.y,yaml.calculation_point_in_body_frame.y)
         {
@@ -105,11 +105,11 @@ class RadiationDampingForceModel::Impl
                 for (size_t j = 0 ; j < 6 ; ++j)
                 {
                     const auto Br = get_Br(i,j);
-                    K[i][j] = get_K(Br);
+                    Kb[i][j] = get_K(Br);
                     if (yaml.output_Br_and_K)
                     {
                         omega_writer.add("Br",Br,i+1,j+1);
-                        tau_writer.add("K",K[i][j],i+1,j+1);
+                        tau_writer.add("K",Kb[i][j],i+1,j+1);
                     }
                 }
             }
@@ -143,7 +143,7 @@ class RadiationDampingForceModel::Impl
                     // Removing the average velocity to get only the oscillation velocity
                     std::function<double(double)> reverse_history = [&his, &average_velocities, k](double tau){return his(tau) - average_velocities[k];};
                     // Integrate up to Tmax if possible, but never exceed the history length
-                    const double co = builder.convolution(reverse_history, K[i][k], Tmin, std::min(Tmax, his.get_duration()));
+                    const double co = builder.convolution(reverse_history, Kb[i][k], Tmin, std::min(Tmax, his.get_duration()));
                     K_X_dot += co;
                 }
             }
@@ -198,7 +198,7 @@ class RadiationDampingForceModel::Impl
         Impl();
         TR1(shared_ptr)<HDBParser> hdb;
         RadiationDampingBuilder builder;
-        std::array<std::array<std::function<double(double)>,6>, 6> K;
+        std::array<std::array<std::function<double(double)>,6>, 6> Kb;
         std::vector<double> omega;
         std::vector<double> taus;
         size_t n;
