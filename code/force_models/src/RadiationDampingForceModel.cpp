@@ -193,7 +193,7 @@ class RadiationDampingForceModel::Impl
          *               ⎣ 0   0   0   0        0        U*Ka₆₂ ⎦
          */
 
-        std::function<double(double)> get_K(const size_t i, const size_t j, const std::array<double, 6>& average_velocities)
+        std::function<double(double)> get_K(const size_t i, const size_t j, const std::array<double, 6>& Ubar)
         {
             if (forward_speed_correction)
             {
@@ -205,22 +205,22 @@ class RadiationDampingForceModel::Impl
                 {
                     if (i%2 == 0) // Lines 1, 3 and 5
                     {
-                        return Kb[i][j] + average_velocities[1]*Ka[i][0];
+                        return Kb[i][j] + Ubar[1]*Ka[i][0];
                     }
                     else // Lines 2, 4 and 6
                     {
-                        return Kb[i][j] - average_velocities[0]*Ka[i][1];
+                        return Kb[i][j] - Ubar[0]*Ka[i][1];
                     }
                 }
                 else if (i%2 == 0) // Lines 1, 3 and 5
                 {
                     if (j == 3) // Column 4
                     {
-                        return Kb[i][j] - average_velocities[1]*Ka[i][2];
+                        return Kb[i][j] - Ubar[1]*Ka[i][2];
                     }
                     else if(j == 4) // Column 5
                     {
-                        return Kb[i][j] + average_velocities[0]*Ka[i][2];
+                        return Kb[i][j] + Ubar[0]*Ka[i][2];
                     }
                     else
                     {
@@ -248,22 +248,36 @@ class RadiationDampingForceModel::Impl
             return Ls;
         }
 
-        double get_convolution_for_axis(const size_t i, const BodyStates& states, const std::array<double, 6>& average_velocities)
+        double get_convolution(const size_t i, const size_t j, const BodyStates& states, const std::array<double, 6>& average_velocities)
         {
-            double K_X_dot = 0;
-            for (size_t k = 0 ; k < 6 ; ++k)
+            const History his = get_velocity_history_from_index(j, states);
+            if(his.get_duration() >= Tmin)
             {
-                const History his = get_velocity_history_from_index(k, states);
-                if (his.get_duration() >= Tmin)
+                // Removing the average velocity to get only the oscillation velocity
+                std::function<double(double)> reverse_history = [&his, &average_velocities, j](double tau)
+                    {
+                        return his(tau) - average_velocities[j];
+                    };
+                // Integrate up to Tmax if possible, but never exceed the history length
+                return builder.convolution(reverse_history, get_K(i, j, average_velocities), Tmin, std::min(Tmax, his.get_duration()));
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        ssc::kinematics::Vector6d get_convoluted_matrix_product(const BodyStates& states, const std::array<double, 6>& average_velocities)
+        {
+            ssc::kinematics::Vector6d ret = ssc::kinematics::Vector6d::Zero();
+            for (size_t i = 0 ; i < 6 ; i++)
+            {
+                for (size_t j = 0 ; j < 6 ; ++j)
                 {
-                    // Removing the average velocity to get only the oscillation velocity
-                    std::function<double(double)> reverse_history = [&his, &average_velocities, k](double tau){return his(tau) - average_velocities[k];};
-                    // Integrate up to Tmax if possible, but never exceed the history length
-                    const double co = builder.convolution(reverse_history, get_K(i, k, average_velocities), Tmin, std::min(Tmax, his.get_duration()));
-                    K_X_dot += co;
+                    ret(i) += get_convolution(i, j, states, average_velocities);
                 }
             }
-            return K_X_dot;
+            return ret;
         }
 
         std::array<double, 6> get_average_velocities(const BodyStates& states)
@@ -302,16 +316,11 @@ class RadiationDampingForceModel::Impl
 
         Wrench get_wrench(const BodyStates& states)
         {
-            ssc::kinematics::Vector6d W;
+
             const ssc::kinematics::Point H(states.name,H0);
             const auto average_velocities = get_average_velocities(states);
 
-            W(0) = -get_convolution_for_axis(0, states, average_velocities);
-            W(1) = -get_convolution_for_axis(1, states, average_velocities);
-            W(2) = -get_convolution_for_axis(2, states, average_velocities);
-            W(3) = -get_convolution_for_axis(3, states, average_velocities);
-            W(4) = -get_convolution_for_axis(4, states, average_velocities);
-            W(5) = -get_convolution_for_axis(5, states, average_velocities);
+            ssc::kinematics::Vector6d W = -get_convoluted_matrix_product(states, average_velocities);
 
             if (forward_speed_correction)
             {
