@@ -90,6 +90,21 @@ class CSVWriter
 
 };
 
+std::function<double(double)> operator*(const double a, const std::function<double(double)>& f)
+{
+    return [a, f](double x){return a*f(x);};
+}
+
+std::function<double(double)> operator+(const std::function<double(double)>& f, const std::function<double(double)>& g)
+{
+    return [f, g](double x){return f(x) + g(x);};
+}
+
+std::function<double(double)> operator-(const std::function<double(double)>& f, const std::function<double(double)>& g)
+{
+    return [f, g](double x){return f(x) - g(x);};
+}
+
 class RadiationDampingForceModel::Impl
 {
     public:
@@ -101,6 +116,11 @@ class RadiationDampingForceModel::Impl
             CSVWriter omega_writer(std::cerr, "omega", omega);
             taus = builder.build_regular_intervals(Tmin,Tmax,n);
             CSVWriter tau_writer(std::cerr, "tau", taus);
+
+            if (forward_speed_correction && fabs(hdb->get_forward_speed()) > 1e-3)
+            {
+                std::cout << "WARNING: You chose to apply a forward speed correction in the 'Radiation Damping' force model, but the forward velocity specified in the HDB file is not zero." << std::endl;
+            }
 
             A = parser->get_added_mass();
 
@@ -143,6 +163,91 @@ class RadiationDampingForceModel::Impl
             return builder.build_retardation_function(Br,taus,1E-3,omega.front(),omega.back());
         }
 
+        /* This function does the operation Kb - Ka.Ls(Ubar) if forward_speed_correction, with
+         *
+         * Ls(Ubar) = ⎡ 0   0   0   0   0  -V ⎤  where Ubar = ⎡ U ⎤
+         *            ⎢                       ⎥               ⎢   ⎥
+         *            ⎢ 0   0   0   0   0   U ⎥               ⎢ V ⎥
+         *            ⎢                       ⎥               ⎢   ⎥
+         *            ⎢ 0   0   0   V  -U   0 ⎥               ⎢ W ⎥
+         *            ⎢                       ⎥               ⎢   ⎥
+         *            ⎢ 0   0   0   0   0   0 ⎥               ⎢ P ⎥
+         *            ⎢                       ⎥               ⎢   ⎥
+         *            ⎢ 0   0   0   0   0   0 ⎥               ⎢ Q ⎥
+         *            ⎢                       ⎥               ⎢   ⎥
+         *            ⎣ 0   0   0   0   0   0 ⎦               ⎣ R ⎦
+         *
+         * The capitalized velocities are the average velocities (over Tmax), Ubar is 'average_velocities'
+         * Because the matrix is well known and almost empty, it is not worth it to compute it as a matrix product.
+         *
+         * Ka.Ls(Ubar) = ⎡ 0   0   0   V*Ka₁₃  -U*Ka₁₃  -V*Ka₁₁ ⎤
+         *               ⎢                                      ⎥
+         *               ⎢ 0   0   0   0        0        U*Ka₂₂ ⎥
+         *               ⎢                                      ⎥
+         *               ⎢ 0   0   0   V*Ka₃₃  -U*Ka₃₃  -V*Ka₃₁ ⎥
+         *               ⎢                                      ⎥
+         *               ⎢ 0   0   0   0        0        U*Ka₄₂ ⎥
+         *               ⎢                                      ⎥
+         *               ⎢ 0   0   0   V*Ka₅₃  -U*Ka₅₃  -V*Ka₅₁ ⎥
+         *               ⎢                                      ⎥
+         *               ⎣ 0   0   0   0        0        U*Ka₆₂ ⎦
+         */
+
+        std::function<double(double)> get_K(const size_t i, const size_t j, const std::array<double, 6>& average_velocities)
+        {
+            if (forward_speed_correction)
+            {
+                if (j < 3) // 3 first columns
+                {
+                    return Kb[i][j];
+                }
+                else if (j == 5) // Column 6
+                {
+                    if (i%2 == 0) // Lines 1, 3 and 5
+                    {
+                        return Kb[i][j] + average_velocities[1]*Ka[i][0];
+                    }
+                    else // Lines 2, 4 and 6
+                    {
+                        return Kb[i][j] - average_velocities[0]*Ka[i][1];
+                    }
+                }
+                else if (i%2 == 0) // Lines 1, 3 and 5
+                {
+                    if (j == 3) // Column 4
+                    {
+                        return Kb[i][j] - average_velocities[1]*Ka[i][2];
+                    }
+                    else if(j == 4) // Column 5
+                    {
+                        return Kb[i][j] + average_velocities[0]*Ka[i][2];
+                    }
+                    else
+                    {
+                        return Kb[i][j];
+                    }
+                }
+                else
+                {
+                    return Kb[i][j];
+                }
+            }
+            else
+            {
+                return Kb[i][j];
+            }
+        }
+
+        Eigen::Matrix<double, 6, 6> get_Ls(const std::array<double, 6>& Ubar) const
+        {
+            Eigen::Matrix<double, 6, 6> Ls = Eigen::Matrix<double, 6, 6>::Zero();
+            Ls(1,5)=Ubar[0];
+            Ls(2,4)=-Ubar[0];
+            Ls(0,5)=-Ubar[1];
+            Ls(2,3)=Ubar[1];
+            return Ls;
+        }
+
         double get_convolution_for_axis(const size_t i, const BodyStates& states, const std::array<double, 6>& average_velocities)
         {
             double K_X_dot = 0;
@@ -154,7 +259,7 @@ class RadiationDampingForceModel::Impl
                     // Removing the average velocity to get only the oscillation velocity
                     std::function<double(double)> reverse_history = [&his, &average_velocities, k](double tau){return his(tau) - average_velocities[k];};
                     // Integrate up to Tmax if possible, but never exceed the history length
-                    const double co = builder.convolution(reverse_history, Kb[i][k], Tmin, std::min(Tmax, his.get_duration()));
+                    const double co = builder.convolution(reverse_history, get_K(i, k, average_velocities), Tmin, std::min(Tmax, his.get_duration()));
                     K_X_dot += co;
                 }
             }
@@ -167,6 +272,16 @@ class RadiationDampingForceModel::Impl
             for (size_t i = 0 ; i < 6 ; i++)
             {
                 ret[i] = get_velocity_history_from_index(i, states).average(Tmax);
+            }
+            return ret;
+        }
+
+        Eigen::Matrix<double, 6, 1> get_oscillation_velocities(const BodyStates& states, const std::array<double, 6>& average_velocities)
+        {
+            Eigen::Matrix<double, 6, 1> ret;
+            for (size_t i = 0 ; i < 6 ; i++)
+            {
+                ret(i) = get_velocity_history_from_index(i, states)() - average_velocities[i];
             }
             return ret;
         }
@@ -197,6 +312,12 @@ class RadiationDampingForceModel::Impl
             W(3) = -get_convolution_for_axis(3, states, average_velocities);
             W(4) = -get_convolution_for_axis(4, states, average_velocities);
             W(5) = -get_convolution_for_axis(5, states, average_velocities);
+
+            if (forward_speed_correction)
+            {
+                W += A*get_Ls(average_velocities)*get_oscillation_velocities(states, average_velocities);
+            }
+
             return Wrench(H, states.name, W);
         }
 
