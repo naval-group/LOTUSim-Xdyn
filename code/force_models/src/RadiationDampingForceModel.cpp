@@ -178,58 +178,36 @@ class RadiationDampingForceModel::Impl
          *            ⎣ 0   0   0   0   0   0 ⎦               ⎣ R ⎦
          *
          * The capitalized velocities are the average velocities (over Tmax), Ubar is 'average_velocities'
-         * Because the matrix is well known and almost empty, it is not worth it to compute it as a matrix product.
+         * Because the matrix is well known and almost empty, it is not worth it to compute it as an entire matrix product.
          *
-         * Ka.Ls(Ubar) = ⎡ 0   0   0   V*Ka₁₃  -U*Ka₁₃  -V*Ka₁₁ ⎤
-         *               ⎢                                      ⎥
-         *               ⎢ 0   0   0   0        0        U*Ka₂₂ ⎥
-         *               ⎢                                      ⎥
-         *               ⎢ 0   0   0   V*Ka₃₃  -U*Ka₃₃  -V*Ka₃₁ ⎥
-         *               ⎢                                      ⎥
-         *               ⎢ 0   0   0   0        0        U*Ka₄₂ ⎥
-         *               ⎢                                      ⎥
-         *               ⎢ 0   0   0   V*Ka₅₃  -U*Ka₅₃  -V*Ka₅₁ ⎥
-         *               ⎢                                      ⎥
-         *               ⎣ 0   0   0   0        0        U*Ka₆₂ ⎦
+         * Ka.Ls(Ubar) = ⎡ 0   0   0   V*Ka₁₃  -U*Ka₁₃  U*Ka₁₂-V*Ka₁₁ ⎤
+         *               ⎢                                            ⎥
+         *               ⎢ 0   0   0   V*Ka₂₃  -U*Ka₂₃  U*Ka₂₂-V*Ka₂₁ ⎥
+         *               ⎢                                            ⎥
+         *               ⎢ 0   0   0   V*Ka₃₃  -U*Ka₃₃  U*Ka₃₂-V*Ka₃₁ ⎥
+         *               ⎢                                            ⎥
+         *               ⎢ 0   0   0   V*Ka₄₃  -U*Ka₄₃  U*Ka₄₂-V*Ka₄₁ ⎥
+         *               ⎢                                            ⎥
+         *               ⎢ 0   0   0   V*Ka₅₃  -U*Ka₅₃  U*Ka₅₂-V*Ka₅₁ ⎥
+         *               ⎢                                            ⎥
+         *               ⎣ 0   0   0   V*Ka₆₃  -U*Ka₆₃  U*Ka₆₂-V*Ka₆₁ ⎦
          */
 
         std::function<double(double)> get_K(const size_t i, const size_t j, const std::array<double, 6>& Ubar)
         {
-            if (forward_speed_correction)
+            if (forward_speed_correction && j < 3) // 3 last column
             {
-                if (j < 3) // 3 first columns
+                if (j == 3) // Column 4
                 {
-                    return Kb[i][j];
+                    return Kb[i][j] + Ubar[1]*Ka[i][2]; // Kb(i,j) + V*Ka(i,3)
                 }
-                else if (j == 5) // Column 6
+                else if (j == 4) // Column 5
                 {
-                    if (i%2 == 0) // Lines 1, 3 and 5
-                    {
-                        return Kb[i][j] + Ubar[1]*Ka[i][0];
-                    }
-                    else // Lines 2, 4 and 6
-                    {
-                        return Kb[i][j] - Ubar[0]*Ka[i][1];
-                    }
+                    return Kb[i][j] - Ubar[0]*Ka[i][2]; // Kb(i,j) - U*Ka(i,3)
                 }
-                else if (i%2 == 0) // Lines 1, 3 and 5
+                else // Column 6
                 {
-                    if (j == 3) // Column 4
-                    {
-                        return Kb[i][j] - Ubar[1]*Ka[i][2];
-                    }
-                    else if(j == 4) // Column 5
-                    {
-                        return Kb[i][j] + Ubar[0]*Ka[i][2];
-                    }
-                    else
-                    {
-                        return Kb[i][j];
-                    }
-                }
-                else
-                {
-                    return Kb[i][j];
+                    return Kb[i][j] + Ubar[0]*Ka[i][1] - Ubar[1]*Ka[i][0]; // Kb(i,j) + U*Ka(i,2) - V*Ka(i,1)
                 }
             }
             else
