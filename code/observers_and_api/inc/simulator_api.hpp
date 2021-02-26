@@ -4,12 +4,13 @@
 #include <map>
 #include <string>
 
+#include "Scheduler.hpp"
+#include "solve.hpp"
+
 #include "EverythingObserver.hpp"
 #include "Sim.hpp"
 #include "SimulatorBuilder.hpp"
 #include "SimObserver.hpp"
-#include "solver.hpp"
-#include "solve.hpp"
 
 struct YamlSimulatorInput;
 
@@ -31,8 +32,7 @@ template <typename StepperType> std::vector<Res> simulate(Sim& sys, const double
 {
     EverythingObserver observer;
     ssc::solver::Scheduler scheduler(tstart, tend, dt);
-    ForceStates force_states = [&sys](std::vector<double>&states, const double t){sys.force_states(states, t);};
-    ssc::solver::quicksolve<StepperType, EverythingObserver, ForceStates>(sys, scheduler, observer, force_states);
+    ssc::solver::quicksolve<StepperType>(sys, scheduler, observer);
     auto ret = observer.get();
     return ret;
 }
@@ -40,8 +40,7 @@ template <typename StepperType> std::vector<Res> simulate(Sim& sys, const double
 template <typename StepperType, typename ObserverType> void simulate(Sim& sys, const double tstart, const double tend, const double dt, ObserverType& observer)
 {
     ssc::solver::Scheduler scheduler(tstart, tend, dt);
-    ForceStates force_states = [&sys](std::vector<double>&states, const double t){sys.force_states(states, t);};
-    ssc::solver::quicksolve<StepperType, ObserverType, ForceStates>(sys, scheduler, observer, force_states);
+    ssc::solver::quicksolve<StepperType>(sys, scheduler, observer);
 }
 
 template <typename StepperType> std::vector<Res> simulate(const std::string& yaml, const double tstart, const double tend, const double dt)
