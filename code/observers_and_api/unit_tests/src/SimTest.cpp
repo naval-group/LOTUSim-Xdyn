@@ -315,6 +315,7 @@ TEST_F(SimTest, LONG_propulsion_and_resistance)
     const size_t N = 250;
     const auto res = simulate<ssc::solver::EulerStepper>(yaml, test_ship_stl, 0, N, 1, commands);
     ASSERT_EQ(N+1, res.size());
+    ASSERT_EQ(13, res.at(0).x.size());
     const double tolerance = 1e-15;
     for (size_t i = 0 ; i <= N ; ++i)
     {
