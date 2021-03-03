@@ -390,30 +390,27 @@ s'appelle `quicksolve` et figure dans le fichier `simulator_run.cpp` du module
 `executables` :
 
 ~~~~~~~~~~~~~~ {.cpp}
-ssc::solver::quicksolve<Stepper>(system, tstart, tend, dt, observer);
+ssc::solver::quicksolve<Stepper>(system, scheduler, observer);
 ~~~~~~~~~~~~~~
 
 Voici une brève description des paramètres (le fonctionnement détaillé du
 solveur figure dans la documentation utilisateur).
 
-+-----------+---------------------------------------------------------------------------------------+
-| Paramètre | Description                                                                           |
-+===========+=======================================================================================+
-| `Stepper` | Type du solveur à utiliser. Il s'agit de `typedef`s vers les types de solveur de      |
-|           | `odeint`. Par exemple, `ssc::solver::EulerStepper` est un alias pour                  |
-|           | `::boost::numeric::odeint::euler<std::vector<double> >`.                              |
-+-----------+---------------------------------------------------------------------------------------+
-| `system`  | N'importe quel objet possédant une méthode                                            |
-|           | `void operator()(const std::vector<double>& x, std::vector<double>& dxdt, double t)`  |
-|           | Dans le cas du simulateur "Bassin Numérique", un objet de la classe `Sim`             |
-+-----------+---------------------------------------------------------------------------------------+
-| `tstart`  | `double` représentant la date du premier pas de temps                                 |
-+-----------+---------------------------------------------------------------------------------------+
-| `tend`    | `double` représentant la date du dernier pas de temps calculé                         |
-+-----------+---------------------------------------------------------------------------------------+
-| `dt`      | `double` représentant l'incrément en temps. Dans le cas d'un solveur à pas adaptatif, |
-|           | longueur initiale du pas de temps.                                                    |
-+-----------+---------------------------------------------------------------------------------------+
++------------+---------------------------------------------------------------------------------------+
+| Paramètre  | Description                                                                           |
++============+=======================================================================================+
+| `Stepper`  | Type du solveur à utiliser. Il s'agit de `typedef`s vers les types de solveur de      |
+|            | `odeint`. Par exemple, `ssc::solver::EulerStepper` est un alias pour                  |
+|            | `::boost::numeric::odeint::euler<std::vector<double> >`.                              |
++------------+---------------------------------------------------------------------------------------+
+| `system`   | N'importe quel objet possédant une méthode                                            |
+|            | `void operator()(const std::vector<double>& x, std::vector<double>& dxdt, double t)`  |
+|            | Dans le cas du simulateur "Bassin Numérique", un objet de la classe `Sim`             |
++------------+---------------------------------------------------------------------------------------+
+| `scheduler`| Object dérivant de la classe `Scheduler`.                                                    |
++------------+---------------------------------------------------------------------------------------+
+| `observer` | Object dérivant de la classe `Observer`.                                                    |
++------------+---------------------------------------------------------------------------------------+
 
 La responsabilité du solveur est double :
 

@@ -21,7 +21,8 @@ TEST_F(SimulationServerObserverTest, requested_additional_variables_are_availabl
     auto sys = get_system(test_data::falling_ball_example(), 0);
 
     SimulationServerObserver observer({"Fz(gravity,ball,ball)"});
-    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, tend, dt, observer);
+    ssc::solver::Scheduler scheduler(0, tend, dt);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observer);
     auto results = observer.get();
 
     for(const auto& res:results)

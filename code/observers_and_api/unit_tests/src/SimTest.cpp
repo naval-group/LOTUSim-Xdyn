@@ -422,8 +422,9 @@ TEST_F(SimTest, LONG_bug_2732)
     command_listener.set<double>("Prop. & rudder(P/D)", 1);
     command_listener.set<double>("Prop. & rudder(beta)", 0);
     auto sys = get_system(yaml,test_ship_stl,0,command_listener);
-    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.1, 0.4, observer);
-    ASSERT_NO_THROW(ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.1, 0.4, observer));
+    ssc::solver::Scheduler scheduler(0, 0.1, 0.4);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observer);
+    ASSERT_NO_THROW(ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observer));
 }
 
 TEST_F(SimTest, LONG_bug_2838)
@@ -435,7 +436,8 @@ TEST_F(SimTest, LONG_bug_2838)
     command_listener.set<double>("PropRudd(P/D)", 1);
     command_listener.set<double>("PropRudd(beta)", 0);
     auto sys = get_system(yaml,test_ship_stl,0,command_listener);
-    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.4, 0.1, observer);
+    ssc::solver::Scheduler scheduler(0, 0.4, 0.1);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observer);
     const auto m = get_map(observer);
     ASSERT_EQ(2, m.size());
     const auto it = m.find("Mz(PropRudd,TestShip,TestShip)");
@@ -453,7 +455,8 @@ TEST_F(SimTest, LONG_bug_2845)
     command_listener.set<double>("PropRudd(P/D)", 1);
     command_listener.set<double>("PropRudd(beta)", 0.8);
     auto sys = get_system(yaml,test_ship_stl,0,command_listener);
-    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.4, 0.1, observer);
+    ssc::solver::Scheduler scheduler(0, 0.4, 0.1);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observer);
     const auto m = get_map(observer);
     ASSERT_EQ(3, m.size());
     const auto it = m.find("Mz(PropRudd,TestShip,TestShip)");
@@ -471,7 +474,8 @@ TEST_F(SimTest, LONG_can_retrieve_maneuvering_force)
     command_listener.set<double>("PropRudd(P/D)", 1);
     command_listener.set<double>("PropRudd(beta)", 0.8);
     auto sys = get_system(yaml,test_ship_stl,0,command_listener);
-    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.4, 0.1, observer);
+    ssc::solver::Scheduler scheduler(0, 0.4, 0.1);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observer);
     const auto m = get_map(observer);
     ASSERT_EQ(3, m.size());
     const auto it = m.find("Fx(Fman,TestShip,TestShip)");
@@ -489,7 +493,8 @@ TEST_F(SimTest, LONG_can_use_commands_in_maneuvering_model)
     command_listener.set<double>("PropRudd(P/D)", 1);
     command_listener.set<double>("PropRudd(beta)", 0.8);
     auto sys = get_system(yaml,test_ship_stl,0,command_listener);
-    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.4, 0.1, observer);
+    ssc::solver::Scheduler scheduler(0, 0.4, 0.1);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observer);
     command_listener.check_out();
     const auto m = get_map(observer);
     ASSERT_EQ(4, m.size());
@@ -651,7 +656,8 @@ TEST_F(SimTest, bug_2984)
     command_listener.set<double>("propeller(beta)", 0);
 
     auto sys = get_system(input,test_ship_stl,0,command_listener);
-    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.1, 0.1, observer);
+    ssc::solver::Scheduler scheduler(0, 0.1, 0.1);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observer);
     const auto m = get_map(observer);
     ASSERT_EQ(6, m.size());
     const auto Fx = m.find("Fx(propeller,ship,ship)");
@@ -688,7 +694,8 @@ TEST_F(SimTest, bug_3217_hdb_interpolation_in_direction_incorrect_LONG)
 
     // Results for 0.001 deg
     auto sys = get_system(input,test_ship_stl,0,command_listener);
-    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
+    ssc::solver::Scheduler scheduler(t0, T, dt);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observers);
     auto m = get_map(observers);
     ASSERT_EQ(6, m.size());
     ASSERT_EQ(2, m["Fx(diffraction,TestShip,TestShip)"].size());
@@ -702,7 +709,8 @@ TEST_F(SimTest, bug_3217_hdb_interpolation_in_direction_incorrect_LONG)
     // Results for 0 deg
     boost::replace_all(input.environment.at(0).yaml, "value: 0.001", "value: 0");
     sys = get_system(input,test_ship_stl,0,command_listener);
-    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
+    ssc::solver::Scheduler scheduler2(t0, T, dt);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler2, observers);
     m = get_map(observers);
 
     ASSERT_EQ(6, m.size());
@@ -718,7 +726,8 @@ TEST_F(SimTest, bug_3217_hdb_interpolation_in_direction_incorrect_LONG)
     input.environment.at(0).yaml = original_yaml;
     boost::replace_all(input.environment.at(0).yaml, "value: 0.001", "value: 30");
     sys = get_system(input,test_ship_stl,0,command_listener);
-    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
+    ssc::solver::Scheduler scheduler3(t0, T, dt);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler3, observers);
     m = get_map(observers);
     ASSERT_EQ(6, m.size());
     ASSERT_EQ(6, m["Fx(diffraction,TestShip,TestShip)"].size());
@@ -759,7 +768,8 @@ TEST_F(SimTest, bug_3227_wave_angle_mirroing_problem_for_diffraction_LONG)
 
     // Results for 30 deg
     auto sys = get_system(input,test_ship_stl,0,command_listener);
-    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
+    ssc::solver::Scheduler scheduler(t0, T, dt);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observers);
     auto m = get_map(observers);
     ASSERT_EQ(6, m.size());
     ASSERT_EQ(2, m["Fx(diffraction,TestShip,TestShip)"].size());
@@ -773,7 +783,8 @@ TEST_F(SimTest, bug_3227_wave_angle_mirroing_problem_for_diffraction_LONG)
     // Results for -30 deg
     boost::replace_all(input.environment.at(0).yaml, "value: 30", "value: -30");
     sys = get_system(input,test_ship_stl,0,command_listener);
-    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
+    ssc::solver::Scheduler scheduler2(t0, T, dt);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler2, observers);
     m = get_map(observers);
 
     ASSERT_EQ(6, m.size());
@@ -813,7 +824,8 @@ TEST_F(SimTest, bug_3230_advance_speed_not_taken_into_account_properly_for_diffr
 
 
     auto sys = get_system(input,test_ship_stl,0,command_listener);
-    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
+    ssc::solver::Scheduler scheduler(t0, T, dt);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observers);
     auto m = get_map(observers);
     ASSERT_EQ(6, m.size());
     ASSERT_EQ(2, m["Fx(diffraction,ship,ship)"].size());
@@ -842,7 +854,8 @@ TEST_F(SimTest, bug_3241_blocked_dof_interpolation_problem_LONG)
     auto input = SimulatorYamlParser(yaml).parse();
 
     auto sys = get_system(input,test_ship_stl,0);
-    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
+    ssc::solver::Scheduler scheduler(t0, T, dt);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observers);
     auto m = get_map(observers);
     ASSERT_EQ(1, m.size());
     ASSERT_EQ(151, m["u(dtmb)"].size());
@@ -863,7 +876,8 @@ TEST_F(SimTest, issue_20_constant_force)
     auto input = SimulatorYamlParser(yaml).parse();
 
     auto sys = get_system(input,test_ship_stl,0);
-    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, t0, T, dt, observers);
+    ssc::solver::Scheduler scheduler(t0, T, dt);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observers);
 }
 
 TEST_F(SimTest, bug_3187)
@@ -901,7 +915,8 @@ TEST_F(SimTest, bug_3185_all_data_should_be_there)
     ListOfObservers observer(parse_output(yaml));
     const auto input = SimulatorYamlParser(yaml).parse();
     auto sys = get_system(input,0);
-    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.1, 0.1, observer);
+    ssc::solver::Scheduler scheduler(0, 0.1, 0.1);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observer);
     const auto m = get_map(observer);
     ASSERT_EQ(13, m.size());
     ASSERT_NE(m.end(), m.find("t"));
@@ -926,7 +941,8 @@ TEST_F(SimTest, bug_3185_check_values)
     ListOfObservers observer(parse_output(yaml));
     const auto input = SimulatorYamlParser(yaml).parse();
     auto sys = get_system(input,0);
-    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, 0.1, 0.2, observer);
+    ssc::solver::Scheduler scheduler(0, 0.1, 0.2);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observer);
     auto m = get_map(observer);
 
     const auto Fx_prop = m["Fx(portside propeller,dtmb,portside propeller)"];

@@ -72,8 +72,9 @@ TEST_F(ObserverTests, can_observe_using_a_websocket)
         out.data = {"t", "x(cube)", "theta(cube)"};
         out.format = "ws";
         std::vector<YamlOutput> v(1,out);
+        ssc::solver::Scheduler scheduler(0, 1, 0.1);
         ListOfObservers observer(v);
-        ssc::solver::quicksolve<ssc::solver::RK4Stepper>(sys, 0, 1, 0.1, observer);
+        ssc::solver::quicksolve<ssc::solver::RK4Stepper>(sys, scheduler, observer);
         usleep(1000); // So the server thread has enough time to process the data
     }
 //! [ObserverTests example]

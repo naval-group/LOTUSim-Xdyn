@@ -37,21 +37,22 @@ CHECK_SSC_VERSION(8,0)
 void solve(const XdynCommandLineArguments& input_data, Sim& sys, ListOfObservers& observer);
 void solve(const XdynCommandLineArguments& input_data, Sim& sys, ListOfObservers& observer)
 {
+    ssc::solver::Scheduler scheduler(input_data.tstart, input_data.tend, input_data.initial_timestep);
     if (input_data.solver=="euler")
     {
-        ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
+        ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observer);
     }
     else if (input_data.solver=="rk4")
     {
-        ssc::solver::quicksolve<ssc::solver::RK4Stepper>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
+        ssc::solver::quicksolve<ssc::solver::RK4Stepper>(sys, scheduler, observer);
     }
     else if (input_data.solver=="rkck")
     {
-        ssc::solver::quicksolve<ssc::solver::RKCK>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
+        ssc::solver::quicksolve<ssc::solver::RKCK>(sys, scheduler, observer);
     }
     else
     {
-        ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
+        ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observer);
     }
 }
 

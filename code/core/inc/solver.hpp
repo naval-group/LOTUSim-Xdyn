@@ -28,15 +28,15 @@ namespace ssc
     {
 
         template <typename StepperType, typename ObserverType, typename StateForcer>
-        void quicksolve(Sim& sys, const double tstart, const double tend, double dt, ObserverType& observer, StateForcer& force_states)
+        void quicksolve(Sim& sys, Scheduler& scheduler, ObserverType& observer, StateForcer& force_states)
         {
             StepperType stepper;
-            ssc::solver::Scheduler scheduler(tstart, tend, dt);
             ssc::solver::EventHandler event_handler;
             sys.initialize_system_outputs_before_first_observation();
-            observer.observe(sys,tstart);
+            observer.observe(sys,scheduler.get_time());
             while(scheduler.has_more_time_events())
             {
+                const double dt = scheduler.get_step();
                 const double t = scheduler.get_time();
                 stepper.do_step(sys, sys.state, t, dt);
                 force_states(sys.state, t);

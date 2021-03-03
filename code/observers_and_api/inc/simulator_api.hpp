@@ -30,16 +30,18 @@ typedef std::function<void(std::vector<double>&, const double)> ForceStates;
 template <typename StepperType> std::vector<Res> simulate(Sim& sys, const double tstart, const double tend, const double dt)
 {
     EverythingObserver observer;
+    ssc::solver::Scheduler scheduler(tstart, tend, dt);
     ForceStates force_states = [&sys](std::vector<double>&states, const double t){sys.force_states(states, t);};
-    ssc::solver::quicksolve<StepperType, EverythingObserver, ForceStates>(sys, tstart, tend, dt, observer, force_states);
+    ssc::solver::quicksolve<StepperType, EverythingObserver, ForceStates>(sys, scheduler, observer, force_states);
     auto ret = observer.get();
     return ret;
 }
 
 template <typename StepperType, typename ObserverType> void simulate(Sim& sys, const double tstart, const double tend, const double dt, ObserverType& observer)
 {
+    ssc::solver::Scheduler scheduler(tstart, tend, dt);
     ForceStates force_states = [&sys](std::vector<double>&states, const double t){sys.force_states(states, t);};
-    ssc::solver::quicksolve<StepperType, ObserverType, ForceStates>(sys, tstart, tend, dt, observer, force_states);
+    ssc::solver::quicksolve<StepperType, ObserverType, ForceStates>(sys, scheduler, observer, force_states);
 }
 
 template <typename StepperType> std::vector<Res> simulate(const std::string& yaml, const double tstart, const double tend, const double dt)
@@ -90,8 +92,9 @@ template <typename StepperType> std::vector<Res> simulate(const YamlSimulatorInp
 template <typename StepperType> std::vector<Res> simulate(const YamlSimulatorInput& yaml, const VectorOfVectorOfPoints& mesh, const double tstart, const double tend, const double dt, ssc::data_source::DataSource& commands)
 {
     Sim sys = get_system(yaml, mesh, tstart, commands);
+    ssc::solver::Scheduler scheduler(tstart, tend, dt);
     SimObserver observer;
-    ssc::solver::quicksolve<StepperType>(sys, tstart, tend, dt, observer);
+    ssc::solver::quicksolve<StepperType>(sys, scheduler, observer);
     return observer.get();
 }
 
