@@ -27,7 +27,9 @@
 #include "SurfaceElevationInterface.hpp"
 #include "XdynCommandLineArguments.hpp"
 
-#include <ssc/solver.hpp>
+#include <solve.hpp>
+#include <steppers.hpp>
+#include <Scheduler.hpp>
 #include "ErrorReporter.hpp"
 
 CHECK_SSC_VERSION(8,0)

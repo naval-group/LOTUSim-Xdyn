@@ -191,7 +191,7 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const BodyP
     return pimpl->sum_of_forces_in_body_frame[body->get_name()];
 }
 
-void Sim::initialize_system_outputs_before_observation()
+void Sim::initialize_system_outputs_before_first_observation()
 {
     for (auto body: pimpl->bodies)
     {

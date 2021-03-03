@@ -4,6 +4,7 @@
 #include "JsonObserverTest.hpp"
 #include "ListOfObservers.hpp"
 #include "simulator_api.hpp"
+#include "steppers.hpp"
 
 JsonObserverTest::JsonObserverTest() : a(ssc::random_data_generator::DataGenerator(666))
 {

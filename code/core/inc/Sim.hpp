@@ -17,13 +17,14 @@
 #include "ForceModel.hpp"
 #include "SurfaceElevationGrid.hpp"
 #include "State.hpp"
+#include "System.hpp"
 
 typedef std::map<std::string, std::map< std::string,ssc::kinematics::Vector6d > > OuputtedForces;
 typedef std::vector<std::pair<std::string,std::vector<std::string> > > VectorOfStringModelForEachBody;
 
 class Observer;
 
-class Sim
+class Sim : public ssc::solver::System
 {
     public:
         Sim(const std::vector<BodyPtr>& bodies,
@@ -69,7 +70,7 @@ class Sim
         /** \brief This function calls all force models from the current body states.
           * \detail This should be called before the first call to Sim::output if the initial state (at construction) is to be recorded.
           */
-        void initialize_system_outputs_before_observation();
+        void initialize_system_outputs_before_first_observation();
 
     private:
         ssc::kinematics::UnsafeWrench sum_of_forces(const StateType& x, const BodyPtr& body, const double t);

@@ -25,7 +25,8 @@
 #include "SimulatorYamlParser.hpp"
 #include "stl_data.hpp"
 #include "simulator_api.hpp"
-#include <ssc/solver.hpp>
+#include "solve.hpp"
+#include "steppers.hpp"
 #include "TriMeshTestData.hpp"
 #include "generate_test_ship.hpp"
 #include "hdb_data.hpp"

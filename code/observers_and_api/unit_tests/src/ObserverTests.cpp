@@ -16,7 +16,7 @@
 #include "SimulatorYamlParser.hpp"
 #include "stl_data.hpp"
 #include "simulator_api.hpp"
-#include <ssc/solver.hpp>
+#include "steppers.hpp"
 #include "TriMeshTestData.hpp"
 #include "parse_output.hpp"
 #include "ListOfObservers.hpp"

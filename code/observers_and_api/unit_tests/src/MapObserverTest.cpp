@@ -12,6 +12,7 @@
 #include "parse_output.hpp"
 #include "ListOfObservers.hpp"
 #include "simulator_api.hpp"
+#include "steppers.hpp"
 #include "stl_data.hpp"
 
 #define EPS 1E-8
