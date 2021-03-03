@@ -1,5 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
-PROJECT(parser_extensions)
+PROJECT(listeners_and_controllers)
 
 SET(SRC src/builders.cpp
         src/listeners.cpp

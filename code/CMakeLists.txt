@@ -73,7 +73,7 @@ ADD_SUBDIRECTORY(hdb_interpolators)
 ADD_SUBDIRECTORY(core)
 ADD_SUBDIRECTORY(force_models)
 ADD_SUBDIRECTORY(grpc)
-ADD_SUBDIRECTORY(parser_extensions)
+ADD_SUBDIRECTORY(listeners_and_controllers)
 ADD_SUBDIRECTORY(observers_and_api)
 ADD_SUBDIRECTORY(gz_curves)
 ADD_SUBDIRECTORY(executables)
@@ -88,7 +88,7 @@ ENDIF()
 ADD_LIBRARY(${PROJECT_NAME} ${STATICORSHARED}
         $<TARGET_OBJECTS:core>
         $<TARGET_OBJECTS:observers_and_api>
-        $<TARGET_OBJECTS:parser_extensions>
+        $<TARGET_OBJECTS:listeners_and_controllers>
         $<TARGET_OBJECTS:force_models>
         $<TARGET_OBJECTS:environment_models>
         $<TARGET_OBJECTS:external_file_formats>
@@ -148,7 +148,7 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:core_tests>
         $<TARGET_OBJECTS:environment_models_tests>
         $<TARGET_OBJECTS:force_models_tests>
-        $<TARGET_OBJECTS:parser_extensions_tests>
+        $<TARGET_OBJECTS:listeners_and_controllers_tests>
         $<TARGET_OBJECTS:test_data_generator>
         $<TARGET_OBJECTS:hdb_interpolators_tests>
         $<TARGET_OBJECTS:interface_hdf5_tests>

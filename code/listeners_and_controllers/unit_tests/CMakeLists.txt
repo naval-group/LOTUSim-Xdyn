@@ -1,5 +1,5 @@
 # ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
-set(MODULE_UNDER_TEST parser_extensions)
+set(MODULE_UNDER_TEST listeners_and_controllers)
 project(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/listenersTest.cpp
               )

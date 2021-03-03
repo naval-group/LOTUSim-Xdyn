@@ -56,7 +56,7 @@ INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${environment_models_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${binary_stl_data_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${force_models_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${parser_extensions_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${listeners_and_controllers_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${observers_and_api_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${hdb_interpolators_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${gz_curves_INCLUDE_DIRS})
@@ -138,7 +138,7 @@ ADD_EXECUTABLE(test_hs
         src/test_hs.cpp
         $<TARGET_OBJECTS:test_data_generator>
         $<TARGET_OBJECTS:core>
-        $<TARGET_OBJECTS:parser_extensions>
+        $<TARGET_OBJECTS:listeners_and_controllers>
         $<TARGET_OBJECTS:force_models>
         $<TARGET_OBJECTS:environment_models>
         $<TARGET_OBJECTS:external_file_formats>

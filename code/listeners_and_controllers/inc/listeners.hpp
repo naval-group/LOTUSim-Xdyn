@@ -14,7 +14,7 @@
 
 /**  \brief Reads data from YAML & builds an interpolation table per command.
   *  \returns DataSource used to retrieve the commands of the controlled forces models at each instant
-  *  \snippet parser_extensions/unit_tests/src/listenersTest.cpp listenersTest listen_to_file_example
+  *  \snippet listeners_and_controllers/unit_tests/src/listenersTest.cpp listenersTest listen_to_file_example
   */
 ssc::data_source::DataSource make_command_listener(const std::vector<YamlCommands>& commands);
 
