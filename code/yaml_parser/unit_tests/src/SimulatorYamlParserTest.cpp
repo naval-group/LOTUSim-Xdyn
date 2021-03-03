@@ -13,6 +13,8 @@ using namespace testing; // So we can use 'ElementsAre' unqualified
 #include "yaml_data.hpp"
 #include "SimulatorYamlParser.hpp"
 #include "InvalidInputException.hpp"
+#include "parse_commands.hpp"
+#include "parse_controllers.hpp"
 
 const YamlSimulatorInput SimulatorYamlParserTest::yaml = SimulatorYamlParser(test_data::full_example_with_propulsion()).parse();
 const YamlSimulatorInput SimulatorYamlParserTest::old_yaml = SimulatorYamlParser(test_data::full_example_with_propulsion_and_old_key_name()).parse();
@@ -461,4 +463,26 @@ TEST_F(SimulatorYamlParserTest, can_parse_added_mass_matrix_with_old_key_name)
     {
         ASSERT_EQ(yaml.bodies.at(0).dynamics.rigid_body_inertia.row_6.at(i), old_yaml.bodies.at(0).dynamics.rigid_body_inertia.row_6.at(i));
     }
+}
+
+TEST_F(SimulatorYamlParserTest, can_parse_controllers_and_commands_for_controlled_forces)
+{
+    const YamlSimulatorInput yaml = SimulatorYamlParser(
+        test_data::falling_ball_example() +
+        test_data::inputs() +
+        test_data::controllers() +
+        test_data::controlled_forces()
+    ).parse();
+
+    ASSERT_EQ(2, yaml.inputs.size());
+    ASSERT_EQ("propeller", yaml.inputs[0].name);
+    ASSERT_EQ("controller", yaml.inputs[1].name);
+
+    ASSERT_EQ(3, yaml.controllers.size());
+    ASSERT_EQ("propeller", yaml.controllers[0].name);
+    ASSERT_EQ("propeller", yaml.controllers[1].name);
+    ASSERT_EQ("controller", yaml.controllers[2].name);
+
+    ASSERT_EQ(1, yaml.commands.size());
+    ASSERT_EQ("propeller", yaml.commands[0].name);
 }
