@@ -28,8 +28,12 @@ std::string Controller::get_name() const
     return output_name;
 }
 
-void Controller::update_discrete_states(const double , ssc::solver::ContinuousSystem* )
+void Controller::update_discrete_states(const double time, ssc::solver::ContinuousSystem* system)
 {
+    Sim* sys = static_cast<Sim*>(system);
+    const double command_value = compute_command(get_setpoint(sys), get_measured_value(sys), time);
+    const std::map<std::string, double> new_command { { get_name(), command_value } };
+    sys->set_command_listener(new_command);
 }
 
 double Controller::get_setpoint(const Sim* sys) const
