@@ -85,3 +85,25 @@ void add_inputs_listener(ssc::data_source::DataSource& ds,
     }
     ds.check_out();
 }
+
+
+std::vector<PIDController> get_pid_controllers(const std::vector<YamlController>& controllers //!< Parsed YAML controllers
+                                               )
+{
+    std::vector<PIDController> parsed_controllers;
+    for (YamlController yamlController : controllers)
+    {
+        if (yamlController.type == "PID")
+        {
+            const PIDController controller(yamlController.dt,
+                                           namify(yamlController.output, yamlController.name),
+                                           namify(yamlController.input, yamlController.name),
+                                           yamlController.states,
+                                           yamlController.rest_of_the_yaml
+                                           );
+            parsed_controllers.push_back(controller);
+        }
+    }
+
+    return parsed_controllers;
+}

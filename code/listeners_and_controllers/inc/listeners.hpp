@@ -9,8 +9,9 @@
 #define LISTENERS_HPP_
 
 #include <ssc/data_source.hpp>
-
+#include "PIDController.hpp"
 #include "YamlCommands.hpp"
+#include "YamlController.hpp"
 
 /**  \brief Reads data from YAML & builds an interpolation table per command.
   *  \returns DataSource used to retrieve the commands of the controlled forces models at each instant
@@ -23,5 +24,10 @@ ssc::data_source::DataSource make_command_listener(const std::vector<YamlCommand
   *  \snippet listeners_and_controllers/unit_tests/src/listenersTest.cpp listenersTest listen_to_file_example
   */
 void add_inputs_listener(ssc::data_source::DataSource& ds, const std::vector<YamlCommands>& inputs);
+
+/**  \brief Reads data from YAML & returns the corresponding controllers.
+  *  \snippet listeners_and_controllers/unit_tests/src/controllersTest.cpp controllersTest listen_to_file_example
+  */
+std::vector<PIDController> get_pid_controllers(const std::vector<YamlController>& controllers);
 
 #endif /* LISTENERS_HPP_ */

@@ -8,6 +8,7 @@
 #include "listenersTest.hpp"
 #include "listeners.hpp"
 #include "parse_commands.hpp"
+#include "parse_controllers.hpp"
 #include "yaml_data.hpp"
 
 #define EPS (1E-14)
@@ -174,4 +175,17 @@ TEST_F(listenersTest, can_add_inputs_when_commands_with_same_name_already_exist)
     ASSERT_DOUBLE_EQ(42, ds.get<double>("propeller(command)")); // commands value
 
     ds.check_out();
+}
+
+
+TEST_F(listenersTest, get_pid_controllers_example)
+{
+    //! [controllersTest listen_to_file_example]
+    const std::vector<PIDController> controllers = get_pid_controllers(parse_controller_yaml(test_data::controllers()));
+
+    ASSERT_EQ(2, controllers.size());
+    ASSERT_EQ("propeller(rpm)", controllers[0].get_name());
+    ASSERT_EQ("controller(psi)", controllers[1].get_name());
+
+    //! [controllersTest listen_to_file_example]
 }
