@@ -7,7 +7,10 @@
 #include "Scheduler.hpp"
 #include "solve.hpp"
 
+#include "SimulatorYamlParser.hpp"
+#include "check_input_yaml.hpp"
 #include "EverythingObserver.hpp"
+#include "listeners.hpp"
 #include "Sim.hpp"
 #include "SimulatorBuilder.hpp"
 #include "SimObserver.hpp"
@@ -28,10 +31,11 @@ Sim get_system(const YamlSimulatorInput& input, const std::map<std::string, Vect
 
 typedef std::function<void(std::vector<double>&, const double)> ForceStates;
 
-template <typename StepperType> std::vector<Res> simulate(Sim& sys, const double tstart, const double tend, const double dt)
+template <typename StepperType> std::vector<Res> simulate(Sim& sys, const std::vector<YamlController>& controllers, const double tstart, const double tend, const double dt)
 {
     EverythingObserver observer;
     ssc::solver::Scheduler scheduler(tstart, tend, dt);
+    add_controllers_callbacks_to_scheduler(controllers, scheduler);
     ssc::solver::quicksolve<StepperType>(sys, scheduler, observer);
     auto ret = observer.get();
     return ret;
@@ -40,45 +44,50 @@ template <typename StepperType> std::vector<Res> simulate(Sim& sys, const double
 template <typename StepperType, typename ObserverType> void simulate(Sim& sys, const double tstart, const double tend, const double dt, ObserverType& observer)
 {
     ssc::solver::Scheduler scheduler(tstart, tend, dt);
+    /* This is used for cosimulation, whose inputs do not define controllers. Therefore, `add_controllers_callbacks_to_scheduler` is not called. */
     ssc::solver::quicksolve<StepperType>(sys, scheduler, observer);
 }
 
 template <typename StepperType> std::vector<Res> simulate(const std::string& yaml, const double tstart, const double tend, const double dt)
 {
+    const YamlSimulatorInput input = check_input_yaml(SimulatorYamlParser(yaml).parse());
     Sim sys = get_system(yaml, tstart);
-    return simulate<StepperType>(sys, tstart, tend, dt);
+    return simulate<StepperType>(sys, input.controllers, tstart, tend, dt);
 }
 
 MeshMap make_mesh_map(const YamlSimulatorInput& yaml, const std::string& mesh);
 
 template <typename StepperType> std::vector<Res> simulate(const std::string& yaml, const std::string& mesh, const double tstart, const double tend, const double dt)
 {
+    const YamlSimulatorInput input = check_input_yaml(SimulatorYamlParser(yaml).parse());
     Sim sys = get_system(yaml, mesh, tstart);
-    return simulate<StepperType>(sys, tstart, tend, dt);
+    return simulate<StepperType>(sys, input.controllers, tstart, tend, dt);
 }
 
 template <typename StepperType> std::vector<Res> simulate(const std::string& yaml, const std::string& mesh, const double tstart, const double tend, const double dt, ssc::data_source::DataSource& commands)
 {
+    const YamlSimulatorInput input = check_input_yaml(SimulatorYamlParser(yaml).parse());
     Sim sys = get_system(yaml, mesh, tstart, commands);
-    return simulate<StepperType>(sys, tstart, tend, dt);
+    return simulate<StepperType>(sys, input.controllers, tstart, tend, dt);
 }
 
 template <typename StepperType> std::vector<Res> simulate(const std::string& yaml, const std::map<std::string, VectorOfVectorOfPoints>& meshes, const double tstart, const double tend, const double dt)
 {
+    const YamlSimulatorInput input = check_input_yaml(SimulatorYamlParser(yaml).parse());
     Sim sys = get_system(yaml, meshes, tstart);
-    return simulate<StepperType>(sys, tstart, tend, dt);
+    return simulate<StepperType>(sys, input.controllers, tstart, tend, dt);
 }
 
 template <typename StepperType> std::vector<Res> simulate(const YamlSimulatorInput& input, const double tstart, const double tend, const double dt)
 {
     Sim sys = get_system(input, tstart);
-    return simulate<StepperType>(sys, tstart, tend, dt);
+    return simulate<StepperType>(sys, input.controllers, tstart, tend, dt);
 }
 
 template <typename StepperType> std::vector<Res> simulate(const YamlSimulatorInput& input, const std::map<std::string, VectorOfVectorOfPoints>& meshes, const double tstart, const double tend, const double dt)
 {
     Sim sys = get_system(input, meshes, tstart);
-    return simulate<StepperType>(sys, tstart, tend, dt);
+    return simulate<StepperType>(sys, input.controllers, tstart, tend, dt);
 }
 
 template <typename StepperType> std::vector<Res> simulate(const YamlSimulatorInput& input, const VectorOfVectorOfPoints& mesh, const double tstart, const double tend, const double dt)
@@ -93,6 +102,7 @@ template <typename StepperType> std::vector<Res> simulate(const YamlSimulatorInp
     Sim sys = get_system(input, mesh, tstart, commands);
     ssc::solver::Scheduler scheduler(tstart, tend, dt);
     SimObserver observer;
+    add_controllers_callbacks_to_scheduler(input.controllers, scheduler);
     ssc::solver::quicksolve<StepperType>(sys, scheduler, observer);
     return observer.get();
 }
