@@ -22,6 +22,7 @@ struct YamlSimulatorInput
     YamlEnvironmentalConstants environmental_constants;
     std::vector<YamlModel> environment;
     std::vector<YamlBody> bodies;
+    std::vector<YamlCommands> inputs;
     std::vector<YamlController> controllers;
     std::vector<YamlCommands> commands;
 };

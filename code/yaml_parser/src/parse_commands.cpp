@@ -44,3 +44,14 @@ std::vector<YamlCommands> parse_command_yaml(const std::string& yaml)
     node["commands"] >> ret;
     return ret;
 }
+
+std::vector<YamlCommands> parse_input_yaml(const std::string& yaml)
+{
+    std::stringstream stream(yaml);
+    YAML::Parser parser(stream);
+    YAML::Node node;
+    parser.GetNextDocument(node);
+    std::vector<YamlCommands> ret;
+    node["inputs"] >> ret;
+    return ret;
+}

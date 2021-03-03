@@ -2183,6 +2183,21 @@ std::string test_data::bug_2961()
     return ss.str();
 }
 
+std::string test_data::inputs()
+{
+    std::stringstream ss;
+    ss << "inputs:\n"
+          "  - name: propeller\n"
+          "    t: [0,1,3,10]\n"
+          "    rpm_co: {unit: rad/s, values: [3, 30, 30, 40]}\n"
+          "    P/D: {unit: 1, values: [1.064935,1.064935,1.064935,1.064935]}\n"
+          "  - name: controller\n"
+          "    t: [4.2]\n"
+          "    psi_co: {unit: rad, values: [2.5]}\n";
+
+    return ss.str();
+}
+
 std::string test_data::controllers()
 {
     std::stringstream ss;
