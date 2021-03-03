@@ -5,6 +5,7 @@ SET(SRC src/builders.cpp
         src/listeners.cpp
         src/InterpolationModule.cpp
         src/Controller.cpp
+        src/PIDController.cpp
         )
 
 # Using C++ 2011
