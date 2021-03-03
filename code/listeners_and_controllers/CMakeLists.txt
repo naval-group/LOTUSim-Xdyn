@@ -4,6 +4,7 @@ PROJECT(listeners_and_controllers)
 SET(SRC src/builders.cpp
         src/listeners.cpp
         src/InterpolationModule.cpp
+        src/Controller.cpp
         )
 
 # Using C++ 2011

@@ -127,7 +127,7 @@ Voici la description des modules de X-DYN :
 | `mesh`                     | Calculs sur les maillages (intersection navire/surface libre, itération sur les |
 |                            | facettes)                                                                       |
 | `observers_and_api`        | Définition des sorties en cours de simulation (CSV, HDF5, websocket...)         |
-| `listeners_and_controllers`        | Lecture des fichiers de commande (efforts contrôlés) et des spectres de houle                       |
+| `listeners_and_controllers`| Lecture des fichiers de commande, des contrôleurs et des spectres de houle      |
 | `slamming`                 | Calcul des efforts de slamming                                                  |
 | `test_data_generator`      | Génération des données de test (notamment utilisées pour générer les tutoriels) |
 | `yaml_parser`              | Interprétation des parties génériques du YAML (non spécifiques à un modèle)     |
