@@ -64,6 +64,10 @@ class Sim : public ssc::solver::ContinuousSystem
 
         void set_command_listener(const std::map<std::string, double>& new_commands);
 
+        /** \brief Gets the value of the given command from the datasource
+         */
+        double get_command(const std::string command_name) const;
+
         void reset_history();
         std::vector<std::string> get_command_names() const;
 

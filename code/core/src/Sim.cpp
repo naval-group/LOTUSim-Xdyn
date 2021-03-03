@@ -285,6 +285,11 @@ void Sim::set_command_listener(const std::map<std::string, double>& new_commands
     }
 }
 
+double Sim::get_command(const std::string command_name) const
+{
+    return pimpl->command_listener.get<double>(command_name);
+}
+
 void Sim::reset_history()
 {
     for (auto body:pimpl->bodies)

@@ -45,6 +45,19 @@ class Controller : public ssc::solver::DiscreteSystem
          * @param system The continuous system. Used to retrieve the continuous states.
          */
         void update_discrete_states(const double time, ssc::solver::ContinuousSystem* system);
+
+        /** \brief Gets the value of the controller input used by `compute_command` from the datasource
+         */
+        double get_setpoint(const Sim* sys) const;
+
+        /** \brief Gets the value of the controller measured input used by `compute_command` from the system states
+         */
+        double get_measured_value(const Sim* sys) const;
+
+        /** \brief Gets the system states value corresponding to the given name
+         */
+        double get_state_value_from_name(const Sim* sys, const std::string name) const;
+
 };
 
 #endif /* CONTROLLER_HPP_ */
