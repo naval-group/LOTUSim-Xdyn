@@ -1,12 +1,12 @@
 /*
- * DefaultEventHandler.hpp
+ * EventHandler.hpp
  *
  * \date 21 mars 2014
  * \author cec
  */
 
-#ifndef DEFAULTEVENTHANDLER_HPP_
-#define DEFAULTEVENTHANDLER_HPP_
+#ifndef EVENTHANDLER_HPP_
+#define EVENTHANDLER_HPP_
 
 namespace ssc
 {
@@ -32,4 +32,4 @@ namespace ssc
     }
 }
 
-#endif /* DEFAULTEVENTHANDLER_HPP_ */
+#endif /* EVENTHANDLER_HPP_ */

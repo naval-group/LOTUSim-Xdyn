@@ -17,14 +17,14 @@
 #include "ForceModel.hpp"
 #include "SurfaceElevationGrid.hpp"
 #include "State.hpp"
-#include "System.hpp"
+#include "ContinuousSystem.hpp"
 
 typedef std::map<std::string, std::map< std::string,ssc::kinematics::Vector6d > > OuputtedForces;
 typedef std::vector<std::pair<std::string,std::vector<std::string> > > VectorOfStringModelForEachBody;
 
 class Observer;
 
-class Sim : public ssc::solver::System
+class Sim : public ssc::solver::ContinuousSystem
 {
     public:
         Sim(const std::vector<BodyPtr>& bodies,

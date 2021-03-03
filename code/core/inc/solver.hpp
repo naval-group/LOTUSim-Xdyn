@@ -31,9 +31,9 @@ namespace ssc
         void quicksolve(Sim& sys, Scheduler& scheduler, ObserverType& observer, StateForcer& force_states)
         {
             StepperType stepper;
-            ssc::solver::EventHandler event_handler;
+            EventHandler event_handler;
             sys.initialize_system_outputs_before_first_observation();
-            observer.observe(sys,scheduler.get_time());
+            observer.observe(sys, scheduler.get_t0());
             while(scheduler.has_more_time_events())
             {
                 const double dt = scheduler.get_step();
@@ -48,7 +48,7 @@ namespace ssc
                 const auto discrete_state_updaters = scheduler.get_discrete_state_updaters_to_run();
                 for (const auto state_updater : discrete_state_updaters)
                 {
-                    state_updater(t, sys.state);
+                    state_updater(scheduler, &sys);
                 }
                 scheduler.advance_to_next_time_event();
                 observer.observe(sys, scheduler.get_time());
