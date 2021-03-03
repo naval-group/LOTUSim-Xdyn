@@ -107,3 +107,14 @@ std::vector<PIDController> get_pid_controllers(const std::vector<YamlController>
 
     return parsed_controllers;
 }
+
+
+void add_controllers_callbacks_to_scheduler(const std::vector<YamlController>& controllers,
+                                            ssc::solver::Scheduler& scheduler
+                                            )
+{
+    const std::vector<PIDController> parsed_controllers = get_pid_controllers(controllers);
+    for (PIDController controller:parsed_controllers) {
+        controller.schedule_update(scheduler.get_time(), scheduler);
+    }
+}

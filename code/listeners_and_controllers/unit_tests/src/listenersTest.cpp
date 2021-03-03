@@ -189,3 +189,25 @@ TEST_F(listenersTest, get_pid_controllers_example)
 
     //! [controllersTest listen_to_file_example]
 }
+
+TEST_F(listenersTest, can_add_controllers_callbacks_to_scheduler)
+{
+    ssc::solver::Scheduler scheduler(2, 4, 0.2);
+    add_controllers_callbacks_to_scheduler(parse_controller_yaml(test_data::controllers()), scheduler);
+
+    ASSERT_EQ(2, scheduler.get_time());
+    ASSERT_EQ(2, scheduler.get_discrete_state_updaters_to_run().size()); // both controllers
+    scheduler.advance_to_next_time_event();
+
+    ASSERT_EQ(2, scheduler.get_time());
+    ASSERT_EQ(0, scheduler.get_discrete_state_updaters_to_run().size()); // no controller (time event added to the scheduler by "propeller(rpm)" controller)
+    scheduler.advance_to_next_time_event();
+
+    ASSERT_EQ(2, scheduler.get_time());
+    ASSERT_EQ(0, scheduler.get_discrete_state_updaters_to_run().size()); // no controller (time event added to the scheduler by "controller(psi)" controller)
+    scheduler.advance_to_next_time_event();
+
+    ASSERT_EQ(2.2, scheduler.get_time());
+    ASSERT_EQ(0, scheduler.get_discrete_state_updaters_to_run().size()); // no controller (no new schedule_update called)
+    scheduler.advance_to_next_time_event();
+}

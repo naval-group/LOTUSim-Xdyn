@@ -10,6 +10,7 @@
 
 #include <ssc/data_source.hpp>
 #include "PIDController.hpp"
+#include "Scheduler.hpp"
 #include "YamlCommands.hpp"
 #include "YamlController.hpp"
 
@@ -29,5 +30,11 @@ void add_inputs_listener(ssc::data_source::DataSource& ds, const std::vector<Yam
   *  \snippet listeners_and_controllers/unit_tests/src/controllersTest.cpp controllersTest listen_to_file_example
   */
 std::vector<PIDController> get_pid_controllers(const std::vector<YamlController>& controllers);
+
+/**  \brief Reads data from YAML & adds the corresponding controllers callbacks to the scheduler.
+  */
+void add_controllers_callbacks_to_scheduler(const std::vector<YamlController>& controllers,
+                                            ssc::solver::Scheduler& scheduler
+                                            );
 
 #endif /* LISTENERS_HPP_ */
