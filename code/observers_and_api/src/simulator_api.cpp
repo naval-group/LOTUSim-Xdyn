@@ -87,7 +87,8 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, co
 
 Sim get_system(const YamlSimulatorInput& input, const double t0)
 {
-    const ssc::data_source::DataSource command_listener = make_command_listener(input.commands);
+    ssc::data_source::DataSource command_listener = make_command_listener(input.commands);
+    add_inputs_listener(command_listener, input.inputs);
     return get_builder(input, t0, command_listener).build();
 }
 
@@ -136,7 +137,8 @@ Sim get_system(const std::string& yaml, const VectorOfVectorOfPoints& mesh, cons
 
 Sim get_system(const YamlSimulatorInput& input, const MeshMap& meshes, const double t0)
 {
-    const ssc::data_source::DataSource command_listener = make_command_listener(input.commands);
+    ssc::data_source::DataSource command_listener = make_command_listener(input.commands);
+    add_inputs_listener(command_listener, input.inputs);
     return get_builder(input, t0, command_listener).build(meshes);
 }
 

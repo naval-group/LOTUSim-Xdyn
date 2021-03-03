@@ -72,3 +72,16 @@ ssc::data_source::DataSource make_command_listener(const std::vector<YamlCommand
     ds.check_out();
     return ds;
 }
+
+
+void add_inputs_listener(ssc::data_source::DataSource& ds,
+                         const std::vector<YamlCommands>& inputs //!< Parsed YAML inputs
+                         )
+{
+    ds.check_in(__PRETTY_FUNCTION__);
+    for (auto that_input = inputs.begin() ; that_input != inputs.end() ; ++that_input)
+    {
+        add(that_input, ds);
+    }
+    ds.check_out();
+}

@@ -18,4 +18,10 @@
   */
 ssc::data_source::DataSource make_command_listener(const std::vector<YamlCommands>& commands);
 
+/**  \brief Reads data from YAML & builds an interpolation table per input.
+  *  \returns DataSource used to retrieve the inputs of the controlled forces models at each instant
+  *  \snippet listeners_and_controllers/unit_tests/src/listenersTest.cpp listenersTest listen_to_file_example
+  */
+void add_inputs_listener(ssc::data_source::DataSource& ds, const std::vector<YamlCommands>& inputs);
+
 #endif /* LISTENERS_HPP_ */
