@@ -14,6 +14,12 @@
 #include "Controller.hpp"
 #include "yaml.h"
 
+/*
+ * Tests for PIDController are found in `observers_and_api/unit_tests/src/PIDControllerTest.cpp`
+ * because these tests need a Sim instance, which requires the observers_and_api include directory.
+ * To avoid cross-dependencies, the corresponding unit tests are moved to observers_and_api/unit_tests.
+ */
+
 class PIDController : public Controller
 {
     public:
@@ -34,6 +40,8 @@ class PIDController : public Controller
                       );
         ~PIDController();
 
+        const Yaml yaml; //!< Controller-specific yaml
+
     private:
         /** \brief Returns the last time instant at which `callback` has been called
          */
@@ -46,8 +54,6 @@ class PIDController : public Controller
         /** \brief Computes the command value from the input data
          */
         double compute_command(const double setpoint, const double measured_value, const double t);
-
-        const Yaml yaml; //!< Controller-specific yaml
 
         /* PID Controller "memory" */
         const double dt; //!< Controller fixed time step
