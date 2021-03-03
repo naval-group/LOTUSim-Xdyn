@@ -2183,6 +2183,44 @@ std::string test_data::bug_2961()
     return ss.str();
 }
 
+std::string test_data::controllers()
+{
+    std::stringstream ss;
+    ss << "controllers:\n"
+          "  - name: propeller\n"
+          "    output: rpm\n"
+          "    type: PID\n"
+          "    dt: 0.1\n"
+          "    input: rpm_co\n"
+          "    states:\n"
+          "        x: 1\n"
+          "        y: -1\n"
+          "    gains:\n"
+          "        Kp: 4.2\n"
+          "        Ki: 0.25\n"
+          "        Kd: 1\n"
+          "  - name: propeller\n"
+          "    output: P/D\n"
+          "    type: gRPC\n"
+          "    dt: 0.01\n"
+          "    input: P/D\n"
+          "    states:\n"
+          "        u: 2\n"
+          "  - name: controller\n"
+          "    output: psi\n"
+          "    type: PID\n"
+          "    dt: 0.5\n"
+          "    input: psi_co\n"
+          "    states:\n"
+          "        psi_est: 1\n"
+          "    gains:\n"
+          "        Kp: 0.52\n"
+          "        Ki: 21.5\n"
+          "        Kd: 2.2\n";
+
+    return ss.str();
+}
+
 std::string test_data::wageningen()
 {
     std::stringstream ss;

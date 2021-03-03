@@ -41,6 +41,7 @@ namespace test_data
     std::string test_ship_damping();
     std::string controlled_forces();
     std::string bug_2961();
+    std::string controllers();
     std::string wageningen();
     std::string resistance_curve();
     std::string propulsion_and_resistance();

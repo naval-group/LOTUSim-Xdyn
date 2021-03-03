@@ -13,6 +13,7 @@
 #include "YamlBody.hpp"
 #include "YamlEnvironmentalConstants.hpp"
 #include "YamlCommands.hpp"
+#include "YamlController.hpp"
 
 struct YamlSimulatorInput
 {
@@ -21,6 +22,7 @@ struct YamlSimulatorInput
     YamlEnvironmentalConstants environmental_constants;
     std::vector<YamlModel> environment;
     std::vector<YamlBody> bodies;
+    std::vector<YamlController> controllers;
     std::vector<YamlCommands> commands;
 };
 
