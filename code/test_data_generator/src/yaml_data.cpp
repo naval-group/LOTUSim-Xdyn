@@ -2358,6 +2358,40 @@ std::string test_data::propulsion_and_resistance()
     return ss.str();
 }
 
+std::string test_data::dummy_controllers_and_commands_for_propulsion_and_resistance()
+{
+    /*
+    Get this result in the datasource for t≥0:
+    ```cpp
+    commands.set<double>("propeller(rpm)", 100*(2*PI)/60.);
+    commands.set<double>("propeller(P/D)", 1.064935);
+    ```
+    using both controllers and commands.
+    */
+    std::stringstream ss;
+    ss << "inputs:\n"
+       << "  - name: propeller\n"
+       << "    t: [0]\n"
+       << "    rpm_co: {unit: rad/s, values: [10.4719755]}\n"
+       << "controllers:\n"
+       << "  - name: propeller\n"
+       << "    output: rpm\n"
+       << "    type: PID\n"
+       << "    dt: 10\n"
+       << "    input: rpm_co\n"
+       << "    states:\n"
+       << "        x: 0\n"
+       << "    gains:\n"
+       << "        Kp: 1\n"
+       << "        Ki: 0\n"
+       << "        Kd: 0\n"
+       << "commands:\n"
+       << "  - name: propeller\n"
+       << "    t: [0]\n"
+       << "    P/D: {unit: 1, values: [1.064935]}\n";
+    return ss.str();
+}
+
 std::string test_data::radiation_damping()
 {
     std::stringstream ss;
