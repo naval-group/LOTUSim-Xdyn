@@ -105,9 +105,9 @@ class Tests(unittest.TestCase):
                 33.15779999999996, 35.75744999999995, 38.455199999999934, 41.251049999999935, 44.14499999999993]
         for i in range(len(self.res['t'])):
             t = self.res['t'][i]
-            assert abs(self.res['z'][i] - expected_z[i] - 3-t*6) < EPS
-            assert abs(self.res['x'][i]-t*4-1) < EPS
-            assert abs(self.res['y'][i]-t*5-2) < EPS
+            assert abs(self.res['z'][i] - expected_z[i] - 3-(t-2)*6) < EPS
+            assert abs(self.res['x'][i]-(t-2)*4-1) < EPS
+            assert abs(self.res['y'][i]-(t-2)*5-2) < EPS
             assert abs(self.res['u'][i]-4) < EPS
             assert abs(self.res['v'][i]-5) < EPS
             assert abs(self.res['p'][i]) < EPS
@@ -116,7 +116,7 @@ class Tests(unittest.TestCase):
 
     def test_check_time_vector(self):
         """Time vector should have the right size & hold correct values."""
-        t_ = 0
+        t_ = 2
         assert len(self.res['t']) == 31
         for t in self.res['t']:
             assert abs(t - t_) < EPS
@@ -145,3 +145,7 @@ class Tests(unittest.TestCase):
         """Extra observations should be available."""
         assert 'Fz(gravity,ball,ball)' in self.res['extra_observations']
         assert len(self.res['extra_observations']['Fz(gravity,ball,ball)']) == len(self.res['t'])
+        
+    def test_response_starts_at_last_time_of_request(self):
+        """Check that the first time stamp in the response is the last time stamp of the request."""
+        assert self.res['t'][0] == 2
