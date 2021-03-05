@@ -20,6 +20,11 @@ void ssc::solver::DiscreteSystem::callback(Scheduler &scheduler, ContinuousSyste
     schedule_update(tnext, scheduler);
 }
 
+void ssc::solver::DiscreteSystem::initialize(Scheduler &scheduler, ContinuousSystem *system)
+{
+    callback(scheduler, system);
+}
+
 double ssc::solver::DiscreteSystem::get_date_of_next_update(const double current_time) const
 {
     return current_time + dt;
