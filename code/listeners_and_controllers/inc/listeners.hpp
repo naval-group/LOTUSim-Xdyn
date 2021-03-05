@@ -31,10 +31,12 @@ void add_inputs_listener(ssc::data_source::DataSource& ds, const std::vector<Yam
   */
 std::vector<PIDController> get_pid_controllers(const std::vector<YamlController>& controllers);
 
-/**  \brief Reads data from YAML & adds the corresponding controllers callbacks to the scheduler.
+/**  \brief Reads data from YAML & initializes the corresponding controllers.
+  *  \snippet observers_and_api/unit_tests/src/PIDControllerTest.cpp controllersTest initialize_controllers
   */
-void add_controllers_callbacks_to_scheduler(const std::vector<YamlController>& controllers,
-                                            ssc::solver::Scheduler& scheduler
-                                            );
+void initialize_controllers(const std::vector<YamlController>& controllers,
+                            ssc::solver::Scheduler& scheduler,
+                            Sim* system
+                            );
 
 #endif /* LISTENERS_HPP_ */

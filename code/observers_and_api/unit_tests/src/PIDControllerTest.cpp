@@ -8,9 +8,11 @@
 #include "simulator_api.hpp"
 #include "Scheduler.hpp"
 #include "DiscreteSystem.hpp"
+#include "listeners.hpp"
 #include "PIDControllerTest.hpp"
 #include "PIDController.hpp"
 #include "parse_commands.hpp"
+#include "parse_controllers.hpp"
 #include "yaml_data.hpp"
 
 #define EPS (1E-14)
@@ -228,4 +230,68 @@ TEST_F(PIDControllerTest, can_use_euler_angles_in_states)
     controller.callback(scheduler, &sys);
     const double first_expected_command = Kp * error;
     ASSERT_NEAR(first_expected_command, sys.get_command("propeller(psi_co)"), 1e-6);
+}
+
+TEST_F(PIDControllerTest, can_initialize_controllers)
+{
+    //! [controllersTest initialize_controllers]
+    Sim sys = get_system(test_data::falling_ball_example(), 0);
+    const double tstart = 0.1;
+    const double dt = 1;
+    ssc::solver::Scheduler scheduler(tstart, 10, dt);
+
+    // initialize inputs
+    const double rpm_co = 0.45;
+    const double pd_co = 0.5;
+    sys.set_command_listener(std::map<std::string, double>({ { "t", tstart }, { "propeller(rpm_co)", rpm_co }, { "controller(P/D_co)", pd_co } }));
+
+    // initialize states
+    const double u = 1.0;
+    const StateType states = {100.0, 200.0, 300.0, u, 2.0, 3.0, 4.0, 5.0, 6.0, 1, 0, 0, 0};
+    sys.get_bodies().front()->update_body_states(states, tstart);
+
+    std::stringstream controllers;
+    controllers << "controllers:\n"
+                   "  - name: propeller\n"
+                   "    output: rpm\n"
+                   "    type: PID\n"
+                   "    dt: 0.15\n"
+                   "    input: rpm_co\n"
+                   "    states:\n"
+                   "        u: 0.5\n"
+                   "    gains:\n"
+                   "        Kp: 4.2\n"
+                   "        Ki: 0.25\n"
+                   "        Kd: 1\n"
+                   "  - name: controller\n"
+                   "    output: P/D\n"
+                   "    type: PID\n"
+                   "    dt: 0.5\n"
+                   "    input: P/D_co\n"
+                   "    states:\n"
+                   "        u: 0\n"
+                   "    gains:\n"
+                   "        Kp: 1\n"
+                   "        Ki: 0\n"
+                   "        Kd: 0\n";
+
+    initialize_controllers(parse_controller_yaml(controllers.str()), scheduler, &sys);
+
+    // Check controllers commands have been initialized in the datasource
+    ASSERT_EQ(tstart, scheduler.get_time());
+    ASSERT_NEAR(4.2 * (rpm_co - u * 0.5 ), sys.get_command("propeller(rpm)"), 1e-6);
+    ASSERT_NEAR(pd_co, sys.get_command("controller(P/D)"), 1e-6);
+    ASSERT_EQ(0, scheduler.get_discrete_state_updaters_to_run().size()); // no controller callback should be called anymore at t=tstart
+
+    // Check 'propeller' callback has been added to the scheduler.
+    scheduler.advance_to_next_time_event();
+    ASSERT_EQ(tstart + 0.15, scheduler.get_time());
+    ASSERT_EQ(1, scheduler.get_discrete_state_updaters_to_run().size()); // propeller callback
+
+    // Check 'propeller' callback has been added to the scheduler.
+    scheduler.advance_to_next_time_event();
+    ASSERT_EQ(tstart + 0.5, scheduler.get_time());
+    ASSERT_EQ(1, scheduler.get_discrete_state_updaters_to_run().size()); // controller callback
+
+    //! [controllersTest initialize_controllers]
 }
