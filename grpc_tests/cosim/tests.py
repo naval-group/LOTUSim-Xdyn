@@ -145,3 +145,7 @@ class Tests(unittest.TestCase):
         """Extra observations should be available."""
         assert 'Fz(gravity,ball,ball)' in self.res['extra_observations']
         assert len(self.res['extra_observations']['Fz(gravity,ball,ball)']) == len(self.res['t'])
+        
+    def test_response_starts_at_last_time_of_request(self):
+        """Check that the first time stamp in the response is the last time stamp of the request."""
+        assert self.res['t'][0] == 2
