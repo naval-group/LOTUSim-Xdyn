@@ -106,6 +106,7 @@ YamlSimServerInputs from_grpc(grpc::ServerContext* , const CosimulationRequestEu
         server_inputs.states.resize(n);
         for (size_t i = 0 ; i < n ; ++i)
         {
+            server_inputs.states[i].t = request->states().t(i);
             server_inputs.states[i].x = request->states().x(i);
             server_inputs.states[i].y = request->states().y(i);
             server_inputs.states[i].z = request->states().z(i);
@@ -145,6 +146,7 @@ YamlSimServerInputs from_grpc(grpc::ServerContext* , const CosimulationRequestQu
         server_inputs.states.resize(n);
         for (size_t i = 0 ; i < n ; ++i)
         {
+            server_inputs.states[i].t = request->states().t(i);
             server_inputs.states[i].x = request->states().x(i);
             server_inputs.states[i].y = request->states().y(i);
             server_inputs.states[i].z = request->states().z(i);
