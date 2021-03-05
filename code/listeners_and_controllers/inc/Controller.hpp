@@ -43,24 +43,16 @@ class Controller : public ssc::solver::DiscreteSystem
          * This method will be called by the "ssc::solver::DiscreteSystem::callback" method.
          * @param time Current simulation time (in seconds).
          * @param system The continuous system. Used to retrieve the continuous states.
-         * Should be a `Sim*` instance, because the setpoint and measured states need to
-         * get their inputs from a `Sim`. As `ssc::solver::DiscreteSystem` is more generic and
-         * does not know `Sim` yet, `update_discrete_states` `system` argument is typed as a
-         * `ssc::solver::ContinuousSystem*` but will be casted into `Sim*`.
          */
         void update_discrete_states(const double time, ssc::solver::ContinuousSystem* system);
 
         /** \brief Gets the value of the controller input used by `compute_command` from the datasource
          */
-        double get_setpoint(const Sim* sys) const;
+        double get_setpoint(const ssc::solver::ContinuousSystem* sys) const;
 
         /** \brief Gets the value of the controller measured input used by `compute_command` from the system states
          */
-        double get_measured_value(const Sim* sys) const;
-
-        /** \brief Gets the system states value corresponding to the given name
-         */
-        double get_state_value_from_name(const Sim* sys, const std::string name) const;
+        double get_measured_value(const ssc::solver::ContinuousSystem* sys) const;
 
         /** \brief Computes the command value from the input data
          */

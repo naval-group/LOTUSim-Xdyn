@@ -285,9 +285,55 @@ void Sim::set_command_listener(const std::map<std::string, double>& new_commands
     }
 }
 
-double Sim::get_command(const std::string command_name) const
+void Sim::set_discrete_state(const std::string state_name, const double value)
 {
-    return pimpl->command_listener.get<double>(command_name);
+    pimpl->command_listener.set(state_name, value);
+}
+
+double Sim::get_input_value(const std::string name) const
+{
+    return pimpl->command_listener.get<double>(name);
+}
+
+double Sim::get_state_value(const std::string name) const
+{
+    if (name == "x") {
+        return pimpl->bodies.front()->get_states().x();
+    } else if (name == "y") {
+        return pimpl->bodies.front()->get_states().y();
+    } else if (name == "z") {
+        return pimpl->bodies.front()->get_states().z();
+    } else if (name == "u") {
+        return pimpl->bodies.front()->get_states().u();
+    } else if (name == "v") {
+        return pimpl->bodies.front()->get_states().v();
+    } else if (name == "w") {
+        return pimpl->bodies.front()->get_states().w();
+    } else if (name == "p") {
+        return pimpl->bodies.front()->get_states().p();
+    } else if (name == "q") {
+        return pimpl->bodies.front()->get_states().q();
+    } else if (name == "r") {
+        return pimpl->bodies.front()->get_states().r();
+    } else if (name == "qr") {
+        return pimpl->bodies.front()->get_states().qr();
+    } else if (name == "qi") {
+        return pimpl->bodies.front()->get_states().qi();
+    } else if (name == "qj") {
+        return pimpl->bodies.front()->get_states().qj();
+    } else if (name == "qk") {
+        return pimpl->bodies.front()->get_states().qk();
+    } else if (name == "phi") {
+        return pimpl->bodies.front()->get_states().get_angles().phi;
+    } else if (name == "theta") {
+        return pimpl->bodies.front()->get_states().get_angles().theta;
+    } else if (name == "psi") {
+        return pimpl->bodies.front()->get_states().get_angles().psi;
+    } else {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+              "Something is wrong with a 'states' name: '" << name << "' is not a valid state. Examples of valid states: 'x', 'u', 'qr', 'psi', etc.."
+              );
+    }
 }
 
 void Sim::reset_history()

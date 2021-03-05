@@ -97,7 +97,7 @@ TEST_F(PIDControllerTest, update_command_in_ds_example)
 
     controller.callback(scheduler, &sys);
     const double error = rpm_co - (x - y);
-    ASSERT_NEAR(Kp * error, sys.get_command("propeller(rpm)"), 1e-6);
+    ASSERT_NEAR(Kp * error, sys.get_input_value("propeller(rpm)"), 1e-6);
 
     //! [callback example]
 }
@@ -129,7 +129,7 @@ TEST_F(PIDControllerTest, can_compute_PID_commands)
 
     controller.callback(scheduler, &sys);
     const double first_expected_command = Kp * error;
-    ASSERT_NEAR(first_expected_command, sys.get_command("propeller(rpm)"), 1e-6);
+    ASSERT_NEAR(first_expected_command, sys.get_input_value("propeller(rpm)"), 1e-6);
 
     // Second time step
     scheduler.advance_to_next_time_event();
@@ -144,7 +144,7 @@ TEST_F(PIDControllerTest, can_compute_PID_commands)
 
     controller.callback(scheduler, &sys);
     const double second_expected_command = Kp * error2 + Ki * error2 * dt + Kd * (error2 - error) / dt;
-    ASSERT_NEAR(second_expected_command, sys.get_command("propeller(rpm)"), 1e-6);
+    ASSERT_NEAR(second_expected_command, sys.get_input_value("propeller(rpm)"), 1e-6);
 
     // Third time step
     scheduler.advance_to_next_time_event();
@@ -161,7 +161,7 @@ TEST_F(PIDControllerTest, can_compute_PID_commands)
 
     controller.callback(scheduler, &sys);
     const double third_expected_command = Kp * error3 + Ki * (error2 * dt + error3 * dt) + Kd * (error3 - error2) / dt;
-    ASSERT_NEAR(third_expected_command, sys.get_command("propeller(rpm)"), 1e-6);
+    ASSERT_NEAR(third_expected_command, sys.get_input_value("propeller(rpm)"), 1e-6);
 }
 
 TEST_F(PIDControllerTest, can_compute_PID_commands_several_times_at_first_time_step)
@@ -189,19 +189,19 @@ TEST_F(PIDControllerTest, can_compute_PID_commands_several_times_at_first_time_s
     sys.get_bodies().front()->update_body_states(states, tstart);
     controller.callback(scheduler, &sys);
     const double first_expected_command = Kp * error;
-    ASSERT_NEAR(first_expected_command, sys.get_command("propeller(rpm)"), 1e-6);
+    ASSERT_NEAR(first_expected_command, sys.get_input_value("propeller(rpm)"), 1e-6);
 
     // First time step again should send back the same result
     ASSERT_EQ(tstart, scheduler.get_time());
     controller.callback(scheduler, &sys);
-    ASSERT_NEAR(first_expected_command, sys.get_command("propeller(rpm)"), 1e-6);
+    ASSERT_NEAR(first_expected_command, sys.get_input_value("propeller(rpm)"), 1e-6);
 
     // A time step before the next meeting point should send back the same result
     scheduler.add_time_event(tstart + dt / 2);
     scheduler.advance_to_next_time_event();
     ASSERT_EQ(tstart + dt / 2, scheduler.get_time());
     controller.callback(scheduler, &sys);
-    ASSERT_NEAR(first_expected_command, sys.get_command("propeller(rpm)"), 1e-6);
+    ASSERT_NEAR(first_expected_command, sys.get_input_value("propeller(rpm)"), 1e-6);
 }
 
 TEST_F(PIDControllerTest, can_use_euler_angles_in_states)
@@ -229,7 +229,7 @@ TEST_F(PIDControllerTest, can_use_euler_angles_in_states)
 
     controller.callback(scheduler, &sys);
     const double first_expected_command = Kp * error;
-    ASSERT_NEAR(first_expected_command, sys.get_command("propeller(psi_co)"), 1e-6);
+    ASSERT_NEAR(first_expected_command, sys.get_input_value("propeller(psi_co)"), 1e-6);
 }
 
 TEST_F(PIDControllerTest, can_initialize_controllers)
@@ -279,8 +279,8 @@ TEST_F(PIDControllerTest, can_initialize_controllers)
 
     // Check controllers commands have been initialized in the datasource
     ASSERT_EQ(tstart, scheduler.get_time());
-    ASSERT_NEAR(4.2 * (rpm_co - u * 0.5 ), sys.get_command("propeller(rpm)"), 1e-6);
-    ASSERT_NEAR(pd_co, sys.get_command("controller(P/D)"), 1e-6);
+    ASSERT_NEAR(4.2 * (rpm_co - u * 0.5 ), sys.get_input_value("propeller(rpm)"), 1e-6);
+    ASSERT_NEAR(pd_co, sys.get_input_value("controller(P/D)"), 1e-6);
     ASSERT_EQ(0, scheduler.get_discrete_state_updaters_to_run().size()); // no controller callback should be called anymore at t=tstart
 
     // Check 'propeller' callback has been added to the scheduler.

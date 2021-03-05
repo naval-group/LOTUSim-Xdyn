@@ -64,9 +64,21 @@ class Sim : public ssc::solver::ContinuousSystem
 
         void set_command_listener(const std::map<std::string, double>& new_commands);
 
-        /** \brief Gets the value of the given command from the datasource
+        /** \brief Sets the value of the given command in the datasource
+         * 
+         * Used by controllers to update the datasource values.
          */
-        double get_command(const std::string command_name) const;
+        void set_discrete_state(const std::string state_name, const double value);
+        /** \brief Gets the value of the given input from the datasource
+         * 
+         * Used by controllers to get the inputs they need to compute a command.
+         */
+        double get_input_value(const std::string name) const;
+        /** \brief Gets the value of a Sim state ("x", "u", "qr", "phi", ...)
+         * 
+         * Used by controllers to get the states they need to compute a command.
+         */
+        double get_state_value(const std::string name) const;
 
         void reset_history();
         std::vector<std::string> get_command_names() const;

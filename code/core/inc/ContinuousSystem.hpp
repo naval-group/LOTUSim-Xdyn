@@ -8,6 +8,7 @@
 #ifndef SOLVER_CONTINUOUSSYSTEM_HPP_
 #define SOLVER_CONTINUOUSSYSTEM_HPP_
 
+#include <string>
 #include <vector>
 
 namespace ssc
@@ -51,6 +52,18 @@ https://gitlab.com/sirehna_naval_group/xdyn/-/commit/b3e624960e941d73a8b3823e9cb
              *
              */
             virtual void initialize_system_outputs_before_first_observation() = 0;
+
+            /** \brief Sets the value of a discrete state (output of a DiscreteSystem) in the ContinuousSystem.
+             */
+            virtual void set_discrete_state(const std::string discrete_state_name, const double value) = 0;
+
+            /** \brief Gets the value of an input from the ContinuousSystem, needed by a DiscreteSystem.
+             */
+            virtual double get_input_value(const std::string name) const = 0;
+
+            /** \brief Gets the value of state from the ContinuousSystem, needed by a DiscreteSystem.
+             */
+            virtual double get_state_value(const std::string name) const = 0;
         };
     }
 }
