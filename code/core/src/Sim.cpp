@@ -161,14 +161,6 @@ void Sim::dx_dt(const StateType& x, StateType& dxdt, const double t)
     }
 }
 
-void Sim::update_discrete_states()
-{
-}
-
-void Sim::update_continuous_states()
-{
-}
-
 ssc::kinematics::Wrench project_into_NED_frame(const ssc::kinematics::Wrench& F, const ssc::kinematics::RotationMatrix& R);
 ssc::kinematics::Wrench project_into_NED_frame(const ssc::kinematics::Wrench& F, const ssc::kinematics::RotationMatrix& R)
 {

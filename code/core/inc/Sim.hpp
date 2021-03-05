@@ -36,9 +36,6 @@ class Sim : public ssc::solver::ContinuousSystem
         void dx_dt(const StateType& x, StateType& dxdt, const double t);
         void force_states(StateType& x, const double t) const;
 
-        void update_discrete_states();
-        void update_continuous_states();
-
         /**  \brief Serialize wave data on mesh for an ASCII observer
           *  \details Called by SimCsvObserver at each time step. The aim is to
           *  calculate the wave data on a mesh expressed in a particular frame of
