@@ -115,12 +115,12 @@ std::vector<PIDController> get_pid_controllers(const std::vector<YamlController>
  * To avoid cross-dependencies, the corresponding unit tests are moved to observers_and_api/unit_tests.
  */
 
-void initialize_controllers(const std::vector<PIDController>& controllers,
+void initialize_controllers(std::vector<PIDController>& controllers,
                             ssc::solver::Scheduler& scheduler,
                             Sim* system
                             )
 {
-    for (PIDController controller:controllers) {
+    for (PIDController &controller:controllers) {
         controller.initialize(scheduler, system);
     }
 }

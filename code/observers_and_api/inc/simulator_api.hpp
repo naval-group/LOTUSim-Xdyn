@@ -103,7 +103,7 @@ template <typename StepperType> std::vector<Res> simulate(const YamlSimulatorInp
     Sim sys = get_system(input, mesh, tstart, commands);
     ssc::solver::Scheduler scheduler(tstart, tend, dt);
     SimObserver observer;
-    const std::vector<PIDController> controllers = get_pid_controllers(input.controllers);
+    std::vector<PIDController> controllers = get_pid_controllers(input.controllers);
     initialize_controllers(controllers, scheduler, &sys);
     ssc::solver::quicksolve<StepperType>(sys, scheduler, observer);
     return observer.get();

@@ -35,7 +35,7 @@ std::vector<PIDController> get_pid_controllers(const std::vector<YamlController>
   * adds their callbacks to the scheduler.
   *  \snippet observers_and_api/unit_tests/src/PIDControllerTest.cpp controllersTest initialize_controllers
   */
-void initialize_controllers(const std::vector<PIDController>& controllers,
+void initialize_controllers(std::vector<PIDController>& controllers,
                             ssc::solver::Scheduler& scheduler,
                             Sim* system
                             );
