@@ -87,25 +87,25 @@ void add_inputs_listener(ssc::data_source::DataSource& ds,
 }
 
 
-std::vector<PIDController> get_pid_controllers(const std::vector<YamlController>& controllers //!< Parsed YAML controllers
+std::vector<PIDController> get_pid_controllers(const std::vector<YamlController>& yaml_controllers //!< Parsed YAML controllers
                                                )
 {
-    std::vector<PIDController> parsed_controllers;
-    for (YamlController yamlController : controllers)
+    std::vector<PIDController> controllers;
+    for (YamlController yaml_controller : yaml_controllers)
     {
-        if (yamlController.type == "PID")
+        if (yaml_controller.type == "PID")
         {
-            const PIDController controller(yamlController.dt,
-                                           namify(yamlController.output, yamlController.name),
-                                           namify(yamlController.input, yamlController.name),
-                                           yamlController.states,
-                                           yamlController.rest_of_the_yaml
+            const PIDController controller(yaml_controller.dt,
+                                           namify(yaml_controller.output, yaml_controller.name),
+                                           namify(yaml_controller.input, yaml_controller.name),
+                                           yaml_controller.states,
+                                           yaml_controller.rest_of_the_yaml
                                            );
-            parsed_controllers.push_back(controller);
+            controllers.push_back(controller);
         }
     }
 
-    return parsed_controllers;
+    return controllers;
 }
 
 
@@ -115,13 +115,12 @@ std::vector<PIDController> get_pid_controllers(const std::vector<YamlController>
  * To avoid cross-dependencies, the corresponding unit tests are moved to observers_and_api/unit_tests.
  */
 
-void initialize_controllers(const std::vector<YamlController>& controllers,
+void initialize_controllers(const std::vector<PIDController>& controllers,
                             ssc::solver::Scheduler& scheduler,
                             Sim* system
                             )
 {
-    const std::vector<PIDController> parsed_controllers = get_pid_controllers(controllers);
-    for (PIDController controller:parsed_controllers) {
+    for (PIDController controller:controllers) {
         controller.initialize(scheduler, system);
     }
 }

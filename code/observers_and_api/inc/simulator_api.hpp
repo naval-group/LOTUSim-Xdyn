@@ -31,10 +31,11 @@ Sim get_system(const YamlSimulatorInput& input, const std::map<std::string, Vect
 
 typedef std::function<void(std::vector<double>&, const double)> ForceStates;
 
-template <typename StepperType> std::vector<Res> simulate(Sim& sys, const std::vector<YamlController>& controllers, const double tstart, const double tend, const double dt)
+template <typename StepperType> std::vector<Res> simulate(Sim& sys, const std::vector<YamlController>& yaml_controllers, const double tstart, const double tend, const double dt)
 {
     EverythingObserver observer;
     ssc::solver::Scheduler scheduler(tstart, tend, dt);
+    std::vector<PIDController> controllers = get_pid_controllers(yaml_controllers);
     initialize_controllers(controllers, scheduler, &sys);
     ssc::solver::quicksolve<StepperType>(sys, scheduler, observer);
     auto ret = observer.get();
@@ -102,7 +103,8 @@ template <typename StepperType> std::vector<Res> simulate(const YamlSimulatorInp
     Sim sys = get_system(input, mesh, tstart, commands);
     ssc::solver::Scheduler scheduler(tstart, tend, dt);
     SimObserver observer;
-    initialize_controllers(input.controllers, scheduler, &sys);
+    const std::vector<PIDController> controllers = get_pid_controllers(input.controllers);
+    initialize_controllers(controllers, scheduler, &sys);
     ssc::solver::quicksolve<StepperType>(sys, scheduler, observer);
     return observer.get();
 }

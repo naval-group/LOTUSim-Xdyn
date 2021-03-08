@@ -250,8 +250,8 @@ TEST_F(PIDControllerTest, can_initialize_controllers)
     const StateType states = {100.0, 200.0, 300.0, u, 2.0, 3.0, 4.0, 5.0, 6.0, 1, 0, 0, 0};
     sys.get_bodies().front()->update_body_states(states, tstart);
 
-    std::stringstream controllers;
-    controllers << "controllers:\n"
+    std::stringstream yaml_controllers;
+    yaml_controllers << "controllers:\n"
                    "  - name: propeller\n"
                    "    output: rpm\n"
                    "    type: PID\n"
@@ -275,7 +275,8 @@ TEST_F(PIDControllerTest, can_initialize_controllers)
                    "        Ki: 0\n"
                    "        Kd: 0\n";
 
-    initialize_controllers(parse_controller_yaml(controllers.str()), scheduler, &sys);
+    const std::vector<PIDController> controllers = get_pid_controllers(parse_controller_yaml(yaml_controllers.str()));
+    initialize_controllers(controllers, scheduler, &sys);
 
     // Check controllers commands have been initialized in the datasource
     ASSERT_EQ(tstart, scheduler.get_time());

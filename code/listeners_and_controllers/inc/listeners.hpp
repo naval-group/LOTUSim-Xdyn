@@ -29,12 +29,13 @@ void add_inputs_listener(ssc::data_source::DataSource& ds, const std::vector<Yam
 /**  \brief Reads data from YAML & returns the corresponding controllers.
   *  \snippet listeners_and_controllers/unit_tests/src/controllersTest.cpp controllersTest listen_to_file_example
   */
-std::vector<PIDController> get_pid_controllers(const std::vector<YamlController>& controllers);
+std::vector<PIDController> get_pid_controllers(const std::vector<YamlController>& yaml_controllers);
 
-/**  \brief Reads data from YAML & initializes the corresponding controllers.
+/**  \brief Initializes the given controllers commands in Sim datasource and
+  * adds their callbacks to the scheduler.
   *  \snippet observers_and_api/unit_tests/src/PIDControllerTest.cpp controllersTest initialize_controllers
   */
-void initialize_controllers(const std::vector<YamlController>& controllers,
+void initialize_controllers(const std::vector<PIDController>& controllers,
                             ssc::solver::Scheduler& scheduler,
                             Sim* system
                             );
