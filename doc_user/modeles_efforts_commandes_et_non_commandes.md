@@ -985,7 +985,7 @@ controlled forces:
     diameter: {value: 2, unit: m}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Les commandes sont définies dans la section `commands` décrite ci-après.
+Les commandes sont définies dans les sections `commands` et `controllers` décrites ci-après.
 
 ### Syntaxe des commandes
 
@@ -1021,7 +1021,7 @@ commande est maintenue. Avant la première valeur de temps, on utilise la premi�
 valeur de chaque commande. Ainsi, pour l'exemple présenté ci-dessus, pour toute
 valeur de $`t\geq 10`$, alors rpm=4000. Pour $`t\leq 1`$, rpm=3000.
 
-Les [commandes attendues](#syntaxe-des-commandes) pour ce modèle sont :
+Les commandes attendues pour ce modèle sont :
 
 - La vitesse de rotation de l'hélice, toujours positive pour ce modèle, définie
 par `rpm`.
@@ -1035,6 +1035,101 @@ commands:
     t: [0,1,3,10]
     rpm: {unit: rpm, values: [2500, 3000, 3000, 4000]}
     P/D: {unit: 1, values: [0.7,0.7,0.7,0.7]}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+### Syntaxe des contrôleurs
+
+Les commandes des efforts commandés peuvent aussi être obtenues de manière dynamique comme la sortie de **contrôleurs**.
+
+Un contrôleur est un système permettant d'atteindre une valeur de consigne et de la maintenir malgré les perturbations externes.
+Il a besoin de deux entrées : une consigne et une mesure, qu'il compare pour calculer la commande.
+
+Le champ `controlers` (facultatif) à la racine du yaml permet de définir les paramètres permettant d'intégrer
+des contrôleurs à la simulation, qui vont calculer les commandes dont ont besoin les efforts commandés.
+
+Pour chaque commande à calculer :
+
+- La valeur renseignée dans `name` doit correspondre à l'identifiant utilisé dans la section `controlled forces`.
+- Le nom de la commande est renseigné dans le champ `output`.
+- Le champ `type` permet de choisir le type de contrôleur. Pour l'instant, seul le
+  [régulateur `PID`](#r%C3%A9gulateur-pid) est implémenté.
+- Le pas de temps du contrôleur est renseigné dans le champ `dt`.
+- Le nom de la consigne du contrôleur est renseigné dans le champ `input`.
+- La mesure est spécifiée dans le champ `states`, par une formule linéaire permettant d'obtenir une valeur à
+  partir des états du système lors de la simulation. On renseigne une liste de clefs/valeurs où les clefs
+  correspondent au nom de l'état et les valeurs sont les coefficients. Un état non spécifié a pour coefficient 0.
+  Par exemple, pour obtenir `x / 2 - y` :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+states:
+    x: 0.5
+    y: -1
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+On peut aussi rajouter les champs spécifiques au contrôleur choisi.
+
+Par exemple, voici un yaml spécifiant un contrôleur calculant la commande attendue
+pour la direction de [ce modèle](#h%C3%A9lices-wageningen-s%C3%A9rie-b) :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+controllers:
+  - name: port side propeller
+    output: beta
+    type: PID
+    dt: 1
+    input: psi_co
+    states:
+      psi: 1
+    gains:
+      Kp: -1
+      Ki: 0
+      Kd: -1
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Les valeurs des **mesures des contrôleurs** doivent être renseignées dans une nouvelle section `inputs`
+(facultative) à la racine du yaml, dont la syntaxe est identique à [celle des commandes](#syntaxe-des-commandes) :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+inputs:
+    - name: port side propeller
+      t: [0, 500, 800, 1000]
+      psi_co: {unit: deg, values: [30, 40, 50, 60]}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+On peut spécifier à la fois des commandes et des contrôleurs pour obtenir les commandes nécessaires aux efforts
+commandés. Toutefois, pour chaque effort commandé, chaque commande doit être définie une seule fois, soit
+directement dans le champ `commands`, soit calculée par un contrôleur du champ `controllers`.
+
+#### Régulateur PID
+
+Le [régulateur PID](https://en.wikipedia.org/wiki/PID_controller) délivre un signal de commande à partir de la
+différence entre la consigne et la mesure (l'erreur).
+
+Le correcteur PID agit de trois manières :
+
+- action proportionnelle : l'erreur est multipliée par un gain Kp ;
+- action intégrale : l'erreur est intégrée et divisée par un gain Ki ;
+- action dérivée : l'erreur est dérivée et multipliée par un gain Kd.
+
+Pour calculer une commande en utilisant un régulateur PID, il faut créer un contrôleur de type `PID`,
+auquel on rajoutera la section yaml `gains`, qui contient trois champs : `Kp`, `Ki` et `Kd`.
+
+Par exemple :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+controllers:
+  - name: port side propeller
+    output: beta
+    type: PID
+    dt: 1
+    input: psi_co
+    states:
+      psi: 1
+    gains:
+      Kp: -1
+      Ki: 0
+      Kd: -1
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
