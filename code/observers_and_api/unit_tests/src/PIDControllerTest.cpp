@@ -148,8 +148,6 @@ TEST_F(PIDControllerTest, can_compute_PID_commands)
 
     // Third time step
     scheduler.advance_to_next_time_event();
-    ASSERT_EQ(tstart + dt, scheduler.get_time()); // `tstart + dt` has been added by the previous callback command
-    scheduler.advance_to_next_time_event();
     ASSERT_EQ(tstart + 2 * dt, scheduler.get_time());
     const double error3 = 0.01;
     rpm_co = 5.5;

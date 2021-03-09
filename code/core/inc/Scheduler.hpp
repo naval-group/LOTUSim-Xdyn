@@ -8,6 +8,7 @@
 #ifndef SCHEDULER_HPP_
 #define SCHEDULER_HPP_
 
+#include <cmath>
 #include <functional>
 #include <list>
 #include <vector>
@@ -27,6 +28,7 @@ namespace ssc
                 , discrete_state_updaters()
                 , t0(tstart)
                 , tend(tend_)
+                , tolerance(0.01 * dt)
             {
                 if (dt > 0)
                 {
@@ -75,7 +77,7 @@ namespace ssc
 
             virtual void add_time_event(const double t)
             {
-                if (t <= tend)
+                if (t <= tend && is_new_time_event(t))
                 {
                     scheduled_time_events.push_back(t);
                     scheduled_time_events.sort();
@@ -118,6 +120,23 @@ namespace ssc
             std::vector<std::pair<double, Callback> > discrete_state_updaters;
             double t0;
             double tend;
+            const double tolerance;
+
+            bool is_new_time_event(const double new_t) const
+            {
+                for (double t : scheduled_time_events)
+                {
+                    if (std::abs(t - new_t) <= tolerance)
+                    {
+                        return false;
+                    }
+                    if (t > new_t)
+                    {
+                        return true; // scheduled_time_events are sorted, so we're sure abs(t-new_t) > tolerance
+                    }
+                }
+                return false; // new_t > tend
+            }
         };
     }
 }

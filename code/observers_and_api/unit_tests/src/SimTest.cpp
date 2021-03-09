@@ -1008,7 +1008,7 @@ TEST_F(SimTest, LONG_can_use_controllers_to_output_commands)
                                           ).parse();
     const size_t N = 250;
     const std::vector<Res> res = simulate<ssc::solver::EulerStepper>(yaml, test_ship_stl, 0, N, 1);
-    ASSERT_EQ(N+1+25, res.size()); // + 25: duplicate time steps due to DiscreteSystem.schedule_update
+    ASSERT_EQ(N+1, res.size());
     ASSERT_EQ(13, res.at(0).x.size());
     const double tolerance = 1e-15;
     for (size_t i = 0 ; i <= N ; ++i)

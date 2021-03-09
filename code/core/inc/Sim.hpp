@@ -65,17 +65,17 @@ class Sim : public ssc::solver::ContinuousSystem
          * 
          * Used by controllers to update the datasource values.
          */
-        void set_discrete_state(const std::string state_name, const double value);
+        void set_discrete_state(const std::string &state_name, const double value);
         /** \brief Gets the value of the given input from the datasource
          * 
          * Used by controllers to get the inputs they need to compute a command.
          */
-        double get_input_value(const std::string name) const;
+        double get_input_value(const std::string &name) const;
         /** \brief Gets the value of a Sim state ("x", "u", "qr", "phi", ...)
          * 
          * Used by controllers to get the states they need to compute a command.
          */
-        double get_state_value(const std::string name) const;
+        double get_state_value(const std::string &name) const;
 
         void reset_history();
         std::vector<std::string> get_command_names() const;

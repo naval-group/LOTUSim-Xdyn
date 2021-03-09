@@ -33,9 +33,8 @@ namespace ssc
             void callback(Scheduler &scheduler, ContinuousSystem *system);
 
             /**
-             * @brief Initialize the scheduler.
+             * @brief Initialize the discrete states and add the first callabck to the scheduler.
              *
-             * Updates the discrete states and schedules the next discrete update.
              * @param scheduler Used to get the start time & schedule the next update.
              * @param system This can be used by the 'update' method to retrieve the continuous
              * states of the system.

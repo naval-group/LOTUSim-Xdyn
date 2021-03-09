@@ -277,17 +277,17 @@ void Sim::set_command_listener(const std::map<std::string, double>& new_commands
     }
 }
 
-void Sim::set_discrete_state(const std::string state_name, const double value)
+void Sim::set_discrete_state(const std::string &state_name, const double value)
 {
     pimpl->command_listener.set(state_name, value);
 }
 
-double Sim::get_input_value(const std::string name) const
+double Sim::get_input_value(const std::string &name) const
 {
     return pimpl->command_listener.get<double>(name);
 }
 
-double Sim::get_state_value(const std::string name) const
+double Sim::get_state_value(const std::string &name) const
 {
     if (name == "x") {
         return pimpl->bodies.front()->get_states().x();
