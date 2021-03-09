@@ -8,6 +8,7 @@
 #include "BodyStates.hpp"
 #include "CosimulationServiceImpl.hpp"
 #include "YamlSimServerInputs.hpp"
+#include "report_xdyn_exceptions_to_user.hpp"
 
 CosimulationServiceImpl::CosimulationServiceImpl(const XdynForCS& simserver_):
         simserver(simserver_)
@@ -247,8 +248,22 @@ grpc::Status CosimulationServiceImpl::step_euler_321(
     {
         return precond;
     }
-    const YamlSimServerInputs inputs = from_grpc(context, request);
-    const std::vector<YamlState> output = simserver.handle(inputs);
+    std::vector<YamlState> output;
+    const std::function<void()> f = [&context, this, &request, &output]()
+        {
+            const YamlSimServerInputs inputs = from_grpc(context, request);
+            output = simserver.handle(inputs);
+        };
+    grpc::Status run_status(grpc::Status::OK);
+    const std::function<void(const std::string&)> error_outputter = [&run_status](const std::string& error_message)
+        {
+            run_status = grpc::Status(grpc::StatusCode::UNKNOWN, error_message);
+        };
+    report_xdyn_exceptions_to_user(f, error_outputter);
+    if (not run_status.ok())
+    {
+        return run_status;
+    }
     const grpc::Status postcond = to_grpc(context, output, response);
     return postcond;
 }
@@ -263,8 +278,22 @@ grpc::Status CosimulationServiceImpl::step_quaternion(
     {
         return precond;
     }
-    const YamlSimServerInputs inputs = from_grpc(context, request);
-    const std::vector<YamlState> output = simserver.handle(inputs);
+    std::vector<YamlState> output;
+    const std::function<void()> f = [&context, this, &request, &output]()
+        {
+            const YamlSimServerInputs inputs = from_grpc(context, request);
+            output = simserver.handle(inputs);
+        };
+    grpc::Status run_status(grpc::Status::OK);
+    const std::function<void(const std::string&)> error_outputter = [&run_status](const std::string& error_message)
+        {
+            run_status = grpc::Status(grpc::StatusCode::UNKNOWN, error_message);
+        };
+    report_xdyn_exceptions_to_user(f, error_outputter);
+    if (not run_status.ok())
+    {
+        return run_status;
+    }
     const grpc::Status postcond = to_grpc(context, output, response);
     return postcond;
 }

@@ -11,6 +11,7 @@
 #include "ModelExchangeServiceImpl.hpp"
 #include "SimServerInputs.hpp"
 #include "YamlSimServerInputs.hpp"
+#include "report_xdyn_exceptions_to_user.hpp"
 
 ModelExchangeServiceImpl::ModelExchangeServiceImpl(const XdynForME& xdyn_):
 xdyn(xdyn_)
@@ -215,8 +216,22 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_euler_321(
     {
         return precond;
     }
-    const YamlSimServerInputs inputs(from_grpc(context, request));
-    const YamlState output = xdyn.handle(inputs);
+    YamlState output;
+    const std::function<void()> f = [&context, this, &request, &output]()
+        {
+            const YamlSimServerInputs inputs = from_grpc(context, request);
+            output = xdyn.handle(inputs);
+        };
+    grpc::Status run_status(grpc::Status::OK);
+    const std::function<void(const std::string&)> error_outputter = [&run_status](const std::string& error_message)
+        {
+            run_status = grpc::Status(grpc::StatusCode::UNKNOWN, error_message);
+        };
+    report_xdyn_exceptions_to_user(f, error_outputter);
+    if (not run_status.ok())
+    {
+        return run_status;
+    }
     const grpc::Status postcond = to_grpc(context, output, response);
     return postcond;
 }
@@ -231,8 +246,22 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_quaternion(
     {
         return precond;
     }
-    const YamlSimServerInputs inputs = from_grpc(context, request);
-    const YamlState output = xdyn.handle(inputs);
+    YamlState output;
+    const std::function<void()> f = [&context, this, &request, &output]()
+        {
+            const YamlSimServerInputs inputs = from_grpc(context, request);
+            output = xdyn.handle(inputs);
+        };
+    grpc::Status run_status(grpc::Status::OK);
+    const std::function<void(const std::string&)> error_outputter = [&run_status](const std::string& error_message)
+        {
+            run_status = grpc::Status(grpc::StatusCode::UNKNOWN, error_message);
+        };
+    report_xdyn_exceptions_to_user(f, error_outputter);
+    if (not run_status.ok())
+    {
+        return run_status;
+    }
     const grpc::Status postcond = to_grpc(context, output, response);
     return postcond;
 }
