@@ -50,6 +50,10 @@ grpc::Status check_states_size(const ModelExchangeRequestEuler* request)
         CHECK_SIZE(phi);
         CHECK_SIZE(theta);
         CHECK_SIZE(psi);
+        if (states.t_size() == 0 && msg.str().empty())
+        {
+            msg << "xdyn didn't get any states as input: we need at least one to set the initial conditions.";
+        }
     }
     if (msg.str().empty())
     {
@@ -82,6 +86,10 @@ grpc::Status check_states_size(const ModelExchangeRequestQuaternion* request)
         CHECK_SIZE(qi);
         CHECK_SIZE(qj);
         CHECK_SIZE(qk);
+        if (states.t_size() == 0 && msg.str().empty())
+        {
+            msg << "xdyn didn't get any states as input: we need at least one to set the initial conditions.";
+        }
     }
     if (msg.str().empty())
     {
@@ -224,10 +232,6 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_quaternion(
         return precond;
     }
     const YamlSimServerInputs inputs = from_grpc(context, request);
-    if (inputs.states.empty())
-    {
-        return grpc::Status(grpc::StatusCode::INTERNAL, "We didn't get any states as input (inputs.states is empty): we need at least one to set the initial conditions. This error was detected in ModelExchangeServiceImpl::dx_dt_quaternion");
-    }
     const YamlState output = xdyn.handle(inputs);
     const grpc::Status postcond = to_grpc(context, output, response);
     return postcond;
