@@ -1025,3 +1025,23 @@ TEST_F(SimTest, LONG_can_use_controllers_to_output_commands)
         ASSERT_NEAR(0, res.at(i).x[RIDX(0)], tolerance) << "i = " << i;
     }
 }
+
+TEST_F(SimTest, LONG_can_simulate_heading_keeping_using_controllers)
+{
+    const auto yaml = SimulatorYamlParser(test_data::heading_keeping_with_controller()).parse();
+    const size_t N = 800;
+    const std::vector<Res> res = simulate<ssc::solver::EulerStepper>(yaml, 0, N, 1);
+    ASSERT_EQ(N+1, res.size());
+    ASSERT_EQ(13, res.at(0).x.size());
+    const double tolerance = 1e-15;
+    for (size_t i = 400 ; i <= N ; ++i)
+    {
+        // forced states
+        ASSERT_NEAR(0, res.at(i).x[WIDX(0)], tolerance);
+        ASSERT_NEAR(0, res.at(i).x[PIDX(0)], tolerance);
+        ASSERT_NEAR(0, res.at(i).x[QIDX(0)], tolerance);
+        // heading
+        const auto angle = convert(res.at(i).x[QRIDX(0)], res.at(i).x[QIIDX(0)], res.at(i).x[QJIDX(0)], res.at(i).x[QKIDX(0)]);
+        ASSERT_NEAR(60 * PI / 180, angle.psi, 6e-3);
+    }
+}

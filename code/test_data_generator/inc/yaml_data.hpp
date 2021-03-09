@@ -47,6 +47,7 @@ namespace test_data
     std::string resistance_curve();
     std::string propulsion_and_resistance();
     std::string dummy_controllers_and_commands_for_propulsion_and_resistance();
+    std::string heading_keeping_with_controller();
     std::string radiation_damping();
     std::string diffraction();
     std::string test_ship_radiation_damping();
