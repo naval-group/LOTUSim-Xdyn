@@ -14,7 +14,7 @@
 #include "report_xdyn_exceptions_to_user.hpp"
 
 ModelExchangeServiceImpl::ModelExchangeServiceImpl(const XdynForME& xdyn_):
-xdyn(xdyn_)
+simserver(xdyn_)
 {}
 
 #define SIZE size()
@@ -220,7 +220,7 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_euler_321(
     const std::function<void()> f = [&context, this, &request, &output]()
         {
             const YamlSimServerInputs inputs = from_grpc(context, request);
-            output = xdyn.handle(inputs);
+            output = simserver.handle(inputs);
         };
     grpc::Status run_status(grpc::Status::OK);
     const std::function<void(const std::string&)> error_outputter = [&run_status](const std::string& error_message)
@@ -250,7 +250,7 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_quaternion(
     const std::function<void()> f = [&context, this, &request, &output]()
         {
             const YamlSimServerInputs inputs = from_grpc(context, request);
-            output = xdyn.handle(inputs);
+            output = simserver.handle(inputs);
         };
     grpc::Status run_status(grpc::Status::OK);
     const std::function<void(const std::string&)> error_outputter = [&run_status](const std::string& error_message)

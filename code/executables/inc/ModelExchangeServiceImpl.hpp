@@ -23,7 +23,7 @@ class ModelExchangeServiceImpl final : public ModelExchange::Service {
         grpc::Status dx_dt_euler_321(grpc::ServerContext* context, const ModelExchangeRequestEuler* request, ModelExchangeResponse* response) override;
 
     private:
-        XdynForME xdyn;
+        XdynForME simserver;
 };
 
 #endif /* EXECUTABLES_INC_MODELEXCHANGESERVICEIMPL_HPP_ */
