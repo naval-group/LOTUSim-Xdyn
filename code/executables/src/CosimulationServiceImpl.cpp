@@ -50,7 +50,7 @@ grpc::Status check_states_size(const CosimulationRequestEuler* request)
         CHECK_SIZE(psi);
         if (states.t_size() == 0 && msg.str().empty())
         {
-            msg << "xdyn didn't get any states as input: we need at least one to set the initial conditions.";
+            msg << "The state history provided to xdyn is empty ('t' has size 0): we need at least one value for each state to set the initial conditions.";
         }
     }
     if (msg.str().empty())
@@ -86,7 +86,7 @@ grpc::Status check_states_size(const CosimulationRequestQuaternion* request)
         CHECK_SIZE(qk);
         if (states.t_size() == 0 && msg.str().empty())
         {
-            msg << "xdyn didn't get any states as input: we need at least one to set the initial conditions.";
+            msg << "The state history provided to xdyn is empty ('t' has size 0): we need at least one value for each state to set the initial conditions.";
         }
     }
     if (msg.str().empty())
