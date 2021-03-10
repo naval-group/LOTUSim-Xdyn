@@ -2392,7 +2392,7 @@ std::string test_data::dummy_controllers_and_commands_for_propulsion_and_resista
     return ss.str();
 }
 
-std::string test_data::heading_keeping_with_controller()
+std::string test_data::heading_keeping_base()
 {
     std::stringstream ss;
     ss << "rotations convention: [psi, theta', phi'']\n"
@@ -2588,7 +2588,6 @@ std::string test_data::heading_keeping_with_controller()
        << "environment models:\n"
        << "  - model: no waves\n"
        << "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
-       << "\n"
        << "commands:\n"
        << "    - name: PSPropRudd\n"
        << "      t: [0]\n"
@@ -2597,9 +2596,14 @@ std::string test_data::heading_keeping_with_controller()
        << "    - name: SBPropRudd\n"
        << "      t: [0]\n"
        << "      rpm: {unit: rpm, values: [101.]}\n"
-       << "      P/D: {unit: 1, values: [0.79]}\n"
-       << "\n"
-       << "inputs:\n"
+       << "      P/D: {unit: 1, values: [0.79]}\n";
+    return ss.str();
+}
+
+std::string test_data::heading_keeping_controllers()
+{
+    std::stringstream ss;
+    ss << "inputs:\n"
        << "    - name: PSPropRudd\n"
        << "      t: [0]\n"
        << "      psi_co: {unit: deg, values: [60]}\n"

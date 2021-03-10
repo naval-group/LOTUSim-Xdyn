@@ -120,6 +120,7 @@ void initialize_controllers(std::vector<PIDController>& controllers,
                             Sim* system
                             )
 {
+    system->set_discrete_state("t", scheduler.get_time());
     for (PIDController &controller:controllers) {
         controller.initialize(scheduler, system);
     }
