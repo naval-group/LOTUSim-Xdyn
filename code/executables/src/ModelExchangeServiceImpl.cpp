@@ -225,7 +225,7 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_euler_321(
     grpc::Status run_status(grpc::Status::OK);
     const std::function<void(const std::string&)> error_outputter = [&run_status](const std::string& error_message)
         {
-            run_status = grpc::Status(grpc::StatusCode::UNKNOWN, error_message);
+            run_status = grpc::Status(grpc::StatusCode::ABORTED, error_message);
         };
     report_xdyn_exceptions_to_user(f, error_outputter);
     if (not run_status.ok())
@@ -255,7 +255,7 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_quaternion(
     grpc::Status run_status(grpc::Status::OK);
     const std::function<void(const std::string&)> error_outputter = [&run_status](const std::string& error_message)
         {
-            run_status = grpc::Status(grpc::StatusCode::UNKNOWN, error_message);
+            run_status = grpc::Status(grpc::StatusCode::ABORTED, error_message);
         };
     report_xdyn_exceptions_to_user(f, error_outputter);
     if (not run_status.ok())
