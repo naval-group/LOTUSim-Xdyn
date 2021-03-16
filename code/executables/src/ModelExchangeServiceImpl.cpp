@@ -11,7 +11,6 @@
 #include "ModelExchangeServiceImpl.hpp"
 #include "SimServerInputs.hpp"
 #include "YamlSimServerInputs.hpp"
-#include "report_xdyn_exceptions_to_user.hpp"
 #include "ErrorOutputter.hpp"
 
 ModelExchangeServiceImpl::ModelExchangeServiceImpl(const XdynForME& xdyn_):
@@ -19,7 +18,6 @@ simserver(xdyn_),
 error()
 {}
 
-YamlSimServerInputs from_grpc(grpc::ServerContext* context, const ModelExchangeRequestEuler* request);
 YamlSimServerInputs from_grpc(grpc::ServerContext* , const ModelExchangeRequestEuler* request)
 {
     YamlSimServerInputs server_inputs;
@@ -62,7 +60,6 @@ YamlSimServerInputs from_grpc(grpc::ServerContext* , const ModelExchangeRequestE
     return server_inputs;
 }
 
-YamlSimServerInputs from_grpc(grpc::ServerContext* context, const ModelExchangeRequestQuaternion* request);
 YamlSimServerInputs from_grpc(grpc::ServerContext* , const ModelExchangeRequestQuaternion* request)
 {
     YamlSimServerInputs server_inputs;
@@ -97,7 +94,6 @@ YamlSimServerInputs from_grpc(grpc::ServerContext* , const ModelExchangeRequestQ
     return server_inputs;
 }
 
-grpc::Status to_grpc(grpc::ServerContext* context, const YamlState& state_derivatives, ModelExchangeResponse* response);
 grpc::Status to_grpc(grpc::ServerContext* , const YamlState& state_derivatives, ModelExchangeResponse* response)
 {
     ModelExchangeStateDerivatives* d_dt = new ModelExchangeStateDerivatives();
@@ -131,27 +127,7 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_euler_321(
         const ModelExchangeRequestEuler* request,
         ModelExchangeResponse* response)
 {
-    const grpc::Status precond = check_euler_states_size(error, request);
-    if (not precond.ok())
-    {
-        return precond;
-    }
-    YamlState output;
-    const std::function<void()> f = [&context, this, &request, &output]()
-        {
-            const YamlSimServerInputs inputs = from_grpc(context, request);
-            output = simserver.handle(inputs);
-        };
-    const std::function<void(const std::string&)> error_outputter = [this](const std::string& error_message)
-        {
-            this->error.simulation_error(error_message);
-        };
-    report_xdyn_exceptions_to_user(f, error_outputter);
-    if (error.contains_errors())
-    {
-        return error.get_grpc_status();
-    }
-    return to_grpc(context, output, response);
+    return dx_dt(error, context, request, response);
 }
 
 grpc::Status ModelExchangeServiceImpl::dx_dt_quaternion(
@@ -159,27 +135,15 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_quaternion(
         const ModelExchangeRequestQuaternion* request,
         ModelExchangeResponse* response)
 {
-    const grpc::Status precond = check_quaternion_states_size(error, request);
-    if (not precond.ok())
-    {
-        return precond;
-    }
-    YamlState output;
-    const std::function<void()> f = [&context, this, &request, &output]()
-        {
-            const YamlSimServerInputs inputs = from_grpc(context, request);
-            output = simserver.handle(inputs);
-        };
-    grpc::Status run_status(grpc::Status::OK);
-    const std::function<void(const std::string&)> error_outputter =
-        [this](const std::string& error_message)
-        {
-            this->error.simulation_error(error_message);
-        };
-    report_xdyn_exceptions_to_user(f, error_outputter);
-    if (error.contains_errors())
-    {
-        return error.get_grpc_status();
-    }
-    return to_grpc(context, output, response);
+    return dx_dt(error, context, request, response);
+}
+
+template <> grpc::Status check_states_size<ModelExchangeRequestEuler>(ErrorOutputter& error, const ModelExchangeRequestEuler* request)
+{
+    return check_euler_states_size(error, request);
+}
+
+template <> grpc::Status check_states_size<ModelExchangeRequestQuaternion>(ErrorOutputter& error, const ModelExchangeRequestQuaternion* request)
+{
+    return check_quaternion_states_size(error, request);
 }

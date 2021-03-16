@@ -13,7 +13,15 @@
 #include "model_exchange.pb.h"
 #include "XdynForME.hpp"
 #include "ErrorOutputter.hpp"
+#include "report_xdyn_exceptions_to_user.hpp"
 
+
+YamlSimServerInputs from_grpc(grpc::ServerContext* context, const ModelExchangeRequestEuler* request);
+YamlSimServerInputs from_grpc(grpc::ServerContext* context, const ModelExchangeRequestQuaternion* request);
+grpc::Status to_grpc(grpc::ServerContext* context, const YamlState& state_derivatives, ModelExchangeResponse* response);
+template <typename Request> grpc::Status check_states_size(ErrorOutputter& error, const Request* request);
+template <> grpc::Status check_states_size<ModelExchangeRequestEuler>(ErrorOutputter& error, const ModelExchangeRequestEuler* request);
+template <> grpc::Status check_states_size<ModelExchangeRequestQuaternion>(ErrorOutputter& error, const ModelExchangeRequestQuaternion* request);
 /*
  *
  */
@@ -24,6 +32,34 @@ class ModelExchangeServiceImpl final : public ModelExchange::Service {
         grpc::Status dx_dt_euler_321(grpc::ServerContext* context, const ModelExchangeRequestEuler* request, ModelExchangeResponse* response) override;
 
     private:
+        template <typename Request> grpc::Status dx_dt(
+                ErrorOutputter& error,
+                grpc::ServerContext* context,
+                const Request* request,
+                ModelExchangeResponse* response)
+        {
+            const grpc::Status precond = check_states_size(error, request);
+            if (not precond.ok())
+            {
+                return precond;
+            }
+            YamlState output;
+            const std::function<void()> f = [&context, this, &request, &output]()
+                {
+                    const YamlSimServerInputs inputs = from_grpc(context, request);
+                    output = simserver.handle(inputs);
+                };
+            const std::function<void(const std::string&)> error_outputter = [this](const std::string& error_message)
+                {
+                    this->error.simulation_error(error_message);
+                };
+            report_xdyn_exceptions_to_user(f, error_outputter);
+            if (error.contains_errors())
+            {
+                return error.get_grpc_status();
+            }
+            return to_grpc(context, output, response);
+        }
         XdynForME simserver;
         ErrorOutputter error;
 };
