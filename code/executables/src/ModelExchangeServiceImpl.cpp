@@ -63,7 +63,6 @@ grpc::Status check_states_size(ErrorOutputter& error, const ModelExchangeRequest
 grpc::Status check_states_size(ErrorOutputter& error, const ModelExchangeRequestQuaternion* request);
 grpc::Status check_states_size(ErrorOutputter& error, const ModelExchangeRequestQuaternion* request)
 {
-    std::stringstream msg;
     if (!request)
     {
         error.invalid_request(__PRETTY_FUNCTION__, __LINE__);
@@ -84,7 +83,7 @@ grpc::Status check_states_size(ErrorOutputter& error, const ModelExchangeRequest
         CHECK_SIZE(qi);
         CHECK_SIZE(qj);
         CHECK_SIZE(qk);
-        if (states.t_size() == 0 && msg.str().empty())
+        if (states.t_size() == 0)
         {
             error.empty_history();
         }
