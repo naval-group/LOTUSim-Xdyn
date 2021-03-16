@@ -162,7 +162,7 @@ grpc::Status CosimulationServiceImpl::step_euler_321(
         const CosimulationRequestEuler* request,
         CosimulationResponse* response)
 {
-    const grpc::Status precond = check_euler_states_size(error, request);
+    const grpc::Status precond = check_states_size(error, request);
     if (not precond.ok())
     {
         return precond;
@@ -191,7 +191,7 @@ grpc::Status CosimulationServiceImpl::step_quaternion(
         const CosimulationRequestQuaternion* request,
         CosimulationResponse* response)
 {
-    const grpc::Status precond = check_quaternion_states_size(error, request);
+    const grpc::Status precond = check_states_size(error, request);
     if (not precond.ok())
     {
         return precond;
@@ -212,4 +212,14 @@ grpc::Status CosimulationServiceImpl::step_quaternion(
         return error.get_grpc_status();
     }
     return to_grpc(context, output, response);
+}
+
+template <> grpc::Status check_states_size<CosimulationRequestEuler>(ErrorOutputter& error, const CosimulationRequestEuler* request)
+{
+    return check_euler_states_size(error, request);
+}
+
+template <> grpc::Status check_states_size<CosimulationRequestQuaternion>(ErrorOutputter& error, const CosimulationRequestQuaternion* request)
+{
+    return check_quaternion_states_size(error, request);
 }

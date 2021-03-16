@@ -14,9 +14,10 @@
 #include "XdynForCS.hpp"
 #include "ErrorOutputter.hpp"
 
-/*
- *
- */
+template <typename Request> grpc::Status check_states_size(ErrorOutputter& error, const Request* request);
+template <> grpc::Status check_states_size<CosimulationRequestEuler>(ErrorOutputter& error, const CosimulationRequestEuler* request);
+template <> grpc::Status check_states_size<CosimulationRequestQuaternion>(ErrorOutputter& error, const CosimulationRequestQuaternion* request);
+
 class CosimulationServiceImpl final : public Cosimulation::Service {
     public:
         explicit CosimulationServiceImpl(const XdynForCS& simserver);
