@@ -15,78 +15,6 @@ CosimulationServiceImpl::CosimulationServiceImpl(const XdynForCS& simserver_):
         error()
 {}
 
-#define SIZE size()
-#define PASTER(x,y) x ## _ ## y
-#define EVALUATOR(x,y)  PASTER(x,y)
-#define STATE_SIZE(state) EVALUATOR(state, SIZE)
-#define CHECK_SIZE(state) if (states.STATE_SIZE(state) != states.t_size())\
-{\
-    const size_t n1 = states.STATE_SIZE(state);\
-    const size_t n2 = states.t_size();\
-    error.invalid_state_size(#state, n1, n2);\
-}
-
-grpc::Status check_states_size(ErrorOutputter& error, const CosimulationRequestEuler* request);
-grpc::Status check_states_size(ErrorOutputter& error, const CosimulationRequestEuler* request)
-{
-    if (!request)
-    {
-        error.invalid_request(__PRETTY_FUNCTION__, __LINE__);
-    }
-    else
-    {
-        const CosimulationStatesEuler states = request->states();
-        CHECK_SIZE(x);
-        CHECK_SIZE(y);
-        CHECK_SIZE(z);
-        CHECK_SIZE(u);
-        CHECK_SIZE(v);
-        CHECK_SIZE(w);
-        CHECK_SIZE(p);
-        CHECK_SIZE(q);
-        CHECK_SIZE(r);
-        CHECK_SIZE(phi);
-        CHECK_SIZE(theta);
-        CHECK_SIZE(psi);
-        if (states.t_size() == 0)
-        {
-            error.empty_history();
-        }
-    }
-    return error.get_grpc_status();
-}
-
-grpc::Status check_states_size(ErrorOutputter& error, const CosimulationRequestQuaternion* request);
-grpc::Status check_states_size(ErrorOutputter& error, const CosimulationRequestQuaternion* request)
-{
-    if (!request)
-    {
-        error.invalid_request(__PRETTY_FUNCTION__, __LINE__);
-    }
-    else
-    {
-        const CosimulationStatesQuaternion states = request->states();
-        CHECK_SIZE(x);
-        CHECK_SIZE(y);
-        CHECK_SIZE(z);
-        CHECK_SIZE(u);
-        CHECK_SIZE(v);
-        CHECK_SIZE(w);
-        CHECK_SIZE(p);
-        CHECK_SIZE(q);
-        CHECK_SIZE(r);
-        CHECK_SIZE(qr);
-        CHECK_SIZE(qi);
-        CHECK_SIZE(qj);
-        CHECK_SIZE(qk);
-        if (states.t_size() == 0)
-        {
-            error.empty_history();
-        }
-    }
-    return error.get_grpc_status();
-}
-
 YamlSimServerInputs from_grpc(grpc::ServerContext* context, const CosimulationRequestEuler* request);
 YamlSimServerInputs from_grpc(grpc::ServerContext* , const CosimulationRequestEuler* request)
 {
@@ -234,7 +162,7 @@ grpc::Status CosimulationServiceImpl::step_euler_321(
         const CosimulationRequestEuler* request,
         CosimulationResponse* response)
 {
-    const grpc::Status precond = check_states_size(error, request);
+    const grpc::Status precond = check_euler_states_size(error, request);
     if (not precond.ok())
     {
         return precond;
@@ -263,7 +191,7 @@ grpc::Status CosimulationServiceImpl::step_quaternion(
         const CosimulationRequestQuaternion* request,
         CosimulationResponse* response)
 {
-    const grpc::Status precond = check_states_size(error, request);
+    const grpc::Status precond = check_quaternion_states_size(error, request);
     if (not precond.ok())
     {
         return precond;

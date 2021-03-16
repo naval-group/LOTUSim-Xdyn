@@ -19,78 +19,6 @@ simserver(xdyn_),
 error()
 {}
 
-#define SIZE size()
-#define PASTER(x,y) x ## _ ## y
-#define EVALUATOR(x,y)  PASTER(x,y)
-#define STATE_SIZE(state) EVALUATOR(state, SIZE)
-#define CHECK_SIZE(state) if (states.STATE_SIZE(state) != states.t_size())\
-{\
-    const size_t n1 = states.STATE_SIZE(state);\
-    const size_t n2 = states.t_size();\
-    error.invalid_state_size(#state, n1, n2);\
-}
-
-grpc::Status check_states_size(ErrorOutputter& error, const ModelExchangeRequestEuler* request);
-grpc::Status check_states_size(ErrorOutputter& error, const ModelExchangeRequestEuler* request)
-{
-    if (!request)
-    {
-        error.invalid_request(__PRETTY_FUNCTION__, __LINE__);
-    }
-    else
-    {
-        const ModelExchangeStatesEuler states = request->states();
-        CHECK_SIZE(x);
-        CHECK_SIZE(y);
-        CHECK_SIZE(z);
-        CHECK_SIZE(u);
-        CHECK_SIZE(v);
-        CHECK_SIZE(w);
-        CHECK_SIZE(p);
-        CHECK_SIZE(q);
-        CHECK_SIZE(r);
-        CHECK_SIZE(phi);
-        CHECK_SIZE(theta);
-        CHECK_SIZE(psi);
-        if (states.t_size() == 0)
-        {
-            error.empty_history();
-        }
-    }
-    return error.get_grpc_status();
-}
-
-grpc::Status check_states_size(ErrorOutputter& error, const ModelExchangeRequestQuaternion* request);
-grpc::Status check_states_size(ErrorOutputter& error, const ModelExchangeRequestQuaternion* request)
-{
-    if (!request)
-    {
-        error.invalid_request(__PRETTY_FUNCTION__, __LINE__);
-    }
-    else
-    {
-        const ModelExchangeStatesQuaternion states = request->states();
-        CHECK_SIZE(x);
-        CHECK_SIZE(y);
-        CHECK_SIZE(z);
-        CHECK_SIZE(u);
-        CHECK_SIZE(v);
-        CHECK_SIZE(w);
-        CHECK_SIZE(p);
-        CHECK_SIZE(q);
-        CHECK_SIZE(r);
-        CHECK_SIZE(qr);
-        CHECK_SIZE(qi);
-        CHECK_SIZE(qj);
-        CHECK_SIZE(qk);
-        if (states.t_size() == 0)
-        {
-            error.empty_history();
-        }
-    }
-    return error.get_grpc_status();
-}
-
 YamlSimServerInputs from_grpc(grpc::ServerContext* context, const ModelExchangeRequestEuler* request);
 YamlSimServerInputs from_grpc(grpc::ServerContext* , const ModelExchangeRequestEuler* request)
 {
@@ -203,7 +131,7 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_euler_321(
         const ModelExchangeRequestEuler* request,
         ModelExchangeResponse* response)
 {
-    const grpc::Status precond = check_states_size(error, request);
+    const grpc::Status precond = check_euler_states_size(error, request);
     if (not precond.ok())
     {
         return precond;
@@ -231,7 +159,7 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_quaternion(
         const ModelExchangeRequestQuaternion* request,
         ModelExchangeResponse* response)
 {
-    const grpc::Status precond = check_states_size(error, request);
+    const grpc::Status precond = check_quaternion_states_size(error, request);
     if (not precond.ok())
     {
         return precond;
