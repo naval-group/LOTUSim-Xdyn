@@ -223,6 +223,7 @@ ADD_EXECUTABLE(xdyn-for-cs
         src/XdynCommandLineArguments.cpp
         src/xdyn_for_cs.cpp
         src/CosimulationServiceImpl.cpp
+        src/ErrorOutputter.cpp
         "${cosimulation_proto_srcs}"
         "${cosimulation_grpc_srcs}"
         )
@@ -243,6 +244,7 @@ ADD_EXECUTABLE(xdyn-for-me
         src/XdynForMECommandLineArguments.cpp
         src/xdyn_for_me.cpp
         src/ModelExchangeServiceImpl.cpp
+        src/ErrorOutputter.cpp
         "${model_exchange_proto_srcs}"
         "${model_exchange_grpc_srcs}"
         )
