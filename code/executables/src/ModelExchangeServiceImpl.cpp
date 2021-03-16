@@ -215,8 +215,6 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_euler_321(
             const YamlSimServerInputs inputs = from_grpc(context, request);
             output = simserver.handle(inputs);
         };
-    grpc::Status run_status(grpc::Status::OK);
-
     const std::function<void(const std::string&)> error_outputter = [this](const std::string& error_message)
         {
             this->error.simulation_error(error_message);
