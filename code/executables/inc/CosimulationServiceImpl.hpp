@@ -12,6 +12,7 @@
 #include "cosimulation.grpc.pb.h"
 #include "cosimulation.pb.h"
 #include "XdynForCS.hpp"
+#include "ErrorOutputter.hpp"
 
 /*
  *
@@ -24,6 +25,7 @@ class CosimulationServiceImpl final : public Cosimulation::Service {
 
     private:
         XdynForCS simserver;
+        ErrorOutputter error;
 };
 
 #endif /* EXECUTABLES_INC_XDYNFORCSGRPC_HPP_ */
