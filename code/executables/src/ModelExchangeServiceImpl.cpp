@@ -12,9 +12,11 @@
 #include "SimServerInputs.hpp"
 #include "YamlSimServerInputs.hpp"
 #include "report_xdyn_exceptions_to_user.hpp"
+#include "ErrorOutputter.hpp"
 
 ModelExchangeServiceImpl::ModelExchangeServiceImpl(const XdynForME& xdyn_):
-simserver(xdyn_)
+simserver(xdyn_),
+error()
 {}
 
 #define SIZE size()
@@ -25,16 +27,15 @@ simserver(xdyn_)
 {\
     const size_t n1 = states.STATE_SIZE(state);\
     const size_t n2 = states.t_size();\
-    msg << "State '" << #state << "' has size " << n1 << ", whereas 't' has size " << n2 << ": this is a problem in the client code (caller of xdyn's gRPC server), not a problem with xdyn. Please ensure that '" << #state << "' and 't' have the same size in CosimulationRequest's 'States' type." << std::endl;\
+    error.invalid_state_size(#state, n1, n2);\
 }
 
-grpc::Status check_states_size(const ModelExchangeRequestEuler* request);
-grpc::Status check_states_size(const ModelExchangeRequestEuler* request)
+grpc::Status check_states_size(ErrorOutputter& error, const ModelExchangeRequestEuler* request);
+grpc::Status check_states_size(ErrorOutputter& error, const ModelExchangeRequestEuler* request)
 {
-    std::stringstream msg;
     if (!request)
     {
-        msg << "'request' is a NULL pointer in " << __PRETTY_FUNCTION__ << ", line " << __LINE__ << ": this is an implementation error in xdyn. You should contact xdyn's support team." << std::endl;
+        error.invalid_request(__PRETTY_FUNCTION__, __LINE__);
     }
     else
     {
@@ -51,25 +52,21 @@ grpc::Status check_states_size(const ModelExchangeRequestEuler* request)
         CHECK_SIZE(phi);
         CHECK_SIZE(theta);
         CHECK_SIZE(psi);
-        if (states.t_size() == 0 && msg.str().empty())
+        if (states.t_size() == 0)
         {
-            msg << "The state history provided to xdyn is empty ('t' has size 0): we need at least one value for each state to set the initial conditions.";
+            error.empty_history();
         }
     }
-    if (msg.str().empty())
-    {
-        return grpc::Status::OK;
-    }
-    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg.str());
+    return error.get_grpc_status();
 }
 
-grpc::Status check_states_size(const ModelExchangeRequestQuaternion* request);
-grpc::Status check_states_size(const ModelExchangeRequestQuaternion* request)
+grpc::Status check_states_size(ErrorOutputter& error, const ModelExchangeRequestQuaternion* request);
+grpc::Status check_states_size(ErrorOutputter& error, const ModelExchangeRequestQuaternion* request)
 {
     std::stringstream msg;
     if (!request)
     {
-        msg << "'request' is a NULL pointer in " << __PRETTY_FUNCTION__ << ", line " << __LINE__ << ": this is an implementation error in xdyn. You should contact xdyn's support team." << std::endl;
+        error.invalid_request(__PRETTY_FUNCTION__, __LINE__);
     }
     else
     {
@@ -89,14 +86,10 @@ grpc::Status check_states_size(const ModelExchangeRequestQuaternion* request)
         CHECK_SIZE(qk);
         if (states.t_size() == 0 && msg.str().empty())
         {
-            msg << "The state history provided to xdyn is empty ('t' has size 0): we need at least one value for each state to set the initial conditions.";
+            error.empty_history();
         }
     }
-    if (msg.str().empty())
-    {
-        return grpc::Status::OK;
-    }
-    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg.str());
+    return error.get_grpc_status();
 }
 
 YamlSimServerInputs from_grpc(grpc::ServerContext* context, const ModelExchangeRequestEuler* request);
@@ -211,7 +204,7 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_euler_321(
         const ModelExchangeRequestEuler* request,
         ModelExchangeResponse* response)
 {
-    const grpc::Status precond = check_states_size(request);
+    const grpc::Status precond = check_states_size(error, request);
     if (not precond.ok())
     {
         return precond;
@@ -223,17 +216,17 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_euler_321(
             output = simserver.handle(inputs);
         };
     grpc::Status run_status(grpc::Status::OK);
-    const std::function<void(const std::string&)> error_outputter = [&run_status](const std::string& error_message)
+
+    const std::function<void(const std::string&)> error_outputter = [this](const std::string& error_message)
         {
-            run_status = grpc::Status(grpc::StatusCode::ABORTED, error_message);
+            this->error.simulation_error(error_message);
         };
     report_xdyn_exceptions_to_user(f, error_outputter);
-    if (not run_status.ok())
+    if (error.contains_errors())
     {
-        return run_status;
+        return error.get_grpc_status();
     }
-    const grpc::Status postcond = to_grpc(context, output, response);
-    return postcond;
+    return to_grpc(context, output, response);
 }
 
 grpc::Status ModelExchangeServiceImpl::dx_dt_quaternion(
@@ -241,7 +234,7 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_quaternion(
         const ModelExchangeRequestQuaternion* request,
         ModelExchangeResponse* response)
 {
-    const grpc::Status precond = check_states_size(request);
+    const grpc::Status precond = check_states_size(error, request);
     if (not precond.ok())
     {
         return precond;
@@ -253,15 +246,15 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_quaternion(
             output = simserver.handle(inputs);
         };
     grpc::Status run_status(grpc::Status::OK);
-    const std::function<void(const std::string&)> error_outputter = [&run_status](const std::string& error_message)
+    const std::function<void(const std::string&)> error_outputter =
+        [this](const std::string& error_message)
         {
-            run_status = grpc::Status(grpc::StatusCode::ABORTED, error_message);
+            this->error.simulation_error(error_message);
         };
     report_xdyn_exceptions_to_user(f, error_outputter);
-    if (not run_status.ok())
+    if (error.contains_errors())
     {
-        return run_status;
+        return error.get_grpc_status();
     }
-    const grpc::Status postcond = to_grpc(context, output, response);
-    return postcond;
+    return to_grpc(context, output, response);
 }

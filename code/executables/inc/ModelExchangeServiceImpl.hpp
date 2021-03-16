@@ -12,6 +12,7 @@
 #include "model_exchange.grpc.pb.h"
 #include "model_exchange.pb.h"
 #include "XdynForME.hpp"
+#include "ErrorOutputter.hpp"
 
 /*
  *
@@ -24,6 +25,7 @@ class ModelExchangeServiceImpl final : public ModelExchange::Service {
 
     private:
         XdynForME simserver;
+        ErrorOutputter error;
 };
 
 #endif /* EXECUTABLES_INC_MODELEXCHANGESERVICEIMPL_HPP_ */
