@@ -229,7 +229,6 @@ ADD_EXECUTABLE(xdyn-for-cs
         src/ConsoleErrorOutputter.cpp
         src/gRPCErrorOutputter.cpp
         src/JsonWebsocketErrorOutputter.cpp
-        #src/JSONWebSocketServer.cpp
         "${cosimulation_proto_srcs}"
         "${cosimulation_grpc_srcs}"
         )
@@ -254,7 +253,6 @@ ADD_EXECUTABLE(xdyn-for-me
         src/ConsoleErrorOutputter.cpp
         src/gRPCErrorOutputter.cpp
         src/JsonWebsocketErrorOutputter.cpp
-        #src/JSONWebSocketServer.cpp
         "${model_exchange_proto_srcs}"
         "${model_exchange_grpc_srcs}"
         )
