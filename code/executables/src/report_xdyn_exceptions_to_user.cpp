@@ -41,7 +41,8 @@ void report_xdyn_exceptions_to_user(const std::function<void(void)>& f, const st
     }
     catch(const MeshException& e)
     {
-        std::cerr << "A problem was detected with the STL file (mesh): " << e.get_message() << std::endl;
+        ss << "A problem was detected with the STL file (mesh): " << e.get_message() << std::endl;
+        outputter(ss.str());
     }
     catch(const NumericalErrorException& e)
     {
