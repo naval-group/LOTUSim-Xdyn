@@ -52,18 +52,7 @@ std::string ErrorOutputter::get_message() const
     return ss.str();
 }
 
-grpc::Status ErrorOutputter::get_grpc_status() const
+ErrorOutputter::Status ErrorOutputter::get_status() const
 {
-    // Cf. https://gitlab.com/sirehna_naval_group/xdyn/-/merge_requests/10#note_525827152
-    switch (status)
-    {
-        case Status::OK:
-            return grpc::Status::OK;
-            break;
-        case Status::INVALID_INPUT:
-            return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, get_message());
-        case Status::SIMULATION_ERROR:
-            return grpc::Status(grpc::StatusCode::ABORTED, get_message());
-    }
-    return grpc::Status(grpc::StatusCode::UNKNOWN, "Reached the end of a switch case in ErrorOutputter::get_grpc_status()");
+    return status;
 }

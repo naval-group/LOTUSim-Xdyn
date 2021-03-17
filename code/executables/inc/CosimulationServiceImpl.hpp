@@ -13,6 +13,7 @@
 #include "cosimulation.pb.h"
 #include "XdynForCS.hpp"
 #include "ErrorOutputter.hpp"
+#include "gRPCChecks.hpp"
 #include "report_xdyn_exceptions_to_user.hpp"
 
 template <typename Request> grpc::Status check_states_size(ErrorOutputter& error, const Request* request);
@@ -53,7 +54,7 @@ class CosimulationServiceImpl final : public Cosimulation::Service {
             report_xdyn_exceptions_to_user(f, error_outputter);
             if (error.contains_errors())
             {
-                return error.get_grpc_status();
+                return to_gRPC_status(error);
             }
             return to_grpc(context, output, response);
         }
