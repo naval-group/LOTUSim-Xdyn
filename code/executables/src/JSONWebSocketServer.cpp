@@ -11,7 +11,6 @@
 #include "report_xdyn_exceptions_to_user.hpp"
 #include "JSONSerializer.hpp"
 
-volatile sig_atomic_t stop;
 
 #include "JSONWebSocketServer.hpp"
 

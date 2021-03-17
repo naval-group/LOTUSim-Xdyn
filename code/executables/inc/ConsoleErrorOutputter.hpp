@@ -5,6 +5,8 @@
 
 class ConsoleErrorOutputter : public ErrorOutputter
 {
+    public:
+        ConsoleErrorOutputter() = default;
     private:
         void output() const;
 

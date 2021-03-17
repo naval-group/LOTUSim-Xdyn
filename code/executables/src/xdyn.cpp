@@ -28,7 +28,7 @@
 #include "XdynCommandLineArguments.hpp"
 
 #include <ssc/solver.hpp>
-#include "report_xdyn_exceptions_to_user.hpp"
+#include "ConsoleErrorOutputter.hpp"
 
 CHECK_SSC_VERSION(8,0)
 
@@ -127,8 +127,8 @@ std::string input_data_serialize(const XdynCommandLineArguments& inputData)
     return s.str();
 }
 
-void run_simulation(const XdynCommandLineArguments& input_data);
-void run_simulation(const XdynCommandLineArguments& input_data)
+void run_simulation(const XdynCommandLineArguments& input_data, ErrorOutputter& error_outputter);
+void run_simulation(const XdynCommandLineArguments& input_data, ErrorOutputter& error_outputter)
 {
     const auto f = [input_data](){
     {
@@ -141,16 +141,22 @@ void run_simulation(const XdynCommandLineArguments& input_data)
         serialize_context_if_necessary_new(observers, sys);
         solve(input_data, sys, observers);
     }};
-    if (input_data.catch_exceptions) report_xdyn_exceptions_to_user(f, [](const std::string& s){std::cerr << s;} );
-    else                             f();
+    if (input_data.catch_exceptions)
+    {
+        error_outputter.run_and_report_errors(f);
+    }
+    else
+    {
+        f();
+    }
 }
 
 
 
-int run(const XdynCommandLineArguments& input_data);
-int run(const XdynCommandLineArguments& input_data)
+int run(const XdynCommandLineArguments& input_data, ErrorOutputter& error_outputter);
+int run(const XdynCommandLineArguments& input_data, ErrorOutputter& error_outputter)
 {
-    if (not(input_data.empty())) run_simulation(input_data);
+    if (not(input_data.empty())) run_simulation(input_data, error_outputter);
     return EXIT_SUCCESS;
 }
 
@@ -162,6 +168,7 @@ int main(int argc, char** argv)
 
     XdynCommandLineArguments input_data;
     int error = 0;
+    ConsoleErrorOutputter error_outputter;
     try
     {
         if (argc==1) return fill_input_or_display_help(argv[0], input_data);
@@ -169,8 +176,8 @@ int main(int argc, char** argv)
     }
     catch(boost::program_options::error& e)
     {
-      std::cerr << "The command line you supplied is not valid: " << e.what() << std::endl << "Use --help to get the list of available parameters." << std::endl;
-      return -1;
+        error_outputter.invalid_command_line(e.what());
+        return -1;
     }
     if (error)
     {
@@ -180,15 +187,15 @@ int main(int argc, char** argv)
     {
         try
         {
-            return run(input_data);
+            return run(input_data, error_outputter);
         }
         catch (const std::exception& e)
         {
-            std::cerr << "An internal error has occurred: " << e.what() << std::endl;
+            error_outputter.internal_error(e.what());
             return -1;
         }
     }
-    const auto ret = run(input_data);
+    const auto ret = run(input_data, error_outputter);
     google::protobuf::ShutdownProtobufLibrary();
     return ret;
 }

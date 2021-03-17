@@ -15,7 +15,7 @@
 #include "make_sim_for_GZ.hpp"
 #include "OptionPrinter.hpp"
 #include "parse_XdynCommandLineArguments.hpp"
-#include "report_xdyn_exceptions_to_user.hpp"
+#include "ConsoleErrorOutputter.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>
@@ -37,28 +37,32 @@ struct GZOptions
     }
 };
 
-bool invalid(const GZOptions& input);
-bool invalid(const GZOptions& input)
+bool invalid(const GZOptions& input, ErrorOutputter& outputter);
+bool invalid(const GZOptions& input, ErrorOutputter& outputter)
 {
     if (input.empty()) return true;
     if (input.stl_filename.empty())
     {
-        std::cerr << "Error: no STL file defined." << std::endl;
+        outputter.invalid_input("No STL file defined.");
         return true;
     }
     if (input.yaml_files.empty())
     {
-        std::cerr << "Error: no input YAML files defined: need at least one." << std::endl;
+        outputter.invalid_input("No input YAML files defined: need at least one.");
         return true;
     }
     if (input.dphi<=0)
     {
-        std::cerr << "Error: the roll step should be strictly positive. Received " << input.dphi << std::endl;
+        std::stringstream ss;
+        ss << "Error: the roll step should be strictly positive. Received " << input.dphi;
+        outputter.invalid_input(ss.str());
         return true;
     }
     if (input.phi_max<input.dphi)
     {
-        std::cerr << "Error: the maximum roll angle should be greater than the roll step. Received " << input.phi_max << std::endl;
+        std::stringstream ss;
+        ss << "Error: the maximum roll angle should be greater than the roll step. Received " << input.phi_max;
+        outputter.invalid_input(ss.str());
         return true;
     }
     return false;
@@ -79,12 +83,12 @@ po::options_description gz_options(GZOptions& input_data)
     return desc;
 }
 
-int get_gz_data(int argc, char **argv, GZOptions& input_data);
-int get_gz_data(int argc, char **argv, GZOptions& input_data)
+int get_gz_data(int argc, char **argv, GZOptions& input_data, ErrorOutputter& error_outputter);
+int get_gz_data(int argc, char **argv, GZOptions& input_data, ErrorOutputter& error_outputter)
 {
     const po::options_description desc = gz_options(input_data);
     const BooleanArguments has = parse_input(argc, argv, desc);
-    if (invalid(input_data) or has.help)
+    if (invalid(input_data, error_outputter) or has.help)
     {
         print_usage(std::cout, desc, argv[0], "Righting lever curve computer");
         return EXIT_FAILURE;
@@ -100,7 +104,8 @@ template <typename T> void write(std::ostream& os, const T& v1, const T& v2, con
 int main(int argc, char** argv)
 {
     GZOptions input_data;
-    const int error = get_gz_data(argc, argv, input_data);
+    ConsoleErrorOutputter error_outputter;
+    const int error = get_gz_data(argc, argv, input_data, error_outputter);
     if (not(error))
     {
         const auto f = [input_data]()
@@ -125,7 +130,7 @@ int main(int argc, char** argv)
                     write(os, phi*180./PI, calculate.gz(phi), sep);
                 }
             };
-        report_xdyn_exceptions_to_user(f, [](const std::string& s){std::cerr << s;});
+        error_outputter.run_and_report_errors(f);
     }
     google::protobuf::ShutdownProtobufLibrary();
     return 0;

@@ -112,7 +112,8 @@ ADD_EXECUTABLE(xdyn
         src/parse_XdynCommandLineArguments.cpp
         src/build_observers_description.cpp
         src/XdynCommandLineArguments.cpp
-        src/report_xdyn_exceptions_to_user.cpp
+        src/ErrorOutputter.cpp
+        src/ConsoleErrorOutputter.cpp
         src/xdyn.cpp
         )
 
@@ -184,7 +185,8 @@ ADD_EXECUTABLE(gz
         ${CMAKE_CURRENT_BINARY_DIR}/display_command_line_arguments.cpp
         src/parse_XdynCommandLineArguments.cpp
         src/XdynCommandLineArguments.cpp
-        src/report_xdyn_exceptions_to_user.cpp
+        src/ErrorOutputter.cpp
+        src/ConsoleErrorOutputter.cpp
         src/build_observers_description.cpp
         )
 
@@ -218,7 +220,6 @@ ADD_EXECUTABLE(xdyn-for-cs
         ${CMAKE_CURRENT_BINARY_DIR}/display_command_line_arguments.cpp
         src/parse_XdynForCSCommandLineArguments.cpp
         src/build_observers_description.cpp
-        src/report_xdyn_exceptions_to_user.cpp
         src/XdynForCSCommandLineArguments.cpp
         src/XdynCommandLineArguments.cpp
         src/xdyn_for_cs.cpp
@@ -228,6 +229,7 @@ ADD_EXECUTABLE(xdyn-for-cs
         src/ConsoleErrorOutputter.cpp
         src/gRPCErrorOutputter.cpp
         src/JsonWebsocketErrorOutputter.cpp
+        #src/JSONWebSocketServer.cpp
         "${cosimulation_proto_srcs}"
         "${cosimulation_grpc_srcs}"
         )
@@ -244,7 +246,6 @@ ADD_EXECUTABLE(xdyn-for-me
         ${CMAKE_CURRENT_BINARY_DIR}/display_command_line_arguments.cpp
         src/parse_XdynForMECommandLineArguments.cpp
         src/build_observers_description.cpp
-        src/report_xdyn_exceptions_to_user.cpp
         src/XdynForMECommandLineArguments.cpp
         src/xdyn_for_me.cpp
         src/ModelExchangeServiceImpl.cpp
@@ -253,6 +254,7 @@ ADD_EXECUTABLE(xdyn-for-me
         src/ConsoleErrorOutputter.cpp
         src/gRPCErrorOutputter.cpp
         src/JsonWebsocketErrorOutputter.cpp
+        #src/JSONWebSocketServer.cpp
         "${model_exchange_proto_srcs}"
         "${model_exchange_grpc_srcs}"
         )

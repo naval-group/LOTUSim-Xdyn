@@ -14,7 +14,6 @@
 #include "XdynForCS.hpp"
 #include "ErrorOutputter.hpp"
 #include "gRPCChecks.hpp"
-#include "report_xdyn_exceptions_to_user.hpp"
 #include <memory>
 
 template <typename Request> grpc::Status check_states_size(ErrorOutputter& error, const Request* request);
