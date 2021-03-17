@@ -29,7 +29,7 @@ void ErrorOutputter::invalid_state_size(const std::string& state_name, const siz
        << state_size
        << ", whereas 't' has size "
        << t_size
-       << ": this is a problem in the client code (caller of xdyn's gRPC server), not a problem with xdyn. Please ensure that '"
+       << ": this is a problem in the client code (caller of xdyn), not a problem with xdyn. Please ensure that '"
        << state_name
        << "' and 't' have the same size in the request's 'States' type."
        << std::endl;
