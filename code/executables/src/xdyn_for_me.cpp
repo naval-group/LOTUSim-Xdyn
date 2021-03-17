@@ -6,6 +6,7 @@
 #include "gRPCProtoBufServer.hpp"
 #include "ModelExchangeServiceImpl.hpp"
 #include "JSONWebSocketServer.hpp"
+#include "gRPCErrorOutputter.hpp"
 
 #include <ssc/text_file_reader.hpp>
 #include <ssc/check_ssc_version.hpp>
@@ -27,8 +28,8 @@ void start_grpc_server(const XdynForMECommandLineArguments& input_data)
     const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_filenames);
     const auto yaml = yaml_reader.get_contents();
     XdynForME xdyn(yaml);
-    ModelExchangeServiceImpl service(xdyn);
-    std::shared_ptr<grpc::Service> handler(new ModelExchangeServiceImpl(xdyn));
+    std::shared_ptr<ErrorOutputter> error_outputter(new gRPCErrorOutputter());
+    std::shared_ptr<grpc::Service> handler(new ModelExchangeServiceImpl(xdyn, error_outputter));
     gRPCProtoBufServer server(handler);
     server.start(input_data.port);
 }

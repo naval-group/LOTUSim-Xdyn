@@ -13,9 +13,9 @@
 #include "YamlSimServerInputs.hpp"
 #include "ErrorOutputter.hpp"
 
-ModelExchangeServiceImpl::ModelExchangeServiceImpl(const XdynForME& xdyn_):
+ModelExchangeServiceImpl::ModelExchangeServiceImpl(const XdynForME& xdyn_, std::shared_ptr<ErrorOutputter>& error_outputter_):
 simserver(xdyn_),
-error()
+error_outputter(error_outputter_)
 {}
 
 YamlSimServerInputs from_grpc(grpc::ServerContext* , const ModelExchangeRequestEuler* request)
@@ -127,7 +127,7 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_euler_321(
         const ModelExchangeRequestEuler* request,
         ModelExchangeResponse* response)
 {
-    return dx_dt(error, context, request, response);
+    return dx_dt(context, request, response);
 }
 
 grpc::Status ModelExchangeServiceImpl::dx_dt_quaternion(
@@ -135,7 +135,7 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_quaternion(
         const ModelExchangeRequestQuaternion* request,
         ModelExchangeResponse* response)
 {
-    return dx_dt(error, context, request, response);
+    return dx_dt(context, request, response);
 }
 
 template <> grpc::Status check_states_size<ModelExchangeRequestEuler>(ErrorOutputter& error, const ModelExchangeRequestEuler* request)

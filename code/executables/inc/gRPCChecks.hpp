@@ -5,7 +5,7 @@
 
 #include "ErrorOutputter.hpp"
 
-grpc::Status to_gRPC_status(const ErrorOutputter& status);
+grpc::Status to_gRPC_status(const ErrorOutputter& error_outputter);
 
 
 #define SIZE size()

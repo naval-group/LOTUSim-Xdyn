@@ -6,6 +6,7 @@
 #include "gRPCProtoBufServer.hpp"
 #include "CosimulationServiceImpl.hpp"
 #include "JSONWebSocketServer.hpp"
+#include "gRPCErrorOutputter.hpp"
 
 #include <ssc/text_file_reader.hpp>
 #include <ssc/check_ssc_version.hpp>
@@ -31,7 +32,8 @@ void start_grpc_server(const XdynForCSCommandLineArguments& input_data);
 void start_grpc_server(const XdynForCSCommandLineArguments& input_data)
 {
     XdynForCS simserver = get_SimServer(input_data);
-    std::shared_ptr<grpc::Service> handler(new CosimulationServiceImpl(simserver));
+    std::shared_ptr<ErrorOutputter> error_outputter(new gRPCErrorOutputter());
+    std::shared_ptr<grpc::Service> handler(new CosimulationServiceImpl(simserver, error_outputter));
     gRPCProtoBufServer server(handler);
     server.start(input_data.port);
 }

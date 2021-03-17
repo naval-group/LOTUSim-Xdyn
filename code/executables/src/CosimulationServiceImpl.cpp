@@ -9,9 +9,9 @@
 #include "CosimulationServiceImpl.hpp"
 #include "YamlSimServerInputs.hpp"
 
-CosimulationServiceImpl::CosimulationServiceImpl(const XdynForCS& simserver_):
+CosimulationServiceImpl::CosimulationServiceImpl(const XdynForCS& simserver_, std::shared_ptr<ErrorOutputter>& error_outputter_):
         simserver(simserver_),
-        error()
+        error_outputter(error_outputter_)
 {}
 
 YamlSimServerInputs from_grpc(grpc::ServerContext* , const CosimulationRequestEuler* request)
