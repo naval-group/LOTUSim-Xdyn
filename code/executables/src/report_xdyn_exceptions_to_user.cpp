@@ -26,7 +26,6 @@ void report_xdyn_exceptions_to_user(const std::function<void(void)>& f, const st
     catch(const boost::program_options::error& e)
     {
         ss << "The command-line you supplied is not valid:" << std::endl << '\t' << e.what() << std::endl << "Try running the program again with the -h flag to get a list of supported options." << std::endl;
-        outputter(ss.str());
     }
     catch(const InvalidInputException& e)
     {
@@ -37,7 +36,6 @@ void report_xdyn_exceptions_to_user(const std::function<void(void)>& f, const st
     {
         ss << "The following error should never arise & is clearly a sign of a bug in the simulator. Please contact the support team." << std::endl
                   << e.what() << std::endl;
-        outputter(ss.str());
     }
     catch(const MeshException& e)
     {
@@ -61,23 +59,19 @@ void report_xdyn_exceptions_to_user(const std::function<void(void)>& f, const st
     catch(const ConnexionError& e)
     {
         ss << "This simulation requires X-DYN to connect to a server but there was a problem with that connection: " << e.get_message() << std::endl;
-        outputter(ss.str());
     }
     catch(const ssc::json::Exception& e)
     {
         ss << "There is a syntax problem with the supplied JSON: " << e.get_message() << std::endl;
-        outputter(ss.str());
     }
     catch(ssc::exception_handling::Exception& e)
     {
         ss << "The following problem was detected:" << std::endl << e.get_message() << std::endl;
-        outputter(ss.str());
     }
     catch(const YAML::Exception& e)
     {
         ss << "There is a syntax problem with the YAML file line " << e.mark.line+1 << ", column " << e.mark.column+1 << ": " << e.msg << "." << std::endl
            << "Please note that as all YAML files supplied on the command-line are concatenated, the line number given here corresponds to the line number in the concatenated YAML." << std::endl;
-        outputter(ss.str());
     }
     catch(std::exception& e)
     {
@@ -85,8 +79,8 @@ void report_xdyn_exceptions_to_user(const std::function<void(void)>& f, const st
            << "- Input YAML file(s) + STL (if needed)" << std::endl
            << "- Command-line arguments" << std::endl
            << "- The following error message: " << e.what() << std::endl;
-        outputter(ss.str());
     }
+    outputter(ss.str());
 }
 
 
