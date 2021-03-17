@@ -45,10 +45,12 @@ class ModelExchangeServiceImpl final : public ModelExchange::Service {
                 return precond;
             }
             YamlState output;
-            const std::function<void()> f = [&context, this, &request, &output]()
+            grpc::Status run_status;
+            const std::function<void()> f = [&context, this, &request, &output, &response, &run_status]()
                 {
                     const YamlSimServerInputs inputs = from_grpc(context, request);
                     output = simserver.handle(inputs);
+                    run_status = to_grpc(context, output, response);
                 };
             const std::function<void(const std::string&)> error_outputter = [this](const std::string& error_message)
                 {
@@ -59,7 +61,7 @@ class ModelExchangeServiceImpl final : public ModelExchange::Service {
             {
                 return to_gRPC_status(error);
             }
-            return to_grpc(context, output, response);
+            return run_status;
         }
         XdynForME simserver;
         ErrorOutputter error;

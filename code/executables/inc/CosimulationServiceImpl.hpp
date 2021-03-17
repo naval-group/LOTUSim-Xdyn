@@ -41,12 +41,14 @@ class CosimulationServiceImpl final : public Cosimulation::Service {
                 return precond;
             }
             std::vector<YamlState> output;
-            const std::function<void()> f = [&context, this, &request, &output]()
+            grpc::Status run_status;
+            const std::function<void()> f = [&context, this, &request, &output, &run_status, &response]()
                 {
                     const YamlSimServerInputs inputs = from_grpc(context, request);
                     output = simserver.handle(inputs);
+                    run_status = to_grpc(context, output, response);
                 };
-            grpc::Status run_status(grpc::Status::OK);
+            
             const std::function<void(const std::string&)> error_outputter = [this](const std::string& error_message)
                 {
                     this->error.simulation_error(error_message);
@@ -56,7 +58,7 @@ class CosimulationServiceImpl final : public Cosimulation::Service {
             {
                 return to_gRPC_status(error);
             }
-            return to_grpc(context, output, response);
+            return run_status;
         }
         XdynForCS simserver;
         ErrorOutputter error;
