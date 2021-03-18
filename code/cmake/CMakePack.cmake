@@ -77,18 +77,7 @@ IF(UNIX OR MSYS)
         SET(CPACK_PACKAGE_EXECUTABLES "" "")
         SET(CPACK_GENERATOR "DEB")
         SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Charles-Edouard Cady")
-        ##CPACK_PACKAGING_INSTALL_PREFIX : Sets the default root that the generated package installs into, '/usr' is the default for the debian and redhat generators
-        #SET(CPACK_GENERATOR "RPM")
         SET(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}")
-        ##To generate a RPM file, one needs program rpmbuild that can be
-        ##installed with
-        ##su
-        ##yum install rpm-build
-        ##yum install --skip-broken rpm-build
-        ##To see the content of a RPM file, use the following command
-        ##rpm -q -filesbypkg -p DYSCOASM-0.0.0-Linux.rpm
-        ##
-        ##rpm -i --prefix=/home/people/jacquenot/simulateurIrtJv/ simulateurIrtJv_installer_1589M.rpm
     ENDIF(WIN32)
     INCLUDE(CPack)
 ENDIF()
