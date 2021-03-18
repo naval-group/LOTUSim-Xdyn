@@ -12,19 +12,19 @@
 #include "cosimulation.grpc.pb.h"
 #include "cosimulation.pb.h"
 #include "XdynForCS.hpp"
-#include "ErrorOutputter.hpp"
+#include "ErrorReporter.hpp"
 #include "gRPCChecks.hpp"
 
-template <typename Request> grpc::Status check_states_size(ErrorOutputter& error, const Request* request);
-template <> grpc::Status check_states_size<CosimulationRequestEuler>(ErrorOutputter& error, const CosimulationRequestEuler* request);
-template <> grpc::Status check_states_size<CosimulationRequestQuaternion>(ErrorOutputter& error, const CosimulationRequestQuaternion* request);
+template <typename Request> grpc::Status check_states_size(ErrorReporter& error, const Request* request);
+template <> grpc::Status check_states_size<CosimulationRequestEuler>(ErrorReporter& error, const CosimulationRequestEuler* request);
+template <> grpc::Status check_states_size<CosimulationRequestQuaternion>(ErrorReporter& error, const CosimulationRequestQuaternion* request);
 YamlSimServerInputs from_grpc(grpc::ServerContext* context, const CosimulationRequestEuler* request);
 YamlSimServerInputs from_grpc(grpc::ServerContext* context, const CosimulationRequestQuaternion* request);
 grpc::Status to_grpc(grpc::ServerContext* context, const std::vector<YamlState>& res, CosimulationResponse* response);
 
 class CosimulationServiceImpl final : public Cosimulation::Service {
     public:
-        explicit CosimulationServiceImpl(const XdynForCS& simserver, ErrorOutputter& outputter);
+        explicit CosimulationServiceImpl(const XdynForCS& simserver, ErrorReporter& outputter);
         grpc::Status step_quaternion(grpc::ServerContext* context, const CosimulationRequestQuaternion* request, CosimulationResponse* response) override;
         grpc::Status step_euler_321(grpc::ServerContext* context, const CosimulationRequestEuler* request, CosimulationResponse* response) override;
 
@@ -51,7 +51,7 @@ class CosimulationServiceImpl final : public Cosimulation::Service {
             return to_gRPC_status(error_outputter);
         }
         XdynForCS simserver;
-        ErrorOutputter& error_outputter;
+        ErrorReporter& error_outputter;
 };
 
 #endif /* EXECUTABLES_INC_XDYNFORCSGRPC_HPP_ */

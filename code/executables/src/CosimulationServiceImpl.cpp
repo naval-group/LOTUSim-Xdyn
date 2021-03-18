@@ -9,7 +9,7 @@
 #include "CosimulationServiceImpl.hpp"
 #include "YamlSimServerInputs.hpp"
 
-CosimulationServiceImpl::CosimulationServiceImpl(const XdynForCS& simserver_, ErrorOutputter& error_outputter_):
+CosimulationServiceImpl::CosimulationServiceImpl(const XdynForCS& simserver_, ErrorReporter& error_outputter_):
         simserver(simserver_),
         error_outputter(error_outputter_)
 {}
@@ -169,12 +169,12 @@ grpc::Status CosimulationServiceImpl::step_quaternion(
     return step(context, request, response);
 }
 
-template <> grpc::Status check_states_size<CosimulationRequestEuler>(ErrorOutputter& error, const CosimulationRequestEuler* request)
+template <> grpc::Status check_states_size<CosimulationRequestEuler>(ErrorReporter& error, const CosimulationRequestEuler* request)
 {
     return check_euler_states_size(error, request);
 }
 
-template <> grpc::Status check_states_size<CosimulationRequestQuaternion>(ErrorOutputter& error, const CosimulationRequestQuaternion* request)
+template <> grpc::Status check_states_size<CosimulationRequestQuaternion>(ErrorReporter& error, const CosimulationRequestQuaternion* request)
 {
     return check_quaternion_states_size(error, request);
 }

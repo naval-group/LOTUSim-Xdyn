@@ -12,22 +12,22 @@
 #include "model_exchange.grpc.pb.h"
 #include "model_exchange.pb.h"
 #include "XdynForME.hpp"
-#include "ErrorOutputter.hpp"
+#include "ErrorReporter.hpp"
 #include "gRPCChecks.hpp"
 
 
 YamlSimServerInputs from_grpc(grpc::ServerContext* context, const ModelExchangeRequestEuler* request);
 YamlSimServerInputs from_grpc(grpc::ServerContext* context, const ModelExchangeRequestQuaternion* request);
 grpc::Status to_grpc(grpc::ServerContext* context, const YamlState& state_derivatives, ModelExchangeResponse* response);
-template <typename Request> grpc::Status check_states_size(ErrorOutputter& error, const Request* request);
-template <> grpc::Status check_states_size<ModelExchangeRequestEuler>(ErrorOutputter& error, const ModelExchangeRequestEuler* request);
-template <> grpc::Status check_states_size<ModelExchangeRequestQuaternion>(ErrorOutputter& error, const ModelExchangeRequestQuaternion* request);
+template <typename Request> grpc::Status check_states_size(ErrorReporter& error, const Request* request);
+template <> grpc::Status check_states_size<ModelExchangeRequestEuler>(ErrorReporter& error, const ModelExchangeRequestEuler* request);
+template <> grpc::Status check_states_size<ModelExchangeRequestQuaternion>(ErrorReporter& error, const ModelExchangeRequestQuaternion* request);
 /*
  *
  */
 class ModelExchangeServiceImpl final : public ModelExchange::Service {
     public:
-        explicit ModelExchangeServiceImpl(const XdynForME& xdyn, ErrorOutputter& error_outputter);
+        explicit ModelExchangeServiceImpl(const XdynForME& xdyn, ErrorReporter& error_outputter);
         grpc::Status dx_dt_quaternion(grpc::ServerContext* context, const ModelExchangeRequestQuaternion* request, ModelExchangeResponse* response) override;
         grpc::Status dx_dt_euler_321(grpc::ServerContext* context, const ModelExchangeRequestEuler* request, ModelExchangeResponse* response) override;
 
@@ -54,7 +54,7 @@ class ModelExchangeServiceImpl final : public ModelExchange::Service {
             return to_gRPC_status(error_outputter);
         }
         XdynForME simserver;
-        ErrorOutputter& error_outputter;
+        ErrorReporter& error_outputter;
 };
 
 #endif /* EXECUTABLES_INC_MODELEXCHANGESERVICEIMPL_HPP_ */

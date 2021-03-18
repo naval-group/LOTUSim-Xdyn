@@ -1,4 +1,4 @@
-#include "ErrorOutputter.hpp"
+#include "ErrorReporter.hpp"
 #include "InternalErrorException.hpp"
 #include "ConnexionError.hpp"
 #include "MeshException.hpp"
@@ -15,10 +15,10 @@
 #include <functional>
 #include <boost/program_options.hpp>
 
-ErrorOutputter::ErrorOutputter() : ss(), status(Status::OK)
+ErrorReporter::ErrorReporter() : ss(), status(Status::OK)
 {}
 
-void ErrorOutputter::run_and_report_errors(const std::function<void(void)>& f)
+void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f)
 {
     try
     {
@@ -80,7 +80,7 @@ void ErrorOutputter::run_and_report_errors(const std::function<void(void)>& f)
     }
 }
 
-void ErrorOutputter::invalid_request(const std::string &function, const int line)
+void ErrorReporter::invalid_request(const std::string &function, const int line)
 {
     ss << "'request' is a NULL pointer in "
        << function
@@ -91,13 +91,13 @@ void ErrorOutputter::invalid_request(const std::string &function, const int line
     status = Status::INVALID_INPUT;
 }
 
-void ErrorOutputter::empty_history()
+void ErrorReporter::empty_history()
 {
     ss << "The state history provided to xdyn is empty ('t' has size 0): we need at least one value for each state to set the initial conditions.";
     status = Status::INVALID_INPUT;
 }
 
-void ErrorOutputter::invalid_state_size(const std::string& state_name, const size_t state_size, const size_t t_size)
+void ErrorReporter::invalid_state_size(const std::string& state_name, const size_t state_size, const size_t t_size)
 {
     ss << "State '"
        << state_name
@@ -112,19 +112,19 @@ void ErrorOutputter::invalid_state_size(const std::string& state_name, const siz
     status = Status::INVALID_INPUT;
 }
 
-void ErrorOutputter::invalid_command_line(const std::string& error)
+void ErrorReporter::invalid_command_line(const std::string& error)
 {
     ss << "The command-line you supplied is not valid:" << std::endl << '\t' << error << std::endl << "Try running the program again with the -h flag to get a list of supported options." << std::endl;
     status = Status::INVALID_INPUT;
 }
 
-void ErrorOutputter::invalid_input(const std::string& error_message)
+void ErrorReporter::invalid_input(const std::string& error_message)
 {
     ss << "The input you provided is invalid & we cannot simulate. " << error_message << std::endl;
     status = Status::INVALID_INPUT;
 }
 
-void ErrorOutputter::simulation_error(const std::string& error_message)
+void ErrorReporter::simulation_error(const std::string& error_message)
 {
     ss << "The simulation has diverged and cannot continue: " << error_message << std::endl;
     ss << "Maybe you can use another solver? For example, if you used a Euler integration scheme, maybe the simulation can be run with" << std::endl
@@ -132,22 +132,22 @@ void ErrorOutputter::simulation_error(const std::string& error_message)
     status = Status::SIMULATION_ERROR;
 }
 
-bool ErrorOutputter::contains_errors() const
+bool ErrorReporter::contains_errors() const
 {
     return status != Status::OK;
 }
 
-std::string ErrorOutputter::get_message() const
+std::string ErrorReporter::get_message() const
 {
     return ss.str();
 }
 
-ErrorOutputter::Status ErrorOutputter::get_status() const
+ErrorReporter::Status ErrorReporter::get_status() const
 {
     return status;
 }
 
-void ErrorOutputter::internal_error(const std::string& error_message)
+void ErrorReporter::internal_error(const std::string& error_message)
 {
     ss << "The following error should never arise & is clearly a sign of a bug inxdyn: please send an email to the support team containing the following:" << std::endl
           << "- Input YAML file(s) + STL (if needed)" << std::endl
@@ -157,7 +157,7 @@ void ErrorOutputter::internal_error(const std::string& error_message)
     status = Status::INTERNAL_ERROR;
 }
 
-void ErrorOutputter::network_error(const std::string& error_message)
+void ErrorReporter::network_error(const std::string& error_message)
 {
     ss << "Network error: " << error_message;
     status = Status::NETWORK_ERROR;

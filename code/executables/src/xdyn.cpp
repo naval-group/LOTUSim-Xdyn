@@ -28,7 +28,7 @@
 #include "XdynCommandLineArguments.hpp"
 
 #include <ssc/solver.hpp>
-#include "ErrorOutputter.hpp"
+#include "ErrorReporter.hpp"
 
 CHECK_SSC_VERSION(8,0)
 
@@ -127,8 +127,8 @@ std::string input_data_serialize(const XdynCommandLineArguments& inputData)
     return s.str();
 }
 
-void run_simulation(const XdynCommandLineArguments& input_data, ErrorOutputter& error_outputter);
-void run_simulation(const XdynCommandLineArguments& input_data, ErrorOutputter& error_outputter)
+void run_simulation(const XdynCommandLineArguments& input_data, ErrorReporter& error_outputter);
+void run_simulation(const XdynCommandLineArguments& input_data, ErrorReporter& error_outputter)
 {
     const auto f = [input_data](){
     {
@@ -153,8 +153,8 @@ void run_simulation(const XdynCommandLineArguments& input_data, ErrorOutputter& 
 
 
 
-int run(const XdynCommandLineArguments& input_data, ErrorOutputter& error_outputter);
-int run(const XdynCommandLineArguments& input_data, ErrorOutputter& error_outputter)
+int run(const XdynCommandLineArguments& input_data, ErrorReporter& error_outputter);
+int run(const XdynCommandLineArguments& input_data, ErrorReporter& error_outputter)
 {
     if (not(input_data.empty())) run_simulation(input_data, error_outputter);
     return EXIT_SUCCESS;
@@ -168,7 +168,7 @@ int main(int argc, char** argv)
 
     XdynCommandLineArguments input_data;
     int error = 0;
-    ErrorOutputter error_outputter;
+    ErrorReporter error_outputter;
     try
     {
         if (argc==1) return fill_input_or_display_help(argv[0], input_data);
@@ -192,7 +192,7 @@ int main(int argc, char** argv)
         catch (const std::exception& e)
         {
             error_outputter.internal_error(e.what());
-            if (error_outputter.get_status() != ErrorOutputter::Status::OK)
+            if (error_outputter.get_status() != ErrorReporter::Status::OK)
             {
                 std::cerr << error_outputter.get_message() << std::endl;
             }

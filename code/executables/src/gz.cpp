@@ -15,7 +15,7 @@
 #include "make_sim_for_GZ.hpp"
 #include "OptionPrinter.hpp"
 #include "parse_XdynCommandLineArguments.hpp"
-#include "ErrorOutputter.hpp"
+#include "ErrorReporter.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>
@@ -37,8 +37,8 @@ struct GZOptions
     }
 };
 
-bool invalid(const GZOptions& input, ErrorOutputter& outputter);
-bool invalid(const GZOptions& input, ErrorOutputter& outputter)
+bool invalid(const GZOptions& input, ErrorReporter& outputter);
+bool invalid(const GZOptions& input, ErrorReporter& outputter)
 {
     if (input.empty()) return true;
     if (input.stl_filename.empty())
@@ -83,8 +83,8 @@ po::options_description gz_options(GZOptions& input_data)
     return desc;
 }
 
-int get_gz_data(int argc, char **argv, GZOptions& input_data, ErrorOutputter& error_outputter);
-int get_gz_data(int argc, char **argv, GZOptions& input_data, ErrorOutputter& error_outputter)
+int get_gz_data(int argc, char **argv, GZOptions& input_data, ErrorReporter& error_outputter);
+int get_gz_data(int argc, char **argv, GZOptions& input_data, ErrorReporter& error_outputter)
 {
     const po::options_description desc = gz_options(input_data);
     const BooleanArguments has = parse_input(argc, argv, desc);
@@ -105,7 +105,7 @@ template <typename T> void write(std::ostream& os, const T& v1, const T& v2, con
 int main(int argc, char** argv)
 {
     GZOptions input_data;
-    ErrorOutputter error_outputter;
+    ErrorReporter error_outputter;
     const int error = get_gz_data(argc, argv, input_data, error_outputter);
     if (not(error))
     {
@@ -132,7 +132,7 @@ int main(int argc, char** argv)
                 }
             };
         error_outputter.run_and_report_errors(f);
-        if (error_outputter.get_status() != ErrorOutputter::Status::OK)
+        if (error_outputter.get_status() != ErrorReporter::Status::OK)
         {
             std::cerr << error_outputter.get_message() << std::endl;
         }

@@ -1,11 +1,11 @@
-#ifndef ERROROUTPUTTER_HPP
-#define ERROROUTPUTTER_HPP
+#ifndef ERRORREPORTER_HPP
+#define ERRORREPORTER_HPP
 
 #include <functional>
 #include <sstream>
 #include <string>
 
-class ErrorOutputter
+class ErrorReporter
 {
     public:
         enum class Status
@@ -16,7 +16,7 @@ class ErrorOutputter
             INTERNAL_ERROR,
             NETWORK_ERROR
         };
-        ErrorOutputter();
+        ErrorReporter();
         void invalid_request(const std::string &function, const int line);
         void empty_history();
         void invalid_state_size(const std::string& state_name, const size_t state_size, const size_t t_size);

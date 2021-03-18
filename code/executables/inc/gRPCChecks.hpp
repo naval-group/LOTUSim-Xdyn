@@ -3,9 +3,9 @@
 
 #include <grpcpp/grpcpp.h>
 
-#include "ErrorOutputter.hpp"
+#include "ErrorReporter.hpp"
 
-grpc::Status to_gRPC_status(const ErrorOutputter& error_outputter);
+grpc::Status to_gRPC_status(const ErrorReporter& error_outputter);
 
 
 #define SIZE size()
@@ -19,7 +19,7 @@ grpc::Status to_gRPC_status(const ErrorOutputter& error_outputter);
     err.invalid_state_size(#state, n1, n2);\
 }
 
-template <typename Request> grpc::Status check_euler_states_size(ErrorOutputter& error, const Request* request)
+template <typename Request> grpc::Status check_euler_states_size(ErrorReporter& error, const Request* request)
 {
     if (!request)
     {
@@ -48,7 +48,7 @@ template <typename Request> grpc::Status check_euler_states_size(ErrorOutputter&
     return to_gRPC_status(error);
 }
 
-template <typename Request> grpc::Status check_quaternion_states_size(ErrorOutputter& error, const Request* request)
+template <typename Request> grpc::Status check_quaternion_states_size(ErrorReporter& error, const Request* request)
 {
     if (!request)
     {

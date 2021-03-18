@@ -5,7 +5,7 @@
 #include "gRPCProtoBufServer.hpp"
 #include "CosimulationServiceImpl.hpp"
 #include "JSONWebSocketServer.hpp"
-#include "ErrorOutputter.hpp"
+#include "ErrorReporter.hpp"
 
 #include <ssc/text_file_reader.hpp>
 #include <ssc/check_ssc_version.hpp>
@@ -31,7 +31,7 @@ void start_grpc_server(const XdynForCSCommandLineArguments& input_data);
 void start_grpc_server(const XdynForCSCommandLineArguments& input_data)
 {
     XdynForCS simserver = get_SimServer(input_data);
-    ErrorOutputter error_outputter;
+    ErrorReporter error_outputter;
     std::shared_ptr<grpc::Service> handler(new CosimulationServiceImpl(simserver, error_outputter));
     gRPCProtoBufServer server(handler);
     server.start(input_data.port);
@@ -42,11 +42,11 @@ int main(int argc, char** argv)
     XdynForCSCommandLineArguments input_data;
     if (argc==1) return display_help(argv[0], input_data);
     int error = 0;
-    ErrorOutputter error_outputter;
+    ErrorReporter error_outputter;
     error_outputter.run_and_report_errors([&error,&argc,&argv,&input_data]{error = get_input_data(argc, argv, input_data);});
     if (error)
     {
-        if (error_outputter.get_status() != ErrorOutputter::Status::OK)
+        if (error_outputter.get_status() != ErrorReporter::Status::OK)
         {
             std::cerr << error_outputter.get_message() << std::endl;
         }
@@ -65,7 +65,7 @@ int main(int argc, char** argv)
     if (input_data.catch_exceptions)
     {
         error_outputter.run_and_report_errors(run);
-        if (error_outputter.get_status() != ErrorOutputter::Status::OK)
+        if (error_outputter.get_status() != ErrorReporter::Status::OK)
         {
             std::cerr << error_outputter.get_message() << std::endl;
         }
