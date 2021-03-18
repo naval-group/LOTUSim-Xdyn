@@ -94,7 +94,7 @@ class JSONWebSocketServer
                         msg.send_text(output_json);
                     };
                     error_outputter.run_and_report_errors(f);
-                    if (error_outputter.get_status() != ErrorReporter::Status::OK)
+                    if (error_outputter.contains_errors())
                     {
                         msg.send_text(replace_newlines_by_spaces(std::string("{\"error\": \"") + error_outputter.get_message() + "\"}"));
                     }

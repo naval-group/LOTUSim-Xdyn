@@ -192,7 +192,7 @@ int main(int argc, char** argv)
         catch (const std::exception& e)
         {
             error_outputter.internal_error(e.what());
-            if (error_outputter.get_status() != ErrorReporter::Status::OK)
+            if (error_outputter.contains_errors())
             {
                 std::cerr << error_outputter.get_message() << std::endl;
             }

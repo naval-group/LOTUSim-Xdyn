@@ -46,7 +46,7 @@ int main(int argc, char** argv)
     error_outputter.run_and_report_errors([&error,&argc,&argv,&input_data]{error = get_input_data(argc, argv, input_data);});
     if (error)
     {
-        if (error_outputter.get_status() != ErrorReporter::Status::OK)
+        if (error_outputter.contains_errors())
         {
             std::cerr << error_outputter.get_message() << std::endl;
         }
@@ -65,7 +65,7 @@ int main(int argc, char** argv)
     if (input_data.catch_exceptions)
     {
         error_outputter.run_and_report_errors(run);
-        if (error_outputter.get_status() != ErrorReporter::Status::OK)
+        if (error_outputter.contains_errors())
         {
             std::cerr << error_outputter.get_message() << std::endl;
         }

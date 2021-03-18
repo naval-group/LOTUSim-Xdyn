@@ -65,7 +65,7 @@ int main(int argc, char** argv)
     {
         run();
     }
-    if (error_outputter.get_status() != ErrorReporter::Status::OK)
+    if (error_outputter.contains_errors())
     {
         std::cerr << error_outputter.get_message() << std::endl;
     }
