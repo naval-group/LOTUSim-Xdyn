@@ -10,19 +10,33 @@
 #include <csignal>
 #include <memory>
 #include <boost/algorithm/string/replace.hpp>
-
 #include <ssc/websocket.hpp>
 #include <ssc/macros.hpp>
 
-#include "report_xdyn_exceptions_to_user.hpp"
 #include "JSONSerializer.hpp"
+#include "ErrorReporter.hpp"
 
 volatile sig_atomic_t stop;
 
 #define ADDRESS "127.0.0.1"
 #define WEBSOCKET_ADDRESS "ws://" ADDRESS
 #define WEBSOCKET_PORT    1234
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <ctime>
 
+
+std::string current_date_time();
+std::string current_date_time()
+{
+    time_t     now = time(0);
+    struct tm  tstruct;
+    char       buf[80];
+    tstruct = *localtime(&now);
+    strftime(buf, sizeof(buf), "%Y-%m-%d %X", &tstruct);
+    return buf;
+}
 template<class ServiceT>
 class JSONWebSocketServer
 {
@@ -55,7 +69,7 @@ class JSONWebSocketServer
         class JSONHandler : public ssc::websocket::MessageHandler
         {
             public:
-                JSONHandler(const ServiceT& simserver, const bool verbose_) : sim_server(simserver), verbose(verbose_)
+                JSONHandler(const ServiceT& simserver, const bool verbose_) : sim_server(simserver), verbose(verbose_), error_outputter()
                 {
                 }
                 virtual ~JSONHandler()
@@ -69,12 +83,6 @@ class JSONWebSocketServer
                     {
                         std::cout << current_date_time() << " Received: " << input_json << std::endl;
                     }
-                    const std::function<void(const std::string&)> quiet_error_outputter = [&msg, this](const std::string& what)
-                    {   msg.send_text(replace_newlines_by_spaces(std::string("{\"error\": \"") + what + "\"}"));};
-                    const std::function<void(const std::string&)> verbose_error_outputter = [&msg, this](
-                            const std::string& what)
-                            {   std::cerr << current_date_time() << " Error: " << what << std::endl; msg.send_text(replace_newlines_by_spaces(std::string("{\"error\": \"") + what + "\"}"));};
-                    const auto error_outputter = verbose ? verbose_error_outputter : quiet_error_outputter;
                     const auto f = [&input_json, this, &msg]()
                     {
                         SimServerInputs server_inputs(deserialize(input_json), sim_server.get_Tmax());
@@ -85,7 +93,11 @@ class JSONWebSocketServer
                         }
                         msg.send_text(output_json);
                     };
-                    report_xdyn_exceptions_to_user(f, error_outputter);
+                    error_outputter.run_and_report_errors(f);
+                    if (error_outputter.contains_errors())
+                    {
+                        msg.send_text(replace_newlines_by_spaces(std::string("{\"error\": \"") + error_outputter.get_message() + "\"}"));
+                    }
                 }
 
             private:
@@ -94,9 +106,9 @@ class JSONWebSocketServer
                     boost::replace_all(str, "\n", " ");
                     return str;
                 }
-
                 ServiceT sim_server;
                 const bool verbose;
+                ErrorReporter error_outputter;
         };
 
         JSONHandler handler;

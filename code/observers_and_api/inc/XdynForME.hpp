@@ -20,7 +20,6 @@ class XdynForME
         XdynForME(const std::string& yaml_model);
         YamlState handle(const YamlSimServerInputs& request);
         YamlState handle(const SimServerInputs& request);
-        YamlState compute_state_derivatives(const SimServerInputs& request);
         double get_Tmax() const;
 
     private :

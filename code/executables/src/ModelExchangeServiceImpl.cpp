@@ -11,86 +11,13 @@
 #include "ModelExchangeServiceImpl.hpp"
 #include "SimServerInputs.hpp"
 #include "YamlSimServerInputs.hpp"
+#include "ErrorReporter.hpp"
 
-ModelExchangeServiceImpl::ModelExchangeServiceImpl(const XdynForME& xdyn_):
-xdyn(xdyn_)
+ModelExchangeServiceImpl::ModelExchangeServiceImpl(const XdynForME& xdyn_, ErrorReporter& error_outputter_):
+simserver(xdyn_),
+error_outputter(error_outputter_)
 {}
 
-#define SIZE size()
-#define PASTER(x,y) x ## _ ## y
-#define EVALUATOR(x,y)  PASTER(x,y)
-#define STATE_SIZE(state) EVALUATOR(state, SIZE)
-#define CHECK_SIZE(state) if (states.STATE_SIZE(state) != states.t_size())\
-{\
-    const size_t n1 = states.STATE_SIZE(state);\
-    const size_t n2 = states.t_size();\
-    msg << "State '" << #state << "' has size " << n1 << ", whereas 't' has size " << n2 << ": this is a problem in the client code (caller of xdyn's gRPC server), not a problem with xdyn. Please ensure that '" << #state << "' and 't' have the same size in CosimulationRequest's 'States' type." << std::endl;\
-}
-
-grpc::Status check_states_size(const ModelExchangeRequestEuler* request);
-grpc::Status check_states_size(const ModelExchangeRequestEuler* request)
-{
-    std::stringstream msg;
-    if (!request)
-    {
-        msg << "'request' is a NULL pointer in " << __PRETTY_FUNCTION__ << ", line " << __LINE__ << ": this is an implementation error in xdyn. You should contact xdyn's support team." << std::endl;
-    }
-    else
-    {
-        const ModelExchangeStatesEuler states = request->states();
-        CHECK_SIZE(x);
-        CHECK_SIZE(y);
-        CHECK_SIZE(z);
-        CHECK_SIZE(u);
-        CHECK_SIZE(v);
-        CHECK_SIZE(w);
-        CHECK_SIZE(p);
-        CHECK_SIZE(q);
-        CHECK_SIZE(r);
-        CHECK_SIZE(phi);
-        CHECK_SIZE(theta);
-        CHECK_SIZE(psi);
-    }
-    if (msg.str().empty())
-    {
-        return grpc::Status::OK;
-    }
-    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg.str());
-}
-
-grpc::Status check_states_size(const ModelExchangeRequestQuaternion* request);
-grpc::Status check_states_size(const ModelExchangeRequestQuaternion* request)
-{
-    std::stringstream msg;
-    if (!request)
-    {
-        msg << "'request' is a NULL pointer in " << __PRETTY_FUNCTION__ << ", line " << __LINE__ << ": this is an implementation error in xdyn. You should contact xdyn's support team." << std::endl;
-    }
-    else
-    {
-        const ModelExchangeStatesQuaternion states = request->states();
-        CHECK_SIZE(x);
-        CHECK_SIZE(y);
-        CHECK_SIZE(z);
-        CHECK_SIZE(u);
-        CHECK_SIZE(v);
-        CHECK_SIZE(w);
-        CHECK_SIZE(p);
-        CHECK_SIZE(q);
-        CHECK_SIZE(r);
-        CHECK_SIZE(qr);
-        CHECK_SIZE(qi);
-        CHECK_SIZE(qj);
-        CHECK_SIZE(qk);
-    }
-    if (msg.str().empty())
-    {
-        return grpc::Status::OK;
-    }
-    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg.str());
-}
-
-YamlSimServerInputs from_grpc(grpc::ServerContext* context, const ModelExchangeRequestEuler* request);
 YamlSimServerInputs from_grpc(grpc::ServerContext* , const ModelExchangeRequestEuler* request)
 {
     YamlSimServerInputs server_inputs;
@@ -133,7 +60,6 @@ YamlSimServerInputs from_grpc(grpc::ServerContext* , const ModelExchangeRequestE
     return server_inputs;
 }
 
-YamlSimServerInputs from_grpc(grpc::ServerContext* context, const ModelExchangeRequestQuaternion* request);
 YamlSimServerInputs from_grpc(grpc::ServerContext* , const ModelExchangeRequestQuaternion* request)
 {
     YamlSimServerInputs server_inputs;
@@ -168,7 +94,6 @@ YamlSimServerInputs from_grpc(grpc::ServerContext* , const ModelExchangeRequestQ
     return server_inputs;
 }
 
-grpc::Status to_grpc(grpc::ServerContext* context, const YamlState& state_derivatives, ModelExchangeResponse* response);
 grpc::Status to_grpc(grpc::ServerContext* , const YamlState& state_derivatives, ModelExchangeResponse* response)
 {
     ModelExchangeStateDerivatives* d_dt = new ModelExchangeStateDerivatives();
@@ -202,15 +127,7 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_euler_321(
         const ModelExchangeRequestEuler* request,
         ModelExchangeResponse* response)
 {
-    const grpc::Status precond = check_states_size(request);
-    if (not precond.ok())
-    {
-        return precond;
-    }
-    const YamlSimServerInputs inputs(from_grpc(context, request));
-    const YamlState output = xdyn.handle(inputs);
-    const grpc::Status postcond = to_grpc(context, output, response);
-    return postcond;
+    return dx_dt(context, request, response);
 }
 
 grpc::Status ModelExchangeServiceImpl::dx_dt_quaternion(
@@ -218,17 +135,15 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_quaternion(
         const ModelExchangeRequestQuaternion* request,
         ModelExchangeResponse* response)
 {
-    const grpc::Status precond = check_states_size(request);
-    if (not precond.ok())
-    {
-        return precond;
-    }
-    const YamlSimServerInputs inputs = from_grpc(context, request);
-    if (inputs.states.empty())
-    {
-        return grpc::Status(grpc::StatusCode::INTERNAL, "We didn't get any states as input (inputs.states is empty): we need at least one to set the initial conditions. This error was detected in ModelExchangeServiceImpl::dx_dt_quaternion");
-    }
-    const YamlState output = xdyn.handle(inputs);
-    const grpc::Status postcond = to_grpc(context, output, response);
-    return postcond;
+    return dx_dt(context, request, response);
+}
+
+template <> grpc::Status check_states_size<ModelExchangeRequestEuler>(ErrorReporter& error, const ModelExchangeRequestEuler* request)
+{
+    return check_euler_states_size(error, request);
+}
+
+template <> grpc::Status check_states_size<ModelExchangeRequestQuaternion>(ErrorReporter& error, const ModelExchangeRequestQuaternion* request)
+{
+    return check_quaternion_states_size(error, request);
 }

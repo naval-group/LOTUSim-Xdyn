@@ -9,85 +9,11 @@
 #include "CosimulationServiceImpl.hpp"
 #include "YamlSimServerInputs.hpp"
 
-CosimulationServiceImpl::CosimulationServiceImpl(const XdynForCS& simserver_):
-        simserver(simserver_)
+CosimulationServiceImpl::CosimulationServiceImpl(const XdynForCS& simserver_, ErrorReporter& error_outputter_):
+        simserver(simserver_),
+        error_outputter(error_outputter_)
 {}
 
-#define SIZE size()
-#define PASTER(x,y) x ## _ ## y
-#define EVALUATOR(x,y)  PASTER(x,y)
-#define STATE_SIZE(state) EVALUATOR(state, SIZE)
-#define CHECK_SIZE(state) if (states.STATE_SIZE(state) != states.t_size())\
-{\
-    const size_t n1 = states.STATE_SIZE(state);\
-    const size_t n2 = states.t_size();\
-    msg << "State '" << #state << "' has size " << n1 << ", whereas 't' has size " << n2 << ": this is a problem in the client code (caller of xdyn's gRPC server), not a problem with xdyn. Please ensure that '" << #state << "' and 't' have the same size in CosimulationRequest's 'States' type." << std::endl;\
-}
-
-grpc::Status check_states_size(const CosimulationRequestEuler* request);
-grpc::Status check_states_size(const CosimulationRequestEuler* request)
-{
-    std::stringstream msg;
-    if (!request)
-    {
-        msg << "'request' is a NULL pointer in " << __PRETTY_FUNCTION__ << ", line " << __LINE__ << ": this is an implementation error in xdyn. You should contact xdyn's support team." << std::endl;
-    }
-    else
-    {
-        const CosimulationStatesEuler states = request->states();
-        CHECK_SIZE(x);
-        CHECK_SIZE(y);
-        CHECK_SIZE(z);
-        CHECK_SIZE(u);
-        CHECK_SIZE(v);
-        CHECK_SIZE(w);
-        CHECK_SIZE(p);
-        CHECK_SIZE(q);
-        CHECK_SIZE(r);
-        CHECK_SIZE(phi);
-        CHECK_SIZE(theta);
-        CHECK_SIZE(psi);
-    }
-    if (msg.str().empty())
-    {
-        return grpc::Status::OK;
-    }
-    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg.str());
-}
-
-grpc::Status check_states_size(const CosimulationRequestQuaternion* request);
-grpc::Status check_states_size(const CosimulationRequestQuaternion* request)
-{
-    std::stringstream msg;
-    if (!request)
-    {
-        msg << "'request' is a NULL pointer in " << __PRETTY_FUNCTION__ << ", line " << __LINE__ << ": this is an implementation error in xdyn. You should contact xdyn's support team." << std::endl;
-    }
-    else
-    {
-        const CosimulationStatesQuaternion states = request->states();
-        CHECK_SIZE(x);
-        CHECK_SIZE(y);
-        CHECK_SIZE(z);
-        CHECK_SIZE(u);
-        CHECK_SIZE(v);
-        CHECK_SIZE(w);
-        CHECK_SIZE(p);
-        CHECK_SIZE(q);
-        CHECK_SIZE(r);
-        CHECK_SIZE(qr);
-        CHECK_SIZE(qi);
-        CHECK_SIZE(qj);
-        CHECK_SIZE(qk);
-    }
-    if (msg.str().empty())
-    {
-        return grpc::Status::OK;
-    }
-    return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, msg.str());
-}
-
-YamlSimServerInputs from_grpc(grpc::ServerContext* context, const CosimulationRequestEuler* request);
 YamlSimServerInputs from_grpc(grpc::ServerContext* , const CosimulationRequestEuler* request)
 {
     YamlSimServerInputs server_inputs;
@@ -131,7 +57,6 @@ YamlSimServerInputs from_grpc(grpc::ServerContext* , const CosimulationRequestEu
     return server_inputs;
 }
 
-YamlSimServerInputs from_grpc(grpc::ServerContext* context, const CosimulationRequestQuaternion* request);
 YamlSimServerInputs from_grpc(grpc::ServerContext* , const CosimulationRequestQuaternion* request)
 {
     YamlSimServerInputs server_inputs;
@@ -167,7 +92,6 @@ YamlSimServerInputs from_grpc(grpc::ServerContext* , const CosimulationRequestQu
     return server_inputs;
 }
 
-grpc::Status to_grpc(grpc::ServerContext* context, const std::vector<YamlState>& res, CosimulationResponse* response);
 grpc::Status to_grpc(grpc::ServerContext* , const std::vector<YamlState>& res, CosimulationResponse* response)
 {
     if (res.empty())
@@ -234,15 +158,7 @@ grpc::Status CosimulationServiceImpl::step_euler_321(
         const CosimulationRequestEuler* request,
         CosimulationResponse* response)
 {
-    const grpc::Status precond = check_states_size(request);
-    if (not precond.ok())
-    {
-        return precond;
-    }
-    const YamlSimServerInputs inputs = from_grpc(context, request);
-    const std::vector<YamlState> output = simserver.handle(inputs);
-    const grpc::Status postcond = to_grpc(context, output, response);
-    return postcond;
+    return step(context, request, response);
 }
 
 grpc::Status CosimulationServiceImpl::step_quaternion(
@@ -250,13 +166,15 @@ grpc::Status CosimulationServiceImpl::step_quaternion(
         const CosimulationRequestQuaternion* request,
         CosimulationResponse* response)
 {
-    const grpc::Status precond = check_states_size(request);
-    if (not precond.ok())
-    {
-        return precond;
-    }
-    const YamlSimServerInputs inputs = from_grpc(context, request);
-    const std::vector<YamlState> output = simserver.handle(inputs);
-    const grpc::Status postcond = to_grpc(context, output, response);
-    return postcond;
+    return step(context, request, response);
+}
+
+template <> grpc::Status check_states_size<CosimulationRequestEuler>(ErrorReporter& error, const CosimulationRequestEuler* request)
+{
+    return check_euler_states_size(error, request);
+}
+
+template <> grpc::Status check_states_size<CosimulationRequestQuaternion>(ErrorReporter& error, const CosimulationRequestQuaternion* request)
+{
+    return check_quaternion_states_size(error, request);
 }

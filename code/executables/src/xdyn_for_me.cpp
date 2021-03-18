@@ -1,11 +1,11 @@
 #include "XdynForME.hpp"
 #include "parse_XdynForMECommandLineArguments.hpp"
-#include "report_xdyn_exceptions_to_user.hpp"
 #include "XdynForMECommandLineArguments.hpp"
 
 #include "gRPCProtoBufServer.hpp"
 #include "ModelExchangeServiceImpl.hpp"
 #include "JSONWebSocketServer.hpp"
+#include "ErrorReporter.hpp"
 
 #include <ssc/text_file_reader.hpp>
 #include <ssc/check_ssc_version.hpp>
@@ -27,8 +27,8 @@ void start_grpc_server(const XdynForMECommandLineArguments& input_data)
     const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_filenames);
     const auto yaml = yaml_reader.get_contents();
     XdynForME xdyn(yaml);
-    ModelExchangeServiceImpl service(xdyn);
-    std::shared_ptr<grpc::Service> handler(new ModelExchangeServiceImpl(xdyn));
+    ErrorReporter error_outputter;
+    std::shared_ptr<grpc::Service> handler(new ModelExchangeServiceImpl(xdyn, error_outputter));
     gRPCProtoBufServer server(handler);
     server.start(input_data.port);
 }
@@ -38,7 +38,8 @@ int main(int argc, char** argv)
     XdynForMECommandLineArguments input_data;
     if (argc==1) return fill_input_or_display_help(argv[0], input_data);
     int error = 0;
-    report_xdyn_exceptions_to_user([&error,&argc,&argv,&input_data]{error = get_input_data(argc, argv, input_data);}, [](const std::string& s){std::cerr << s;});
+    ErrorReporter error_outputter;
+    error_outputter.run_and_report_errors([&error,&argc,&argv,&input_data]{error = get_input_data(argc, argv, input_data);});
     if (error)
     {
         return error;
@@ -58,11 +59,15 @@ int main(int argc, char** argv)
     const std::function< void(void) > run = input_data.grpc ? run_grpc : run_ws;
     if (input_data.catch_exceptions)
     {
-        report_xdyn_exceptions_to_user(run, [](const std::string& s){std::cerr << s;});
+        error_outputter.run_and_report_errors(run);
     }
     else
     {
         run();
+    }
+    if (error_outputter.contains_errors())
+    {
+        std::cerr << error_outputter.get_message() << std::endl;
     }
     google::protobuf::ShutdownProtobufLibrary();
     return 0;
