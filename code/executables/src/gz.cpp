@@ -15,7 +15,7 @@
 #include "make_sim_for_GZ.hpp"
 #include "OptionPrinter.hpp"
 #include "parse_XdynCommandLineArguments.hpp"
-#include "ConsoleErrorOutputter.hpp"
+#include "ErrorOutputter.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>
@@ -90,6 +90,7 @@ int get_gz_data(int argc, char **argv, GZOptions& input_data, ErrorOutputter& er
     const BooleanArguments has = parse_input(argc, argv, desc);
     if (invalid(input_data, error_outputter) or has.help)
     {
+        std::cerr << error_outputter.get_message() << std::endl;
         print_usage(std::cout, desc, argv[0], "Righting lever curve computer");
         return EXIT_FAILURE;
     }
@@ -104,7 +105,7 @@ template <typename T> void write(std::ostream& os, const T& v1, const T& v2, con
 int main(int argc, char** argv)
 {
     GZOptions input_data;
-    ConsoleErrorOutputter error_outputter;
+    ErrorOutputter error_outputter;
     const int error = get_gz_data(argc, argv, input_data, error_outputter);
     if (not(error))
     {
@@ -131,6 +132,10 @@ int main(int argc, char** argv)
                 }
             };
         error_outputter.run_and_report_errors(f);
+        if (error_outputter.get_status() != ErrorOutputter::Status::OK)
+        {
+            std::cerr << error_outputter.get_message() << std::endl;
+        }
     }
     google::protobuf::ShutdownProtobufLibrary();
     return 0;

@@ -13,7 +13,7 @@
 #include "YamlSimServerInputs.hpp"
 #include "ErrorOutputter.hpp"
 
-ModelExchangeServiceImpl::ModelExchangeServiceImpl(const XdynForME& xdyn_, std::shared_ptr<ErrorOutputter>& error_outputter_):
+ModelExchangeServiceImpl::ModelExchangeServiceImpl(const XdynForME& xdyn_, ErrorOutputter& error_outputter_):
 simserver(xdyn_),
 error_outputter(error_outputter_)
 {}

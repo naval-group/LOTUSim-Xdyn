@@ -78,10 +78,6 @@ void ErrorOutputter::run_and_report_errors(const std::function<void(void)>& f)
     {
         internal_error(e.what());
     }
-    if (get_status() != Status::OK)
-    {
-        output();
-    }
 }
 
 void ErrorOutputter::invalid_request(const std::string &function, const int line)

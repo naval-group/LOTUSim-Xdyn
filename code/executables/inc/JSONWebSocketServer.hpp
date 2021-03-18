@@ -9,12 +9,12 @@
 #include <cstdio>
 #include <csignal>
 #include <memory>
-
+#include <boost/algorithm/string/replace.hpp>
 #include <ssc/websocket.hpp>
 #include <ssc/macros.hpp>
 
 #include "JSONSerializer.hpp"
-#include "JsonWebsocketErrorOutputter.hpp"
+#include "ErrorOutputter.hpp"
 
 volatile sig_atomic_t stop;
 
@@ -69,7 +69,7 @@ class JSONWebSocketServer
         class JSONHandler : public ssc::websocket::MessageHandler
         {
             public:
-                JSONHandler(const ServiceT& simserver, const bool verbose_) : sim_server(simserver), verbose(verbose_)
+                JSONHandler(const ServiceT& simserver, const bool verbose_) : sim_server(simserver), verbose(verbose_), error_outputter()
                 {
                 }
                 virtual ~JSONHandler()
@@ -78,7 +78,6 @@ class JSONWebSocketServer
 
                 void operator()(const ssc::websocket::Message& msg)
                 {
-                    JsonWebsocketErrorOutputter error_outputter(msg);
                     const std::string input_json = msg.get_payload();
                     if(verbose)
                     {
@@ -95,11 +94,21 @@ class JSONWebSocketServer
                         msg.send_text(output_json);
                     };
                     error_outputter.run_and_report_errors(f);
+                    if (error_outputter.get_status() != ErrorOutputter::Status::OK)
+                    {
+                        msg.send_text(replace_newlines_by_spaces(std::string("{\"error\": \"") + error_outputter.get_message() + "\"}"));
+                    }
                 }
 
             private:
+                std::string replace_newlines_by_spaces(std::string str)
+                {
+                    boost::replace_all(str, "\n", " ");
+                    return str;
+                }
                 ServiceT sim_server;
                 const bool verbose;
+                ErrorOutputter error_outputter;
         };
 
         JSONHandler handler;

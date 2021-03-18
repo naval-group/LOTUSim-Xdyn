@@ -14,7 +14,6 @@
 #include "XdynForCS.hpp"
 #include "ErrorOutputter.hpp"
 #include "gRPCChecks.hpp"
-#include <memory>
 
 template <typename Request> grpc::Status check_states_size(ErrorOutputter& error, const Request* request);
 template <> grpc::Status check_states_size<CosimulationRequestEuler>(ErrorOutputter& error, const CosimulationRequestEuler* request);
@@ -25,7 +24,7 @@ grpc::Status to_grpc(grpc::ServerContext* context, const std::vector<YamlState>&
 
 class CosimulationServiceImpl final : public Cosimulation::Service {
     public:
-        explicit CosimulationServiceImpl(const XdynForCS& simserver, std::shared_ptr<ErrorOutputter>& outputter);
+        explicit CosimulationServiceImpl(const XdynForCS& simserver, ErrorOutputter& outputter);
         grpc::Status step_quaternion(grpc::ServerContext* context, const CosimulationRequestQuaternion* request, CosimulationResponse* response) override;
         grpc::Status step_euler_321(grpc::ServerContext* context, const CosimulationRequestEuler* request, CosimulationResponse* response) override;
 
@@ -35,7 +34,7 @@ class CosimulationServiceImpl final : public Cosimulation::Service {
                 const Request* request,
                 CosimulationResponse* response)
         {
-            const grpc::Status precond = check_states_size(*error_outputter, request);
+            const grpc::Status precond = check_states_size(error_outputter, request);
             if (not precond.ok())
             {
                 return precond;
@@ -48,11 +47,11 @@ class CosimulationServiceImpl final : public Cosimulation::Service {
                     output = simserver.handle(inputs);
                     run_status = to_grpc(context, output, response);
                 };
-            error_outputter->run_and_report_errors(f);
-            return to_gRPC_status(*error_outputter);
+            error_outputter.run_and_report_errors(f);
+            return to_gRPC_status(error_outputter);
         }
         XdynForCS simserver;
-        std::shared_ptr<ErrorOutputter> error_outputter;
+        ErrorOutputter& error_outputter;
 };
 
 #endif /* EXECUTABLES_INC_XDYNFORCSGRPC_HPP_ */

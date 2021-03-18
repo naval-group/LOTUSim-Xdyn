@@ -5,8 +5,7 @@
 #include "gRPCProtoBufServer.hpp"
 #include "ModelExchangeServiceImpl.hpp"
 #include "JSONWebSocketServer.hpp"
-#include "gRPCErrorOutputter.hpp"
-#include "ConsoleErrorOutputter.hpp"
+#include "ErrorOutputter.hpp"
 
 #include <ssc/text_file_reader.hpp>
 #include <ssc/check_ssc_version.hpp>
@@ -28,7 +27,7 @@ void start_grpc_server(const XdynForMECommandLineArguments& input_data)
     const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_filenames);
     const auto yaml = yaml_reader.get_contents();
     XdynForME xdyn(yaml);
-    std::shared_ptr<ErrorOutputter> error_outputter(new gRPCErrorOutputter());
+    ErrorOutputter error_outputter;
     std::shared_ptr<grpc::Service> handler(new ModelExchangeServiceImpl(xdyn, error_outputter));
     gRPCProtoBufServer server(handler);
     server.start(input_data.port);
@@ -39,7 +38,7 @@ int main(int argc, char** argv)
     XdynForMECommandLineArguments input_data;
     if (argc==1) return fill_input_or_display_help(argv[0], input_data);
     int error = 0;
-    ConsoleErrorOutputter error_outputter;
+    ErrorOutputter error_outputter;
     error_outputter.run_and_report_errors([&error,&argc,&argv,&input_data]{error = get_input_data(argc, argv, input_data);});
     if (error)
     {
@@ -65,6 +64,10 @@ int main(int argc, char** argv)
     else
     {
         run();
+    }
+    if (error_outputter.get_status() != ErrorOutputter::Status::OK)
+    {
+        std::cerr << error_outputter.get_message() << std::endl;
     }
     google::protobuf::ShutdownProtobufLibrary();
     return 0;

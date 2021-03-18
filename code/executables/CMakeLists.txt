@@ -113,7 +113,6 @@ ADD_EXECUTABLE(xdyn
         src/build_observers_description.cpp
         src/XdynCommandLineArguments.cpp
         src/ErrorOutputter.cpp
-        src/ConsoleErrorOutputter.cpp
         src/xdyn.cpp
         )
 
@@ -186,7 +185,6 @@ ADD_EXECUTABLE(gz
         src/parse_XdynCommandLineArguments.cpp
         src/XdynCommandLineArguments.cpp
         src/ErrorOutputter.cpp
-        src/ConsoleErrorOutputter.cpp
         src/build_observers_description.cpp
         )
 
@@ -226,9 +224,6 @@ ADD_EXECUTABLE(xdyn-for-cs
         src/CosimulationServiceImpl.cpp
         src/ErrorOutputter.cpp
         src/gRPCChecks.cpp
-        src/ConsoleErrorOutputter.cpp
-        src/gRPCErrorOutputter.cpp
-        src/JsonWebsocketErrorOutputter.cpp
         "${cosimulation_proto_srcs}"
         "${cosimulation_grpc_srcs}"
         )
@@ -250,9 +245,6 @@ ADD_EXECUTABLE(xdyn-for-me
         src/ModelExchangeServiceImpl.cpp
         src/ErrorOutputter.cpp
         src/gRPCChecks.cpp
-        src/ConsoleErrorOutputter.cpp
-        src/gRPCErrorOutputter.cpp
-        src/JsonWebsocketErrorOutputter.cpp
         "${model_exchange_proto_srcs}"
         "${model_exchange_grpc_srcs}"
         )

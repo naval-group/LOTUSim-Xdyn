@@ -34,9 +34,7 @@ class ErrorOutputter
 
       private:
           std::stringstream ss;
-          
           Status status;
-          virtual void output() const = 0;
 
 };
 

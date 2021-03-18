@@ -7,7 +7,6 @@
 
 #ifndef EXECUTABLES_INC_MODELEXCHANGESERVICEIMPL_HPP_
 #define EXECUTABLES_INC_MODELEXCHANGESERVICEIMPL_HPP_
-#include <memory>
 
 #include <grpcpp/grpcpp.h>
 #include "model_exchange.grpc.pb.h"
@@ -28,7 +27,7 @@ template <> grpc::Status check_states_size<ModelExchangeRequestQuaternion>(Error
  */
 class ModelExchangeServiceImpl final : public ModelExchange::Service {
     public:
-        explicit ModelExchangeServiceImpl(const XdynForME& xdyn, std::shared_ptr<ErrorOutputter>& error_outputter);
+        explicit ModelExchangeServiceImpl(const XdynForME& xdyn, ErrorOutputter& error_outputter);
         grpc::Status dx_dt_quaternion(grpc::ServerContext* context, const ModelExchangeRequestQuaternion* request, ModelExchangeResponse* response) override;
         grpc::Status dx_dt_euler_321(grpc::ServerContext* context, const ModelExchangeRequestEuler* request, ModelExchangeResponse* response) override;
 
@@ -38,7 +37,7 @@ class ModelExchangeServiceImpl final : public ModelExchange::Service {
                 const Request* request,
                 ModelExchangeResponse* response)
         {
-            const grpc::Status precond = check_states_size(*error_outputter, request);
+            const grpc::Status precond = check_states_size(error_outputter, request);
             if (not precond.ok())
             {
                 return precond;
@@ -51,11 +50,11 @@ class ModelExchangeServiceImpl final : public ModelExchange::Service {
                     output = simserver.handle(inputs);
                     run_status = to_grpc(context, output, response);
                 };
-            error_outputter->run_and_report_errors(f);
-            return to_gRPC_status(*error_outputter);
+            error_outputter.run_and_report_errors(f);
+            return to_gRPC_status(error_outputter);
         }
         XdynForME simserver;
-        std::shared_ptr<ErrorOutputter>& error_outputter;
+        ErrorOutputter& error_outputter;
 };
 
 #endif /* EXECUTABLES_INC_MODELEXCHANGESERVICEIMPL_HPP_ */

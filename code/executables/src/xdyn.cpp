@@ -28,7 +28,7 @@
 #include "XdynCommandLineArguments.hpp"
 
 #include <ssc/solver.hpp>
-#include "ConsoleErrorOutputter.hpp"
+#include "ErrorOutputter.hpp"
 
 CHECK_SSC_VERSION(8,0)
 
@@ -168,7 +168,7 @@ int main(int argc, char** argv)
 
     XdynCommandLineArguments input_data;
     int error = 0;
-    ConsoleErrorOutputter error_outputter;
+    ErrorOutputter error_outputter;
     try
     {
         if (argc==1) return fill_input_or_display_help(argv[0], input_data);
@@ -192,6 +192,10 @@ int main(int argc, char** argv)
         catch (const std::exception& e)
         {
             error_outputter.internal_error(e.what());
+            if (error_outputter.get_status() != ErrorOutputter::Status::OK)
+            {
+                std::cerr << error_outputter.get_message() << std::endl;
+            }
             return -1;
         }
     }
