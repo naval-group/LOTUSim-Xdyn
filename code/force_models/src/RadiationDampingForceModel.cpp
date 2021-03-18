@@ -111,7 +111,8 @@ class RadiationDampingForceModel::Impl
         Impl(const TR1(shared_ptr)<HDBParser>& parser, const YamlRadiationDamping& yaml) : hdb{parser}, builder(RadiationDampingBuilder(yaml.type_of_quadrature_for_convolution, yaml.type_of_quadrature_for_cos_transform)),
         A(), Ka(), Kb(), omega(parser->get_angular_frequencies()), taus(),
         n(yaml.nb_of_points_for_retardation_function_discretization), Tmin(yaml.tau_min), Tmax(yaml.tau_max),
-        H0(yaml.calculation_point_in_body_frame.x,yaml.calculation_point_in_body_frame.y,yaml.calculation_point_in_body_frame.y), forward_speed_correction(yaml.forward_speed_correction)
+        H0(yaml.calculation_point_in_body_frame.x,yaml.calculation_point_in_body_frame.y,yaml.calculation_point_in_body_frame.y),
+        remove_constant_speed(yaml.remove_constant_speed), forward_speed_correction(yaml.forward_speed_correction)
         {
             CSVWriter omega_writer(std::cerr, "omega", omega);
             taus = builder.build_regular_intervals(Tmin,Tmax,n);
@@ -232,10 +233,21 @@ class RadiationDampingForceModel::Impl
             if(his.get_duration() >= Tmin)
             {
                 // Removing the average velocity to get only the oscillation velocity
-                std::function<double(double)> reverse_history = [&his, &average_velocities, j](double tau)
-                    {
-                        return his(tau) - average_velocities[j];
-                    };
+                std::function<double(double)> reverse_history;
+                if (remove_constant_speed)
+                {
+                    reverse_history = [&his, &average_velocities, j](double tau)
+                        {
+                            return his(tau) - average_velocities[j];
+                        };
+                }
+                else
+                {
+                    reverse_history = [&his](double tau)
+                        {
+                            return his(tau);
+                        };
+                }
                 // Integrate up to Tmax if possible, but never exceed the history length
                 return builder.convolution(reverse_history, get_K(i, j, average_velocities), Tmin, std::min(Tmax, his.get_duration()));
             }
@@ -302,7 +314,16 @@ class RadiationDampingForceModel::Impl
 
             if (forward_speed_correction)
             {
-                W += A*get_Ls(average_velocities)*get_oscillation_velocities(states, average_velocities);
+                if (remove_constant_speed)
+                {
+                    W += A*get_Ls(average_velocities)*get_oscillation_velocities(states, average_velocities);
+                }
+                else
+                {
+                    Eigen::Matrix<double, 6, 1> velocities;
+                    velocities << states.u(), states.v(), states.w(), states.p(), states.q(), states.r();
+                    W += A*get_Ls(average_velocities)*velocities;
+                }
             }
 
             return Wrench(H, states.name, W);
@@ -326,6 +347,7 @@ class RadiationDampingForceModel::Impl
         double Tmin;
         double Tmax;
         Eigen::Vector3d H0;
+        bool remove_constant_speed;
         bool forward_speed_correction;
 };
 
@@ -385,6 +407,10 @@ RadiationDampingForceModel::Input RadiationDampingForceModel::parse(const std::s
     ssc::yaml_parser::parse_uv(node["tau max"], input.tau_max);
     node["output Br and K"] >> input.output_Br_and_K;
     node["calculation point in body frame"] >> input.calculation_point_in_body_frame;
+    if (node.FindValue("remove constant speed"))
+    {
+        node["remove constant speed"] >> input.remove_constant_speed;
+    }
     if (node.FindValue("forward speed correction"))
     {
         node["forward speed correction"] >> input.forward_speed_correction;

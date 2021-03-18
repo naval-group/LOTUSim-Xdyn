@@ -27,6 +27,7 @@ struct YamlRadiationDamping
     double              tau_max;                                              //!< Upper bound of the convolution integral, to calculate Fr
     bool                output_Br_and_K;                                      //!< Should the program output
     YamlCoordinates     calculation_point_in_body_frame;                      //!< Where were the damping matrices (read from the HDB file) computed?
+    bool                remove_constant_speed;                                //!< Should the constant (mean) velocity be subtracted from the total velocity before in this model
     bool                forward_speed_correction;                             //!< Should a forward speed correction be applied (if the HDB results are at zero forward speed)
 };
 

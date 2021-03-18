@@ -169,6 +169,7 @@ TEST_F(RadiationDampingForceModelTest, results_are_zero_for_constant_velocity)
     RadiationDampingForceModel::Input input;
     input.hdb = get_hdb_data(yaml);
     input.yaml = yaml;
+    input.yaml.remove_constant_speed = true;
     const EnvironmentAndFrames env;
     const std::string body_name = a.random<std::string>();
     RadiationDampingForceModel F(input, body_name, env);
@@ -211,6 +212,7 @@ TEST_F(RadiationDampingForceModelTest, velocity_offset_should_not_change_the_res
     RadiationDampingForceModel::Input input;
     input.hdb = get_hdb_data(yaml);
     input.yaml = yaml;
+    input.yaml.remove_constant_speed = true;
     const EnvironmentAndFrames env;
     const std::string body_name = a.random<std::string>();
     RadiationDampingForceModel F(input, body_name, env);
