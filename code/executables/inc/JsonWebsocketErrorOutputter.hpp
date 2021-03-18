@@ -7,9 +7,9 @@
 class JsonWebsocketErrorOutputter : public ErrorOutputter
 {
     public:
+        JsonWebsocketErrorOutputter() = delete;
         JsonWebsocketErrorOutputter(const ssc::websocket::Message& msg);
     private:
-        JsonWebsocketErrorOutputter() = delete;
         void output() const;
         ssc::websocket::Message msg;
 };
