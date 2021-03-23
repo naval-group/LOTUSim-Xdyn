@@ -77,6 +77,7 @@ ADD_SUBDIRECTORY(parser_extensions)
 ADD_SUBDIRECTORY(observers_and_api)
 ADD_SUBDIRECTORY(gz_curves)
 ADD_SUBDIRECTORY(executables)
+ADD_SUBDIRECTORY(fmi)
 
 IF (WIN32)
     SET(STATICORSHARED STATIC)
@@ -93,6 +94,7 @@ ADD_LIBRARY(${PROJECT_NAME} ${STATICORSHARED}
         $<TARGET_OBJECTS:external_file_formats>
         $<TARGET_OBJECTS:mesh>
         $<TARGET_OBJECTS:yaml_parser>
+        $<TARGET_OBJECTS:fmi_simulator>
         $<TARGET_OBJECTS:external_data_structures>
         $<TARGET_OBJECTS:hdb_interpolators>
         $<TARGET_OBJECTS:interface_hdf5>
@@ -152,6 +154,7 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:interface_hdf5_tests>
         $<TARGET_OBJECTS:observers_and_api_tests>
         $<TARGET_OBJECTS:gz_curves_tests>
+        $<TARGET_OBJECTS:fmi_simulator_tests>
         $<TARGET_OBJECTS:grpc_tests>
         )
 

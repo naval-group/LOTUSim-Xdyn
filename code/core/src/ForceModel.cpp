@@ -188,3 +188,9 @@ bool ForceModel::is_a_surface_force_model() const
 void ForceModel::extra_observations(Observer&) const
 {
 }
+
+
+std::vector<std::string> ForceModel::get_command_names() const
+{
+    return commands;
+}

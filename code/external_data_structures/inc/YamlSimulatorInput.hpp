@@ -11,7 +11,6 @@
 #include "YamlRotation.hpp"
 #include "YamlModel.hpp"
 #include "YamlBody.hpp"
-#include "YamlPoint.hpp"
 #include "YamlEnvironmentalConstants.hpp"
 #include "YamlCommands.hpp"
 
