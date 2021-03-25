@@ -54,7 +54,7 @@ PIDController::compute_command (const double setpoint,
     double derivative_term = 0;
 
     // Proportional term
-    const double proportionalTerm = yaml.Kp * error;
+    const double proportional_term = yaml.Kp * error;
 
     if (initialized && next_meeting_point <= t)
     {
@@ -78,7 +78,7 @@ PIDController::compute_command (const double setpoint,
     // Store error for next time step
     previous_error = error;
 
-    return proportionalTerm + integral_term + derivative_term;
+    return proportional_term + integral_term + derivative_term;
 }
 
 double
