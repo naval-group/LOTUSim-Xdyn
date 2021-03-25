@@ -51,7 +51,7 @@ PIDController::compute_command (const double setpoint,
     const double error = setpoint - measured_value;
     const double previous_t = get_previous_t ();
     const double next_meeting_point = get_current_t ();
-    double derivativeTerm = 0;
+    double derivative_term = 0;
 
     // Proportional term
     const double proportionalTerm = yaml.Kp * error;
@@ -63,7 +63,7 @@ PIDController::compute_command (const double setpoint,
                         + yaml.Ki * error * (next_meeting_point - previous_t);
 
         // Derivative term
-        derivativeTerm = yaml.Kd * (error - previous_error)
+        derivative_term = yaml.Kd * (error - previous_error)
                          / (next_meeting_point - previous_t);
 
         ++i_previous_t;
@@ -78,7 +78,7 @@ PIDController::compute_command (const double setpoint,
     // Store error for next time step
     previous_error = error;
 
-    return proportionalTerm + integral_term + derivativeTerm;
+    return proportionalTerm + integral_term + derivative_term;
 }
 
 double
