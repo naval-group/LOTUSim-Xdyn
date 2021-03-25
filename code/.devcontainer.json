@@ -1,0 +1,37 @@
+{
+    "dockerFile": "Dockerfile.vscode.devcontainer",
+    "name": "C++",
+    "extensions": [
+        "ms-vscode.cpptools",
+        "eamodio.gitlens",
+        "twxs.cmake",
+        "cschlosser.doxdocgen",
+        "xaver.clang-format"
+    ],
+    "settings": {
+        "editor.rulers": [
+            100
+        ],
+        "editor.formatOnSave": false,
+        "editor.tabSize": 4,
+        "editor.detectIndentation": true,
+        "editor.renderWhitespace": "all",
+        "terminal.integrated.shell.linux": "/bin/bash",
+        "ms-vscode.cpptools.includePath": [
+            "${workspaceFolder}/**",
+            "/opt/googletest/googlemock/include/**",
+            "/opt/boost/include/**",
+            "/opt/googletest/googletest/include/**",
+            "/opt/ssc/include/**",
+            "/opt/ssc/include/ssc/**",
+            "/opt/eigen/**"
+        ],
+        "ms-vscode.cpptools.browse.path": ["/opt/eigen/**"],
+        "doxdocgen.generic.useGitUserEmail": true,
+        "doxdocgen.generic.useGitUserName": true,
+        "clang-format.executable": "/usr/bin/clang-format",
+        "editor.defaultFormatter": "xaver.clang-format",
+        "C_Cpp.errorSquiggles": "Enabled",
+        "C_Cpp.exclusionPolicy": "checkFilesAndFolders",
+    }
+}
