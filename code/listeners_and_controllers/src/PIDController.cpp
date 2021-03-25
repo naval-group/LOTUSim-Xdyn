@@ -19,9 +19,6 @@ PIDController::PIDController(const double dt,
 {
 }
 
-PIDController::~PIDController()
-{
-}
 
 PIDController::Yaml::Yaml(const std::string& yaml) : Kp(), Ki(), Kd()
 {

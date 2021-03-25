@@ -38,7 +38,6 @@ class PIDController : public Controller
                       const std::map<std::string, double>& states,
                       const std::string& yaml
                       );
-        ~PIDController();
 
         const Yaml yaml; //!< Controller-specific yaml
 
