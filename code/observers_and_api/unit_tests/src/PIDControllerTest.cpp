@@ -194,7 +194,7 @@ TEST_F(PIDControllerTest, can_compute_PID_commands_several_times_at_first_time_s
     controller.callback(scheduler, &sys);
     ASSERT_NEAR(first_expected_command, sys.get_input_value("propeller(rpm)"), 1e-6);
 
-    // A time step before the next meeting point should send back the same result
+    // A time step before the next time event should send back the same result
     scheduler.add_time_event(tstart + dt / 2);
     scheduler.advance_to_next_time_event();
     ASSERT_EQ(tstart + dt / 2, scheduler.get_time());

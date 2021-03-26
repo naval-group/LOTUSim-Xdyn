@@ -124,7 +124,7 @@ namespace ssc
 
             bool is_new_time_event(const double new_t) const
             {
-                for (double t : scheduled_time_events)
+                for (const double t : scheduled_time_events)
                 {
                     if (std::abs(t - new_t) <= tolerance)
                     {

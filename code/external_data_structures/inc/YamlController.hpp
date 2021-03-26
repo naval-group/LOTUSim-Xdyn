@@ -22,7 +22,7 @@ struct YamlController
     std::string type;                      //!< Type of the controller (PID, gRPC)
     double dt;                             //!< Time step of the discrete system
     std::string input;                     //!< Name of the input needed by the controller as setpoint
-    std::map<std::string, double> states;  //!< States used by the controller as measurement (e.g. {{'u',1},{'v',-3}} for 'u - 3v')
+    std::map<std::string, double> states;  //!< Continuous states used by the controller (e.g. {{'u',1},{'v',-3}} for 'u - 3v')
     std::string rest_of_the_yaml;          //!< All other fields that are spectific to the controller type
 };
 

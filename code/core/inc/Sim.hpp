@@ -61,9 +61,7 @@ class Sim : public ssc::solver::ContinuousSystem
 
         void set_command_listener(const std::map<std::string, double>& new_commands);
 
-        /** \brief Sets the value of the given command in the datasource
-         * 
-         * Used by controllers to update the datasource values.
+        /** \brief Sets the value of one of the system's discrete states. In our case, these discrete states are the command values calculated by the controllers. This method is used by the controllers to store the updated command values in the DataSource, for use by controlled forces (e.g. propellers).
          */
         void set_discrete_state(const std::string &state_name, const double value);
         /** \brief Gets the value of the given input from the datasource

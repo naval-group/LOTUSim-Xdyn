@@ -27,9 +27,9 @@ class PIDController : public Controller
         {
             Yaml(const std::string& yaml);
             /* PID Controller gains */
-            double Kp;
-            double Ki;
-            double Kd;
+            double Kp; //!< Proportional gain
+            double Ki; //!< Integral gain
+            double Kd; //!< Derivative gain
         };
 
         PIDController(const double dt,
