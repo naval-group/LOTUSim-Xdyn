@@ -11,7 +11,7 @@
 #include "InvalidInputException.hpp"
 
 void check_rotations(const YamlRotation& input);
-void check_controllers_and_commands(const std::vector<YamlController>& controllers_input, const std::vector<YamlCommands>& commands_input);
+void check_controllers_and_commands(const std::vector<YamlController>& controllers_input, const std::vector<YamlTimeSeries>& commands_input);
 void throw_if_any_errors_were_detected(const std::string& caller, const std::stringstream& ss);
 bool is_an_axis(const std::string& name);
 
@@ -67,13 +67,13 @@ void check_rotations(const YamlRotation& input)
     throw_if_any_errors_were_detected(__PRETTY_FUNCTION__, errors);
 }
 
-void check_controllers_and_commands(const std::vector<YamlController>& controllers_input, const std::vector<YamlCommands>& commands_input)
+void check_controllers_and_commands(const std::vector<YamlController>& controllers_input, const std::vector<YamlTimeSeries>& commands_input)
 {
     std::stringstream errors;
 
     for (const YamlController controller : controllers_input)
     {
-        for (const YamlCommands commands : commands_input)
+        for (const YamlTimeSeries commands : commands_input)
         {
             if ((controller.name == commands.name) and (commands.commands.count(controller.output) > 0))
             {

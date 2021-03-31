@@ -11,7 +11,7 @@
 #include <ssc/yaml_parser.hpp>
 #include "external_data_structures_parsers.hpp"
 #include "parse_controllers.hpp"
-#include "parse_commands.hpp"
+#include "parse_time_series.hpp"
 
 SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(data)
 {

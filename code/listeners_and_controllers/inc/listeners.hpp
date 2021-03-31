@@ -11,20 +11,20 @@
 #include <ssc/data_source.hpp>
 #include "PIDController.hpp"
 #include "Scheduler.hpp"
-#include "YamlCommands.hpp"
+#include "YamlTimeSeries.hpp"
 #include "YamlController.hpp"
 
 /**  \brief Reads data from YAML & builds an interpolation table per command.
   *  \returns DataSource used to retrieve the commands of the controlled forces models at each instant
   *  \snippet listeners_and_controllers/unit_tests/src/listenersTest.cpp listenersTest listen_to_file_example
   */
-ssc::data_source::DataSource make_command_listener(const std::vector<YamlCommands>& commands);
+ssc::data_source::DataSource make_command_listener(const std::vector<YamlTimeSeries>& commands);
 
 /**  \brief Reads data from YAML & builds an interpolation table per setpoint.
   *  \returns DataSource used to retrieve the setpoints of the controlled forces models at each instant
   *  \snippet listeners_and_controllers/unit_tests/src/listenersTest.cpp listenersTest listen_to_file_example
   */
-void add_setpoints_listener(ssc::data_source::DataSource& ds, const std::vector<YamlCommands>& setpoints);
+void add_setpoints_listener(ssc::data_source::DataSource& ds, const std::vector<YamlTimeSeries>& setpoints);
 
 /**  \brief Reads data from YAML & returns the corresponding controllers.
   *  \snippet listeners_and_controllers/unit_tests/src/controllersTest.cpp controllersTest listen_to_file_example

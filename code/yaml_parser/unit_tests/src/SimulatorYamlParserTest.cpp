@@ -13,8 +13,8 @@ using namespace testing; // So we can use 'ElementsAre' unqualified
 #include "yaml_data.hpp"
 #include "SimulatorYamlParser.hpp"
 #include "InvalidInputException.hpp"
-#include "parse_commands.hpp"
 #include "parse_controllers.hpp"
+#include "parse_time_series.hpp"
 
 const YamlSimulatorInput SimulatorYamlParserTest::yaml = SimulatorYamlParser(test_data::full_example_with_propulsion()).parse();
 const YamlSimulatorInput SimulatorYamlParserTest::old_yaml = SimulatorYamlParser(test_data::full_example_with_propulsion_and_old_key_name()).parse();

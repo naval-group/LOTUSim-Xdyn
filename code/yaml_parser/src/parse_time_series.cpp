@@ -1,16 +1,16 @@
 /*
- * parse_commands.cpp
+ * parse_time_series.cpp
  *
  *  Created on: Oct 22, 2014
  *      Author: cady
  */
 
-#include "parse_commands.hpp"
+#include "parse_time_series.hpp"
 #include "InvalidInputException.hpp"
 
 #include <ssc/yaml_parser.hpp>
 
-void operator >> (const YAML::Node& node, YamlCommands& c)
+void operator >> (const YAML::Node& node, YamlTimeSeries& c)
 {
     node["name"] >> c.name;
     node["t"] >> c.t;
@@ -28,30 +28,30 @@ void operator >> (const YAML::Node& node, YamlCommands& c)
             }
             catch(const YAML::Exception& e)
             {
-                THROW(__PRETTY_FUNCTION__, InvalidInputException, "Something is wrong with the YAML, more specifically in the 'commands' section. When parsing the '" << key << "' values: " << e.msg);
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "Something is wrong with the YAML, more specifically in the 'commands' or 'setpoints' section. When parsing the '" << key << "' values: " << e.msg);
             }
         }
     }
 }
 
-std::vector<YamlCommands> parse_command_yaml(const std::string& yaml)
+std::vector<YamlTimeSeries> parse_command_yaml(const std::string& yaml)
 {
     std::stringstream stream(yaml);
     YAML::Parser parser(stream);
     YAML::Node node;
     parser.GetNextDocument(node);
-    std::vector<YamlCommands> ret;
+    std::vector<YamlTimeSeries> ret;
     node["commands"] >> ret;
     return ret;
 }
 
-std::vector<YamlCommands> parse_setpoint_yaml(const std::string& yaml)
+std::vector<YamlTimeSeries> parse_setpoint_yaml(const std::string& yaml)
 {
     std::stringstream stream(yaml);
     YAML::Parser parser(stream);
     YAML::Node node;
     parser.GetNextDocument(node);
-    std::vector<YamlCommands> ret;
+    std::vector<YamlTimeSeries> ret;
     node["setpoints"] >> ret;
     return ret;
 }

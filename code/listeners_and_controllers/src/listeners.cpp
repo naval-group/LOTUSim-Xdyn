@@ -8,7 +8,7 @@
 #include "InterpolationModule.hpp"
 #include "InvalidInputException.hpp"
 #include "listeners.hpp"
-#include "YamlCommands.hpp"
+#include "YamlTimeSeries.hpp"
 
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
@@ -31,8 +31,8 @@ std::string namify(const std::string& command_name, const std::string& model_nam
     return model_name + "(" + command_name + ")";
 }
 
-void add(std::vector<YamlCommands>::const_iterator& that_command, ssc::data_source::DataSource& ds);
-void add(std::vector<YamlCommands>::const_iterator& that_command, ssc::data_source::DataSource& ds)
+void add(std::vector<YamlTimeSeries>::const_iterator& that_command, ssc::data_source::DataSource& ds);
+void add(std::vector<YamlTimeSeries>::const_iterator& that_command, ssc::data_source::DataSource& ds)
 {
     ds.check_in(__PRETTY_FUNCTION__);
     const auto t = that_command->t;
@@ -60,7 +60,7 @@ void add(std::vector<YamlCommands>::const_iterator& that_command, ssc::data_sour
     ds.check_out();
 }
 
-ssc::data_source::DataSource make_command_listener(const std::vector<YamlCommands>& commands //!< Parsed YAML commands
+ssc::data_source::DataSource make_command_listener(const std::vector<YamlTimeSeries>& commands //!< Parsed YAML commands
                        )
 {
     ssc::data_source::DataSource ds;
@@ -75,7 +75,7 @@ ssc::data_source::DataSource make_command_listener(const std::vector<YamlCommand
 
 
 void add_setpoints_listener(ssc::data_source::DataSource& ds,
-                           const std::vector<YamlCommands>& setpoints //!< Parsed YAML setpoints
+                           const std::vector<YamlTimeSeries>& setpoints //!< Parsed YAML setpoints
                            )
 {
     ds.check_in(__PRETTY_FUNCTION__);
