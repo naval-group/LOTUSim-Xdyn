@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+/* This service defines a controller interface that can be used by xdyn, a 6-degrees of freedom
+tim-domain ship simulator (cf. https://gitlab.com/sirehna_naval_group/xdyn)
+
+Before the first time step (during initialization), the controller's set_parameters function
+will be called to set the controller's constant parameters (e.g. gains but could be anything).
+
+
+The controller's responsibility is to compute commands based on ship states, their derivatives
+and constant parameters. The controller is discrete: at each call (the get_commands_*
+functions) it must give the date at which it needs to be called back.
+
+*/
+
+service Controller
+{
+    // Initialize the controller with YAML parameters
+    rpc set_parameters(SetParametersRequest)                 returns (SetParametersResponse);
+    // Calculate the commands using quaternions instead of angles
+    rpc get_commands_quaternion(ControllerRequestQuaternion) returns (ControllerResponse);
+    // Calculate the commands using angles in Rned2body = Rz(ψ).Ry(θ).Rx(ϕ) rotation convention
+    rpc get_commands_euler_321(ControllerRequestEuler)       returns (ControllerResponse);
+}
+
+message SetParametersRequest
+{
+    string parameters = 1; // YAML string containing the parameters to set for this particular model. Extracted verbatim from xdyn's YAML file
+    double t0         = 2; // Date of the beginning of the simulation (first timestep) in seconds
+}
+
+message SetParametersResponse
+{
+    double date_of_first_callback  = 1; // Date at which the controller should be called for the first time. Will often be equal to just t0.
+    repeated string setpoint_names = 2; // Name of the controller inputs (setpoints) which xdyn must supply. 
+}
+
+message ControllerRequestQuaternion
+{
+    ControllerStatesQuaternion states     = 1; // Ship states
+    ControllerStatesQuaternion dstates_dt = 2; // Ship state derivatives (at the previous time step)
+    repeated double            setpoints  = 3; // Controller inputs (setpoints). Must have the same size as setpoint_names in SetParametersResponse.
+}
+
+message ControllerRequestEuler
+{
+    ControllerStatesEuler states     = 1; // Ship states history
+    ControllerStatesEuler dstates_dt = 2; // Ship state derivatives history
+    repeated double       setpoints  = 3; // Controller inputs (setpoints). Must have the same size as setpoint_names in SetParametersResponse.
+}
+
+message ControllerStatesQuaternion
+{
+    double t  = 1;  // Simulation time (in seconds).
+    double x  = 2;  // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double y  = 3;  // Projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double z  = 4;  // Projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double u  = 5;  // Projection on axis X of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    double v  = 6;  // Projection on axis Y of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    double w  = 7;  // Projection on axis Z of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    double p  = 8;  // Projection on axis X of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    double q  = 9;  // Projection on axis Y of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    double r  = 10; // Projection on axis Z of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    double qr = 11; // Real part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    double qi = 12; // First imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    double qj = 13; // Second imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    double qk = 14; // Third imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+}
+
+message ControllerStatesEuler
+{
+    double t     = 1;  // Simulation time (in seconds).
+    double x     = 2;  // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double y     = 3;  // Projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double z     = 4;  // Projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double u     = 5;  // Projection on axis X of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    double v     = 6;  // Projection on axis Y of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    double w     = 7;  // Projection on axis Z of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    double p     = 8;  // Projection on axis X of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    double q     = 9;  // Projection on axis Y of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    double r     = 10; // Projection on axis Z of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    double phi   = 11; // First Euler angle. Actual interpretation depends on rotation convention (and hence on the gRPC method called)
+    double theta = 12; // Second Euler angle. Actual interpretation depends on rotation convention (and hence on the gRPC method called)
+    double psi   = 13; // Third Euler angle. Actual interpretation depends on rotation convention (and hence on the gRPC method called)
+}
+
+message ControllerResponse
+{
+    map<string,float> commands = 1; // Commands computed by the controller
+    double next_call           = 2; // Date at which the solver should call the controller again
+}
+
