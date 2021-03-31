@@ -54,6 +54,6 @@ TEST_F(parse_controllersTest, example)
     ASSERT_EQ(0.5, controllers[2].dt);
     ASSERT_EQ("psi_co", controllers[2].setpoint);
     ASSERT_EQ(1, controllers[2].state_weights.size());
-    ASSERT_EQ(1, controllers[2].state_weights["psi_est"]);
+    ASSERT_EQ(1, controllers[2].state_weights["psi"]);
 //! [parse_controllersTest example]
 }

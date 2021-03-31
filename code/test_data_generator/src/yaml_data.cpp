@@ -2227,7 +2227,7 @@ std::string test_data::controllers()
           "    dt: 0.5\n"
           "    setpoint: psi_co\n"
           "    state_weights:\n"
-          "        psi_est: 1\n"
+          "        psi: 1\n"
           "    gains:\n"
           "        Kp: 0.52\n"
           "        Ki: 21.5\n"

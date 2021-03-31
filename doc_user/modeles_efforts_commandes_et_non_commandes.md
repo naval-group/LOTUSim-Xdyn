@@ -1044,7 +1044,7 @@ Les commandes des efforts commandés peuvent aussi être obtenues de manière dy
 Un contrôleur est un système permettant d'atteindre une valeur de consigne et de la maintenir malgré les perturbations externes.
 Il a besoin de deux entrées : une consigne et une mesure, qu'il compare pour calculer la commande.
 
-Le champ `controlers` (facultatif) à la racine du yaml permet de définir les paramètres permettant d'intégrer
+Le champ `controllers` (facultatif) à la racine du yaml permet de définir les paramètres permettant d'intégrer
 des contrôleurs à la simulation, qui vont calculer les commandes dont ont besoin les efforts commandés.
 
 Pour chaque commande à calculer :
@@ -1058,6 +1058,7 @@ Pour chaque commande à calculer :
 - La mesure est spécifiée dans le champ `state_weights`, par une formule linéaire permettant d'obtenir une valeur à
   partir des états du système lors de la simulation. On renseigne une liste de clefs/valeurs où les clefs
   correspondent au nom de l'état et les valeurs sont les coefficients. Un état non spécifié a pour coefficient 0.
+  Les noms d'états valides sont : `x`, `y`, `z`, `u`, `v`, `w`, `p`, `q`, `r`, `qr`, `qi`, `qj`, `qk`, `phi`, `theta` et `psi`.
   Par exemple, pour obtenir `x / 2 - y` :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}

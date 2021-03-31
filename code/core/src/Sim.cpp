@@ -322,7 +322,7 @@ double Sim::get_state_value(const std::string &name) const
     } else if (name == "psi") {
         return pimpl->bodies.front()->get_states().get_angles().psi;
     } else {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+        THROW(__PRETTY_FUNCTION__, InternalErrorException,
               "Something is wrong with a 'states' name: '" << name << "' is not a valid state. Examples of valid states: 'x', 'u', 'qr', 'psi', etc.."
               );
     }

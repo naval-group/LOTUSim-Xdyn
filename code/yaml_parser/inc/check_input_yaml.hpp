@@ -11,5 +11,6 @@
 #include "YamlSimulatorInput.hpp"
 
 YamlSimulatorInput check_input_yaml(const YamlSimulatorInput& input);
+void check_state_name(const std::string& state_name);
 
 #endif /* CHECK_INPUT_YAML_HPP_ */
