@@ -35,7 +35,7 @@ TEST_F(parse_controllersTest, example)
     ASSERT_EQ("rpm", controllers[0].output);
     ASSERT_EQ("PID", controllers[0].type);
     ASSERT_EQ(0.1, controllers[0].dt);
-    ASSERT_EQ("rpm_co", controllers[0].input);
+    ASSERT_EQ("rpm_co", controllers[0].setpoint);
     ASSERT_EQ(2, controllers[0].states.size());
     ASSERT_EQ(1, controllers[0].states["x"]);
     ASSERT_EQ(-1, controllers[0].states["y"]);
@@ -44,7 +44,7 @@ TEST_F(parse_controllersTest, example)
     ASSERT_EQ("P/D", controllers[1].output);
     ASSERT_EQ("gRPC", controllers[1].type);
     ASSERT_EQ(0.01, controllers[1].dt);
-    ASSERT_EQ("P/D", controllers[1].input);
+    ASSERT_EQ("P/D", controllers[1].setpoint);
     ASSERT_EQ(1, controllers[1].states.size());
     ASSERT_EQ(2, controllers[1].states["u"]);
 
@@ -52,7 +52,7 @@ TEST_F(parse_controllersTest, example)
     ASSERT_EQ("psi", controllers[2].output);
     ASSERT_EQ("PID", controllers[2].type);
     ASSERT_EQ(0.5, controllers[2].dt);
-    ASSERT_EQ("psi_co", controllers[2].input);
+    ASSERT_EQ("psi_co", controllers[2].setpoint);
     ASSERT_EQ(1, controllers[2].states.size());
     ASSERT_EQ(1, controllers[2].states["psi_est"]);
 //! [parse_controllersTest example]

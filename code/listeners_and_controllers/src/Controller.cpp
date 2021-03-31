@@ -10,11 +10,11 @@
 
 Controller::Controller(const double dt,
                        const std::string& output_name,
-                       const std::string& input_name,
+                       const std::string& setpoint_name,
                        const std::map<std::string, double>& states) :
                            ssc::solver::DiscreteSystem(dt),
                            output_name(output_name),
-                           input_name(input_name),
+                           setpoint_name(setpoint_name),
                            states(states)
 {
 }
@@ -36,7 +36,7 @@ void Controller::update_discrete_states(const double time, ssc::solver::Continuo
 
 double Controller::get_setpoint(const ssc::solver::ContinuousSystem* sys) const
 {
-    return sys->get_input_value(input_name);
+    return sys->get_input_value(setpoint_name);
 }
 
 double Controller::get_measured_value(const ssc::solver::ContinuousSystem* sys) const

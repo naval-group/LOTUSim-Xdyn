@@ -17,10 +17,10 @@
 std::vector<YamlCommands> parse_command_yaml(const std::string& yaml //!< YAML data
                                             );
 
-/**  \brief Parses the inputs for use by the controllers (for controlled forces).
-  *  \snippet simulator_yaml_parser/unit_tests/src/parse_inputsTest.cpp parse_inputsTest example
+/**  \brief Parses the setpoints for use by the controllers (for controlled forces).
+  *  \snippet simulator_yaml_parser/unit_tests/src/parse_setpointsTest.cpp parse_setpointsTest example
   */
-std::vector<YamlCommands> parse_input_yaml(const std::string& yaml //!< YAML data
+std::vector<YamlCommands> parse_setpoint_yaml(const std::string& yaml //!< YAML data
                                            );
 
 void operator >> (const YAML::Node& node, YamlCommands& c);

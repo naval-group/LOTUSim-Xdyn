@@ -1054,7 +1054,7 @@ Pour chaque commande à calculer :
 - Le champ `type` permet de choisir le type de contrôleur. Pour l'instant, seul le
   [régulateur `PID`](#r%C3%A9gulateur-pid) est implémenté.
 - Le pas de temps du contrôleur est renseigné dans le champ `dt`.
-- Le nom de la consigne du contrôleur est renseigné dans le champ `input`.
+- Le nom de la consigne du contrôleur est renseigné dans le champ `setpoint`.
 - La mesure est spécifiée dans le champ `states`, par une formule linéaire permettant d'obtenir une valeur à
   partir des états du système lors de la simulation. On renseigne une liste de clefs/valeurs où les clefs
   correspondent au nom de l'état et les valeurs sont les coefficients. Un état non spécifié a pour coefficient 0.
@@ -1078,7 +1078,7 @@ controllers:
     output: beta
     type: PID
     dt: 1
-    input: psi_co
+    setpoint: psi_co
     states:
       psi: 1
     gains:
@@ -1087,11 +1087,11 @@ controllers:
       Kd: -1
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Les valeurs des **mesures des contrôleurs** doivent être renseignées dans une nouvelle section `inputs`
+Les valeurs des **mesures des contrôleurs** doivent être renseignées dans une nouvelle section `setpoints`
 (facultative) à la racine du yaml, dont la syntaxe est identique à [celle des commandes](#syntaxe-des-commandes) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-inputs:
+setpoints:
     - name: port side propeller
       t: [0, 500, 800, 1000]
       psi_co: {unit: deg, values: [30, 40, 50, 60]}
@@ -1123,7 +1123,7 @@ controllers:
     output: beta
     type: PID
     dt: 1
-    input: psi_co
+    setpoint: psi_co
     states:
       psi: 1
     gains:

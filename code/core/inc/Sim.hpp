@@ -66,7 +66,7 @@ class Sim : public ssc::solver::ContinuousSystem
         void set_discrete_state(const std::string &state_name, const double value);
         /** \brief Gets the value of the given input from the datasource
          * 
-         * Used by controllers to get the inputs they need to compute a command.
+         * Used by controllers to get the inputs they need (setpoints or commands) to compute a command.
          */
         double get_input_value(const std::string &name) const;
         /** \brief Gets the value of a Sim state ("x", "u", "qr", "phi", ...)

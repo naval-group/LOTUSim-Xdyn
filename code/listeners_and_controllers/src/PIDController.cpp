@@ -9,10 +9,10 @@
 #include "InvalidInputException.hpp"
 
 PIDController::PIDController (const double dt, const std::string &output_name,
-                              const std::string &input_name,
+                              const std::string &setpoint_name,
                               const std::map<std::string, double> &states,
                               const std::string &yaml)
-    : Controller (dt, output_name, input_name, states), yaml (yaml), dt (dt),
+    : Controller (dt, output_name, setpoint_name, states), yaml (yaml), dt (dt),
       t_start (), i_previous_t (0), initialized (false), previous_error (),
       integral_term (0)
 {

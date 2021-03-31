@@ -238,7 +238,7 @@ TEST_F(PIDControllerTest, can_initialize_controllers)
     const double dt = 1;
     ssc::solver::Scheduler scheduler(tstart, 10, dt);
 
-    // initialize inputs
+    // initialize setpoints
     const double rpm_co = 0.45;
     const double pd_co = 0.5;
     sys.set_command_listener(std::map<std::string, double>({ { "t", tstart }, { "propeller(rpm_co)", rpm_co }, { "controller(P/D_co)", pd_co } }));
@@ -254,7 +254,7 @@ TEST_F(PIDControllerTest, can_initialize_controllers)
                    "    output: rpm\n"
                    "    type: PID\n"
                    "    dt: 0.15\n"
-                   "    input: rpm_co\n"
+                   "    setpoint: rpm_co\n"
                    "    states:\n"
                    "        u: 0.5\n"
                    "    gains:\n"
@@ -265,7 +265,7 @@ TEST_F(PIDControllerTest, can_initialize_controllers)
                    "    output: P/D\n"
                    "    type: PID\n"
                    "    dt: 0.5\n"
-                   "    input: P/D_co\n"
+                   "    setpoint: P/D_co\n"
                    "    states:\n"
                    "        u: 0\n"
                    "    gains:\n"

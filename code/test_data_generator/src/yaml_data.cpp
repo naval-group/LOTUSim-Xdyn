@@ -2183,10 +2183,10 @@ std::string test_data::bug_2961()
     return ss.str();
 }
 
-std::string test_data::inputs()
+std::string test_data::setpoints()
 {
     std::stringstream ss;
-    ss << "inputs:\n"
+    ss << "setpoints:\n"
           "  - name: propeller\n"
           "    t: [0,1,3,10]\n"
           "    rpm_co: {unit: rad/s, values: [3, 30, 30, 40]}\n"
@@ -2206,7 +2206,7 @@ std::string test_data::controllers()
           "    output: rpm\n"
           "    type: PID\n"
           "    dt: 0.1\n"
-          "    input: rpm_co\n"
+          "    setpoint: rpm_co\n"
           "    states:\n"
           "        x: 1\n"
           "        y: -1\n"
@@ -2218,14 +2218,14 @@ std::string test_data::controllers()
           "    output: P/D\n"
           "    type: gRPC\n"
           "    dt: 0.01\n"
-          "    input: P/D\n"
+          "    setpoint: P/D\n"
           "    states:\n"
           "        u: 2\n"
           "  - name: controller\n"
           "    output: psi\n"
           "    type: PID\n"
           "    dt: 0.5\n"
-          "    input: psi_co\n"
+          "    setpoint: psi_co\n"
           "    states:\n"
           "        psi_est: 1\n"
           "    gains:\n"
@@ -2369,7 +2369,7 @@ std::string test_data::dummy_controllers_and_commands_for_propulsion_and_resista
     using both controllers and commands.
     */
     std::stringstream ss;
-    ss << "inputs:\n"
+    ss << "setpoints:\n"
        << "  - name: propeller\n"
        << "    t: [0]\n"
        << "    rpm_co: {unit: rad/s, values: [10.4719755]}\n"
@@ -2378,7 +2378,7 @@ std::string test_data::dummy_controllers_and_commands_for_propulsion_and_resista
        << "    output: rpm\n"
        << "    type: PID\n"
        << "    dt: 10\n"
-       << "    input: rpm_co\n"
+       << "    setpoint: rpm_co\n"
        << "    states:\n"
        << "        x: 0\n"
        << "    gains:\n"
@@ -2603,7 +2603,7 @@ std::string test_data::heading_keeping_base()
 std::string test_data::heading_keeping_controllers()
 {
     std::stringstream ss;
-    ss << "inputs:\n"
+    ss << "setpoints:\n"
        << "    - name: PSPropRudd\n"
        << "      t: [0]\n"
        << "      psi_co: {unit: deg, values: [60]}\n"
@@ -2615,7 +2615,7 @@ std::string test_data::heading_keeping_controllers()
        << "      output: beta\n"
        << "      type: PID\n"
        << "      dt: 1\n"
-       << "      input: psi_co\n"
+       << "      setpoint: psi_co\n"
        << "      states:\n"
        << "        psi: 1\n"
        << "      gains:\n"
@@ -2626,7 +2626,7 @@ std::string test_data::heading_keeping_controllers()
        << "      output: beta\n"
        << "      type: PID\n"
        << "      dt: 1\n"
-       << "      input: psi_co\n"
+       << "      setpoint: psi_co\n"
        << "      states:\n"
        << "        psi: 1\n"
        << "      gains:\n"

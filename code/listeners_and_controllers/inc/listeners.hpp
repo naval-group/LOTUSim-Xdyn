@@ -20,11 +20,11 @@
   */
 ssc::data_source::DataSource make_command_listener(const std::vector<YamlCommands>& commands);
 
-/**  \brief Reads data from YAML & builds an interpolation table per input.
-  *  \returns DataSource used to retrieve the inputs of the controlled forces models at each instant
+/**  \brief Reads data from YAML & builds an interpolation table per setpoint.
+  *  \returns DataSource used to retrieve the setpoints of the controlled forces models at each instant
   *  \snippet listeners_and_controllers/unit_tests/src/listenersTest.cpp listenersTest listen_to_file_example
   */
-void add_inputs_listener(ssc::data_source::DataSource& ds, const std::vector<YamlCommands>& inputs);
+void add_setpoints_listener(ssc::data_source::DataSource& ds, const std::vector<YamlCommands>& setpoints);
 
 /**  \brief Reads data from YAML & returns the corresponding controllers.
   *  \snippet listeners_and_controllers/unit_tests/src/controllersTest.cpp controllersTest listen_to_file_example

@@ -469,14 +469,14 @@ TEST_F(SimulatorYamlParserTest, can_parse_controllers_and_commands_for_controlle
 {
     const YamlSimulatorInput yaml = SimulatorYamlParser(
         test_data::falling_ball_example() +
-        test_data::inputs() +
+        test_data::setpoints() +
         test_data::controllers() +
         test_data::controlled_forces()
     ).parse();
 
-    ASSERT_EQ(2, yaml.inputs.size());
-    ASSERT_EQ("propeller", yaml.inputs[0].name);
-    ASSERT_EQ("controller", yaml.inputs[1].name);
+    ASSERT_EQ(2, yaml.setpoints.size());
+    ASSERT_EQ("propeller", yaml.setpoints[0].name);
+    ASSERT_EQ("controller", yaml.setpoints[1].name);
 
     ASSERT_EQ(3, yaml.controllers.size());
     ASSERT_EQ("propeller", yaml.controllers[0].name);

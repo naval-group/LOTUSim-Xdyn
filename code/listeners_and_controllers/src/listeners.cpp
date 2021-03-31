@@ -74,14 +74,14 @@ ssc::data_source::DataSource make_command_listener(const std::vector<YamlCommand
 }
 
 
-void add_inputs_listener(ssc::data_source::DataSource& ds,
-                         const std::vector<YamlCommands>& inputs //!< Parsed YAML inputs
-                         )
+void add_setpoints_listener(ssc::data_source::DataSource& ds,
+                           const std::vector<YamlCommands>& setpoints //!< Parsed YAML setpoints
+                           )
 {
     ds.check_in(__PRETTY_FUNCTION__);
-    for (auto that_input = inputs.begin() ; that_input != inputs.end() ; ++that_input)
+    for (auto that_setpoint = setpoints.begin() ; that_setpoint != setpoints.end() ; ++that_setpoint)
     {
-        add(that_input, ds);
+        add(that_setpoint, ds);
     }
     ds.check_out();
 }
@@ -97,7 +97,7 @@ std::vector<PIDController> get_pid_controllers(const std::vector<YamlController>
         {
             const PIDController controller(yaml_controller.dt,
                                            namify(yaml_controller.output, yaml_controller.name),
-                                           namify(yaml_controller.input, yaml_controller.name),
+                                           namify(yaml_controller.setpoint, yaml_controller.name),
                                            yaml_controller.states,
                                            yaml_controller.rest_of_the_yaml
                                            );

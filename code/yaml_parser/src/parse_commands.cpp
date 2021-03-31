@@ -45,13 +45,13 @@ std::vector<YamlCommands> parse_command_yaml(const std::string& yaml)
     return ret;
 }
 
-std::vector<YamlCommands> parse_input_yaml(const std::string& yaml)
+std::vector<YamlCommands> parse_setpoint_yaml(const std::string& yaml)
 {
     std::stringstream stream(yaml);
     YAML::Parser parser(stream);
     YAML::Node node;
     parser.GetNextDocument(node);
     std::vector<YamlCommands> ret;
-    node["inputs"] >> ret;
+    node["setpoints"] >> ret;
     return ret;
 }

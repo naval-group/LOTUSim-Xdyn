@@ -16,7 +16,7 @@ void operator >> (const YAML::Node& node, YamlController& c)
     node["output"] >> c.output;
     node["type"] >> c.type;
     node["dt"] >> c.dt;
-    node["input"] >> c.input;
+    node["setpoint"] >> c.setpoint;
 
     for(YAML::Iterator it=node["states"].begin();it!=node["states"].end();++it)
     {

@@ -1048,10 +1048,10 @@ TEST_F(SimTest, LONG_can_simulate_heading_keeping_using_controllers)
     }
 }
 
-TEST_F(SimTest, LONG_can_simulate_heading_with_non_constant_controllers_inputs)
+TEST_F(SimTest, LONG_can_simulate_heading_with_non_constant_controllers_setpoints)
 {
     std::stringstream heading_keeping_controllers;
-    heading_keeping_controllers << "inputs:\n"
+    heading_keeping_controllers << "setpoints:\n"
                                 << "    - name: PSPropRudd\n"
                                 << "      t: [0, 100, 200, 300]\n"
                                 << "      psi_co: {unit: deg, values: [30, 40, 50, 60]}\n"
@@ -1063,7 +1063,7 @@ TEST_F(SimTest, LONG_can_simulate_heading_with_non_constant_controllers_inputs)
                                 << "      output: beta\n"
                                 << "      type: PID\n"
                                 << "      dt: 1\n"
-                                << "      input: psi_co\n"
+                                << "      setpoint: psi_co\n"
                                 << "      states:\n"
                                 << "        psi: 1\n"
                                 << "      gains:\n"
@@ -1074,7 +1074,7 @@ TEST_F(SimTest, LONG_can_simulate_heading_with_non_constant_controllers_inputs)
                                 << "      output: beta\n"
                                 << "      type: PID\n"
                                 << "      dt: 1\n"
-                                << "      input: psi_co\n"
+                                << "      setpoint: psi_co\n"
                                 << "      states:\n"
                                 << "        psi: 1\n"
                                 << "      gains:\n"

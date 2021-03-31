@@ -19,7 +19,7 @@ class Controller : public ssc::solver::DiscreteSystem
     public:
         Controller(const double dt,
                    const std::string& output_name,
-                   const std::string& input_name,
+                   const std::string& setpoint_name,
                    const std::map<std::string, double>& states
                    );
 
@@ -32,7 +32,7 @@ class Controller : public ssc::solver::DiscreteSystem
 
     private:
         const std::string output_name;              //!< Name of the datasource command outputed by the controller
-        const std::string input_name;               //!< Name of the datasource input needed by the controller (`setpoint` for the controller algorithm)
+        const std::string setpoint_name;            //!< Name of the datasource setpoint needed by the controller
         const std::map<std::string, double> states; //!< Name and coefficients of the measured states needed by the controller
                                                     //   (to compute the `measured_value` input of the controller algorithm)
                                                     //   for example: "u - 2v" -> { {"u", 1}, {"v", -2} }
@@ -46,7 +46,7 @@ class Controller : public ssc::solver::DiscreteSystem
          */
         void update_discrete_states(const double time, ssc::solver::ContinuousSystem* system);
 
-        /** \brief Gets the value of the controller input used by `compute_command` from the datasource
+        /** \brief Gets the value of the controller setpoint input used by `compute_command` from the datasource
          */
         double get_setpoint(const ssc::solver::ContinuousSystem* sys) const;
 

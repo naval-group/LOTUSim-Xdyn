@@ -106,11 +106,11 @@ TEST_F(listenersTest, bug_2961_can_have_a_single_value_for_commands)
 }
 
 
-TEST_F(listenersTest, can_add_inputs_to_an_empty_ds)
+TEST_F(listenersTest, can_add_setpoints_to_an_empty_ds)
 {
     ssc::data_source::DataSource ds;
-    add_inputs_listener(ds, parse_input_yaml(test_data::inputs()));
-    ds.check_in("listenersTest (can_add_inputs_to_an_empty_ds)");
+    add_setpoints_listener(ds, parse_setpoint_yaml(test_data::setpoints()));
+    ds.check_in("listenersTest (can_add_setpoints_to_an_empty_ds)");
     ds.set<double>("t", 0);
     ASSERT_DOUBLE_EQ(3, ds.get<double>("propeller(rpm_co)"));
     ASSERT_DOUBLE_EQ(1.064935, ds.get<double>("propeller(P/D)"));
@@ -132,11 +132,11 @@ TEST_F(listenersTest, can_add_inputs_to_an_empty_ds)
     ds.check_out();
 }
 
-TEST_F(listenersTest, can_have_a_single_value_for_inputs)
+TEST_F(listenersTest, can_have_a_single_value_for_setpoints)
 {
     ssc::data_source::DataSource ds;
-    add_inputs_listener(ds, parse_input_yaml(test_data::inputs()));
-    ds.check_in("listenersTest (can_have_a_single_value_for_inputs)");
+    add_setpoints_listener(ds, parse_setpoint_yaml(test_data::setpoints()));
+    ds.check_in("listenersTest (can_have_a_single_value_for_setpoints)");
     for (size_t i = 0 ; i < 100 ; ++i)
     {
         ds.set<double>("t", a.random<double>());
@@ -145,33 +145,33 @@ TEST_F(listenersTest, can_have_a_single_value_for_inputs)
     ds.check_out();
 }
 
-TEST_F(listenersTest, can_add_inputs_when_commands_with_same_name_already_exist)
+TEST_F(listenersTest, can_add_setpoints_when_commands_with_same_name_already_exist)
 {
     std::string commands = "commands:\n"
                            "  - name: propeller\n"
                            "    t: [0]\n"
-                           "    rpm_co: {unit: rad/s, values: [50]}\n" // also defined in test_data::inputs()
+                           "    rpm_co: {unit: rad/s, values: [50]}\n" // also defined in test_data::setpoints()
                            "    command: {unit: 1, values: [42]}\n";
     ssc::data_source::DataSource ds = make_command_listener(parse_command_yaml(commands));
 
-    add_inputs_listener(ds, parse_input_yaml(test_data::inputs()));
-    ds.check_in("listenersTest (can_add_inputs_when_commands_with_same_name_already_exist)");
+    add_setpoints_listener(ds, parse_setpoint_yaml(test_data::setpoints()));
+    ds.check_in("listenersTest (can_add_setpoints_when_commands_with_same_name_already_exist)");
     ds.set<double>("t", 0);
-    ASSERT_DOUBLE_EQ(3, ds.get<double>("propeller(rpm_co)")); // inputs value
-    ASSERT_DOUBLE_EQ(1.064935, ds.get<double>("propeller(P/D)")); // inputs value
-    ASSERT_DOUBLE_EQ(2.5, ds.get<double>("controller(psi_co)")); // inputs value
+    ASSERT_DOUBLE_EQ(3, ds.get<double>("propeller(rpm_co)")); // setpoints value
+    ASSERT_DOUBLE_EQ(1.064935, ds.get<double>("propeller(P/D)")); // setpoints value
+    ASSERT_DOUBLE_EQ(2.5, ds.get<double>("controller(psi_co)")); // setpoints value
     ASSERT_DOUBLE_EQ(42, ds.get<double>("propeller(command)")); // commands value
 
     ds.set<double>("t", 1);
-    ASSERT_DOUBLE_EQ(30, ds.get<double>("propeller(rpm_co)")); // inputs value
-    ASSERT_DOUBLE_EQ(1.064935, ds.get<double>("propeller(P/D)")); // inputs value
-    ASSERT_DOUBLE_EQ(2.5, ds.get<double>("controller(psi_co)")); // inputs value
+    ASSERT_DOUBLE_EQ(30, ds.get<double>("propeller(rpm_co)")); // setpoints value
+    ASSERT_DOUBLE_EQ(1.064935, ds.get<double>("propeller(P/D)")); // setpoints value
+    ASSERT_DOUBLE_EQ(2.5, ds.get<double>("controller(psi_co)")); // setpoints value
     ASSERT_DOUBLE_EQ(42, ds.get<double>("propeller(command)")); // commands value
 
     ds.set<double>("t", 3);
-    ASSERT_DOUBLE_EQ(30, ds.get<double>("propeller(rpm_co)")); // inputs value
-    ASSERT_DOUBLE_EQ(1.064935, ds.get<double>("propeller(P/D)")); // inputs value
-    ASSERT_DOUBLE_EQ(2.5, ds.get<double>("controller(psi_co)")); // inputs value
+    ASSERT_DOUBLE_EQ(30, ds.get<double>("propeller(rpm_co)")); // setpoints value
+    ASSERT_DOUBLE_EQ(1.064935, ds.get<double>("propeller(P/D)")); // setpoints value
+    ASSERT_DOUBLE_EQ(2.5, ds.get<double>("controller(psi_co)")); // setpoints value
     ASSERT_DOUBLE_EQ(42, ds.get<double>("propeller(command)")); // commands value
 
     ds.check_out();

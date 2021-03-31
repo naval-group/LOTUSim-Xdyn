@@ -68,36 +68,36 @@ TEST_F(parse_commandsTest, example)
 }
 
 
-TEST_F(parse_commandsTest, inputs_example)
+TEST_F(parse_commandsTest, setpoints_example)
 {
-//! [parse_inputsTest example]
-    std::vector<YamlCommands> inputs = parse_input_yaml(test_data::inputs());
-    ASSERT_EQ(2, inputs.size());
+//! [parse_setpointsTest example]
+    std::vector<YamlCommands> setpoints = parse_setpoint_yaml(test_data::setpoints());
+    ASSERT_EQ(2, setpoints.size());
 
-    ASSERT_EQ("propeller", inputs[0].name);
-    ASSERT_EQ(4, inputs[0].t.size());
-    ASSERT_DOUBLE_EQ(0, inputs[0].t[0]);
-    ASSERT_DOUBLE_EQ(1, inputs[0].t[1]);
-    ASSERT_DOUBLE_EQ(3, inputs[0].t[2]);
-    ASSERT_DOUBLE_EQ(10, inputs[0].t[3]);
-    ASSERT_EQ(2, inputs[0].commands.size());
-    ASSERT_EQ(4, inputs[0].commands["rpm_co"].size());
-    ASSERT_DOUBLE_EQ(3, inputs[0].commands["rpm_co"][0]);
-    ASSERT_DOUBLE_EQ(30, inputs[0].commands["rpm_co"][1]);
-    ASSERT_DOUBLE_EQ(30, inputs[0].commands["rpm_co"][2]);
-    ASSERT_DOUBLE_EQ(40, inputs[0].commands["rpm_co"][3]);
-    ASSERT_EQ(4, inputs[0].commands["P/D"].size());
-    ASSERT_DOUBLE_EQ(1.064935, inputs[0].commands["P/D"][0]);
-    ASSERT_DOUBLE_EQ(1.064935, inputs[0].commands["P/D"][1]);
-    ASSERT_DOUBLE_EQ(1.064935, inputs[0].commands["P/D"][2]);
-    ASSERT_DOUBLE_EQ(1.064935, inputs[0].commands["P/D"][3]);
+    ASSERT_EQ("propeller", setpoints[0].name);
+    ASSERT_EQ(4, setpoints[0].t.size());
+    ASSERT_DOUBLE_EQ(0, setpoints[0].t[0]);
+    ASSERT_DOUBLE_EQ(1, setpoints[0].t[1]);
+    ASSERT_DOUBLE_EQ(3, setpoints[0].t[2]);
+    ASSERT_DOUBLE_EQ(10, setpoints[0].t[3]);
+    ASSERT_EQ(2, setpoints[0].commands.size());
+    ASSERT_EQ(4, setpoints[0].commands["rpm_co"].size());
+    ASSERT_DOUBLE_EQ(3, setpoints[0].commands["rpm_co"][0]);
+    ASSERT_DOUBLE_EQ(30, setpoints[0].commands["rpm_co"][1]);
+    ASSERT_DOUBLE_EQ(30, setpoints[0].commands["rpm_co"][2]);
+    ASSERT_DOUBLE_EQ(40, setpoints[0].commands["rpm_co"][3]);
+    ASSERT_EQ(4, setpoints[0].commands["P/D"].size());
+    ASSERT_DOUBLE_EQ(1.064935, setpoints[0].commands["P/D"][0]);
+    ASSERT_DOUBLE_EQ(1.064935, setpoints[0].commands["P/D"][1]);
+    ASSERT_DOUBLE_EQ(1.064935, setpoints[0].commands["P/D"][2]);
+    ASSERT_DOUBLE_EQ(1.064935, setpoints[0].commands["P/D"][3]);
 
-    ASSERT_EQ("controller", inputs[1].name);
-    ASSERT_EQ(1, inputs[1].t.size());
-    ASSERT_DOUBLE_EQ(4.2, inputs[1].t[0]);
-    ASSERT_EQ(1, inputs[1].commands.size());
-    ASSERT_EQ(1, inputs[1].commands["psi_co"].size());
-    ASSERT_DOUBLE_EQ(2.5, inputs[1].commands["psi_co"][0]);
-//! [parse_inputsTest example]
+    ASSERT_EQ("controller", setpoints[1].name);
+    ASSERT_EQ(1, setpoints[1].t.size());
+    ASSERT_DOUBLE_EQ(4.2, setpoints[1].t[0]);
+    ASSERT_EQ(1, setpoints[1].commands.size());
+    ASSERT_EQ(1, setpoints[1].commands["psi_co"].size());
+    ASSERT_DOUBLE_EQ(2.5, setpoints[1].commands["psi_co"][0]);
+//! [parse_setpointsTest example]
 }
 
