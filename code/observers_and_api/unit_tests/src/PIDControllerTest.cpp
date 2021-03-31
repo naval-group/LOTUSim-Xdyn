@@ -40,24 +40,29 @@ std::string PIDControllerTest::yaml_gains(const double Kp, const double Ki, cons
 {
     std::stringstream yaml_string;
     yaml_string << "gains:\n"
-                << "    Kp: " << Kp << "\n"
-                << "    Ki: " << Ki << "\n"
-                << "    Kd: " << Kd << "\n";
+                << "    Kp: " << std::to_string(Kp) << "\n"
+                << "    Ki: " << std::to_string(Ki) << "\n"
+                << "    Kd: " << std::to_string(Kd) << "\n";
+
     return yaml_string.str();
 }
 
 TEST_F(PIDControllerTest, can_parse_controller_gains)
 {
-    const double Kp = 2.5;
-    const double Ki = -0.105;
-    const double Kd = 1;
+    for (size_t i = 0 ; i < 100 ; ++i)
+    {
+        const double dt = 0.2;
+        const double Kp = a.random<double>();
+        const double Ki = a.random<double>();
+        const double Kd = a.random<double>();
 
-    const std::map<std::string, double> state_weights { { "x", -1 }, { "y", 2 } };
-    const PIDController controller = PIDController(0.2, "propeller(rpm)", "propeller(rpm_co)", state_weights, yaml_gains(Kp, Ki, Kd));
+        const std::map<std::string, double> state_weights { { a.random<std::string>(), a.random<double>() }, { a.random<std::string>(), a.random<double>() } };
+        const PIDController controller = PIDController(dt, a.random<std::string>(), a.random<std::string>(), state_weights, yaml_gains(Kp, Ki, Kd));
 
-    ASSERT_DOUBLE_EQ(Kp, controller.yaml.Kp);
-    ASSERT_DOUBLE_EQ(Ki, controller.yaml.Ki);
-    ASSERT_DOUBLE_EQ(Kd, controller.yaml.Kd);
+        ASSERT_NEAR(Kp, controller.yaml.Kp, 1e-6);
+        ASSERT_NEAR(Ki, controller.yaml.Ki, 1e-6);
+        ASSERT_NEAR(Kd, controller.yaml.Kd, 1e-6);
+    }
 }
 
 TEST_F(PIDControllerTest, can_get_the_controller_name)
