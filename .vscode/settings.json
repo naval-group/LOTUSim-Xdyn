@@ -55,5 +55,6 @@
         "thread": "cpp",
         "typeinfo": "cpp",
         "fmimodelfunctions.h": "c"
-    }
+    },
+    "python.formatting.provider": "autopep8"
 }
