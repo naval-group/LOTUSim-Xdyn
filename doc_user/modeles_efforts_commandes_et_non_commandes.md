@@ -1055,13 +1055,13 @@ Pour chaque commande à calculer :
   [régulateur `PID`](#r%C3%A9gulateur-pid) est implémenté.
 - Le pas de temps du contrôleur est renseigné dans le champ `dt`.
 - Le nom de la consigne du contrôleur est renseigné dans le champ `setpoint`.
-- La mesure est spécifiée dans le champ `states`, par une formule linéaire permettant d'obtenir une valeur à
+- La mesure est spécifiée dans le champ `state_weights`, par une formule linéaire permettant d'obtenir une valeur à
   partir des états du système lors de la simulation. On renseigne une liste de clefs/valeurs où les clefs
   correspondent au nom de l'état et les valeurs sont les coefficients. Un état non spécifié a pour coefficient 0.
   Par exemple, pour obtenir `x / 2 - y` :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-states:
+state_weights:
     x: 0.5
     y: -1
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1079,7 +1079,7 @@ controllers:
     type: PID
     dt: 1
     setpoint: psi_co
-    states:
+    state_weights:
       psi: 1
     gains:
       Kp: -1
@@ -1124,7 +1124,7 @@ controllers:
     type: PID
     dt: 1
     setpoint: psi_co
-    states:
+    state_weights:
       psi: 1
     gains:
       Kp: -1

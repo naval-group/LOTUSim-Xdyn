@@ -35,7 +35,7 @@ class PIDController : public Controller
         PIDController(const double dt,
                       const std::string& output_name,
                       const std::string& setpoint_name,
-                      const std::map<std::string, double>& states,
+                      const std::map<std::string, double>& state_weights,
                       const std::string& yaml
                       );
 

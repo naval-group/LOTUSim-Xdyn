@@ -18,19 +18,19 @@ void operator >> (const YAML::Node& node, YamlController& c)
     node["dt"] >> c.dt;
     node["setpoint"] >> c.setpoint;
 
-    for(YAML::Iterator it=node["states"].begin();it!=node["states"].end();++it)
+    for(YAML::Iterator it=node["state_weights"].begin();it!=node["state_weights"].end();++it)
     {
         std::string key = "";
         it.first() >> key;
         try
         {
             double value;
-            node["states"][key] >> value;
-            c.states[key] = value;
+            node["state_weights"][key] >> value;
+            c.state_weights[key] = value;
         }
         catch(const YAML::Exception& e)
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Something is wrong with the YAML, more specifically in the 'states' section. When parsing the '" << key << "' values: " << e.msg);
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Something is wrong with the YAML, more specifically in the 'state_weights' section. When parsing the '" << key << "' values: " << e.msg);
         }
     }
 

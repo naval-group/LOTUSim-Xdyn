@@ -11,11 +11,11 @@
 Controller::Controller(const double dt,
                        const std::string& output_name,
                        const std::string& setpoint_name,
-                       const std::map<std::string, double>& states) :
+                       const std::map<std::string, double>& state_weights) :
                            ssc::solver::DiscreteSystem(dt),
                            output_name(output_name),
                            setpoint_name(setpoint_name),
-                           states(states)
+                           state_weights(state_weights)
 {
 }
 
@@ -42,7 +42,7 @@ double Controller::get_setpoint(const ssc::solver::ContinuousSystem* sys) const
 double Controller::get_measured_value(const ssc::solver::ContinuousSystem* sys) const
 {
     double measured_state = 0;
-    for (const auto& name_coeff : states)
+    for (const auto& name_coeff : state_weights)
     {
         measured_state += name_coeff.second * sys->get_state_value(name_coeff.first);
     }

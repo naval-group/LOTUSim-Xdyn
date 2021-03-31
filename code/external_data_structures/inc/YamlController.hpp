@@ -17,13 +17,15 @@
 struct YamlController
 {
     YamlController();
-    std::string name;                      //!< Name of the controlled force
-    std::string output;                    //!< Name of the command outputed by the controller
-    std::string type;                      //!< Type of the controller (PID, gRPC)
-    double dt;                             //!< Time step of the discrete system
-    std::string setpoint;                  //!< Name of the setpoint needed by the controller
-    std::map<std::string, double> states;  //!< Continuous states used by the controller (e.g. {{'u',1},{'v',-3}} for 'u - 3v')
-    std::string rest_of_the_yaml;          //!< All other fields that are spectific to the controller type
+    std::string name;                             //!< Name of the controlled force
+    std::string output;                           //!< Name of the command outputed by the controller
+    std::string type;                             //!< Type of the controller (PID, gRPC)
+    double dt;                                    //!< Time step of the discrete system
+    std::string setpoint;                         //!< Name of the setpoint needed by the controller
+    std::map<std::string, double> state_weights;  //!< Weights associated to each state, used to compute the controller's measured input,
+                                                  //   with the convention that any missing state has weight 0.
+                                                  //   For example "u - 2v" -> { {"u", 1}, {"v", -2} }
+    std::string rest_of_the_yaml;                 //!< All other fields that are spectific to the controller type
 };
 
 

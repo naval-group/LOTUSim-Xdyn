@@ -52,8 +52,8 @@ TEST_F(PIDControllerTest, can_parse_controller_gains)
     const double Ki = -0.105;
     const double Kd = 1;
 
-    const std::map<std::string, double> states_coeff { { "x", -1 }, { "y", 2 } };
-    const PIDController controller = PIDController(0.2, "propeller(rpm)", "propeller(rpm_co)", states_coeff, yaml_gains(Kp, Ki, Kd));
+    const std::map<std::string, double> state_weights { { "x", -1 }, { "y", 2 } };
+    const PIDController controller = PIDController(0.2, "propeller(rpm)", "propeller(rpm_co)", state_weights, yaml_gains(Kp, Ki, Kd));
 
     ASSERT_DOUBLE_EQ(Kp, controller.yaml.Kp);
     ASSERT_DOUBLE_EQ(Ki, controller.yaml.Ki);
@@ -66,8 +66,8 @@ TEST_F(PIDControllerTest, can_get_the_controller_name)
     const double Kp = 2.5;
     const double Ki = 0.1;
     const double Kd = 0.314;
-    const std::map<std::string, double> states_coeff { { "x", -1 }, { "y", 2 } };
-    const PIDController controller(dt, "propeller(rpm)", "propeller(rpm_co)", states_coeff, yaml_gains(Kp, Ki, Kd));
+    const std::map<std::string, double> state_weights { { "x", -1 }, { "y", 2 } };
+    const PIDController controller(dt, "propeller(rpm)", "propeller(rpm_co)", state_weights, yaml_gains(Kp, Ki, Kd));
     ASSERT_EQ("propeller(rpm)", controller.get_name());
 }
 
@@ -77,8 +77,8 @@ TEST_F(PIDControllerTest, update_command_in_ds_example)
     const double Kp = 2.5;
     const double Ki = 0.1;
     const double Kd = 0.314;
-    const std::map<std::string, double> states_coeff { { "x", 1 }, { "y", -1 } };
-    PIDController controller(dt, "propeller(rpm)", "propeller(rpm_co)", states_coeff, yaml_gains(Kp, Ki, Kd));
+    const std::map<std::string, double> state_weights { { "x", 1 }, { "y", -1 } };
+    PIDController controller(dt, "propeller(rpm)", "propeller(rpm_co)", state_weights, yaml_gains(Kp, Ki, Kd));
 
     const double rpm_co = 5;
     const double x = 2 * rpm_co;
@@ -108,8 +108,8 @@ TEST_F(PIDControllerTest, can_compute_PID_commands)
     const double Kp = 2.5;
     const double Ki = 0.1;
     const double Kd = 0.314;
-    const std::map<std::string, double> states_coeff { { "x", 1 }, { "y", -1 } };
-    PIDController controller(dt, "propeller(rpm)", "propeller(rpm_co)", states_coeff, yaml_gains(Kp, Ki, Kd));
+    const std::map<std::string, double> state_weights { { "x", 1 }, { "y", -1 } };
+    PIDController controller(dt, "propeller(rpm)", "propeller(rpm_co)", state_weights, yaml_gains(Kp, Ki, Kd));
 
     Sim sys = get_system(test_data::falling_ball_example(), 0);
 
@@ -168,8 +168,8 @@ TEST_F(PIDControllerTest, can_compute_PID_commands_several_times_at_first_time_s
     const double Kp = 2.5;
     const double Ki = 0.1;
     const double Kd = 0.314;
-    const std::map<std::string, double> states_coeff { { "x", 1 }, { "y", -1 } };
-    PIDController controller(dt, "propeller(rpm)", "propeller(rpm_co)", states_coeff, yaml_gains(Kp, Ki, Kd));
+    const std::map<std::string, double> state_weights { { "x", 1 }, { "y", -1 } };
+    PIDController controller(dt, "propeller(rpm)", "propeller(rpm_co)", state_weights, yaml_gains(Kp, Ki, Kd));
 
     Sim sys = get_system(test_data::falling_ball_example(), 0);
 
@@ -208,8 +208,8 @@ TEST_F(PIDControllerTest, can_use_euler_angles_in_states)
     const double Kp = 2.5;
     const double Ki = 0.1;
     const double Kd = 0.314;
-    const std::map<std::string, double> states_coeff { { "psi", 1 } };
-    PIDController controller(dt, "propeller(psi_co)", "propeller(psi)", states_coeff, yaml_gains(Kp, Ki, Kd));
+    const std::map<std::string, double> state_weights { { "psi", 1 } };
+    PIDController controller(dt, "propeller(psi_co)", "propeller(psi)", state_weights, yaml_gains(Kp, Ki, Kd));
 
     Sim sys = get_system(test_data::falling_ball_example(), 0);
 
@@ -255,7 +255,7 @@ TEST_F(PIDControllerTest, can_initialize_controllers)
                    "    type: PID\n"
                    "    dt: 0.15\n"
                    "    setpoint: rpm_co\n"
-                   "    states:\n"
+                   "    state_weights:\n"
                    "        u: 0.5\n"
                    "    gains:\n"
                    "        Kp: 4.2\n"
@@ -266,7 +266,7 @@ TEST_F(PIDControllerTest, can_initialize_controllers)
                    "    type: PID\n"
                    "    dt: 0.5\n"
                    "    setpoint: P/D_co\n"
-                   "    states:\n"
+                   "    state_weights:\n"
                    "        u: 0\n"
                    "    gains:\n"
                    "        Kp: 1\n"

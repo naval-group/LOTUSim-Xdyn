@@ -7,5 +7,5 @@
 
 #include "YamlController.hpp"
 
-YamlController::YamlController() : name(), output(), type(), dt(), setpoint(), states(), rest_of_the_yaml()
+YamlController::YamlController() : name(), output(), type(), dt(), setpoint(), state_weights(), rest_of_the_yaml()
 {}

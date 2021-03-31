@@ -20,7 +20,7 @@ class Controller : public ssc::solver::DiscreteSystem
         Controller(const double dt,
                    const std::string& output_name,
                    const std::string& setpoint_name,
-                   const std::map<std::string, double>& states
+                   const std::map<std::string, double>& state_weights
                    );
 
         virtual ~Controller();
@@ -31,11 +31,11 @@ class Controller : public ssc::solver::DiscreteSystem
         std::string get_name() const;
 
     private:
-        const std::string output_name;              //!< Name of the datasource command outputed by the controller
-        const std::string setpoint_name;            //!< Name of the datasource setpoint needed by the controller
-        const std::map<std::string, double> states; //!< Name and coefficients of the measured states needed by the controller
-                                                    //   (to compute the `measured_value` input of the controller algorithm)
-                                                    //   for example: "u - 2v" -> { {"u", 1}, {"v", -2} }
+        const std::string output_name;                     //!< Name of the datasource command outputed by the controller
+        const std::string setpoint_name;                   //!< Name of the datasource setpoint needed by the controller
+        const std::map<std::string, double> state_weights; //!< Weights associated to each state, used to compute the controller's measured input,
+                                                           //   with the convention that any missing state has weight 0.
+                                                           //   For example "u - 2v" -> { {"u", 1}, {"v", -2} }
 
         /**
          * @brief Updates the controller output value in the datasource

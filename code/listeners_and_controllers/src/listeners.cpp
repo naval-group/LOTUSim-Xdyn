@@ -98,7 +98,7 @@ std::vector<PIDController> get_pid_controllers(const std::vector<YamlController>
             const PIDController controller(yaml_controller.dt,
                                            namify(yaml_controller.output, yaml_controller.name),
                                            namify(yaml_controller.setpoint, yaml_controller.name),
-                                           yaml_controller.states,
+                                           yaml_controller.state_weights,
                                            yaml_controller.rest_of_the_yaml
                                            );
             controllers.push_back(controller);
