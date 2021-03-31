@@ -1,3 +1,7 @@
 grpcio-tools
 numpy
 pyyaml
+autopep8
+pylint
+nose
+rednose
