@@ -1,0 +1,26 @@
+FROM sirehna/base-image-debian10-gcc8-xdyn
+RUN apt-get update -yq && \
+    apt-get install \
+        --yes \
+        --no-install-recommends \
+        ipython3 \
+        python3-pip \
+        python3-setuptools \
+        python3-dev \
+        pycodestyle \
+        black \
+        python3-deepdiff
+RUN pip3 install wheel
+ADD grpc_docker/requirements.txt .
+RUN pip3 install -r requirements.txt && \
+    mkdir -p /usr/python && \
+    chmod a+rwx /usr/python
+ENV PYTHONPATH /usr/python
+ADD code/grpc/force.proto .
+ADD code/waves_grpc/wave_types.proto .
+RUN python3 -m grpc_tools.protoc -I . --python_out=/usr/python --grpc_python_out=/usr/python/ force.proto
+ADD code/waves_grpc/wave_grpc.proto .
+RUN python3 -m grpc_tools.protoc -I . --python_out=/usr/python --grpc_python_out=/usr/python/ wave_types.proto
+ADD code/grpc/controller.proto .
+RUN python3 -m grpc_tools.protoc -I . --python_out=/usr/python --grpc_python_out=/usr/python/ controller.proto
+ADD grpc_docker/force.py grpc_docker/controller.py /usr/python/

@@ -1,0 +1,38 @@
+{
+    "dockerFile": "Dockerfile.vscode.devcontainer",
+    "name": "xdyn_gRPC",
+    "context": "..",
+    "extensions": [
+        "eamodio.gitlens",
+        "ms-python.python",
+        "oouo-diogo-perdigao.docthis",
+        "peterj.proto"
+    ],
+    "settings": {
+        "editor.rulers": [
+            80,
+            100
+        ],
+        "editor.formatOnSave": true,
+        "editor.tabSize": 4,
+        "editor.detectIndentation": true,
+        "editor.renderWhitespace": "all",
+        "terminal.integrated.shell.linux": "/bin/bash",
+        "python.pythonPath": "/usr/bin/python3",
+        "python.linting.pylintPath": "/usr/local/bin/pylint",
+        "python.formatting.provider": "black",
+        "python.analysis.cacheFolderPath": "/tmp",
+        "python.analysis.logLevel": "Warning",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": false,
+        "python.linting.lintOnSave": true,
+        "python.linting.pycodestyleEnabled": true,
+        "python.linting.pycodestylePath": "/usr/local/bin/pycodestyle",
+        "python.formatting.autopep8Path": "/usr/local/bin/autopep8",
+        "python.formatting.blackPath": "/usr/bin/black",
+        "python.linting.pylintUseMinimalCheckers": false,
+        "python.formatting.blackArgs": [
+            "--line-length=80"
+        ]
+    }
+}
