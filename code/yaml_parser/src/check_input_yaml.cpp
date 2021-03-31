@@ -95,7 +95,7 @@ void check_state_name(const std::string& state_name)
                                                     "phi", "theta", "psi" };
 
     if (std::find(valid_states.begin(), valid_states.end(), state_name) == valid_states.end()) {
-        errors << "'" << state_name << "' is not a valid state. Examples of valid states: 'x', 'u', 'p', 'qr', 'phi', etc.." << std::endl;
+        errors << "'" << state_name << "' is not a valid state. The valid states are: 'x', 'y', 'z', 'u', 'v', 'w', 'p', 'q', 'r', 'qr', 'qi', 'qj', 'qk', 'phi', 'theta' and 'psi'." << std::endl;
     }
     throw_if_any_errors_were_detected(__PRETTY_FUNCTION__, errors);
 }
