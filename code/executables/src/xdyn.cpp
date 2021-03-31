@@ -34,18 +34,18 @@
 
 CHECK_SSC_VERSION(8,0)
 
-void solve(const std::string& input_data_solver, Sim& sys, ssc::solver::Scheduler& scheduler, ListOfObservers& observer);
-void solve(const std::string& input_data_solver, Sim& sys, ssc::solver::Scheduler& scheduler, ListOfObservers& observer)
+void solve(const std::string& solver_name, Sim& sys, ssc::solver::Scheduler& scheduler, ListOfObservers& observer);
+void solve(const std::string& solver_name, Sim& sys, ssc::solver::Scheduler& scheduler, ListOfObservers& observer)
 {
-    if (input_data_solver=="euler")
+    if (solver_name=="euler")
     {
         ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observer);
     }
-    else if (input_data_solver=="rk4")
+    else if (solver_name=="rk4")
     {
         ssc::solver::quicksolve<ssc::solver::RK4Stepper>(sys, scheduler, observer);
     }
-    else if (input_data_solver=="rkck")
+    else if (solver_name=="rkck")
     {
         ssc::solver::quicksolve<ssc::solver::RKCK>(sys, scheduler, observer);
     }
