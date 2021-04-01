@@ -20,7 +20,7 @@ On peut aussi se contenter des 2 seuls efforts de résistance et de propulsion.
 
 Les changements par rapport au tutoriel 2 sont les ajouts des efforts d'amortissement
 et de résistance, d'une section 
-[`controlled forces`](#efforts-commandés) et d'une section
+[`external forces`](#efforts-commandés) et d'une section
 [`commands`](#syntaxe-des-commandes).
 
 On commence par définir les [caractéristiques du propulseur](#efforts-commandés) :
@@ -29,8 +29,8 @@ On commence par définir les [caractéristiques du propulseur](#efforts-command�
 yaml_data = load_yaml('tutorial_06_1D_propulsion.yml')
 ```
 
-```python echo=False, results='raw', name='tutorial_06_print_controlled_forces_section'
-print_yaml(yaml_data, 'bodies/0/controlled forces')
+```python echo=False, results='raw', name='tutorial_06_print_external_forces_section'
+print_yaml(yaml_data, 'bodies/0/external forces')
 ```
 
 Les commandes sont définies à la racine du YAML:

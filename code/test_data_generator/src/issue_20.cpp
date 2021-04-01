@@ -113,7 +113,6 @@ std::string test_data::issue_20()
        << "        K: {value: 0, unit: kN*m}\n"
        << "        M: {value: 0, unit: kN*m}\n"
        << "        N: {value: 0, unit: kN*m}\n"
-       << "    controlled forces:\n"
        << "      - name: controller\n"
        << "        model: simple heading controller\n"
        << "        ksi: 3\n"

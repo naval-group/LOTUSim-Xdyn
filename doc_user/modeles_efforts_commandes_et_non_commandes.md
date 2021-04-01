@@ -1,11 +1,20 @@
 
-# Modèles d'efforts non-commandés
+# Modèles d'efforts
 
-Les efforts extérieurs (non commandés) sont donnés dans la section
-`external forces` sous forme de liste de modèles ayant ou non des paramètres.
-La seule clef commune à tous les modèles d'effort est `model` : chaque modèle
-possède sinon sa propre paramétrisation (éventuellement aucune paramétrisation).
-Voici un exemple de section `external forces` :
+Dans les versions précédentes d'xdyn, les efforts appliqués au navire se
+subdivisaient en efforts non-commandés (qui ne nécessitent que les états
+navires pour être calculés) et efforts commandés (qui, en plus des états
+navire, utilisent des variables appelés "commandes" fournis séparément).
+Depuis, ces modèles d'effort ont été unifiés (les efforts non-commandés
+ont juste une liste vide de commandes).
+
+C'est pourquoi les efforts extérieurs sont aujourd'hui renseignés
+indifféremment dans la section `external forces` ou `controlled forces` (pour
+compatibilité avec les anciens modèles d'xdyn) sous forme de liste de modèles
+ayant ou non des paramètres.  La seule clef commune à tous les modèles d'effort
+est `model` : chaque modèle possède sinon sa propre paramétrisation
+(éventuellement aucune paramétrisation). Voici un exemple de section `external
+forces` :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 external forces:
@@ -932,23 +941,22 @@ Les données polaires de coefficients de portance et traînée peuvent être don
 
 - [Page Wikipedia "Effort sur une voile"](https://fr.wikipedia.org/wiki/Effort_sur_une_voile)
 
-# Efforts commandés
+## Efforts commandés
 
-## Description
-
-Les efforts commandés correspondent, par exemple, aux efforts de propulsion, de safran et de
-foil. Ils sont décrits dans la section `controlled forces`. Les seules clefs
-YAML communes à tous les efforts commandés sont `name` (qui est un identifiant
-choisi par l'utilisateur) et `model` (qui est une chaîne servant à identifier
-le type de modèle utilisé).
+Les efforts commandés correspondent, par exemple, aux efforts de propulsion, de
+safran et de foil. Ils sont également décrits dans la section `external forces`
+(ou `controlled forces`, par compatibilité avec les anciennes versions de
+xdyn).  Les seules clefs YAML communes à tous les efforts commandés sont `name`
+(qui est un identifiant choisi par l'utilisateur) et `model` (qui est une
+chaîne servant à identifier le type de modèle utilisé).
 
 Les commandes sont spécifiées en YAML, soit dans le même fichier que les
 modèles d'effort, soit dans un fichier à part (plus modulaire).
 
-Voici un exemple de section `efforts commandés`, qui correspond au modèle d'hélice décrit [ici](#h%C3%A9lices-wageningen-s%C3%A9rie-b) :
+Voici un exemple d'efforts commandé, qui correspond au modèle d'hélice décrit [ici](#h%C3%A9lices-wageningen-s%C3%A9rie-b) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-controlled forces:
+external forces:
   - name: port side propeller
     model: wageningen B-series
     position of propeller frame:
@@ -1008,7 +1016,7 @@ commands:
 Il s'agit ici d'un modèle d'hélice dont la description complète est [ici](#h%C3%A9lices-wageningen-s%C3%A9rie-b).
 
 La valeur renseignée dans `name` doit correspondre à l'identifiant utilisé dans
-la section `controlled forces`. Pour chaque effort contrôlé (identifié par
+la section `external forces`. Pour chaque effort contrôlé (identifié par
 `name`), on donne une liste d'instants (en secondes) puis, pour chaque
 commande, les valeurs à ces instants. Il doit donc y avoir, pour chaque
 commande, autant de valeurs qu'il y a d'instants et il faut spécifier au moins
@@ -1049,7 +1057,7 @@ des contrôleurs à la simulation, qui vont calculer les commandes dont ont beso
 
 Pour chaque commande à calculer :
 
-- La valeur renseignée dans `name` doit correspondre à l'identifiant utilisé dans la section `controlled forces`.
+- La valeur renseignée dans `name` doit correspondre à l'identifiant utilisé dans la section `external forces`.
 - Le nom de la commande est renseigné dans le champ `output`.
 - Le champ `type` permet de choisir le type de contrôleur. Pour l'instant, seul le
   [régulateur `PID`](#r%C3%A9gulateur-pid) est implémenté.
@@ -1606,7 +1614,7 @@ bilan des efforts.
 Voici un exemple de configuration possible :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-controlled forces:
+external forces:
   - name: port side propeller
     model: wageningen B-series
     position of propeller frame:
@@ -1729,7 +1737,7 @@ De même, en prenant $`r<0`$ et $`\psi=\psi_{\textrm{co}}`$, le moment généré
 ### Paramétrage
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-controlled forces:
+external forces:
   - name: controller
     model: simple heading controller
     ksi: 0.9
@@ -1844,7 +1852,7 @@ De même, en prenant $`r<0`$ et $`\psi=\psi_{\textrm{co}}`$, le moment généré
 ### Paramétrage
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-controlled forces:
+external forces:
   - name: controller
     model: simple station-keeping controller
     ksi_x: 0.9
@@ -2222,7 +2230,7 @@ d'où
 ### Paramétrage
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-controlled forces:
+external forces:
   - name: Prop. & rudder
     model: propeller+rudder
     position of propeller frame:
@@ -2354,7 +2362,7 @@ N
 Voici un exemple de configuration possible :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-controlled forces:
+external forces:
   - name: port side propeller
     model: Kt(J) & Kq(J)
     position of propeller frame:
@@ -2442,7 +2450,7 @@ fichier de configuration YAML d'xdyn.
 
 ### Paramétrage
 
-Dans la section `controlled forces`, on ajoute une section de la forme suivante :
+Dans la section `external forces`, on ajoute une section de la forme suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: grpc

@@ -298,8 +298,7 @@ Chaque corps comprend :
    `initial position of body frame relative to NED` et
    `initial velocity of body frame relative to NED`)
  - des données nécessaires pour les calculs cinétiques (section `dynamics`)
- - la liste des efforts auxquels il est soumis (sections `external forces` et
-   `controlled forces`).
+ - la liste des efforts auxquels il est soumis (sections `external forces`).
  - de façon facultative, des états forcés.
 
 ### Exemple complet

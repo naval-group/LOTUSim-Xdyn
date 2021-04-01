@@ -303,7 +303,7 @@ print("# Pour afficher l'intégralité du YAML avec de la coloration syntaxique"
 print("print_yaml(yaml_data)")
 print("")
 print("# Pour n'afficher qu'une sous-section du YAML")
-print("print_yaml(yaml_data, 'bodies/0/controlled forces')")
+print("print_yaml(yaml_data, 'bodies/0/external forces')")
 print('`' * 3)
 print('~' * 4)
 ```
