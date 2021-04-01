@@ -1066,13 +1066,29 @@ directement dans le champ `commands`, soit calculée par un contrôleur du champ
 #### Consignes des contrôleurs
 
 Les valeurs des **consignes des contrôleurs** sont spécifiées de manière statique dans une nouvelle section `setpoints`
-(facultative) à la racine du yaml, dont la syntaxe est identique à [celle des commandes](#syntaxe-des-commandes) :
+(facultative) à la racine du yaml.
+
+On donne une liste d'instants (en secondes) puis, pour chaque consigne, les valeurs à ces instants.
+Il doit donc y avoir, pour chaque consigne, autant de valeurs qu'il y a d'instants.
+Entre deux instants, les valeurs des commandes sont interpolées linéairement.
+On peut définir autant de consignes qu'on le souhaite : les consignes inutilisées sont simplement ignorées.
+
+Au-delà de la dernière valeur de temps renseignée, la dernière valeur de chaque
+consigne est maintenue. Avant la première valeur de temps, on utilise la première
+valeur de chaque consigne.
+
+On peut définir plusieurs liste d'instants différents.
+
+Par exemple :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 setpoints:
-    - name: port side propeller
-      t: [0, 500, 800, 1000]
+    - t: [0, 500, 800, 1000]
       psi_co: {unit: deg, values: [30, 40, 50, 60]}
+    - t: [0, 50]
+      u_co: {unit: knot, values: [0, 1]}
+      v_co: {unit: knot, values: [0, 1]}
+      w_co: {unit: knot, values: [0, 1]}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #### Régulateur PID
@@ -1102,10 +1118,9 @@ state weights:
     y: -1
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- `setpoint`, qui contient le nom complet de la consigne dont le contrôleur aura besoin,
+- `setpoint`, qui contient le nom de la consigne dont le contrôleur aura besoin,
    qu'il cherchera dans la section [`setpoints`](#consignes-des-contr%C3%B4leurs) décrite précédemment.
-   Ce nom est composé du nom du modèle d'effort concaténé avec le nom de la consigne entre parenthèses.
-   Par example: `PropRudd(rpm_co)`, `port side propeller(psi_co)`.
+   Par example: `psi_co`.
 - `command`, qui contient le nom complet de la commande que calcule le contrôleur,
    composé du nom du modèle d'effort concaténé avec le nom de la commande entre parenthèses.
    Par example: `PropRudd(rpm)`, `port side propeller(P/D)`.
@@ -1120,7 +1135,7 @@ controllers:
     dt: 1
     state weights:
       psi: 1
-    setpoint: port side propeller(psi_co)
+    setpoint: psi_co
     command: port side propeller(beta)
     gains:
       Kp: -1

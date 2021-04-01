@@ -29,6 +29,10 @@ void add_interpolation_table(const std::string& x_name, const std::vector<double
 std::string namify(const std::string& command_name, const std::string& model_name);
 std::string namify(const std::string& command_name, const std::string& model_name)
 {
+    if (model_name == "")
+    {
+        return command_name;
+    }
     return model_name + "(" + command_name + ")";
 }
 
@@ -64,6 +68,7 @@ void add(std::vector<YamlTimeSeries>::const_iterator& that_command, ssc::data_so
 ssc::data_source::DataSource make_command_listener(const std::vector<YamlTimeSeries>& commands //!< Parsed YAML commands
                        )
 {
+    check_command_names(commands);
     ssc::data_source::DataSource ds;
     ds.check_in(__PRETTY_FUNCTION__);
     for (auto that_command = commands.begin() ; that_command != commands.end() ; ++that_command)

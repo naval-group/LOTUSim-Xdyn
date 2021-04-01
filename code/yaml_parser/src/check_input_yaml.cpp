@@ -85,6 +85,20 @@ void check_controller_output_is_not_defined_in_a_command(const std::string& cont
     throw_if_any_errors_were_detected(__PRETTY_FUNCTION__, errors);
 }
 
+void check_command_names(const std::vector<YamlTimeSeries>& commands_input)
+{
+    std::stringstream errors;
+
+    for (const YamlTimeSeries commands : commands_input)
+    {
+        if (commands.name == "")
+        {
+            errors << "Missing 'name' field in the 'commands' section: all commands should be defined for a force model." << std::endl;
+        }
+    }
+    throw_if_any_errors_were_detected(__PRETTY_FUNCTION__, errors);
+}
+
 void check_state_name(const std::string& state_name)
 {
     std::stringstream errors;

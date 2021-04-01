@@ -89,7 +89,7 @@ TEST_F(PIDControllerTest, update_command_in_ds_example)
     const double Kp = 2.5;
     const double Ki = 0.1;
     const double Kd = 0.314;
-    PIDController controller(dt, pid_specific_yaml(Kp, Ki, Kd, "propeller(rpm_co)", "propeller(rpm)") + "state weights:\n    x: 1\n    y: -1\n");
+    PIDController controller(dt, pid_specific_yaml(Kp, Ki, Kd, "rpm_co", "propeller(rpm)") + "state weights:\n    x: 1\n    y: -1\n");
 
     const double rpm_co = 5;
     const double x = 2 * rpm_co;
@@ -102,7 +102,7 @@ TEST_F(PIDControllerTest, update_command_in_ds_example)
 
     //! [callback example]
     // First time step
-    sys.set_command_listener(std::map<std::string, double>({ { "t", tstart }, { "propeller(rpm_co)", rpm_co } }));
+    sys.set_command_listener(std::map<std::string, double>({ { "t", tstart }, { "rpm_co", rpm_co } }));
     StateType states = {x, y, 300.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 1, 0, 0, 0};
     sys.get_bodies().front()->update_body_states(states, tstart);
 
@@ -119,7 +119,7 @@ TEST_F(PIDControllerTest, can_compute_PID_commands)
     const double Kp = 2.5;
     const double Ki = 0.1;
     const double Kd = 0.314;
-    PIDController controller(dt, pid_specific_yaml(Kp, Ki, Kd, "propeller(rpm_co)", "propeller(rpm)") + "state weights:\n    x: 1\n    y: -1\n");
+    PIDController controller(dt, pid_specific_yaml(Kp, Ki, Kd, "rpm_co", "propeller(rpm)") + "state weights:\n    x: 1\n    y: -1\n");
 
     Sim sys = get_system(test_data::falling_ball_example(), 0);
 
@@ -132,7 +132,7 @@ TEST_F(PIDControllerTest, can_compute_PID_commands)
     double rpm_co = 5;
     double x = 2 * rpm_co;
     double y = rpm_co + error;
-    sys.set_command_listener(std::map<std::string, double>({ { "t", tstart }, { "propeller(rpm_co)", rpm_co } }));
+    sys.set_command_listener(std::map<std::string, double>({ { "t", tstart }, { "rpm_co", rpm_co } }));
 
     StateType states = {x, y, 300.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 1, 0, 0, 0};
     sys.get_bodies().front()->update_body_states(states, tstart);
@@ -148,7 +148,7 @@ TEST_F(PIDControllerTest, can_compute_PID_commands)
     rpm_co = 1.5;
     x = 2 * rpm_co;
     y = rpm_co + error2;
-    sys.set_command_listener(std::map<std::string, double>({ { "t", tstart + dt }, { "propeller(rpm_co)", rpm_co } }));
+    sys.set_command_listener(std::map<std::string, double>({ { "t", tstart + dt }, { "rpm_co", rpm_co } }));
     states = {x, y, 300.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 1, 0, 0, 0};
     sys.get_bodies().front()->update_body_states(states, tstart + dt);
 
@@ -163,7 +163,7 @@ TEST_F(PIDControllerTest, can_compute_PID_commands)
     rpm_co = 5.5;
     x = 2 * rpm_co;
     y = rpm_co + error3;
-    sys.set_command_listener(std::map<std::string, double>({ { "t", tstart + 2 * dt }, { "propeller(rpm_co)", rpm_co } }));
+    sys.set_command_listener(std::map<std::string, double>({ { "t", tstart + 2 * dt }, { "rpm_co", rpm_co } }));
     states = {x, y, 300.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 1, 0, 0, 0};
     sys.get_bodies().front()->update_body_states(states, tstart + 2 * dt);
 
@@ -178,7 +178,7 @@ TEST_F(PIDControllerTest, can_compute_PID_commands_several_times_at_first_time_s
     const double Kp = 2.5;
     const double Ki = 0.1;
     const double Kd = 0.314;
-    PIDController controller(dt, pid_specific_yaml(Kp, Ki, Kd, "propeller(rpm_co)", "propeller(rpm)") + "state weights:\n    x: 1\n    y: -1\n");
+    PIDController controller(dt, pid_specific_yaml(Kp, Ki, Kd, "rpm_co", "propeller(rpm)") + "state weights:\n    x: 1\n    y: -1\n");
 
     Sim sys = get_system(test_data::falling_ball_example(), 0);
 
@@ -191,7 +191,7 @@ TEST_F(PIDControllerTest, can_compute_PID_commands_several_times_at_first_time_s
     const double rpm_co = 5;
     const double x = 2 * rpm_co;
     const double y = rpm_co + error;
-    sys.set_command_listener(std::map<std::string, double>({ { "t", tstart }, { "propeller(rpm_co)", rpm_co } }));
+    sys.set_command_listener(std::map<std::string, double>({ { "t", tstart }, { "rpm_co", rpm_co } }));
     const StateType states = {x, y, 300.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 1, 0, 0, 0};
     sys.get_bodies().front()->update_body_states(states, tstart);
     controller.callback(scheduler, &sys);
@@ -217,7 +217,7 @@ TEST_F(PIDControllerTest, can_use_euler_angles_in_states)
     const double Kp = 2.5;
     const double Ki = 0.1;
     const double Kd = 0.314;
-    PIDController controller(dt, pid_specific_yaml(Kp, Ki, Kd, "propeller(psi)", "propeller(psi_co)") + "state weights:\n    psi: 1\n");
+    PIDController controller(dt, pid_specific_yaml(Kp, Ki, Kd, "psi", "propeller(psi_co)") + "state weights:\n    psi: 1\n");
 
     Sim sys = get_system(test_data::falling_ball_example(), 0);
 
@@ -226,7 +226,7 @@ TEST_F(PIDControllerTest, can_use_euler_angles_in_states)
 
     const double psi = 0.45;
     const double error = -0.05;
-    sys.set_command_listener(std::map<std::string, double>({ { "t", tstart }, { "propeller(psi)", psi } }));
+    sys.set_command_listener(std::map<std::string, double>({ { "t", tstart }, { "psi", psi } }));
 
     const ssc::kinematics::EulerAngles angles(0.2, 0.9, psi - error);
     std::tuple<double, double, double, double> quaternion = sys.get_bodies().front()->get_quaternions(angles, sys.get_env().rot);
@@ -249,7 +249,7 @@ TEST_F(PIDControllerTest, can_initialize_controllers)
     // initialize setpoints
     const double rpm_co = 0.45;
     const double pd_co = 0.5;
-    sys.set_command_listener(std::map<std::string, double>({ { "t", tstart }, { "propeller(rpm_co)", rpm_co }, { "controller(P/D_co)", pd_co } }));
+    sys.set_command_listener(std::map<std::string, double>({ { "t", tstart }, { "rpm_co", rpm_co }, { "P/D_co", pd_co } }));
 
     // initialize states
     const double u = 1.0;
@@ -260,7 +260,7 @@ TEST_F(PIDControllerTest, can_initialize_controllers)
     yaml_controllers << "controllers:\n"
                    "  - type: PID\n"
                    "    dt: 0.15\n"
-                   "    setpoint: propeller(rpm_co)\n"
+                   "    setpoint: rpm_co\n"
                    "    state weights:\n"
                    "        u: 0.5\n"
                    "    command: propeller(rpm)\n"
@@ -270,7 +270,7 @@ TEST_F(PIDControllerTest, can_initialize_controllers)
                    "        Kd: 1\n"
                    "  - type: PID\n"
                    "    dt: 0.5\n"
-                   "    setpoint: controller(P/D_co)\n"
+                   "    setpoint: P/D_co\n"
                    "    state weights:\n"
                    "        u: 0\n"
                    "    command: controller(P/D)\n"

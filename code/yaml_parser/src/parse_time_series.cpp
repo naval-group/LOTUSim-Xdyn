@@ -12,7 +12,15 @@
 
 void operator >> (const YAML::Node& node, YamlTimeSeries& c)
 {
-    node["name"] >> c.name;
+    c.name = "";
+    try
+    {
+        node["name"] >> c.name;
+    }
+    catch(std::exception& ) // Nothing to do: 'name' section is not mandatory (should be empty for controller setpoints)
+    {
+    }
+
     node["t"] >> c.t;
     for(YAML::Iterator it=node.begin();it!=node.end();++it)
     {
