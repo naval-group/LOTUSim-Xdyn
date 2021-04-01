@@ -479,9 +479,12 @@ TEST_F(SimulatorYamlParserTest, can_parse_controllers_and_commands_for_controlle
     ASSERT_EQ("controller", yaml.setpoints[1].name);
 
     ASSERT_EQ(3, yaml.controllers.size());
-    ASSERT_EQ("propeller", yaml.controllers[0].name);
-    ASSERT_EQ("propeller", yaml.controllers[1].name);
-    ASSERT_EQ("controller", yaml.controllers[2].name);
+    ASSERT_EQ("PID", yaml.controllers[0].type);
+    ASSERT_EQ(0.1, yaml.controllers[0].dt);
+    ASSERT_EQ("gRPC", yaml.controllers[1].type);
+    ASSERT_EQ(0.01, yaml.controllers[1].dt);
+    ASSERT_EQ("PID", yaml.controllers[2].type);
+    ASSERT_EQ(0.5, yaml.controllers[2].dt);
 
     ASSERT_EQ(1, yaml.commands.size());
     ASSERT_EQ("propeller", yaml.commands[0].name);

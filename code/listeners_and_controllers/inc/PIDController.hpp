@@ -30,12 +30,13 @@ class PIDController : public Controller
             double Kp; //!< Proportional gain
             double Ki; //!< Integral gain
             double Kd; //!< Derivative gain
+            /* PID Controller input */
+            std::string setpoint_name;
             /* PID Controller output */
             std::string command_name;
         };
 
         PIDController(const double dt,
-                      const std::string& setpoint_name,
                       const std::map<std::string, double>& state_weights,
                       const std::string& yaml
                       );

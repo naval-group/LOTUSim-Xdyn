@@ -18,7 +18,6 @@ class Controller : public ssc::solver::DiscreteSystem
 {
     public:
         Controller(const double dt,
-                   const std::string& setpoint_name,
                    const std::map<std::string, double>& state_weights
                    );
 
@@ -37,14 +36,13 @@ class Controller : public ssc::solver::DiscreteSystem
 
         /** \brief Gets the value of the controller setpoint input used by `compute_command` from the datasource
          */
-        double get_setpoint(const ssc::solver::ContinuousSystem* sys) const;
+        double get_setpoint(const ssc::solver::ContinuousSystem* sys, const std::string& setpoint_name) const;
 
         /** \brief Gets the value of the controller measured input used by `compute_command` from the system states
          */
         double get_measured_value(const ssc::solver::ContinuousSystem* sys) const;
 
     private:
-        const std::string setpoint_name;                   //!< Name of the datasource setpoint needed by the controller
         const std::map<std::string, double> state_weights; //!< Weights associated to each state, used to compute the controller's measured input,
                                                            //   with the convention that any missing state has weight 0.
                                                            //   For example "u - 2v" -> { {"u", 1}, {"v", -2} }

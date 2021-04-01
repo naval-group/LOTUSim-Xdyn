@@ -9,10 +9,8 @@
 #include "InvalidInputException.hpp"
 
 Controller::Controller(const double dt,
-                       const std::string& setpoint_name,
                        const std::map<std::string, double>& state_weights) :
                            ssc::solver::DiscreteSystem(dt),
-                           setpoint_name(setpoint_name),
                            state_weights(state_weights)
 {
 }
@@ -33,7 +31,7 @@ void Controller::set_discrete_state(ssc::solver::ContinuousSystem* sys, const st
     sys->set_discrete_state(command_name, command_value);
 }
 
-double Controller::get_setpoint(const ssc::solver::ContinuousSystem* sys) const
+double Controller::get_setpoint(const ssc::solver::ContinuousSystem* sys, const std::string& setpoint_name) const
 {
     return sys->get_input_value(setpoint_name);
 }

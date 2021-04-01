@@ -9,16 +9,15 @@
 #include "InvalidInputException.hpp"
 
 PIDController::PIDController (const double dt,
-                              const std::string &setpoint_name,
                               const std::map<std::string, double> &state_weights,
                               const std::string &yaml)
-    : Controller (dt, setpoint_name, state_weights), yaml (yaml), dt (dt),
+    : Controller (dt, state_weights), yaml (yaml), dt (dt),
       t_start (), i_previous_t (0), initialized (false), previous_error (),
       integral_term (0)
 {
 }
 
-PIDController::Yaml::Yaml (const std::string &yaml) : Kp (), Ki (), Kd (), command_name ()
+PIDController::Yaml::Yaml (const std::string &yaml) : Kp (), Ki (), Kd (), setpoint_name (), command_name ()
 {
     std::stringstream stream (yaml);
     std::stringstream ss;
@@ -26,6 +25,7 @@ PIDController::Yaml::Yaml (const std::string &yaml) : Kp (), Ki (), Kd (), comma
     YAML::Node node;
     parser.GetNextDocument (node);
 
+    node["setpoint"] >> setpoint_name;
     node["command"] >> command_name;
 
     try
@@ -53,7 +53,7 @@ PIDController::Yaml::Yaml (const std::string &yaml) : Kp (), Ki (), Kd (), comma
 void
 PIDController::update_discrete_states (const double time, ssc::solver::ContinuousSystem* sys)
 {
-    const double command_value = compute_command(Controller::get_setpoint(sys),
+    const double command_value = compute_command(Controller::get_setpoint(sys, yaml.setpoint_name),
                                                  Controller::get_measured_value(sys),
                                                  time);
     Controller::set_discrete_state(sys, yaml.command_name, command_value);

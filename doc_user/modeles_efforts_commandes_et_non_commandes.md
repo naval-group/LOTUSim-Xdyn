@@ -1061,7 +1061,6 @@ Pour chaque commande à calculer :
 - Le champ `type` permet de choisir le type de contrôleur. Pour l'instant, seul le
   [régulateur `PID`](#r%C3%A9gulateur-pid) est implémenté.
 - Le pas de temps du contrôleur est renseigné dans le champ `dt`.
-- Le nom de la consigne du contrôleur est renseigné dans le champ `setpoint`.
 - La mesure est spécifiée dans le champ `state_weights`, par une formule linéaire permettant d'obtenir une valeur à
   partir des états du système lors de la simulation. On renseigne une liste de clefs/valeurs où les clefs
   correspondent au nom de l'état et les valeurs sont les coefficients. Un état non spécifié a pour coefficient 0.
@@ -1076,7 +1075,13 @@ state_weights:
 
 On peut aussi rajouter les champs spécifiques au contrôleur choisi.
 
-Les valeurs des **mesures des contrôleurs** doivent être renseignées dans une nouvelle section `setpoints`
+On peut spécifier à la fois des commandes et des contrôleurs pour obtenir les commandes nécessaires aux efforts
+commandés. Toutefois, pour chaque effort commandé, chaque commande doit être définie une seule fois, soit
+directement dans le champ `commands`, soit calculée par un contrôleur du champ `controllers`.
+
+#### Mesures des contrôleurs
+
+Les valeurs des **mesures des contrôleurs** sont spécifiées de manière statique dans une nouvelle section `setpoints`
 (facultative) à la racine du yaml, dont la syntaxe est identique à [celle des commandes](#syntaxe-des-commandes) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
@@ -1086,9 +1091,6 @@ setpoints:
       psi_co: {unit: deg, values: [30, 40, 50, 60]}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-On peut spécifier à la fois des commandes et des contrôleurs pour obtenir les commandes nécessaires aux efforts
-commandés. Toutefois, pour chaque effort commandé, chaque commande doit être définie une seule fois, soit
-directement dans le champ `commands`, soit calculée par un contrôleur du champ `controllers`.
 
 #### Régulateur PID
 
@@ -1104,8 +1106,12 @@ Le correcteur PID agit de trois manières :
 Pour calculer une commande en utilisant un régulateur PID, il faut créer un contrôleur de type `PID`,
 auquel on rajoutera les sections yaml suivantes:
 - `gains`, qui contient trois champs : `Kp`, `Ki` et `Kd`.
+- `setpoint`, qui contient le nom complet de la mesure dont le contrôleur aura besoin,
+   qu'il cherchera dans la section [`setpoints`](#mesures-des-contrôleurs) décrite précédemment.
+   Ce nom est composé du nom du modèle d'effort concaténé avec le nom de la mesure entre parenthèses.
+   Par example: `PropRudd(rpm_co)`, `port side propeller(psi_co)`.
 - `command`, qui contient le nom complet de la commande que calcule le contrôleur,
-   composée du nom du modèle d'effort concaténé avec le nom de la commande entre parenthèses.
+   composé du nom du modèle d'effort concaténé avec le nom de la commande entre parenthèses.
    Par example: `PropRudd(rpm)`, `port side propeller(P/D)`.
 
 Par exemple, voici un yaml spécifiant un contrôleur PID calculant la commande attendue
@@ -1116,9 +1122,9 @@ controllers:
   - name: port side propeller
     type: PID
     dt: 1
-    setpoint: psi_co
     state_weights:
       psi: 1
+    setpoint: port side propeller(psi_co)
     command: port side propeller(beta)
     gains:
       Kp: -1
