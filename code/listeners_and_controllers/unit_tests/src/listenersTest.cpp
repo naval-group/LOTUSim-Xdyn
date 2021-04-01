@@ -184,8 +184,8 @@ TEST_F(listenersTest, get_pid_controllers_example)
     const std::vector<PIDController> controllers = get_pid_controllers(parse_controller_yaml(test_data::controllers()));
 
     ASSERT_EQ(2, controllers.size());
-    ASSERT_EQ("propeller(rpm)", controllers[0].get_name());
-    ASSERT_EQ("controller(psi)", controllers[1].get_name());
+    ASSERT_DOUBLE_EQ(4.2, controllers[0].yaml.Kp);
+    ASSERT_EQ(0.52, controllers[1].yaml.Kp);
 
     //! [controllersTest listen_to_file_example]
 }

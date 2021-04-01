@@ -65,17 +65,6 @@ TEST_F(PIDControllerTest, can_parse_controller_gains)
     }
 }
 
-TEST_F(PIDControllerTest, can_get_the_controller_name)
-{
-    const double dt = 0.5;
-    const double Kp = 2.5;
-    const double Ki = 0.1;
-    const double Kd = 0.314;
-    const std::map<std::string, double> state_weights { { "x", -1 }, { "y", 2 } };
-    const PIDController controller(dt, "propeller(rpm)", "propeller(rpm_co)", state_weights, yaml_gains(Kp, Ki, Kd));
-    ASSERT_EQ("propeller(rpm)", controller.get_name());
-}
-
 TEST_F(PIDControllerTest, update_command_in_ds_example)
 {
     const double dt = 0.5;

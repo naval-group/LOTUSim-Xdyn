@@ -25,11 +25,6 @@ class Controller : public ssc::solver::DiscreteSystem
 
         virtual ~Controller();
 
-        /** \brief Returns the name of the command computed by the controller
-         * (suffixed by the controlled force name), as will be written in the datasource
-         */
-        std::string get_name() const;
-
     private:
         const std::string output_name;                     //!< Name of the datasource command outputed by the controller
         const std::string setpoint_name;                   //!< Name of the datasource setpoint needed by the controller
@@ -45,6 +40,16 @@ class Controller : public ssc::solver::DiscreteSystem
          * @param system The continuous system. Used to retrieve the continuous states.
          */
         void update_discrete_states(const double time, ssc::solver::ContinuousSystem* system);
+
+        /**
+         * @brief Sets a controller output value in the datasource
+         *
+         * This method will be called for each controller output by the "update_discrete_states" method.
+         * @param system The continuous system in which the discrete states will be updated.
+         * @param command_name The name of the datasource command that should be updated.
+         * @param command_value The value of the datasource command that should replace the previous one.
+         */
+        void set_discrete_state(ssc::solver::ContinuousSystem* system, const std::string& command_name, const double command_value);
 
         /** \brief Gets the value of the controller setpoint input used by `compute_command` from the datasource
          */
