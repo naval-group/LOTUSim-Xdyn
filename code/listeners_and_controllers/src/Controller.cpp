@@ -36,12 +36,17 @@ double Controller::get_setpoint(const ssc::solver::ContinuousSystem* sys, const 
     return sys->get_input_value(setpoint_name);
 }
 
+double Controller::get_state_value(const ssc::solver::ContinuousSystem* sys, const std::string& state_name) const
+{
+    return sys->get_state_value(state_name);
+}
+
 double Controller::get_measured_value(const ssc::solver::ContinuousSystem* sys) const
 {
     double measured_state = 0;
     for (const auto& name_coeff : state_weights)
     {
-        measured_state += name_coeff.second * sys->get_state_value(name_coeff.first);
+        measured_state += name_coeff.second * get_state_value(sys, name_coeff.first);
     }
     return measured_state;
 }

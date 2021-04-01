@@ -38,6 +38,10 @@ class Controller : public ssc::solver::DiscreteSystem
          */
         double get_setpoint(const ssc::solver::ContinuousSystem* sys, const std::string& setpoint_name) const;
 
+        /** \brief Gets the value of the system state used by the controller to compute its measured input
+         */
+        double get_state_value(const ssc::solver::ContinuousSystem* sys, const std::string& state_name) const;
+
         /** \brief Gets the value of the controller measured input used by `compute_command` from the system states
          */
         double get_measured_value(const ssc::solver::ContinuousSystem* sys) const;
