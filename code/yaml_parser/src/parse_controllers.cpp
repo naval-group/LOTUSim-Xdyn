@@ -6,7 +6,6 @@
  */
 
 #include "parse_controllers.hpp"
-#include "check_input_yaml.hpp"
 #include "InvalidInputException.hpp"
 
 #include <ssc/yaml_parser.hpp>
@@ -15,27 +14,6 @@ void operator >> (const YAML::Node& node, YamlController& c)
 {
     node["type"] >> c.type;
     node["dt"] >> c.dt;
-
-    for(YAML::Iterator it=node["state_weights"].begin();it!=node["state_weights"].end();++it)
-    {
-        std::string key = "";
-        it.first() >> key;
-        try
-        {
-            check_state_name(key);
-            double value;
-            node["state_weights"][key] >> value;
-            c.state_weights[key] = value;
-        }
-        catch(const InvalidInputException& e)
-        {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Something is wrong with the YAML, more specifically in the 'state_weights' section. When parsing the '" << key << "' state: " << e.get_message());
-        }
-        catch(const YAML::Exception& e)
-        {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Something is wrong with the YAML, more specifically in the 'state_weights' section. When parsing the '" << key << "' values: " << e.msg);
-        }
-    }
 
     YAML::Emitter out;
     out << node;

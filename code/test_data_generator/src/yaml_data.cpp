@@ -2212,8 +2212,6 @@ std::string test_data::controllers()
           "        Kd: 1\n"
           "  - type: gRPC\n"
           "    dt: 0.01\n"
-          "    state_weights:\n"
-          "        u: 2\n"
           "  - type: PID\n"
           "    dt: 0.5\n"
           "    state_weights:\n"

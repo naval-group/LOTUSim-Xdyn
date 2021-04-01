@@ -31,13 +31,15 @@ class PIDController : public Controller
             double Ki; //!< Integral gain
             double Kd; //!< Derivative gain
             /* PID Controller input */
+            std::map<std::string, double> state_weights;  //!< Weights associated to each state, used to compute the controller's measured input,
+                                                          //   with the convention that any missing state has weight 0.
+                                                          //   For example "u - 2v" -> { {"u", 1}, {"v", -2} }
             std::string setpoint_name;
             /* PID Controller output */
             std::string command_name;
         };
 
         PIDController(const double dt,
-                      const std::map<std::string, double>& state_weights,
                       const std::string& yaml
                       );
 
@@ -52,6 +54,10 @@ class PIDController : public Controller
          * @param system The continuous system. Used to retrieve the continuous states.
          */
         void update_discrete_states(const double time, ssc::solver::ContinuousSystem* system);
+
+        /** \brief Gets the value of the controller measured input used by `compute_command` from the system states
+         */
+        double get_measured_value(const ssc::solver::ContinuousSystem* sys) const;
 
         /** \brief Returns the last time instant at which `callback` has been called
          */

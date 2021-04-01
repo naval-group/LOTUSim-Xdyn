@@ -1055,33 +1055,17 @@ Il a besoin de deux entrées : une consigne et une mesure, qu'il compare pour ca
 Le champ `controllers` (facultatif) à la racine du yaml permet de définir les paramètres permettant d'intégrer
 des contrôleurs à la simulation, qui vont calculer les commandes dont ont besoin les efforts commandés.
 
-Pour chaque commande à calculer :
-
-- La valeur renseignée dans `name` doit correspondre à l'identifiant utilisé dans la section `external forces`.
-- Le champ `type` permet de choisir le type de contrôleur. Pour l'instant, seul le
-  [régulateur `PID`](#r%C3%A9gulateur-pid) est implémenté.
-- Le pas de temps du contrôleur est renseigné dans le champ `dt`.
-- La mesure est spécifiée dans le champ `state_weights`, par une formule linéaire permettant d'obtenir une valeur à
-  partir des états du système lors de la simulation. On renseigne une liste de clefs/valeurs où les clefs
-  correspondent au nom de l'état et les valeurs sont les coefficients. Un état non spécifié a pour coefficient 0.
-  Les noms d'états valides sont : `x`, `y`, `z`, `u`, `v`, `w`, `p`, `q`, `r`, `qr`, `qi`, `qj`, `qk`, `phi`, `theta` et `psi`.
-  Par exemple, pour obtenir `x / 2 - y` :
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-state_weights:
-    x: 0.5
-    y: -1
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-On peut aussi rajouter les champs spécifiques au contrôleur choisi.
+Les seule clefs communes à tous les types de contrôleurs sont `type` (pour choisir le type de contrôleur) et
+`dt` (pour renseigner le pas de temps du contrôleur) : chaque type de contrôleur possède sinon sa propre paramétrisation.
+Pour l'instant, seul le [régulateur `PID`](#r%C3%A9gulateur-pid) est implémenté.
 
 On peut spécifier à la fois des commandes et des contrôleurs pour obtenir les commandes nécessaires aux efforts
 commandés. Toutefois, pour chaque effort commandé, chaque commande doit être définie une seule fois, soit
 directement dans le champ `commands`, soit calculée par un contrôleur du champ `controllers`.
 
-#### Mesures des contrôleurs
+#### Consignes des contrôleurs
 
-Les valeurs des **mesures des contrôleurs** sont spécifiées de manière statique dans une nouvelle section `setpoints`
+Les valeurs des **consignes des contrôleurs** sont spécifiées de manière statique dans une nouvelle section `setpoints`
 (facultative) à la racine du yaml, dont la syntaxe est identique à [celle des commandes](#syntaxe-des-commandes) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
@@ -1090,7 +1074,6 @@ setpoints:
       t: [0, 500, 800, 1000]
       psi_co: {unit: deg, values: [30, 40, 50, 60]}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 
 #### Régulateur PID
 
@@ -1105,10 +1088,23 @@ Le correcteur PID agit de trois manières :
 
 Pour calculer une commande en utilisant un régulateur PID, il faut créer un contrôleur de type `PID`,
 auquel on rajoutera les sections yaml suivantes:
+
 - `gains`, qui contient trois champs : `Kp`, `Ki` et `Kd`.
-- `setpoint`, qui contient le nom complet de la mesure dont le contrôleur aura besoin,
-   qu'il cherchera dans la section [`setpoints`](#mesures-des-contrôleurs) décrite précédemment.
-   Ce nom est composé du nom du modèle d'effort concaténé avec le nom de la mesure entre parenthèses.
+- `state_weights`, qui contient la mesure dont le contrôleur aura besoin, spécifiée par une formule linéaire permettant
+  d'obtenir une valeur à partir des états du système lors de la simulation. On renseigne une liste de clefs/valeurs où les clefs
+  correspondent au nom de l'état et les valeurs sont les coefficients. Un état non spécifié a pour coefficient 0.
+  Les noms d'états valides sont : `x`, `y`, `z`, `u`, `v`, `w`, `p`, `q`, `r`, `qr`, `qi`, `qj`, `qk`, `phi`, `theta` et `psi`.
+  Par exemple, pour obtenir `x / 2 - y` :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+state_weights:
+    x: 0.5
+    y: -1
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- `setpoint`, qui contient le nom complet de la consigne dont le contrôleur aura besoin,
+   qu'il cherchera dans la section [`setpoints`](#consignes-des-contr%C3%B4leurs) décrite précédemment.
+   Ce nom est composé du nom du modèle d'effort concaténé avec le nom de la consigne entre parenthèses.
    Par example: `PropRudd(rpm_co)`, `port side propeller(psi_co)`.
 - `command`, qui contient le nom complet de la commande que calcule le contrôleur,
    composé du nom du modèle d'effort concaténé avec le nom de la commande entre parenthèses.

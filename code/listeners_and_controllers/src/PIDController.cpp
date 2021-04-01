@@ -6,18 +6,18 @@
  */
 
 #include "PIDController.hpp"
+#include "check_input_yaml.hpp"
 #include "InvalidInputException.hpp"
 
 PIDController::PIDController (const double dt,
-                              const std::map<std::string, double> &state_weights,
                               const std::string &yaml)
-    : Controller (dt, state_weights), yaml (yaml), dt (dt),
+    : Controller (dt), yaml (yaml), dt (dt),
       t_start (), i_previous_t (0), initialized (false), previous_error (),
       integral_term (0)
 {
 }
 
-PIDController::Yaml::Yaml (const std::string &yaml) : Kp (), Ki (), Kd (), setpoint_name (), command_name ()
+PIDController::Yaml::Yaml (const std::string &yaml) : Kp (), Ki (), Kd (), state_weights (), setpoint_name (), command_name ()
 {
     std::stringstream stream (yaml);
     std::stringstream ss;
@@ -40,6 +40,27 @@ PIDController::Yaml::Yaml (const std::string &yaml) : Kp (), Ki (), Kd (), setpo
                "Unable to parse 'gains': it should contain the sub-nodes "
                "'Kp', 'Ki' and 'Kd'.");
     }
+
+    for(YAML::Iterator it=node["state_weights"].begin();it!=node["state_weights"].end();++it)
+    {
+        std::string key = "";
+        it.first() >> key;
+        try
+        {
+            check_state_name(key);
+            double value;
+            node["state_weights"][key] >> value;
+            state_weights[key] = value;
+        }
+        catch(const InvalidInputException& e)
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Something is wrong with the YAML, more specifically in the 'state_weights' section. When parsing the '" << key << "' state: " << e.get_message());
+        }
+        catch(const YAML::Exception& e)
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Something is wrong with the YAML, more specifically in the 'state_weights' section. When parsing the '" << key << "' values: " << e.msg);
+        }
+    }
 }
 
 
@@ -54,10 +75,24 @@ void
 PIDController::update_discrete_states (const double time, ssc::solver::ContinuousSystem* sys)
 {
     const double command_value = compute_command(Controller::get_setpoint(sys, yaml.setpoint_name),
-                                                 Controller::get_measured_value(sys),
+                                                 get_measured_value(sys),
                                                  time);
     Controller::set_discrete_state(sys, yaml.command_name, command_value);
 }
+
+/** \brief Gets the value of the controller measured input used by `compute_command` from the system states
+ */
+double
+PIDController::get_measured_value(const ssc::solver::ContinuousSystem* sys) const
+{
+    double measured_state = 0;
+    for (const auto& name_coeff : yaml.state_weights)
+    {
+        measured_state += name_coeff.second * Controller::get_state_value(sys, name_coeff.first);
+    }
+    return measured_state;
+}
+
 
 /** \brief Computes the command value from the input data, using a PID
  * controller algorithm.

@@ -193,7 +193,6 @@ TEST_F(listenersTest, get_pid_controllers_example)
     const std::vector<PIDController> controllers = get_pid_controllers(parse_controller_yaml(test_data::controllers()),
                                                                        parse_command_yaml(commands)
                                                                        );
-
     ASSERT_EQ(2, controllers.size());
     ASSERT_EQ("propeller(rpm)", controllers[0].yaml.command_name);
     ASSERT_EQ("controller(psi)", controllers[1].yaml.command_name);

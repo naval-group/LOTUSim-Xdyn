@@ -33,18 +33,11 @@ TEST_F(parse_controllersTest, example)
 
     ASSERT_EQ("PID", controllers[0].type);
     ASSERT_EQ(0.1, controllers[0].dt);
-    ASSERT_EQ(2, controllers[0].state_weights.size());
-    ASSERT_EQ(1, controllers[0].state_weights["x"]);
-    ASSERT_EQ(-1, controllers[0].state_weights["y"]);
 
     ASSERT_EQ("gRPC", controllers[1].type);
     ASSERT_EQ(0.01, controllers[1].dt);
-    ASSERT_EQ(1, controllers[1].state_weights.size());
-    ASSERT_EQ(2, controllers[1].state_weights["u"]);
 
     ASSERT_EQ("PID", controllers[2].type);
     ASSERT_EQ(0.5, controllers[2].dt);
-    ASSERT_EQ(1, controllers[2].state_weights.size());
-    ASSERT_EQ(1, controllers[2].state_weights["psi"]);
 //! [parse_controllersTest example]
 }

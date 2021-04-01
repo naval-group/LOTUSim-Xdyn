@@ -48,7 +48,6 @@ std::string PIDControllerTest::pid_specific_yaml(const double Kp, const double K
                 << "    Kd: " << std::to_string(Kd) << "\n"
                 << "setpoint: " << setpoint_name << "\n"
                 << "command: " << command_name << "\n";
-
     return yaml_string.str();
 }
 
@@ -63,12 +62,22 @@ TEST_F(PIDControllerTest, can_parse_controller_specific_yaml)
         const std::string setpoint_name = a.random<std::string>();
         const std::string command_name = a.random<std::string>();
 
-        const std::map<std::string, double> state_weights { { a.random<std::string>(), a.random<double>() }, { a.random<std::string>(), a.random<double>() } };
-        const PIDController controller = PIDController(dt, state_weights, pid_specific_yaml(Kp, Ki, Kd, setpoint_name, command_name));
+        const double x_weight = a.random<double>();
+        const double psi_weight = a.random<double>();
+        const PIDController controller = PIDController(dt,
+                                                       pid_specific_yaml(Kp, Ki, Kd, setpoint_name, command_name) +
+                                                       "state_weights:\n    x: " + std::to_string(x_weight) +
+                                                       "\n    psi: " + std::to_string(psi_weight) + "\n");
 
         ASSERT_NEAR(Kp, controller.yaml.Kp, 1e-6);
         ASSERT_NEAR(Ki, controller.yaml.Ki, 1e-6);
         ASSERT_NEAR(Kd, controller.yaml.Kd, 1e-6);
+        std::map<std::string, double> state_weights = controller.yaml.state_weights;
+        ASSERT_EQ(2, state_weights.size());
+        ASSERT_EQ(1, state_weights.count("x"));
+        ASSERT_NEAR(x_weight, state_weights["x"], 1e-6);
+        ASSERT_EQ(1, state_weights.count("psi"));
+        ASSERT_NEAR(psi_weight, state_weights["psi"], 1e-6);
         ASSERT_EQ(setpoint_name, controller.yaml.setpoint_name);
         ASSERT_EQ(command_name, controller.yaml.command_name);
     }
@@ -80,8 +89,7 @@ TEST_F(PIDControllerTest, update_command_in_ds_example)
     const double Kp = 2.5;
     const double Ki = 0.1;
     const double Kd = 0.314;
-    const std::map<std::string, double> state_weights { { "x", 1 }, { "y", -1 } };
-    PIDController controller(dt, state_weights, pid_specific_yaml(Kp, Ki, Kd, "propeller(rpm_co)", "propeller(rpm)"));
+    PIDController controller(dt, pid_specific_yaml(Kp, Ki, Kd, "propeller(rpm_co)", "propeller(rpm)") + "state_weights:\n    x: 1\n    y: -1\n");
 
     const double rpm_co = 5;
     const double x = 2 * rpm_co;
@@ -111,8 +119,7 @@ TEST_F(PIDControllerTest, can_compute_PID_commands)
     const double Kp = 2.5;
     const double Ki = 0.1;
     const double Kd = 0.314;
-    const std::map<std::string, double> state_weights { { "x", 1 }, { "y", -1 } };
-    PIDController controller(dt, state_weights, pid_specific_yaml(Kp, Ki, Kd, "propeller(rpm_co)", "propeller(rpm)"));
+    PIDController controller(dt, pid_specific_yaml(Kp, Ki, Kd, "propeller(rpm_co)", "propeller(rpm)") + "state_weights:\n    x: 1\n    y: -1\n");
 
     Sim sys = get_system(test_data::falling_ball_example(), 0);
 
@@ -171,8 +178,7 @@ TEST_F(PIDControllerTest, can_compute_PID_commands_several_times_at_first_time_s
     const double Kp = 2.5;
     const double Ki = 0.1;
     const double Kd = 0.314;
-    const std::map<std::string, double> state_weights { { "x", 1 }, { "y", -1 } };
-    PIDController controller(dt, state_weights, pid_specific_yaml(Kp, Ki, Kd, "propeller(rpm_co)", "propeller(rpm)"));
+    PIDController controller(dt, pid_specific_yaml(Kp, Ki, Kd, "propeller(rpm_co)", "propeller(rpm)") + "state_weights:\n    x: 1\n    y: -1\n");
 
     Sim sys = get_system(test_data::falling_ball_example(), 0);
 
@@ -211,8 +217,7 @@ TEST_F(PIDControllerTest, can_use_euler_angles_in_states)
     const double Kp = 2.5;
     const double Ki = 0.1;
     const double Kd = 0.314;
-    const std::map<std::string, double> state_weights { { "psi", 1 } };
-    PIDController controller(dt, state_weights, pid_specific_yaml(Kp, Ki, Kd, "propeller(psi)", "propeller(psi_co)"));
+    PIDController controller(dt, pid_specific_yaml(Kp, Ki, Kd, "propeller(psi)", "propeller(psi_co)") + "state_weights:\n    psi: 1\n");
 
     Sim sys = get_system(test_data::falling_ball_example(), 0);
 
