@@ -29,7 +29,9 @@ void add_setpoints_listener(ssc::data_source::DataSource& ds, const std::vector<
 /**  \brief Reads data from YAML & returns the corresponding controllers.
   *  \snippet listeners_and_controllers/unit_tests/src/controllersTest.cpp controllersTest listen_to_file_example
   */
-std::vector<PIDController> get_pid_controllers(const std::vector<YamlController>& yaml_controllers);
+std::vector<PIDController> get_pid_controllers(const std::vector<YamlController>& yaml_controllers,
+                                               const std::vector<YamlTimeSeries>& yaml_commands
+                                               );
 
 /**  \brief Initializes the given controllers commands in Sim datasource and
   * adds their callbacks to the scheduler.

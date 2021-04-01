@@ -19,7 +19,9 @@ class PIDControllerTest : public ::testing::Test
         virtual void SetUp();
         virtual void TearDown();
         ssc::random_data_generator::DataGenerator a;
-        std::string yaml_gains(const double Kp, const double Ki, const double Kd);
+        std::string pid_specific_yaml(const double Kp, const double Ki, const double Kd,
+                                      const std::string& command_name
+                                      );
 };
 
 #endif  /* PIDCONTROLLERTEST_HPP_ */

@@ -11,7 +11,6 @@
 #include "InvalidInputException.hpp"
 
 void check_rotations(const YamlRotation& input);
-void check_controllers_and_commands(const std::vector<YamlController>& controllers_input, const std::vector<YamlTimeSeries>& commands_input);
 void throw_if_any_errors_were_detected(const std::string& caller, const std::stringstream& ss);
 bool is_an_axis(const std::string& name);
 
@@ -67,17 +66,19 @@ void check_rotations(const YamlRotation& input)
     throw_if_any_errors_were_detected(__PRETTY_FUNCTION__, errors);
 }
 
-void check_controllers_and_commands(const std::vector<YamlController>& controllers_input, const std::vector<YamlTimeSeries>& commands_input)
+void check_controller_output_is_not_defined_in_a_command(const std::string& controller_command_name,
+                                                         const std::vector<YamlTimeSeries>& commands_input)
 {
     std::stringstream errors;
 
-    for (const YamlController controller : controllers_input)
+    for (const YamlTimeSeries commands : commands_input)
     {
-        for (const YamlTimeSeries commands : commands_input)
+        for (const auto& command_name_values : commands.commands)
         {
-            if ((controller.name == commands.name) and (commands.commands.count(controller.output) > 0))
+            const std::string command_complete_name = commands.name + "(" + command_name_values.first + ")";
+            if (controller_command_name == command_complete_name)
             {
-                errors << "The controllers output '" << controller.output << "' of controlled force '" << controller.name << "' is already defined in the 'commands' section." << std::endl;
+                errors << "The controllers output '" << controller_command_name << "' is already defined in the 'commands' section." << std::endl;
             }
         }
     }
@@ -103,6 +104,5 @@ void check_state_name(const std::string& state_name)
 YamlSimulatorInput check_input_yaml(const YamlSimulatorInput& input)
 {
     check_rotations(input.rotations);
-    check_controllers_and_commands(input.controllers, input.commands);
     return input;
 }

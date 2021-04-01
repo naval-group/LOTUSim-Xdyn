@@ -2,7 +2,6 @@
 set(MODULE_UNDER_TEST yaml_parser)
 project(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/SimulatorYamlParserTest.cpp
-              src/check_input_yamlTest.cpp
               src/environment_parsersTest.cpp
               src/parse_controllersTest.cpp
               src/parse_commandsTest.cpp

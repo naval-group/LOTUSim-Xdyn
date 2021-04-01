@@ -1058,7 +1058,6 @@ des contrôleurs à la simulation, qui vont calculer les commandes dont ont beso
 Pour chaque commande à calculer :
 
 - La valeur renseignée dans `name` doit correspondre à l'identifiant utilisé dans la section `external forces`.
-- Le nom de la commande est renseigné dans le champ `output`.
 - Le champ `type` permet de choisir le type de contrôleur. Pour l'instant, seul le
   [régulateur `PID`](#r%C3%A9gulateur-pid) est implémenté.
 - Le pas de temps du contrôleur est renseigné dans le champ `dt`.
@@ -1075,26 +1074,7 @@ state_weights:
     y: -1
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
 On peut aussi rajouter les champs spécifiques au contrôleur choisi.
-
-Par exemple, voici un yaml spécifiant un contrôleur calculant la commande attendue
-pour la direction de [ce modèle](#h%C3%A9lices-wageningen-s%C3%A9rie-b) :
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-controllers:
-  - name: port side propeller
-    output: beta
-    type: PID
-    dt: 1
-    setpoint: psi_co
-    state_weights:
-      psi: 1
-    gains:
-      Kp: -1
-      Ki: 0
-      Kd: -1
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Les valeurs des **mesures des contrôleurs** doivent être renseignées dans une nouvelle section `setpoints`
 (facultative) à la racine du yaml, dont la syntaxe est identique à [celle des commandes](#syntaxe-des-commandes) :
@@ -1122,19 +1102,24 @@ Le correcteur PID agit de trois manières :
 - action dérivée : l'erreur est dérivée et multipliée par un gain Kd.
 
 Pour calculer une commande en utilisant un régulateur PID, il faut créer un contrôleur de type `PID`,
-auquel on rajoutera la section yaml `gains`, qui contient trois champs : `Kp`, `Ki` et `Kd`.
+auquel on rajoutera les sections yaml suivantes:
+- `gains`, qui contient trois champs : `Kp`, `Ki` et `Kd`.
+- `command`, qui contient le nom complet de la commande que calcule le contrôleur,
+   composée du nom du modèle d'effort concaténé avec le nom de la commande entre parenthèses.
+   Par example: `PropRudd(rpm)`, `port side propeller(P/D)`.
 
-Par exemple :
+Par exemple, voici un yaml spécifiant un contrôleur PID calculant la commande attendue
+pour la direction de [ce modèle](#h%C3%A9lices-wageningen-s%C3%A9rie-b) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 controllers:
   - name: port side propeller
-    output: beta
     type: PID
     dt: 1
     setpoint: psi_co
     state_weights:
       psi: 1
+    command: port side propeller(beta)
     gains:
       Kp: -1
       Ki: 0

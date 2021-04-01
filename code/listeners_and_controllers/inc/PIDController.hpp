@@ -30,10 +30,11 @@ class PIDController : public Controller
             double Kp; //!< Proportional gain
             double Ki; //!< Integral gain
             double Kd; //!< Derivative gain
+            /* PID Controller output */
+            std::string command_name;
         };
 
         PIDController(const double dt,
-                      const std::string& output_name,
                       const std::string& setpoint_name,
                       const std::map<std::string, double>& state_weights,
                       const std::string& yaml
@@ -42,6 +43,15 @@ class PIDController : public Controller
         const Yaml yaml; //!< Controller-specific yaml
 
     private:
+        /**
+         * @brief Updates the controller output value in the datasource
+         *
+         * This method will be called by the "ssc::solver::DiscreteSystem::callback" method.
+         * @param time Current simulation time (in seconds).
+         * @param system The continuous system. Used to retrieve the continuous states.
+         */
+        void update_discrete_states(const double time, ssc::solver::ContinuousSystem* system);
+
         /** \brief Returns the last time instant at which `callback` has been called
          */
         double get_previous_t();

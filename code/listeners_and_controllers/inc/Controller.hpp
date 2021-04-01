@@ -18,29 +18,13 @@ class Controller : public ssc::solver::DiscreteSystem
 {
     public:
         Controller(const double dt,
-                   const std::string& output_name,
                    const std::string& setpoint_name,
                    const std::map<std::string, double>& state_weights
                    );
 
         virtual ~Controller();
 
-    private:
-        const std::string output_name;                     //!< Name of the datasource command outputed by the controller
-        const std::string setpoint_name;                   //!< Name of the datasource setpoint needed by the controller
-        const std::map<std::string, double> state_weights; //!< Weights associated to each state, used to compute the controller's measured input,
-                                                           //   with the convention that any missing state has weight 0.
-                                                           //   For example "u - 2v" -> { {"u", 1}, {"v", -2} }
-
-        /**
-         * @brief Updates the controller output value in the datasource
-         *
-         * This method will be called by the "ssc::solver::DiscreteSystem::callback" method.
-         * @param time Current simulation time (in seconds).
-         * @param system The continuous system. Used to retrieve the continuous states.
-         */
-        void update_discrete_states(const double time, ssc::solver::ContinuousSystem* system);
-
+    protected:
         /**
          * @brief Sets a controller output value in the datasource
          *
@@ -59,9 +43,20 @@ class Controller : public ssc::solver::DiscreteSystem
          */
         double get_measured_value(const ssc::solver::ContinuousSystem* sys) const;
 
-        /** \brief Computes the command value from the input data
+    private:
+        const std::string setpoint_name;                   //!< Name of the datasource setpoint needed by the controller
+        const std::map<std::string, double> state_weights; //!< Weights associated to each state, used to compute the controller's measured input,
+                                                           //   with the convention that any missing state has weight 0.
+                                                           //   For example "u - 2v" -> { {"u", 1}, {"v", -2} }
+
+        /**
+         * @brief Updates the controller output value in the datasource
+         *
+         * This method will be called by the "ssc::solver::DiscreteSystem::callback" method.
+         * @param time Current simulation time (in seconds).
+         * @param system The continuous system. Used to retrieve the continuous states.
          */
-        virtual double compute_command(const double setpoint, const double measured_value, const double t) = 0;
+        virtual void update_discrete_states(const double time, ssc::solver::ContinuousSystem* system) = 0;
 
 };
 

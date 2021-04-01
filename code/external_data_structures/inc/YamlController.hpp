@@ -18,7 +18,6 @@ struct YamlController
 {
     YamlController();
     std::string name;                             //!< Name of the controlled force
-    std::string output;                           //!< Name of the command outputed by the controller
     std::string type;                             //!< Type of the controller (PID, gRPC)
     double dt;                                    //!< Time step of the discrete system
     std::string setpoint;                         //!< Name of the setpoint needed by the controller

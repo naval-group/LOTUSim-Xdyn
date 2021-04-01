@@ -14,7 +14,6 @@
 void operator >> (const YAML::Node& node, YamlController& c)
 {
     node["name"] >> c.name;
-    node["output"] >> c.output;
     node["type"] >> c.type;
     node["dt"] >> c.dt;
     node["setpoint"] >> c.setpoint;

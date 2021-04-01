@@ -5,6 +5,7 @@
  *      Author: cady
  */
 
+#include "check_input_yaml.hpp"
 #include "InterpolationModule.hpp"
 #include "InvalidInputException.hpp"
 #include "listeners.hpp"
@@ -87,7 +88,8 @@ void add_setpoints_listener(ssc::data_source::DataSource& ds,
 }
 
 
-std::vector<PIDController> get_pid_controllers(const std::vector<YamlController>& yaml_controllers //!< Parsed YAML controllers
+std::vector<PIDController> get_pid_controllers(const std::vector<YamlController>& yaml_controllers, //!< Parsed YAML controllers
+                                               const std::vector<YamlTimeSeries>& yaml_commands //!< Parsed YAML commands
                                                )
 {
     std::vector<PIDController> controllers;
@@ -96,11 +98,11 @@ std::vector<PIDController> get_pid_controllers(const std::vector<YamlController>
         if (yaml_controller.type == "PID")
         {
             const PIDController controller(yaml_controller.dt,
-                                           namify(yaml_controller.output, yaml_controller.name),
                                            namify(yaml_controller.setpoint, yaml_controller.name),
                                            yaml_controller.state_weights,
                                            yaml_controller.rest_of_the_yaml
                                            );
+            check_controller_output_is_not_defined_in_a_command(controller.yaml.command_name, yaml_commands);
             controllers.push_back(controller);
         }
     }

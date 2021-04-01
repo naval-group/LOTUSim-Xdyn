@@ -36,18 +36,21 @@ void PIDControllerTest::TearDown()
 {
 }
 
-std::string PIDControllerTest::yaml_gains(const double Kp, const double Ki, const double Kd)
+std::string PIDControllerTest::pid_specific_yaml(const double Kp, const double Ki, const double Kd,
+                                                 const std::string& command_name
+                                                 )
 {
     std::stringstream yaml_string;
     yaml_string << "gains:\n"
                 << "    Kp: " << std::to_string(Kp) << "\n"
                 << "    Ki: " << std::to_string(Ki) << "\n"
-                << "    Kd: " << std::to_string(Kd) << "\n";
+                << "    Kd: " << std::to_string(Kd) << "\n"
+                << "command: " << command_name << "\n";
 
     return yaml_string.str();
 }
 
-TEST_F(PIDControllerTest, can_parse_controller_gains)
+TEST_F(PIDControllerTest, can_parse_controller_specific_yaml)
 {
     for (size_t i = 0 ; i < 100 ; ++i)
     {
@@ -55,13 +58,15 @@ TEST_F(PIDControllerTest, can_parse_controller_gains)
         const double Kp = a.random<double>();
         const double Ki = a.random<double>();
         const double Kd = a.random<double>();
+        const std::string command_name = a.random<std::string>();
 
         const std::map<std::string, double> state_weights { { a.random<std::string>(), a.random<double>() }, { a.random<std::string>(), a.random<double>() } };
-        const PIDController controller = PIDController(dt, a.random<std::string>(), a.random<std::string>(), state_weights, yaml_gains(Kp, Ki, Kd));
+        const PIDController controller = PIDController(dt, a.random<std::string>(), state_weights, pid_specific_yaml(Kp, Ki, Kd, command_name));
 
         ASSERT_NEAR(Kp, controller.yaml.Kp, 1e-6);
         ASSERT_NEAR(Ki, controller.yaml.Ki, 1e-6);
         ASSERT_NEAR(Kd, controller.yaml.Kd, 1e-6);
+        ASSERT_EQ(command_name, controller.yaml.command_name);
     }
 }
 
@@ -72,7 +77,7 @@ TEST_F(PIDControllerTest, update_command_in_ds_example)
     const double Ki = 0.1;
     const double Kd = 0.314;
     const std::map<std::string, double> state_weights { { "x", 1 }, { "y", -1 } };
-    PIDController controller(dt, "propeller(rpm)", "propeller(rpm_co)", state_weights, yaml_gains(Kp, Ki, Kd));
+    PIDController controller(dt, "propeller(rpm_co)", state_weights, pid_specific_yaml(Kp, Ki, Kd, "propeller(rpm)"));
 
     const double rpm_co = 5;
     const double x = 2 * rpm_co;
@@ -103,7 +108,7 @@ TEST_F(PIDControllerTest, can_compute_PID_commands)
     const double Ki = 0.1;
     const double Kd = 0.314;
     const std::map<std::string, double> state_weights { { "x", 1 }, { "y", -1 } };
-    PIDController controller(dt, "propeller(rpm)", "propeller(rpm_co)", state_weights, yaml_gains(Kp, Ki, Kd));
+    PIDController controller(dt, "propeller(rpm_co)", state_weights, pid_specific_yaml(Kp, Ki, Kd, "propeller(rpm)"));
 
     Sim sys = get_system(test_data::falling_ball_example(), 0);
 
@@ -163,7 +168,7 @@ TEST_F(PIDControllerTest, can_compute_PID_commands_several_times_at_first_time_s
     const double Ki = 0.1;
     const double Kd = 0.314;
     const std::map<std::string, double> state_weights { { "x", 1 }, { "y", -1 } };
-    PIDController controller(dt, "propeller(rpm)", "propeller(rpm_co)", state_weights, yaml_gains(Kp, Ki, Kd));
+    PIDController controller(dt, "propeller(rpm_co)", state_weights, pid_specific_yaml(Kp, Ki, Kd, "propeller(rpm)"));
 
     Sim sys = get_system(test_data::falling_ball_example(), 0);
 
@@ -203,7 +208,7 @@ TEST_F(PIDControllerTest, can_use_euler_angles_in_states)
     const double Ki = 0.1;
     const double Kd = 0.314;
     const std::map<std::string, double> state_weights { { "psi", 1 } };
-    PIDController controller(dt, "propeller(psi_co)", "propeller(psi)", state_weights, yaml_gains(Kp, Ki, Kd));
+    PIDController controller(dt, "propeller(psi)", state_weights, pid_specific_yaml(Kp, Ki, Kd, "propeller(psi_co)"));
 
     Sim sys = get_system(test_data::falling_ball_example(), 0);
 
@@ -245,29 +250,31 @@ TEST_F(PIDControllerTest, can_initialize_controllers)
     std::stringstream yaml_controllers;
     yaml_controllers << "controllers:\n"
                    "  - name: propeller\n"
-                   "    output: rpm\n"
                    "    type: PID\n"
                    "    dt: 0.15\n"
                    "    setpoint: rpm_co\n"
                    "    state_weights:\n"
                    "        u: 0.5\n"
+                   "    command: propeller(rpm)\n"
                    "    gains:\n"
                    "        Kp: 4.2\n"
                    "        Ki: 0.25\n"
                    "        Kd: 1\n"
                    "  - name: controller\n"
-                   "    output: P/D\n"
                    "    type: PID\n"
                    "    dt: 0.5\n"
                    "    setpoint: P/D_co\n"
                    "    state_weights:\n"
                    "        u: 0\n"
+                   "    command: controller(P/D)\n"
                    "    gains:\n"
                    "        Kp: 1\n"
                    "        Ki: 0\n"
                    "        Kd: 0\n";
 
-    std::vector<PIDController> controllers = get_pid_controllers(parse_controller_yaml(yaml_controllers.str()));
+    std::vector<PIDController> controllers = get_pid_controllers(parse_controller_yaml(yaml_controllers.str()),
+                                                                 std::vector<YamlTimeSeries>()
+                                                                 );
     initialize_controllers(controllers, scheduler, &sys);
 
     // Check controllers commands have been initialized in the datasource

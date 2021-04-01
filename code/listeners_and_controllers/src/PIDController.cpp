@@ -8,23 +8,25 @@
 #include "PIDController.hpp"
 #include "InvalidInputException.hpp"
 
-PIDController::PIDController (const double dt, const std::string &output_name,
+PIDController::PIDController (const double dt,
                               const std::string &setpoint_name,
                               const std::map<std::string, double> &state_weights,
                               const std::string &yaml)
-    : Controller (dt, output_name, setpoint_name, state_weights), yaml (yaml), dt (dt),
+    : Controller (dt, setpoint_name, state_weights), yaml (yaml), dt (dt),
       t_start (), i_previous_t (0), initialized (false), previous_error (),
       integral_term (0)
 {
 }
 
-PIDController::Yaml::Yaml (const std::string &yaml) : Kp (), Ki (), Kd ()
+PIDController::Yaml::Yaml (const std::string &yaml) : Kp (), Ki (), Kd (), command_name ()
 {
     std::stringstream stream (yaml);
     std::stringstream ss;
     YAML::Parser parser (stream);
     YAML::Node node;
     parser.GetNextDocument (node);
+
+    node["command"] >> command_name;
 
     try
     {
@@ -38,6 +40,23 @@ PIDController::Yaml::Yaml (const std::string &yaml) : Kp (), Ki (), Kd ()
                "Unable to parse 'gains': it should contain the sub-nodes "
                "'Kp', 'Ki' and 'Kd'.");
     }
+}
+
+
+/**
+ * @brief Updates the controller output value in the datasource
+ *
+ * This method will be called by the "ssc::solver::DiscreteSystem::callback" method.
+ * @param time Current simulation time (in seconds).
+ * @param system The continuous system. Used to retrieve the continuous states.
+ */
+void
+PIDController::update_discrete_states (const double time, ssc::solver::ContinuousSystem* sys)
+{
+    const double command_value = compute_command(Controller::get_setpoint(sys),
+                                                 Controller::get_measured_value(sys),
+                                                 time);
+    Controller::set_discrete_state(sys, yaml.command_name, command_value);
 }
 
 /** \brief Computes the command value from the input data, using a PID
