@@ -20,7 +20,7 @@
         "terminal.integrated.shell.linux": "/bin/bash",
         "python.pythonPath": "/usr/bin/python3",
         "python.linting.pylintPath": "/usr/local/bin/pylint",
-        "python.formatting.provider": "black",
+        "python.formatting.provider": "autopep8",
         "python.analysis.cacheFolderPath": "/tmp",
         "python.analysis.logLevel": "Warning",
         "python.linting.enabled": true,
