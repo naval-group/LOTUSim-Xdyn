@@ -12,9 +12,17 @@ class PIDController(controller.Model):
     def __init__(self, parameters: str, t0: float):
         """Initialize parameters from gRPC's set_parameters."""
         param = yaml.safe_load(parameters)
+        self.derivative_gain = param["gains"]["Kd"]
+        self.proportional_gain = param["gains"]["Kp"]
+        self.integral_gain = param["gains"]["Ki"]
         self.timestep = param["dt"]
         self.setpoint_name = param["setpoint"]
+        self.command_name = param["command"]
         self.weights = param["weights"]
+        self.t_start = t0
+        self.previous_error = 0
+        self.integral = 0
+        self.can_use_integrator_and_derivative = False
         super(PIDController, self).__init__(t0, self.timestep)
 
     def get_setpoint_names(self) -> List[str]:
@@ -52,3 +60,53 @@ class PIDController(controller.Model):
             + self.weights.get("psi", 0) * states.psi
         )
 
+    def get_commands_euler_321(
+        self,
+        states: StatesEuler,
+        dstates_dt: StatesEuler,
+        setpoints: List[float],
+    ) -> Dict[str, float]:
+        """Calculate the commands using angles in Rned2body = Rz(ψ).Ry(θ).Rx(ϕ)
+            rotation convention
+
+            Parameters
+            ----------
+            - states (StatesQuaternion): latest ship states
+            - dstates_dt (StatesQuaternion): ship states derivative at the
+                                             previous timestep
+            - setpoints (Dict[str,float]): controller inputs (setpoints)
+
+            Returns
+            -------
+            - commands (Dict[str,float]): commands used by xdyn's controlled
+                                          forces
+            """
+        error = setpoints[0] - self.get_plant_output(states)
+        # Proportional term
+        proportional_term = self.proportional_gain * error
+        integral_term = 0
+        derivative_term = 0
+
+        if self.can_use_integrator_and_derivative:
+            # Integral term
+            self.integral += error * self.timestep
+            integral_term = self.integral_gain * self.integral
+
+            # Derivative term
+            derivative_term = (
+                self.derivative_gain *
+                (error - self.previous_error) / self.timestep
+            )
+
+        # Store error for next time step
+        self.previous_error = error
+
+        # As integrator and derivative have been initialized, we can now use
+        # them
+        self.can_use_integrator_and_derivative = True
+
+        return {
+            self.command_name: proportional_term
+            + integral_term
+            + derivative_term
+        }
