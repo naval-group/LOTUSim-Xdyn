@@ -2,7 +2,6 @@
 from difflib import SequenceMatcher
 import logging
 from typing import Dict, List
-import wave_types_pb2
 import controller_pb2
 import controller_pb2_grpc
 import time
@@ -250,7 +249,7 @@ class Model:
 
 
 class ControllerServicer(controller_pb2_grpc.ControllerServicer):
-    """Implements the gRPC methods defined in waves.proto."""
+    """Implements the gRPC methods defined in controller.proto."""
 
     def __init__(self, controller_class):
         """Constructor.
