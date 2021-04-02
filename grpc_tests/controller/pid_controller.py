@@ -4,6 +4,17 @@ from typing import Dict, List
 import yaml
 from controller import StatesEuler, StatesQuaternion
 import controller
+import logging
+
+SERVICE_NAME = "pid-controller"
+
+logging.basicConfig(
+    format='%(asctime)s,%(msecs)d ['
+    + SERVICE_NAME
+    + '] - %(levelname)-4s [%(filename)s:%(lineno)d] %(message)s',
+    datefmt='%d-%m-%Y:%H:%M:%S')
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.INFO)
 
 
 class PIDController(controller.Model):
