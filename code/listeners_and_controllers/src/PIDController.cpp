@@ -88,7 +88,7 @@ PIDController::get_measured_value(const ssc::solver::ContinuousSystem* sys) cons
     double measured_state = 0;
     for (const auto& name_coeff : yaml.state_weights)
     {
-        measured_state += name_coeff.second * Controller::get_state_value(sys, name_coeff.first);
+        measured_state += name_coeff.second * Controller::get_system_output(sys, name_coeff.first);
     }
     return measured_state;
 }

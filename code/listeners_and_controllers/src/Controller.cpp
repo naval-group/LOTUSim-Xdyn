@@ -33,7 +33,7 @@ double Controller::get_setpoint(const ssc::solver::ContinuousSystem* sys, const 
     return sys->get_input_value(setpoint_name);
 }
 
-double Controller::get_state_value(const ssc::solver::ContinuousSystem* sys, const std::string& state_name) const
+double Controller::get_system_output(const ssc::solver::ContinuousSystem* sys, const std::string& state_name) const
 {
     return sys->get_state_value(state_name);
 }

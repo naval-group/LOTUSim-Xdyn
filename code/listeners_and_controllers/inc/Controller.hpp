@@ -38,7 +38,7 @@ class Controller : public ssc::solver::DiscreteSystem
 
         /** \brief Gets the value of the system state used by the controller to compute its input
          */
-        double get_state_value(const ssc::solver::ContinuousSystem* sys, const std::string& state_name) const;
+        double get_system_output(const ssc::solver::ContinuousSystem* sys, const std::string& state_name) const;
 
     private:
         /**
