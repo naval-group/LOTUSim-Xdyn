@@ -89,7 +89,7 @@ def run():
     """Launch the server & run some gRPC calls."""
     with grpc.insecure_channel("controller:9002") as channel:
         yaml_parameters = """
-            command: beta,
+            command: beta
             dt: 0.5
             setpoint: rpm_co
             weights:
@@ -100,7 +100,10 @@ def run():
                 Ki: 0.1
                 Kd: 0.314
         """
-        LOGGER.info("Creating PID controller instance")
+        Kp = 2.5
+        Ki = 0.1
+        Kd = 0.314
+        dt = 0.5
         pid = Controller(channel, yaml_parameters)
         # First time step
         error = 0.05
@@ -119,7 +122,31 @@ def run():
         dstates_dt = controller.StatesEuler()
 
         first_expected_command = Kp * error
-        LOGGER.info(pid.get_commands_euler_321(states, dstates_dt, [rpm_co]))
+        assert abs(pid.get_commands_euler_321(states, dstates_dt,
+                                              [rpm_co])['beta'] - first_expected_command) < 1E-6
+
+        # Second time step
+        error2 = -0.03
+        rpm_co = 1.5
+        states.x = 2 * rpm_co
+        states.y = rpm_co + error2
+        second_expected_command = Kp * error2 + Ki * \
+            error2 * dt + Kd * (error2 - error) / dt
+        assert abs(pid.get_commands_euler_321(states, dstates_dt,
+                                              [rpm_co])['beta'] - second_expected_command) < 1E-6
+
+        # Third time step
+        error3 = 0.01
+        rpm_co = 5.5
+        states.x = 2 * rpm_co
+        states.y = rpm_co + error3
+        third_expected_command = Kp * error3 + Ki * \
+            (error2 * dt + error3 * dt) + Kd * (error3 - error2) / dt
+
+        assert abs(pid.get_commands_euler_321(states, dstates_dt,
+                                              [rpm_co])['beta'] - third_expected_command) < 1E-6
+
+        LOGGER.info('ALL DONE!')
 
 
 if __name__ == "__main__":

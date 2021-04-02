@@ -1,0 +1,20 @@
+version: '3'
+services:
+  controller:
+    build:
+      context: ../..
+      dockerfile: grpc_tests/controller/Dockerfile
+    user: ${CURRENT_UID}
+    environment:
+    - no_proxy
+    entrypoint: /usr/bin/python3 pid_controller.py
+  test:
+    build:
+      context: ../..
+      dockerfile: grpc_tests/controller/Dockerfile
+    depends_on:
+    - controller
+    user: ${CURRENT_UID}
+    environment:
+    - no_proxy
+    entrypoint: ./wait-for-it.sh controller:9002 -s -t 20 -- /usr/bin/python3 grpc_controller_client.py
