@@ -41,7 +41,7 @@ PIDController::Yaml::Yaml (const std::string &yaml) : Kp (), Ki (), Kd (), state
                "'Kp', 'Ki' and 'Kd'.");
     }
 
-    for(YAML::Iterator it=node["state_weights"].begin();it!=node["state_weights"].end();++it)
+    for(YAML::Iterator it=node["state weights"].begin();it!=node["state weights"].end();++it)
     {
         std::string key = "";
         it.first() >> key;
@@ -49,16 +49,16 @@ PIDController::Yaml::Yaml (const std::string &yaml) : Kp (), Ki (), Kd (), state
         {
             check_state_name(key);
             double value;
-            node["state_weights"][key] >> value;
+            node["state weights"][key] >> value;
             state_weights[key] = value;
         }
         catch(const InvalidInputException& e)
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Something is wrong with the YAML, more specifically in the 'state_weights' section. When parsing the '" << key << "' state: " << e.get_message());
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Something is wrong with the YAML, more specifically in the 'state weights' section. When parsing the '" << key << "' state: " << e.get_message());
         }
         catch(const YAML::Exception& e)
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Something is wrong with the YAML, more specifically in the 'state_weights' section. When parsing the '" << key << "' values: " << e.msg);
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Something is wrong with the YAML, more specifically in the 'state weights' section. When parsing the '" << key << "' values: " << e.msg);
         }
     }
 }

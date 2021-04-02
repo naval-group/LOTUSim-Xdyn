@@ -1090,14 +1090,14 @@ Pour calculer une commande en utilisant un régulateur PID, il faut créer un co
 auquel on rajoutera les sections yaml suivantes:
 
 - `gains`, qui contient trois champs : `Kp`, `Ki` et `Kd`.
-- `state_weights`, qui contient la mesure dont le contrôleur aura besoin, spécifiée par une formule linéaire permettant
+- `state weights`, qui contient la mesure dont le contrôleur aura besoin, spécifiée par une formule linéaire permettant
   d'obtenir une valeur à partir des états du système lors de la simulation. On renseigne une liste de clefs/valeurs où les clefs
   correspondent au nom de l'état et les valeurs sont les coefficients. Un état non spécifié a pour coefficient 0.
   Les noms d'états valides sont : `x`, `y`, `z`, `u`, `v`, `w`, `p`, `q`, `r`, `qr`, `qi`, `qj`, `qk`, `phi`, `theta` et `psi`.
   Par exemple, pour obtenir `x / 2 - y` :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-state_weights:
+state weights:
     x: 0.5
     y: -1
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1118,7 +1118,7 @@ controllers:
   - name: port side propeller
     type: PID
     dt: 1
-    state_weights:
+    state weights:
       psi: 1
     setpoint: port side propeller(psi_co)
     command: port side propeller(beta)
