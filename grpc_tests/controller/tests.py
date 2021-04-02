@@ -20,3 +20,8 @@ def test_can_call_pid_controller():
     )
     pid_controller.PIDController(yaml_string, dt)
 
+
+def test_should_get_the_right_number_of_inputs():
+    dt = 2.3
+    controller = pid_controller.PIDController(get_yaml(dt), dt)
+    assert controller.get_setpoint_names() == ["psi_co"]
