@@ -11,8 +11,9 @@
 
 PIDController::PIDController (const double dt,
                               const std::string &yaml)
-    : Controller (dt), yaml (yaml), dt (dt),
-      t_start (), i_previous_t (0), initialized (false), previous_error (),
+    : Controller (dt), yaml (yaml),
+      initialized (false),
+      previous_t (0), previous_error (0),
       integral_term (0)
 {
 }
@@ -103,54 +104,28 @@ PIDController::compute_command (const double setpoint,
                                 const double measured_value, const double t)
 {
     const double error = setpoint - measured_value;
-    const double previous_t = get_previous_t ();
-    const double next_meeting_point = get_current_t ();
     double derivative_term = 0;
 
     // Proportional term
     const double proportional_term = yaml.Kp * error;
 
-    if (initialized && next_meeting_point <= t)
+    if (initialized && t > previous_t)
     {
         // Integral term
-        integral_term = integral_term
-                        + yaml.Ki * error * (next_meeting_point - previous_t);
+        integral_term = integral_term + yaml.Ki * error * (t - previous_t);
 
         // Derivative term
-        derivative_term = yaml.Kd * (error - previous_error)
-                         / (next_meeting_point - previous_t);
-
-        ++i_previous_t;
+        derivative_term = yaml.Kd * (error - previous_error) / (t - previous_t);
     }
 
     if (!initialized)
     {
-        t_start = t;
         initialized = true;
     }
 
-    // Store error for next time step
+    // Store error and time for next time step
+    previous_t = t;
     previous_error = error;
 
     return proportional_term + integral_term + derivative_term;
-}
-
-double
-PIDController::get_previous_t ()
-{
-    if (!initialized)
-    {
-        return 0;
-    }
-    return t_start + dt * i_previous_t;
-}
-
-double
-PIDController::get_current_t ()
-{
-    if (!initialized)
-    {
-        return 0;
-    }
-    return t_start + dt * (i_previous_t + 1);
 }
