@@ -9,9 +9,10 @@
 #include "check_input_yaml.hpp"
 #include "InvalidInputException.hpp"
 
-PIDController::PIDController (const double dt,
+PIDController::PIDController (const double tstart,
+                              const double dt,
                               const std::string &yaml)
-    : Controller (dt), yaml (yaml),
+    : Controller (tstart, dt), yaml (yaml),
       initialized (false),
       previous_t (0), previous_error (0),
       integral_term (0)

@@ -1,7 +1,7 @@
 #include "DiscreteSystem.hpp"
 
-ssc::solver::DiscreteSystem::DiscreteSystem(const double dt_)
-    : dt(dt_)
+ssc::solver::DiscreteSystem::DiscreteSystem(const double tstart_, const double dt_)
+    : tstart(tstart_), dt(dt_)
 {
 }
 

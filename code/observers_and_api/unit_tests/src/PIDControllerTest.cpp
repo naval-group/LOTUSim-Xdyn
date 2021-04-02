@@ -64,7 +64,7 @@ TEST_F(PIDControllerTest, can_parse_controller_specific_yaml)
 
         const double x_weight = a.random<double>();
         const double psi_weight = a.random<double>();
-        const PIDController controller = PIDController(dt,
+        const PIDController controller = PIDController(0, dt,
                                                        pid_specific_yaml(Kp, Ki, Kd, setpoint_name, command_name) +
                                                        "state weights:\n    x: " + std::to_string(x_weight) +
                                                        "\n    psi: " + std::to_string(psi_weight) + "\n");
@@ -85,20 +85,20 @@ TEST_F(PIDControllerTest, can_parse_controller_specific_yaml)
 
 TEST_F(PIDControllerTest, update_command_in_ds_example)
 {
+    const double tstart = 0.1;
     const double dt = 0.5;
+    ssc::solver::Scheduler scheduler(tstart, 10, dt);
+
     const double Kp = 2.5;
     const double Ki = 0.1;
     const double Kd = 0.314;
-    PIDController controller(dt, pid_specific_yaml(Kp, Ki, Kd, "rpm_co", "propeller(rpm)") + "state weights:\n    x: 1\n    y: -1\n");
+    PIDController controller(tstart, dt, pid_specific_yaml(Kp, Ki, Kd, "rpm_co", "propeller(rpm)") + "state weights:\n    x: 1\n    y: -1\n");
 
     const double rpm_co = 5;
     const double x = 2 * rpm_co;
     const double y = rpm_co + 0.05;
 
     Sim sys = get_system(test_data::falling_ball_example(), 0);
-
-    const double tstart = 0.1;
-    ssc::solver::Scheduler scheduler(tstart, 10, dt);
 
     //! [callback example]
     // First time step
@@ -115,16 +115,16 @@ TEST_F(PIDControllerTest, update_command_in_ds_example)
 
 TEST_F(PIDControllerTest, can_compute_PID_commands)
 {
+    const double tstart = 0.1;
     const double dt = 0.5;
+    ssc::solver::Scheduler scheduler(tstart, 2, dt);
+
     const double Kp = 2.5;
     const double Ki = 0.1;
     const double Kd = 0.314;
-    PIDController controller(dt, pid_specific_yaml(Kp, Ki, Kd, "rpm_co", "propeller(rpm)") + "state weights:\n    x: 1\n    y: -1\n");
+    PIDController controller(tstart, dt, pid_specific_yaml(Kp, Ki, Kd, "rpm_co", "propeller(rpm)") + "state weights:\n    x: 1\n    y: -1\n");
 
     Sim sys = get_system(test_data::falling_ball_example(), 0);
-
-    const double tstart = 0.1;
-    ssc::solver::Scheduler scheduler(tstart, 2, dt);
 
     // First time step
     ASSERT_EQ(tstart, scheduler.get_time());
@@ -174,16 +174,16 @@ TEST_F(PIDControllerTest, can_compute_PID_commands)
 
 TEST_F(PIDControllerTest, can_compute_PID_commands_several_times_at_first_time_step)
 {
+    const double tstart = 0.1;
     const double dt = 0.5;
+    ssc::solver::Scheduler scheduler(tstart, 10, dt);
+
     const double Kp = 2.5;
     const double Ki = 0.1;
     const double Kd = 0.314;
-    PIDController controller(dt, pid_specific_yaml(Kp, Ki, Kd, "rpm_co", "propeller(rpm)") + "state weights:\n    x: 1\n    y: -1\n");
+    PIDController controller(tstart, dt, pid_specific_yaml(Kp, Ki, Kd, "rpm_co", "propeller(rpm)") + "state weights:\n    x: 1\n    y: -1\n");
 
     Sim sys = get_system(test_data::falling_ball_example(), 0);
-
-    const double tstart = 0.1;
-    ssc::solver::Scheduler scheduler(tstart, 10, dt);
 
     // First time step
     ASSERT_EQ(tstart, scheduler.get_time());
@@ -213,16 +213,16 @@ TEST_F(PIDControllerTest, can_compute_PID_commands_several_times_at_first_time_s
 
 TEST_F(PIDControllerTest, can_use_euler_angles_in_states)
 {
+    const double tstart = 0.1;
     const double dt = 0.5;
+    ssc::solver::Scheduler scheduler(tstart, 10, dt);
+
     const double Kp = 2.5;
     const double Ki = 0.1;
     const double Kd = 0.314;
-    PIDController controller(dt, pid_specific_yaml(Kp, Ki, Kd, "psi", "propeller(psi_co)") + "state weights:\n    psi: 1\n");
+    PIDController controller(tstart, dt, pid_specific_yaml(Kp, Ki, Kd, "psi", "propeller(psi_co)") + "state weights:\n    psi: 1\n");
 
     Sim sys = get_system(test_data::falling_ball_example(), 0);
-
-    const double tstart = 0.1;
-    ssc::solver::Scheduler scheduler(tstart, 10, dt);
 
     const double psi = 0.45;
     const double error = -0.05;
@@ -279,7 +279,8 @@ TEST_F(PIDControllerTest, can_initialize_controllers)
                    "        Ki: 0\n"
                    "        Kd: 0\n";
 
-    std::vector<PIDController> controllers = get_pid_controllers(parse_controller_yaml(yaml_controllers.str()),
+    std::vector<PIDController> controllers = get_pid_controllers(tstart,
+                                                                 parse_controller_yaml(yaml_controllers.str()),
                                                                  std::vector<YamlTimeSeries>()
                                                                  );
     initialize_controllers(controllers, scheduler, &sys);

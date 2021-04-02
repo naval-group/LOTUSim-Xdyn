@@ -93,7 +93,8 @@ void add_setpoints_listener(ssc::data_source::DataSource& ds,
 }
 
 
-std::vector<PIDController> get_pid_controllers(const std::vector<YamlController>& yaml_controllers, //!< Parsed YAML controllers
+std::vector<PIDController> get_pid_controllers(const double tstart,
+                                               const std::vector<YamlController>& yaml_controllers, //!< Parsed YAML controllers
                                                const std::vector<YamlTimeSeries>& yaml_commands //!< Parsed YAML commands
                                                )
 {
@@ -102,7 +103,8 @@ std::vector<PIDController> get_pid_controllers(const std::vector<YamlController>
     {
         if (yaml_controller.type == "PID")
         {
-            const PIDController controller(yaml_controller.dt,
+            const PIDController controller(tstart,
+                                           yaml_controller.dt,
                                            yaml_controller.rest_of_the_yaml
                                            );
             check_controller_output_is_not_defined_in_a_command(controller.yaml.command_name, yaml_commands);

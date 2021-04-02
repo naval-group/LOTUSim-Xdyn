@@ -39,7 +39,8 @@ class PIDController : public Controller
             std::string command_name;
         };
 
-        PIDController(const double dt,
+        PIDController(const double tstart,
+                      const double dt,
                       const std::string& yaml
                       );
 

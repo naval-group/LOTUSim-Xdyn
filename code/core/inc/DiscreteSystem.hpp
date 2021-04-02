@@ -20,7 +20,7 @@ namespace ssc
         class DiscreteSystem
         {
           public:
-            DiscreteSystem(const double dt);
+            DiscreteSystem(const double tstart, const double dt);
             virtual ~DiscreteSystem() = default;
             /**
              * @brief This is the callback that is called by the scheduler.
@@ -72,6 +72,7 @@ namespace ssc
              */
             virtual void update_discrete_states(const double time, ContinuousSystem *system) = 0;
 
+            double tstart;
             double dt;
         };
     }

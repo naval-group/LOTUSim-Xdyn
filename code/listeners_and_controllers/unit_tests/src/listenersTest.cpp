@@ -201,7 +201,8 @@ TEST_F(listenersTest, get_pid_controllers_example)
         "    rpm: {unit: rad/s, values: [3]}\n"
         "    psi_co: {unit: deg, values: [30]}\n";
     //! [controllersTest listen_to_file_example]
-    const std::vector<PIDController> controllers = get_pid_controllers(parse_controller_yaml(test_data::controllers()),
+    const std::vector<PIDController> controllers = get_pid_controllers(0,
+                                                                       parse_controller_yaml(test_data::controllers()),
                                                                        parse_command_yaml(commands)
                                                                        );
     ASSERT_EQ(2, controllers.size());
@@ -222,5 +223,5 @@ TEST_F(listenersTest, should_throw_if_controllers_and_commands_define_the_same_c
         "    rpm: {unit: rad/s, values: [3]}\n");
     const std::vector<YamlController> yaml_controllers = parse_controller_yaml(test_data::controllers());
 
-    ASSERT_THROW(get_pid_controllers(yaml_controllers, yaml_commands), InvalidInputException);
+    ASSERT_THROW(get_pid_controllers(0, yaml_controllers, yaml_commands), InvalidInputException);
 }

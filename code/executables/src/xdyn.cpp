@@ -140,7 +140,7 @@ void run_simulation(const XdynCommandLineArguments& input_data, ErrorReporter& e
         auto sys = get_system(input, input_data.tstart);
 
         ssc::solver::Scheduler scheduler(input_data.tstart, input_data.tend, input_data.initial_timestep);
-        std::vector<PIDController> controllers = get_pid_controllers(input.controllers, input.commands);
+        std::vector<PIDController> controllers = get_pid_controllers(input_data.tstart, input.controllers, input.commands);
         initialize_controllers(controllers, scheduler, &sys);
 
         auto observers_description = build_observers_description(yaml_input, input_data);
