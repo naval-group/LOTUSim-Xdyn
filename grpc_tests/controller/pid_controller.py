@@ -127,9 +127,14 @@ class PIDController(controller.Model):
         # As integrator and derivative have been initialized, we can now use
         # them
         self.can_use_integrator_and_derivative = True
-
         return {
             self.command_name: proportional_term
             + integral_term
             + derivative_term
         }
+
+
+# Start the gRPC server loop
+if __name__ == "__main__":
+    LOGGER.info('Starting gRPC PID controller')
+    controller.serve(PIDController)
