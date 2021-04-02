@@ -14,6 +14,7 @@ class PIDController(controller.Model):
         param = yaml.safe_load(parameters)
         self.timestep = param["dt"]
         self.setpoint_name = param["setpoint"]
+        self.weights = param["weights"]
         super(PIDController, self).__init__(t0, self.timestep)
 
     def get_setpoint_names(self) -> List[str]:
@@ -32,4 +33,22 @@ class PIDController(controller.Model):
         - commands (Dict[str,float]): commands used by xdyn's controlled forces
         """
         return [self.setpoint_name]
+
+    def get_plant_output(self, states: StatesEuler) -> float:
+        """Calculates the linear combination of states used to compute the
+        command."""
+        return (
+            self.weights.get("x", 0) * states.x
+            + self.weights.get("y", 0) * states.y
+            + self.weights.get("z", 0) * states.z
+            + self.weights.get("u", 0) * states.u
+            + self.weights.get("v", 0) * states.v
+            + self.weights.get("w", 0) * states.w
+            + self.weights.get("p", 0) * states.p
+            + self.weights.get("q", 0) * states.q
+            + self.weights.get("r", 0) * states.r
+            + self.weights.get("phi", 0) * states.phi
+            + self.weights.get("theta", 0) * states.theta
+            + self.weights.get("psi", 0) * states.psi
+        )
 
