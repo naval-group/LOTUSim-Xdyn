@@ -32,7 +32,7 @@ void operator >> (const YAML::Node& node, YamlTimeSeries& c)
             {
                 std::vector<double> values;
                 ssc::yaml_parser::parse_uv(node[key], values);
-                c.commands[key] = values;
+                c.values[key] = values;
             }
             catch(const YAML::Exception& e)
             {

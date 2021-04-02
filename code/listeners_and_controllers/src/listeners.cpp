@@ -43,14 +43,14 @@ void add(std::vector<YamlTimeSeries>::const_iterator& that_command, ssc::data_so
     const auto t = that_command->t;
     if (t.size() == 1)
     {
-        for (auto it = that_command->commands.begin() ; it != that_command->commands.end() ; ++it)
+        for (auto it = that_command->values.begin() ; it != that_command->values.end() ; ++it)
         {
             ds.set<double>(namify(it->first, that_command->name), it->second.front());
         }
     }
     else
     {
-        for (auto it = that_command->commands.begin() ; it != that_command->commands.end() ; ++it)
+        for (auto it = that_command->values.begin() ; it != that_command->values.end() ; ++it)
         {
             try
             {

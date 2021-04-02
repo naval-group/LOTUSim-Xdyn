@@ -7,5 +7,5 @@
 
 #include "YamlTimeSeries.hpp"
 
-YamlTimeSeries::YamlTimeSeries() : name(),t(),commands()
+YamlTimeSeries::YamlTimeSeries() : name(),t(),values()
 {}

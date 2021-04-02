@@ -73,7 +73,7 @@ void check_controller_output_is_not_defined_in_a_command(const std::string& cont
 
     for (const YamlTimeSeries commands : commands_input)
     {
-        for (const auto& command_name_values : commands.commands)
+        for (const auto& command_name_values : commands.values)
         {
             const std::string command_complete_name = commands.name + "(" + command_name_values.first + ")";
             if (controller_command_name == command_complete_name)
