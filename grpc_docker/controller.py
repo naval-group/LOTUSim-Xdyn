@@ -125,6 +125,46 @@ class StatesEuler:
     theta: float = 0
     psi  : float = 0
 
+def from_grpc_states_euler(
+    states: controller_pb2.ControllerStatesEuler
+) -> StatesEuler:
+    """Convert protobuf states type to Python dataclass."""
+    ret = StatesEuler()
+    ret.t = states.t
+    ret.x = states.x
+    ret.y = states.y
+    ret.z = states.z
+    ret.u = states.u
+    ret.v = states.v
+    ret.w = states.w
+    ret.p = states.p
+    ret.q = states.q
+    ret.r = states.r
+    ret.phi = states.phi
+    ret.theta = states.theta
+    ret.psi = states.psi
+    return ret
+
+def from_grpc_states_quaternion(
+    states: controller_pb2.ControllerStatesQuaternion
+) -> StatesQuaternion:
+    """Convert protobuf states type to Python dataclass."""
+    ret = StatesEuler()
+    ret.t = states.t
+    ret.x = states.x
+    ret.y = states.y
+    ret.z = states.z
+    ret.u = states.u
+    ret.v = states.v
+    ret.w = states.w
+    ret.p = states.p
+    ret.q = states.q
+    ret.r = states.r
+    ret.qr = states.qr
+    ret.qi = states.qi
+    ret.qj = states.qj
+    ret.qk = states.qk
+    return ret
 
 SERVICE_NAME = "grpc-controller"
 
