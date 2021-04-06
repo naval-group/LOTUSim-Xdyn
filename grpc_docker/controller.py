@@ -391,9 +391,10 @@ class ControllerServicer(controller_pb2_grpc.ControllerServicer):
                     + str(len(self.setpoint_names))
                     + " were provided."
                 )
-            commands = callback(converter(request.states), converter(request.dstates_dt), setpoints)
-            response.commands[:] = commands[:]
             response.next_call = self.controller.get_date_of_next_callback()
+            commands = callback(converter(request.states), converter(request.dstates_dt), setpoints)
+            for key, value in commands.items():
+                response.commands[key] = value
             self.controller.increment_nb_of_calls()
         except NotImplementedError as exception:
             LOGGER.error(exception)
