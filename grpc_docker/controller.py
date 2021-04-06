@@ -19,6 +19,7 @@ class StatesQuaternion:
     """Ship states history supplied to the controller. Using quaternions.
 
     Attributes:
+        t (float): Simulation time (in seconds).
         x (float): Projection on axis X of the NED frame of the vector between
                    the origin of the NED frame and the origin of the BODY frame
                    In metres.
@@ -53,6 +54,7 @@ class StatesQuaternion:
                     rotation from the NED frame to the ship's BODY frame.
     """
 
+    t: float
     x: float
     y: float
     z: float
@@ -73,6 +75,7 @@ class StatesEuler:
     """Ship states history supplied to the controller. Using Euler 3-2-1 angles
 
     Attributes:
+        t (float): Simulation time (in seconds).
         x (float): Projection on axis X of the NED frame of the vector between
                    the origin of the NED frame and the origin of the BODY frame
                    In metres.
@@ -108,6 +111,7 @@ class StatesEuler:
                      See xdyn's documentation for details.
     """
 
+    t: float
     x: float
     y: float
     z: float
