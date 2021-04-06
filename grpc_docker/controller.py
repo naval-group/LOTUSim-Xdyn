@@ -227,6 +227,17 @@ class Model:
         """
         return self.t0 + self.nb_of_calls * self.dt
 
+    def get_angle_representation(self) -> str:
+        """Which method should we call to get the commands computed by the controller?
+
+        'QUATERNION' -> get_commands_quaternion
+        'EULER_321' -> get_commands_euler_321
+        """
+        raise NotImplementedError(
+            inspect.currentframe().f_code.co_name + NOT_IMPLEMENTED
+        )
+
+
     def get_commands_quaternion(
         self, states: StatesQuaternion, dstates_dt: StatesQuaternion
     ) -> Dict[str, float]:
@@ -329,6 +340,7 @@ class ControllerServicer(controller_pb2_grpc.ControllerServicer):
             response.date_of_first_callback = (
                 self.controller.get_date_of_next_callback()
             )
+            response.angle_representation = controller_pb2.SetParametersResponse.AngleRepresentation.Value(self.controller.get_angle_representation())
             self.controller.increment_nb_of_calls()
         except KeyError as exception:
             match = closest_match(

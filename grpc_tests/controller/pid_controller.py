@@ -36,6 +36,14 @@ class PIDController(controller.Model):
         self.can_use_integrator_and_derivative = False
         super(PIDController, self).__init__(t0, self.timestep)
 
+    def get_angle_representation(self) -> str:
+        """Which method should we call to get the commands computed by the controller?
+
+        'QUATERNION' -> get_commands_quaternion
+        'EULER_321' -> get_commands_euler_321
+        """
+        return 'EULER_321'
+
     def get_setpoint_names(self) -> List[str]:
         """Return the name(s) of the controller inputs (setpoints).
 
