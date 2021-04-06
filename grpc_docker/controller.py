@@ -382,7 +382,7 @@ class ControllerServicer(controller_pb2_grpc.ControllerServicer):
         """Marshalls the controller's arguments from gRPC."""
         response = controller_pb2.ControllerResponse()
         try:
-            setpoints = request.inputs[:]
+            setpoints = request.setpoints[:]
             if len(setpoints) != len(self.setpoint_names):
                 raise IndexError(
                     "The controller needs "
