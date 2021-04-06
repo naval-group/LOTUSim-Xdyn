@@ -54,20 +54,20 @@ class StatesQuaternion:
                     rotation from the NED frame to the ship's BODY frame.
     """
 
-    t: float
-    x: float
-    y: float
-    z: float
-    u: float
-    v: float
-    w: float
-    p: float
-    q: float
-    r: float
-    qr: float
-    qi: float
-    qj: float
-    qk: float
+    t : float = 0
+    x : float = 0
+    y : float = 0
+    z : float = 0
+    u : float = 0
+    v : float = 0
+    w : float = 0
+    p : float = 0
+    q : float = 0
+    r : float = 0
+    qr: float = 0
+    qi: float = 0
+    qj: float = 0
+    qk: float = 0
 
 
 @dataclass
@@ -111,20 +111,19 @@ class StatesEuler:
                      See xdyn's documentation for details.
     """
 
-    t: float
-    x: float
-    y: float
-    z: float
-    u: float
-    v: float
-    w: float
-    p: float
-    q: float
-    r: float
-    phi: float
-    theta: float
-    psi: float
-    qk: float
+    t    : float = 0
+    x    : float = 0
+    y    : float = 0
+    z    : float = 0
+    u    : float = 0
+    v    : float = 0
+    w    : float = 0
+    p    : float = 0
+    q    : float = 0
+    r    : float = 0
+    phi  : float = 0
+    theta: float = 0
+    psi  : float = 0
 
 
 SERVICE_NAME = "grpc-controller"
