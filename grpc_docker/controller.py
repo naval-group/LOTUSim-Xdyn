@@ -377,9 +377,11 @@ class ControllerServicer(controller_pb2_grpc.ControllerServicer):
             response.next_call = self.controller.get_date_of_next_callback()
             self.controller.increment_nb_of_calls()
         except NotImplementedError as exception:
+            LOGGER.error(exception)
             context.set_details(repr(exception))
             context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         except Exception as exception:
+            LOGGER.error(exception)
             context.set_details(repr(exception))
             context.set_code(grpc.StatusCode.UNKNOWN)
         return response
