@@ -349,13 +349,13 @@ class ControllerServicer(controller_pb2_grpc.ControllerServicer):
 
     def get_commands_euler_321(self, request, context):
         """Euler-angle version of the controller."""
-        self.get_commands(
+        return self.get_commands(
             self.controller.get_commands_euler_321, request, context
         )
 
     def get_commands_quaternion(self, request, context):
         """Quaternion version of the controller."""
-        self.get_commands(
+        return self.get_commands(
             self.controller.get_commands_quaternion, request, context
         )
 
