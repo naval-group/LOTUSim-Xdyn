@@ -369,16 +369,16 @@ class ControllerServicer(controller_pb2_grpc.ControllerServicer):
     def get_commands_euler_321(self, request, context):
         """Euler-angle version of the controller."""
         return self.get_commands(
-            self.controller.get_commands_euler_321, request, context
+            self.controller.get_commands_euler_321, from_grpc_states_euler, request, context
         )
 
     def get_commands_quaternion(self, request, context):
         """Quaternion version of the controller."""
         return self.get_commands(
-            self.controller.get_commands_quaternion, request, context
+            self.controller.get_commands_quaternion, from_grpc_states_quaternion, request, context
         )
 
-    def get_commands(self, callback, request, context):
+    def get_commands(self, callback, converter, request, context):
         """Marshalls the controller's arguments from gRPC."""
         response = controller_pb2.ControllerResponse()
         try:
@@ -391,7 +391,7 @@ class ControllerServicer(controller_pb2_grpc.ControllerServicer):
                     + str(len(self.setpoint_names))
                     + " were provided."
                 )
-            commands = callback(states, request.dstates_dt, setpoints)
+            commands = callback(converter(request.states), converter(request.dstates_dt), setpoints)
             response.commands[:] = commands[:]
             response.next_call = self.controller.get_date_of_next_callback()
             self.controller.increment_nb_of_calls()
