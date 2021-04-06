@@ -320,8 +320,7 @@ class ControllerServicer(controller_pb2_grpc.ControllerServicer):
             - date_of_first_callback (double): usually t0
 
         """
-        LOGGER.info("Received parameters: %s", request.parameters)
-        response = controller_pb2.SetControllerParameterResponse()
+        response = controller_pb2.SetParametersResponse()
         try:
             self.controller = self.controller_class(
                 request.parameters, request.t0
