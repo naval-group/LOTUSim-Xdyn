@@ -87,7 +87,7 @@ class Controller:
 
 def run():
     """Launch the server & run some gRPC calls."""
-    with grpc.insecure_channel("controller:50051") as channel:
+    with grpc.insecure_channel("controller:9002") as channel:
         yaml_parameters = """
             command: beta,
             dt: 0.5
