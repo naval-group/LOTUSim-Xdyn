@@ -27,5 +27,6 @@ void ssc::solver::DiscreteSystem::initialize(Scheduler &scheduler, ContinuousSys
 
 double ssc::solver::DiscreteSystem::get_date_of_next_update(const double current_time) const
 {
-    return current_time + dt;
+    const int current_iterator = (int)std::round((current_time - tstart) / dt);
+    return tstart + (current_iterator + 1) * dt;
 }
