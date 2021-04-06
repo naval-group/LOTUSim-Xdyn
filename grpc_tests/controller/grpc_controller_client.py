@@ -78,8 +78,8 @@ class Controller:
         request = controller_pb2.ControllerRequestEuler()
         grpc_states = to_grpc_states(states)
         grpc_dstates_dt = to_grpc_states(dstates_dt)
-        request.states = grpc_states
-        request.dstates_dt = grpc_dstates_dt
+        request.states.CopyFrom(grpc_states)
+        request.dstates_dt.CopyFrom(grpc_dstates_dt)
         request.setpoints[:] = setpoints
         response = self.stub.get_commands_euler_321(request)
         return response.commands
