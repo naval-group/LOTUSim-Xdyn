@@ -325,7 +325,7 @@ class ControllerServicer(controller_pb2_grpc.ControllerServicer):
             self.controller = self.controller_class(
                 request.parameters, request.t0
             )
-            self.setpoint_names = self.controller.get_setpoint_names()
+            self.setpoint_names[:] = self.controller.get_setpoint_names()
             response.date_of_first_callback = (
                 self.controller.get_date_of_next_callback()
             )
