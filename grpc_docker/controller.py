@@ -237,6 +237,12 @@ class Model:
             inspect.currentframe().f_code.co_name + NOT_IMPLEMENTED
         )
 
+    def has_extra_observations(self) -> bool:
+        """Should the solver call get_extra_observations or is there no point?"""
+        raise NotImplementedError(
+            inspect.currentframe().f_code.co_name + NOT_IMPLEMENTED
+        )
+
 
     def get_commands_quaternion(
         self, states: StatesQuaternion, dstates_dt: StatesQuaternion
@@ -341,6 +347,7 @@ class ControllerServicer(controller_pb2_grpc.ControllerServicer):
                 self.controller.get_date_of_next_callback()
             )
             response.angle_representation = controller_pb2.SetParametersResponse.AngleRepresentation.Value(self.controller.get_angle_representation())
+            response.has_extra_observations = self.controller.has_extra_observations()
             self.controller.increment_nb_of_calls()
         except KeyError as exception:
             match = closest_match(

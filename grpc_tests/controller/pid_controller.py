@@ -44,6 +44,10 @@ class PIDController(controller.Model):
         """
         return 'EULER_321'
 
+    def has_extra_observations(self) -> bool:
+        """Should the solver call get_extra_observations or is there no point?"""
+        return False
+
     def get_setpoint_names(self) -> List[str]:
         """Return the name(s) of the controller inputs (setpoints).
 
