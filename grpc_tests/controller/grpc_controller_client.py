@@ -85,9 +85,11 @@ class Controller:
         return response.commands
 
 
-def test_python_controller():
+
+def test_controller(address):
     """Launch the server & run some gRPC calls."""
-    with grpc.insecure_channel("python-controller:9002") as channel:
+    LOGGER.info('Testing controller at ' + address)
+    with grpc.insecure_channel(address) as channel:
         yaml_parameters = """
             command: beta
             dt: 0.5
@@ -149,6 +151,15 @@ def test_python_controller():
         LOGGER.info('ALL DONE!')
 
 
+def test_python_controller():
+    test_controller("python-controller:9002")
+
+
+def test_cpp_controller():
+    test_controller("cpp-controller:9002")
+
+
 if __name__ == "__main__":
     LOGGER.info("Starting client")
     test_python_controller()
+    test_cpp_controller()

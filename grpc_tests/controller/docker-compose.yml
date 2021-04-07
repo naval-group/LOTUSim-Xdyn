@@ -8,13 +8,21 @@ services:
     environment:
     - no_proxy
     entrypoint: /usr/bin/python3 pid_controller.py
+  cpp-controller:
+    build:
+      context: ../..
+      dockerfile: grpc_tests/controller/Dockerfile.cpp
+    user: ${CURRENT_UID}
+    environment:
+    - no_proxy
   test:
     build:
       context: ../..
       dockerfile: grpc_tests/controller/Dockerfile.python
     depends_on:
+    - cpp-controller
     - python-controller
     user: ${CURRENT_UID}
     environment:
     - no_proxy
-    entrypoint: ./wait-for-it.sh controller:9002 -s -t 20 -- /usr/bin/python3 grpc_controller_client.py
+    entrypoint: ./wait-for-it.sh cpp-controller:9002 -s -t 20 -- ./wait-for-it.sh python-controller:9002 -s -t 20 -- /usr/bin/python3 grpc_controller_client.py
