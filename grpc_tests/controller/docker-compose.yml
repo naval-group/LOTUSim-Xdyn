@@ -1,9 +1,9 @@
 version: '3'
 services:
-  controller:
+  python-controller:
     build:
       context: ../..
-      dockerfile: grpc_tests/controller/Dockerfile
+      dockerfile: grpc_tests/controller/Dockerfile.python
     user: ${CURRENT_UID}
     environment:
     - no_proxy
@@ -11,9 +11,9 @@ services:
   test:
     build:
       context: ../..
-      dockerfile: grpc_tests/controller/Dockerfile
+      dockerfile: grpc_tests/controller/Dockerfile.python
     depends_on:
-    - controller
+    - python-controller
     user: ${CURRENT_UID}
     environment:
     - no_proxy
