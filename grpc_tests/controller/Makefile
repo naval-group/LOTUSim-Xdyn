@@ -2,4 +2,4 @@
 
 all:
 	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose rm -f
-	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose up -t 0 --exit-code-from test --abort-on-container-exit --build
+	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose up -t 0 --exit-code-from test --abort-on-container-exit --build --remove-orphans
