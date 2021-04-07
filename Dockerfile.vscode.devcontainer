@@ -22,5 +22,6 @@ ADD code/waves_grpc/wave_grpc.proto .
 ADD code/waves_grpc/wave_types.proto .
 RUN python3 -m grpc_tools.protoc -I . --python_out=/usr/python --grpc_python_out=/usr/python/ wave_types.proto && \
     python3 -m grpc_tools.protoc -I . --python_out=/usr/python --grpc_python_out=/usr/python/ force.proto && \
-    python3 -m grpc_tools.protoc -I . --python_out=/usr/python --grpc_python_out=/usr/python/ controller.proto
+    python3 -m grpc_tools.protoc -I . --python_out=/usr/python --grpc_python_out=/usr/python/ controller.proto && \
+    protoc --plugin=protoc-gen-grpc=`which grpc_cpp_plugin` -I . --cpp_out=/opt --grpc_out=/opt controller.proto
 ADD grpc_docker/force.py grpc_docker/controller.py /usr/python/
