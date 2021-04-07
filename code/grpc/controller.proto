@@ -103,7 +103,7 @@ message ControllerStatesEuler
 
 message ControllerResponse
 {
-    map<string,float> commands = 1; // Commands computed by the controller
+    map<string,double> commands = 1; // Commands computed by the controller
     double next_call           = 2; // Date at which the solver should call the controller again
 }
 
