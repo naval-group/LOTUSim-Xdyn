@@ -31,7 +31,7 @@ message ExtraObservationsRequest
 
 message ExtraObservationsResponse
 {
-    map<string, string> extra_observations = 1; // Extra values that the controller can output (for logging & tracing purposes)
+    map<string, double> extra_observations = 1; // Extra values that the controller can output (for logging & tracing purposes)
 }
 
 message SetParametersRequest
