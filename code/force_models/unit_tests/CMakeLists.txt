@@ -26,6 +26,7 @@ FILE(GLOB SRC src/QuadraticDampingForceModelTest.cpp
               src/LinearHydrostaticForceModelTest.cpp
               src/ConstantForceModelTest.cpp
               src/HoltropMennenForceModelTest.cpp
+              src/AeroPolarForceModelTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
