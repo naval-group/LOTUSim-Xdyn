@@ -40,6 +40,7 @@
 #include "PowerLawWindVelocityProfile.hpp"
 #include "LogWindVelocityProfile.hpp"
 #include "HoltropMennenForceModel.hpp"
+#include "AeroPolarForceModel.hpp"
 
 SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, const ssc::data_source::DataSource& command_listener);
 SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, const ssc::data_source::DataSource& command_listener)
@@ -79,7 +80,8 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& yaml, const double t0, co
 		   .can_parse<UniformWindVelocityProfile>()
 		   .can_parse<PowerLawWindVelocityProfile>()
 		   .can_parse<LogWindVelocityProfile>()
-		   .can_parse<HoltropMennenForceModel>();
+		   .can_parse<HoltropMennenForceModel>()
+		   .can_parse<AeroPolarForceModel>();
     return builder;
 }
 
