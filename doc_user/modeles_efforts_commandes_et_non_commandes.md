@@ -899,9 +899,11 @@ Ce modèle d'effort est essentiellement valide pour des mouvements dans le plan 
 
 De plus certains détails d'implémentation sont à noter :
 
-- La vitesse de l'écoulement $`U`$ correspond à la vitesse relative de l'écoulement d'air (vent et vitesse du corps), calculée à un point du corps spécifié en entrée, et projetée dans le plan horizontal du repère propre au corps ;
+- La vitesse de l'écoulement $`U`$ correspond à la vitesse relative de l'écoulement d'air (vent et vitesse du corps), calculée à un point du corps spécifié en entrée, et projetée dans le plan horizontal du repère propre au corps (repère "body") ;
 - L'effort de portance est orienté de façon favorable à la propulsion pour un coefficient $`C_l`$ positif ;
 - L'effort de traînée est orienté dans le sens de l'écoulement pour un coefficient $`C_d`$ positif.
+
+Enfin, le point de calcul donné en entrée a deux fonctions. C'est d'une part le point de calcul du vent relatif : le vent à sa position et sa vitesse sont utilisés. C'est d'autre part le point d'application de la force dans le repère lié au corps.
 
 ### Paramétrage
 
@@ -925,6 +927,10 @@ La clé `AWA` (pour Apparent Wind Angle) correspond à l'angle de vent apparent,
 ![](images/apparent_wind.svg)
 
 Les données polaires de coefficients de portance et traînée peuvent être données de 0° à 360° ou de 0° à 180°. Dans ce second cas, une hypothèse de symmétrie selon l'axe longitudinal du corps ($`\vec{x_0}`$ du repère propre) est appliquée.
+
+### Références
+
+- [Page Wikipedia "Effort sur une voile"](https://fr.wikipedia.org/wiki/Effort_sur_une_voile)
 
 # Efforts commandés
 
