@@ -29,7 +29,7 @@ class AeroPolarForceModel : public ForceModel
         Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const override;
 
     private:
-        // The interpolators need to be behind pointers because calling them in non-const
+        // The interpolators need to be behind pointers because interpolation is non-const
         std::unique_ptr<ssc::interpolation::SplineVariableStep> Cl;
         std::unique_ptr<ssc::interpolation::SplineVariableStep> Cd;
         const double S;
