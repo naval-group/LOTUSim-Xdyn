@@ -4,8 +4,8 @@
 #include <map>
 #include <string>
 
-#include "Scheduler.hpp"
-#include "solve.hpp"
+#include <ssc/solver/Scheduler.hpp>
+#include <ssc/solver/solve.hpp>
 
 #include "SimulatorYamlParser.hpp"
 #include "check_input_yaml.hpp"

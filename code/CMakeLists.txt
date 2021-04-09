@@ -127,6 +127,7 @@ ADD_LIBRARY(${PROJECT_NAME} ${STATICORSHARED}
     $<TARGET_OBJECTS:websocket_object>
     $<TARGET_OBJECTS:f2c_object>
     $<TARGET_OBJECTS:json_object>
+    $<TARGET_OBJECTS:solver_object>
 
         $<TARGET_OBJECTS:core>
         $<TARGET_OBJECTS:observers_and_api>

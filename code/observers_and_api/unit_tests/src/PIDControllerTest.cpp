@@ -6,8 +6,8 @@
  */
 
 #include "simulator_api.hpp"
-#include "Scheduler.hpp"
-#include "DiscreteSystem.hpp"
+#include <ssc/solver/Scheduler.hpp>
+#include <ssc/solver/DiscreteSystem.hpp>
 #include "listeners.hpp"
 #include "PIDControllerTest.hpp"
 #include "PIDController.hpp"

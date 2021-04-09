@@ -10,7 +10,7 @@
 
 #include <ssc/data_source.hpp>
 #include "PIDController.hpp"
-#include "Scheduler.hpp"
+#include <ssc/solver/Scheduler.hpp>
 #include "YamlTimeSeries.hpp"
 #include "YamlController.hpp"
 

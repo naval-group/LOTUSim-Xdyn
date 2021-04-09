@@ -4,7 +4,7 @@
 #include "JSONSerializer.hpp"
 #include "SimServerInputs.hpp"
 #include "simulator_api.hpp"
-#include <steppers.hpp>
+#include <ssc/solver/steppers.hpp>
 #include "CoSimulationObserver.hpp"
 
 XdynForCS::XdynForCS(const std::string& yaml_model, const std::string& solver, const double dt):

@@ -17,7 +17,7 @@
 #include "ForceModel.hpp"
 #include "SurfaceElevationGrid.hpp"
 #include "State.hpp"
-#include "ContinuousSystem.hpp"
+#include <ssc/solver/ContinuousSystem.hpp>
 
 typedef std::map<std::string, std::map< std::string,ssc::kinematics::Vector6d > > OuputtedForces;
 typedef std::vector<std::pair<std::string,std::vector<std::string> > > VectorOfStringModelForEachBody;
