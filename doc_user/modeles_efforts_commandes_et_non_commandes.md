@@ -870,6 +870,68 @@ Les coordonnées du point d'application de l'effort sont notées `x`, `y` et `z`
 exprimées dans le repère désigné par `frame`. Les coordonnées `X`, `Y`, `Z`,
 `K`, `M` et `N` du torseur d'effort sont également exprimées dans ce repère.
 
+
+## Modèle d'effort aérodynamique quadratique par polaire
+
+### Description
+
+Les efforts du vent sur une structure peuvent être représentés de façon quadratique à l'aide de ceofficients de portance et traînée :
+
+```math
+F_l = \frac{1}{2} \rho_{air} C_l S_{ref} U^2
+```
+```math
+F_d = \frac{1}{2} \rho_{air} C_d S_{ref} U^2
+```
+
+Où :
+
+- $`F_l`$ est l'effort de portance, perpendicalaire à la direction de l'écoulement d'air,
+- $`F_d`$ est l'effort de traînée, parallèle à la direction de l'écoulement d'air,
+- $`\rho_{air}`$ est la masse volumique de l'air,
+- $`C_l`$ et $`C_d`$ sont les coefficients de portance et de traînée (respectivement),
+- $`S_{ref}`$ est une surface de référence (généralement une surface projetée),
+- $`U`$ est la vitesse de l'écoulement d'air, dépendant de la vitesse du corps et de celle du vent
+
+### Hypothèses
+
+Ce modèle d'effort est essentiellement valide pour des mouvements dans le plan horizontal. Les coefficients donnés par l'utilisateur sont valables pour une attitude du corps simulé. Il est donc pertinent d'utiliser ce modèle pour des objets dont les mouvements hors du plan horizontal sont faibles, comme un navire sur mer calme. Ce modèle peut être utilisé pour simuler l'effet du vent sur les oeuvres mortes ou sur un système de propulsion éolienne.
+
+De plus certains détails d'implémentation sont à noter :
+
+- La vitesse de l'écoulement $`U`$ correspond à la vitesse relative de l'écoulement d'air (vent et vitesse du corps), calculée à un point du corps spécifié en entrée, et projetée dans le plan horizontal du repère propre au corps (repère "body") ;
+- L'effort de portance est orienté de façon favorable à la propulsion pour un coefficient $`C_l`$ positif ;
+- L'effort de traînée est orienté dans le sens de l'écoulement pour un coefficient $`C_d`$ positif.
+
+Enfin, le point de calcul donné en entrée a deux fonctions. C'est d'une part le point de calcul du vent relatif : le vent à sa position et sa vitesse sont utilisés. C'est d'autre part le point d'application de la force dans le repère lié au corps.
+
+### Paramétrage
+
+Le modèle d'effort aérodynamique quadratique par polaire est paramétré dans xdyn avec la section YAML suivante :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: aerodynamic polar
+  name: main sail
+  calculation point in body frame:
+      x: {value: 1, unit: m}
+      y: {value: 2, unit: m}
+      z: {value: 3, unit: m}
+  reference area: {value: 1000, unit: m^2}
+  AWA: {unit: deg, values: [0,7,9,12,28,60,90,120,150,180]}
+  lift coefficient: [0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,-0.11207]
+  drag coefficient: [0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+La clé `AWA` (pour Apparent Wind Angle) correspond à l'angle de vent apparent, c'est-à-dire l'angle d'incidence de l'écoulement dans le répère propre au corps. Un angle nul correspond à un écoulement selon l'axe $`-\vec{x_0}`$ (du repère propre, soit un vent de face), un angle de 90° un écoulement selon l'angle $`-\vec{y_0}`$ (donc un vent de travers sur tribord)...
+
+![](images/apparent_wind.svg)
+
+Les données polaires de coefficients de portance et traînée peuvent être données de 0° à 360° ou de 0° à 180°. Dans ce second cas, une hypothèse de symmétrie selon l'axe longitudinal du corps ($`\vec{x_0}`$ du repère propre) est appliquée.
+
+### Références
+
+- [Page Wikipedia "Effort sur une voile"](https://fr.wikipedia.org/wiki/Effort_sur_une_voile)
+
 # Efforts commandés
 
 ## Description
