@@ -30,8 +30,8 @@ class AeroPolarForceModel : public ForceModel
 
     private:
         // The interpolators need to be behind pointers because interpolation is non-const
-        std::unique_ptr<ssc::interpolation::SplineVariableStep> Cl;
-        std::unique_ptr<ssc::interpolation::SplineVariableStep> Cd;
+        std::unique_ptr<ssc::interpolation::SplineVariableStep> Cl; //<! Lift coefficient as a function of the apparent wind angle AWA
+        std::unique_ptr<ssc::interpolation::SplineVariableStep> Cd; //!< Drag coefficient as a function of the apparent wind angle AWA
         const double S;
         const Eigen::Vector3d calculation_point;
         bool symmetry;
