@@ -913,7 +913,7 @@ Le modèle d'effort aérodynamique quadratique par polaire est paramétré dans 
   calculation point in body frame:
       x: {value: 1, unit: m}
       y: {value: 2, unit: m}
-       z: {value: 3, unit: m}
+      z: {value: 3, unit: m}
   reference area: {value: 1000, unit: m^2}
   AWA: {unit: deg, values: [0,7,9,12,28,60,90,120,150,180]}
   lift coefficient: [0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,-0.11207]
