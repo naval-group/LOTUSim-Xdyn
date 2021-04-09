@@ -32,7 +32,7 @@ class AeroPolarForceModel : public ForceModel
         // The interpolators need to be behind pointers because interpolation is non-const
         std::unique_ptr<ssc::interpolation::SplineVariableStep> Cl; //<! Lift coefficient as a function of the apparent wind angle AWA
         std::unique_ptr<ssc::interpolation::SplineVariableStep> Cd; //!< Drag coefficient as a function of the apparent wind angle AWA
-        const double S;
+        const double reference_area;
         const Eigen::Vector3d calculation_point;
         bool symmetry; //!< If true, then lift and drag coefficients from 180° to 360° AWA are the same as the coefficients from 180° to 0° (they are symmetric with respect to the wing's x0 axis in the (x0,y0) plane). Otherwise, the coefficients are assumed to have been given for AWA from 0° to 360°.
 };

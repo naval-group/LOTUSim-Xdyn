@@ -16,7 +16,7 @@ AeroPolarForceModel::AeroPolarForceModel(const Input input, const std::string bo
         ForceModel(input.name, {}, body_name_, env),
         Cl(),
         Cd(),
-        S(input.reference_area),
+        reference_area(input.reference_area),
         calculation_point(input.calculation_point_in_body_frame.x, input.calculation_point_in_body_frame.y, input.calculation_point_in_body_frame.z),
         symmetry()
 {
@@ -98,8 +98,8 @@ Wrench AeroPolarForceModel::get_force(const BodyStates& states, const double t, 
     {
         beta_prime = beta;
     }
-    const double lift = 0.5*Cl->f(beta_prime)*env.get_rho_air()*pow(U, 2)*S;
-    const double drag = 0.5*Cd->f(beta_prime)*env.get_rho_air()*pow(U, 2)*S;
+    const double lift = 0.5*Cl->f(beta_prime)*env.get_rho_air()*pow(U, 2)*reference_area;
+    const double drag = 0.5*Cd->f(beta_prime)*env.get_rho_air()*pow(U, 2)*reference_area;
     Wrench ret(ssc::kinematics::Point(body_name, calculation_point), body_name);
     if (beta<=M_PI) // Starboard wind
     {
