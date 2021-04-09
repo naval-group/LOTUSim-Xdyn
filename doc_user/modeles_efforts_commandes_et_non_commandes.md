@@ -922,6 +922,8 @@ Le modèle d'effort aérodynamique quadratique par polaire est paramétré dans 
 
 La clé `AWA` (pour Apparent Wind Angle) correspond à l'angle de vent apparent, c'est-à-dire l'angle d'incidence de l'écoulement dans le répère propre au corps. Un angle nul correspond à un écoulement selon l'axe $`-\vec{x_0}`$ (du repère propre, soit un vent de face), un angle de 90° un écoulement selon l'angle $`-\vec{y_0}`$ (donc un vent de travers sur tribord)...
 
+![](images/apparent_wind.svg)
+
 Les données polaires de coefficients de portance et traînée peuvent être données de 0° à 360° ou de 0° à 180°. Dans ce second cas, une hypothèse de symmétrie selon l'axe longitudinal du corps ($`\vec{x_0}`$ du repère propre) est appliquée.
 
 # Efforts commandés
