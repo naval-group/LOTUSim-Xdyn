@@ -37,7 +37,7 @@ AeroPolarForceModel::AeroPolarForceModel(const Input input, const std::string bo
     }
     else if (max_beta < 2*M_PI-eps) // max_beta is between pi and 2*pi (but not close enough to either)
     {
-        std::cout << "WARNING: In an aerodynamic polar force model '" << name << "', you provided a maximum apparent wind angle between 180deg and 360deg. Symmetry will be assumed and values over 180deg will be ignored." << std::endl;
+        std::cerr << "WARNING: In an aerodynamic polar force model '" << name << "', you provided a maximum apparent wind angle between 180deg and 360deg. Symmetry will be assumed and values over 180deg will be ignored." << std::endl;
         symmetry = true;
     }
     else if (max_beta < 2*M_PI+eps) // max_beta is close to 2*pi
@@ -46,7 +46,7 @@ AeroPolarForceModel::AeroPolarForceModel(const Input input, const std::string bo
     }
     else // max_beta is over 2*pi (but not close enough)
     {
-        std::cout << "WARNING: In an aerodynamic polar force model '" << name << "', you provided a maximum apparent wind higher than 360deg. All values over 360deg will be ignored." << std::endl;
+        std::cerr << "WARNING: In an aerodynamic polar force model '" << name << "', you provided a maximum apparent wind higher than 360deg. All values over 360deg will be ignored." << std::endl;
         symmetry = false;
     }
     Cl.reset(new ssc::interpolation::SplineVariableStep(input.apparent_wind_angle, input.lift_coefficient));
