@@ -139,3 +139,48 @@ TEST_F(AeroPolarForceModelTest, orientation_test_with_forward_speed)
     ASSERT_TRUE(F.Y() > 0);
 }
 
+TEST_F(AeroPolarForceModelTest, should_throw_for_invalid_polar_input)
+{
+    AeroPolarForceModel::Input input;
+    input.name = "test";
+    input.calculation_point_in_body_frame = YamlCoordinates(0,0,0);
+    input.reference_area = 1000;
+    EnvironmentAndFrames env;
+
+    // The vectors do not have the same size
+    input.apparent_wind_angle = {0.,0.12217305,0.15707963,0.20943951,0.48869219,1.04719755,1.57079633,2.0943951,2.61799388,M_PI};
+    input.lift_coefficient = {0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793};
+    input.drag_coefficient = {0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888};
+    ASSERT_THROW(AeroPolarForceModel(input, "body", env), InvalidInputException);
+
+    // The maximum value for AWA is below 180°
+    input.apparent_wind_angle = {0.,0.12217305,0.15707963,0.20943951,0.48869219,1.04719755,1.57079633,2.0943951,2.61799388};
+    input.lift_coefficient = {0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793};
+    input.drag_coefficient = {0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578};
+    ASSERT_THROW(AeroPolarForceModel(input, "body", env), InvalidInputException);
+}
+
+TEST_F(AeroPolarForceModelTest, should_print_warning_for_polar_input_with_unexpected_bounds)
+{
+    AeroPolarForceModel::Input input;
+    input.name = "test";
+    input.calculation_point_in_body_frame = YamlCoordinates(0,0,0);
+    input.reference_area = 1000;
+    EnvironmentAndFrames env;
+
+    // The maximum value for AWA is between 180° and 360°
+    input.apparent_wind_angle = {0.,0.12217305,0.15707963,0.20943951,0.48869219,1.04719755,1.57079633,2.0943951,2.61799388,M_PI,3*M_PI/2};
+    input.lift_coefficient = {0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,-0.11207,-0.11207};
+    input.drag_coefficient = {0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483,1.34483};
+    testing::internal::CaptureStderr();
+    AeroPolarForceModel(input, "body", env);
+    ASSERT_FALSE(testing::internal::GetCapturedStderr().empty());
+
+    // The maximum value for AWA is over 360°
+    input.apparent_wind_angle = {0.,0.12217305,0.15707963,0.20943951,0.48869219,1.04719755,1.57079633,2.0943951,2.61799388,M_PI,3*M_PI/2,5*M_PI/2};
+    input.lift_coefficient = {0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,-0.11207,-0.11207,-0.11207};
+    input.drag_coefficient = {0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483,1.34483,1.34483};
+    testing::internal::CaptureStderr();
+    AeroPolarForceModel(input, "body", env);
+    ASSERT_FALSE(testing::internal::GetCapturedStderr().empty());
+}
