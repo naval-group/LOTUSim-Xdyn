@@ -1,6 +1,5 @@
-FROM debian:9 AS builder
-RUN echo "deb http://deb.debian.org/debian stretch-backports main" >>  /etc/apt/sources.list && \
-    apt-get update && \
+FROM debian:10 AS builder
+RUN apt-get update && \
     apt-get install --yes --no-install-recommends \
         make \
         cmake \
@@ -13,8 +12,6 @@ RUN echo "deb http://deb.debian.org/debian stretch-backports main" >>  /etc/apt/
         ninja-build \
         ca-certificates \
         wget \
-    && \
-    apt-get -t stretch-backports install --yes --no-install-recommends \
         libgrpc++-dev \
         libgrpc++1 \
         libgrpc-dev \
@@ -51,6 +48,6 @@ RUN mkdir build \
 	          /work
 RUN cd build && ninja
 
-FROM debian:9-slim
+FROM debian:10-slim
 COPY --from=builder /work/build/controller_server /usr
 ENTRYPOINT ["/usr/controller_server"]
