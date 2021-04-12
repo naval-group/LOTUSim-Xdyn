@@ -30,15 +30,6 @@ cmake-windows: HDF5_DIR=/opt/HDF5_1_8_20/cmake
 cmake-windows: ci_env=
 cmake-windows: cmake-windows-target
 
-debian_8_release_gcc_492: BUILD_TYPE = Release
-debian_8_release_gcc_492: BUILD_DIR = build_deb8
-debian_8_release_gcc_492: CPACK_GENERATOR = DEB
-debian_8_release_gcc_492: DOCKER_IMAGE = sirehna/base-image-debian8-gcc492-xdyn
-debian_8_release_gcc_492: BOOST_ROOT = /opt/boost
-debian_8_release_gcc_492: SSC_ROOT = /opt/ssc
-debian_8_release_gcc_492: ci_env=
-debian_8_release_gcc_492: cmake-debian-target build-debian test-debian
-
 debian_9_release_gcc_6: BUILD_TYPE = Release
 debian_9_release_gcc_6: BUILD_DIR = build_deb9
 debian_9_release_gcc_6: CPACK_GENERATOR = DEB
