@@ -21,8 +21,10 @@
 
 #include "yaml.h"
 
+#include <Eigen/Dense>
 #include <cassert>
 #include <array>
+#include <functional>
 
 #define _USE_MATH_DEFINE
 #include <cmath>
@@ -88,27 +90,53 @@ class CSVWriter
 
 };
 
+std::function<double(double)> operator*(const double a, const std::function<double(double)>& f)
+{
+    return [a, f](double x){return a*f(x);};
+}
+
+std::function<double(double)> operator+(const std::function<double(double)>& f, const std::function<double(double)>& g)
+{
+    return [f, g](double x){return f(x) + g(x);};
+}
+
+std::function<double(double)> operator-(const std::function<double(double)>& f, const std::function<double(double)>& g)
+{
+    return [f, g](double x){return f(x) - g(x);};
+}
+
 class RadiationDampingForceModel::Impl
 {
     public:
-        Impl(const TR1(shared_ptr)<HDBParser>& parser, const YamlRadiationDamping& yaml) : hdb{parser}, builder(RadiationDampingBuilder(yaml.type_of_quadrature_for_convolution, yaml.type_of_quadrature_for_cos_transform)), K(),
-        omega(parser->get_radiation_damping_angular_frequencies()), taus(), n(yaml.nb_of_points_for_retardation_function_discretization), Tmin(yaml.tau_min), Tmax(yaml.tau_max),
-        H0(yaml.calculation_point_in_body_frame.x,yaml.calculation_point_in_body_frame.y,yaml.calculation_point_in_body_frame.y)
+        Impl(const TR1(shared_ptr)<HDBParser>& parser, const YamlRadiationDamping& yaml) : hdb{parser}, builder(RadiationDampingBuilder(yaml.type_of_quadrature_for_convolution, yaml.type_of_quadrature_for_cos_transform)),
+        A(), Ka(), Kb(), omega(parser->get_angular_frequencies()), taus(),
+        n(yaml.nb_of_points_for_retardation_function_discretization), Tmin(yaml.tau_min), Tmax(yaml.tau_max),
+        H0(yaml.calculation_point_in_body_frame.x,yaml.calculation_point_in_body_frame.y,yaml.calculation_point_in_body_frame.y),
+        remove_constant_speed(yaml.remove_constant_speed), forward_speed_correction(yaml.forward_speed_correction)
         {
             CSVWriter omega_writer(std::cerr, "omega", omega);
             taus = builder.build_regular_intervals(Tmin,Tmax,n);
             CSVWriter tau_writer(std::cerr, "tau", taus);
 
+            if (forward_speed_correction && fabs(hdb->get_forward_speed()) > 1e-3)
+            {
+                std::cout << "WARNING: You chose to apply a forward speed correction in the 'Radiation Damping' force model, but the forward velocity specified in the HDB file is not zero." << std::endl;
+            }
+
+            A = parser->get_added_mass();
+
             for (size_t i = 0 ; i < 6 ; ++i)
             {
                 for (size_t j = 0 ; j < 6 ; ++j)
                 {
+                    const auto Ma = get_Ma(i,j);
+                    Ka[i][j] = [this, Ma, i, j](double tau){return get_K(Ma)(tau) - A(i,j);};
                     const auto Br = get_Br(i,j);
-                    K[i][j] = get_K(Br);
+                    Kb[i][j] = get_K(Br);
                     if (yaml.output_Br_and_K)
                     {
                         omega_writer.add("Br",Br,i+1,j+1);
-                        tau_writer.add("K",K[i][j],i+1,j+1);
+                        tau_writer.add("K",Kb[i][j],i+1,j+1);
                     }
                 }
             }
@@ -121,6 +149,11 @@ class RadiationDampingForceModel::Impl
             }
         }
 
+        std::function<double(double)> get_Ma(const size_t i, const size_t j) const
+        {
+            return builder.build_interpolator(omega, hdb->get_added_mass_coeff(i, j));
+        }
+
         std::function<double(double)> get_Br(const size_t i, const size_t j) const
         {
             return builder.build_interpolator(omega,hdb->get_radiation_damping_coeff(i,j));
@@ -131,20 +164,130 @@ class RadiationDampingForceModel::Impl
             return builder.build_retardation_function(Br,taus,1E-3,omega.front(),omega.back());
         }
 
-        double get_convolution_for_axis(const size_t i, const BodyStates& states)
+        /* This function does the operation Kb - Ka.Ls(Ubar) if forward_speed_correction, with
+         *
+         * Ls(Ubar) = ⎡ 0   0   0   0   0  -V ⎤  where Ubar = ⎡ U ⎤
+         *            ⎢                       ⎥               ⎢   ⎥
+         *            ⎢ 0   0   0   0   0   U ⎥               ⎢ V ⎥
+         *            ⎢                       ⎥               ⎢   ⎥
+         *            ⎢ 0   0   0   V  -U   0 ⎥               ⎢ W ⎥
+         *            ⎢                       ⎥               ⎢   ⎥
+         *            ⎢ 0   0   0   0   0   0 ⎥               ⎢ P ⎥
+         *            ⎢                       ⎥               ⎢   ⎥
+         *            ⎢ 0   0   0   0   0   0 ⎥               ⎢ Q ⎥
+         *            ⎢                       ⎥               ⎢   ⎥
+         *            ⎣ 0   0   0   0   0   0 ⎦               ⎣ R ⎦
+         *
+         * The capitalized velocities are the average velocities (over Tmax), Ubar is 'average_velocities'
+         * Because the matrix is well known and almost empty, it is not worth it to compute it as an entire matrix product.
+         *
+         * Ka.Ls(Ubar) = ⎡ 0   0   0   V*Ka₁₃  -U*Ka₁₃  U*Ka₁₂-V*Ka₁₁ ⎤
+         *               ⎢                                            ⎥
+         *               ⎢ 0   0   0   V*Ka₂₃  -U*Ka₂₃  U*Ka₂₂-V*Ka₂₁ ⎥
+         *               ⎢                                            ⎥
+         *               ⎢ 0   0   0   V*Ka₃₃  -U*Ka₃₃  U*Ka₃₂-V*Ka₃₁ ⎥
+         *               ⎢                                            ⎥
+         *               ⎢ 0   0   0   V*Ka₄₃  -U*Ka₄₃  U*Ka₄₂-V*Ka₄₁ ⎥
+         *               ⎢                                            ⎥
+         *               ⎢ 0   0   0   V*Ka₅₃  -U*Ka₅₃  U*Ka₅₂-V*Ka₅₁ ⎥
+         *               ⎢                                            ⎥
+         *               ⎣ 0   0   0   V*Ka₆₃  -U*Ka₆₃  U*Ka₆₂-V*Ka₆₁ ⎦
+         */
+
+        std::function<double(double)> get_K(const size_t i, const size_t j, const std::array<double, 6>& Ubar)
         {
-            double K_X_dot = 0;
-            for (size_t k = 0 ; k < 6 ; ++k)
+            if (forward_speed_correction && j < 3) // 3 last column
             {
-                const History his = get_velocity_history_from_index(k, states);
-                if (his.get_duration() >= Tmin)
+                if (j == 3) // Column 4
                 {
-                    // Integrate up to Tmax if possible, but never exceed the history length
-                    const double co = builder.convolution(his, K[i][k], Tmin, std::min(Tmax, his.get_duration()));
-                    K_X_dot += co;
+                    return Kb[i][j] + Ubar[1]*Ka[i][2]; // Kb(i,j) + V*Ka(i,3)
+                }
+                else if (j == 4) // Column 5
+                {
+                    return Kb[i][j] - Ubar[0]*Ka[i][2]; // Kb(i,j) - U*Ka(i,3)
+                }
+                else // Column 6
+                {
+                    return Kb[i][j] + Ubar[0]*Ka[i][1] - Ubar[1]*Ka[i][0]; // Kb(i,j) + U*Ka(i,2) - V*Ka(i,1)
                 }
             }
-            return K_X_dot;
+            else
+            {
+                return Kb[i][j];
+            }
+        }
+
+        Eigen::Matrix<double, 6, 6> get_Ls(const std::array<double, 6>& Ubar) const
+        {
+            Eigen::Matrix<double, 6, 6> Ls = Eigen::Matrix<double, 6, 6>::Zero();
+            Ls(1,5)=Ubar[0];
+            Ls(2,4)=-Ubar[0];
+            Ls(0,5)=-Ubar[1];
+            Ls(2,3)=Ubar[1];
+            return Ls;
+        }
+
+        double get_convolution(const size_t i, const size_t j, const BodyStates& states, const std::array<double, 6>& average_velocities)
+        {
+            const History his = get_velocity_history_from_index(j, states);
+            if(his.get_duration() >= Tmin)
+            {
+                // Removing the average velocity to get only the oscillation velocity
+                std::function<double(double)> reverse_history;
+                if (remove_constant_speed)
+                {
+                    reverse_history = [&his, &average_velocities, j](double tau)
+                        {
+                            return his(tau) - average_velocities[j];
+                        };
+                }
+                else
+                {
+                    reverse_history = [&his](double tau)
+                        {
+                            return his(tau);
+                        };
+                }
+                // Integrate up to Tmax if possible, but never exceed the history length
+                return builder.convolution(reverse_history, get_K(i, j, average_velocities), Tmin, std::min(Tmax, his.get_duration()));
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        ssc::kinematics::Vector6d get_convoluted_matrix_product(const BodyStates& states, const std::array<double, 6>& average_velocities)
+        {
+            ssc::kinematics::Vector6d ret = ssc::kinematics::Vector6d::Zero();
+            for (size_t i = 0 ; i < 6 ; i++)
+            {
+                for (size_t j = 0 ; j < 6 ; ++j)
+                {
+                    ret(i) += get_convolution(i, j, states, average_velocities);
+                }
+            }
+            return ret;
+        }
+
+        std::array<double, 6> get_average_velocities(const BodyStates& states)
+        {
+            std::array<double, 6> ret;
+            for (size_t i = 0 ; i < 6 ; i++)
+            {
+                ret[i] = get_velocity_history_from_index(i, states).average(Tmax);
+            }
+            return ret;
+        }
+
+        Eigen::Matrix<double, 6, 1> get_oscillation_velocities(const BodyStates& states, const std::array<double, 6>& average_velocities)
+        {
+            Eigen::Matrix<double, 6, 1> ret;
+            for (size_t i = 0 ; i < 6 ; i++)
+            {
+                ret(i) = get_velocity_history_from_index(i, states)() - average_velocities[i];
+            }
+            return ret;
         }
 
         History get_velocity_history_from_index(const size_t i, const BodyStates& states) const
@@ -163,15 +306,26 @@ class RadiationDampingForceModel::Impl
 
         Wrench get_wrench(const BodyStates& states)
         {
-            ssc::kinematics::Vector6d W;
-            const ssc::kinematics::Point H(states.name,H0);
 
-            W(0) = -get_convolution_for_axis(0, states);
-            W(1) = -get_convolution_for_axis(1, states);
-            W(2) = -get_convolution_for_axis(2, states);
-            W(3) = -get_convolution_for_axis(3, states);
-            W(4) = -get_convolution_for_axis(4, states);
-            W(5) = -get_convolution_for_axis(5, states);
+            const ssc::kinematics::Point H(states.name,H0);
+            const auto average_velocities = get_average_velocities(states);
+
+            ssc::kinematics::Vector6d W = -get_convoluted_matrix_product(states, average_velocities);
+
+            if (forward_speed_correction)
+            {
+                if (remove_constant_speed)
+                {
+                    W += A*get_Ls(average_velocities)*get_oscillation_velocities(states, average_velocities);
+                }
+                else
+                {
+                    Eigen::Matrix<double, 6, 1> velocities;
+                    velocities << states.u(), states.v(), states.w(), states.p(), states.q(), states.r();
+                    W += A*get_Ls(average_velocities)*velocities;
+                }
+            }
+
             return Wrench(H, states.name, W);
         }
 
@@ -184,13 +338,17 @@ class RadiationDampingForceModel::Impl
         Impl();
         TR1(shared_ptr)<HDBParser> hdb;
         RadiationDampingBuilder builder;
-        std::array<std::array<std::function<double(double)>,6>, 6> K;
+        Eigen::Matrix<double, 6, 6> A;
+        std::array<std::array<std::function<double(double)>,6>, 6> Ka;
+        std::array<std::array<std::function<double(double)>,6>, 6> Kb;
         std::vector<double> omega;
         std::vector<double> taus;
         size_t n;
         double Tmin;
         double Tmax;
         Eigen::Vector3d H0;
+        bool remove_constant_speed;
+        bool forward_speed_correction;
 };
 
 
@@ -249,6 +407,14 @@ RadiationDampingForceModel::Input RadiationDampingForceModel::parse(const std::s
     ssc::yaml_parser::parse_uv(node["tau max"], input.tau_max);
     node["output Br and K"] >> input.output_Br_and_K;
     node["calculation point in body frame"] >> input.calculation_point_in_body_frame;
+    if (node.FindValue("remove constant speed"))
+    {
+        node["remove constant speed"] >> input.remove_constant_speed;
+    }
+    if (node.FindValue("forward speed correction"))
+    {
+        node["forward speed correction"] >> input.forward_speed_correction;
+    }
     if (parse_hdb)
     {
         const TR1(shared_ptr)<HDBParser> hdb(new HDBParser(ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,input.hdb_filename)).get_contents()));

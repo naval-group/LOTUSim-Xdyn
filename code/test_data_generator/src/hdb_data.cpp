@@ -609,6 +609,7 @@ double test_data::analytical_K(const double tau)
 {
     return exp(-0.1*tau)*cos(0.5*tau);
 }
+
 std::string test_data::bug_3210()
 {
     std::stringstream ss;

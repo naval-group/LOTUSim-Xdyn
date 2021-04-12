@@ -426,9 +426,125 @@ $`K`$ est obtenu en prenant la transformée de Fourier inverse de $`B_r`$ :
 
 
 ```math
-K(t) = \frac{2}{\pi}\int_0^{+\infty} B_r(\omega)\cos(\omega\tau)d\tau
+K(t) = \frac{2}{\pi}\int_0^{+\infty} B_r(\omega)\cos(\omega\tau)d\omega
 ```
 
+## Prise en compte de la vitesse d'avance
+
+### Vitesse d'oscillation et vitesse moyenne
+
+L'ensemble de la théorie décrite jusqu'ici est valable pour un corps en oscillation autour d'une position d'équilibre. En pratique, elle est aussi applicable à un corps à vitesse constante de direction linéaire (pas de rotation constante) dans le plan horizontal, sous réserves de corrections détaillées dans la section suivante. La vitesse $`\frac{dX}{dt}`$ à utiliser dans la formulation précédente est alors la vitesse d'oscillation, c'est-à-dire la vitesse instantanée à laquelle on soustrait la vitesse moyenne :
+
+```math
+\dot{X_b} = \dot{X} - V_s
+```
+
+On note $`V_s = \bar{\dot{X}}  = \bar{\frac{dX}{dt}}`$ par commodité d'écriture.
+
+Dans xdyn, la vitesse moyenne est calculée sur une période T représentative des effets de radiation et déterminée par l'utilisateur, qui est aussi la période utilisée pour la convolution avec $`K`$.
+
+### Correction avec vitesse d'avance
+
+Dans le cas d'un corps oscillant avec vitesse d'avance, les conditions aux limites sont modifiées :
+
+- La condition de surface libre contient des termes supplémentaires proportionnels à la vitesse,
+- La condition de glissement sur le corps doit intégrer sa vitesse d'avance dans le terme $`V_0`$.
+
+Si ces conditions sont appliquées dès la résolution, les résultats fréquentiels sont dépendants de la vitesse d'avance. En revanche, si on néglige le couplage entre la génération de vagues liée à l'avance et celle liée à la radiation (ce qui revient à linéariser la condition de surface libre), ont peut obtenir les résultats fréquentiels à une vitesse d'avance arbitraire en fonction des résultats à vitesse nulle.
+
+#### Correction sur les résultats fréquentiels
+
+La correction s'applique sur les coefficients $`M_A`$ et $`B_r`$ du domaine fréquentiel de la façon suivante pour une vitesse constante U selon l'axe x :
+
+```math
+{M_A}_{i,5}' = {M_A}_{i,5} - \frac{U}{\omega^2} {B_r}_{i,3}
+```
+```math
+{M_A}_{i,6}' = {M_A}_{i,6} + \frac{U}{\omega^2} {B_r}_{i,2}
+```
+```math
+{B_r}_{i,5}' = {B_r}_{i,5} + U {M_A}_{i,3}
+```
+```math
+{B_r}_{i,6}' = {B_r}_{i,6} - U {M_A}_{i,2}
+```
+
+Pour plus de détails sur le développement du calcul, voir la thèse de docteur-ingénieur de Jean Bougis (1980).
+
+La même correction peut être appliquée pour une vitesse V selon l'axe y, et la composition des deux corrections s'écrit par linéarité :
+
+```math
+{M_A}_{i,4}' = {M_A}_{i,4} + \frac{V}{\omega^2} {B_r}_{i,3}
+```
+```math
+{M_A}_{i,5}' = {M_A}_{i,5} - \frac{U}{\omega^2} {B_r}_{i,3}
+```
+```math
+{M_A}_{i,6}' = {M_A}_{i,6} + \frac{U}{\omega^2} {B_r}_{i,2} - \frac{V}{\omega^2} {B_r}_{i,1}
+```
+```math
+{B_r}_{i,4}' = {B_r}_{i,4} - V {M_A}_{i,3}
+```
+```math
+{B_r}_{i,5}' = {B_r}_{i,5} + U {M_A}_{i,3}
+```
+```math
+{B_r}_{i,6}' = {B_r}_{i,6} - U {M_A}_{i,2} + V {M_A}_{i,1}
+```
+
+On peut écrire de façon plus pratique :
+
+```math
+M_A(\omega,V_s) = {M_A}_0(\omega) + \frac{1}{\omega^2} {B_r}_0(\omega) \cdot L_s(V_s)
+```
+```math
+B_r(\omega,V_s) = {B_r}_0(\omega) - {M_A}_0(\omega) \cdot L_s(V_s)
+```
+
+Où $`L_s`$ est une matrice de sélection qui dépend des vitesses moyennes :
+
+```math
+L_s(V_s) =
+\begin{bmatrix}
+0 & 0 & 0 & 0 & 0 & \bar{V} \\
+0 & 0 & 0 & 0 & 0 & -\bar{U} \\
+0 & 0 & 0 & -\bar{V} & \bar{U} & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 \\
+\end{bmatrix}
+```
+
+#### Modification de la formulation temporelle
+
+La formulation dans le domaine temporel est globalement la même, à l'exception de certaines hypothèses qui ne peuvent plus être appliquées. Notamment, les coefficients $`B_r`$ ne tendent pas nécessairement vers zero pour de grandes pulsations, on a donc :
+
+```math
+\vec{F_{rad}} = -A_\infty(V_s) \cdot \ddot{X} - B_\infty(V_s) \cdot \dot{X_b} - \int_0^{+\infty} K(\tau,V_s) \cdot \dot{X_b}(t-\tau) d\tau
+```
+où $`\dot{X_b}`$ est la vitesse d'oscillation (autour de la vitesse moyenne) et :
+
+```math
+K(\tau,V_s) = \frac{2}{\pi}\int_0^{+\infty} [B_r(\omega,V_s) - B_\infty(V_s)]\cos(\omega\tau)d\omega
+```
+
+En utilisant la correction précédente et la notation $`A = {M_A}_{0,\infty}`$, on a :
+
+```math
+K(\tau,V_s) = \frac{2}{\pi}\int_0^{+\infty} [{B_r}_0(V_s) - {M_A}_0(\omega) \cdot L_s(V_s) + {M_A}_{0,\infty} \cdot L_s(V_s)]\cos(\omega\tau)d\omega
+```
+```math
+K(\tau,V_s) = \frac{2}{\pi}\int_0^{+\infty} {B_r}_0(V_s) \cos(\omega\tau)d\omega - \frac{2}{\pi}\int_0^{+\infty} [{M_A}_0(\omega) - A]\cos(\omega\tau)d\omega \cdot L_s(V_s) 
+```
+```math
+K(\tau,V_s) = K_B(\tau) - K_A(\tau) \cdot L_s(V_s) 
+```
+
+Et :
+
+```math
+\vec{F_{rad}} = -A \cdot \ddot{X} + A \cdot L_s(V_s) \cdot \dot{X_b} - \int_0^{+\infty} K(\tau,V_s) \cdot \dot{X_b}(t-\tau) d\tau
+```
 
 ## Calcul numérique des amortissements de radiation
 
@@ -508,6 +624,7 @@ suivantes sont réalisées :
   fonctions de retard (afin de valider les bornes d'intégration et l'algorithme
   utilisés). Pour activer la verbosité, on met la clef `output Br and K` à
   `true`. Sinon on la met à `false`.
+- Correction avec vitesse d'avance : la clée booléenne `forward speed correction` peut prendre la valeur `true` pour appliquer la correction des coefficients avec vitesse d'avance. Cette clé est optionelle et peut donc être omise, la correction ne sera alors pas appliquée.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: radiation damping
@@ -520,6 +637,7 @@ suivantes sont réalisées :
   tau min: {value: 0.2094395, unit: s}
   tau max: {value: 10, unit: s}
   output Br and K: true
+  forward speed correction: true
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Méthode des rectangles
@@ -697,3 +815,6 @@ potentiel) sont suffisamment fines pour que le résultat ait un sens.
   Its Mobile Device Application*, 2011, Zayar Thein, Department of Shipping and
   Marine Technology, CHALMERS UNIVERSITY OF TECHNOLOGY, Göteborg, Sweden,
   page 18.
+
+- *Étude de la diffraction-radiation dans le cas d'un flotteur indéformable animé d'une vitesse moyenne constante et sollicité par une houle sinusoïdale de faible amplitude*, 1980, Jean Bougis, Thèse en vue d'obtenir le grade de Docteur-Ingénieur, Ecole Nationale Supérieure de Mécanique, Nantes, France.
+

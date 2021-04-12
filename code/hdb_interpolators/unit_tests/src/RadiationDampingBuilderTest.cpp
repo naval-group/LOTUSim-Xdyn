@@ -55,6 +55,7 @@ TEST_F(RadiationDampingBuilderTest, can_compute_convolution)
     h.record(0,1);
     h.record(1000,1);
     RadiationDampingBuilder builder(TypeOfQuadrature::GAUSS_KRONROD, TypeOfQuadrature::FILON);
+    std::function<double(double)> reverse_history = [h](double tau){return h(tau);};
     ASSERT_NEAR(sin(2000.)/2., builder.convolution(h, [](const double t){return cos(2*t);}, 0, 1000), EPS);
 }
 

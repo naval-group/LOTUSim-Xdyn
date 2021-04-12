@@ -2318,6 +2318,7 @@ std::string test_data::radiation_damping()
        << "tau min: {value: 0.2094395, unit: s}\n"
        << "tau max: {value: 10, unit: s}\n"
        << "output Br and K: true\n"
+       << "forward speed correction: true\n"
        << "calculation point in body frame:\n"
        << "    x: {value: 0.696, unit: m}\n"
        << "    y: {value: 0, unit: m}\n"

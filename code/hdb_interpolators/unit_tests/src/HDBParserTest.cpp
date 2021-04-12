@@ -127,7 +127,7 @@ TEST_F(HDBParserTest, can_retrieve_added_mass_at_Tp_0)
 TEST_F(HDBParserTest, can_retrieve_angular_frequencies_for_radiation_damping)
 {
     const HDBParser data(test_data::test_ship_hdb());
-    const auto angular_frequencies = data.get_radiation_damping_angular_frequencies();
+    const auto angular_frequencies = data.get_angular_frequencies();
     ASSERT_EQ(6,        angular_frequencies.size());
     ASSERT_EQ(2*PI/1.,  angular_frequencies.at(5));
     ASSERT_EQ(2*PI/2.,  angular_frequencies.at(4));
@@ -230,4 +230,10 @@ TEST_F(HDBParserTest, bug_3238)
     const HDBParser data(test_data::bug_3238_hdb());
     ASSERT_THROW(data.get_diffraction_module(), InvalidInputException);
     ASSERT_THROW(data.get_diffraction_phase(), InvalidInputException);
+}
+
+TEST_F(HDBParserTest, can_get_forward_speed)
+{
+    HDBParser data(test_data::test_ship_hdb());
+    ASSERT_DOUBLE_EQ(data.get_forward_speed(), 0.);
 }

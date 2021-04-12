@@ -16,6 +16,8 @@ YamlRadiationDamping::YamlRadiationDamping() : hdb_filename(),
                                                tau_min(0),
                                                tau_max(0),
                                                output_Br_and_K(),
-                                               calculation_point_in_body_frame()
+                                               calculation_point_in_body_frame(),
+                                               remove_constant_speed(false),
+                                               forward_speed_correction(false)
 {
 }

@@ -10,6 +10,9 @@
 #include <list>
 #include <set>
 #include <sstream>
+#include <limits>
+#include <algorithm>
+#include <functional>
 
 #define _USE_MATH_DEFINE
 #include <cmath>
@@ -29,7 +32,7 @@
 class HDBParser::Impl
 {
     public:
-        Impl() : omega_rad(), tree(), M(), Br(), Tmin(0), diffraction_module(), diffraction_phase(), froude_krylov_module(), froude_krylov_phase()
+        Impl() : omega_rad(), tree(), M(), Ma(), Br(), Tmin(0), diffraction_module(), diffraction_phase(), froude_krylov_module(), froude_krylov_phase()
         {
         }
 
@@ -37,6 +40,7 @@ class HDBParser::Impl
         : omega_rad()
         , tree(hdb::parse(data))
         , M()
+        , Ma()
         , Br()
         , Tmin(0)
         , diffraction_module(get_diffraction_module())
@@ -45,27 +49,38 @@ class HDBParser::Impl
         , froude_krylov_phase(get_froude_krylov_phase())
         {
             bool allow_queries_outside_bounds;
-            const TimestampedMatrices Ma = get_added_mass_array();
+            const TimestampedMatrices M_a = get_added_mass_array();
             const TimestampedMatrices B_r = get_radiation_damping_array();
-            const auto x = get_Tp(Ma);
-            Tmin = x.front();
+            const auto periods = get_periods();
+            std::function<bool(double, double)> double_eq = [](double d1, double d2){return fabs(d1 - d2) <= std::numeric_limits<double>::epsilon();};
+            for (auto T = periods.rbegin() ; T != periods.rend() ; ++T)
+            {
+                if(double_eq(*T, 0.))
+                {
+                    THROW(__PRETTY_FUNCTION__, InvalidInputException, "Zero period detected: cannot compute angular frequency. Check the HDB file.");
+                }
+                omega_rad.push_back(2*PI/ *T);
+            }
+            Tmin = periods.front();
+            const auto added_mass_periods = get_Tp(M_a);
+            if ((added_mass_periods.size() != periods.size()) || not(std::equal(periods.begin(), periods.end(), added_mass_periods.begin(), double_eq)))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "The declared periods ('List_calculated_periods' section) and the added mass periods do not match in the HDB file.");
+            }
+            const auto radiation_damping_periods = get_Tp(B_r);
+            if ((radiation_damping_periods.size() != periods.size()) || not(std::equal(periods.begin(), periods.end(), radiation_damping_periods.begin(), double_eq)))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "The declared periods ('List_calculated_periods' section) and the radiation damping periods do not match in the HDB file.");
+            }
+
             for (size_t i = 0 ; i < 6 ; ++i)
             {
                 for (size_t j = 0 ; j < 6 ; ++j)
                 {
-                    M[i][j] = ssc::interpolation::SplineVariableStep(x, get_Mij_for_each_Tp(Ma,i,j), allow_queries_outside_bounds=true);
+                    Ma[i][j] = get_Mij_for_each_Tp(M_a, i, j);
+                    M[i][j] = ssc::interpolation::SplineVariableStep(periods, Ma[i][j], allow_queries_outside_bounds=true);
                     Br[i][j] = get_Mij_for_each_Tp(B_r, i, j);
                 }
-            }
-
-            auto v = get_Tp(B_r);
-            for (auto it = v.rbegin(); it != v.rend() ; ++it)
-            {
-                if(*it==0)
-                {
-                    THROW(__PRETTY_FUNCTION__, InvalidInputException, "Zero period detected: cannot compute angular frequency. Check Added_mass_Radiation_Damping section of the HDB file.");
-                }
-                omega_rad.push_back(2*PI/ *it);
             }
         }
 
@@ -142,6 +157,47 @@ class HDBParser::Impl
                  */
             }
             return matrices;
+        }
+
+        double get_value(const std::string& key) const
+        {
+            bool found_key(false);
+            double ret;
+            for (const auto& section:tree.value_keys)
+            {
+                if (section.header == key)
+                {
+                    found_key = true;
+                    ret = section.value;
+                }
+            }
+            if (not(found_key))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find key-value section '" << key << "' in HDB file");
+            }
+            return ret;
+        }
+
+        std::vector<double> get_vector(const std::string& header) const
+        {
+            bool found_section(false);
+            std::vector<double> ret;
+            for (const auto& section:tree.vector_sections)
+            {
+                if (section.header == header)
+                {
+                    found_section = true;
+                    for(const auto& value:section.values)
+                    {
+                        ret.push_back(value);
+                    }
+                }
+            }
+            if (not(found_section))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find vector section '" << header << "' in HDB file");
+            }
+            return ret;
         }
 
         TimestampedMatrices get_matrix(const std::string& header, const std::string& matrix) const
@@ -227,6 +283,11 @@ class HDBParser::Impl
             psi_l.sort();
             ret.psi.insert(ret.psi.begin(),psi_l.begin(), psi_l.end());
             return ret;
+        }
+
+        std::vector<double> get_periods() const
+        {
+            return get_vector("List_calculated_periods");
         }
 
         boost::variant<RAOData,std::string> get_diffraction_module() const
@@ -317,6 +378,12 @@ class HDBParser::Impl
             return get_added_mass(Tmin);
         }
 
+        std::vector<double> get_added_mass_coeff(const size_t i, const size_t j) const
+        {
+            const auto v = Ma[i][j];
+            return std::vector<double>(v.rbegin(), v.rend());
+        }
+
         std::vector<double> get_radiation_damping_coeff(const size_t i, const size_t j) const
         {
             const auto v = Br[i][j];
@@ -403,6 +470,11 @@ class HDBParser::Impl
             return ret->periods;
         }
 
+        double get_forward_speed() const
+        {
+            return get_value("FORWARD_SPEED");
+        }
+
         std::vector<double> omega_rad;
 
     private:
@@ -422,6 +494,7 @@ class HDBParser::Impl
 
         hdb::AST tree;
         std::array<std::array<ssc::interpolation::SplineVariableStep,6>,6> M;
+        std::array<std::array<std::vector<double>,6>,6> Ma;
         std::array<std::array<std::vector<double>,6>,6> Br;
         double Tmin;
         boost::variant<RAOData,std::string> diffraction_module;
@@ -441,6 +514,11 @@ HDBParser::HDBParser() : pimpl(new Impl())
 
 HDBParser::~HDBParser()
 {
+}
+
+double HDBParser::get_forward_speed() const
+{
+    return pimpl->get_forward_speed();
 }
 
 TimestampedMatrices HDBParser::get_added_mass_array() const
@@ -486,10 +564,15 @@ Eigen::Matrix<double,6,6> HDBParser::get_added_mass(const double Tp //!< Period 
     return pimpl->get_added_mass(Tp);
 }
 
-std::vector<double> HDBParser::get_radiation_damping_angular_frequencies() const
+std::vector<double> HDBParser::get_angular_frequencies() const
 {
     return pimpl->omega_rad;
 
+}
+
+std::vector<double> HDBParser::get_added_mass_coeff(const size_t i, const size_t j) const
+{
+    return pimpl->get_added_mass_coeff(i, j);
 }
 
 std::vector<double> HDBParser::get_radiation_damping_coeff(const size_t i, const size_t j) const
