@@ -2,3 +2,6 @@
 [submodule "code/waves_grpc"]
 	path = code/waves_grpc
 	url = ../waves_gRPC
+[submodule "code/ssc"]
+	path = code/ssc
+	url = ../scientific_computing
