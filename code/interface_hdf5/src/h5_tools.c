@@ -138,7 +138,12 @@ char * _h5_concatenatePaddedArrayOfStrings(
     m = (char *) calloc((maxLength+1)*numberOfStrings,sizeof(char));
     for(i=0;i<numberOfStrings;++i)
     {
-        strncpy(m+(i*(maxLength+1)),strings[i],strlen(strings[i]));
+        // Maybe this requires a bit more testing. This is a workaround but doesn't really solve any underlying issue (if any)
+        // - https://developers.redhat.com/blog/2018/05/24/detecting-string-truncation-with-gcc-8/
+        // - https://github.com/zmartzone/liboauth2/issues/9
+        // - https://stackoverflow.com/a/52265482
+        // - https://github.com/facebookarchive/xcbuild/issues/297#issuecomment-570531099
+        memcpy(m+(i*(maxLength+1)),strings[i],strlen(strings[i]));
     }
     *maxLengthStrings = maxLength;
     return m;
