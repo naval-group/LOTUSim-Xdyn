@@ -122,6 +122,7 @@ TARGET_LINK_LIBRARIES(xdyn
         boost_program_options_descriptions_static
         ${GRPC_GRPCPP_UNSECURE}
         ${PROTOBUF_LIBPROTOBUF}
+        ${Boost_THREAD_LIBRARY}
         )
 
 ADD_EXECUTABLE(test_orbital_velocities_and_dynamic_pressures
@@ -161,11 +162,12 @@ TARGET_LINK_LIBRARIES(test_hs
 
 ADD_EXECUTABLE(yml2test src/yml2test.cpp)
 
-ADD_EXECUTABLE(quat2eul src/convert_quaternion_to_euler.cpp)
-
-TARGET_LINK_LIBRARIES(quat2eul
-        ${ssc_STATIC_LIB}
-        )
+ADD_EXECUTABLE(quat2eul src/convert_quaternion_to_euler.cpp
+    $<TARGET_OBJECTS:kinematics_object>
+    $<TARGET_OBJECTS:data_source_object>
+    $<TARGET_OBJECTS:exception_handling_object>
+    $<TARGET_OBJECTS:numeric_object>
+    )
 
 ADD_EXECUTABLE(convert_stl_files_to_code
         ${CMAKE_CURRENT_BINARY_DIR}/convert_stl_files_to_code.cpp
@@ -234,6 +236,7 @@ TARGET_LINK_LIBRARIES(xdyn-for-cs
         boost_program_options_descriptions_static
         ${GRPC_GRPCPP_UNSECURE}
         ${PROTOBUF_LIBPROTOBUF}
+        ${Boost_THREAD_LIBRARY}
         )
 
 ADD_EXECUTABLE(xdyn-for-me
@@ -255,6 +258,7 @@ TARGET_LINK_LIBRARIES(xdyn-for-me
         boost_program_options_descriptions_static
         ${GRPC_GRPCPP_UNSECURE}
         ${PROTOBUF_LIBPROTOBUF}
+        ${Boost_THREAD_LIBRARY}
         )
 
 ################################################################################

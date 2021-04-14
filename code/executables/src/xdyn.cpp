@@ -32,7 +32,7 @@
 #include <Scheduler.hpp>
 #include "ErrorReporter.hpp"
 
-CHECK_SSC_VERSION(8,0)
+CHECK_SSC_VERSION(9,0)
 
 void solve(const std::string& solver_name, Sim& sys, ssc::solver::Scheduler& scheduler, ListOfObservers& observer);
 void solve(const std::string& solver_name, Sim& sys, ssc::solver::Scheduler& scheduler, ListOfObservers& observer)
