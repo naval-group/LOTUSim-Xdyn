@@ -41,7 +41,7 @@ print_yaml(yaml_cmds)
 La connexion au modèle d'effort distant est définie dans la section suivante :
 
 ```python echo=False, results='raw', name='tutorial_10_print_yaml_subsection'
-print_yaml(yaml_data, 'bodies/0/controlled forces')
+print_yaml(yaml_data, 'bodies/0/external forces')
 ```
 
 - `model: grpc` indique à xdyn qu'il s'agit d'un modèle d'effort distant
@@ -146,7 +146,7 @@ python3 harmonic_oscillator.py
 Puis il faut éditer le fichier YAML d'entrée de xdyn en remplaçant :
 
 ```yaml
-controlled forces:
+external forces:
   - model: grpc
     url: force-model:9002
 ```
@@ -154,7 +154,7 @@ controlled forces:
 par
 
 ```yaml
-controlled forces:
+external forces:
   - model: grpc
     url: localhost:50051
 ```

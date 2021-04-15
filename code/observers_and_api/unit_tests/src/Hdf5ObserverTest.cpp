@@ -4,6 +4,7 @@
 #include "Hdf5ObserverTest.hpp"
 #include "ListOfObservers.hpp"
 #include "simulator_api.hpp"
+#include "steppers.hpp"
 
 Hdf5ObserverTest::Hdf5ObserverTest() : a(ssc::random_data_generator::DataGenerator(546545))
 {
@@ -16,8 +17,9 @@ TEST_F(Hdf5ObserverTest, should_be_able_to_create_an_observer)
     auto sys = get_system(test_data::falling_ball_example(), 0);
     const auto yaml = parse_output(test_data::falling_ball_example());
     {
+        ssc::solver::Scheduler scheduler(0, tend, dt);
         ListOfObservers observers(yaml);
-        ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, tend, dt, observers);
+        ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observers);
     }
     for (auto output:yaml)
     {
@@ -35,8 +37,9 @@ TEST_F(Hdf5ObserverTest, LONG_should_be_able_to_create_an_observer_with_wave_out
     auto sys = get_system(test_data::simple_waves(), 0);
     const auto yaml = parse_output(test_data::simple_waves());
     {
+        ssc::solver::Scheduler scheduler(0, tend, dt);
         ListOfObservers observers(yaml);
-        ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, tend, dt, observers);
+        ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observers);
     }
     for (auto output:yaml)
     {

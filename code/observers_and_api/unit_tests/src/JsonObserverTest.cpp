@@ -4,6 +4,7 @@
 #include "JsonObserverTest.hpp"
 #include "ListOfObservers.hpp"
 #include "simulator_api.hpp"
+#include "steppers.hpp"
 
 JsonObserverTest::JsonObserverTest() : a(ssc::random_data_generator::DataGenerator(666))
 {
@@ -16,8 +17,9 @@ TEST_F(JsonObserverTest, should_be_able_to_create_an_observer)
     auto sys = get_system(test_data::falling_ball_example(), 0);
     const auto yaml = parse_output(test_data::falling_ball_example());
     {
+        ssc::solver::Scheduler scheduler(0, tend, dt);
         ListOfObservers observers(yaml);
-        ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, tend, dt, observers);
+        ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observers);
     }
     for (auto output:yaml)
     {
@@ -38,8 +40,9 @@ TEST_F(JsonObserverTest, should_be_able_to_create_an_observer_with_waves)
     auto sys = get_system(test_data::falling_ball_example(), 0);
     const auto yaml = parse_output(test_data::falling_ball_example());
     {
+        ssc::solver::Scheduler scheduler(0, tend, dt);
         ListOfObservers observers(yaml);
-        ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, tend, dt, observers);
+        ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observers);
     }
     for (auto output:yaml)
     {

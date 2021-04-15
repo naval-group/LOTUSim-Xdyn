@@ -27,29 +27,31 @@
 #include "SurfaceElevationInterface.hpp"
 #include "XdynCommandLineArguments.hpp"
 
-#include <ssc/solver.hpp>
+#include <solve.hpp>
+#include <steppers.hpp>
+#include <Scheduler.hpp>
 #include "ErrorReporter.hpp"
 
-CHECK_SSC_VERSION(8,0)
+CHECK_SSC_VERSION(9,0)
 
-void solve(const XdynCommandLineArguments& input_data, Sim& sys, ListOfObservers& observer);
-void solve(const XdynCommandLineArguments& input_data, Sim& sys, ListOfObservers& observer)
+void solve(const std::string& solver_name, Sim& sys, ssc::solver::Scheduler& scheduler, ListOfObservers& observer);
+void solve(const std::string& solver_name, Sim& sys, ssc::solver::Scheduler& scheduler, ListOfObservers& observer)
 {
-    if (input_data.solver=="euler")
+    if (solver_name=="euler")
     {
-        ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
+        ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observer);
     }
-    else if (input_data.solver=="rk4")
+    else if (solver_name=="rk4")
     {
-        ssc::solver::quicksolve<ssc::solver::RK4Stepper>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
+        ssc::solver::quicksolve<ssc::solver::RK4Stepper>(sys, scheduler, observer);
     }
-    else if (input_data.solver=="rkck")
+    else if (solver_name=="rkck")
     {
-        ssc::solver::quicksolve<ssc::solver::RKCK>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
+        ssc::solver::quicksolve<ssc::solver::RKCK>(sys, scheduler, observer);
     }
     else
     {
-        ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, input_data.tstart, input_data.tend, input_data.initial_timestep, observer);
+        ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observer);
     }
 }
 
@@ -133,13 +135,21 @@ void run_simulation(const XdynCommandLineArguments& input_data, ErrorReporter& e
     const auto f = [input_data](){
     {
         const auto yaml_input = ssc::text_file_reader::TextFileReader(input_data.yaml_filenames).get_contents();
-        ssc::data_source::DataSource command_listener;
-        auto sys = get_system(yaml_input, input_data.tstart);
+        const auto input = SimulatorYamlParser(yaml_input).parse();
+
+        auto sys = get_system(input, input_data.tstart);
+
+        ssc::solver::Scheduler scheduler(input_data.tstart, input_data.tend, input_data.initial_timestep);
+        std::vector<PIDController> controllers = get_pid_controllers(input_data.tstart, input.controllers, input.commands);
+        initialize_controllers(controllers, scheduler, &sys);
+
         auto observers_description = build_observers_description(yaml_input, input_data);
         ListOfObservers observers(observers_description);
+
         serialize_context_if_necessary(observers_description, sys, yaml_input, input_data_serialize(input_data));
         serialize_context_if_necessary_new(observers, sys);
-        solve(input_data, sys, observers);
+
+        solve(input_data.solver, sys, scheduler, observers);
     }};
     if (input_data.catch_exceptions)
     {

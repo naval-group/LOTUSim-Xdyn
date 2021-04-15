@@ -11,6 +11,8 @@ YamlSimulatorInput::YamlSimulatorInput() : rotations(),
                                            environmental_constants(),
                                            environment(),
                                            bodies(),
+                                           setpoints(),
+                                           controllers(),
                                            commands()
 {
 }

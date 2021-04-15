@@ -12,6 +12,7 @@ FILE(GLOB SRC
         src/ForceTests.cpp
         src/MapObserverTest.cpp
         src/ObserverTests.cpp
+        src/PIDControllerTest.cpp # because it needs a Sim instance, which requires the observers_and_api include directory.
         src/ConfBuilderTest.cpp
         src/XdynForCSTest.cpp
         src/XdynForMETest.cpp

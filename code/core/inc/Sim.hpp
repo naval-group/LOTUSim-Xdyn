@@ -17,13 +17,14 @@
 #include "ForceModel.hpp"
 #include "SurfaceElevationGrid.hpp"
 #include "State.hpp"
+#include "ContinuousSystem.hpp"
 
 typedef std::map<std::string, std::map< std::string,ssc::kinematics::Vector6d > > OuputtedForces;
 typedef std::vector<std::pair<std::string,std::vector<std::string> > > VectorOfStringModelForEachBody;
 
 class Observer;
 
-class Sim
+class Sim : public ssc::solver::ContinuousSystem
 {
     public:
         Sim(const std::vector<BodyPtr>& bodies,
@@ -34,9 +35,6 @@ class Sim
         void operator()(const StateType& x, StateType& dxdt, double t);
         void dx_dt(const StateType& x, StateType& dxdt, const double t);
         void force_states(StateType& x, const double t) const;
-
-        void update_discrete_states();
-        void update_continuous_states();
 
         /**  \brief Serialize wave data on mesh for an ASCII observer
           *  \details Called by SimCsvObserver at each time step. The aim is to
@@ -63,13 +61,27 @@ class Sim
 
         void set_command_listener(const std::map<std::string, double>& new_commands);
 
+        /** \brief Sets the value of one of the system's discrete states. In our case, these discrete states are the command values calculated by the controllers. This method is used by the controllers to store the updated command values in the DataSource, for use by controlled forces (e.g. propellers).
+         */
+        void set_discrete_state(const std::string &state_name, const double value);
+        /** \brief Gets the value of the given input from the datasource
+         * 
+         * Used by controllers to get the inputs they need (setpoints or commands) to compute a command.
+         */
+        double get_input_value(const std::string &name) const;
+        /** \brief Gets the value of a Sim state ("x", "u", "qr", "phi", ...)
+         * 
+         * Used by controllers to get the states they need to compute a command.
+         */
+        double get_state_value(const std::string &name) const;
+
         void reset_history();
         std::vector<std::string> get_command_names() const;
 
         /** \brief This function calls all force models from the current body states.
           * \detail This should be called before the first call to Sim::output if the initial state (at construction) is to be recorded.
           */
-        void initialize_system_outputs_before_observation();
+        void initialize_system_outputs_before_first_observation();
 
     private:
         ssc::kinematics::UnsafeWrench sum_of_forces(const StateType& x, const BodyPtr& body, const double t);

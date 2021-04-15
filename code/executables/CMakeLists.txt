@@ -56,7 +56,7 @@ INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${environment_models_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${binary_stl_data_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${force_models_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${parser_extensions_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${listeners_and_controllers_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${observers_and_api_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${hdb_interpolators_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${gz_curves_INCLUDE_DIRS})
@@ -122,6 +122,7 @@ TARGET_LINK_LIBRARIES(xdyn
         boost_program_options_descriptions_static
         ${GRPC_GRPCPP_UNSECURE}
         ${PROTOBUF_LIBPROTOBUF}
+        ${Boost_THREAD_LIBRARY}
         )
 
 ADD_EXECUTABLE(test_orbital_velocities_and_dynamic_pressures
@@ -138,7 +139,7 @@ ADD_EXECUTABLE(test_hs
         src/test_hs.cpp
         $<TARGET_OBJECTS:test_data_generator>
         $<TARGET_OBJECTS:core>
-        $<TARGET_OBJECTS:parser_extensions>
+        $<TARGET_OBJECTS:listeners_and_controllers>
         $<TARGET_OBJECTS:force_models>
         $<TARGET_OBJECTS:environment_models>
         $<TARGET_OBJECTS:external_file_formats>
@@ -161,11 +162,12 @@ TARGET_LINK_LIBRARIES(test_hs
 
 ADD_EXECUTABLE(yml2test src/yml2test.cpp)
 
-ADD_EXECUTABLE(quat2eul src/convert_quaternion_to_euler.cpp)
-
-TARGET_LINK_LIBRARIES(quat2eul
-        ${ssc_STATIC_LIB}
-        )
+ADD_EXECUTABLE(quat2eul src/convert_quaternion_to_euler.cpp
+    $<TARGET_OBJECTS:kinematics_object>
+    $<TARGET_OBJECTS:data_source_object>
+    $<TARGET_OBJECTS:exception_handling_object>
+    $<TARGET_OBJECTS:numeric_object>
+    )
 
 ADD_EXECUTABLE(convert_stl_files_to_code
         ${CMAKE_CURRENT_BINARY_DIR}/convert_stl_files_to_code.cpp
@@ -234,6 +236,7 @@ TARGET_LINK_LIBRARIES(xdyn-for-cs
         boost_program_options_descriptions_static
         ${GRPC_GRPCPP_UNSECURE}
         ${PROTOBUF_LIBPROTOBUF}
+        ${Boost_THREAD_LIBRARY}
         )
 
 ADD_EXECUTABLE(xdyn-for-me
@@ -255,6 +258,7 @@ TARGET_LINK_LIBRARIES(xdyn-for-me
         boost_program_options_descriptions_static
         ${GRPC_GRPCPP_UNSECURE}
         ${PROTOBUF_LIBPROTOBUF}
+        ${Boost_THREAD_LIBRARY}
         )
 
 ################################################################################

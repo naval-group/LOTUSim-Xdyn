@@ -1,11 +1,20 @@
 
-# Modèles d'efforts non-commandés
+# Modèles d'efforts
 
-Les efforts extérieurs (non commandés) sont donnés dans la section
-`external forces` sous forme de liste de modèles ayant ou non des paramètres.
-La seule clef commune à tous les modèles d'effort est `model` : chaque modèle
-possède sinon sa propre paramétrisation (éventuellement aucune paramétrisation).
-Voici un exemple de section `external forces` :
+Dans les versions précédentes d'xdyn, les efforts appliqués au navire se
+subdivisaient en efforts non-commandés (qui ne nécessitent que les états
+navires pour être calculés) et efforts commandés (qui, en plus des états
+navire, utilisent des variables appelés "commandes" fournis séparément).
+Depuis, ces modèles d'effort ont été unifiés (les efforts non-commandés
+ont juste une liste vide de commandes).
+
+C'est pourquoi les efforts extérieurs sont aujourd'hui renseignés
+indifféremment dans la section `external forces` ou `controlled forces` (pour
+compatibilité avec les anciens modèles d'xdyn) sous forme de liste de modèles
+ayant ou non des paramètres.  La seule clef commune à tous les modèles d'effort
+est `model` : chaque modèle possède sinon sa propre paramétrisation
+(éventuellement aucune paramétrisation). Voici un exemple de section `external
+forces` :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 external forces:
@@ -932,23 +941,22 @@ Les données polaires de coefficients de portance et traînée peuvent être don
 
 - [Page Wikipedia "Effort sur une voile"](https://fr.wikipedia.org/wiki/Effort_sur_une_voile)
 
-# Efforts commandés
+## Efforts commandés
 
-## Description
-
-Les efforts commandés correspondent, par exemple, aux efforts de propulsion, de safran et de
-foil. Ils sont décrits dans la section `controlled forces`. Les seules clefs
-YAML communes à tous les efforts commandés sont `name` (qui est un identifiant
-choisi par l'utilisateur) et `model` (qui est une chaîne servant à identifier
-le type de modèle utilisé).
+Les efforts commandés correspondent, par exemple, aux efforts de propulsion, de
+safran et de foil. Ils sont également décrits dans la section `external forces`
+(ou `controlled forces`, par compatibilité avec les anciennes versions de
+xdyn).  Les seules clefs YAML communes à tous les efforts commandés sont `name`
+(qui est un identifiant choisi par l'utilisateur) et `model` (qui est une
+chaîne servant à identifier le type de modèle utilisé).
 
 Les commandes sont spécifiées en YAML, soit dans le même fichier que les
 modèles d'effort, soit dans un fichier à part (plus modulaire).
 
-Voici un exemple de section `efforts commandés`, qui correspond au modèle d'hélice décrit [ici](#h%C3%A9lices-wageningen-s%C3%A9rie-b) :
+Voici un exemple d'efforts commandé, qui correspond au modèle d'hélice décrit [ici](#h%C3%A9lices-wageningen-s%C3%A9rie-b) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-controlled forces:
+external forces:
   - name: port side propeller
     model: wageningen B-series
     position of propeller frame:
@@ -985,7 +993,7 @@ controlled forces:
     diameter: {value: 2, unit: m}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Les commandes sont définies dans la section `commands` décrite ci-après.
+Les commandes sont définies dans les sections `commands` et `controllers` décrites ci-après.
 
 ### Syntaxe des commandes
 
@@ -1008,7 +1016,7 @@ commands:
 Il s'agit ici d'un modèle d'hélice dont la description complète est [ici](#h%C3%A9lices-wageningen-s%C3%A9rie-b).
 
 La valeur renseignée dans `name` doit correspondre à l'identifiant utilisé dans
-la section `controlled forces`. Pour chaque effort contrôlé (identifié par
+la section `external forces`. Pour chaque effort contrôlé (identifié par
 `name`), on donne une liste d'instants (en secondes) puis, pour chaque
 commande, les valeurs à ces instants. Il doit donc y avoir, pour chaque
 commande, autant de valeurs qu'il y a d'instants et il faut spécifier au moins
@@ -1021,7 +1029,7 @@ commande est maintenue. Avant la première valeur de temps, on utilise la premi�
 valeur de chaque commande. Ainsi, pour l'exemple présenté ci-dessus, pour toute
 valeur de $`t\geq 10`$, alors rpm=4000. Pour $`t\leq 1`$, rpm=3000.
 
-Les [commandes attendues](#syntaxe-des-commandes) pour ce modèle sont :
+Les commandes attendues pour ce modèle sont :
 
 - La vitesse de rotation de l'hélice, toujours positive pour ce modèle, définie
 par `rpm`.
@@ -1035,6 +1043,104 @@ commands:
     t: [0,1,3,10]
     rpm: {unit: rpm, values: [2500, 3000, 3000, 4000]}
     P/D: {unit: 1, values: [0.7,0.7,0.7,0.7]}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+### Syntaxe des contrôleurs
+
+Les commandes des efforts commandés peuvent aussi être obtenues de manière dynamique comme la sortie de **contrôleurs**.
+
+Un contrôleur est un système permettant d'atteindre une valeur de consigne et de la maintenir malgré les perturbations externes.
+Il a besoin de deux entrées : une consigne et une mesure, qu'il compare pour calculer la commande.
+
+Le champ `controllers` (facultatif) à la racine du yaml permet de définir les paramètres permettant d'intégrer
+des contrôleurs à la simulation, qui vont calculer les commandes dont ont besoin les efforts commandés.
+
+Les seule clefs communes à tous les types de contrôleurs sont `type` (pour choisir le type de contrôleur) et
+`dt` (pour renseigner le pas de temps du contrôleur) : chaque type de contrôleur possède sinon sa propre paramétrisation.
+Pour l'instant, seul le [régulateur `PID`](#r%C3%A9gulateur-pid) est implémenté.
+
+On peut spécifier à la fois des commandes et des contrôleurs pour obtenir les commandes nécessaires aux efforts
+commandés. Toutefois, pour chaque effort commandé, chaque commande doit être définie une seule fois, soit
+directement dans le champ `commands`, soit calculée par un contrôleur du champ `controllers`.
+
+#### Consignes des contrôleurs
+
+Les valeurs des **consignes des contrôleurs** sont spécifiées de manière statique dans une nouvelle section `setpoints`
+(facultative) à la racine du yaml.
+
+On donne une liste d'instants (en secondes) puis, pour chaque consigne, les valeurs à ces instants.
+Il doit donc y avoir, pour chaque consigne, autant de valeurs qu'il y a d'instants.
+Entre deux instants, les valeurs des commandes sont interpolées linéairement.
+On peut définir autant de consignes qu'on le souhaite : les consignes inutilisées sont simplement ignorées.
+
+Au-delà de la dernière valeur de temps renseignée, la dernière valeur de chaque
+consigne est maintenue. Avant la première valeur de temps, on utilise la première
+valeur de chaque consigne.
+
+On peut définir plusieurs liste d'instants différents.
+
+Par exemple :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+setpoints:
+    - t: [0, 500, 800, 1000]
+      psi_co: {unit: deg, values: [30, 40, 50, 60]}
+    - t: [0, 50]
+      u_co: {unit: knot, values: [0, 1]}
+      v_co: {unit: knot, values: [0, 1]}
+      w_co: {unit: knot, values: [0, 1]}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#### Régulateur PID
+
+Le [régulateur PID](https://en.wikipedia.org/wiki/PID_controller) délivre un signal de commande à partir de la
+différence entre la consigne et la mesure (l'erreur).
+
+Le correcteur PID agit de trois manières :
+
+- action proportionnelle : l'erreur est multipliée par un gain Kp ;
+- action intégrale : l'erreur est intégrée et divisée par un gain Ki ;
+- action dérivée : l'erreur est dérivée et multipliée par un gain Kd.
+
+Pour calculer une commande en utilisant un régulateur PID, il faut créer un contrôleur de type `PID`,
+auquel on rajoutera les sections yaml suivantes:
+
+- `gains`, qui contient trois champs : `Kp`, `Ki` et `Kd`.
+- `state weights`, qui contient la mesure dont le contrôleur aura besoin, spécifiée par une formule linéaire permettant
+  d'obtenir une valeur à partir des états du système lors de la simulation. On renseigne une liste de clefs/valeurs où les clefs
+  correspondent au nom de l'état et les valeurs sont les coefficients. Un état non spécifié a pour coefficient 0.
+  Les noms d'états valides sont : `x`, `y`, `z`, `u`, `v`, `w`, `p`, `q`, `r`, `qr`, `qi`, `qj`, `qk`, `phi`, `theta` et `psi`.
+  Par exemple, pour obtenir `x / 2 - y` :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+state weights:
+    x: 0.5
+    y: -1
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- `setpoint`, qui contient le nom de la consigne dont le contrôleur aura besoin,
+   qu'il cherchera dans la section [`setpoints`](#consignes-des-contr%C3%B4leurs) décrite précédemment.
+   Par example: `psi_co`.
+- `command`, qui contient le nom complet de la commande que calcule le contrôleur,
+   composé du nom du modèle d'effort concaténé avec le nom de la commande entre parenthèses.
+   Par example: `PropRudd(rpm)`, `port side propeller(P/D)`.
+
+Par exemple, voici un yaml spécifiant un contrôleur PID calculant la commande attendue
+pour la direction de [ce modèle](#h%C3%A9lices-wageningen-s%C3%A9rie-b) :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+controllers:
+  - name: port side propeller
+    type: PID
+    dt: 1
+    state weights:
+      psi: 1
+    setpoint: psi_co
+    command: port side propeller(beta)
+    gains:
+      Kp: -1
+      Ki: 0
+      Kd: -1
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -1510,7 +1616,7 @@ bilan des efforts.
 Voici un exemple de configuration possible :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-controlled forces:
+external forces:
   - name: port side propeller
     model: wageningen B-series
     position of propeller frame:
@@ -1633,7 +1739,7 @@ De même, en prenant $`r<0`$ et $`\psi=\psi_{\textrm{co}}`$, le moment généré
 ### Paramétrage
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-controlled forces:
+external forces:
   - name: controller
     model: simple heading controller
     ksi: 0.9
@@ -1748,7 +1854,7 @@ De même, en prenant $`r<0`$ et $`\psi=\psi_{\textrm{co}}`$, le moment généré
 ### Paramétrage
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-controlled forces:
+external forces:
   - name: controller
     model: simple station-keeping controller
     ksi_x: 0.9
@@ -2126,7 +2232,7 @@ d'où
 ### Paramétrage
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-controlled forces:
+external forces:
   - name: Prop. & rudder
     model: propeller+rudder
     position of propeller frame:
@@ -2258,7 +2364,7 @@ N
 Voici un exemple de configuration possible :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-controlled forces:
+external forces:
   - name: port side propeller
     model: Kt(J) & Kq(J)
     position of propeller frame:
@@ -2346,7 +2452,7 @@ fichier de configuration YAML d'xdyn.
 
 ### Paramétrage
 
-Dans la section `controlled forces`, on ajoute une section de la forme suivante :
+Dans la section `external forces`, on ajoute une section de la forme suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: grpc

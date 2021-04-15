@@ -13,6 +13,7 @@
 #include "parse_output.hpp"
 #include "ListOfObservers.hpp"
 #include "simulator_api.hpp"
+#include "steppers.hpp"
 #include "stl_data.hpp"
 
 #define EPS 1E-8
@@ -58,7 +59,8 @@ TEST_F(EverythingObserverTest, example)
     auto sys = get_system(test_data::GM_cube(), test_data::cube(), 0);
     auto list_of_observers = observers();
 
-    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, tend, dt, list_of_observers);
+    ssc::solver::Scheduler scheduler(0, tend, dt);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, list_of_observers);
     const auto obs = list_of_observers.get();
 //! [MapObserverTest example]
 //! [MapObserverTest expected output]
@@ -74,8 +76,9 @@ TEST_F(EverythingObserverTest, GM)
     const double dt = 1;
     const double tend = 1;
     auto sys = get_system(test_data::GM_cube(), test_data::cube(), 0);
+    ssc::solver::Scheduler scheduler(0, tend, dt);
     auto list_of_observers = observers();
-    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, 0, tend, dt, list_of_observers);
+    ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, list_of_observers);
     const auto obs = list_of_observers.get();
 //! [MapObserverTest example]
 //! [MapObserverTest expected output]

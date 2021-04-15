@@ -161,14 +161,6 @@ void Sim::dx_dt(const StateType& x, StateType& dxdt, const double t)
     }
 }
 
-void Sim::update_discrete_states()
-{
-}
-
-void Sim::update_continuous_states()
-{
-}
-
 ssc::kinematics::Wrench project_into_NED_frame(const ssc::kinematics::Wrench& F, const ssc::kinematics::RotationMatrix& R);
 ssc::kinematics::Wrench project_into_NED_frame(const ssc::kinematics::Wrench& F, const ssc::kinematics::RotationMatrix& R)
 {
@@ -191,7 +183,7 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const BodyP
     return pimpl->sum_of_forces_in_body_frame[body->get_name()];
 }
 
-void Sim::initialize_system_outputs_before_observation()
+void Sim::initialize_system_outputs_before_first_observation()
 {
     for (auto body: pimpl->bodies)
     {
@@ -282,6 +274,57 @@ void Sim::set_command_listener(const std::map<std::string, double>& new_commands
     for(const auto c : new_commands)
     {
         pimpl->command_listener.set(c.first, c.second);
+    }
+}
+
+void Sim::set_discrete_state(const std::string &state_name, const double value)
+{
+    pimpl->command_listener.set(state_name, value);
+}
+
+double Sim::get_input_value(const std::string &name) const
+{
+    return pimpl->command_listener.get<double>(name);
+}
+
+double Sim::get_state_value(const std::string &name) const
+{
+    if (name == "x") {
+        return pimpl->bodies.front()->get_states().x();
+    } else if (name == "y") {
+        return pimpl->bodies.front()->get_states().y();
+    } else if (name == "z") {
+        return pimpl->bodies.front()->get_states().z();
+    } else if (name == "u") {
+        return pimpl->bodies.front()->get_states().u();
+    } else if (name == "v") {
+        return pimpl->bodies.front()->get_states().v();
+    } else if (name == "w") {
+        return pimpl->bodies.front()->get_states().w();
+    } else if (name == "p") {
+        return pimpl->bodies.front()->get_states().p();
+    } else if (name == "q") {
+        return pimpl->bodies.front()->get_states().q();
+    } else if (name == "r") {
+        return pimpl->bodies.front()->get_states().r();
+    } else if (name == "qr") {
+        return pimpl->bodies.front()->get_states().qr();
+    } else if (name == "qi") {
+        return pimpl->bodies.front()->get_states().qi();
+    } else if (name == "qj") {
+        return pimpl->bodies.front()->get_states().qj();
+    } else if (name == "qk") {
+        return pimpl->bodies.front()->get_states().qk();
+    } else if (name == "phi") {
+        return pimpl->bodies.front()->get_states().get_angles().phi;
+    } else if (name == "theta") {
+        return pimpl->bodies.front()->get_states().get_angles().theta;
+    } else if (name == "psi") {
+        return pimpl->bodies.front()->get_states().get_angles().psi;
+    } else {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException,
+              "Something is wrong with a 'states' name: '" << name << "' is not a valid state. Examples of valid states: 'x', 'u', 'qr', 'psi', etc.."
+              );
     }
 }
 

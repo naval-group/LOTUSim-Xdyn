@@ -38,7 +38,6 @@ CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt"
 # External libraries
 INCLUDE(CMakeOutputDirectories)
 INCLUDE(CMakeGMock)
-INCLUDE(CMakeSSC)
 INCLUDE(CMakeYamlCpp)
 INCLUDE(CMakeEigen)
 INCLUDE(CMakeHdf5)
@@ -47,9 +46,9 @@ INCLUDE(CMakeGRPC)
 
 INCLUDE(CMakeBoost)
 SET(Boost_USE_STATIC_LIBS   ON)
-SET(Boost_USE_MULTITHREADED OFF)
+SET(Boost_USE_MULTITHREADED ON)
 #SET(Boost_USE_STATIC_RUNTIME    OFF)
-FIND_PACKAGE(Boost 1.53 COMPONENTS program_options filesystem system regex REQUIRED) #random
+FIND_PACKAGE(Boost 1.53 COMPONENTS program_options filesystem system regex thread random chrono REQUIRED) #random
 IF(Boost_FOUND)
     MESSAGE(STATUS "Boost_INCLUDE_DIRS  : ${Boost_INCLUDE_DIRS}")
     MESSAGE(STATUS "Boost_LIBRARIES     : ${Boost_LIBRARIES}")
@@ -57,7 +56,12 @@ ENDIF()
 
 #############################################################################
 # Compilation part
+ADD_SUBDIRECTORY(ssc/ssc/f2c)
 INCLUDE(CMakeCompilationOptions)
+SET(ssc_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/ssc" CACHE PATH "Path to SSC include directory")
+SET(SSC_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/ssc" CACHE PATH "Path to SSC include directory")
+SET(F2C_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ssc/ssc/f2c" CACHE PATH "Path to f2c include directory")
+
 ADD_SUBDIRECTORY(base91x)
 ADD_SUBDIRECTORY(exceptions)
 ADD_SUBDIRECTORY(external_data_structures)
@@ -73,7 +77,7 @@ ADD_SUBDIRECTORY(hdb_interpolators)
 ADD_SUBDIRECTORY(core)
 ADD_SUBDIRECTORY(force_models)
 ADD_SUBDIRECTORY(grpc)
-ADD_SUBDIRECTORY(parser_extensions)
+ADD_SUBDIRECTORY(listeners_and_controllers)
 ADD_SUBDIRECTORY(observers_and_api)
 ADD_SUBDIRECTORY(gz_curves)
 ADD_SUBDIRECTORY(executables)
@@ -84,11 +88,49 @@ IF (WIN32)
 ELSE()
     SET(STATICORSHARED SHARED)
 ENDIF()
+SET(websocketpp_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ssc/ssc/websocketpp)
+ADD_SUBDIRECTORY(ssc/ssc/data_source)
+ADD_SUBDIRECTORY(ssc/ssc/random_data_generator)
+ADD_SUBDIRECTORY(ssc/ssc/exception_handling)
+ADD_SUBDIRECTORY(ssc/ssc/decode_unit)
+ADD_SUBDIRECTORY(ssc/ssc/yaml_parser)
+ADD_SUBDIRECTORY(ssc/ssc/text_file_reader)
+ADD_SUBDIRECTORY(ssc/ssc/integrate)
+ADD_SUBDIRECTORY(ssc/ssc/numeric)
+ADD_SUBDIRECTORY(ssc/ssc/kinematics)
+ADD_SUBDIRECTORY(ssc/ssc/interpolation)
+ADD_SUBDIRECTORY(ssc/ssc/csv_file_reader)
+ADD_SUBDIRECTORY(ssc/ssc/csv_writer)
+ADD_SUBDIRECTORY(ssc/ssc/matrix_and_vector_classes)
+ADD_SUBDIRECTORY(ssc/ssc/functors_for_optimizer)
+ADD_SUBDIRECTORY(ssc/ssc/websocket)
+ADD_SUBDIRECTORY(ssc/ssc/json)
+ADD_SUBDIRECTORY(ssc/ssc/solver)
+
+
 
 ADD_LIBRARY(${PROJECT_NAME} ${STATICORSHARED}
+    $<TARGET_OBJECTS:random_data_generator_object>
+    $<TARGET_OBJECTS:exception_handling_object>
+    $<TARGET_OBJECTS:decode_unit_object>
+    $<TARGET_OBJECTS:yaml_parser_object>
+    $<TARGET_OBJECTS:text_file_reader_object>
+    $<TARGET_OBJECTS:integrate_object>
+    $<TARGET_OBJECTS:numeric_object>
+    $<TARGET_OBJECTS:data_source_object>
+    $<TARGET_OBJECTS:kinematics_object>
+    $<TARGET_OBJECTS:interpolation_object>
+    $<TARGET_OBJECTS:csv_file_reader_object>
+    $<TARGET_OBJECTS:csv_writer_object>
+    $<TARGET_OBJECTS:matrix_and_vector_classes_object>
+    $<TARGET_OBJECTS:functors_for_optimizer_object>
+    $<TARGET_OBJECTS:websocket_object>
+    $<TARGET_OBJECTS:f2c_object>
+    $<TARGET_OBJECTS:json_object>
+
         $<TARGET_OBJECTS:core>
         $<TARGET_OBJECTS:observers_and_api>
-        $<TARGET_OBJECTS:parser_extensions>
+        $<TARGET_OBJECTS:listeners_and_controllers>
         $<TARGET_OBJECTS:force_models>
         $<TARGET_OBJECTS:environment_models>
         $<TARGET_OBJECTS:external_file_formats>
@@ -101,12 +143,6 @@ ADD_LIBRARY(${PROJECT_NAME} ${STATICORSHARED}
         $<TARGET_OBJECTS:gz_curves>
         $<TARGET_OBJECTS:grpc>
         )
-
-IF (WIN32)
-    TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE ${ssc_STATIC_LIB})
-ELSE()
-    TARGET_LINK_LIBRARIES(${PROJECT_NAME} PUBLIC ${ssc_STATIC_LIB})
-ENDIF()
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE yaml-cpp)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE gfortran)
@@ -148,7 +184,7 @@ ADD_EXECUTABLE(${TEST_EXE}
         $<TARGET_OBJECTS:core_tests>
         $<TARGET_OBJECTS:environment_models_tests>
         $<TARGET_OBJECTS:force_models_tests>
-        $<TARGET_OBJECTS:parser_extensions_tests>
+        $<TARGET_OBJECTS:listeners_and_controllers_tests>
         $<TARGET_OBJECTS:test_data_generator>
         $<TARGET_OBJECTS:hdb_interpolators_tests>
         $<TARGET_OBJECTS:interface_hdf5_tests>
@@ -166,6 +202,7 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         ${PROJECT_NAME}
         ${GRPC_GRPCPP_UNSECURE}
         ${PROTOBUF_LIBPROTOBUF}
+        ${Boost_THREAD_LIBRARY}
         )
 
 MESSAGE(STATUS "CMAKE_BUILD_TYPE_UPPER : ${CMAKE_BUILD_TYPE_UPPER}")

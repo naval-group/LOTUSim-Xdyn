@@ -4,7 +4,7 @@
  *  Created on: May 23, 2014
  *      Author: cady
  */
-
+#include <algorithm>
 #include <sstream>
 
 #include "check_input_yaml.hpp"
@@ -63,6 +63,55 @@ void check_rotations(const YamlRotation& input)
     {
         errors << "'rotations/order by' must be either 'angle' or 'axis': got '" << input.order_by << "'" << std::endl;
     }        
+    throw_if_any_errors_were_detected(__PRETTY_FUNCTION__, errors);
+}
+
+void check_controller_output_is_not_defined_in_a_command(const std::string& controller_command_name,
+                                                         const std::vector<YamlTimeSeries>& commands_input)
+{
+    std::stringstream errors;
+
+    for (const YamlTimeSeries commands : commands_input)
+    {
+        for (const auto& command_name_values : commands.values)
+        {
+            const std::string command_complete_name = commands.name + "(" + command_name_values.first + ")";
+            if (controller_command_name == command_complete_name)
+            {
+                errors << "The controllers output '" << controller_command_name << "' is already defined in the 'commands' section." << std::endl;
+            }
+        }
+    }
+    throw_if_any_errors_were_detected(__PRETTY_FUNCTION__, errors);
+}
+
+void check_command_names(const std::vector<YamlTimeSeries>& commands_input)
+{
+    std::stringstream errors;
+
+    for (const YamlTimeSeries commands : commands_input)
+    {
+        if (commands.name == "")
+        {
+            errors << "Missing 'name' field in the 'commands' section: all commands should be defined for a force model." << std::endl;
+        }
+    }
+    throw_if_any_errors_were_detected(__PRETTY_FUNCTION__, errors);
+}
+
+void check_state_name(const std::string& state_name)
+{
+    std::stringstream errors;
+
+    const std::vector<std::string> valid_states = { "x", "y", "z",
+                                                    "u", "v", "w",
+                                                    "p", "q", "r",
+                                                    "qr", "qi", "qj", "qk",
+                                                    "phi", "theta", "psi" };
+
+    if (std::find(valid_states.begin(), valid_states.end(), state_name) == valid_states.end()) {
+        errors << "'" << state_name << "' is not a valid state. The valid states are: 'x', 'y', 'z', 'u', 'v', 'w', 'p', 'q', 'r', 'qr', 'qi', 'qj', 'qk', 'phi', 'theta' and 'psi'." << std::endl;
+    }
     throw_if_any_errors_were_detected(__PRETTY_FUNCTION__, errors);
 }
 

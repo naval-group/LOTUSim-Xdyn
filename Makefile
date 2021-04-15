@@ -1,15 +1,18 @@
-all: submodule windows debian debug doc all_docker_images
+all: submodule headers windows debian debug doc all_docker_images
 
-windows: windows_gccx_posix
-debian: debian_10_release_gcc_8
-debug: debian_10_debug_gcc_8
+windows: headers windows_gccx_posix
+debian: headers debian_10_release_gcc_8
+debug: headers debian_10_debug_gcc_8
 
-.PHONY: fetch-ssc-windows cmake-windows package-windows windows doc submodule
+.PHONY: all_docker_images cmake-debian debian cmake-windows windows doc submodule
 
 
 submodule:
 	@git submodule sync --recursive
 	@git submodule update --init --recursive
+
+headers:
+	@cd code/ssc/ssc && sh generate_module_header.sh && cd ../../..
 
 cmake-debian: BUILD_TYPE = Release
 cmake-debian: BUILD_DIR = build_deb10
@@ -29,15 +32,6 @@ cmake-windows: SSC_ROOT=/opt/ssc
 cmake-windows: HDF5_DIR=/opt/HDF5_1_8_20/cmake
 cmake-windows: ci_env=
 cmake-windows: cmake-windows-target
-
-debian_8_release_gcc_492: BUILD_TYPE = Release
-debian_8_release_gcc_492: BUILD_DIR = build_deb8
-debian_8_release_gcc_492: CPACK_GENERATOR = DEB
-debian_8_release_gcc_492: DOCKER_IMAGE = sirehna/base-image-debian8-gcc492-xdyn
-debian_8_release_gcc_492: BOOST_ROOT = /opt/boost
-debian_8_release_gcc_492: SSC_ROOT = /opt/ssc
-debian_8_release_gcc_492: ci_env=
-debian_8_release_gcc_492: cmake-debian-target build-debian test-debian
 
 debian_9_release_gcc_6: BUILD_TYPE = Release
 debian_9_release_gcc_6: BUILD_DIR = build_deb9

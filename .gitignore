@@ -27,7 +27,6 @@ ssc_windows
 .project
 .settings
 .vagrant
-.vscode
 *.swp
 *.tar.gz
 *.tgz

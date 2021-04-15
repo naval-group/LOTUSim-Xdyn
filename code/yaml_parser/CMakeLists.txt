@@ -5,8 +5,9 @@ set(SRC src/SimulatorYamlParser.cpp
         src/environment_parsers.cpp
         src/check_input_yaml.cpp
         src/external_data_structures_parsers.cpp
-        src/parse_commands.cpp
+        src/parse_controllers.cpp
         src/parse_output.cpp
+        src/parse_time_series.cpp
         src/parse_address.cpp
         )
 

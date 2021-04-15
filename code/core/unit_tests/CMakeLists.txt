@@ -24,7 +24,7 @@ INCLUDE_DIRECTORIES(SYSTEM ${GTEST_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${GMOCK_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${binary_stl_data_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${parser_extensions_INCLUDE_DIRS}/../unit_tests/inc)
+INCLUDE_DIRECTORIES(${listeners_and_controllers_INCLUDE_DIRS}/../unit_tests/inc)
 
 # Using C++ 2011
 # The -std=c++0x option causes g++ to go into 'strict ANSI' mode so it doesn't declare non-standard functions

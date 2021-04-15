@@ -127,7 +127,7 @@ Voici la description des modules de X-DYN :
 | `mesh`                     | Calculs sur les maillages (intersection navire/surface libre, itération sur les |
 |                            | facettes)                                                                       |
 | `observers_and_api`        | Définition des sorties en cours de simulation (CSV, HDF5, websocket...)         |
-| `parser_extensions`        | Lecture des fichiers de commande et des spectres de houle                       |
+| `listeners_and_controllers`| Lecture des fichiers de commande, des contrôleurs et des spectres de houle      |
 | `slamming`                 | Calcul des efforts de slamming                                                  |
 | `test_data_generator`      | Génération des données de test (notamment utilisées pour générer les tutoriels) |
 | `yaml_parser`              | Interprétation des parties génériques du YAML (non spécifiques à un modèle)     |
@@ -390,30 +390,27 @@ s'appelle `quicksolve` et figure dans le fichier `simulator_run.cpp` du module
 `executables` :
 
 ~~~~~~~~~~~~~~ {.cpp}
-ssc::solver::quicksolve<Stepper>(system, tstart, tend, dt, observer);
+ssc::solver::quicksolve<Stepper>(system, scheduler, observer);
 ~~~~~~~~~~~~~~
 
 Voici une brève description des paramètres (le fonctionnement détaillé du
 solveur figure dans la documentation utilisateur).
 
-+-----------+---------------------------------------------------------------------------------------+
-| Paramètre | Description                                                                           |
-+===========+=======================================================================================+
-| `Stepper` | Type du solveur à utiliser. Il s'agit de `typedef`s vers les types de solveur de      |
-|           | `odeint`. Par exemple, `ssc::solver::EulerStepper` est un alias pour                  |
-|           | `::boost::numeric::odeint::euler<std::vector<double> >`.                              |
-+-----------+---------------------------------------------------------------------------------------+
-| `system`  | N'importe quel objet possédant une méthode                                            |
-|           | `void operator()(const std::vector<double>& x, std::vector<double>& dxdt, double t)`  |
-|           | Dans le cas du simulateur "Bassin Numérique", un objet de la classe `Sim`             |
-+-----------+---------------------------------------------------------------------------------------+
-| `tstart`  | `double` représentant la date du premier pas de temps                                 |
-+-----------+---------------------------------------------------------------------------------------+
-| `tend`    | `double` représentant la date du dernier pas de temps calculé                         |
-+-----------+---------------------------------------------------------------------------------------+
-| `dt`      | `double` représentant l'incrément en temps. Dans le cas d'un solveur à pas adaptatif, |
-|           | longueur initiale du pas de temps.                                                    |
-+-----------+---------------------------------------------------------------------------------------+
++------------+---------------------------------------------------------------------------------------+
+| Paramètre  | Description                                                                           |
++============+=======================================================================================+
+| `Stepper`  | Type du solveur à utiliser. Il s'agit de `typedef`s vers les types de solveur de      |
+|            | `odeint`. Par exemple, `ssc::solver::EulerStepper` est un alias pour                  |
+|            | `::boost::numeric::odeint::euler<std::vector<double> >`.                              |
++------------+---------------------------------------------------------------------------------------+
+| `system`   | N'importe quel objet possédant une méthode                                            |
+|            | `void operator()(const std::vector<double>& x, std::vector<double>& dxdt, double t)`  |
+|            | Dans le cas du simulateur "Bassin Numérique", un objet de la classe `Sim`             |
++------------+---------------------------------------------------------------------------------------+
+| `scheduler`| Object dérivant de la classe `Scheduler`.                                                    |
++------------+---------------------------------------------------------------------------------------+
+| `observer` | Object dérivant de la classe `Observer`.                                                    |
++------------+---------------------------------------------------------------------------------------+
 
 La responsabilité du solveur est double :
 
@@ -1062,7 +1059,7 @@ intervenir sur cinq modules pour ajouter un modèle de houle :
 - `environment_models` pour la définition du modèle proprement dit
 - `external_data_structures` pour l'ajout d'une structure de donnée contenant
   les paramètres du modèle lus depuis le fichier YAML
-- `parser_extensions` pour l'interface du parseur
+- `listeners_and_controllers` pour l'interface du parseur
 - `yaml_parser` pour le parsing effectif
 - `observers_and_api` pour l'ajout à X-DYN (dans `simulator_api.cpp`)
 
@@ -1109,7 +1106,7 @@ On commence par définir la structure de données qui va contenir les données
 lues depuis le fichier YAML. On l'appelle par exemple `YamlJonswap` et on la
 stocke dans `YamlWaveModelInput.hpp` dans le module `external_data_structures`.
 
-Ensuite, dans le module `parser_extensions`, on spécialise le template de
+Ensuite, dans le module `listeners_and_controllers`, on spécialise le template de
 classe `SpectrumBuilder` défini dans `builders.hpp` de la façon suivante :
 
 ~~~~~~~~ {.cpp}
@@ -1227,7 +1224,7 @@ On commence par définir la structure de données qui va contenir les données
 lues depuis le fichier YAML. On l'appelle par exemple `YamlCos2s` et on la
 stocke dans `YamlWaveModelInput.hpp` dans le module `external_data_structures`.
 
-Ensuite, dans le module `parser_extensions`, on spécialise le template de
+Ensuite, dans le module `listeners_and_controllers`, on spécialise le template de
 classe `DirectionalSpreadingBuilder` défini dans `builders.hpp` de la façon suivante :
 
 ~~~~~~~~ {.cpp}

@@ -8,20 +8,22 @@
 #ifndef ENVIRONMENTANDFRAMES_HPP_
 #define ENVIRONMENTANDFRAMES_HPP_
 
-#include "YamlRotation.hpp"
 #include "Body.hpp"
 #include "StateMacros.hpp"
 #include "SurfaceElevationInterface.hpp"
 #include "WindModel.hpp"
-#include <ssc/kinematics.hpp>
+#include "YamlRotation.hpp"
 #include <boost/optional.hpp>
+#include <ssc/kinematics.hpp>
 
 class Observer;
 
 struct EnvironmentAndFrames
 {
-    EnvironmentAndFrames();
-    void feed(Observer& observer, double t, const std::vector<BodyPtr>& bodies, const StateType& state) const;
+    EnvironmentAndFrames ();
+    void feed (Observer &observer, double t,
+               const std::vector<BodyPtr> &bodies,
+               const StateType &state) const;
     SurfaceElevationPtr w;
     WindModelPtr wind;
     ssc::kinematics::KinematicsPtr k;
@@ -30,10 +32,10 @@ struct EnvironmentAndFrames
     double g;
     YamlRotation rot;
 
-    void set_rho_air(const double value);
-    double get_rho_air() const;
+    void set_rho_air (const double value);
+    double get_rho_air () const;
 
-private:
+  private:
     boost::optional<double> rho_air;
 };
 

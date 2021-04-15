@@ -10,7 +10,8 @@
 #include "InvalidInputException.hpp"
 #include <ssc/yaml_parser.hpp>
 #include "external_data_structures_parsers.hpp"
-#include "parse_commands.hpp"
+#include "parse_controllers.hpp"
+#include "parse_time_series.hpp"
 
 SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(data)
 {
@@ -35,6 +36,8 @@ YamlSimulatorInput SimulatorYamlParser::parse() const
     PARSE_OPTIONAL_KEY("bodies", ret.bodies);
     node["rotations convention"] >> ret.rotations;
     PARSE_OPTIONAL_KEY("environment models", ret.environment);
+    PARSE_OPTIONAL_KEY("setpoints", ret.setpoints);
+    PARSE_OPTIONAL_KEY("controllers", ret.controllers);
     PARSE_OPTIONAL_KEY("commands", ret.commands);
     return ret;
 }
