@@ -1,4 +1,5 @@
 #!/bin/sh
+make headers
 docker run \
     -t \
     --rm \

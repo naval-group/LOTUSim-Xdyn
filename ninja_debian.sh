@@ -1,4 +1,5 @@
 #!/bin/sh
+make headers
 docker run \
     --name xdyn-ninja-debian \
     --rm \

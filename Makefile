@@ -1,15 +1,18 @@
-all: submodule windows debian debug doc all_docker_images
+all: submodule headers windows debian debug doc all_docker_images
 
-windows: windows_gccx_posix
-debian: debian_10_release_gcc_8
-debug: debian_10_debug_gcc_8
+windows: headers windows_gccx_posix
+debian: headers debian_10_release_gcc_8
+debug: headers debian_10_debug_gcc_8
 
-.PHONY: fetch-ssc-windows cmake-windows package-windows windows doc submodule
+.PHONY: all_docker_images cmake-debian debian cmake-windows windows doc submodule
 
 
 submodule:
 	@git submodule sync --recursive
 	@git submodule update --init --recursive
+
+headers:
+	@cd code/ssc/ssc && sh generate_module_header.sh && cd ../../..
 
 cmake-debian: BUILD_TYPE = Release
 cmake-debian: BUILD_DIR = build_deb10

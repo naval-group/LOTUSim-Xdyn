@@ -1,4 +1,5 @@
 #!/bin/sh
+make headers
 docker run  --rm \
     -u $(id -u):$(id -g) \
     -v $(pwd):/opt/share \
