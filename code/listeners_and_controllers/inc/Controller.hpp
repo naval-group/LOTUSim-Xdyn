@@ -10,8 +10,8 @@
 
 #include <string>
 #include <ssc/data_source.hpp>
-#include "DiscreteSystem.hpp"
-#include "ContinuousSystem.hpp"
+#include <ssc/solver/DiscreteSystem.hpp>
+#include <ssc/solver/ContinuousSystem.hpp>
 #include "Sim.hpp"
 
 class Controller : public ssc::solver::DiscreteSystem
