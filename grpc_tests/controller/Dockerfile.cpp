@@ -26,7 +26,7 @@ RUN wget https://github.com/google/googletest/archive/release-1.8.1.tar.gz -O go
     tar -xf googletest.tar.gz --strip 1 -C /opt/googletest && \
     rm -rf googletest.tar.gz
 
-ADD code/grpc/controller.proto /
+ADD code/interfaces/controller.proto /
 
 WORKDIR /work
 ADD grpc_tests/controller/CMakeLists.txt\

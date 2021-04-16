@@ -7,7 +7,7 @@ all: clean cosimulation.proto
 	CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose rm -f
 	CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose up -t 0 --exit-code-from test --abort-on-container-exit --build
 
-cosimulation.proto: ../../code/grpc/cosimulation.proto
+cosimulation.proto: ../../code/interfaces/cosimulation.proto
 	cp $< $@
 
 clean:
