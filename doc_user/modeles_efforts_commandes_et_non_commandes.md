@@ -1308,7 +1308,7 @@ message SetParametersResponse
 {
     enum AngleRepresentation {
         QUATERNION = 0;
-        EULER_321 = 1;
+        EULER_321  = 1;
     }
     double              date_of_first_callback = 1; // Date at which the controller should be called for the first time. Will often be equal to just t0.
     repeated string     setpoint_names         = 2; // Name of the controller inputs (setpoints) which xdyn must supply.
@@ -1368,7 +1368,7 @@ message ControllerStatesEuler
 message ControllerResponse
 {
     map<string,double> commands = 1; // Commands computed by the controller
-    double next_call           = 2; // Date at which the solver should call the controller again
+    double next_call            = 2; // Date at which the solver should call the controller again
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
