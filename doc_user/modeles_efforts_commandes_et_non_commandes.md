@@ -1219,6 +1219,182 @@ controllers:
       Kd: -1
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+#### Utilisation de contrôleurs externes
+
+xdyn peut appeler des contrôleurs externes via une interface gRPC. Il est donc possible
+d'utiliser un contrôleur existant, pour peu qu'une interface gRPC lui soit adjointe. La
+paramétrisation de ces contrôleurs nécessite, _a minima_, un nom, un type et une URL.
+Un contrôleur externe n'ayant aucun paramètre pourrait donc être utilisé grâce à la section YAML
+suivante :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+controllers:
+  - name: some name
+    type: grpc
+    url: localhost:9002
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Cependant, les contrôleurs ont en général besoin de paramètres (les gains notamment). C'est pourquoi
+il est possible de spécifier des paramètres supplémentaires dans le YAML. Ces paramètres ne seront
+pas interprêtés par xdyn et le noeud YAML complet (avec tous ses enfants) sera envoyé tel quel
+au contrôleur. Voici un example de YAML pour utiliser un PID externe nécessitant les mêmes entrées
+YAML que le PID interne d'xdyn :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+controllers:
+  - name: some name
+    type: grpc
+    url: localhost:9002
+    dt: 1
+    state weights:
+      psi: 1
+    setpoint: psi_co
+    command: port side propeller(beta)
+    gains:
+      Kp: -1
+      Ki: 0
+      Kd: -1
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Dans cet exemple, lors de l'initialisation du contrôleur externe, la chaîne YAML suivante sera
+envoyée au contrôleur :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+name: some name
+type: grpc
+url: localhost:9002
+dt: 1
+state weights:
+  psi: 1
+setpoint: psi_co
+command: port side propeller(beta)
+gains:
+  Kp: -1
+  Ki: 0
+  Kd: -1
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+L'interface gRPC utilisée par les contrôleurs est définie de la façon suivante (syntaxe .proto) :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.proto}
+service Controller
+{
+    // Initialize the controller with YAML parameters
+    rpc set_parameters(SetParametersRequest)                 returns (SetParametersResponse);
+    // Calculate the commands using quaternions instead of angles
+    rpc get_commands_quaternion(ControllerRequestQuaternion) returns (ControllerResponse);
+    // Calculate the commands using angles in Rned2body = Rz(ψ).Ry(θ).Rx(ϕ) rotation convention
+    rpc get_commands_euler_321(ControllerRequestEuler)       returns (ControllerResponse);
+    // Return the extra observations this controller may give
+    rpc get_extra_observations(ExtraObservationsRequest)     returns (ExtraObservationsResponse);
+}
+
+message ExtraObservationsRequest
+{
+}
+
+message ExtraObservationsResponse
+{
+    map<string, double> extra_observations = 1; // Extra values that the controller can output (for logging & tracing purposes)
+}
+
+message SetParametersRequest
+{
+    string parameters = 1; // YAML string containing the parameters to set for this particular model. Extracted verbatim from xdyn's YAML file
+    double t0         = 2; // Date of the beginning of the simulation (first timestep) in seconds
+}
+
+message SetParametersResponse
+{
+    enum AngleRepresentation {
+        QUATERNION = 0;
+        EULER_321 = 1;
+    }
+    double              date_of_first_callback = 1; // Date at which the controller should be called for the first time. Will often be equal to just t0.
+    repeated string     setpoint_names         = 2; // Name of the controller inputs (setpoints) which xdyn must supply.
+    AngleRepresentation angle_representation   = 3; // Does the controller need to be called with get_commands_quaternion or with get_commands_euler_321?
+    bool                has_extra_observations = 4; // If set to true, the controller's get_extra_observations will be called.
+}
+
+message ControllerRequestQuaternion
+{
+    ControllerStatesQuaternion states     = 1; // Ship states
+    ControllerStatesQuaternion dstates_dt = 2; // Ship state derivatives (at the previous time step)
+    repeated double            setpoints  = 3; // Controller inputs (setpoints). Must have the same size as setpoint_names in SetParametersResponse.
+}
+
+message ControllerRequestEuler
+{
+    ControllerStatesEuler states     = 1; // Ship states history
+    ControllerStatesEuler dstates_dt = 2; // Ship state derivatives history
+    repeated double       setpoints  = 3; // Controller inputs (setpoints). Must have the same size as setpoint_names in SetParametersResponse.
+}
+
+message ControllerStatesQuaternion
+{
+    double t  = 1;  // Simulation time (in seconds).
+    double x  = 2;  // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double y  = 3;  // Projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double z  = 4;  // Projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double u  = 5;  // Projection on axis X of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    double v  = 6;  // Projection on axis Y of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    double w  = 7;  // Projection on axis Z of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    double p  = 8;  // Projection on axis X of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    double q  = 9;  // Projection on axis Y of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    double r  = 10; // Projection on axis Z of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    double qr = 11; // Real part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    double qi = 12; // First imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    double qj = 13; // Second imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    double qk = 14; // Third imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+}
+
+message ControllerStatesEuler
+{
+    double t     = 1;  // Simulation time (in seconds).
+    double x     = 2;  // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double y     = 3;  // Projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double z     = 4;  // Projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double u     = 5;  // Projection on axis X of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    double v     = 6;  // Projection on axis Y of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    double w     = 7;  // Projection on axis Z of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    double p     = 8;  // Projection on axis X of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    double q     = 9;  // Projection on axis Y of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    double r     = 10; // Projection on axis Z of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    double phi   = 11; // First Euler angle. Actual interpretation depends on rotation convention (and hence on the gRPC method called)
+    double theta = 12; // Second Euler angle. Actual interpretation depends on rotation convention (and hence on the gRPC method called)
+    double psi   = 13; // Third Euler angle. Actual interpretation depends on rotation convention (and hence on the gRPC method called)
+}
+
+message ControllerResponse
+{
+    map<string,double> commands = 1; // Commands computed by the controller
+    double next_call           = 2; // Date at which the solver should call the controller again
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Lors de l'initialisation d'xdyn, la méthode `set_parameters` de chaque contrôleur est appelée avec
+le noeud YAML complet correspondant à ce contrôleur et la date t0 du premier isntant de simulation.
+Le contrôleur externe doit répondre en donnant :
+
+- la date à laquelle il doit être appelé pour la première fois (en général t0) : `date_of_first_callback`
+- les consignes `setpoint_names` qu'xdyn doit lui fournir (lues depuis la section `setpoints` du fichier YAML d'xdyn)
+- la représentation `angle_representation` que le contrôleur doit fournir (quaternions ou angles d'Euler)
+- si le contrôleur possède des valeurs à sérialiser en plus des commandes qu'il calcule (qui, elles,
+  sont automatiquement sérialisées) : clef `has_extra_observations`
+
+Après l'initialisation, le solveur d'xdyn appelle le contrôleur externe à la date `date_of_first_callback`.
+La méthode gRPC exacte appelée par xdyn dépend de la valeur de `angle_representation` retournée
+par le contrôleur lors de l'appel à `set_parameters` :
+
+- Si `set_parameters` vaut "QUATERNION" alors `get_commands_quaternion` sera appelée
+- Si `set_parameters` vaut "EULER_321" alors `get_commands_euler_321` sera appelée
+
+Dans tous les cas, xdyn fournit au contrôleur les états navire et leur dérivée, ainsi que les
+consignes du contrôleur. La différence entre les deux méthodes est la représentation de l'attitude
+du navire.
+
+Le contrôleur répond en donnant la valeur des commandes qu'il calcule ainsi que la date à laquelle
+il doit être rappelé.
 
 ## Modèles de manœuvrabilité
 
