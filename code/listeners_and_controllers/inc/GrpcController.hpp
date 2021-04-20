@@ -16,9 +16,12 @@ class GrpcController : public Controller
     struct Input
     {
         Input ();
-        std::string url;
-        std::string name;
-        std::string yaml;
+        std::string url;  //!< URL at which the gRPC controller may be reached,
+                          //!< e.g. pid:9002
+        std::string name; //!< Name used to disambiguate commands created by
+                          //!< the controller
+        std::string yaml; //!< The whole YAML node as a string, passed to the
+                          //!< controller's set_parameters gRPC method
     };
     static Input parse (const std::string &yaml);
 
