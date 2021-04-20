@@ -5443,18 +5443,18 @@ std::string test_data::gRPC_force_model()
 std::string test_data::gRPC_controller()
 {
     std::stringstream ss;
-    ss << "name: PID\n"
-       << "type: grpc\n"
-       << "url: pid:9002\n"
+    ss << "command: port side propeller(beta)\n"
        << "dt: 1\n"
-       << "state weights:\n"
-       << "    psi: 1\n"
-       << "setpoint: psi_co\n"
-       << "command: port side propeller(beta)\n"
        << "gains:\n"
-       << "    Kp: -1\n"
-       << "    Ki: 0\n"
-       << "    Kd: -1\n\n";
+       << "  Kd: -1\n"
+       << "  Ki: 0\n"
+       << "  Kp: -1\n"
+       << "name: PID\n"
+       << "setpoint: psi_co\n"
+       << "state weights:\n"
+       << "  psi: 1\n"
+       << "type: grpc\n"
+       << "url: pid:9002";
     return ss.str();
 }
 
