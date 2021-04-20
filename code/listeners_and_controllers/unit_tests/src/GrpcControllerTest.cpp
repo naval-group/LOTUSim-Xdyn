@@ -53,3 +53,10 @@ TEST_F (GrpcControllerTest, can_parse_name)
     const auto input = GrpcController::parse (test_data::gRPC_controller ());
     ASSERT_EQ ("PID", input.name);
 }
+
+
+TEST_F (GrpcControllerTest, rest_of_yaml_should_be_available_for_use_by_grpc_method_set_parameters)
+{
+    const auto input = GrpcController::parse (test_data::gRPC_controller ());
+    ASSERT_EQ (test_data::gRPC_controller (), input.yaml);
+}

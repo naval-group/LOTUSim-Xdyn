@@ -16,6 +16,9 @@ GrpcController::parse (const std::string &yaml)
     {
         node["url"] >> ret.url;
         node["name"] >> ret.name;
+        YAML::Emitter out;
+        out << node;
+        ret.yaml = out.c_str();
     }
     catch (YAML::Exception &e)
     {
