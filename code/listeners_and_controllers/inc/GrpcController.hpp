@@ -13,8 +13,6 @@
 class GrpcController : public Controller
 {
   public:
-    static GrpcControllerInterface::Input parse (const std::string &yaml);
-
     GrpcController (const double tstart, const double dt,
                     const std::string &yaml);
 

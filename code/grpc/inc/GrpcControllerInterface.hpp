@@ -17,6 +17,8 @@ class GrpcControllerInterface
                               //!< controller's set_parameters gRPC method
         };
 
+        static GrpcControllerInterface::Input parse (const std::string &yaml);
+
 };
 
 
