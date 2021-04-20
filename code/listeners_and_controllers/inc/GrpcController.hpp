@@ -9,21 +9,11 @@
 #define GRPCCONTROLLER_HPP_
 
 #include "Controller.hpp"
-
+#include "GrpcControllerInterface.hpp"
 class GrpcController : public Controller
 {
   public:
-    struct Input
-    {
-        Input ();
-        std::string url;  //!< URL at which the gRPC controller may be reached,
-                          //!< e.g. pid:9002
-        std::string name; //!< Name used to disambiguate commands created by
-                          //!< the controller
-        std::string yaml; //!< The whole YAML node as a string, passed to the
-                          //!< controller's set_parameters gRPC method
-    };
-    static Input parse (const std::string &yaml);
+    static GrpcControllerInterface::Input parse (const std::string &yaml);
 
     GrpcController (const double tstart, const double dt,
                     const std::string &yaml);

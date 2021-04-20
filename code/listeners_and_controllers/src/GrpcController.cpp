@@ -1,9 +1,7 @@
 #include "GrpcController.hpp"
 #include "yaml.h"
 
-GrpcController::Input::Input () : url (), name (), yaml () {}
-
-GrpcController::Input
+GrpcControllerInterface::Input
 GrpcController::parse (const std::string &yaml)
 {
     std::stringstream stream (yaml);
@@ -11,7 +9,7 @@ GrpcController::parse (const std::string &yaml)
     YAML::Parser parser (stream);
     YAML::Node node;
     parser.GetNextDocument (node);
-    GrpcController::Input ret;
+    GrpcControllerInterface::Input ret;
     try
     {
         node["url"] >> ret.url;

@@ -5,6 +5,7 @@ set(SRC src/SurfaceElevationFromGRPC.cpp
         src/GRPCForceModel.cpp
         src/ToGRPC.cpp
         src/FromGRPC.cpp
+        src/GrpcControllerInterface.cpp
         )
 
 # Using C++ 2011
