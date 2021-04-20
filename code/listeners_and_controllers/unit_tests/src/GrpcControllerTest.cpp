@@ -26,3 +26,7 @@ void GrpcControllerTest::TearDown()
 {
 }
 
+TEST_F(GrpcControllerTest, can_parse_url)
+{
+    GrpcController::parse(test_data::gRPC_controller());
+}

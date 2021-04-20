@@ -15,6 +15,7 @@ class GrpcController : public Controller
     public:
         struct Input
         {
+            Input();
             std::string url;
             std::string name;
             std::string yaml;
