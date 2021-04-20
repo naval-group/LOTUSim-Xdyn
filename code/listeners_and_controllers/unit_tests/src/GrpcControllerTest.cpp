@@ -7,27 +7,25 @@
 
 #include "GrpcController.hpp"
 #include "GrpcControllerTest.hpp"
+#include "InvalidInputException.hpp"
 #include "yaml_data.hpp"
 
+GrpcControllerTest::GrpcControllerTest () {}
 
-GrpcControllerTest::GrpcControllerTest()
+GrpcControllerTest::~GrpcControllerTest () {}
+
+void
+GrpcControllerTest::SetUp ()
 {
 }
 
-GrpcControllerTest::~GrpcControllerTest()
+void
+GrpcControllerTest::TearDown ()
 {
 }
 
-void GrpcControllerTest::SetUp()
+TEST_F (GrpcControllerTest, can_parse_url)
 {
-}
-
-void GrpcControllerTest::TearDown()
-{
-}
-
-TEST_F(GrpcControllerTest, can_parse_url)
-{
-    const auto input = GrpcController::parse(test_data::gRPC_controller());
-    ASSERT_EQ("pid:9002", input.url);
+    const auto input = GrpcController::parse (test_data::gRPC_controller ());
+    ASSERT_EQ ("pid:9002", input.url);
 }
