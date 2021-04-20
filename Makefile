@@ -1,10 +1,36 @@
-all: submodule headers windows debian debug doc all_docker_images
+all: submodule windows debian debug doc all_docker_images
 
 BASE_IMAGE_VERSION=2021-04-16
 
-windows: headers windows_gccx_posix
-debian: headers debian_10_release_gcc_8
-debug: headers debian_10_debug_gcc_8
+
+SSC_HEADERS=code/ssc/ssc/check_ssc_version.hpp\
+            code/ssc/ssc/csv_file_reader.hpp\
+            code/ssc/ssc/csv_writer.hpp\
+            code/ssc/ssc/data_source.hpp\
+            code/ssc/ssc/decode_unit.hpp\
+            code/ssc/ssc/exception_handling.hpp\
+            code/ssc/ssc/functors_for_optimizer.hpp\
+            code/ssc/ssc/geometry.hpp\
+            code/ssc/ssc/integrate.hpp\
+            code/ssc/ssc/interpolation.hpp\
+            code/ssc/ssc/ipopt_interface.hpp\
+            code/ssc/ssc/json.hpp\
+            code/ssc/ssc/kinematics.hpp\
+            code/ssc/ssc/macros.hpp\
+            code/ssc/ssc/matrix_and_vector_classes.hpp\
+            code/ssc/ssc/numeric.hpp\
+            code/ssc/ssc/optimizer.hpp\
+            code/ssc/ssc/pimpl_idiom.hpp\
+            code/ssc/ssc/random_data_generator.hpp\
+            code/ssc/ssc/solver.hpp\
+            code/ssc/ssc/text_file_reader.hpp\
+            code/ssc/ssc/websocket.hpp\
+            code/ssc/ssc/yaml_parser.hpp
+
+windows: ${HEADERS} windows_gccx_posix
+debian: ${HEADERS} debian_10_release_gcc_8
+debug: ${HEADERS} debian_10_debug_gcc_8
+headers: ${HEADERS}
 
 .PHONY: all_docker_images cmake-debian debian cmake-windows windows doc submodule
 
@@ -13,7 +39,7 @@ submodule:
 	@git submodule sync --recursive
 	@git submodule update --init --recursive
 
-headers:
+${HEADERS}:
 	@cd code/ssc/ssc && sh generate_module_header.sh && cd ../../..
 
 cmake-debian: BUILD_TYPE = Release
