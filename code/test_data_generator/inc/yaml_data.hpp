@@ -105,6 +105,7 @@ namespace test_data
     std::string tutorial_10_gRPC_force_model();
     std::string tutorial_10_gRPC_force_model_commands();
     std::string gRPC_force_model();
+    std::string gRPC_controller();
     std::string bug_3187();
     std::string bug_3185_with_invalid_frame();
     std::string bug_3185();
