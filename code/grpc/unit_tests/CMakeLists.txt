@@ -2,6 +2,7 @@
 SET(MODULE_UNDER_TEST grpc)
 PROJECT(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/GRPCForceModelTest.cpp
+              src/GrpcControllerInterfaceTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
