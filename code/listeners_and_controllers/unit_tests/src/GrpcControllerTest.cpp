@@ -47,3 +47,9 @@ TEST_F (GrpcControllerTest, should_throw_a_helpful_message_if_input_is_invalid)
                "some: invalid YAML",
                error_msg);
 }
+
+TEST_F (GrpcControllerTest, can_parse_name)
+{
+    const auto input = GrpcController::parse (test_data::gRPC_controller ());
+    ASSERT_EQ ("PID", input.name);
+}
