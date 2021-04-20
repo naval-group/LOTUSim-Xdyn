@@ -28,5 +28,6 @@ void GrpcControllerTest::TearDown()
 
 TEST_F(GrpcControllerTest, can_parse_url)
 {
-    GrpcController::parse(test_data::gRPC_controller());
+    const auto input = GrpcController::parse(test_data::gRPC_controller());
+    ASSERT_EQ("pid:9002", input.url);
 }
