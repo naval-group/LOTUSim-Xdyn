@@ -29,7 +29,7 @@ void add_setpoints_listener(ssc::data_source::DataSource& ds, const std::vector<
 /**  \brief Reads data from YAML & returns the corresponding controllers.
   *  \snippet listeners_and_controllers/unit_tests/src/controllersTest.cpp controllersTest listen_to_file_example
   */
-std::vector<PIDController> get_pid_controllers(const double tstart,
+std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > get_controllers(const double tstart,
                                                const std::vector<YamlController>& yaml_controllers,
                                                const std::vector<YamlTimeSeries>& yaml_commands
                                                );
@@ -38,7 +38,7 @@ std::vector<PIDController> get_pid_controllers(const double tstart,
   * adds their callbacks to the scheduler.
   *  \snippet observers_and_api/unit_tests/src/PIDControllerTest.cpp controllersTest initialize_controllers
   */
-void initialize_controllers(std::vector<PIDController>& controllers,
+void initialize_controllers(const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& controllers,
                             ssc::solver::Scheduler& scheduler,
                             Sim* system
                             );

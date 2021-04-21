@@ -279,10 +279,10 @@ TEST_F(PIDControllerTest, can_initialize_controllers)
                    "        Ki: 0\n"
                    "        Kd: 0\n";
 
-    std::vector<PIDController> controllers = get_pid_controllers(tstart,
-                                                                 parse_controller_yaml(yaml_controllers.str()),
-                                                                 std::vector<YamlTimeSeries>()
-                                                                 );
+    const auto controllers = get_controllers(tstart,
+                                             parse_controller_yaml(yaml_controllers.str()),
+                                             std::vector<YamlTimeSeries>()
+                                             );
     initialize_controllers(controllers, scheduler, &sys);
 
     // Check controllers commands have been initialized in the datasource

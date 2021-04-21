@@ -93,22 +93,22 @@ void add_setpoints_listener(ssc::data_source::DataSource& ds,
 }
 
 
-std::vector<PIDController> get_pid_controllers(const double tstart,
+std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > get_controllers(const double tstart,
                                                const std::vector<YamlController>& yaml_controllers, //!< Parsed YAML controllers
                                                const std::vector<YamlTimeSeries>& yaml_commands //!< Parsed YAML commands
                                                )
 {
-    std::vector<PIDController> controllers;
+    std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > controllers;
     for (YamlController yaml_controller : yaml_controllers)
     {
         if (yaml_controller.type == "PID")
         {
-            const PIDController controller(tstart,
+            PIDController* controller = new PIDController (tstart,
                                            yaml_controller.dt,
                                            yaml_controller.rest_of_the_yaml
                                            );
-            check_controller_output_is_not_defined_in_a_command(controller.yaml.command_name, yaml_commands);
-            controllers.push_back(controller);
+            check_controller_output_is_not_defined_in_a_command(controller->yaml.command_name, yaml_commands);
+            controllers.push_back(std::shared_ptr<ssc::solver::DiscreteSystem> (controller));
         }
     }
 
@@ -122,13 +122,14 @@ std::vector<PIDController> get_pid_controllers(const double tstart,
  * To avoid cross-dependencies, the corresponding unit tests are moved to observers_and_api/unit_tests.
  */
 
-void initialize_controllers(std::vector<PIDController>& controllers,
+void initialize_controllers(const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& controllers,
                             ssc::solver::Scheduler& scheduler,
                             Sim* system
                             )
 {
     system->set_discrete_state("t", scheduler.get_time());
-    for (PIDController &controller:controllers) {
-        controller.initialize(scheduler, system);
+    for (auto controller:controllers)
+    {
+        controller->initialize(scheduler, system);
     }
 }
