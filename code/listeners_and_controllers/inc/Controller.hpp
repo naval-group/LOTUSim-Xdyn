@@ -13,7 +13,10 @@
 #include <ssc/solver/DiscreteSystem.hpp>
 #include <ssc/solver/ContinuousSystem.hpp>
 #include "Sim.hpp"
-
+/**
+ * @brief Constant step controller.
+ * 
+ */
 class Controller : public ssc::solver::DiscreteSystem
 {
     public:
