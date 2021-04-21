@@ -1,5 +1,5 @@
 #!/bin/sh
-make submodule headers
+make headers
 docker run \
     -t \
     --rm \
