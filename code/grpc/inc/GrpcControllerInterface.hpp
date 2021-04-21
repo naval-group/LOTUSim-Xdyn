@@ -2,7 +2,7 @@
 #define GRPCCONTROLLERINTERFACEHPP
 
 #include "BodyStates.hpp"
-#include "EnvironmentAndFrames.hpp"
+#include <map>
 
 enum class AngleRepresentation
 {
@@ -45,7 +45,7 @@ class GrpcControllerInterface
 
         static std::shared_ptr<GrpcControllerInterface> build(const Input& input, const double t0);
         static Input parse (const std::string &yaml);
-        virtual GrpcControllerResponse get_commands(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints, const EnvironmentAndFrames& env) = 0;
+        virtual GrpcControllerResponse get_commands(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints) = 0;
         std::map<std::string, double> get_extra_observations();
         bool has_extra_observations() const;
         std::vector<std::string> get_setpoint_names() const;
@@ -65,7 +65,7 @@ class Euler321GrpcController : public GrpcControllerInterface
 {
     public:
         Euler321GrpcController(const std::shared_ptr<Impl>& pimpl, const GrpcSetParametersResponse& set_parameters_response);
-        GrpcControllerResponse get_commands(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints, const EnvironmentAndFrames& env);
+        GrpcControllerResponse get_commands(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints);
     private:
         Euler321GrpcController() = delete;
 
@@ -75,7 +75,7 @@ class QuaternionGrpcController : public GrpcControllerInterface
 {
     public:
         QuaternionGrpcController(const std::shared_ptr<Impl>& pimpl, const GrpcSetParametersResponse& set_parameters_response);
-        GrpcControllerResponse get_commands(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints, const EnvironmentAndFrames& env);
+        GrpcControllerResponse get_commands(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints);
     private:
         QuaternionGrpcController() = delete;
 };

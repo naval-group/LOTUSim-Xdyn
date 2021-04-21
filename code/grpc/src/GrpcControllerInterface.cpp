@@ -4,6 +4,7 @@
 #include <grpcpp/grpcpp.h>
 #include "controller.pb.h"
 #include "controller.grpc.pb.h"
+#include <ssc/kinematics.hpp>
 
 GrpcControllerInterface::Input::Input () : url (), name (), yaml () {}
 
@@ -68,12 +69,13 @@ ControllerRequestQuaternion build_quaternion_request(const double t, const BodyS
     return ret;
 }
 
-ControllerStatesEuler* build_euler321_state(const double t, const BodyStates& states, const YamlRotation& rot);
-ControllerStatesEuler* build_euler321_state(const double t, const BodyStates& states, const YamlRotation& rot)
+ControllerStatesEuler* build_euler321_state(const double t, const BodyStates& states);
+ControllerStatesEuler* build_euler321_state(const double t, const BodyStates& states)
 {
+    using namespace ssc::kinematics;
     ControllerStatesEuler* ret = new ControllerStatesEuler();
     ssc::kinematics::RotationMatrix R = Eigen::Quaternion<double>(states.qr(),states.qi(),states.qj(),states.qk()).matrix();
-    const ssc::kinematics::EulerAngles euler_angles = states.convert(R, rot);
+    const ssc::kinematics::EulerAngles angles = euler_angles<INTRINSIC, CHANGING_ANGLE_ORDER, 3, 2, 1>(R);
     ret->set_t(t);
     ret->set_x(states.x());
     ret->set_y(states.y());
@@ -84,18 +86,18 @@ ControllerStatesEuler* build_euler321_state(const double t, const BodyStates& st
     ret->set_p(states.p());
     ret->set_q(states.q());
     ret->set_r(states.r());
-    ret->set_phi(euler_angles.phi);
-    ret->set_theta(euler_angles.theta);
-    ret->set_psi(euler_angles.psi);
+    ret->set_phi(angles.phi);
+    ret->set_theta(angles.theta);
+    ret->set_psi(angles.psi);
     return ret;
 }
 
-ControllerRequestEuler build_euler321_request(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints, const EnvironmentAndFrames& env);
-ControllerRequestEuler build_euler321_request(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints, const EnvironmentAndFrames& env)
+ControllerRequestEuler build_euler321_request(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints);
+ControllerRequestEuler build_euler321_request(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints)
 {
     ControllerRequestEuler ret;
-    ret.set_allocated_states(build_euler321_state(t, states, env.rot));
-    ret.set_allocated_dstates_dt(build_euler321_state(t, dstates_dt, env.rot));
+    ret.set_allocated_states(build_euler321_state(t, states));
+    ret.set_allocated_dstates_dt(build_euler321_state(t, dstates_dt));
     *ret.mutable_setpoints() = {setpoints.begin(), setpoints.end()};
     return ret;
 }
@@ -135,7 +137,7 @@ struct GrpcControllerInterface::Impl
         return ret;
     }
 
-    GrpcControllerResponse get_commands_quaternion(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints, const EnvironmentAndFrames& )
+    GrpcControllerResponse get_commands_quaternion(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints)
     {
         ControllerResponse response;
         grpc::ClientContext context;
@@ -144,11 +146,11 @@ struct GrpcControllerInterface::Impl
         return convert_controller_response(response);
     }
 
-    GrpcControllerResponse get_commands_euler321(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints, const EnvironmentAndFrames& env)
+    GrpcControllerResponse get_commands_euler321(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints)
     {
         ControllerResponse response;
         grpc::ClientContext context;
-        const ControllerRequestEuler request = build_euler321_request(t, states, dstates_dt, setpoints, env);
+        const ControllerRequestEuler request = build_euler321_request(t, states, dstates_dt, setpoints);
         const grpc::Status status = stub->get_commands_euler_321(&context, request, &response);
         return convert_controller_response(response);
     }
@@ -240,14 +242,14 @@ GrpcControllerInterface::parse (const std::string &yaml)
 }
 
 
-GrpcControllerResponse QuaternionGrpcController::get_commands(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints, const EnvironmentAndFrames& env)
+GrpcControllerResponse QuaternionGrpcController::get_commands(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints)
 {
-    return pimpl->get_commands_quaternion(t, states, dstates_dt, setpoints, env);
+    return pimpl->get_commands_quaternion(t, states, dstates_dt, setpoints);
 }
 
-GrpcControllerResponse Euler321GrpcController::get_commands(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints, const EnvironmentAndFrames& env)
+GrpcControllerResponse Euler321GrpcController::get_commands(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints)
 {
-    return pimpl->get_commands_euler321(t, states, dstates_dt, setpoints, env);
+    return pimpl->get_commands_euler321(t, states, dstates_dt, setpoints);
 }
 
 Euler321GrpcController::Euler321GrpcController(const std::shared_ptr<Impl>& pimpl_, const GrpcSetParametersResponse& set_parameters_response) : GrpcControllerInterface(pimpl_, set_parameters_response)
