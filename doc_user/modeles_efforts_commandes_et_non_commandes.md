@@ -1133,7 +1133,10 @@ des contrôleurs à la simulation, qui vont calculer les commandes dont ont beso
 
 Les seule clefs communes à tous les types de contrôleurs sont `type` (pour choisir le type de contrôleur) et
 `dt` (pour renseigner le pas de temps du contrôleur) : chaque type de contrôleur possède sinon sa propre paramétrisation.
-Pour l'instant, seul le [régulateur `PID`](#r%C3%A9gulateur-pid) est implémenté.
+Deux types de contrôleur sont actuellement implémentés :
+
+- le [régulateur `PID`](#r%C3%A9gulateur-pid)
+- les contrôleurs externes (gRPC)
 
 On peut spécifier à la fois des commandes et des contrôleurs pour obtenir les commandes nécessaires aux efforts
 commandés. Toutefois, pour chaque effort commandé, chaque commande doit être définie une seule fois, soit
