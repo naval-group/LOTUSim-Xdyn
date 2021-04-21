@@ -1262,7 +1262,7 @@ controllers:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Dans cet exemple, lors de l'initialisation du contrôleur externe, la chaîne YAML suivante sera
-envoyée au contrôleur :
+envoyée au contrôleur externe :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 name: some name
