@@ -16,6 +16,7 @@ struct GrpcSetParametersResponse
     std::vector<std::string> setpoint_names;         // Name of the controller inputs (setpoints) which xdyn must supply.
     AngleRepresentation      angle_representation;   // Does the controller need to be called with get_commands_quaternion or with get_commands_euler_321?
     bool                     has_extra_observations; // If set to true, the controller's get_extra_observations will be called.
+    double                   dt;                     // Constant step of the controller. Only taken into account if dt>0: if dt==0, the controller is assumed to be a variable step controller and has to give the date at which the solver should call it again in ControllerResponse (next_call >= 0).
 };
 
 struct GrpcControllerResponse
@@ -40,7 +41,7 @@ class GrpcControllerInterface
             std::string yaml; //!< The whole YAML node as a string, passed to the
                               //!< controller's set_parameters gRPC method
         };
-        double get_date_of_first_callback() const;
+        double get_dt() const;
 
         static std::shared_ptr<GrpcControllerInterface> build(const Input& input, const double t0);
         static Input parse (const std::string &yaml);

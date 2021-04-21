@@ -1223,14 +1223,16 @@ controllers:
 
 xdyn peut appeler des contrôleurs externes via une interface gRPC. Il est donc possible
 d'utiliser un contrôleur existant, pour peu qu'une interface gRPC lui soit adjointe. La
-paramétrisation de ces contrôleurs nécessite, _a minima_, un nom, un type et une URL.
-Un contrôleur externe n'ayant aucun paramètre pourrait donc être utilisé grâce à la section YAML
-suivante :
+paramétrisation de ces contrôleurs nécessite, _a minima_, un nom, un type, un
+pas de temps (tous les contrôleurs d'xdyn sont à pas constant) et une URL. Un
+contrôleur externe n'ayant aucun paramètre pourrait donc être utilisé grâce à
+la section YAML suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 controllers:
   - name: some name
     type: grpc
+    dt: 0.01
     url: localhost:9002
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1314,6 +1316,7 @@ message SetParametersResponse
     repeated string     setpoint_names         = 2; // Name of the controller inputs (setpoints) which xdyn must supply.
     AngleRepresentation angle_representation   = 3; // Does the controller need to be called with get_commands_quaternion or with get_commands_euler_321?
     bool                has_extra_observations = 4; // If set to true, the controller's get_extra_observations will be called.
+    double              dt                     = 5; // Constant step of the controller. Only taken into account if dt>0: if dt==0, the controller is assumed to be a variable step controller and has to give the date at which the solver should call it again in ControllerResponse (next_call >= 0).
 }
 
 message ControllerRequestQuaternion

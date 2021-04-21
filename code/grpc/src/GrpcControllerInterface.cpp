@@ -131,6 +131,7 @@ struct GrpcControllerInterface::Impl
         ret.has_extra_observations = response.has_extra_observations();
         ret.setpoint_names.reserve(response.setpoint_names_size());
         std::copy(response.setpoint_names().begin(), response.setpoint_names().end(), std::back_inserter(ret.setpoint_names));
+        ret.dt = response.dt();
         return ret;
     }
 
@@ -175,9 +176,9 @@ set_parameters_response(set_parameters_response_)
 GrpcControllerInterface::~GrpcControllerInterface()
 {}
 
-double GrpcControllerInterface::get_date_of_first_callback() const
+double GrpcControllerInterface::get_dt() const
 {
-    return set_parameters_response.date_of_first_callback;
+    return set_parameters_response.dt;
 }
 
 bool GrpcControllerInterface::has_extra_observations() const
