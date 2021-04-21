@@ -32,7 +32,6 @@ class Sim : public ssc::solver::ContinuousSystem
             const EnvironmentAndFrames& env,
             const StateType& x,
             const ssc::data_source::DataSource& command_listener);
-        void operator()(const StateType& x, StateType& dxdt, double t);
         void dx_dt(const StateType& x, StateType& dxdt, const double t);
         void force_states(StateType& x, const double t) const;
 
