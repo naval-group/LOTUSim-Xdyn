@@ -38,29 +38,29 @@ SetParametersRequest build_set_parameters_request(const std::string& yaml, const
 }
 
 
-ControllerStatesQuaternion* build_quaternion_state(const double t, const BodyStates& states);
-ControllerStatesQuaternion* build_quaternion_state(const double t, const BodyStates& states)
+ControllerStatesQuaternion* build_quaternion_state(const double t, const std::vector<double>& states);
+ControllerStatesQuaternion* build_quaternion_state(const double t, const std::vector<double>& states)
 {
     ControllerStatesQuaternion* ret = new ControllerStatesQuaternion();
     ret->set_t(t);
-    ret->set_x(states.x());
-    ret->set_y(states.y());
-    ret->set_z(states.z());
-    ret->set_u(states.u());
-    ret->set_v(states.v());
-    ret->set_w(states.w());
-    ret->set_p(states.p());
-    ret->set_q(states.q());
-    ret->set_r(states.r());
-    ret->set_qr(states.qr());
-    ret->set_qi(states.qi());
-    ret->set_qj(states.qj());
-    ret->set_qk(states.qk());
+    ret->set_x(states[0]);
+    ret->set_y(states[1]);
+    ret->set_z(states[2]);
+    ret->set_u(states[3]);
+    ret->set_v(states[4]);
+    ret->set_w(states[5]);
+    ret->set_p(states[6]);
+    ret->set_q(states[7]);
+    ret->set_r(states[8]);
+    ret->set_qr(states[9]);
+    ret->set_qi(states[10]);
+    ret->set_qj(states[11]);
+    ret->set_qk(states[12]);
     return ret;
 }
 
-ControllerRequestQuaternion build_quaternion_request(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints);
-ControllerRequestQuaternion build_quaternion_request(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints)
+ControllerRequestQuaternion build_quaternion_request(const double t, const std::vector<double>& states, const std::vector<double>& dstates_dt, const std::vector<double>& setpoints);
+ControllerRequestQuaternion build_quaternion_request(const double t, const std::vector<double>& states, const std::vector<double>& dstates_dt, const std::vector<double>& setpoints)
 {
     ControllerRequestQuaternion ret;
     ret.set_allocated_states(build_quaternion_state(t, states));
@@ -69,31 +69,31 @@ ControllerRequestQuaternion build_quaternion_request(const double t, const BodyS
     return ret;
 }
 
-ControllerStatesEuler* build_euler321_state(const double t, const BodyStates& states);
-ControllerStatesEuler* build_euler321_state(const double t, const BodyStates& states)
+ControllerStatesEuler* build_euler321_state(const double t, const std::vector<double>& states);
+ControllerStatesEuler* build_euler321_state(const double t, const std::vector<double>& states)
 {
     using namespace ssc::kinematics;
     ControllerStatesEuler* ret = new ControllerStatesEuler();
-    ssc::kinematics::RotationMatrix R = Eigen::Quaternion<double>(states.qr(),states.qi(),states.qj(),states.qk()).matrix();
+    ssc::kinematics::RotationMatrix R = Eigen::Quaternion<double>(states[9],states[10],states[11],states[12]).matrix();
     const ssc::kinematics::EulerAngles angles = euler_angles<INTRINSIC, CHANGING_ANGLE_ORDER, 3, 2, 1>(R);
     ret->set_t(t);
-    ret->set_x(states.x());
-    ret->set_y(states.y());
-    ret->set_z(states.z());
-    ret->set_u(states.u());
-    ret->set_v(states.v());
-    ret->set_w(states.w());
-    ret->set_p(states.p());
-    ret->set_q(states.q());
-    ret->set_r(states.r());
+    ret->set_x(states[0]);
+    ret->set_y(states[1]);
+    ret->set_z(states[2]);
+    ret->set_u(states[3]);
+    ret->set_v(states[4]);
+    ret->set_w(states[5]);
+    ret->set_p(states[6]);
+    ret->set_q(states[7]);
+    ret->set_r(states[8]);
     ret->set_phi(angles.phi);
     ret->set_theta(angles.theta);
     ret->set_psi(angles.psi);
     return ret;
 }
 
-ControllerRequestEuler build_euler321_request(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints);
-ControllerRequestEuler build_euler321_request(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints)
+ControllerRequestEuler build_euler321_request(const double t, const std::vector<double>& states, const std::vector<double>& dstates_dt, const std::vector<double>& setpoints);
+ControllerRequestEuler build_euler321_request(const double t, const std::vector<double>& states, const std::vector<double>& dstates_dt, const std::vector<double>& setpoints)
 {
     ControllerRequestEuler ret;
     ret.set_allocated_states(build_euler321_state(t, states));
@@ -137,7 +137,7 @@ struct GrpcControllerInterface::Impl
         return ret;
     }
 
-    GrpcControllerResponse get_commands_quaternion(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints)
+    GrpcControllerResponse get_commands_quaternion(const double t, const std::vector<double>& states, const std::vector<double>& dstates_dt, const std::vector<double>& setpoints)
     {
         ControllerResponse response;
         grpc::ClientContext context;
@@ -146,7 +146,7 @@ struct GrpcControllerInterface::Impl
         return convert_controller_response(response);
     }
 
-    GrpcControllerResponse get_commands_euler321(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints)
+    GrpcControllerResponse get_commands_euler321(const double t, const std::vector<double>& states, const std::vector<double>& dstates_dt, const std::vector<double>& setpoints)
     {
         ControllerResponse response;
         grpc::ClientContext context;
@@ -242,12 +242,12 @@ GrpcControllerInterface::parse (const std::string &yaml)
 }
 
 
-GrpcControllerResponse QuaternionGrpcController::get_commands(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints)
+GrpcControllerResponse QuaternionGrpcController::get_commands(const double t, const std::vector<double>& states, const std::vector<double>& dstates_dt, const std::vector<double>& setpoints)
 {
     return pimpl->get_commands_quaternion(t, states, dstates_dt, setpoints);
 }
 
-GrpcControllerResponse Euler321GrpcController::get_commands(const double t, const BodyStates& states, const BodyStates& dstates_dt, const std::vector<double>& setpoints)
+GrpcControllerResponse Euler321GrpcController::get_commands(const double t, const std::vector<double>& states, const std::vector<double>& dstates_dt, const std::vector<double>& setpoints)
 {
     return pimpl->get_commands_euler321(t, states, dstates_dt, setpoints);
 }
