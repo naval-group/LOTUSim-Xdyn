@@ -13,10 +13,11 @@
 class GrpcController : public Controller
 {
   public:
-    GrpcController (const double tstart, const double dt,
-                    const std::string &yaml);
+    static GrpcController build(const double tstart, const std::string& yaml);
 
   private:
+    GrpcController() = delete;
+    GrpcController (const double tstart, const std::shared_ptr<GrpcControllerInterface>& grpc);
     /**
      * @brief Updates the controller output value in the datasource.
      *
@@ -29,6 +30,8 @@ class GrpcController : public Controller
      */
     void update_discrete_states (const double time,
                                  ssc::solver::ContinuousSystem *system);
+
+    std::shared_ptr<GrpcControllerInterface> grpc;
 };
 
 #endif /* GRPCCONTROLLER_HPP_ */
