@@ -14,6 +14,7 @@ class GrpcController : public Controller
 {
   public:
     static GrpcController build(const double tstart, const std::string& yaml);
+    std::vector<std::string> get_command_names() const;
 
   private:
     GrpcController() = delete;

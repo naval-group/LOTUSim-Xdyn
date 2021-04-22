@@ -303,3 +303,11 @@ TEST_F(PIDControllerTest, can_initialize_controllers)
 
     //! [controllersTest initialize_controllers]
 }
+
+
+TEST_F(PIDControllerTest, can_get_the_commands_outputted_by_the_controller)
+{
+    const PIDController controller(a.random<double>(), a.random<double>(), pid_specific_yaml(a.random<double>(), a.random<double>(), a.random<double>(), "psi", "propeller(psi_co)") + "state weights:\n    psi: 1\n");
+    ASSERT_EQ(1, controller.get_command_names().size());
+    ASSERT_EQ("propeller(psi_co)", controller.get_command_names().at(0));
+}

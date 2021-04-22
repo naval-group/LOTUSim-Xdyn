@@ -43,6 +43,8 @@ class PIDController : public Controller
                       const std::string& yaml
                       );
 
+        std::vector<std::string> get_command_names() const;
+
         const Yaml yaml; //!< Controller-specific yaml
 
     private:

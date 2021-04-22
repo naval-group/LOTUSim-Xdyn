@@ -24,6 +24,12 @@ class Controller : public ssc::solver::DiscreteSystem
 
         virtual ~Controller();
 
+        /**
+         * @brief Get the list of all outputs (commands) computed by the controller.
+         *
+         */
+        virtual std::vector<std::string> get_command_names() const = 0;
+
     protected:
         /**
          * @brief Sets a controller output value in the datasource

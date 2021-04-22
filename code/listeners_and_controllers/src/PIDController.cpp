@@ -20,6 +20,11 @@ PIDController::PIDController (const double tstart,
 {
 }
 
+std::vector<std::string> PIDController::get_command_names() const
+{
+    return {this->yaml.command_name};
+}
+
 PIDController::Yaml::Yaml (const std::string &yaml) : Kp (), Ki (), Kd (), state_weights (), setpoint_name (), command_name ()
 {
     std::stringstream stream (yaml);
