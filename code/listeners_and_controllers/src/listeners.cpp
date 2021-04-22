@@ -9,6 +9,7 @@
 #include "InterpolationModule.hpp"
 #include "InvalidInputException.hpp"
 #include "listeners.hpp"
+#include "PIDController.hpp"
 #include "YamlTimeSeries.hpp"
 
 #include <ssc/macros.hpp>

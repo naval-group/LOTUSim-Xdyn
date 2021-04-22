@@ -10,6 +10,8 @@
 #include "parse_controllers.hpp"
 #include "parse_time_series.hpp"
 #include "yaml_data.hpp"
+#include "InvalidInputException.hpp"
+#include "PIDController.hpp"
 
 #define EPS (1E-14)
 #define _USE_MATH_DEFINE

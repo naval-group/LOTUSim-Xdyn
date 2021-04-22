@@ -9,10 +9,11 @@
 #define LISTENERS_HPP_
 
 #include <ssc/data_source.hpp>
-#include "PIDController.hpp"
-#include <ssc/solver/Scheduler.hpp>
+#include <ssc/solver.hpp>
 #include "YamlTimeSeries.hpp"
 #include "YamlController.hpp"
+
+class Sim;
 
 /**  \brief Reads data from YAML & builds an interpolation table per command.
   *  \returns DataSource used to retrieve the commands of the controlled forces models at each instant
