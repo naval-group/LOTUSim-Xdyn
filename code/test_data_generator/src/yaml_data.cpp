@@ -2197,7 +2197,7 @@ std::string test_data::controllers()
 {
     std::stringstream ss;
     ss << "controllers:\n"
-          "  - type: PID\n"
+          "  - type: pId\n"
           "    dt: 0.1\n"
           "    state weights:\n"
           "        x: 1\n"

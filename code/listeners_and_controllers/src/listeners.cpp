@@ -5,6 +5,8 @@
  *      Author: cady
  */
 
+#include <boost/algorithm/string.hpp> // For boost::to_upper
+
 #include "check_input_yaml.hpp"
 #include "InterpolationModule.hpp"
 #include "InvalidInputException.hpp"
@@ -102,6 +104,7 @@ std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > get_controllers(const
     std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > controllers;
     for (YamlController yaml_controller : yaml_controllers)
     {
+        boost::to_upper(yaml_controller.type);
         if (yaml_controller.type == "PID")
         {
             PIDController* controller = new PIDController (tstart,

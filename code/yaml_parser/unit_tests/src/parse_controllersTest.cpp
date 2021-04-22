@@ -31,7 +31,7 @@ TEST_F(parse_controllersTest, example)
     std::vector<YamlController> controllers = parse_controller_yaml(test_data::controllers());
     ASSERT_EQ(3, controllers.size());
 
-    ASSERT_EQ("PID", controllers[0].type);
+    ASSERT_EQ("pId", controllers[0].type);
     ASSERT_EQ(0.1, controllers[0].dt);
 
     ASSERT_EQ("gRPC", controllers[1].type);
