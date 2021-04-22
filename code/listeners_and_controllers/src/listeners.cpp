@@ -12,6 +12,7 @@
 #include "InvalidInputException.hpp"
 #include "listeners.hpp"
 #include "PIDController.hpp"
+#include "GrpcController.hpp"
 #include "YamlTimeSeries.hpp"
 
 #include <ssc/macros.hpp>
@@ -100,6 +101,10 @@ Controller* build_controller(const double tstart, const YamlController& yaml_con
     if (yaml_controller.type == "PID")
     {
         return new PIDController (tstart, yaml_controller.dt, yaml_controller.rest_of_the_yaml);
+    }
+    if (yaml_controller.type == "GRPC")
+    {
+        return GrpcController::build(tstart, yaml_controller.rest_of_the_yaml);
     }
     THROW(__PRETTY_FUNCTION__, InvalidInputException, "Controller type '" << yaml_controller.type << "' is unknown. Known controller types are: pid");
     return NULL;
