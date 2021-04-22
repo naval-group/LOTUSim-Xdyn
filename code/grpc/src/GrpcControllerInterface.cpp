@@ -10,7 +10,7 @@ GrpcControllerInterface::Input::Input () : url (), name (), yaml () {}
 
 GrpcSetParametersResponse::GrpcSetParametersResponse ()
     : date_of_first_callback (), setpoint_names (), angle_representation (),
-      has_extra_observations ()
+      has_extra_observations (), command_names()
 {
 }
 
@@ -133,6 +133,8 @@ struct GrpcControllerInterface::Impl
         ret.has_extra_observations = response.has_extra_observations();
         ret.setpoint_names.reserve(response.setpoint_names_size());
         std::copy(response.setpoint_names().begin(), response.setpoint_names().end(), std::back_inserter(ret.setpoint_names));
+        ret.command_names.reserve(response.command_names_size());
+        std::copy(response.command_names().begin(), response.command_names().end(), std::back_inserter(ret.command_names));
         ret.dt = response.dt();
         return ret;
     }
@@ -191,6 +193,11 @@ bool GrpcControllerInterface::has_extra_observations() const
 std::vector<std::string> GrpcControllerInterface::get_setpoint_names() const
 {
     return set_parameters_response.setpoint_names;
+}
+
+std::vector<std::string> GrpcControllerInterface::get_command_names() const
+{
+    return set_parameters_response.command_names;
 }
 
 std::shared_ptr<GrpcControllerInterface> GrpcControllerInterface::build(const GrpcControllerInterface::Input& input, const double t0)
