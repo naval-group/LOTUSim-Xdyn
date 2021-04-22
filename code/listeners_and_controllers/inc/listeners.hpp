@@ -28,7 +28,8 @@ ssc::data_source::DataSource make_command_listener(const std::vector<YamlTimeSer
 void add_setpoints_listener(ssc::data_source::DataSource& ds, const std::vector<YamlTimeSeries>& setpoints);
 
 class Controller;
-Controller* build_controller(const double tstart, const YamlController& yaml_controller, const std::vector<YamlTimeSeries>& yaml_commands);
+Controller* build_controller(const double tstart, const YamlController& yaml_controller);
+void check_no_controller_outputs_are_defined_in_a_command(const Controller* controller, const std::vector<YamlTimeSeries>& yaml_commands);
 
 /**  \brief Reads data from YAML & returns the corresponding controllers.
   *  \snippet listeners_and_controllers/unit_tests/src/controllersTest.cpp controllersTest listen_to_file_example

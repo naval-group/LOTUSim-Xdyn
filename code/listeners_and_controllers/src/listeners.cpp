@@ -95,18 +95,22 @@ void add_setpoints_listener(ssc::data_source::DataSource& ds,
     ds.check_out();
 }
 
-Controller* build_controller(const double tstart, const YamlController& yaml_controller, const std::vector<YamlTimeSeries>& yaml_commands)
+Controller* build_controller(const double tstart, const YamlController& yaml_controller)
 {
     if (yaml_controller.type == "PID")
     {
-        PIDController* controller = new PIDController (tstart,
-                                        yaml_controller.dt,
-                                        yaml_controller.rest_of_the_yaml
-                                        );
-        check_controller_output_is_not_defined_in_a_command(controller->yaml.command_name, yaml_commands);
-        return controller;
+        return new PIDController (tstart, yaml_controller.dt, yaml_controller.rest_of_the_yaml);
     }
     return NULL;
+}
+
+void check_no_controller_outputs_are_defined_in_a_command(const Controller* controller, const std::vector<YamlTimeSeries>& yaml_commands)
+{
+    const auto command_names = controller->get_command_names();
+    for (const auto command_name:command_names)
+    {
+        check_controller_output_is_not_defined_in_a_command(command_name, yaml_commands);
+    }
 }
 
 std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > get_controllers(const double tstart,
@@ -118,8 +122,12 @@ std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > get_controllers(const
     for (YamlController yaml_controller : yaml_controllers)
     {
         boost::to_upper(yaml_controller.type);
-        const auto controller = build_controller(tstart, yaml_controller, yaml_commands);
-        controllers.push_back(std::shared_ptr<ssc::solver::DiscreteSystem> (controller));
+        const auto controller = build_controller(tstart, yaml_controller);
+        if (controller)
+        {
+            check_no_controller_outputs_are_defined_in_a_command(controller, yaml_commands);
+            controllers.push_back(std::shared_ptr<ssc::solver::DiscreteSystem> (controller));
+        }
     }
 
     return controllers;
