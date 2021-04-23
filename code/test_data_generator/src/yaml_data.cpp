@@ -103,17 +103,34 @@ std::string initial_position_of_body_frame_deg(const double x, const double y, c
     return ss.str();
 }
 
-std::string initial_velocity();
-std::string initial_velocity()
+std::string initial_velocity(const std::string& frame, const double u, const double v, const double w, const double p, const double q, const double r);
+std::string initial_velocity(const std::string& frame, const double u, const double v, const double w, const double p, const double q, const double r)
 {
-    return "    initial velocity of body frame relative to NED:\n"
-           "        frame: TestShip\n"
-           "        u: {value: 0, unit: m/s}\n"
-           "        v: {value: 0, unit: m/s}\n"
-           "        w: {value: 0, unit: m/s}\n"
-           "        p: {value: 0, unit: rad/s}\n"
-           "        q: {value: 0, unit: rad/s}\n"
-           "        r: {value: 0, unit: rad/s}\n";
+    std::stringstream ss;
+    ss << "    initial velocity of body frame relative to NED:\n"
+       << "        frame: " << frame << "\n"
+       << "        u: {value: " << u << ", unit: m/s}\n"
+       << "        v: {value: " << v << ", unit: m/s}\n"
+       << "        w: {value: " << w << ", unit: m/s}\n"
+       << "        p: {value: " << p << ", unit: rad/s}\n"
+       << "        q: {value: " << q << ", unit: rad/s}\n"
+       << "        r: {value: " << r << ", unit: rad/s}\n";
+    return ss.str();
+}
+
+std::string initial_velocity_kt(const std::string& frame, const double u, const double v, const double w, const double p, const double q, const double r);
+std::string initial_velocity_kt(const std::string& frame, const double u, const double v, const double w, const double p, const double q, const double r)
+{
+    std::stringstream ss;
+    ss << "    initial velocity of body frame relative to NED:\n"
+       << "        frame: " << frame << "\n"
+       << "        u: {value: " << u << ", unit: kt}\n"
+       << "        v: {value: " << v << ", unit: kt}\n"
+       << "        w: {value: " << w << ", unit: kt}\n"
+       << "        p: {value: " << p << ", unit: rad/s}\n"
+       << "        q: {value: " << q << ", unit: rad/s}\n"
+       << "        r: {value: " << r << ", unit: rad/s}\n";
+    return ss.str();
 }
 
 std::string dynamics();
@@ -236,7 +253,7 @@ std::string test_data::bug_2655()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame_deg(0,0,-0.099,0,-0.334,0)
-       << initial_velocity()
+       << initial_velocity("TestShip", 0, 0, 0, 0, 0, 0)
        << dynamics()
        << "    external forces:\n"
        << "      - model: gravity\n"
@@ -273,14 +290,7 @@ std::string test_data::hydrostatic_test()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(10, 0, 0, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, 0, 0, 0, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: body\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("body", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -324,14 +334,7 @@ std::string test_data::added_mass_from_file()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(10, 0, 0, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, 0, 0, 0, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: body\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("body", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -370,14 +373,7 @@ std::string test_data::full_example()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(10, 0.21, 33000, 1, 3, 2)
        << initial_position_of_body_frame(4, 8, 12, 1.3, 1.4, 1.5)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: body 1\n"
-       << "        u: {value: -8, unit: m/s}\n"
-       << "        v: {value: -9, unit: m/s}\n"
-       << "        w: {value: 14, unit: m/s}\n"
-       << "        p: {value: 56, unit: rad/s}\n"
-       << "        q: {value: 7, unit: rad/s}\n"
-       << "        r: {value: 6, unit: rad/s}\n"
+       << initial_velocity("body 1", -8, -9, 14, 56, 7, 6)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -446,14 +442,7 @@ std::string test_data::full_example_with_diagonal_inertia()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(10, 0.21, 33000, 1, 3, 2)
        << initial_position_of_body_frame(4, 8, 12, 1.3, 1.4, 1.5)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: body 1\n"
-       << "        u: {value: -8, unit: m/s}\n"
-       << "        v: {value: -9, unit: m/s}\n"
-       << "        w: {value: 14, unit: m/s}\n"
-       << "        p: {value: 56, unit: rad/s}\n"
-       << "        q: {value: 7, unit: rad/s}\n"
-       << "        r: {value: 6, unit: rad/s}\n"
+       << initial_velocity("body 1", -8, -9, 14, 56, 7, 6)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -523,14 +512,7 @@ std::string test_data::full_example_with_propulsion()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(10, 0.21, 33000, 1, 3, 2)
        << initial_position_of_body_frame(4, 8, 12, 1.3, 1.4, 1.5)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: body 1\n"
-       << "        u: {value: -8, unit: m/s}\n"
-       << "        v: {value: -9, unit: m/s}\n"
-       << "        w: {value: 14, unit: m/s}\n"
-       << "        p: {value: 56, unit: rad/s}\n"
-       << "        q: {value: 7, unit: rad/s}\n"
-       << "        r: {value: 6, unit: rad/s}\n"
+       << initial_velocity("body 1", -8, -9, 14, 56, 7, 6)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -621,14 +603,7 @@ std::string test_data::full_example_with_propulsion_and_old_key_name()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(10, 0.21, 33000, 1, 3, 2)
        << initial_position_of_body_frame(4, 8, 12, 1.3, 1.4, 1.5)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: body 1\n"
-       << "        u: {value: -8, unit: m/s}\n"
-       << "        v: {value: -9, unit: m/s}\n"
-       << "        w: {value: 14, unit: m/s}\n"
-       << "        p: {value: 56, unit: rad/s}\n"
-       << "        q: {value: 7, unit: rad/s}\n"
-       << "        r: {value: 6, unit: rad/s}\n"
+       << initial_velocity("body 1", -8, -9, 14, 56, 7, 6)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -714,14 +689,7 @@ std::string test_data::falling_ball_example()
        << "  - name: ball\n"
        << position_relative_to_mesh(0, 0, -10, 1, 3, 2)
        << initial_position_of_body_frame(4, 8, 12, 0, 0, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: ball\n"
-       << "        u: {value: 1, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("ball", 1, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -773,14 +741,7 @@ std::string test_data::simserver_test_with_commands_and_delay()
        << "  - name: ball\n"
        << position_relative_to_mesh(0, 0, 0, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, 0, 0, 0, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: ball\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("ball", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -839,14 +800,7 @@ std::string test_data::falling_cube()
        << "    mesh: cube.stl\n"
        << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, 0, 0, 0, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: cube\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("cube", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -891,14 +845,7 @@ std::string test_data::rolling_cube()
        << "    mesh: cube.stl\n"
        << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
        << initial_position_of_body_frame_deg(0, 0, 0, 0, 10, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: cube\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("cube", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -944,14 +891,7 @@ std::string test_data::oscillating_cube_example()
        << "    mesh: cube.stl\n"
        << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, 0.5, 0, 0, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: cube\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("cube", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -997,14 +937,7 @@ std::string test_data::new_oscillating_cube_example()
        << "    mesh: big_cube.stl\n"
        << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
        << initial_position_of_body_frame_deg(0, 0, 0, 25, 0, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: cube\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("cube", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -1051,14 +984,7 @@ std::string test_data::stable_cube_example()
        << "    mesh: cube.stl\n"
        << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, 0.4746588693957115, 0, 0, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: cube\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("cube", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -1113,14 +1039,7 @@ std::string test_data::stable_rolling_cube_test()
        << "    mesh: cube.stl\n"
        << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
        << initial_position_of_body_frame_deg(0, 0, 0.25, 0, 2, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: cube\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: deg/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("cube", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -1165,7 +1084,7 @@ std::string test_data::test_ship_hydrostatic_test(const std::string& type)
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, -5, 0, -0.0058, 0)
-       << initial_velocity()
+       << initial_velocity("TestShip", 0, 0, 0, 0, 0, 0)
        << dynamics()
        << "    external forces:\n"
        << "      - model: gravity\n"
@@ -1190,7 +1109,7 @@ std::string test_data::test_ship_propulsion()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, 1, 0, -0.0058, 0)
-       << initial_velocity()
+       << initial_velocity("TestShip", 0, 0, 0, 0, 0, 0)
        << dynamics()
        << "    external forces:\n"
        << "      - model: gravity\n"
@@ -1280,7 +1199,7 @@ std::string test_data::test_ship_waves_test()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, -5, 0, -0.0058, 0)
-       << initial_velocity()
+       << initial_velocity("TestShip", 0, 0, 0, 0, 0, 0)
        << dynamics()
        << "    external forces:\n"
        << "      - model: gravity\n"
@@ -1487,14 +1406,7 @@ std::string test_data::cube_in_waves()
            << "    mesh: cube.stl\n"
            << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
            << initial_position_of_body_frame(0, 0, 0.4746588693957115, 0, 0, 0)
-           << "    initial velocity of body frame relative to NED:\n"
-           << "        frame: cube\n"
-           << "        u: {value: 1, unit: m/s}\n"
-           << "        v: {value: 2, unit: m/s}\n"
-           << "        w: {value: 0, unit: m/s}\n"
-           << "        p: {value: 0, unit: rad/s}\n"
-           << "        q: {value: 0, unit: rad/s}\n"
-           << "        r: {value: 0, unit: rad/s}\n"
+           << initial_velocity("cube", 0, 0, 0, 0, 0, 0)
            << "    dynamics:\n"
            << "        hydrodynamic forces calculation point in body frame:\n"
            << "            x: {value: 0.696, unit: m}\n"
@@ -1569,7 +1481,7 @@ std::string test_data::test_ship_froude_krylov()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, -5, 0, -0.0058, 0)
-       << initial_velocity()
+       << initial_velocity("TestShip", 0, 0, 0, 0, 0, 0)
        << dynamics()
        << "    external forces:\n"
        << "      - model: gravity\n"
@@ -1627,7 +1539,7 @@ std::string test_data::test_ship_diffraction()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, -5, 0, -0.0058, 0)
-       << initial_velocity()
+       << initial_velocity("TestShip", 0, 0, 0, 0, 0, 0)
        << dynamics()
        << "    external forces:\n"
        << "      - model: gravity\n"
@@ -1661,7 +1573,7 @@ std::string test_data::test_ship_damping()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, -5, 0, -0.0058, 0)
-       << initial_velocity()
+       << initial_velocity("TestShip", 0, 0, 0, 0, 0, 0)
        << dynamics()
        << "    external forces:\n"
        << "      - model: gravity\n"
@@ -1799,7 +1711,7 @@ std::string test_data::propulsion_and_resistance()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, 1, 0, 0, 0)
-       << initial_velocity()
+       << initial_velocity("TestShip", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << "        hydrodynamic forces calculation point in body frame:\n"
        << "            x: {value: 0.696, unit: m}\n"
@@ -1917,14 +1829,7 @@ std::string test_data::heading_keeping_base()
        << "            row 5: [-1.962E+07, 0.000E+00,  6.716E+07,  0.000E+00,  9.117E+09,  0.000E+00]\n"
        << "            row 6: [ 0.000E+00, 2.523E+07,  0.000E+00, -2.228E+08,  0.000E+00,  3.338E+09]\n"
        << initial_position_of_body_frame_deg(0, 0, -1.41, -0.06, 0, 0.81)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: dtmb\n"
-       << "        u: {value: 8.901, unit: m/s}\n"
-       << "        v: {value: 0.020, unit: m/s}\n"
-       << "        w: {value: 0., unit: m/s}\n"
-       << "        p: {value: -0.007, unit: rad/s}\n"
-       << "        q: {value: 0., unit: rad/s}\n"
-       << "        r: {value: -0.0006, unit: rad/s}\n"
+       << initial_velocity("dtmb", 8.901, 0.020, 0, -0.007, 0, -0.0006)
        << "    external forces:\n"
        << "      - model: linear damping\n"
        << "        damping matrix at the center of gravity projected in the body frame:\n"
@@ -2149,7 +2054,7 @@ std::string test_data::test_ship_radiation_damping()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, 1, 0, 0, 0)
-       << initial_velocity()
+       << initial_velocity("TestShip", 0, 0, 0, 0, 0, 0)
        << dynamics()
        << "    external forces:\n"
        << "      - model: resistance curve\n"
@@ -2292,7 +2197,7 @@ std::string test_data::bug_2641()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame_deg(0, 0, -0.099, 0, -0.334, 0)
-       << initial_velocity()
+       << initial_velocity("TestShip", 0, 0, 0, 0, 0, 0)
        << dynamics()
        << "    external forces:\n"
        << "      - model: gravity\n"
@@ -2391,14 +2296,7 @@ std::string test_data::bug_in_exact_hydrostatic()
        << "    mesh: cube.stl\n"
        << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, 0.4746588693957115, 0, 0, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: cube\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("cube", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -2441,7 +2339,7 @@ std::string test_data::bug_2714_heading_keeping()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame_deg(0, 0, -0.099, 10, -0.334, 0)
-       << initial_velocity()
+       << initial_velocity("TestShip", 0, 0, 0, 0, 0, 0)
        << dynamics()
        << "    external forces:\n"
        << "      - model: gravity\n"
@@ -2476,7 +2374,7 @@ std::string test_data::bug_2714_station_keeping()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame_deg(0, 0, -0.099, 10, -0.334, 0)
-       << initial_velocity()
+       << initial_velocity("TestShip", 0, 0, 0, 0, 0, 0)
        << dynamics()
        << "    external forces:\n"
        << "      - model: gravity\n"
@@ -2515,14 +2413,7 @@ std::string test_data::bug_2732()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame_deg(0, 0, -0.099, 10, -0.334, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 10, unit: kt}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("TestShip", 10, 0, 0, 0, 0, 0)
        << dynamics()
        << "    external forces:\n"
        << "      - model: gravity\n"
@@ -2628,14 +2519,7 @@ std::string test_data::L_config()
        << "    mesh: L.stl\n"
        << position_relative_to_mesh(0.5, 0.8333333333, -0.8333333333, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, 0, 0, 0, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: cube\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("cube", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -2680,14 +2564,7 @@ std::string test_data::GM_cube()
        << "    mesh: cube.stl\n"
        << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
        << initial_position_of_body_frame_deg(0, 0, 0, 60, 0, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: cube\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("cube", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -2734,14 +2611,7 @@ std::string test_data::bug_2838()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame_deg(0, 0, -0.099, 10, -0.334, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 10, unit: kt}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity_kt("TestShip", 10, 0, 0, 0, 0, 0)
        << dynamics()
        << "    external forces:\n"
        << "      - model: gravity\n"
@@ -2847,14 +2717,7 @@ std::string test_data::bug_2845()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame_deg(0, 0, -0.099, 10, -0.334, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 10, unit: kt}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity_kt("TestShip", 10, 0, 0, 0, 0, 0)
        << dynamics()
        << "    external forces:\n"
        << "      - model: gravity\n"
@@ -2960,14 +2823,7 @@ std::string test_data::maneuvering_with_commands()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame_deg(0, 0, -0.099, 10, -0.334, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 10, unit: kt}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity_kt("TestShip", 10, 0, 0, 0, 0, 0)
        << dynamics()
        << "    external forces:\n"
        << "      - model: maneuvering\n"
@@ -3081,14 +2937,7 @@ std::string test_data::test_ship_linear_hydrostatics_without_waves()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, 1, 0, 0, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 0, unit: kt}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 1, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("TestShip", 0, 0, 1, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -3152,14 +3001,7 @@ std::string test_data::test_ship_linear_hydrostatics_with_waves()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, 1, 0, 0, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 0, unit: kt}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 1, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("TestShip", 0, 0, 1, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -3205,14 +3047,7 @@ std::string test_data::bug_2963_hs_fast()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, 1, 0, 0, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 0, unit: kt}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 1, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("TestShip", 0, 0, 1, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -3244,14 +3079,7 @@ std::string test_data::bug_2963_hs_exact()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, 1, 0, 0, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 0, unit: kt}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 1, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("TestShip", 0, 0, 1, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -3283,14 +3111,7 @@ std::string test_data::bug_2963_fk()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, 1, 0, 0, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 0, unit: kt}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 1, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("TestShip", 0, 0, 1, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -3322,14 +3143,7 @@ std::string test_data::bug_2963_diff()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, 1, 0, 0, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 0, unit: kt}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 1, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("TestShip", 0, 0, 1, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -3367,14 +3181,7 @@ std::string test_data::bug_2963_gm()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, 1, 0, 0, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 0, unit: kt}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 1, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("TestShip", 0, 0, 1, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -3604,14 +3411,7 @@ std::string test_data::bug_3004()
        << "    mesh: Ponton.stl\n"
        << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, -2.167, 0, 0, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: Ponton\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("Ponton", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << "        hydrodynamic forces calculation point in body frame:\n"
        << "            x: {value: 0, unit: m}\n"
@@ -3663,14 +3463,7 @@ std::string test_data::bug_3003()
        << "  - name: TestShip\n"
        << position_relative_to_mesh(0, 0, 0, 0, 0, 0)
        << initial_position_of_body_frame_deg(0, 0, -0.099, 0, -0.334, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 10, unit: kt}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity_kt("TestShip", 10, 0, 0, 0, 0, 0)
        << dynamics()
        << "    external forces:\n"
        << "      - model: maneuvering\n"
@@ -3709,14 +3502,7 @@ std::string test_data::bug_2984()
        << "  - name: ship\n"
        << position_relative_to_mesh(0, 0, 0, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, 0, 0, 0, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: ship\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("ship", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << "        hydrodynamic forces calculation point in body frame:\n"
        << "            x: {value: 0, unit: m}\n"
@@ -3802,7 +3588,7 @@ std::string test_data::bug_3217()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, -5, 0, -0.0058, 0)
-       << initial_velocity()
+       << initial_velocity("TestShip", 0, 0, 0, 0, 0, 0)
        << dynamics()
        << "    external forces:\n"
        << "      - model: diffraction\n"
@@ -3876,7 +3662,7 @@ std::string test_data::bug_3227()
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame(0, 0, -5, 0, -0.0058, 0)
-       << initial_velocity()
+       << initial_velocity("TestShip", 0, 0, 0, 0, 0, 0)
        << dynamics()
        << "    external forces:\n"
        << "      - model: diffraction\n"
@@ -3957,14 +3743,7 @@ std::string test_data::tutorial_09_gRPC_wave_model()
        << "    mesh: cube.stl\n"
        << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
        << initial_position_of_body_frame_deg(0, 0, 0.25, 0, 2, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: cube\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: deg/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity("cube", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
@@ -4008,7 +3787,7 @@ std::string test_data::tutorial_10_gRPC_force_model()
        << "  - name: TestShip\n"
        << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
        << initial_position_of_body_frame(5, 0, 1, 0, 0, 0)
-       << initial_velocity()
+       << initial_velocity("TestShip", 0, 0, 0, 0, 0, 0)
        << dynamics()
        << "    external forces:\n"
        << "      - name: parametric oscillator\n"
@@ -4073,14 +3852,7 @@ std::string test_data::fmi()
        << "  - name: TestShip\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << initial_position_of_body_frame_deg(0, 0, -0.099, 0, -0.334, 0)
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 10, unit: kt}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity_kt("TestShip", 10, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
