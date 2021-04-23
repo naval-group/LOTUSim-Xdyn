@@ -41,6 +41,14 @@ std::string discretization()
            "       energy fraction: 0.999\n";
 }
 
+std::string stretching();
+std::string stretching()
+{
+    return "        stretching:\n"
+           "          delta: 1\n"
+           "          h: {unit: m, value: 0}\n";
+}
+
 std::string test_data::bug_2655()
 {
     std::stringstream ss;
@@ -55,9 +63,7 @@ std::string test_data::bug_2655()
        << "      - model: airy\n"
        << "        depth: {value: 100, unit: m}\n"
        << "        seed of the random data generator: 0\n"
-       << "        stretching:\n"
-       << "          delta: 1\n"
-       << "          h: {unit: m, value: 0}\n"
+       << stretching()
        << directional_spreading()
        << "        spectral density:\n"
        << "           type: dirac\n"
@@ -1493,9 +1499,7 @@ std::string test_data::test_ship_waves_test()
        << "      - model: airy\n"
        << "        depth: {value: 100, unit: m}\n"
        << "        seed of the random data generator: 0\n"
-       << "        stretching:\n"
-       << "          delta: 1\n"
-       << "          h: {unit: m, value: 0}\n"
+       << stretching()
        << directional_spreading()
        << "        spectral density:\n"
        << "           type: jonswap\n"
@@ -1505,9 +1509,7 @@ std::string test_data::test_ship_waves_test()
        << "      - model: airy\n"
        << "        depth: {value: 100, unit: m}\n"
        << "        seed of the random data generator: 10\n"
-       << "        stretching:\n"
-       << "          delta: 1\n"
-       << "          h: {unit: m, value: 0}\n"
+       << stretching()
        << "        directional spreading:\n"
        << "           type: cos2s\n"
        << "           s: 2\n"
@@ -1604,9 +1606,7 @@ std::string test_data::waves()
        << "      - model: airy\n"
        << "        depth: {value: 100, unit: m}\n"
        << "        seed of the random data generator: 0\n"
-       << "        stretching:\n"
-       << "          delta: 1\n"
-       << "          h: {unit: m, value: 0}\n"
+       << stretching()
        << directional_spreading()
        << "        spectral density:\n"
        << "           type: jonswap\n"
@@ -1616,9 +1616,7 @@ std::string test_data::waves()
        << "      - model: airy\n"
        << "        depth: {value: 100, unit: m}\n"
        << "        seed of the random data generator: 10\n"
-       << "        stretching:\n"
-       << "          delta: 1\n"
-       << "          h: {unit: m, value: 0}\n"
+       << stretching()
        << "        directional spreading:\n"
        << "           type: cos2s\n"
        << "           s: 2\n"
@@ -1659,9 +1657,7 @@ std::string test_data::simple_waves()
        << "      - model: airy\n"
        << "        depth: {value: 100, unit: m}\n"
        << "        seed of the random data generator: 0\n"
-       << "        stretching:\n"
-       << "          delta: 1\n"
-       << "          h: {unit: m, value: 0}\n"
+       << stretching()
        << directional_spreading()
        << "        spectral density:\n"
        << "           type: dirac\n"
@@ -1859,9 +1855,7 @@ std::string test_data::test_ship_froude_krylov()
        << "      - model: airy\n"
        << "        depth: {value: 100, unit: m}\n"
        << "        seed of the random data generator: 0\n"
-       << "        stretching:\n"
-       << "          delta: 1\n"
-       << "          h: {unit: m, value: 0}\n"
+       << stretching()
        << directional_spreading()
        << "        spectral density:\n"
        << "           type: jonswap\n"
@@ -1871,9 +1865,7 @@ std::string test_data::test_ship_froude_krylov()
        << "      - model: airy\n"
        << "        depth: {value: 100, unit: m}\n"
        << "        seed of the random data generator: 10\n"
-       << "        stretching:\n"
-       << "          delta: 1\n"
-       << "          h: {unit: m, value: 0}\n"
+       << stretching()
        << "        directional spreading:\n"
        << "           type: cos2s\n"
        << "           s: 2\n"
@@ -1968,9 +1960,7 @@ std::string test_data::test_ship_diffraction()
        << "      - model: airy\n"
        << "        depth: {value: 100, unit: m}\n"
        << "        seed of the random data generator: 0\n"
-       << "        stretching:\n"
-       << "          delta: 1\n"
-       << "          h: {unit: m, value: 0}\n"
+       << stretching()
        << directional_spreading()
        << "        spectral density:\n"
        << "           type: jonswap\n"
@@ -1980,9 +1970,7 @@ std::string test_data::test_ship_diffraction()
        << "      - model: airy\n"
        << "        depth: {value: 100, unit: m}\n"
        << "        seed of the random data generator: 10\n"
-       << "        stretching:\n"
-       << "          delta: 1\n"
-       << "          h: {unit: m, value: 0}\n"
+       << stretching()
        << "        directional spreading:\n"
        << "           type: cos2s\n"
        << "           s: 2\n"
@@ -4129,9 +4117,7 @@ std::string test_data::test_ship_linear_hydrostatics_with_waves()
        << "      - model: airy\n"
        << "        depth: {value: 100, unit: m}\n"
        << "        seed of the random data generator: 0\n"
-       << "        stretching:\n"
-       << "          delta: 1\n"
-       << "          h: {unit: m, value: 0}\n"
+       << stretching()
        << "        directional spreading:\n"
        << "           type: dirac\n"
        << "           waves propagating to: {value: 0, unit: deg}\n"
