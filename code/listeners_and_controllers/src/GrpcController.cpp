@@ -1,9 +1,9 @@
 #include "GrpcController.hpp"
 
-GrpcController GrpcController::build(const double tstart, const std::string& yaml)
+GrpcController* GrpcController::build(const double tstart, const std::string& yaml)
 {
     const auto grpc = GrpcControllerInterface::build(GrpcControllerInterface::parse(yaml), tstart);
-    return GrpcController(tstart, grpc);
+    return new GrpcController(tstart, grpc);
 }
 
 std::vector<std::string> GrpcController::get_command_names() const
