@@ -49,6 +49,15 @@ std::string stretching()
            "          h: {unit: m, value: 0}\n";
 }
 
+std::string airy_depth_100();
+std::string airy_depth_100()
+{
+    return "    spectra:\n"
+           "      - model: airy\n"
+           "        depth: {value: 100, unit: m}\n"
+           "        seed of the random data generator: 0\n";
+}
+
 std::string test_data::bug_2655()
 {
     std::stringstream ss;
@@ -59,10 +68,7 @@ std::string test_data::bug_2655()
        << "  - model: no wind\n"
        << "  - model: waves\n"
        << discretization()
-       << "    spectra:\n"
-       << "      - model: airy\n"
-       << "        depth: {value: 100, unit: m}\n"
-       << "        seed of the random data generator: 0\n"
+       << airy_depth_100()
        << stretching()
        << directional_spreading()
        << "        spectral density:\n"
@@ -1495,10 +1501,7 @@ std::string test_data::test_ship_waves_test()
        << "environment models:\n"
        << "  - model: waves\n"
        << discretization()
-       << "    spectra:\n"
-       << "      - model: airy\n"
-       << "        depth: {value: 100, unit: m}\n"
-       << "        seed of the random data generator: 0\n"
+       << airy_depth_100()
        << stretching()
        << directional_spreading()
        << "        spectral density:\n"
@@ -1602,10 +1605,7 @@ std::string test_data::waves()
        << "       omega min: {value: 0.1, unit: rad/s}\n"
        << "       omega max: {value: 6, unit: rad/s}\n"
        << "       energy fraction: 0.999\n"
-       << "    spectra:\n"
-       << "      - model: airy\n"
-       << "        depth: {value: 100, unit: m}\n"
-       << "        seed of the random data generator: 0\n"
+       << airy_depth_100()
        << stretching()
        << directional_spreading()
        << "        spectral density:\n"
@@ -1653,10 +1653,7 @@ std::string test_data::simple_waves()
        << "       omega min: {value: 0.1, unit: rad/s}\n"
        << "       omega max: {value: 6, unit: rad/s}\n"
        << "       energy fraction: 0.999\n"
-       << "    spectra:\n"
-       << "      - model: airy\n"
-       << "        depth: {value: 100, unit: m}\n"
-       << "        seed of the random data generator: 0\n"
+       << airy_depth_100()
        << stretching()
        << directional_spreading()
        << "        spectral density:\n"
@@ -1851,10 +1848,7 @@ std::string test_data::test_ship_froude_krylov()
        << "environment models:\n"
        << "  - model: waves\n"
        << discretization()
-       << "    spectra:\n"
-       << "      - model: airy\n"
-       << "        depth: {value: 100, unit: m}\n"
-       << "        seed of the random data generator: 0\n"
+       << airy_depth_100()
        << stretching()
        << directional_spreading()
        << "        spectral density:\n"
@@ -1956,10 +1950,7 @@ std::string test_data::test_ship_diffraction()
        << "       omega min: {value: 0.05026548, unit: rad/s}\n"
        << "       omega max: {value: 0.6366198, unit: rad/s}\n"
        << "       energy fraction: 0.999\n"
-       << "    spectra:\n"
-       << "      - model: airy\n"
-       << "        depth: {value: 100, unit: m}\n"
-       << "        seed of the random data generator: 0\n"
+       << airy_depth_100()
        << stretching()
        << directional_spreading()
        << "        spectral density:\n"
@@ -4113,10 +4104,7 @@ std::string test_data::test_ship_linear_hydrostatics_with_waves()
        << "       omega min: {value: 0.1, unit: rad/s}\n"
        << "       omega max: {value: 6, unit: rad/s}\n"
        << "       energy fraction: 0.999\n"
-       << "    spectra:\n"
-       << "      - model: airy\n"
-       << "        depth: {value: 100, unit: m}\n"
-       << "        seed of the random data generator: 0\n"
+       << airy_depth_100()
        << stretching()
        << "        directional spreading:\n"
        << "           type: dirac\n"
