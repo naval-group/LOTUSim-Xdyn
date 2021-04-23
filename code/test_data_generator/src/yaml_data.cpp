@@ -8,10 +8,16 @@
 #include "yaml_data.hpp"
 #include <sstream>
 
+std::string rotation_convention();
+std::string rotation_convention()
+{
+    return "rotations convention: [psi, theta', phi'']\n";
+}
+
 std::string test_data::bug_2655()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -131,7 +137,7 @@ std::string test_data::bug_2655()
 std::string test_data::hydrostatic_test()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -205,7 +211,7 @@ std::string test_data::hydrostatic_test()
 std::string test_data::added_mass_from_file()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -274,7 +280,7 @@ std::string test_data::added_mass_from_file()
 std::string test_data::full_example()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -368,7 +374,7 @@ std::string test_data::full_example()
 std::string test_data::full_example_with_diagonal_inertia()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -461,7 +467,7 @@ std::string test_data::full_example_with_diagonal_inertia()
 std::string test_data::full_example_with_propulsion()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -577,7 +583,7 @@ std::string test_data::full_example_with_propulsion()
 std::string test_data::full_example_with_propulsion_and_old_key_name()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -692,7 +698,7 @@ std::string test_data::full_example_with_propulsion_and_old_key_name()
 std::string test_data::falling_ball_example()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -768,7 +774,7 @@ std::string test_data::falling_ball_example()
 std::string test_data::simserver_test_with_commands_and_delay()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -850,7 +856,7 @@ std::string test_data::simserver_test_with_commands_and_delay()
 std::string test_data::falling_cube()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -917,7 +923,7 @@ std::string test_data::falling_cube()
 std::string test_data::rolling_cube()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -987,7 +993,7 @@ std::string test_data::rolling_cube()
 std::string test_data::oscillating_cube_example()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -1057,7 +1063,7 @@ std::string test_data::oscillating_cube_example()
 std::string test_data::new_oscillating_cube_example()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -1128,7 +1134,7 @@ std::string test_data::new_oscillating_cube_example()
 std::string test_data::stable_cube_example()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -1198,7 +1204,7 @@ std::string test_data::stable_cube_example()
 std::string test_data::stable_rolling_cube_test()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -1278,7 +1284,7 @@ std::string test_data::stable_rolling_cube_test()
 std::string test_data::test_ship_hydrostatic_test(const std::string& type)
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -1350,7 +1356,7 @@ std::string test_data::test_ship_hydrostatic_test(const std::string& type)
 std::string test_data::test_ship_propulsion()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -1465,7 +1471,7 @@ std::string test_data::test_ship_new_hydrostatic_test()
 std::string test_data::test_ship_waves_test()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -1578,7 +1584,7 @@ std::string test_data::test_ship_waves_test()
 std::string test_data::waves()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -1635,7 +1641,7 @@ std::string test_data::waves()
 std::string test_data::simple_waves()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -1681,7 +1687,7 @@ std::string test_data::simple_waves()
 std::string test_data::waves_for_parser_validation_only()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "discretization:\n"
        << "   n: 128\n"
        << "   omega min: {value: 0.1, unit: rad/s}\n"
@@ -1732,7 +1738,7 @@ std::string test_data::waves_for_parser_validation_only()
 std::string test_data::cube_in_waves()
 {
     std::stringstream ss;
-        ss << "rotations convention: [psi, theta', phi'']\n"
+        ss << rotation_convention()
            << "\n"
            << "environmental constants:\n"
            << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -1844,7 +1850,7 @@ std::string test_data::cube_in_waves()
 std::string test_data::test_ship_froude_krylov()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -1958,7 +1964,7 @@ std::string test_data::test_ship_froude_krylov()
 std::string test_data::test_ship_diffraction()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -2079,7 +2085,7 @@ std::string test_data::test_ship_diffraction()
 std::string test_data::test_ship_damping()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -2264,7 +2270,7 @@ std::string test_data::resistance_curve()
 std::string test_data::propulsion_and_resistance()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -2386,7 +2392,7 @@ std::string test_data::dummy_controllers_and_commands_for_propulsion_and_resista
 std::string test_data::heading_keeping_base()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -2658,7 +2664,7 @@ std::string test_data::diffraction()
 std::string test_data::test_ship_radiation_damping()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -2848,7 +2854,7 @@ std::string test_data::maneuvering()
 std::string test_data::bug_2641()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -3006,7 +3012,7 @@ std::string test_data::rudder()
 std::string test_data::bug_in_exact_hydrostatic()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -3075,7 +3081,7 @@ std::string test_data::bug_in_exact_hydrostatic()
 std::string test_data::bug_2714_heading_keeping()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -3171,7 +3177,7 @@ std::string test_data::bug_2714_heading_keeping()
 std::string test_data::bug_2714_station_keeping()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -3271,7 +3277,7 @@ std::string test_data::bug_2714_station_keeping()
 std::string test_data::bug_2732()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -3438,7 +3444,7 @@ std::string test_data::bug_2732()
 std::string test_data::L_config()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -3505,7 +3511,7 @@ std::string test_data::L_config()
 std::string test_data::GM_cube()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -3578,7 +3584,7 @@ std::string test_data::GM_cube()
 std::string test_data::bug_2838()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -3745,7 +3751,7 @@ std::string test_data::bug_2838()
 std::string test_data::bug_2845()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -3912,7 +3918,7 @@ std::string test_data::bug_2845()
 std::string test_data::maneuvering_with_commands()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -4073,7 +4079,7 @@ std::string test_data::linear_hydrostatics()
 std::string test_data::test_ship_linear_hydrostatics_without_waves()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -4157,7 +4163,7 @@ std::string test_data::test_ship_linear_hydrostatics_without_waves()
 std::string test_data::test_ship_linear_hydrostatics_with_waves()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -4259,7 +4265,7 @@ std::string test_data::test_ship_linear_hydrostatics_with_waves()
 std::string test_data::bug_2963_hs_fast()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "# Fixed frame: NED\n"
        << "bodies: # All bodies have NED as parent frame\n"
@@ -4321,7 +4327,7 @@ std::string test_data::bug_2963_hs_fast()
 std::string test_data::bug_2963_hs_exact()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "# Fixed frame: NED\n"
        << "bodies: # All bodies have NED as parent frame\n"
@@ -4383,7 +4389,7 @@ std::string test_data::bug_2963_hs_exact()
 std::string test_data::bug_2963_fk()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "# Fixed frame: NED\n"
        << "bodies: # All bodies have NED as parent frame\n"
@@ -4445,7 +4451,7 @@ std::string test_data::bug_2963_fk()
 std::string test_data::bug_2963_diff()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "# Fixed frame: NED\n"
        << "bodies: # All bodies have NED as parent frame\n"
@@ -4513,7 +4519,7 @@ std::string test_data::bug_2963_diff()
 std::string test_data::bug_2963_gm()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "# Fixed frame: NED\n"
        << "bodies: # All bodies have NED as parent frame\n"
@@ -4768,7 +4774,7 @@ std::string test_data::invalid_json_for_cs()
 std::string test_data::bug_3004()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -4845,7 +4851,7 @@ std::string test_data::bug_3004()
 std::string test_data::bug_3003()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -4928,7 +4934,7 @@ std::string test_data::bug_3003()
 std::string test_data::bug_2984()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -5020,7 +5026,7 @@ std::string test_data::bug_2984()
 std::string test_data::bug_3217()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -5141,7 +5147,7 @@ std::string test_data::bug_3217()
 std::string test_data::bug_3227()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -5280,7 +5286,7 @@ std::string test_data::constant_force()
 std::string test_data::tutorial_09_gRPC_wave_model()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -5355,7 +5361,7 @@ std::string test_data::tutorial_09_gRPC_wave_model()
 std::string test_data::tutorial_10_gRPC_force_model()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
@@ -5467,7 +5473,7 @@ std::string test_data::gRPC_controller()
 std::string test_data::fmi()
 {
     std::stringstream ss;
-    ss << "rotations convention: [psi, theta', phi'']\n"
+    ss << rotation_convention()
        << "\n"
        << "environmental constants:\n"
        << "    g: {value: 9.81, unit: m/s^2}\n"
