@@ -1834,7 +1834,6 @@ std::string test_data::controllers()
           "        Kp: 4.2\n"
           "        Ki: 0.25\n"
           "        Kd: 1\n"
-          << grpc_controller() << 
           "  - type: PID\n"
           "    dt: 0.5\n"
           "    state weights:\n"
