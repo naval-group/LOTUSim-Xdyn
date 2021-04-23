@@ -4396,7 +4396,7 @@ std::string test_data::fmi()
        << "    \n"
        << "# Fixed frame: NED\n"
        << "bodies: # All bodies have NED as parent frame\n"
-       << "  - name: Anthineas\n"
+       << "  - name: TestShip\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
        << "    initial position of body frame relative to NED:\n"
        << "        frame: NED\n"
@@ -4407,7 +4407,7 @@ std::string test_data::fmi()
        << "        theta: {value: -.334, unit: deg}\n"
        << "        psi: {value: 0, unit: deg}\n"
        << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: Anthineas\n"
+       << "        frame: TestShip\n"
        << "        u: {value: 10, unit: kt}\n"
        << "        v: {value: 0, unit: m/s}\n"
        << "        w: {value: 0, unit: m/s}\n"
@@ -4417,13 +4417,13 @@ std::string test_data::fmi()
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
-       << "            frame: Anthineas\n"
+       << "            frame: TestShip\n"
        << "            x: {value: 0.258, unit: m}\n"
        << "            y: {value: 0, unit: m}\n"
        << "            z: {value: 0.432, unit: m}\n"
        << "        mass: {value: 253.31, unit: tonne} # Caution: 'ton' is the british ton which is 907.185 kg\n"
        << "        rigid body inertia matrix at the center of buoyancy projected in the body frame:\n"
-       << "            frame: Anthineas\n"
+       << "            frame: TestShip\n"
        << "            row 1: [253310,0,0,0,0,0]\n"
        << "            row 2: [0,253310,0,0,0,0]\n"
        << "            row 3: [0,0,253310,0,0,0]\n"
@@ -4431,7 +4431,7 @@ std::string test_data::fmi()
        << "            row 5: [0,0,0,0,8.279e6,0]\n"
        << "            row 6: [0,0,0,0,0,7.676e6]\n"
        << "        added mass matrix at the center of buoyancy projected in the body frame:\n"
-       << "            frame: Anthineas\n"
+       << "            frame: TestShip\n"
        << "            row 1: [3.519e4,0,0,0,0,0]\n"
        << "            row 2: [0,3.023e5,0,0,0,0]\n"
        << "            row 3: [0,0,1.980e5,0,0,0]\n"
@@ -4463,7 +4463,7 @@ std::string test_data::fmi()
        << "      - model: maneuvering\n"
        << "        name: F1\n"
        << "        reference frame:\n"
-       << "            frame: Anthineas\n"
+       << "            frame: TestShip\n"
        << "            x: {value: 0.696, unit: m}\n"
        << "            y: {value: 0, unit: m}\n"
        << "            z: {value: 1.418, unit: m}\n"
@@ -4510,7 +4510,7 @@ std::string test_data::fmi()
        << "      - name: PropRudd\n"
        << "        model: propeller+rudder\n"
        << "        position of propeller frame:\n"
-       << "            frame: Anthineas\n"
+       << "            frame: TestShip\n"
        << "            x: {value: -8.4, unit: m}\n"
        << "            y: {value: 0, unit: m}\n"
        << "            z: {value: 2.5, unit: m}\n"
@@ -4537,6 +4537,6 @@ std::string test_data::fmi()
        << "output:\n"
        << "   - format: map\n"
        << "     filename: efforts.h5\n"
-       << "     data: [t,  'Mz(PropRudd,Anthineas,Anthineas)']\n";
+       << "     data: [t,  'Mz(PropRudd,TestShip,TestShip)']\n";
     return ss.str();
 }
