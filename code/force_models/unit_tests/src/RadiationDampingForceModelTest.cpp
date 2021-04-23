@@ -239,24 +239,33 @@ TEST_F(RadiationDampingForceModelTest, velocity_offset_should_not_change_the_res
 
 TEST_F(RadiationDampingForceModelTest, should_print_debugging_information_if_required_by_yaml_data)
 {
-    testing::internal::CaptureStderr();
+    std::stringstream debug;
+    // Redirect cerr to our stringstream buffer or any other ostream
+    std::streambuf* orig =std::cerr.rdbuf(debug.rdbuf());
+    ASSERT_TRUE(debug.str().empty());
     // Call the radiation damping model
     RadiationDampingForceModel::Input input;
     input.yaml = get_yaml_data(true);
     input.hdb = get_hdb_data(input.yaml);
     RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
-    EXPECT_FALSE(testing::internal::GetCapturedStderr().empty());
+    ASSERT_FALSE(debug.str().empty());
+    // Restore cerr's buffer
+    std::cerr.rdbuf(orig);
 }
 
 TEST_F(RadiationDampingForceModelTest, should_not_print_debugging_information_if_not_required_by_yaml_data)
 {
-    testing::internal::CaptureStderr();
+    std::stringstream debug;
+    // Redirect cerr to our stringstream buffer or any other ostream
+    std::streambuf* orig =std::cerr.rdbuf(debug.rdbuf());
     // Call the radiation damping model
     RadiationDampingForceModel::Input input;
     input.yaml = get_yaml_data(false);
     input.hdb = get_hdb_data(input.yaml);
     RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
-    EXPECT_TRUE(testing::internal::GetCapturedStderr().empty());
+    ASSERT_TRUE(debug.str().empty());
+    // Restore cerr's buffer
+    std::cerr.rdbuf(orig);
 }
 
 TEST_F(RadiationDampingForceModelTest, force_model_knows_history_length)
