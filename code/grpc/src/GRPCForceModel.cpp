@@ -24,8 +24,7 @@
 #include "FromGRPC.hpp"
 
 
-void throw_if_invalid_status(const GRPCForceModel::Input& input, const std::string& rpc_method, const grpc::Status& status);
-void throw_if_invalid_status(const GRPCForceModel::Input& input, const std::string& rpc_method, const grpc::Status& status)
+template <typename Input> void throw_if_invalid_status(const Input& input, const std::string& rpc_method, const grpc::Status& status)
 {
     const std::string base_error_msg = std::string("an error occurred when using the distant force model '") + input.name + "' defined via gRPC (method '" + rpc_method + "').\n";
     const std::string yaml_msg = "The YAML you provided for this gRPC model is:\n\n" + input.yaml + "\n";
