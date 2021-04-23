@@ -23,18 +23,19 @@
 #include "ToGRPC.hpp"
 #include "FromGRPC.hpp"
 
+template <typename ServiceType> std::string get_type_of_service();
 
-template <typename Input> void throw_if_invalid_status(const Input& input, const std::string& rpc_method, const grpc::Status& status)
+template <typename Input, typename ServiceType> void throw_if_invalid_status(const Input& input, const std::string& rpc_method, const grpc::Status& status)
 {
-    const std::string base_error_msg = std::string("an error occurred when using the distant force model '") + input.name + "' defined via gRPC (method '" + rpc_method + "').\n";
+    const std::string base_error_msg = std::string("an error occurred when using the distant ") + get_type_of_service<ServiceType>() + " '" + input.name + "' defined via gRPC (method '" + rpc_method + "').\n";
     const std::string yaml_msg = "The YAML you provided for this gRPC model is:\n\n" + input.yaml + "\n";
     const std::string contact_team_msg = "support team with the following error code (cf. https://grpc.github.io/grpc/cpp/grpc_2impl_2codegen_2status_8h.html): ";
     const std::string user_error_msg = "Check that the server is running and accessible from the URL defined in the YAML file: " + input.url;
     const std::string dev_error_msg = "This is a problem with xdyn and should never happen: please contact xdyn's " + contact_team_msg;
-    const std::string network_error_msg = "We couldn't reach the gRPC force model server at this URL: " + input.url + " Maybe the server is temporarily inaccessible or hasn't started yet? Either wait and give it another try or change the 'url' key in the YAML file. If all else fails, contact xdyn's " + contact_team_msg;
-    const std::string server_error_msg = "The gRPC force model server responded with the following error code: " + status.error_message()  + "\nMaybe the parameters you defined in xdyn's YAML file are incorrect? " + yaml_msg + "\nPlease check the force model server's documentation! If the problem persists, try contacting the force model server's " + contact_team_msg;
-    const std::string authentication_error_msg = "This force model server requires authentication and xdyn does not support this yet.";
-    const std::string unimplemented = "This force model server does not implement gRPC method '" + rpc_method + "': implement it or use another model. Otherwise, contact the force model's " + contact_team_msg;
+    const std::string network_error_msg = std::string("We couldn't reach the gRPC ") + get_type_of_service<ServiceType>() + " server at this URL: " + input.url + " Maybe the server is temporarily inaccessible or hasn't started yet? Either wait and give it another try or change the 'url' key in the YAML file. If all else fails, contact xdyn's " + contact_team_msg;
+    const std::string server_error_msg = std::string("The gRPC ") + get_type_of_service<ServiceType>() + " server responded with the following error code: " + status.error_message()  + "\nMaybe the parameters you defined in xdyn's YAML file are incorrect? " + yaml_msg + "\nPlease check the force model server's documentation! If the problem persists, try contacting the force model server's " + contact_team_msg;
+    const std::string authentication_error_msg = std::string("This ") + get_type_of_service<ServiceType>() + " server requires authentication and xdyn does not support this yet.";
+    const std::string unimplemented = std::string("This ") + get_type_of_service<ServiceType>() + " server does not implement gRPC method '" + rpc_method + "': implement it or use another model. Otherwise, contact the " + get_type_of_service<ServiceType>() + "'s " + contact_team_msg;
     switch(status.error_code())
     {
         case grpc::StatusCode::OK:
@@ -135,6 +136,11 @@ template <typename Input> void throw_if_invalid_status(const Input& input, const
     }
 }
 
+template <> std::string get_type_of_service<GRPCForceModel>()
+{
+    return "force model";
+}
+
 class GRPCForceModel::Impl
 {
     public:
@@ -163,7 +169,7 @@ class GRPCForceModel::Impl
             SetForceParameterResponse response;
             grpc::ClientContext context;
             const grpc::Status status = stub->set_parameters(&context, to_grpc.from_yaml(yaml, body_name, instance_name), &response);
-            throw_if_invalid_status(input, "set_parameters", status);
+            throw_if_invalid_status<Input,GRPCForceModel>(input, "set_parameters", status);
             needs_wave_outputs = response.needs_wave_outputs();
             max_history_length = response.max_history_length();
             commands.reserve(response.commands_size());
@@ -183,7 +189,7 @@ class GRPCForceModel::Impl
             RequiredWaveInformationResponse response;
             grpc::ClientContext context;
             const grpc::Status status = stub->required_wave_information(&context, required_wave_information_request, &response);
-            throw_if_invalid_status(input, "required_wave_information", status);
+            throw_if_invalid_status<Input,GRPCForceModel>(input, "required_wave_information", status);
             return from_grpc.to_wave_request(response);
         }
 
@@ -194,7 +200,7 @@ class GRPCForceModel::Impl
             const auto states = to_grpc.from_state(state, max_history_length, env);
             const auto wave_information = get_wave_information(t, state.x(0), state.y(0), state.z(0), env);
             const grpc::Status status = stub->force(&context, to_grpc.from_force_request(states, commands, wave_information, instance_name), &response);
-            throw_if_invalid_status(input, "force", status);
+            throw_if_invalid_status<Input,GRPCForceModel>(input, "force", status);
             extra_observations = std::map<std::string,double>(response.extra_observations().begin(),response.extra_observations().end());
             return from_grpc.to_force(response);
         }
