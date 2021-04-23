@@ -101,6 +101,7 @@ Controller* build_controller(const double tstart, const YamlController& yaml_con
     {
         return new PIDController (tstart, yaml_controller.dt, yaml_controller.rest_of_the_yaml);
     }
+    THROW(__PRETTY_FUNCTION__, InvalidInputException, "Controller type '" << yaml_controller.type << "' is unknown. Known controller types are: pid");
     return NULL;
 }
 

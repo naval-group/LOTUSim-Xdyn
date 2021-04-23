@@ -42,6 +42,7 @@ namespace test_data
     std::string controlled_forces();
     std::string bug_2961();
     std::string setpoints();
+    std::string unknown_controller();
     std::string grpc_controller();
     std::string controllers();
     std::string wageningen();

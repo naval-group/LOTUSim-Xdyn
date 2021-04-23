@@ -1096,3 +1096,12 @@ TEST_F(SimTest, LONG_can_simulate_heading_with_non_constant_controllers_setpoint
         ASSERT_NEAR(60 * PI / 180, angle.psi, 6e-3);
     }
 }
+
+TEST_F(SimTest, should_throw_if_a_controller_has_an_unknown_type)
+{
+    ASSERT_THROW(simulate<ssc::solver::EulerStepper>(test_data::falling_ball_example()
+                                                   + test_data::setpoints()
+                                                   + test_data::controllers()
+                                                   + test_data::unknown_controller(), 0, 11, 1)
+                                                   , InvalidInputException);
+}
