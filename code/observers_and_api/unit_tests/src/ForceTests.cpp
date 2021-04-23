@@ -534,18 +534,19 @@ TEST_F(ForceTests, validation_of_L_volume_against_VTK)
 {
     ForceTester test(test_data::L_config(), L());
     const double z0 = -2.5/3;
-    ASSERT_NEAR(0, test.immersed_volume(0,0,z0,0,0,0), 1E-10);
-    ASSERT_NEAR(0.5, test.immersed_volume(0,0,z0+0.25,0,0,0), 1E-10);
-    ASSERT_NEAR(1, test.immersed_volume(0,0,z0+0.5,0,0,0), 1E-10);
-    ASSERT_NEAR(2, test.immersed_volume(0,0,z0+1,0,0,0), 1E-10);
-    ASSERT_NEAR(2.5, test.immersed_volume(0,0,z0+1.5,0,0,0), 1E-10);
-    ASSERT_NEAR(3, test.immersed_volume(0,0,z0+2,0,0,0), 1E-10);
-    ASSERT_NEAR(3, test.emerged_volume(0,0,z0,0,0,0), 1E-10);
-    ASSERT_NEAR(2.5, test.emerged_volume(0,0,z0+0.25,0,0,0), 1E-10);
-    ASSERT_NEAR(2, test.emerged_volume(0,0,z0+0.5,0,0,0), 1E-10);
-    ASSERT_NEAR(1, test.emerged_volume(0,0,z0+1,0,0,0), 1E-10);
-    ASSERT_NEAR(0.5, test.emerged_volume(0,0,z0+1.5,0,0,0), 1E-10);
-    ASSERT_NEAR(0, test.emerged_volume(0,0,z0+2,0,0,0), 1E-10);
+    const double eps = 1E-6;
+    ASSERT_NEAR(0, test.immersed_volume(0,0,z0,0,0,0), eps);
+    ASSERT_NEAR(0.5, test.immersed_volume(0,0,z0+0.25,0,0,0), eps);
+    ASSERT_NEAR(1, test.immersed_volume(0,0,z0+0.5,0,0,0), eps);
+    ASSERT_NEAR(2, test.immersed_volume(0,0,z0+1,0,0,0), eps);
+    ASSERT_NEAR(2.5, test.immersed_volume(0,0,z0+1.5,0,0,0), eps);
+    ASSERT_NEAR(3, test.immersed_volume(0,0,z0+2,0,0,0), eps);
+    ASSERT_NEAR(3, test.emerged_volume(0,0,z0,0,0,0), eps);
+    ASSERT_NEAR(2.5, test.emerged_volume(0,0,z0+0.25,0,0,0), eps);
+    ASSERT_NEAR(2, test.emerged_volume(0,0,z0+0.5,0,0,0), eps);
+    ASSERT_NEAR(1, test.emerged_volume(0,0,z0+1,0,0,0), eps);
+    ASSERT_NEAR(0.5, test.emerged_volume(0,0,z0+1.5,0,0,0), eps);
+    ASSERT_NEAR(0, test.emerged_volume(0,0,z0+2,0,0,0), eps);
 }
 
 TEST_F(ForceTests, LONG_immersed_and_emerged_surfaces_are_correct)
