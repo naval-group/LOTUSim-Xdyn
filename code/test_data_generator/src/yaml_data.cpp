@@ -152,6 +152,15 @@ std::string quadratic_damping()
            "            row 6: [ 0, 0, 0,      0, 0, 0]\n";
 }
 
+std::string hydrodynamic_calculation_point();
+std::string hydrodynamic_calculation_point()
+{
+    return "        hydrodynamic forces calculation point in body frame:\n"
+           "            x: {value: 0.696, unit: m}\n"
+           "            y: {value: 0, unit: m}\n"
+           "            z: {value: 1.418, unit: m}\n";
+}
+
 std::string test_data::bug_2655()
 {
     std::stringstream ss;
@@ -251,10 +260,7 @@ std::string test_data::hydrostatic_test()
        << "        q: {value: 0, unit: rad/s}\n"
        << "        r: {value: 0, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: body 1\n"
        << "            x: {value: 0, unit: m}\n"
@@ -325,10 +331,7 @@ std::string test_data::added_mass_from_file()
        << "        q: {value: 0, unit: rad/s}\n"
        << "        r: {value: 0, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: body 1\n"
        << "            x: {value: 0, unit: m}\n"
@@ -394,10 +397,7 @@ std::string test_data::full_example()
        << "        q: {value: 7, unit: rad/s}\n"
        << "        r: {value: 6, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: body 1\n"
        << "            x: {value: 4, unit: m}\n"
@@ -487,10 +487,7 @@ std::string test_data::full_example_with_diagonal_inertia()
        << "        q: {value: 7, unit: rad/s}\n"
        << "        r: {value: 6, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: body 1\n"
        << "            x: {value: 4, unit: m}\n"
@@ -581,10 +578,7 @@ std::string test_data::full_example_with_propulsion()
        << "        q: {value: 7, unit: rad/s}\n"
        << "        r: {value: 6, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: body 1\n"
        << "            x: {value: 4, unit: m}\n"
@@ -696,10 +690,7 @@ std::string test_data::full_example_with_propulsion_and_old_key_name()
        << "        q: {value: 7, unit: rad/s}\n"
        << "        r: {value: 6, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: body 1\n"
        << "            x: {value: 4, unit: m}\n"
@@ -806,10 +797,7 @@ std::string test_data::falling_ball_example()
        << "        q: {value: 0, unit: rad/s}\n"
        << "        r: {value: 0, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: ball\n"
        << "            x: {value: 0, unit: m}\n"
@@ -882,10 +870,7 @@ std::string test_data::simserver_test_with_commands_and_delay()
        << "        q: {value: 0, unit: rad/s}\n"
        << "        r: {value: 0, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: ball\n"
        << "            x: {value: 0, unit: m}\n"
@@ -965,10 +950,7 @@ std::string test_data::falling_cube()
        << "        q: {value: 0, unit: rad/s}\n"
        << "        r: {value: 0, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: cube\n"
        << "            x: {value: 0, unit: m}\n"
@@ -1034,10 +1016,7 @@ std::string test_data::rolling_cube()
        << "        q: {value: 0, unit: rad/s}\n"
        << "        r: {value: 0, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: cube\n"
        << "            x: {value: 0, unit: m}\n"
@@ -1104,10 +1083,7 @@ std::string test_data::oscillating_cube_example()
        << "        q: {value: 0, unit: rad/s}\n"
        << "        r: {value: 0, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: cube\n"
        << "            x: {value: 0, unit: m}\n"
@@ -1174,10 +1150,7 @@ std::string test_data::new_oscillating_cube_example()
        << "        q: {value: 0, unit: rad/s}\n"
        << "        r: {value: 0, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: cube\n"
        << "            x: {value: 0, unit: m}\n"
@@ -1245,10 +1218,7 @@ std::string test_data::stable_cube_example()
        << "        q: {value: 0, unit: rad/s}\n"
        << "        r: {value: 0, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: cube\n"
        << "            x: {value: 0, unit: m}\n"
@@ -1324,10 +1294,7 @@ std::string test_data::stable_rolling_cube_test()
        << "        q: {value: 0, unit: deg/s}\n"
        << "        r: {value: 0, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: cube\n"
        << "            x: {value: 0, unit: m}\n"
@@ -2686,10 +2653,7 @@ std::string test_data::bug_in_exact_hydrostatic()
        << "        q: {value: 0, unit: rad/s}\n"
        << "        r: {value: 0, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: cube\n"
        << "            x: {value: 0, unit: m}\n"
@@ -2961,10 +2925,7 @@ std::string test_data::L_config()
        << "        q: {value: 0, unit: rad/s}\n"
        << "        r: {value: 0, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: L\n"
        << "            x: {value: 0, unit: m}\n"
@@ -3030,10 +2991,7 @@ std::string test_data::GM_cube()
        << "        q: {value: 0, unit: rad/s}\n"
        << "        r: {value: 0, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: cube\n"
        << "            x: {value: 0, unit: m}\n"
@@ -3462,10 +3420,7 @@ std::string test_data::test_ship_linear_hydrostatics_without_waves()
        << "        q: {value: 0, unit: rad/s}\n"
        << "        r: {value: 0, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: TestShip\n"
        << "            x: {value: 0.258, unit: m}\n"
@@ -3549,10 +3504,7 @@ std::string test_data::test_ship_linear_hydrostatics_with_waves()
        << "        q: {value: 0, unit: rad/s}\n"
        << "        r: {value: 0, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: TestShip\n"
        << "            x: {value: 0.258, unit: m}\n"
@@ -3618,10 +3570,7 @@ std::string test_data::bug_2963_hs_fast()
        << "        q: {value: 0, unit: rad/s}\n"
        << "        r: {value: 0, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: TestShip\n"
        << "            x: {value: 0.258, unit: m}\n"
@@ -3673,10 +3622,7 @@ std::string test_data::bug_2963_hs_exact()
        << "        q: {value: 0, unit: rad/s}\n"
        << "        r: {value: 0, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: TestShip\n"
        << "            x: {value: 0.258, unit: m}\n"
@@ -3728,10 +3674,7 @@ std::string test_data::bug_2963_fk()
        << "        q: {value: 0, unit: rad/s}\n"
        << "        r: {value: 0, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: TestShip\n"
        << "            x: {value: 0.258, unit: m}\n"
@@ -3783,10 +3726,7 @@ std::string test_data::bug_2963_diff()
        << "        q: {value: 0, unit: rad/s}\n"
        << "        r: {value: 0, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: TestShip\n"
        << "            x: {value: 0.258, unit: m}\n"
@@ -3844,10 +3784,7 @@ std::string test_data::bug_2963_gm()
        << "        q: {value: 0, unit: rad/s}\n"
        << "        r: {value: 0, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: TestShip\n"
        << "            x: {value: 0.258, unit: m}\n"
@@ -4499,10 +4436,7 @@ std::string test_data::tutorial_09_gRPC_wave_model()
        << "        q: {value: 0, unit: deg/s}\n"
        << "        r: {value: 0, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: cube\n"
        << "            x: {value: 0, unit: m}\n"
@@ -4639,10 +4573,7 @@ std::string test_data::fmi()
        << "        q: {value: 0, unit: rad/s}\n"
        << "        r: {value: 0, unit: rad/s}\n"
        << "    dynamics:\n"
-       << "        hydrodynamic forces calculation point in body frame:\n"
-       << "            x: {value: 0.696, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 1.418, unit: m}\n"
+       << hydrodynamic_calculation_point()
        << "        centre of inertia:\n"
        << "            frame: Anthineas\n"
        << "            x: {value: 0.258, unit: m}\n"
