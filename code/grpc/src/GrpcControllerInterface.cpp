@@ -117,10 +117,20 @@ struct GrpcControllerInterface::Impl
     , stub(Controller::NewStub(grpc::CreateChannel(input.url, grpc::InsecureChannelCredentials())))
     {}
 
+    void set_connection_timeout(grpc::ClientContext& context)
+    {
+        // Timeout in seconds
+        const int timeout = 5;
+        // Calculate deadline from connection timeout in seconds
+        std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::seconds(timeout);
+        context.set_deadline(deadline);
+    }
+
     GrpcSetParametersResponse set_parameters(const double t0)
     {
         SetParametersResponse response;
         grpc::ClientContext context;
+        set_connection_timeout(context);
         const grpc::Status status = stub->set_parameters(&context, build_set_parameters_request(input.yaml, t0), &response);
         throw_if_invalid_status<Input,GrpcControllerInterface>(input, "set_parameters", status);
         GrpcSetParametersResponse ret;
