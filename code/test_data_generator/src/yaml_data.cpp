@@ -175,6 +175,18 @@ std::string damping_matrix()
            "            row 6: [ 0, 0,     0,      0,      0, 0]\n";
 }
 
+std::string rigid_body_inertia_matrix();
+std::string rigid_body_inertia_matrix()
+{
+    return "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
+           "            row 1: [253310,0,0,0,0,0]\n"
+           "            row 2: [0,253310,0,0,0,0]\n"
+           "            row 3: [0,0,253310,0,0,0]\n"
+           "            row 4: [0,0,0,1.522e6,0,0]\n"
+           "            row 5: [0,0,0,0,8.279e6,0]\n"
+           "            row 6: [0,0,0,0,0,7.676e6]\n";
+}
+
 std::string test_data::bug_2655()
 {
     std::stringstream ss;
@@ -273,13 +285,7 @@ std::string test_data::hydrostatic_test()
        << "            x: {value: 0, unit: m}\n"
        << "            y: {value: 0, unit: m}\n"
        << "            z: {value: 0, unit: m}\n"
-       << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
-       << "            row 1: [253310,0,0,0,0,0]\n"
-       << "            row 2: [0,253310,0,0,0,0]\n"
-       << "            row 3: [0,0,253310,0,0,0]\n"
-       << "            row 4: [0,0,0,1.522e6,0,0]\n"
-       << "            row 5: [0,0,0,0,8.279e6,0]\n"
-       << "            row 6: [0,0,0,0,0,7.676e6]\n"
+       << rigid_body_inertia_matrix()
        << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [3.519e4,0,0,0,0,0]\n"
        << "            row 2: [0,3.023e5,0,0,0,0]\n"
@@ -337,13 +343,7 @@ std::string test_data::added_mass_from_file()
        << "            x: {value: 0, unit: m}\n"
        << "            y: {value: 0, unit: m}\n"
        << "            z: {value: 0, unit: m}\n"
-       << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
-       << "            row 1: [253310,0,0,0,0,0]\n"
-       << "            row 2: [0,253310,0,0,0,0]\n"
-       << "            row 3: [0,0,253310,0,0,0]\n"
-       << "            row 4: [0,0,0,1.522e6,0,0]\n"
-       << "            row 5: [0,0,0,0,8.279e6,0]\n"
-       << "            row 6: [0,0,0,0,0,7.676e6]\n"
+       << rigid_body_inertia_matrix()
        << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            from hdb: test_ship.hdb\n"
        << "    external forces:\n"
@@ -1919,13 +1919,7 @@ std::string test_data::propulsion_and_resistance()
        << "            x: {value: 0.258, unit: m}\n"
        << "            y: {value: 0, unit: m}\n"
        << "            z: {value: 0.432, unit: m}\n"
-       << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
-       << "            row 1: [253310,0,0,0,0,0]\n"
-       << "            row 2: [0,253310,0,0,0,0]\n"
-       << "            row 3: [0,0,253310,0,0,0]\n"
-       << "            row 4: [0,0,0,1.522e6,0,0]\n"
-       << "            row 5: [0,0,0,0,8.279e6,0]\n"
-       << "            row 6: [0,0,0,0,0,7.676e6]\n"
+       << rigid_body_inertia_matrix()
        << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [3.519e4,0,0,0,0,0]\n"
        << "            row 2: [0,3.023e5,0,0,0,0]\n"
@@ -3302,13 +3296,7 @@ std::string test_data::test_ship_linear_hydrostatics_without_waves()
        << "            x: {value: 0.258, unit: m}\n"
        << "            y: {value: 0, unit: m}\n"
        << "            z: {value: 0.432, unit: m}\n"
-       << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
-       << "            row 1: [253310,0,0,0,0,0]\n"
-       << "            row 2: [0,253310,0,0,0,0]\n"
-       << "            row 3: [0,0,253310,0,0,0]\n"
-       << "            row 4: [0,0,0,1.522e6,0,0]\n"
-       << "            row 5: [0,0,0,0,8.279e6,0]\n"
-       << "            row 6: [0,0,0,0,0,7.676e6]\n"
+       << rigid_body_inertia_matrix()
        << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [0,0,0,0,0,0]\n"
        << "            row 2: [0,0,0,0,0,0]\n"
@@ -3386,13 +3374,7 @@ std::string test_data::test_ship_linear_hydrostatics_with_waves()
        << "            x: {value: 0.258, unit: m}\n"
        << "            y: {value: 0, unit: m}\n"
        << "            z: {value: 0.432, unit: m}\n"
-       << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
-       << "            row 1: [253310,0,0,0,0,0]\n"
-       << "            row 2: [0,253310,0,0,0,0]\n"
-       << "            row 3: [0,0,253310,0,0,0]\n"
-       << "            row 4: [0,0,0,1.522e6,0,0]\n"
-       << "            row 5: [0,0,0,0,8.279e6,0]\n"
-       << "            row 6: [0,0,0,0,0,7.676e6]\n"
+       << rigid_body_inertia_matrix()
        << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [0,0,0,0,0,0]\n"
        << "            row 2: [0,0,0,0,0,0]\n"
@@ -3452,13 +3434,7 @@ std::string test_data::bug_2963_hs_fast()
        << "            x: {value: 0.258, unit: m}\n"
        << "            y: {value: 0, unit: m}\n"
        << "            z: {value: 0.432, unit: m}\n"
-       << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
-       << "            row 1: [253310,0,0,0,0,0]\n"
-       << "            row 2: [0,253310,0,0,0,0]\n"
-       << "            row 3: [0,0,253310,0,0,0]\n"
-       << "            row 4: [0,0,0,1.522e6,0,0]\n"
-       << "            row 5: [0,0,0,0,8.279e6,0]\n"
-       << "            row 6: [0,0,0,0,0,7.676e6]\n"
+       << rigid_body_inertia_matrix()
        << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [0,0,0,0,0,0]\n"
        << "            row 2: [0,0,0,0,0,0]\n"
@@ -3504,13 +3480,7 @@ std::string test_data::bug_2963_hs_exact()
        << "            x: {value: 0.258, unit: m}\n"
        << "            y: {value: 0, unit: m}\n"
        << "            z: {value: 0.432, unit: m}\n"
-       << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
-       << "            row 1: [253310,0,0,0,0,0]\n"
-       << "            row 2: [0,253310,0,0,0,0]\n"
-       << "            row 3: [0,0,253310,0,0,0]\n"
-       << "            row 4: [0,0,0,1.522e6,0,0]\n"
-       << "            row 5: [0,0,0,0,8.279e6,0]\n"
-       << "            row 6: [0,0,0,0,0,7.676e6]\n"
+       << rigid_body_inertia_matrix()
        << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [0,0,0,0,0,0]\n"
        << "            row 2: [0,0,0,0,0,0]\n"
@@ -3556,13 +3526,7 @@ std::string test_data::bug_2963_fk()
        << "            x: {value: 0.258, unit: m}\n"
        << "            y: {value: 0, unit: m}\n"
        << "            z: {value: 0.432, unit: m}\n"
-       << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
-       << "            row 1: [253310,0,0,0,0,0]\n"
-       << "            row 2: [0,253310,0,0,0,0]\n"
-       << "            row 3: [0,0,253310,0,0,0]\n"
-       << "            row 4: [0,0,0,1.522e6,0,0]\n"
-       << "            row 5: [0,0,0,0,8.279e6,0]\n"
-       << "            row 6: [0,0,0,0,0,7.676e6]\n"
+       << rigid_body_inertia_matrix()
        << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [0,0,0,0,0,0]\n"
        << "            row 2: [0,0,0,0,0,0]\n"
@@ -3608,13 +3572,7 @@ std::string test_data::bug_2963_diff()
        << "            x: {value: 0.258, unit: m}\n"
        << "            y: {value: 0, unit: m}\n"
        << "            z: {value: 0.432, unit: m}\n"
-       << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
-       << "            row 1: [253310,0,0,0,0,0]\n"
-       << "            row 2: [0,253310,0,0,0,0]\n"
-       << "            row 3: [0,0,253310,0,0,0]\n"
-       << "            row 4: [0,0,0,1.522e6,0,0]\n"
-       << "            row 5: [0,0,0,0,8.279e6,0]\n"
-       << "            row 6: [0,0,0,0,0,7.676e6]\n"
+       << rigid_body_inertia_matrix()
        << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [0,0,0,0,0,0]\n"
        << "            row 2: [0,0,0,0,0,0]\n"
@@ -3666,13 +3624,7 @@ std::string test_data::bug_2963_gm()
        << "            x: {value: 0.258, unit: m}\n"
        << "            y: {value: 0, unit: m}\n"
        << "            z: {value: 0.432, unit: m}\n"
-       << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
-       << "            row 1: [253310,0,0,0,0,0]\n"
-       << "            row 2: [0,253310,0,0,0,0]\n"
-       << "            row 3: [0,0,253310,0,0,0]\n"
-       << "            row 4: [0,0,0,1.522e6,0,0]\n"
-       << "            row 5: [0,0,0,0,8.279e6,0]\n"
-       << "            row 6: [0,0,0,0,0,7.676e6]\n"
+       << rigid_body_inertia_matrix()
        << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [0,0,0,0,0,0]\n"
        << "            row 2: [0,0,0,0,0,0]\n"
