@@ -18,9 +18,17 @@ std::string environmental_constants();
 std::string environmental_constants()
 {
     return "environmental constants:\n"
-        "    g: {value: 9.81, unit: m/s^2}\n"
-        "    rho: {value: 1025, unit: kg/m^3}\n"
-        "    nu: {value: 1.18e-6, unit: m^2/s}\n";
+           "    g: {value: 9.81, unit: m/s^2}\n"
+           "    rho: {value: 1025, unit: kg/m^3}\n"
+           "    nu: {value: 1.18e-6, unit: m^2/s}\n";
+}
+
+std::string directional_spreading();
+std::string directional_spreading()
+{
+    return "        directional spreading:\n"
+           "           type: dirac\n"
+           "           waves propagating to: {value: 90, unit: deg}\n";
 }
 
 std::string test_data::bug_2655()
@@ -44,9 +52,7 @@ std::string test_data::bug_2655()
        << "        stretching:\n"
        << "          delta: 1\n"
        << "          h: {unit: m, value: 0}\n"
-       << "        directional spreading:\n"
-       << "           type: dirac\n"
-       << "           waves propagating to: {value: 90, unit: deg}\n"
+       << directional_spreading()
        << "        spectral density:\n"
        << "           type: dirac\n"
        << "           omega0: {value: 0.8976, unit: rad/s}\n"
@@ -1488,9 +1494,7 @@ std::string test_data::test_ship_waves_test()
        << "        stretching:\n"
        << "          delta: 1\n"
        << "          h: {unit: m, value: 0}\n"
-       << "        directional spreading:\n"
-       << "           type: dirac\n"
-       << "           waves propagating to: {value: 90, unit: deg}\n"
+       << directional_spreading()
        << "        spectral density:\n"
        << "           type: jonswap\n"
        << "           Hs: {value: 5, unit: m}\n"
@@ -1601,9 +1605,7 @@ std::string test_data::waves()
        << "        stretching:\n"
        << "          delta: 1\n"
        << "          h: {unit: m, value: 0}\n"
-       << "        directional spreading:\n"
-       << "           type: dirac\n"
-       << "           waves propagating to: {value: 90, unit: deg}\n"
+       << directional_spreading()
        << "        spectral density:\n"
        << "           type: jonswap\n"
        << "           Hs: {value: 5, unit: m}\n"
@@ -1658,9 +1660,7 @@ std::string test_data::simple_waves()
        << "        stretching:\n"
        << "          delta: 1\n"
        << "          h: {unit: m, value: 0}\n"
-       << "        directional spreading:\n"
-       << "           type: dirac\n"
-       << "           waves propagating to: {value: 90, unit: deg}\n"
+       << directional_spreading()
        << "        spectral density:\n"
        << "           type: dirac\n"
        << "           omega0: {value: 0.05, unit: rad/s}\n"
@@ -1864,9 +1864,7 @@ std::string test_data::test_ship_froude_krylov()
        << "        stretching:\n"
        << "          delta: 1\n"
        << "          h: {unit: m, value: 0}\n"
-       << "        directional spreading:\n"
-       << "           type: dirac\n"
-       << "           waves propagating to: {value: 90, unit: deg}\n"
+       << directional_spreading()
        << "        spectral density:\n"
        << "           type: jonswap\n"
        << "           Hs: {value: 5, unit: m}\n"
@@ -1975,9 +1973,7 @@ std::string test_data::test_ship_diffraction()
        << "        stretching:\n"
        << "          delta: 1\n"
        << "          h: {unit: m, value: 0}\n"
-       << "        directional spreading:\n"
-       << "           type: dirac\n"
-       << "           waves propagating to: {value: 90, unit: deg}\n"
+       << directional_spreading()
        << "        spectral density:\n"
        << "           type: jonswap\n"
        << "           Hs: {value: 5, unit: m}\n"
