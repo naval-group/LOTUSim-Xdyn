@@ -73,17 +73,34 @@ std::string position_relative_to_mesh(const double x, const double y, const doub
     return ss.str();
 }
 
-std::string initial_position();
-std::string initial_position()
+std::string initial_position_of_body_frame(const double x, const double y, const double z, const double phi, const double theta, const double psi);
+std::string initial_position_of_body_frame(const double x, const double y, const double z, const double phi, const double theta, const double psi)
 {
-    return "    initial position of body frame relative to NED:\n"
-           "        frame: NED\n"
-           "        x: {value: 0, unit: m}\n"
-           "        y: {value: 0, unit: m}\n"
-           "        z: {value: -5, unit: m}\n"
-           "        phi: {value: 0, unit: deg}\n"
-           "        theta: {value: -.0058, unit: rad}\n"
-           "        psi: {value: 0, unit: deg}\n";
+    std::stringstream ss;
+    ss << "    initial position of body frame relative to NED:\n"
+       << "        frame: NED\n"
+       << "        x: {value: " << x << ", unit: m}\n"
+       << "        y: {value: " << y << ", unit: m}\n"
+       << "        z: {value: " << z << ", unit: m}\n"
+       << "        phi: {value: " << phi << ", unit: rad}\n"
+       << "        theta: {value: " << theta << ", unit: rad}\n"
+       << "        psi: {value: " << psi << ", unit: rad}\n";
+    return ss.str();
+}
+
+std::string initial_position_of_body_frame_deg(const double x, const double y, const double z, const double phi, const double theta, const double psi);
+std::string initial_position_of_body_frame_deg(const double x, const double y, const double z, const double phi, const double theta, const double psi)
+{
+    std::stringstream ss;
+    ss << "    initial position of body frame relative to NED:\n"
+       << "        frame: NED\n"
+       << "        x: {value: " << x << ", unit: m}\n"
+       << "        y: {value: " << y << ", unit: m}\n"
+       << "        z: {value: " << z << ", unit: m}\n"
+       << "        phi: {value: " << phi << ", unit: deg}\n"
+       << "        theta: {value: " << theta << ", unit: deg}\n"
+       << "        psi: {value: " << psi << ", unit: deg}\n";
+    return ss.str();
 }
 
 std::string initial_velocity();
@@ -218,14 +235,7 @@ std::string test_data::bug_2655()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: -0.099, unit: m}\n"
-       << "        phi: {value: 0, unit: deg}\n"
-       << "        theta: {value: -.334, unit: deg}\n"
-       << "        psi: {value: 0, unit: deg}\n"
+       << initial_position_of_body_frame_deg(0,0,-0.099,0,-0.334,0)
        << initial_velocity()
        << dynamics()
        << "    external forces:\n"
@@ -262,14 +272,7 @@ std::string test_data::hydrostatic_test()
        << "  - name: body 1\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(10, 0, 0, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 0, unit: m}\n"
-       << "        phi: {value: 0, unit: rad}\n"
-       << "        theta: {value: 0, unit: rad}\n"
-       << "        psi: {value: 0, unit: rad}\n"
+       << initial_position_of_body_frame(0, 0, 0, 0, 0, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: body\n"
        << "        u: {value: 0, unit: m/s}\n"
@@ -320,14 +323,7 @@ std::string test_data::added_mass_from_file()
        << "  - name: body 1\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(10, 0, 0, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 0, unit: m}\n"
-       << "        phi: {value: 0, unit: rad}\n"
-       << "        theta: {value: 0, unit: rad}\n"
-       << "        psi: {value: 0, unit: rad}\n"
+       << initial_position_of_body_frame(0, 0, 0, 0, 0, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: body\n"
        << "        u: {value: 0, unit: m/s}\n"
@@ -373,14 +369,7 @@ std::string test_data::full_example()
        << "  - name: body 1\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(10, 0.21, 33000, 1, 3, 2)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 4, unit: m}\n"
-       << "        y: {value: 8, unit: m}\n"
-       << "        z: {value: 12, unit: m}\n"
-       << "        phi: {value: 1.3, unit: rad}\n"
-       << "        theta: {value: 1.4, unit: rad}\n"
-       << "        psi: {value: 1.5, unit: rad}\n"
+       << initial_position_of_body_frame(4, 8, 12, 1.3, 1.4, 1.5)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: body 1\n"
        << "        u: {value: -8, unit: m/s}\n"
@@ -456,14 +445,7 @@ std::string test_data::full_example_with_diagonal_inertia()
        << "  - name: body 1\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(10, 0.21, 33000, 1, 3, 2)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 4, unit: m}\n"
-       << "        y: {value: 8, unit: m}\n"
-       << "        z: {value: 12, unit: m}\n"
-       << "        phi: {value: 1.3, unit: rad}\n"
-       << "        theta: {value: 1.4, unit: rad}\n"
-       << "        psi: {value: 1.5, unit: rad}\n"
+       << initial_position_of_body_frame(4, 8, 12, 1.3, 1.4, 1.5)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: body 1\n"
        << "        u: {value: -8, unit: m/s}\n"
@@ -540,14 +522,7 @@ std::string test_data::full_example_with_propulsion()
        << "  - name: body 1\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(10, 0.21, 33000, 1, 3, 2)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 4, unit: m}\n"
-       << "        y: {value: 8, unit: m}\n"
-       << "        z: {value: 12, unit: m}\n"
-       << "        phi: {value: 1.3, unit: rad}\n"
-       << "        theta: {value: 1.4, unit: rad}\n"
-       << "        psi: {value: 1.5, unit: rad}\n"
+       << initial_position_of_body_frame(4, 8, 12, 1.3, 1.4, 1.5)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: body 1\n"
        << "        u: {value: -8, unit: m/s}\n"
@@ -645,14 +620,7 @@ std::string test_data::full_example_with_propulsion_and_old_key_name()
        << "  - name: body 1\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(10, 0.21, 33000, 1, 3, 2)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 4, unit: m}\n"
-       << "        y: {value: 8, unit: m}\n"
-       << "        z: {value: 12, unit: m}\n"
-       << "        phi: {value: 1.3, unit: rad}\n"
-       << "        theta: {value: 1.4, unit: rad}\n"
-       << "        psi: {value: 1.5, unit: rad}\n"
+       << initial_position_of_body_frame(4, 8, 12, 1.3, 1.4, 1.5)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: body 1\n"
        << "        u: {value: -8, unit: m/s}\n"
@@ -745,14 +713,7 @@ std::string test_data::falling_ball_example()
        << "bodies: # All bodies have NED as parent frame\n"
        << "  - name: ball\n"
        << position_relative_to_mesh(0, 0, -10, 1, 3, 2)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 4, unit: m}\n"
-       << "        y: {value: 8, unit: m}\n"
-       << "        z: {value: 12, unit: m}\n"
-       << "        phi: {value: 0, unit: rad}\n"
-       << "        theta: {value: 0, unit: rad}\n"
-       << "        psi: {value: 0, unit: rad}\n"
+       << initial_position_of_body_frame(4, 8, 12, 0, 0, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: ball\n"
        << "        u: {value: 1, unit: m/s}\n"
@@ -811,14 +772,7 @@ std::string test_data::simserver_test_with_commands_and_delay()
        << "bodies: # All bodies have NED as parent frame\n"
        << "  - name: ball\n"
        << position_relative_to_mesh(0, 0, 0, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 0, unit: m}\n"
-       << "        phi: {value: 0, unit: rad}\n"
-       << "        theta: {value: 0, unit: rad}\n"
-       << "        psi: {value: 0, unit: rad}\n"
+       << initial_position_of_body_frame(0, 0, 0, 0, 0, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: ball\n"
        << "        u: {value: 0, unit: m/s}\n"
@@ -884,14 +838,7 @@ std::string test_data::falling_cube()
        << "  - name: cube\n"
        << "    mesh: cube.stl\n"
        << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value:  0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 0, unit: m}\n"
-       << "        phi: {value: 0, unit: rad}\n"
-       << "        theta: {value: 0, unit: rad}\n"
-       << "        psi: {value: 0, unit: rad}\n"
+       << initial_position_of_body_frame(0, 0, 0, 0, 0, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: cube\n"
        << "        u: {value: 0, unit: m/s}\n"
@@ -943,14 +890,7 @@ std::string test_data::rolling_cube()
        << "  - name: cube\n"
        << "    mesh: cube.stl\n"
        << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value:  0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 0, unit: m}\n"
-       << "        phi: {value: 0, unit: rad}\n"
-       << "        theta: {value: 10, unit: deg}\n"
-       << "        psi: {value: 0, unit: rad}\n"
+       << initial_position_of_body_frame_deg(0, 0, 0, 0, 10, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: cube\n"
        << "        u: {value: 0, unit: m/s}\n"
@@ -1003,14 +943,7 @@ std::string test_data::oscillating_cube_example()
        << "  - name: cube\n"
        << "    mesh: cube.stl\n"
        << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value:  0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 0.5, unit: m}\n"
-       << "        phi: {value: 0, unit: rad}\n"
-       << "        theta: {value: 0, unit: rad}\n"
-       << "        psi: {value: 0, unit: rad}\n"
+       << initial_position_of_body_frame(0, 0, 0.5, 0, 0, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: cube\n"
        << "        u: {value: 0, unit: m/s}\n"
@@ -1063,14 +996,7 @@ std::string test_data::new_oscillating_cube_example()
        << "  - name: cube\n"
        << "    mesh: big_cube.stl\n"
        << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value:  0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 0, unit: m}\n"
-       << "        phi: {value: 25, unit: deg}\n"
-       << "        theta: {value: 0, unit: rad}\n"
-       << "        psi: {value: 0, unit: rad}\n"
+       << initial_position_of_body_frame_deg(0, 0, 0, 25, 0, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: cube\n"
        << "        u: {value: 0, unit: m/s}\n"
@@ -1124,14 +1050,7 @@ std::string test_data::stable_cube_example()
        << "  - name: cube\n"
        << "    mesh: cube.stl\n"
        << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value:  0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 0.4746588693957115, unit: m}\n"
-       << "        phi: {value: 0, unit: rad}\n"
-       << "        theta: {value: 0, unit: rad}\n"
-       << "        psi: {value: 0, unit: rad}\n"
+       << initial_position_of_body_frame(0, 0, 0.4746588693957115, 0, 0, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: cube\n"
        << "        u: {value: 0, unit: m/s}\n"
@@ -1193,14 +1112,7 @@ std::string test_data::stable_rolling_cube_test()
        << "  - name: cube\n"
        << "    mesh: cube.stl\n"
        << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value:  0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 0.25, unit: m}\n"
-       << "        phi: {value: 0, unit: deg}\n"
-       << "        theta: {value: 2, unit: deg}\n"
-       << "        psi: {value: 0, unit: rad}\n"
+       << initial_position_of_body_frame_deg(0, 0, 0.25, 0, 2, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: cube\n"
        << "        u: {value: 0, unit: m/s}\n"
@@ -1252,7 +1164,7 @@ std::string test_data::test_ship_hydrostatic_test(const std::string& type)
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << initial_position()
+       << initial_position_of_body_frame(0, 0, -5, 0, -0.0058, 0)
        << initial_velocity()
        << dynamics()
        << "    external forces:\n"
@@ -1277,14 +1189,7 @@ std::string test_data::test_ship_propulsion()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 1, unit: m}\n"
-       << "        phi: {value: 0, unit: deg}\n"
-       << "        theta: {value: -.0058, unit: rad}\n"
-       << "        psi: {value: 0, unit: deg}\n"
+       << initial_position_of_body_frame(0, 0, 1, 0, -0.0058, 0)
        << initial_velocity()
        << dynamics()
        << "    external forces:\n"
@@ -1374,7 +1279,7 @@ std::string test_data::test_ship_waves_test()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << initial_position()
+       << initial_position_of_body_frame(0, 0, -5, 0, -0.0058, 0)
        << initial_velocity()
        << dynamics()
        << "    external forces:\n"
@@ -1581,14 +1486,7 @@ std::string test_data::cube_in_waves()
            << "  - name: cube\n"
            << "    mesh: cube.stl\n"
            << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
-           << "    initial position of body frame relative to NED:\n"
-           << "        frame: NED\n"
-           << "        x: {value:  0, unit: m}\n"
-           << "        y: {value: 0, unit: m}\n"
-           << "        z: {value: 0.4746588693957115, unit: m}\n"
-           << "        phi: {value: 0, unit: rad}\n"
-           << "        theta: {value: 0, unit: rad}\n"
-           << "        psi: {value: 0, unit: rad}\n"
+           << initial_position_of_body_frame(0, 0, 0.4746588693957115, 0, 0, 0)
            << "    initial velocity of body frame relative to NED:\n"
            << "        frame: cube\n"
            << "        u: {value: 1, unit: m/s}\n"
@@ -1670,7 +1568,7 @@ std::string test_data::test_ship_froude_krylov()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << initial_position()
+       << initial_position_of_body_frame(0, 0, -5, 0, -0.0058, 0)
        << initial_velocity()
        << dynamics()
        << "    external forces:\n"
@@ -1728,7 +1626,7 @@ std::string test_data::test_ship_diffraction()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << initial_position()
+       << initial_position_of_body_frame(0, 0, -5, 0, -0.0058, 0)
        << initial_velocity()
        << dynamics()
        << "    external forces:\n"
@@ -1762,7 +1660,7 @@ std::string test_data::test_ship_damping()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << initial_position()
+       << initial_position_of_body_frame(0, 0, -5, 0, -0.0058, 0)
        << initial_velocity()
        << dynamics()
        << "    external forces:\n"
@@ -1900,14 +1798,7 @@ std::string test_data::propulsion_and_resistance()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 1, unit: m}\n"
-       << "        phi: {value: 0, unit: deg}\n"
-       << "        theta: {value: 0, unit: rad}\n"
-       << "        psi: {value: 0, unit: deg}\n"
+       << initial_position_of_body_frame(0, 0, 1, 0, 0, 0)
        << initial_velocity()
        << "    dynamics:\n"
        << "        hydrodynamic forces calculation point in body frame:\n"
@@ -2025,14 +1916,7 @@ std::string test_data::heading_keeping_base()
        << "            row 4: [ 0.000E+00, 1.135E+06,  0.000E+00,  3.865E+07,  0.000E+00, -2.228E+08]\n"
        << "            row 5: [-1.962E+07, 0.000E+00,  6.716E+07,  0.000E+00,  9.117E+09,  0.000E+00]\n"
        << "            row 6: [ 0.000E+00, 2.523E+07,  0.000E+00, -2.228E+08,  0.000E+00,  3.338E+09]\n"
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: -1.41, unit: m}\n"
-       << "        phi: {value: -0.06, unit: deg}\n"
-       << "        theta: {value: 0., unit: deg}\n"
-       << "        psi: {value: 0.81, unit: deg}\n"
+       << initial_position_of_body_frame_deg(0, 0, -1.41, -0.06, 0, 0.81)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: dtmb\n"
        << "        u: {value: 8.901, unit: m/s}\n"
@@ -2264,14 +2148,7 @@ std::string test_data::test_ship_radiation_damping()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 1, unit: m}\n"
-       << "        phi: {value: 0, unit: deg}\n"
-       << "        theta: {value: 0, unit: rad}\n"
-       << "        psi: {value: 0, unit: deg}\n"
+       << initial_position_of_body_frame(0, 0, 1, 0, 0, 0)
        << initial_velocity()
        << dynamics()
        << "    external forces:\n"
@@ -2414,14 +2291,7 @@ std::string test_data::bug_2641()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: -0.099, unit: m}\n"
-       << "        phi: {value: 0, unit: deg}\n"
-       << "        theta: {value: -.334, unit: deg}\n"
-       << "        psi: {value: 0, unit: deg}\n"
+       << initial_position_of_body_frame_deg(0, 0, -0.099, 0, -0.334, 0)
        << initial_velocity()
        << dynamics()
        << "    external forces:\n"
@@ -2520,14 +2390,7 @@ std::string test_data::bug_in_exact_hydrostatic()
        << "  - name: cube\n"
        << "    mesh: cube.stl\n"
        << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value:  0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 0.4746588693957115, unit: m}\n"
-       << "        phi: {value: 0, unit: rad}\n"
-       << "        theta: {value: 0, unit: rad}\n"
-       << "        psi: {value: 0, unit: rad}\n"
+       << initial_position_of_body_frame(0, 0, 0.4746588693957115, 0, 0, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: cube\n"
        << "        u: {value: 0, unit: m/s}\n"
@@ -2577,14 +2440,7 @@ std::string test_data::bug_2714_heading_keeping()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: -0.099, unit: m}\n"
-       << "        phi: {value: 10, unit: deg}\n"
-       << "        theta: {value: -.334, unit: deg}\n"
-       << "        psi: {value: 0, unit: deg}\n"
+       << initial_position_of_body_frame_deg(0, 0, -0.099, 10, -0.334, 0)
        << initial_velocity()
        << dynamics()
        << "    external forces:\n"
@@ -2619,14 +2475,7 @@ std::string test_data::bug_2714_station_keeping()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: -0.099, unit: m}\n"
-       << "        phi: {value: 10, unit: deg}\n"
-       << "        theta: {value: -.334, unit: deg}\n"
-       << "        psi: {value: 0, unit: deg}\n"
+       << initial_position_of_body_frame_deg(0, 0, -0.099, 10, -0.334, 0)
        << initial_velocity()
        << dynamics()
        << "    external forces:\n"
@@ -2665,14 +2514,7 @@ std::string test_data::bug_2732()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: -0.099, unit: m}\n"
-       << "        phi: {value: 0, unit: deg}\n"
-       << "        theta: {value: -.334, unit: deg}\n"
-       << "        psi: {value: 0, unit: deg}\n"
+       << initial_position_of_body_frame_deg(0, 0, -0.099, 10, -0.334, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: TestShip\n"
        << "        u: {value: 10, unit: kt}\n"
@@ -2785,14 +2627,7 @@ std::string test_data::L_config()
        << "  - name: L\n"
        << "    mesh: L.stl\n"
        << position_relative_to_mesh(0.5, 0.8333333333, -0.8333333333, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value:  0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 0, unit: m}\n"
-       << "        phi: {value: 0, unit: rad}\n"
-       << "        theta: {value: 0, unit: rad}\n"
-       << "        psi: {value: 0, unit: rad}\n"
+       << initial_position_of_body_frame(0, 0, 0, 0, 0, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: cube\n"
        << "        u: {value: 0, unit: m/s}\n"
@@ -2844,14 +2679,7 @@ std::string test_data::GM_cube()
        << "  - name: cube\n"
        << "    mesh: cube.stl\n"
        << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value:  0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 0, unit: m}\n"
-       << "        phi: {value: 60, unit: deg}\n"
-       << "        theta: {value: 0, unit: deg}\n"
-       << "        psi: {value: 0, unit: rad}\n"
+       << initial_position_of_body_frame_deg(0, 0, 0, 60, 0, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: cube\n"
        << "        u: {value: 0, unit: m/s}\n"
@@ -2905,14 +2733,7 @@ std::string test_data::bug_2838()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: -0.099, unit: m}\n"
-       << "        phi: {value: 0, unit: deg}\n"
-       << "        theta: {value: -.334, unit: deg}\n"
-       << "        psi: {value: 0, unit: deg}\n"
+       << initial_position_of_body_frame_deg(0, 0, -0.099, 10, -0.334, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: TestShip\n"
        << "        u: {value: 10, unit: kt}\n"
@@ -3025,14 +2846,7 @@ std::string test_data::bug_2845()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: -0.099, unit: m}\n"
-       << "        phi: {value: 0, unit: deg}\n"
-       << "        theta: {value: -.334, unit: deg}\n"
-       << "        psi: {value: 0, unit: deg}\n"
+       << initial_position_of_body_frame_deg(0, 0, -0.099, 10, -0.334, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: TestShip\n"
        << "        u: {value: 10, unit: kt}\n"
@@ -3145,14 +2959,7 @@ std::string test_data::maneuvering_with_commands()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: -0.099, unit: m}\n"
-       << "        phi: {value: 0, unit: deg}\n"
-       << "        theta: {value: -.334, unit: deg}\n"
-       << "        psi: {value: 0, unit: deg}\n"
+       << initial_position_of_body_frame_deg(0, 0, -0.099, 10, -0.334, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: TestShip\n"
        << "        u: {value: 10, unit: kt}\n"
@@ -3273,14 +3080,7 @@ std::string test_data::test_ship_linear_hydrostatics_without_waves()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 1, unit: m}\n"
-       << "        phi: {value: 0, unit: deg}\n"
-       << "        theta: {value: 0, unit: deg}\n"
-       << "        psi: {value: 0, unit: deg}\n"
+       << initial_position_of_body_frame(0, 0, 1, 0, 0, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: TestShip\n"
        << "        u: {value: 0, unit: kt}\n"
@@ -3351,14 +3151,7 @@ std::string test_data::test_ship_linear_hydrostatics_with_waves()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 1, unit: m}\n"
-       << "        phi: {value: 0, unit: deg}\n"
-       << "        theta: {value: 0, unit: deg}\n"
-       << "        psi: {value: 0, unit: deg}\n"
+       << initial_position_of_body_frame(0, 0, 1, 0, 0, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: TestShip\n"
        << "        u: {value: 0, unit: kt}\n"
@@ -3411,14 +3204,7 @@ std::string test_data::bug_2963_hs_fast()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 1, unit: m}\n"
-       << "        phi: {value: 0, unit: deg}\n"
-       << "        theta: {value: 0, unit: deg}\n"
-       << "        psi: {value: 0, unit: deg}\n"
+       << initial_position_of_body_frame(0, 0, 1, 0, 0, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: TestShip\n"
        << "        u: {value: 0, unit: kt}\n"
@@ -3457,14 +3243,7 @@ std::string test_data::bug_2963_hs_exact()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 1, unit: m}\n"
-       << "        phi: {value: 0, unit: deg}\n"
-       << "        theta: {value: 0, unit: deg}\n"
-       << "        psi: {value: 0, unit: deg}\n"
+       << initial_position_of_body_frame(0, 0, 1, 0, 0, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: TestShip\n"
        << "        u: {value: 0, unit: kt}\n"
@@ -3503,14 +3282,7 @@ std::string test_data::bug_2963_fk()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 1, unit: m}\n"
-       << "        phi: {value: 0, unit: deg}\n"
-       << "        theta: {value: 0, unit: deg}\n"
-       << "        psi: {value: 0, unit: deg}\n"
+       << initial_position_of_body_frame(0, 0, 1, 0, 0, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: TestShip\n"
        << "        u: {value: 0, unit: kt}\n"
@@ -3549,14 +3321,7 @@ std::string test_data::bug_2963_diff()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 1, unit: m}\n"
-       << "        phi: {value: 0, unit: deg}\n"
-       << "        theta: {value: 0, unit: deg}\n"
-       << "        psi: {value: 0, unit: deg}\n"
+       << initial_position_of_body_frame(0, 0, 1, 0, 0, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: TestShip\n"
        << "        u: {value: 0, unit: kt}\n"
@@ -3601,14 +3366,7 @@ std::string test_data::bug_2963_gm()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 1, unit: m}\n"
-       << "        phi: {value: 0, unit: deg}\n"
-       << "        theta: {value: 0, unit: deg}\n"
-       << "        psi: {value: 0, unit: deg}\n"
+       << initial_position_of_body_frame(0, 0, 1, 0, 0, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: TestShip\n"
        << "        u: {value: 0, unit: kt}\n"
@@ -3845,14 +3603,7 @@ std::string test_data::bug_3004()
        << "  - name: Ponton\n"
        << "    mesh: Ponton.stl\n"
        << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: -2.167, unit: m}\n"
-       << "        phi: {value: 0, unit: deg}\n"
-       << "        theta: {value: 0, unit: deg}\n"
-       << "        psi: {value: 0, unit: deg}\n"
+       << initial_position_of_body_frame(0, 0, -2.167, 0, 0, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: Ponton\n"
        << "        u: {value: 0, unit: m/s}\n"
@@ -3911,14 +3662,7 @@ std::string test_data::bug_3003()
        << "bodies: # All bodies have NED as parent frame\n"
        << "  - name: TestShip\n"
        << position_relative_to_mesh(0, 0, 0, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: -0.099, unit: m}\n"
-       << "        phi: {value: 0, unit: deg}\n"
-       << "        theta: {value: -.334, unit: deg}\n"
-       << "        psi: {value: 0, unit: deg}\n"
+       << initial_position_of_body_frame_deg(0, 0, -0.099, 0, -0.334, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: TestShip\n"
        << "        u: {value: 10, unit: kt}\n"
@@ -3964,14 +3708,7 @@ std::string test_data::bug_2984()
        << "bodies: # All bodies have NED as parent frame\n"
        << "  - name: ship\n"
        << position_relative_to_mesh(0, 0, 0, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 0, unit: m}\n"
-       << "        phi: {value: 0, unit: deg}\n"
-       << "        theta: {value: 0, unit: deg}\n"
-       << "        psi: {value: 0, unit: deg}\n"
+       << initial_position_of_body_frame(0, 0, 0, 0, 0, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: ship\n"
        << "        u: {value: 0, unit: m/s}\n"
@@ -4064,7 +3801,7 @@ std::string test_data::bug_3217()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << initial_position()
+       << initial_position_of_body_frame(0, 0, -5, 0, -0.0058, 0)
        << initial_velocity()
        << dynamics()
        << "    external forces:\n"
@@ -4138,7 +3875,7 @@ std::string test_data::bug_3227()
        << "  - name: TestShip\n"
        << "    mesh: test_ship.stl\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << initial_position()
+       << initial_position_of_body_frame(0, 0, -5, 0, -0.0058, 0)
        << initial_velocity()
        << dynamics()
        << "    external forces:\n"
@@ -4219,14 +3956,7 @@ std::string test_data::tutorial_09_gRPC_wave_model()
        << "  - name: cube\n"
        << "    mesh: cube.stl\n"
        << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value:  0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 0.25, unit: m}\n"
-       << "        phi: {value: 0, unit: deg}\n"
-       << "        theta: {value: 2, unit: deg}\n"
-       << "        psi: {value: 0, unit: rad}\n"
+       << initial_position_of_body_frame_deg(0, 0, 0.25, 0, 2, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: cube\n"
        << "        u: {value: 0, unit: m/s}\n"
@@ -4277,14 +4007,7 @@ std::string test_data::tutorial_10_gRPC_force_model()
        << "bodies: # All bodies have NED as parent frame\n"
        << "  - name: TestShip\n"
        << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 5, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: 1, unit: m}\n"
-       << "        phi: {value: 0, unit: deg}\n"
-       << "        theta: {value: 0, unit: rad}\n"
-       << "        psi: {value: 0, unit: deg}\n"
+       << initial_position_of_body_frame(5, 0, 1, 0, 0, 0)
        << initial_velocity()
        << dynamics()
        << "    external forces:\n"
@@ -4349,14 +4072,7 @@ std::string test_data::fmi()
        << "bodies: # All bodies have NED as parent frame\n"
        << "  - name: TestShip\n"
        << position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
-       << "    initial position of body frame relative to NED:\n"
-       << "        frame: NED\n"
-       << "        x: {value: 0, unit: m}\n"
-       << "        y: {value: 0, unit: m}\n"
-       << "        z: {value: -0.099, unit: m}\n"
-       << "        phi: {value: 0, unit: deg}\n"
-       << "        theta: {value: -.334, unit: deg}\n"
-       << "        psi: {value: 0, unit: deg}\n"
+       << initial_position_of_body_frame_deg(0, 0, -0.099, 0, -0.334, 0)
        << "    initial velocity of body frame relative to NED:\n"
        << "        frame: TestShip\n"
        << "        u: {value: 10, unit: kt}\n"
