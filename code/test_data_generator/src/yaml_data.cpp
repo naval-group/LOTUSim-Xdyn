@@ -2193,6 +2193,14 @@ std::string test_data::setpoints()
     return ss.str();
 }
 
+std::string test_data::grpc_controller()
+{
+    return "  - type: gRPC\n"
+           "    name: my awesome controller\n"
+           "    dt: 0.01\n"
+           "    url: some-url\n";
+}
+
 std::string test_data::controllers()
 {
     std::stringstream ss;
@@ -2208,8 +2216,7 @@ std::string test_data::controllers()
           "        Kp: 4.2\n"
           "        Ki: 0.25\n"
           "        Kd: 1\n"
-          "  - type: gRPC\n"
-          "    dt: 0.01\n"
+          << grpc_controller() << 
           "  - type: PID\n"
           "    dt: 0.5\n"
           "    state weights:\n"
@@ -2220,7 +2227,6 @@ std::string test_data::controllers()
           "        Kp: 0.52\n"
           "        Ki: 21.5\n"
           "        Kd: 2.2\n";
-
     return ss.str();
 }
 
