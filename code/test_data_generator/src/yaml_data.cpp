@@ -31,6 +31,16 @@ std::string directional_spreading()
            "           waves propagating to: {value: 90, unit: deg}\n";
 }
 
+std::string discretization();
+std::string discretization()
+{
+    return "    discretization:\n"
+           "       n: 10\n"
+           "       omega min: {value: 0.1, unit: rad/s}\n"
+           "       omega max: {value: 6, unit: rad/s}\n"
+           "       energy fraction: 0.999\n";
+}
+
 std::string test_data::bug_2655()
 {
     std::stringstream ss;
@@ -40,11 +50,7 @@ std::string test_data::bug_2655()
        << "environment models:\n"
        << "  - model: no wind\n"
        << "  - model: waves\n"
-       << "    discretization:\n"
-       << "       n: 10\n"
-       << "       omega min: {value: 0.1, unit: rad/s}\n"
-       << "       omega max: {value: 6, unit: rad/s}\n"
-       << "       energy fraction: 0.999\n"
+       << discretization()
        << "    spectra:\n"
        << "      - model: airy\n"
        << "        depth: {value: 100, unit: m}\n"
@@ -1482,11 +1488,7 @@ std::string test_data::test_ship_waves_test()
        << environmental_constants()
        << "environment models:\n"
        << "  - model: waves\n"
-       << "    discretization:\n"
-       << "       n: 10\n"
-       << "       omega min: {value: 0.1, unit: rad/s}\n"
-       << "       omega max: {value: 6, unit: rad/s}\n"
-       << "       energy fraction: 0.999\n"
+       << discretization()
        << "    spectra:\n"
        << "      - model: airy\n"
        << "        depth: {value: 100, unit: m}\n"
@@ -1852,11 +1854,7 @@ std::string test_data::test_ship_froude_krylov()
        << environmental_constants()
        << "environment models:\n"
        << "  - model: waves\n"
-       << "    discretization:\n"
-       << "       n: 10\n"
-       << "       omega min: {value: 0.1, unit: rad/s}\n"
-       << "       omega max: {value: 6, unit: rad/s}\n"
-       << "       energy fraction: 0.999\n"
+       << discretization()
        << "    spectra:\n"
        << "      - model: airy\n"
        << "        depth: {value: 100, unit: m}\n"
