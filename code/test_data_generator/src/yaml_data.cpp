@@ -84,6 +84,19 @@ std::string initial_position()
            "        psi: {value: 0, unit: deg}\n";
 }
 
+std::string initial_velocity();
+std::string initial_velocity()
+{
+    return "    initial velocity of body frame relative to NED:\n"
+           "        frame: TestShip\n"
+           "        u: {value: 0, unit: m/s}\n"
+           "        v: {value: 0, unit: m/s}\n"
+           "        w: {value: 0, unit: m/s}\n"
+           "        p: {value: 0, unit: rad/s}\n"
+           "        q: {value: 0, unit: rad/s}\n"
+           "        r: {value: 0, unit: rad/s}\n";
+}
+
 std::string test_data::bug_2655()
 {
     std::stringstream ss;
@@ -123,14 +136,7 @@ std::string test_data::bug_2655()
        << "        phi: {value: 0, unit: deg}\n"
        << "        theta: {value: -.334, unit: deg}\n"
        << "        psi: {value: 0, unit: deg}\n"
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity()
        << "    dynamics:\n"
        << "        hydrodynamic forces calculation point in body frame:\n"
        << "            x: {value: 0.696, unit: m}\n"
@@ -1346,14 +1352,7 @@ std::string test_data::test_ship_hydrostatic_test(const std::string& type)
        << "    mesh: test_ship.stl\n"
        << position_of_body_frame()
        << initial_position()
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity()
        << "    dynamics:\n"
        << "        hydrodynamic forces calculation point in body frame:\n"
        << "            x: {value: 0.696, unit: m}\n"
@@ -1408,14 +1407,7 @@ std::string test_data::test_ship_propulsion()
        << "        phi: {value: 0, unit: deg}\n"
        << "        theta: {value: -.0058, unit: rad}\n"
        << "        psi: {value: 0, unit: deg}\n"
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity()
        << "    dynamics:\n"
        << "        hydrodynamic forces calculation point in body frame:\n"
        << "            x: {value: 0.696, unit: m}\n"
@@ -1534,14 +1526,7 @@ std::string test_data::test_ship_waves_test()
        << "    mesh: test_ship.stl\n"
        << position_of_body_frame()
        << initial_position()
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity()
        << "    dynamics:\n"
        << "        hydrodynamic forces calculation point in body frame:\n"
        << "            x: {value: 0.696, unit: m}\n"
@@ -1867,14 +1852,7 @@ std::string test_data::test_ship_froude_krylov()
        << "    mesh: test_ship.stl\n"
        << position_of_body_frame()
        << initial_position()
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity()
        << "    dynamics:\n"
        << "        hydrodynamic forces calculation point in body frame:\n"
        << "            x: {value: 0.696, unit: m}\n"
@@ -1955,14 +1933,7 @@ std::string test_data::test_ship_diffraction()
        << "    mesh: test_ship.stl\n"
        << position_of_body_frame()
        << initial_position()
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity()
        << "    dynamics:\n"
        << "        hydrodynamic forces calculation point in body frame:\n"
        << "            x: {value: 0.696, unit: m}\n"
@@ -2019,14 +1990,7 @@ std::string test_data::test_ship_damping()
        << "    mesh: test_ship.stl\n"
        << position_of_body_frame()
        << initial_position()
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity()
        << "    dynamics:\n"
        << "        hydrodynamic forces calculation point in body frame:\n"
        << "            x: {value: 0.696, unit: m}\n"
@@ -2193,14 +2157,7 @@ std::string test_data::propulsion_and_resistance()
        << "        phi: {value: 0, unit: deg}\n"
        << "        theta: {value: 0, unit: rad}\n"
        << "        psi: {value: 0, unit: deg}\n"
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity()
        << "    dynamics:\n"
        << "        hydrodynamic forces calculation point in body frame:\n"
        << "            x: {value: 0.696, unit: m}\n"
@@ -2577,14 +2534,7 @@ std::string test_data::test_ship_radiation_damping()
        << "        phi: {value: 0, unit: deg}\n"
        << "        theta: {value: 0, unit: rad}\n"
        << "        psi: {value: 0, unit: deg}\n"
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity()
        << "    dynamics:\n"
        << "        hydrodynamic forces calculation point in body frame:\n"
        << "            x: {value: 0.696, unit: m}\n"
@@ -2757,14 +2707,7 @@ std::string test_data::bug_2641()
        << "        phi: {value: 0, unit: deg}\n"
        << "        theta: {value: -.334, unit: deg}\n"
        << "        psi: {value: 0, unit: deg}\n"
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity()
        << "    dynamics:\n"
        << "        hydrodynamic forces calculation point in body frame:\n"
        << "            x: {value: 0.696, unit: m}\n"
@@ -2974,14 +2917,7 @@ std::string test_data::bug_2714_heading_keeping()
        << "        phi: {value: 10, unit: deg}\n"
        << "        theta: {value: -.334, unit: deg}\n"
        << "        psi: {value: 0, unit: deg}\n"
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity()
        << "    dynamics:\n"
        << "        hydrodynamic forces calculation point in body frame:\n"
        << "            x: {value: 0.696, unit: m}\n"
@@ -3060,14 +2996,7 @@ std::string test_data::bug_2714_station_keeping()
        << "        phi: {value: 10, unit: deg}\n"
        << "        theta: {value: -.334, unit: deg}\n"
        << "        psi: {value: 0, unit: deg}\n"
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity()
        << "    dynamics:\n"
        << "        hydrodynamic forces calculation point in body frame:\n"
        << "            x: {value: 0.696, unit: m}\n"
@@ -4803,14 +4732,7 @@ std::string test_data::bug_3217()
        << "    mesh: test_ship.stl\n"
        << position_of_body_frame()
        << initial_position()
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity()
        << "    dynamics:\n"
        << "        hydrodynamic forces calculation point in body frame:\n"
        << "            x: {value: 0.696, unit: m}\n"
@@ -4907,14 +4829,7 @@ std::string test_data::bug_3227()
        << "    mesh: test_ship.stl\n"
        << position_of_body_frame()
        << initial_position()
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity()
        << "    dynamics:\n"
        << "        hydrodynamic forces calculation point in body frame:\n"
        << "            x: {value: 0.696, unit: m}\n"
@@ -5100,14 +5015,7 @@ std::string test_data::tutorial_10_gRPC_force_model()
        << "        phi: {value: 0, unit: deg}\n"
        << "        theta: {value: 0, unit: rad}\n"
        << "        psi: {value: 0, unit: deg}\n"
-       << "    initial velocity of body frame relative to NED:\n"
-       << "        frame: TestShip\n"
-       << "        u: {value: 0, unit: m/s}\n"
-       << "        v: {value: 0, unit: m/s}\n"
-       << "        w: {value: 0, unit: m/s}\n"
-       << "        p: {value: 0, unit: rad/s}\n"
-       << "        q: {value: 0, unit: rad/s}\n"
-       << "        r: {value: 0, unit: rad/s}\n"
+       << initial_velocity()
        << "    dynamics:\n"
        << "        hydrodynamic forces calculation point in body frame:\n"
        << "            x: {value: 0.696, unit: m}\n"
