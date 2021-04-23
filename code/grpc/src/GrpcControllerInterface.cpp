@@ -5,6 +5,13 @@
 #include "controller.pb.h"
 #include "controller.grpc.pb.h"
 #include <ssc/kinematics.hpp>
+#include "grpc_error_outputter.hpp"
+
+
+template <> std::string get_type_of_service<GrpcControllerInterface>()
+{
+    return "controller";
+}
 
 GrpcControllerInterface::Input::Input () : url (), name (), yaml () {}
 
@@ -105,16 +112,17 @@ ControllerRequestEuler build_euler321_request(const double t, const std::vector<
 
 struct GrpcControllerInterface::Impl
 {
-    Impl(const GrpcControllerInterface::Input& input)
-    : stub(Controller::NewStub(grpc::CreateChannel(input.url, grpc::InsecureChannelCredentials())))
-    , yaml(input.yaml)
+    Impl(const GrpcControllerInterface::Input& input_)
+    : input(input_)
+    , stub(Controller::NewStub(grpc::CreateChannel(input.url, grpc::InsecureChannelCredentials())))
     {}
 
     GrpcSetParametersResponse set_parameters(const double t0)
     {
         SetParametersResponse response;
         grpc::ClientContext context;
-        const grpc::Status status = stub->set_parameters(&context, build_set_parameters_request(yaml, t0), &response);
+        const grpc::Status status = stub->set_parameters(&context, build_set_parameters_request(input.yaml, t0), &response);
+        throw_if_invalid_status<Input,GrpcControllerInterface>(input, "set_parameters", status);
         GrpcSetParametersResponse ret;
         switch(response.angle_representation())
         {
@@ -145,6 +153,7 @@ struct GrpcControllerInterface::Impl
         grpc::ClientContext context;
         const ControllerRequestQuaternion request = build_quaternion_request(t, states, dstates_dt, setpoints);
         const grpc::Status status = stub->get_commands_quaternion(&context, request, &response);
+        throw_if_invalid_status<Input,GrpcControllerInterface>(input, "get_commands_quaternion", status);
         return convert_controller_response(response);
     }
 
@@ -154,6 +163,7 @@ struct GrpcControllerInterface::Impl
         grpc::ClientContext context;
         const ControllerRequestEuler request = build_euler321_request(t, states, dstates_dt, setpoints);
         const grpc::Status status = stub->get_commands_euler_321(&context, request, &response);
+        throw_if_invalid_status<Input,GrpcControllerInterface>(input, "get_commands_euler_321", status);
         return convert_controller_response(response);
     }
 
@@ -162,13 +172,14 @@ struct GrpcControllerInterface::Impl
         ExtraObservationsResponse response;
         grpc::ClientContext context;
         const grpc::Status status = stub->get_extra_observations(&context, ExtraObservationsRequest(), &response);
+        throw_if_invalid_status<Input,GrpcControllerInterface>(input, "get_extra_observations", status);
         return std::map<std::string, double>(response.extra_observations().begin(), response.extra_observations().end());
     }
 
 
     private:
+        GrpcControllerInterface::Input input;
         std::unique_ptr<Controller::Stub> stub;
-        std::string yaml;
 };
 
 
