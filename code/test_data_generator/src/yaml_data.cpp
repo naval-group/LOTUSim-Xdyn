@@ -139,6 +139,19 @@ std::string linear_damping()
            "            row 6: [ 0, 0,     0,      0,      0, 0]\n";
 }
 
+std::string quadratic_damping();
+std::string quadratic_damping()
+{
+    return "      - model: quadratic damping\n"
+           "        damping matrix at the center of gravity projected in the body frame:\n"
+           "            row 1: [ 0, 0, 0,      0, 0, 0]\n"
+           "            row 2: [ 0, 0, 0,      0, 0, 0]\n"
+           "            row 3: [ 0, 0, 0,      0, 0, 0]\n"
+           "            row 4: [ 0, 0, 0, 1.45e6, 0, 0]\n"
+           "            row 5: [ 0, 0, 0,      0, 0, 0]\n"
+           "            row 6: [ 0, 0, 0,      0, 0, 0]\n";
+}
+
 std::string test_data::bug_2655()
 {
     std::stringstream ss;
@@ -185,14 +198,7 @@ std::string test_data::bug_2655()
        << "      - model: non-linear hydrostatic (fast)\n"
        << "      - model: non-linear Froude-Krylov\n"
        << linear_damping()
-       << "      - model: quadratic damping\n"
-       << "        damping matrix at the center of gravity projected in the body frame:\n"
-       << "            row 1: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 2: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 3: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 4: [ 0, 0, 0, 1.45e6, 0, 0]\n"
-       << "            row 5: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 6: [ 0, 0, 0,      0, 0, 0]\n"
+       << quadratic_damping()
        << "\n"
        << "output:\n"
        << "   - format: csv\n"
@@ -2564,14 +2570,7 @@ std::string test_data::bug_2641()
        << "      - model: gravity\n"
        << "      - model: non-linear hydrostatic (exact)\n"
        << linear_damping()
-       << "      - model: quadratic damping\n"
-       << "        damping matrix at the center of gravity projected in the body frame:\n"
-       << "            row 1: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 2: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 3: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 4: [ 0, 0, 0, 1.45e6, 0, 0]\n"
-       << "            row 5: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 6: [ 0, 0, 0,      0, 0, 0]\n"
+       << quadratic_damping()
        << "      - model: resistance curve\n"
        << "        speed: {unit: m/s, values: [0,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8]}\n"
        << "        resistance: {unit: N, values: [0.000E+00,2.102E+02,7.728E+02,1.647E+03,2.803E+03,4.230E+03,5.999E+03,8.498E+03,1.273E+04,2.084E+04,2.789E+04,4.238E+04,7.737E+04,1.449E+05,2.439E+05,3.590E+05,4.741E+05]}\n"
@@ -2744,14 +2743,7 @@ std::string test_data::bug_2714_heading_keeping()
        << "      - model: gravity\n"
        << "      - model: non-linear hydrostatic (fast)\n"
        << linear_damping()
-       << "      - model: quadratic damping\n"
-       << "        damping matrix at the center of gravity projected in the body frame:\n"
-       << "            row 1: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 2: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 3: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 4: [ 0, 0, 0, 1.45e6, 0, 0]\n"
-       << "            row 5: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 6: [ 0, 0, 0,      0, 0, 0]\n"
+       << quadratic_damping()
        << "      - name: controller\n"
        << "        model: simple heading controller\n"
        << "        ksi: 0.9\n"
@@ -2793,14 +2785,7 @@ std::string test_data::bug_2714_station_keeping()
        << "      - model: gravity\n"
        << "      - model: non-linear hydrostatic (fast)\n"
        << linear_damping()
-       << "      - model: quadratic damping\n"
-       << "        damping matrix at the center of gravity projected in the body frame:\n"
-       << "            row 1: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 2: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 3: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 4: [ 0, 0, 0, 1.45e6, 0, 0]\n"
-       << "            row 5: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 6: [ 0, 0, 0,      0, 0, 0]\n"
+       << quadratic_damping()
        << "      - name: controller\n"
        << "        model: simple station-keeping controller\n"
        << "        ksi_x: 0.9\n"
@@ -2853,14 +2838,7 @@ std::string test_data::bug_2732()
        << "      - model: gravity\n"
        << "      - model: non-linear hydrostatic (fast)\n"
        << linear_damping()
-       << "      - model: quadratic damping\n"
-       << "        damping matrix at the center of gravity projected in the body frame:\n"
-       << "            row 1: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 2: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 3: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 4: [ 0, 0, 0, 1.45e6, 0, 0]\n"
-       << "            row 5: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 6: [ 0, 0, 0,      0, 0, 0]\n"
+       << quadratic_damping()
        << "      - model: resistance curve\n"
        << "        speed: {unit: m/s, values: [0,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8]}\n"
        << "        resistance: {unit: N, values: [0.000E+00,2.102E+02,7.728E+02,1.647E+03,2.803E+03,4.230E+03,5.999E+03,8.498E+03,1.273E+04,2.084E+04,2.789E+04,4.238E+04,7.737E+04,1.449E+05,2.439E+05,3.590E+05,4.741E+05]}\n"
@@ -3120,14 +3098,7 @@ std::string test_data::bug_2838()
        << "      - model: gravity\n"
        << "      - model: non-linear hydrostatic (fast)\n"
        << linear_damping()
-       << "      - model: quadratic damping\n"
-       << "        damping matrix at the center of gravity projected in the body frame:\n"
-       << "            row 1: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 2: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 3: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 4: [ 0, 0, 0, 1.45e6, 0, 0]\n"
-       << "            row 5: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 6: [ 0, 0, 0,      0, 0, 0]\n"
+       << quadratic_damping()
        << "      - model: resistance curve\n"
        << "        speed: {unit: m/s, values: [0,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8]}\n"
        << "        resistance: {unit: N, values: [0.000E+00,2.102E+02,7.728E+02,1.647E+03,2.803E+03,4.230E+03,5.999E+03,8.498E+03,1.273E+04,2.084E+04,2.789E+04,4.238E+04,7.737E+04,1.449E+05,2.439E+05,3.590E+05,4.741E+05]}\n"
@@ -3247,14 +3218,7 @@ std::string test_data::bug_2845()
        << "      - model: gravity\n"
        << "      - model: non-linear hydrostatic (fast)\n"
        << linear_damping()
-       << "      - model: quadratic damping\n"
-       << "        damping matrix at the center of gravity projected in the body frame:\n"
-       << "            row 1: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 2: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 3: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 4: [ 0, 0, 0, 1.45e6, 0, 0]\n"
-       << "            row 5: [ 0, 0, 0,      0, 0, 0]\n"
-       << "            row 6: [ 0, 0, 0,      0, 0, 0]\n"
+       << quadratic_damping()
        << "      - model: resistance curve\n"
        << "        speed: {unit: m/s, values: [0,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8]}\n"
        << "        resistance: {unit: N, values: [0.000E+00,2.102E+02,7.728E+02,1.647E+03,2.803E+03,4.230E+03,5.999E+03,8.498E+03,1.273E+04,2.084E+04,2.789E+04,4.238E+04,7.737E+04,1.449E+05,2.439E+05,3.590E+05,4.741E+05]}\n"
