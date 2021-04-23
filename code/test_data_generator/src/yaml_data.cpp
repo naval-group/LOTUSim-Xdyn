@@ -3973,3 +3973,8 @@ std::string test_data::fmi()
        << "     data: [t,  'Mz(PropRudd,TestShip,TestShip)']\n";
     return ss.str();
 }
+
+std::string test_data::tutorial_11_gRPC_controller()
+{
+    return bug_2984() + "controllers:\n" + grpc_controller() + setpoints();
+}
