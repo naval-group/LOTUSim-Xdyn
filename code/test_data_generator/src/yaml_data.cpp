@@ -14,15 +14,21 @@ std::string rotation_convention()
     return "rotations convention: [psi, theta', phi'']\n";
 }
 
+std::string environmental_constants();
+std::string environmental_constants()
+{
+    return "environmental constants:\n"
+        "    g: {value: 9.81, unit: m/s^2}\n"
+        "    rho: {value: 1025, unit: kg/m^3}\n"
+        "    nu: {value: 1.18e-6, unit: m^2/s}\n";
+}
+
 std::string test_data::bug_2655()
 {
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: no wind\n"
        << "  - model: waves\n"
@@ -1286,10 +1292,7 @@ std::string test_data::test_ship_hydrostatic_test(const std::string& type)
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: no waves\n"
        << "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
@@ -1358,10 +1361,7 @@ std::string test_data::test_ship_propulsion()
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: no waves\n"
        << "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
@@ -1473,10 +1473,7 @@ std::string test_data::test_ship_waves_test()
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: waves\n"
        << "    discretization:\n"
@@ -1852,10 +1849,7 @@ std::string test_data::test_ship_froude_krylov()
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: waves\n"
        << "    discretization:\n"
@@ -1966,10 +1960,7 @@ std::string test_data::test_ship_diffraction()
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: waves\n"
        << "    discretization:\n"
@@ -2087,10 +2078,7 @@ std::string test_data::test_ship_damping()
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: no waves\n"
        << "    frame: NED\n"
@@ -2272,10 +2260,7 @@ std::string test_data::propulsion_and_resistance()
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: no waves\n"
        << "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
@@ -2666,10 +2651,7 @@ std::string test_data::test_ship_radiation_damping()
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: no waves\n"
        << "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
@@ -2856,10 +2838,7 @@ std::string test_data::bug_2641()
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: no waves\n"
        << "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
@@ -3083,10 +3062,7 @@ std::string test_data::bug_2714_heading_keeping()
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: no waves\n"
        << "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
@@ -3179,10 +3155,7 @@ std::string test_data::bug_2714_station_keeping()
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: no waves\n"
        << "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
@@ -3279,10 +3252,7 @@ std::string test_data::bug_2732()
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: no waves\n"
        << "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
@@ -3586,10 +3556,7 @@ std::string test_data::bug_2838()
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: no waves\n"
        << "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
@@ -3753,10 +3720,7 @@ std::string test_data::bug_2845()
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: no waves\n"
        << "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
@@ -3920,10 +3884,7 @@ std::string test_data::maneuvering_with_commands()
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: no waves\n"
        << "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
@@ -4081,10 +4042,7 @@ std::string test_data::test_ship_linear_hydrostatics_without_waves()
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: no waves\n"
        << "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
@@ -4165,10 +4123,7 @@ std::string test_data::test_ship_linear_hydrostatics_with_waves()
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: waves\n"
        << "    discretization:\n"
@@ -4776,10 +4731,7 @@ std::string test_data::bug_3004()
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: no waves\n"
        << "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
@@ -4853,10 +4805,7 @@ std::string test_data::bug_3003()
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: no waves\n"
        << "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
@@ -5028,10 +4977,7 @@ std::string test_data::bug_3217()
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: waves\n"
        << "    discretization:\n"
@@ -5149,10 +5095,7 @@ std::string test_data::bug_3227()
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: waves\n"
        << "    discretization:\n"
@@ -5363,10 +5306,7 @@ std::string test_data::tutorial_10_gRPC_force_model()
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: no waves\n"
        << "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
@@ -5475,10 +5415,7 @@ std::string test_data::fmi()
     std::stringstream ss;
     ss << rotation_convention()
        << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1025, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << environmental_constants()
        << "environment models:\n"
        << "  - model: no waves\n"
        << "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
