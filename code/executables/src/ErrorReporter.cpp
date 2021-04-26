@@ -11,6 +11,7 @@
 #include <ssc/json/JSONException.hpp>
 #include <ssc/solver.hpp>
 #include <ssc/websocket.hpp>
+#include <ssc/text_file_reader.hpp>
 
 #include <functional>
 #include <boost/program_options.hpp>
@@ -29,6 +30,10 @@ void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f)
         invalid_command_line(e.what());
     }
     catch(const InvalidInputException& e)
+    {
+        invalid_input(e.get_message());
+    }
+    catch(const TextFileReaderException& e)
     {
         invalid_input(e.get_message());
     }
@@ -77,6 +82,10 @@ void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f)
     catch(std::exception& e)
     {
         internal_error(e.what());
+    }
+    if (status != Status::OK)
+    {
+        std::cerr << ss.str();
     }
 }
 
