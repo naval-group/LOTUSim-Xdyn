@@ -18,22 +18,22 @@ GrpcController::GrpcController (const double tstart, const std::shared_ptr<GrpcC
 
 
 void GrpcController::update_discrete_states (const double time,
-                                 ssc::solver::ContinuousSystem *system)
+                                 ssc::solver::ContinuousSystem *sys)
 {
-    if (system)
+    if (sys)
     {
         const auto setpoint_names = grpc->get_setpoint_names();
         std::vector<double> setpoints(setpoint_names.size(), 0);
 
         for (size_t i = 0 ; i < setpoint_names.size() ; ++i)
         {
-            setpoints[i] = Controller::get_setpoint(system, setpoint_names[i]);
+            setpoints[i] = Controller::get_setpoint(sys, setpoint_names[i]);
         }
-        const auto response = grpc->get_commands(time, system->state, system->get_latest_dx_dt(), setpoints);
+        const auto response = grpc->get_commands(time, sys->state, sys->get_latest_dx_dt(), setpoints);
         const auto commands = response.commands;
         for (auto command : commands)
         {
-            Controller::set_discrete_state(system, command.first, command.second);
+            Controller::set_discrete_state(sys, command.first, command.second);
         }
     }
 }
