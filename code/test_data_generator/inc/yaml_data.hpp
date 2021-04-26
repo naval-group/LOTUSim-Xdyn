@@ -106,6 +106,7 @@ namespace test_data
     std::string tutorial_09_gRPC_wave_model();
     std::string tutorial_10_gRPC_force_model();
     std::string tutorial_10_gRPC_force_model_commands();
+    std::string grpc_setpoints();
     std::string gRPC_force_model();
     std::string gRPC_controller();
     std::string bug_3187();

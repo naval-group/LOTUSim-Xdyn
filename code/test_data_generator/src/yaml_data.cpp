@@ -1620,6 +1620,19 @@ std::string test_data::setpoints()
     return ss.str();
 }
 
+std::string test_data::grpc_setpoints()
+{
+    std::stringstream ss;
+    ss << "setpoints:\n"
+          "  - t: [0,1,3,10]\n"
+          "    rpm_co: {unit: rad/s, values: [3, 30, 30, 40]}\n"
+          "    propeller(P/D): {unit: 1, values: [1.064935,1.064935,1.064935,1.064935]}\n"
+          "  - t: [4.2]\n"
+          "    psi_co: {unit: rad, values: [2.5]}\n";
+
+    return ss.str();
+}
+
 std::string test_data::unknown_controller()
 {
     return "  - type: unknown\n"
@@ -1637,7 +1650,12 @@ std::string test_data::grpc_controller()
            "    gains:\n"
            "        Kp: 4.2\n"
            "        Ki: 0.25\n"
-           "        Kd: 1\n";
+           "        Kd: 1\n"
+           "    setpoint: rpm_co\n"
+           "    command: propeller(rpm)\n"
+           "    state weights:\n"
+           "        x: 1\n"
+           "        y: -1\n";
 }
 
 std::string test_data::controllers()
