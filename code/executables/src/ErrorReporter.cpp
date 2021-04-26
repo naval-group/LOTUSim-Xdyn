@@ -158,7 +158,7 @@ ErrorReporter::Status ErrorReporter::get_status() const
 
 void ErrorReporter::internal_error(const std::string& error_message)
 {
-    ss << "The following error should never arise & is clearly a sign of a bug inxdyn: please send an email to the support team containing the following:" << std::endl
+    ss << "The following error should never arise & is clearly a sign of a bug in xdyn: please send an email to the support team containing the following:" << std::endl
           << "- Input YAML file(s) + STL (if needed)" << std::endl
           << "- Command-line arguments" << std::endl
           << "- The following error message: " << std::endl
