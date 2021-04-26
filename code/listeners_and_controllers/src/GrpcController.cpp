@@ -29,7 +29,12 @@ void GrpcController::update_discrete_states (const double time,
         {
             setpoints[i] = Controller::get_setpoint(sys, setpoint_names[i]);
         }
-        const auto response = grpc->get_commands(time, sys->state, sys->get_latest_dx_dt(), setpoints);
+        auto dx_dt = sys->get_latest_dx_dt();
+        if (dx_dt.empty())
+        {
+            dx_dt = std::vector<double>(13, 0);
+        }
+        const auto response = grpc->get_commands(time, sys->state, dx_dt, setpoints);
         const auto commands = response.commands;
         for (auto command : commands)
         {
