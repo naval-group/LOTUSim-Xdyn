@@ -6,7 +6,7 @@
 #include "controller.grpc.pb.h"
 #include <ssc/kinematics.hpp>
 #include "grpc_error_outputter.hpp"
-
+#include "InternalErrorException.hpp"
 
 template <> std::string get_type_of_service<GrpcControllerInterface>()
 {
@@ -49,20 +49,27 @@ ControllerStatesQuaternion* build_quaternion_state(const double t, const std::ve
 ControllerStatesQuaternion* build_quaternion_state(const double t, const std::vector<double>& states)
 {
     ControllerStatesQuaternion* ret = new ControllerStatesQuaternion();
-    ret->set_t(t);
-    ret->set_x(states[0]);
-    ret->set_y(states[1]);
-    ret->set_z(states[2]);
-    ret->set_u(states[3]);
-    ret->set_v(states[4]);
-    ret->set_w(states[5]);
-    ret->set_p(states[6]);
-    ret->set_q(states[7]);
-    ret->set_r(states[8]);
-    ret->set_qr(states[9]);
-    ret->set_qi(states[10]);
-    ret->set_qj(states[11]);
-    ret->set_qk(states[12]);
+    try
+    {
+        ret->set_t(t);
+        ret->set_x(states.at(0));
+        ret->set_y(states.at(1));
+        ret->set_z(states.at(2));
+        ret->set_u(states.at(3));
+        ret->set_v(states.at(4));
+        ret->set_w(states.at(5));
+        ret->set_p(states.at(6));
+        ret->set_q(states.at(7));
+        ret->set_r(states.at(8));
+        ret->set_qr(states.at(9));
+        ret->set_qi(states.at(10));
+        ret->set_qj(states.at(11));
+        ret->set_qk(states.at(12));
+    }
+    catch(const std::out_of_range& e)
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "When trying to convert (quaternion) states before sending to gRPC controller: " << e.what());
+    }
     return ret;
 }
 
@@ -81,21 +88,28 @@ ControllerStatesEuler* build_euler321_state(const double t, const std::vector<do
 {
     using namespace ssc::kinematics;
     ControllerStatesEuler* ret = new ControllerStatesEuler();
-    ssc::kinematics::RotationMatrix R = Eigen::Quaternion<double>(states[9],states[10],states[11],states[12]).matrix();
-    const ssc::kinematics::EulerAngles angles = euler_angles<INTRINSIC, CHANGING_ANGLE_ORDER, 3, 2, 1>(R);
-    ret->set_t(t);
-    ret->set_x(states[0]);
-    ret->set_y(states[1]);
-    ret->set_z(states[2]);
-    ret->set_u(states[3]);
-    ret->set_v(states[4]);
-    ret->set_w(states[5]);
-    ret->set_p(states[6]);
-    ret->set_q(states[7]);
-    ret->set_r(states[8]);
-    ret->set_phi(angles.phi);
-    ret->set_theta(angles.theta);
-    ret->set_psi(angles.psi);
+    try
+    {
+        ssc::kinematics::RotationMatrix R = Eigen::Quaternion<double>(states.at(9),states.at(10),states.at(11),states.at(12)).matrix();
+        const ssc::kinematics::EulerAngles angles = euler_angles<INTRINSIC, CHANGING_ANGLE_ORDER, 3, 2, 1>(R);
+        ret->set_t(t);
+        ret->set_x(states.at(0));
+        ret->set_y(states.at(1));
+        ret->set_z(states.at(2));
+        ret->set_u(states.at(3));
+        ret->set_v(states.at(4));
+        ret->set_w(states.at(5));
+        ret->set_p(states.at(6));
+        ret->set_q(states.at(7));
+        ret->set_r(states.at(8));
+        ret->set_phi(angles.phi);
+        ret->set_theta(angles.theta);
+        ret->set_psi(angles.psi);
+    }
+    catch(const std::out_of_range& e)
+    {
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "When trying to convert (euler321) states before sending to gRPC controller: " << e.what());
+    }
     return ret;
 }
 
