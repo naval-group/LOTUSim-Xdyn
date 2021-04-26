@@ -48,6 +48,25 @@ class PIDController(controller.Model):
         """Should the solver call get_extra_observations or is there no point?"""
         return False
 
+    def get_command_names(self) -> List[str]:
+        """Return the name(s) of the controller outputs (commands).
+
+        This will be used by the solver (e.g., xdyn) to set the value of the corresponding variables.
+        The names are assumed to be in the same order as the numerical values computed by 'get_commands*'
+
+
+        Parameters
+        ----------
+        -
+
+        Returns
+        -------
+        - commands (List[str]): commands computed by this controller
+        """
+        LOGGER.info(self.command_name)
+        return [self.command_name]
+
+
     def get_setpoint_names(self) -> List[str]:
         """Return the name(s) of the controller inputs (setpoints).
 

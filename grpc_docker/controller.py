@@ -307,6 +307,25 @@ class Model:
             inspect.currentframe().f_code.co_name + NOT_IMPLEMENTED
         )
 
+    def get_command_names() -> List[str]:
+        """Return the name(s) of the controller outputs (commands).
+
+        This will be used by the solver (e.g., xdyn) to set the value of the corresponding variables.
+        The names are assumed to be in the same order as the numerical values computed by 'get_commands*'
+
+
+        Parameters
+        ----------
+        -
+
+        Returns
+        -------
+        - commands (List[str]): commands computed by this controller
+        """
+        raise NotImplementedError(
+            inspect.currentframe().f_code.co_name + NOT_IMPLEMENTED
+        )
+
 
 class ControllerServicer(controller_pb2_grpc.ControllerServicer):
     """Implements the gRPC methods defined in controller.proto."""
