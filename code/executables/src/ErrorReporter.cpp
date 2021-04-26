@@ -2,6 +2,7 @@
 #include "InternalErrorException.hpp"
 #include "ConnexionError.hpp"
 #include "MeshException.hpp"
+#include "GRPCError.hpp"
 #include "NumericalErrorException.hpp"
 #include "yaml-cpp/exceptions.h"
 #include "listeners.hpp"
@@ -44,6 +45,10 @@ void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f)
     catch(const MeshException& e)
     {
         invalid_input(std::string("A problem was detected with the STL file (mesh): ") + e.get_message() + "\n");
+    }
+    catch(const GRPCError& e)
+    {
+        invalid_input(std::string("A problem was detected when using a remote model (gRPC): ") + e.get_message() + "\n");
     }
     catch(const NumericalErrorException& e)
     {
