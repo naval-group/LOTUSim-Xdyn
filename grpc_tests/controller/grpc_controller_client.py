@@ -94,7 +94,7 @@ def test_controller(address):
             command: beta
             dt: 0.5
             setpoint: rpm_co
-            weights:
+            state weights:
                 x: 1
                 y: -1
             gains:

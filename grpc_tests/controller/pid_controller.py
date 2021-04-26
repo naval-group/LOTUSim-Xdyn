@@ -29,7 +29,7 @@ class PIDController(controller.Model):
         self.timestep = param["dt"]
         self.setpoint_name = param["setpoint"]
         self.command_name = param["command"]
-        self.weights = param["weights"]
+        self.weights = param["state weights"]
         self.t_start = t0
         self.previous_error = 0
         self.integral = 0
