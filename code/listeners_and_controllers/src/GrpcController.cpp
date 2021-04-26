@@ -12,7 +12,7 @@ std::vector<std::string> GrpcController::get_command_names() const
 }
 
 GrpcController::GrpcController (const double tstart, const std::shared_ptr<GrpcControllerInterface>& grpc_) :
-                    Controller(tstart, grpc->get_dt())
+                    Controller(tstart, grpc_->get_dt())
                     , grpc(grpc_)
 {}
 
