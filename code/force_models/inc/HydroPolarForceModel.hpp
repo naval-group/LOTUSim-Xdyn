@@ -32,6 +32,9 @@ class HydroPolarForceModel : public ForceModel
         static Input parse(const std::string& yaml_input);
         Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const override;
 
+    protected:
+        void extra_observations(Observer& observer) const override;
+
     private:
         // The interpolators need to be behind pointers because interpolation is non-const
         std::unique_ptr<ssc::interpolation::SplineVariableStep> Cl; //<! Lift coefficient as a function of the apparent flow angle beta
@@ -41,6 +44,10 @@ class HydroPolarForceModel : public ForceModel
         boost::optional<double> chord_length; //!< Chord length (in m), used (optionally) for moment normalization
         bool symmetry; //!< If true, then lift and drag coefficients from -180° to 0° angle of attack are the same as the coefficients from 0° to 180° (they are symmetric with respect to the foil's x0 axis in the (x0,y0) plane). Otherwise, the coefficients are assumed to have been given for angle of attack from -180° to 180°.
         bool use_waves_velocity; //!< If true, the waves orbital velocity is added to the flow velocity acting on the foil
+
+        // These variables are computed at each time step and stored for outputting
+        const std::shared_ptr<double> relative_velocity; //!< Relative flow velocity at the origin of internal frame (m/s) = U
+        const std::shared_ptr<double> angle_of_attack; //!< Angle of attack (rad) = alpha
 };
 
 #endif /* FORCE_MODELS_INC_HYDROPOLARFORCEMODEL_HPP_ */

@@ -20,7 +20,9 @@ HydroPolarForceModel::HydroPolarForceModel(const Input input, const std::string 
         reference_area(input.reference_area),
         chord_length(input.chord_length),
         symmetry(),
-        use_waves_velocity(input.use_waves_velocity)
+        use_waves_velocity(input.use_waves_velocity),
+        relative_velocity(new double(0)),
+        angle_of_attack(new double(0))
 {
     const double min_alpha = *std::min_element(input.angle_of_attack.begin(),input.angle_of_attack.end());
     const double max_alpha = *std::max_element(input.angle_of_attack.begin(),input.angle_of_attack.end());
@@ -167,5 +169,13 @@ Wrench HydroPolarForceModel::get_force(const BodyStates& states, const double t,
             ret.N() = -moment;
         }
     }
+    *angle_of_attack = alpha;
+    *relative_velocity = U;
     return ret;
+}
+
+void HydroPolarForceModel::extra_observations(Observer& observer) const
+{
+    observer.write(*angle_of_attack, DataAddressing({"efforts",body_name,name,"alpha"},std::string("alpha(")+name+","+body_name+")"));
+    observer.write(*relative_velocity, DataAddressing({"efforts",body_name,name,"U"},std::string("U(")+name+","+body_name+")"));
 }
