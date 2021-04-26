@@ -18,7 +18,7 @@ HydroPolarForceModel::HydroPolarForceModel(const Input input, const std::string 
         Cd(),
         Cm(),
         reference_area(input.reference_area),
-        cord_length(input.cord_length),
+        chord_length(input.chord_length),
         symmetry(),
         use_waves_velocity(input.use_waves_velocity)
 {
@@ -84,11 +84,11 @@ HydroPolarForceModel::Input HydroPolarForceModel::parse(const std::string& yaml)
     node["drag coefficient"] >> ret.drag_coefficient;
     parse_optional(node, "moment coefficient", ret.moment_coefficient);
     ssc::yaml_parser::parse_uv(node["reference area"], ret.reference_area);
-    if (node.FindValue("cord length"))
+    if (node.FindValue("chord length"))
     {
         double cord_length; // Intermediate value is necessary to call ssc::yaml_parser::parse_uv
-        ssc::yaml_parser::parse_uv(node["cord length"], cord_length);
-        ret.cord_length = cord_length;
+        ssc::yaml_parser::parse_uv(node["chord length"], cord_length);
+        ret.chord_length = cord_length;
     }
     node["position of calculation frame"] >> ret.internal_frame;
     node["take waves orbital velocity into account"] >> ret.use_waves_velocity;
@@ -149,9 +149,9 @@ Wrench HydroPolarForceModel::get_force(const BodyStates& states, const double t,
     if (Cm)
     {
         double normalization_cubic_length;
-        if (cord_length.is_initialized())
+        if (chord_length.is_initialized())
         {
-            normalization_cubic_length = reference_area*cord_length.get();
+            normalization_cubic_length = reference_area*chord_length.get();
         }
         else
         {
