@@ -1633,7 +1633,11 @@ std::string test_data::grpc_controller()
     return "  - type: gRPC\n"
            "    name: my awesome controller\n"
            "    dt: 0.01\n"
-           "    url: pid:9002\n";
+           "    url: pid:9002\n"
+           "    gains:\n"
+           "        Kp: 4.2\n"
+           "        Ki: 0.25\n"
+           "        Kd: 1\n";
 }
 
 std::string test_data::controllers()
