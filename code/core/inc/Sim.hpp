@@ -47,8 +47,6 @@ class Sim : public ssc::solver::ContinuousSystem
         ssc::kinematics::PointMatrix get_waves(const double t            //!< Current instant
                                               ) const;
 
-        StateType state;
-
         void output(const StateType& x, Observer& obs, double t) const;
         ssc::data_source::DataSource& get_command_listener() const;
 

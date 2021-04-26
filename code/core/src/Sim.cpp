@@ -114,8 +114,9 @@ Sim::Sim(const std::vector<BodyPtr>& bodies,
          const std::vector<ListOfForces>& forces,
          const EnvironmentAndFrames& env,
          const StateType& x,
-         const ssc::data_source::DataSource& command_listener) : state(x), pimpl(new Impl(bodies, forces, env, x, command_listener))
+         const ssc::data_source::DataSource& command_listener) : pimpl(new Impl(bodies, forces, env, x, command_listener))
 {
+    state = x;
 }
 
 StateType Sim::normalize_quaternions(const StateType& all_states
