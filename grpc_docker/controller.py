@@ -381,6 +381,7 @@ class ControllerServicer(controller_pb2_grpc.ControllerServicer):
             response.has_extra_observations = self.controller.has_extra_observations()
             response.dt = self.controller.timestep
             self.controller.increment_nb_of_calls()
+            response.command_names[:] = self.controller.get_command_names()
         except KeyError as exception:
             match = closest_match(
                 list(yaml.safe_load(request.parameters)),
