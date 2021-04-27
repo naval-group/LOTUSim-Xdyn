@@ -126,15 +126,7 @@ Wrench HydroPolarForceModel::get_force(const BodyStates& states, const double t,
     }
     const double alpha = -atan2(Vp(1), Vp(0));
     const double U = sqrt(pow(Vp(0), 2) + pow(Vp(1), 2)); // Apparent flow velocity projected in the (x,y) plane of the internal frame
-    double alpha_prime;
-    if (symmetry && alpha<M_PI/2)
-    {
-        alpha_prime = -alpha;
-    }
-    else
-    {
-        alpha_prime = alpha;
-    }
+    const double alpha_prime = (symmetry && alpha<0) ? -alpha : alpha;
     const double lift = 0.5*Cl->f(alpha_prime)*env.rho*pow(U, 2)*reference_area;
     const double drag = 0.5*Cd->f(alpha_prime)*env.rho*pow(U, 2)*reference_area;
     Wrench ret(ssc::kinematics::Point(name,0,0,0), name);
