@@ -171,15 +171,11 @@ TEST_F(HydroPolarForceModelTest, should_print_warning_for_polar_input_with_unexp
     EnvironmentAndFrames env;
     env.rho = 1000;
     env.rot = YamlRotation("angle", {"z","y'","x''"});
-    std::cout << "a" << std::endl;
 
     std::stringstream debug;
-    std::cout << "b" << std::endl;
     // Redirect cerr to our stringstream buffer or any other ostream
     std::streambuf* orig = std::cerr.rdbuf(debug.rdbuf());
-    std::cout << "c" << std::endl;
     ASSERT_TRUE(debug.str().empty());
-    std::cout << "d" << std::endl;
 
     // The maximum value for AoA is over 180°
     input.angle_of_attack = {0.,0.12217305,0.15707963,0.20943951,0.48869219,1.04719755,1.57079633,2.0943951,2.61799388,M_PI,3*M_PI/2};
@@ -190,11 +186,8 @@ TEST_F(HydroPolarForceModelTest, should_print_warning_for_polar_input_with_unexp
 
     // Reset the stderr stringstream
     debug.str("");
-    std::cout << "e" << std::endl;
     debug.clear();
-    std::cout << "f" << std::endl;
     ASSERT_TRUE(debug.str().empty());
-    std::cout << "g" << std::endl;
 
     // The minimum value for AoA is between -180° and 0°
     input.angle_of_attack = {-M_PI/2,0.,0.12217305,0.15707963,0.20943951,0.48869219,1.04719755,1.57079633,2.0943951,2.61799388, M_PI};
@@ -202,15 +195,11 @@ TEST_F(HydroPolarForceModelTest, should_print_warning_for_polar_input_with_unexp
     input.drag_coefficient = {0.03448,0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483};
     HydroPolarForceModel(input, "body", env);
     ASSERT_FALSE(debug.str().empty());
-    std::cout << "h" << std::endl;
 
     // Reset the stderr stringstream
     debug.str("");
-    std::cout << "i" << std::endl;
     debug.clear();
-    std::cout << "j" << std::endl;
     ASSERT_TRUE(debug.str().empty());
-    std::cout << "k" << std::endl;
 
     // The minimum value for AWA is under -180°
     input.angle_of_attack = {-3*M_PI/2,-M_PI/2,0.,0.12217305,0.15707963,0.20943951,0.48869219,1.04719755,1.57079633,2.0943951,2.61799388, M_PI};
@@ -218,9 +207,7 @@ TEST_F(HydroPolarForceModelTest, should_print_warning_for_polar_input_with_unexp
     input.drag_coefficient = {0.03448,0.03448,0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483};
     HydroPolarForceModel(input, "body", env);
     ASSERT_FALSE(debug.str().empty());
-    std::cout << "l" << std::endl;
 
     // Restore cerr's buffer
     std::cerr.rdbuf(orig);
-    std::cout << "m" << std::endl;
 }
