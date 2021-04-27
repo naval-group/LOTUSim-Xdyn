@@ -3998,5 +3998,5 @@ std::string test_data::fmi()
 
 std::string test_data::tutorial_11_gRPC_controller()
 {
-    return bug_2984() + "controllers:\n" + grpc_controller() + setpoints();
+    return bug_2984() + "controllers:\n" + grpc_controller() + grpc_setpoints();
 }
