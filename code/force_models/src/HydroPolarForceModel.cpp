@@ -24,6 +24,10 @@ HydroPolarForceModel::HydroPolarForceModel(const Input input, const std::string 
         relative_velocity(new double(0)),
         angle_of_attack(new double(0))
 {
+    if (input.lift_coefficient.size()==0)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "An empty vector was provided for the angle of attack, which must be provided from either -180° or 0deg (symmetry) to 180deg.")
+    }
     const double min_alpha = *std::min_element(input.angle_of_attack.begin(),input.angle_of_attack.end());
     const double max_alpha = *std::max_element(input.angle_of_attack.begin(),input.angle_of_attack.end());
     const double eps = 0.1*M_PI/180;
