@@ -109,7 +109,7 @@ Wrench HydroPolarForceModel::get_force(const BodyStates& states, const double t,
     const auto rotation = states.get_rot_from_ned_to_body();
     const Eigen::Vector3d P_NED = states.G.v + rotation*P_body; // Coordinates of point P in NED frame
     double water_height = 0.;
-    if (env.w.use_count()!=0)
+    if (env.w.use_count())
     {
         const auto wave_height = env.w->get_and_check_wave_height({P_NED(0)}, {P_NED(1)}, t);
         if (use_waves_velocity)
