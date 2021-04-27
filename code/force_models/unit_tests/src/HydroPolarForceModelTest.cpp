@@ -203,3 +203,72 @@ TEST_F(HydroPolarForceModelTest, should_print_warning_for_polar_input_with_unexp
     // Restore cerr's buffer
     std::cerr.rdbuf(orig);
 }
+
+TEST_F(HydroPolarForceModelTest, should_throw_if_empty_angle_vector)
+{
+    HydroPolarForceModel::Input input;
+    input.name = "test";
+    // Internal frame is placed under water, 5m under the body frame's origin
+    input.internal_frame = YamlPosition(YamlCoordinates(0,0,5), YamlAngle(0,0,0), "body");
+    input.reference_area = 100;
+    input.angle_of_attack = {};
+    input.lift_coefficient = {};
+    input.drag_coefficient = {};
+    input.use_waves_velocity = true;
+    EnvironmentAndFrames env;
+    env.rho = 1000;
+    env.rot = YamlRotation("angle", {"z","y'","x''"});
+    ASSERT_THROW(HydroPolarForceModel(input, "body", env), InvalidInputException);
+}
+
+TEST_F(HydroPolarForceModelTest, should_throw_if_wave_model_expected_but_not_defined)
+{
+    HydroPolarForceModel::Input input;
+    input.name = "test";
+    // Internal frame is placed under water, 5m under the body frame's origin
+    input.internal_frame = YamlPosition(YamlCoordinates(0,0,5), YamlAngle(0,0,0), "body");
+    input.reference_area = 100;
+    input.angle_of_attack = {0.,0.12217305,0.15707963,0.20943951,0.48869219,1.04719755,1.57079633,2.0943951,2.61799388,M_PI};
+    input.lift_coefficient = {0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,0.};
+    input.drag_coefficient = {0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483};
+    input.use_waves_velocity = true;
+    EnvironmentAndFrames env;
+    env.rho = 1000;
+    env.rot = YamlRotation("angle", {"z","y'","x''"});
+    ASSERT_THROW(HydroPolarForceModel(input, "body", env), InvalidInputException);
+}
+
+TEST_F(HydroPolarForceModelTest, should_print_warning_and_return_zero_force_if_calculation_point_is_outside_the_water)
+{
+    HydroPolarForceModel::Input input;
+    input.name = "test";
+    // Internal frame is placed under water, 5m above the body frame's origin (in the air)
+    input.internal_frame = YamlPosition(YamlCoordinates(0,0,-5), YamlAngle(0,0,0), "body");
+    input.reference_area = 100;
+    input.angle_of_attack = {0.,0.12217305,0.15707963,0.20943951,0.48869219,1.04719755,1.57079633,2.0943951,2.61799388,M_PI};
+    input.lift_coefficient = {0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,0.};
+    input.drag_coefficient = {0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483};
+    input.use_waves_velocity = false;
+    EnvironmentAndFrames env;
+    env.rho = 1000;
+    env.rot = YamlRotation("angle", {"z","y'","x''"});
+    const HydroPolarForceModel force_model(input, "body", env);
+    BodyStates states = get_states(10, 0);
+
+    std::stringstream debug;
+    // Redirect cerr to our stringstream buffer or any other ostream
+    std::streambuf* orig = std::cerr.rdbuf(debug.rdbuf());
+    ASSERT_TRUE(debug.str().empty());
+
+    auto F = force_model.get_force(states, 0, env, {});
+    ASSERT_FALSE(debug.str().empty());
+    ASSERT_DOUBLE_EQ(F.X(), 0);
+    ASSERT_DOUBLE_EQ(F.Y(), 0);
+    ASSERT_DOUBLE_EQ(F.Z(), 0);
+    ASSERT_DOUBLE_EQ(F.K(), 0);
+    ASSERT_DOUBLE_EQ(F.M(), 0);
+    ASSERT_DOUBLE_EQ(F.N(), 0);
+
+    // Restore cerr's buffer
+    std::cerr.rdbuf(orig);
+}
