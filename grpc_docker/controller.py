@@ -13,6 +13,17 @@ from functools import partial
 import inspect
 from dataclasses import dataclass
 
+SERVICE_NAME = "grpc-controller"
+
+logging.basicConfig(
+    format='%(asctime)s,%(msecs)d ['
+    + SERVICE_NAME
+    + '] - %(levelname)-4s [%(filename)s:%(lineno)d] %(message)s',
+    datefmt='%d-%m-%Y:%H:%M:%S')
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.INFO)
+
+
 
 @dataclass
 class StatesQuaternion:
