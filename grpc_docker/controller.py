@@ -379,6 +379,7 @@ class ControllerServicer(controller_pb2_grpc.ControllerServicer):
             )
             response.angle_representation = controller_pb2.SetParametersResponse.AngleRepresentation.Value(self.controller.get_angle_representation())
             response.has_extra_observations = self.controller.has_extra_observations()
+            response.dt = self.controller.timestep
             self.controller.increment_nb_of_calls()
         except KeyError as exception:
             match = closest_match(
