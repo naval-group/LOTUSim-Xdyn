@@ -7,7 +7,7 @@ HydroPolarForceModelTest::HydroPolarForceModelTest()
 {
 }
 
-TEST_F(HydroPolarForceModelTest, can_parse)
+std::string get_yaml_input()
 {
     std::stringstream ss;
     ss << "name: test\n" <<
@@ -24,7 +24,12 @@ TEST_F(HydroPolarForceModelTest, can_parse)
           "lift coefficient: [0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,-0.11207]\n" <<
           "drag coefficient: [0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483]\n" <<
           "take waves orbital velocity into account: false";
-    const HydroPolarForceModel::Input input = HydroPolarForceModel::parse(ss.str());
+    return ss.str();
+}
+
+TEST_F(HydroPolarForceModelTest, can_parse)
+{
+    const HydroPolarForceModel::Input input = HydroPolarForceModel::parse(get_yaml_input());
     ASSERT_EQ(input.name, "test");
     ASSERT_DOUBLE_EQ(input.reference_area, 1000);
     ASSERT_DOUBLE_EQ(input.internal_frame.coordinates.x, 1);
@@ -52,23 +57,10 @@ TEST_F(HydroPolarForceModelTest, can_parse)
 TEST_F(HydroPolarForceModelTest, can_parse_optional_output)
 {
     std::stringstream ss;
-    ss << "name: test\n" <<
-          "position of calculation frame:\n" <<
-          "    frame: body\n" <<
-          "    x: {value: 1, unit: m}\n" <<
-          "    y: {value: 2, unit: m}\n" <<
-          "    z: {value: 3, unit: m}\n" <<
-          "    phi: {value: 10, unit: deg}\n" <<
-          "    theta: {value: 20, unit: deg}\n" <<
-          "    psi: {value: 30, unit: deg}\n" <<
-          "reference area: {value: 1000, unit: m^2}\n" <<
-          "angle of attack: {unit: deg, values: [0,7,9,12,28,60,90,120,150,180]}\n" <<
-          "lift coefficient: [0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,-0.11207]\n" <<
-          "drag coefficient: [0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483]\n" <<
+    ss << "\n" <<
           "moment coefficient: [0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483]\n" <<
-          "chord length: {value: 5, unit: m}\n" <<
-          "take waves orbital velocity into account: false";
-    const HydroPolarForceModel::Input input = HydroPolarForceModel::parse(ss.str());
+          "chord length: {value: 5, unit: m}";
+    const HydroPolarForceModel::Input input = HydroPolarForceModel::parse(get_yaml_input()+ss.str());
     ASSERT_TRUE(input.moment_coefficient.is_initialized());
     ASSERT_TRUE(input.chord_length.is_initialized());
     const std::vector<double> Cm = {0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483};
