@@ -415,17 +415,16 @@ class ControllerServicer(controller_pb2_grpc.ControllerServicer):
         """Marshalls the controller's arguments from gRPC."""
         response = controller_pb2.ControllerResponse()
         try:
-            setpoints = request.setpoints[:]
-            if len(setpoints) != len(self.setpoint_names):
+            if len(request.setpoints) != len(self.setpoint_names):
                 raise IndexError(
                     "The controller needs "
-                    + str(len(setpoints))
-                    + " inputs (setpoints) but "
                     + str(len(self.setpoint_names))
-                    + " were provided."
+                    + " inputs (setpoints) but "
+                    + str(len(request.setpoints))
+                    + " were provided by the simulator."
                 )
             response.next_call = self.controller.get_date_of_next_callback()
-            commands = callback(converter(request.states), converter(request.dstates_dt), setpoints)
+            commands = callback(converter(request.states), converter(request.dstates_dt), request.setpoints)
             for key, value in commands.items():
                 response.commands[key] = value
             self.controller.increment_nb_of_calls()
