@@ -124,7 +124,7 @@ Wrench HydroPolarForceModel::get_force(const BodyStates& states, const double t,
     {
         std::cerr << "WARNING: In hydrodynamic polar force model '" << name << "', the calculation point seems to be outside of the water (z = " << P_NED(2) << ")." << std::endl;
     }
-    double alpha = -atan2(Vp(1), Vp(0));
+    const double alpha = -atan2(Vp(1), Vp(0));
     const double U = sqrt(pow(Vp(0), 2) + pow(Vp(1), 2)); // Apparent flow velocity projected in the (x,y) plane of the internal frame
     double alpha_prime;
     if (symmetry && alpha<M_PI/2)
