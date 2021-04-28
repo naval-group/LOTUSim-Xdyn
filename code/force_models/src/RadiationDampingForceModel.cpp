@@ -201,7 +201,7 @@ class RadiationDampingForceModel::Impl
 
         std::function<double(double)> get_K(const size_t i, const size_t j, const std::array<double, 6>& Ubar)
         {
-            if (forward_speed_correction && j < 3) // 3 last column
+            if (forward_speed_correction && j >= 3) // 3 last column
             {
                 if (j == 3) // Column 4
                 {
