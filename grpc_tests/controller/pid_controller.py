@@ -63,7 +63,6 @@ class PIDController(controller.Model):
         -------
         - commands (List[str]): commands computed by this controller
         """
-        LOGGER.info(self.command_name)
         return [self.command_name]
 
 
