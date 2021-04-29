@@ -87,7 +87,7 @@ Wrench AeroPolarForceModel::get_force(const BodyStates& states, const double t, 
     }
     const double U = sqrt(pow(W(0), 2) + pow(W(1), 2)); // Apparent wind speed projected in the body horizontal plane
     double beta_prime;
-    if (symmetry && beta>M_PI/2)
+    if (symmetry && beta>M_PI)
     {
         beta_prime = 2*M_PI - beta;
     }

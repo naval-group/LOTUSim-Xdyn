@@ -7,6 +7,8 @@
 
 #ifndef EXTERNAL_DATA_STRUCTURES_PARSERS_HPP_
 #define EXTERNAL_DATA_STRUCTURES_PARSERS_HPP_
+#include "boost/optional/optional.hpp"
+
 #include "yaml.h"
 #include "YamlSimulatorInput.hpp"
 
@@ -31,4 +33,16 @@ template <typename T> void try_to_parse(const YAML::Node& node, const std::strin
     const YAML::Node * n = node.FindValue(key);
     if (n) (*n) >> value;
 }
+
+template <typename T>
+void parse_optional(const YAML::Node& node, const std::string& key, boost::optional<T>& opt)
+{
+    if (node.FindValue(key))
+    {
+        T value;
+        node[key] >> value;
+        opt = value;
+    }
+}
+
 #endif /* EXTERNAL_DATA_STRUCTURES_PARSERS_HPP_ */

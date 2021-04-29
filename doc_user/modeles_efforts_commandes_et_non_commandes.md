@@ -880,11 +880,87 @@ exprimées dans le repère désigné par `frame`. Les coordonnées `X`, `Y`, `Z`
 `K`, `M` et `N` du torseur d'effort sont également exprimées dans ce repère.
 
 
+## Modèle d'effort hydrodynamique quadratique par polaire
+
+### Description
+
+Les efforts du fluide sur un objet en mouvement relatif par rapport à ce fluide, dans un plan parallèle à cet écoulement, peuvent être représentés de façon quadratique à l'aide de coefficients de portance et traînée :
+
+```math
+F_l = \frac{1}{2} \rho C_l(\alpha) S_{ref} U^2
+```
+```math
+F_d = \frac{1}{2} \rho C_d(\alpha) S_{ref} U^2
+```
+
+Où :
+
+- $`F_l`$ est l'effort de portance, perpendiculaire à la direction de l'écoulement,
+- $`F_d`$ est l'effort de traînée, parallèle à la direction de l'écoulement,
+- $`\rho`$ est la masse volumique du fluide,
+- $`C_l`$ et $`C_d`$ sont les coefficients de portance et de traînée (respectivement),
+- $`\alpha`$ est l'angle d'attaque,
+- $`S_{ref}`$ est une surface de référence (généralement une surface projetée),
+- $`U`$ est la vitesse de l'écoulement, dépendant de la vitesse du corps et de celle du fluide.
+
+On peut aussi représenter le moment exercé par le fluide sur l'objet, toujours dans le même plan :
+
+```math
+M = \frac{1}{2} \rho C_m(\alpha) S_{ref} d_{ref} U^2
+```
+
+Où :
+
+- $`M`$ est le moment exercé par l'écoulement du fluide,
+- $`C_m`$ est le coefficient de moment,
+- $`d_{ref}`$ est une longueur de référence utilisée pour adimensionnaliser le moment, généralement la corde d'un profil portant, parfois $`\sqrt{S_{ref}}`$.
+
+### Hypothèses
+
+Dans xdyn, un tel modèle est implémenté pour simuler une interaction avec l'eau (plan anti-dérive, hydrofoil, carène...). On définit un repère local fixe par rapport à un repère connu (généralement celui du corps), et on calcule la vitesse de l'écoulement et les efforts résultants à l'origine de ce repère local et dans le plan $`(\vec{x_i},\vec{y_i})`$.
+
+L'angle d'attaque $`\alpha`$ et la vitesse de l'écoulement relatif $`U = |\vec{V}|`$ sont alors définis dans le plan $`(\vec{x_i},\vec{y_i})`$ du repère local :
+
+![](images/angle_of_attack.svg)
+
+L'angle d'attaque $`\alpha`$, défini entre -180° et 180°, est formé entre la vitesse relative projetée dans le plan $`\vec{V}`$ et l'axe longitudinal $`\vec{x_i}`$ du repère local.
+
+Il est à noter que les coefficients $`C_l`$, $`C_d`$ et $`C_m`$ sont généralement très dépendants du régime d'écoulement. xdyn n'effectue aucune vérification du nombre de Reynolds, il appartient à l'utilisateur de s'assurer que les polaires de coefficients sont pertinentes au regards des conditions de l'écoulement. La vitesse de l'écoulement $`U`$ et l'angle d'attaque $`\alpha`$ sont disponibles en sortie du modèle d'effort, sous les noms respectifs `U(model_name,body_name)` et `alpha(model_name,body_name)`.
+
+### Paramétrage
+
+Le modèle d'effort hydrodynamique quadratique par polaire est paramétré dans xdyn avec la section YAML suivante :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: hydrodynamic polar
+  name: centreboard
+  position of calculation frame:
+      frame: body
+      x: {value: 1, unit: m}
+      y: {value: 2, unit: m}
+      z: {value: 3, unit: m}
+      phi: {value: 10, unit: deg}
+      theta: {value: 20, unit: deg}
+      psi: {value: 30, unit: deg}
+  reference area: {value: 1000, unit: m^2}
+  angle of attack: {unit: deg, values: [0,7,9,12,28,60,90,120,150,180]}
+  lift coefficient: [0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,-0.11207]
+  drag coefficient: [0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483]
+  take waves orbital velocity into account: false
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Les données polaires de coefficients de portance et traînée peuvent être données de -180° à 180° ou de 0° à 180°. Dans ce second cas, une hypothèse de symmétrie selon l'axe longitudinal du repère local $`\vec{x_i}`$ est appliquée, ce qui est utile pour les profils symmétriques.
+
+La clé booléenne `take waves orbital velocity into account` permet d'ajouter la vitesse orbitale de houle à l'écoulement relatif. Avec ce paramètre activé, un modèle de houle doit aussi être défini dans la section `environment models`.
+
+Les clés optionnelles `moment coefficient` (vecteur de coefficients) et `chord length` (longueur en `{unit: ..., value: ...}`) permettent d'ajouter le calcul d'un moment autour de l'origine de repère local et selon $`\vec{z_i}`$. Ce moment est toujours déstabilisant pour $`C_m`$ positif (donc positif autour de $`\vec{z_i}`$ pour $`\alpha > 0`$ et négatif pour $`\alpha < 0`$). Si `chord length` est précisé, sa valeur est utilisée pour $`d_{ref}`$, sinon $`d_{ref} = \sqrt{S_{ref}}`$.
+
+
 ## Modèle d'effort aérodynamique quadratique par polaire
 
 ### Description
 
-Les efforts du vent sur une structure peuvent être représentés de façon quadratique à l'aide de ceofficients de portance et traînée :
+Les efforts du vent sur une structure peuvent être représentés de façon quadratique à l'aide de coefficients de portance et traînée :
 
 ```math
 F_l = \frac{1}{2} \rho_{air} C_l S_{ref} U^2
@@ -895,7 +971,7 @@ F_d = \frac{1}{2} \rho_{air} C_d S_{ref} U^2
 
 Où :
 
-- $`F_l`$ est l'effort de portance, perpendicalaire à la direction de l'écoulement d'air,
+- $`F_l`$ est l'effort de portance, perpendiculaire à la direction de l'écoulement d'air,
 - $`F_d`$ est l'effort de traînée, parallèle à la direction de l'écoulement d'air,
 - $`\rho_{air}`$ est la masse volumique de l'air,
 - $`C_l`$ et $`C_d`$ sont les coefficients de portance et de traînée (respectivement),
