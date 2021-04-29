@@ -110,22 +110,22 @@ TEST_F(HydroPolarForceModelTest, orientation_test)
     // u=10, v=0 -> AoA=0°
     states = get_states(10, 0);
     auto F = force_model.get_force(states, 0, env, {});
-    ASSERT_TRUE(F.X() < 0);
+    ASSERT_LT(F.X(), 0);
     ASSERT_NEAR(F.Y(), 0, 1e-9);
     // u=0, v=10 -> AoA=-90°
     states = get_states(0, 10);
     F = force_model.get_force(states, 0, env, {});
-    ASSERT_TRUE(F.X() > 0);
-    ASSERT_TRUE(F.Y() < 0);
+    ASSERT_GT(F.X(), 0);
+    ASSERT_LT(F.Y(), 0);
     // u=0, v=-10 -> AoA=90°
     states = get_states(0, -10);
     F = force_model.get_force(states, 0, env, {});
-    ASSERT_TRUE(F.X() > 0);
-    ASSERT_TRUE(F.Y() > 0);
+    ASSERT_GT(F.X(), 0);
+    ASSERT_GT(F.Y(), 0);
     // u=-10, v=0 -> AoA=+/-180°
     states = get_states(-10, 0);
     F = force_model.get_force(states, 0, env, {});
-    ASSERT_TRUE(F.X() > 0);
+    ASSERT_GT(F.X(), 0);
     ASSERT_NEAR(F.Y(), 0, 1e-9);
 }
 
