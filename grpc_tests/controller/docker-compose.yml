@@ -1,28 +1,24 @@
 version: '3'
 services:
-  python-controller:
+  pid:
     build:
-      context: ../..
-      dockerfile: grpc_tests/controller/Dockerfile.python
+      context: ../../code/interfaces
+      dockerfile: controllers/Dockerfile.python
     user: ${CURRENT_UID}
     environment:
     - no_proxy
-    entrypoint: /usr/bin/python3 pid_controller.py
-  cpp-controller:
-    build:
-      context: ../..
-      dockerfile: grpc_tests/controller/Dockerfile.cpp
+    working_dir: /data
+    volumes:
+        - ./:/data:ro
+    command: pid_controller.py
+  xdyn:
+    image: xdyn
+    working_dir: /data
+    entrypoint: ./wait-for-it.sh pid:9002 -s -t 20 -- xdyn tutorial_11_gRPC_controller.yml --dt 1 --tend 500
+    volumes:
+    - .:/data
     user: ${CURRENT_UID}
-    environment:
-    - no_proxy
-  test:
-    build:
-      context: ../..
-      dockerfile: grpc_tests/controller/Dockerfile.python
     depends_on:
-    - cpp-controller
-    - python-controller
-    user: ${CURRENT_UID}
+    - pid
     environment:
     - no_proxy
-    entrypoint: ./wait-for-it.sh cpp-controller:9002 -s -t 20 -- ./wait-for-it.sh python-controller:9002 -s -t 20 -- /usr/bin/python3 grpc_controller_client.py
