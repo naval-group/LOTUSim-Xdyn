@@ -1,13 +1,15 @@
-.PHONY: all clean cosim sim input_dependencies
+.PHONY: all clean cosim sim
 
 all: cosim sim clean
 
 tutorial_10_gRPC_force_model.yml:
+	@echo "Copying $@ from xdyn's Docker container..."
 	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/xdyn_demos \
         --entrypoint /bin/bash xdyn \
         -c "cp /usr/demos/tutorial_10_gRPC_force_model.yml /xdyn_demos/"
 
 tutorial_10_gRPC_force_model_commands.yml:
+	@echo "Copying $@ from xdyn's Docker container..."
 	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/xdyn_demos \
         --entrypoint /bin/bash xdyn \
         -c "cp /usr/demos/tutorial_10_gRPC_force_model_commands.yml /xdyn_demos/"
