@@ -1,6 +1,8 @@
-.PHONY: all clean
+.PHONY: all clean run
 
-all: tutorial_09_gRPC_wave_model.yml
+all: run clean
+
+run: tutorial_09_gRPC_wave_model.yml
 	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose rm -f
 	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose up -t 0 --exit-code-from test --abort-on-container-exit --build
 
