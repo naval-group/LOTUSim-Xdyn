@@ -1,3 +1,5 @@
+changequote(`{{', `}}')
+
 # Contrôleurs
 
 ## Principe
