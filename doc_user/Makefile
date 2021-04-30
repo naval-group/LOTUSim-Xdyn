@@ -31,10 +31,14 @@ concatenated_doc.pmd: \
 m4 :=  docker run -t --rm \
                -v $(shell pwd):/work \
                -v $(shell pwd)/../interfaces:/interfaces \
+               -v $(shell pwd)/../grpc_tests/controller:/controller \
                -w /work \
                -u $(shell id -u):$(shell id -g) \
                --entrypoint /usr/bin/m4 \
                sirehna/pandoc@sha256:cc4ec54f6e09cda3cc57c6a125764bc0bb12712511e3f0560a69de6f762761e7
+
+tutorial_11.md: tutorial_11.m4.md
+	$(m4) -I/controller $< > $@
 
 interfaces_utilisateur.md: interfaces_utilisateur.m4.md ../interfaces/cosimulation.proto ../interfaces/model_exchange.proto
 	$(m4) -I/interfaces $< > $@
