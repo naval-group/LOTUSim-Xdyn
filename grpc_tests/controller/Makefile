@@ -13,7 +13,7 @@ tutorial_11_gRPC_controller.yml:
 
 tutorial_11.csv: tutorial_11_gRPC_controller.yml
 	@echo "Building pre-requisite images..."
-	@make -C ../../code/interfaces/controllers build
+	@make -C ../../interfaces/controllers build
 	@echo "Running simulation..."
 	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose rm -f
 	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose up -t 0 --exit-code-from xdyn --abort-on-container-exit --build --remove-orphans

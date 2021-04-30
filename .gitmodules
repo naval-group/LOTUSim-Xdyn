@@ -3,5 +3,5 @@
 	path = code/ssc
 	url = ../scientific_computing
 [submodule "interfaces"]
-	path = code/interfaces
+	path = interfaces
 	url = ../interfaces

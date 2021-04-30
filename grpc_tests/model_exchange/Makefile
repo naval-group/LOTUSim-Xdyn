@@ -7,7 +7,7 @@ all: clean model_exchange.proto
 	CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose rm -f
 	CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose up -t 0 --exit-code-from test --abort-on-container-exit --build
 
-model_exchange.proto: ../../code/interfaces/model_exchange.proto
+model_exchange.proto: ../../interfaces/model_exchange.proto
 	cp $< $@
 
 clean:
