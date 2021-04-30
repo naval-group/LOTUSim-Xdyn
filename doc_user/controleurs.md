@@ -357,4 +357,5 @@ du navire.
 Le contrôleur répond en donnant la valeur des commandes qu'il calcule ainsi que la date à laquelle
 il doit être rappelé.
 
+Le [tutoriel 11](#tutoriel-11-utilisation-dun-contr%C3%B4leur-distant) donne un exemple d'utilisation de contrôleur distant.
 
