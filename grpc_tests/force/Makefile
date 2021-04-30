@@ -2,22 +2,25 @@
 
 all: cosim sim clean
 
-input_dependencies:
+tutorial_10_gRPC_force_model.yml:
 	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/xdyn_demos \
         --entrypoint /bin/bash xdyn \
-        -c "cp /usr/demos/tutorial_10_gRPC_force_model*.yml /xdyn_demos/"
+        -c "cp /usr/demos/tutorial_10_gRPC_force_model.yml /xdyn_demos/"
 
-cosim: input_dependencies
+tutorial_10_gRPC_force_model_commands.yml:
+	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/xdyn_demos \
+        --entrypoint /bin/bash xdyn \
+        -c "cp /usr/demos/tutorial_10_gRPC_force_model_commands.yml /xdyn_demos/"
+
+cosim: tutorial_10_gRPC_force_model.yml tutorial_10_gRPC_force_model_commands.yml
 	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose -f docker-compose-cosim.yml rm -f
-	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose -f docker-compose-cosim.yml up -t 0 --exit-code-from test --abort-on-container-exit --build
+	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose -f docker-compose-cosim.yml up -t 0 --exit-code-from test --abort-on-container-exit --build --remove-orphans
 
-sim: input_dependencies
+sim: tutorial_10_gRPC_force_model.yml tutorial_10_gRPC_force_model_commands.yml
 	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose -f docker-compose-sim.yml rm -f
-	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose -f docker-compose-sim.yml up -t 0 --exit-code-from xdyn --abort-on-container-exit --build
+	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose -f docker-compose-sim.yml up -t 0 --exit-code-from xdyn --abort-on-container-exit --build --remove-orphans
 	@echo "Checking the generated CSV file has 4 lines (including the header line)..."
 	@if [ `cat out.csv | wc -l ` -eq 4 ]; then echo "...OK!"; else echo "***error: CSV file has `cat out.csv | wc -l ` line(s)" && exit 1; fi
 
 clean:
-	rm -f tutorial_10_gRPC_force_model*.yml
-	rm -rf __pycache__
-	rm -rf out.csv
+	rm -f out.csv tutorial_10_gRPC_force_model.yml tutorial_10_gRPC_force_model_commands.yml
