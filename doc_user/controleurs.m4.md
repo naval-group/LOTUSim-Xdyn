@@ -79,8 +79,12 @@ calculer les commandes dont ont besoin les efforts commandés.
 
 Les seule clefs communes à tous les types de contrôleurs sont `type` (pour
 choisir le type de contrôleur) et `dt` (pour renseigner le pas de temps du
-contrôleur, qui est donc constant) : chaque type de contrôleur possède sinon sa
-propre paramétrisation. Deux types de contrôleur sont actuellement implémentés
+contrôleur). Le pas de temps `dt` est supposé constant, sauf si `dt` vaut zéro,
+auquel cas le contrôleur doit donner à chaque appel la date du prochain appel.
+Hormis `type` et `dt`, chaque type de contrôleur peut posséder sa propre
+paramétrisation.
+
+Deux types de contrôleur sont actuellement implémentés
 :
 
 - le [régulateur `PID`](#r%C3%A9gulateur-pid)
@@ -181,11 +185,15 @@ state weights:
 ### Contrôleurs externes
 
 xdyn peut appeler des contrôleurs externes via une interface gRPC. Il est donc possible
-d'utiliser un contrôleur existant, pour peu qu'une interface gRPC lui soit adjointe. La
-paramétrisation de ces contrôleurs nécessite, _a minima_, un nom, un type, un
-pas de temps (tous les contrôleurs d'xdyn sont à pas constant) et une URL. Un
-contrôleur externe n'ayant aucun paramètre pourrait donc être utilisé grâce à
-la section YAML suivante :
+d'utiliser un contrôleur existant, pour peu qu'une interface gRPC lui soit
+adjointe. La paramétrisation de ces contrôleurs nécessite, _a minima_, un nom,
+un type, un pas de temps et une URL. Par défaut, tous les contrôleurs d'xdyn
+sont supposés à pas constant, à moins que `dt` soit pris égal à zéro, auquel
+cas le contrôleur doit retourner à chaque appel la date du prochain (et peut
+donc être à pas variable).
+
+Un contrôleur externe n'ayant aucun paramètre pourrait donc être utilisé grâce
+à la section YAML suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 controllers:
