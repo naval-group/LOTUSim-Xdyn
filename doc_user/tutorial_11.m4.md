@@ -35,7 +35,10 @@ Cet exemple contient deux contrôleurs :
 - un contrôleur PID interne d'xdyn, cadencé à 0.7 secondes
 
 Ces contrôleurs sont, en principe, implémentés de la même façon (aux
-différences de langage de programmation près).
+différences de langage de programmation près). On donne deux consignes de cap :
+
+- 30° de t = 0 à t = 250 secondes
+- 45° à partir de t = 250 secondes de simulation
 
 La section relative au contrôleur distant est :
 
@@ -63,7 +66,7 @@ Dans un fichier Python (nommé `pid_controller.py` dans cet exemple) on écrit :
 include({{pid_controller.py}})
 ```
 
-### Lancement de la simulation
+### Lancement de la simulation avec docker-compose
 
 On commence par récupérer l'exemple de modèle de houle :
 
@@ -91,7 +94,7 @@ La partie `CURRENT_UID=$(id -u):$(id -g)` sert simplement à ce que les
 éventuels fichiers générés le soient avec les permissions de l'utilisateur
 courant.
 
-### Sans Docker
+### Lancement de la simulation sans Docker
 
 Si l'on n'utilise pas Docker, il faut lancer le serveur de houle manuellement:
 
@@ -122,3 +125,11 @@ On peut alors lancer xdyn normalement :
 ```bash
 ./xdyn tutorial_11_gRPC_controller.yml --dt 0.1 --tend 1 -o tsv
 ```
+
+### Lancement de la simulation depuis le dépôt d'xdyn
+
+Le tutoriel peut être lancé directement depuis le dépôt d'xdyn en exécutant
+`make` depuis le répertoire `grpc_tests/controller`. La simulation sera alors
+lancée et un fichier CSV sera généré. On évalue ensuite la convergence du
+contrôleur en cap (à 30° entre 0 et 250 secondes, puis à 45° entre 250 et 500
+secondes).
