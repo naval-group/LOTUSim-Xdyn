@@ -3,29 +3,29 @@ all: submodule windows debian debug doc all_docker_images
 BASE_IMAGE_VERSION=2021-04-16
 
 
-SSC_HEADERS=code/ssc/ssc/check_ssc_version.hpp\
-            code/ssc/ssc/csv_file_reader.hpp\
-            code/ssc/ssc/csv_writer.hpp\
-            code/ssc/ssc/data_source.hpp\
-            code/ssc/ssc/decode_unit.hpp\
-            code/ssc/ssc/exception_handling.hpp\
-            code/ssc/ssc/functors_for_optimizer.hpp\
-            code/ssc/ssc/geometry.hpp\
-            code/ssc/ssc/integrate.hpp\
-            code/ssc/ssc/interpolation.hpp\
-            code/ssc/ssc/ipopt_interface.hpp\
-            code/ssc/ssc/json.hpp\
-            code/ssc/ssc/kinematics.hpp\
-            code/ssc/ssc/macros.hpp\
-            code/ssc/ssc/matrix_and_vector_classes.hpp\
-            code/ssc/ssc/numeric.hpp\
-            code/ssc/ssc/optimizer.hpp\
-            code/ssc/ssc/pimpl_idiom.hpp\
-            code/ssc/ssc/random_data_generator.hpp\
-            code/ssc/ssc/solver.hpp\
-            code/ssc/ssc/text_file_reader.hpp\
-            code/ssc/ssc/websocket.hpp\
-            code/ssc/ssc/yaml_parser.hpp
+HEADERS=code/ssc/ssc/check_ssc_version.hpp\
+        code/ssc/ssc/csv_file_reader.hpp\
+        code/ssc/ssc/csv_writer.hpp\
+        code/ssc/ssc/data_source.hpp\
+        code/ssc/ssc/decode_unit.hpp\
+        code/ssc/ssc/exception_handling.hpp\
+        code/ssc/ssc/functors_for_optimizer.hpp\
+        code/ssc/ssc/geometry.hpp\
+        code/ssc/ssc/integrate.hpp\
+        code/ssc/ssc/interpolation.hpp\
+        code/ssc/ssc/ipopt_interface.hpp\
+        code/ssc/ssc/json.hpp\
+        code/ssc/ssc/kinematics.hpp\
+        code/ssc/ssc/macros.hpp\
+        code/ssc/ssc/matrix_and_vector_classes.hpp\
+        code/ssc/ssc/numeric.hpp\
+        code/ssc/ssc/optimizer.hpp\
+        code/ssc/ssc/pimpl_idiom.hpp\
+        code/ssc/ssc/random_data_generator.hpp\
+        code/ssc/ssc/solver.hpp\
+        code/ssc/ssc/text_file_reader.hpp\
+        code/ssc/ssc/websocket.hpp\
+        code/ssc/ssc/yaml_parser.hpp
 
 windows: ${HEADERS} windows_gccx_posix
 debian: ${HEADERS} debian_10_release_gcc_8
