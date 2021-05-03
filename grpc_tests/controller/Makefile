@@ -1,8 +1,8 @@
-.PHONY: all clean run
+.PHONY: all clean test
 
-all: run clean
+all: test clean
 
-run: test.py tutorial_11.csv
+test: test.py tutorial_11.csv
 	@echo "Checking heading converged for both setpoints..."
 	@docker run -t --rm -u $(shell id -u):$(shell id -g) -v $(shell pwd):/work -w /work --entrypoint /usr/bin/python3 python:3.7 test.py
 	@echo "All done!"
