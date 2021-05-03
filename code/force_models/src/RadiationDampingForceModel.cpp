@@ -125,7 +125,7 @@ class RadiationDampingForceModel::Impl
 
             if (forward_speed_correction && fabs(hdb->get_forward_speed()) > 1e-3)
             {
-                std::cout << "WARNING: You chose to apply a forward speed correction in the 'Radiation Damping' force model, but the forward velocity specified in the HDB file is not zero." << std::endl;
+                std::cerr << "WARNING: You chose to apply a forward speed correction in the 'Radiation Damping' force model, but the forward velocity specified in the HDB file is not zero." << std::endl;
             }
 
             A = parser->get_added_mass();
