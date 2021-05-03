@@ -5,6 +5,7 @@ set(SRC src/HDBParser.cpp
         src/RadiationDampingBuilder.cpp
         src/DiffractionInterpolator.cpp
         src/History.cpp
+        src/PrecalParser.cpp
         )
 
 # Using C++ 2011
