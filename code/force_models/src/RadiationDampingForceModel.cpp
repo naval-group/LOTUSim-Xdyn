@@ -123,6 +123,7 @@ class RadiationDampingForceModel::Impl
             taus = builder.build_regular_intervals(Tmin,Tmax,n);
             CSVWriter tau_writer(std::cerr, "tau", taus);
 
+            // We can only apply the forward speed correction if the radiation damping coefficients were calculated at zero speed
             if (forward_speed_correction && fabs(hdb->get_forward_speed()) > 1e-3)
             {
                 std::cerr << "WARNING: You chose to apply a forward speed correction in the 'Radiation Damping' force model, but the forward velocity specified in the HDB file is not zero." << std::endl;

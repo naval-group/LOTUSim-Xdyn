@@ -29,7 +29,7 @@ class HDBParser
     public:
         HDBParser(const std::string& data);
         virtual ~HDBParser();
-        double get_forward_speed() const;
+        double get_forward_speed() const; //!< Speed at which the radiation damping matrices were calculated. Used to determine if we can apply a forward-speed correction
         TimestampedMatrices get_added_mass_array() const;
         TimestampedMatrices get_radiation_damping_array() const;
         RAOData get_diffraction_module() const;
