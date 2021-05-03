@@ -120,5 +120,5 @@ controllers:
 On peut alors lancer xdyn normalement :
 
 ```bash
-./xdyn tutorial_11_gRPC_force_model.yml tutorial_11_gRPC_force_model_commands.yml --dt 0.1 --tend 1 -o tsv
+./xdyn tutorial_11_gRPC_controller.yml --dt 0.1 --tend 1 -o tsv
 ```
