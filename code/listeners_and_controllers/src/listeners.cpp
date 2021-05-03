@@ -106,7 +106,7 @@ Controller* build_controller(const double tstart, const YamlController& yaml_con
     {
         return GrpcController::build(tstart, yaml_controller.rest_of_the_yaml);
     }
-    THROW(__PRETTY_FUNCTION__, InvalidInputException, "Controller type '" << yaml_controller.type << "' is unknown. Known controller types are: pid");
+    THROW(__PRETTY_FUNCTION__, InvalidInputException, "Controller type '" << yaml_controller.type << "' is unknown. Known controller types are: PID, GRPC");
     return NULL;
 }
 
