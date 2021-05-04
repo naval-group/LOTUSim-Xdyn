@@ -8,5 +8,6 @@ all:
 		-t 0 \
         --exit-code-from test \
         --abort-on-container-exit \
-        --build
+        --build \
+		--remove-orphans
 

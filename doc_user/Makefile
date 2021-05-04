@@ -16,26 +16,35 @@ concatenated_doc.pmd: \
     courbes_de_GZ.md \
     solver.md diffraction_radiation.md \
     modeles_efforts_commandes_et_non_commandes.md \
+    controleurs.md \
     tutorial_00.md \
     tutorial_01.md \
     tutorial_02.md \
     tutorial_03.md \
     tutorial_06.md \
     tutorial_09.md \
-    tutorial_10.md
+    tutorial_10.md \
+    tutorial_11.md
 	rm -f concatenated_doc.pmd
 	for f in $^ ; do (cat $$f; echo "")  >> concatenated_doc.pmd ; done
 
 m4 :=  docker run -t --rm \
                -v $(shell pwd):/work \
-               -v $(shell pwd)/../code/grpc:/grpc \
+               -v $(shell pwd)/../interfaces:/interfaces \
+               -v $(shell pwd)/../grpc_tests/controller:/controller \
                -w /work \
                -u $(shell id -u):$(shell id -g) \
                --entrypoint /usr/bin/m4 \
                sirehna/pandoc@sha256:cc4ec54f6e09cda3cc57c6a125764bc0bb12712511e3f0560a69de6f762761e7
-interfaces_utilisateur.md: interfaces_utilisateur.m4.md ../code/grpc/cosimulation.proto ../code/grpc/model_exchange.proto
-	$(m4) -I/grpc $< > $@
 
+tutorial_11.md: tutorial_11.m4.md
+	$(m4) -I/controller $< > $@
+
+interfaces_utilisateur.md: interfaces_utilisateur.m4.md ../interfaces/cosimulation.proto ../interfaces/model_exchange.proto
+	$(m4) -I/interfaces $< > $@
+
+controleurs.md: controleurs.m4.md ../interfaces/controller.proto
+	$(m4) -I/interfaces $< > $@
 
 xdyn-pweave := docker run -t \
                -v $(shell pwd):/work \

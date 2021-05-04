@@ -1,0 +1,24 @@
+version: '3'
+services:
+  pid:
+    build:
+      context: ../../interfaces
+      dockerfile: controllers/Dockerfile.python
+    user: ${CURRENT_UID}
+    environment:
+    - no_proxy
+    working_dir: /data
+    volumes:
+        - ./:/data:ro
+    command: pid_controller.py
+  xdyn:
+    image: xdyn
+    working_dir: /data
+    entrypoint: ./wait-for-it.sh pid:9002 -s -t 20 -- xdyn tutorial_11_gRPC_controller.yml --dt 1 --tend 500
+    volumes:
+    - .:/data
+    user: ${CURRENT_UID}
+    depends_on:
+    - pid
+    environment:
+    - no_proxy

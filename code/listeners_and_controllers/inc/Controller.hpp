@@ -13,13 +13,22 @@
 #include <ssc/solver/DiscreteSystem.hpp>
 #include <ssc/solver/ContinuousSystem.hpp>
 #include "Sim.hpp"
-
+/**
+ * @brief Constant step controller.
+ * 
+ */
 class Controller : public ssc::solver::DiscreteSystem
 {
     public:
         Controller(const double tstart, const double dt);
 
         virtual ~Controller();
+
+        /**
+         * @brief Get the list of all outputs (commands) computed by the controller.
+         *
+         */
+        virtual std::vector<std::string> get_command_names() const = 0;
 
     protected:
         /**

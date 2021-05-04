@@ -68,7 +68,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
 INCLUDE_DIRECTORIES(SYSTEM ${PROTOBUF_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(SYSTEM ${GRPC_INCLUDE_DIR})
 
-SET(cosimulation_proto ${CMAKE_CURRENT_SOURCE_DIR}/../grpc/cosimulation.proto)
+SET(cosimulation_proto ${CMAKE_CURRENT_SOURCE_DIR}/../../interfaces/cosimulation.proto)
 SET(cosimulation_proto_srcs "${CMAKE_CURRENT_BINARY_DIR}/cosimulation.pb.cc")
 SET(cosimulation_proto_hdrs "${CMAKE_CURRENT_BINARY_DIR}/cosimulation.pb.h")
 SET(cosimulation_grpc_srcs "${CMAKE_CURRENT_BINARY_DIR}/cosimulation.grpc.pb.cc")
@@ -84,7 +84,7 @@ ADD_CUSTOM_COMMAND(
            "${PROTOC_PREFIX}${cosimulation_proto}"
       DEPENDS "${cosimulation_proto}")
 
-SET(model_exchange_proto ${CMAKE_CURRENT_SOURCE_DIR}/../grpc/model_exchange.proto)
+SET(model_exchange_proto ${CMAKE_CURRENT_SOURCE_DIR}/../../interfaces/model_exchange.proto)
 SET(model_exchange_proto_srcs "${CMAKE_CURRENT_BINARY_DIR}/model_exchange.pb.cc")
 SET(model_exchange_proto_hdrs "${CMAKE_CURRENT_BINARY_DIR}/model_exchange.pb.h")
 SET(model_exchange_grpc_srcs "${CMAKE_CURRENT_BINARY_DIR}/model_exchange.grpc.pb.cc")

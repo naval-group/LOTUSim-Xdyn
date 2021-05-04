@@ -7,7 +7,7 @@
 
 #include <memory> // std::make_shared
 #include <vector>
-#include <grpcpp/grpcpp.h>
+#include "grpc_error_outputter.hpp"
 #include "force.pb.h"
 #include "force.grpc.pb.h"
 
@@ -16,124 +16,16 @@
 #include <ssc/yaml_parser.hpp>
 #include <ssc/kinematics.hpp>
 
+
 #include "Body.hpp"
-#include "GRPCError.hpp"
 #include "GRPCForceModel.hpp"
 #include "GRPCTypes.hpp"
 #include "ToGRPC.hpp"
 #include "FromGRPC.hpp"
 
-
-void throw_if_invalid_status(const GRPCForceModel::Input& input, const std::string& rpc_method, const grpc::Status& status);
-void throw_if_invalid_status(const GRPCForceModel::Input& input, const std::string& rpc_method, const grpc::Status& status)
+template <> std::string get_type_of_service<GRPCForceModel>()
 {
-    const std::string base_error_msg = std::string("an error occurred when using the distant force model '") + input.name + "' defined via gRPC (method '" + rpc_method + "').\n";
-    const std::string yaml_msg = "The YAML you provided for this gRPC model is:\n\n" + input.yaml + "\n";
-    const std::string contact_team_msg = "support team with the following error code (cf. https://grpc.github.io/grpc/cpp/grpc_2impl_2codegen_2status_8h.html): ";
-    const std::string user_error_msg = "Check that the server is running and accessible from the URL defined in the YAML file: " + input.url;
-    const std::string dev_error_msg = "This is a problem with xdyn and should never happen: please contact xdyn's " + contact_team_msg;
-    const std::string network_error_msg = "We couldn't reach the gRPC force model server at this URL: " + input.url + " Maybe the server is temporarily inaccessible or hasn't started yet? Either wait and give it another try or change the 'url' key in the YAML file. If all else fails, contact xdyn's " + contact_team_msg;
-    const std::string server_error_msg = "The gRPC force model server responded with the following error code: " + status.error_message()  + "\nMaybe the parameters you defined in xdyn's YAML file are incorrect? " + yaml_msg + "\nPlease check the force model server's documentation! If the problem persists, try contacting the force model server's " + contact_team_msg;
-    const std::string authentication_error_msg = "This force model server requires authentication and xdyn does not support this yet.";
-    const std::string unimplemented = "This force model server does not implement gRPC method '" + rpc_method + "': implement it or use another model. Otherwise, contact the force model's " + contact_team_msg;
-    switch(status.error_code())
-    {
-        case grpc::StatusCode::OK:
-        {
-            return;
-            break;
-        }
-        case grpc::StatusCode::ABORTED:
-        {
-            THROW(__PRETTY_FUNCTION__, GRPCError, base_error_msg + dev_error_msg + "ABORTED");
-            break;
-        }
-        case grpc::StatusCode::ALREADY_EXISTS:
-        {
-            THROW(__PRETTY_FUNCTION__, GRPCError, base_error_msg + dev_error_msg + "ALREADY_EXISTS");
-            break;
-        }
-        case grpc::StatusCode::CANCELLED:
-        {
-            THROW(__PRETTY_FUNCTION__, GRPCError, base_error_msg + dev_error_msg + "CANCELLED");
-            break;
-        }
-        case grpc::StatusCode::DATA_LOSS:
-        {
-            THROW(__PRETTY_FUNCTION__, GRPCError, base_error_msg + network_error_msg + "DATA_LOSS");
-            break;
-        }
-        case grpc::StatusCode::DEADLINE_EXCEEDED:
-        {
-            THROW(__PRETTY_FUNCTION__, GRPCError, base_error_msg + network_error_msg + "DEADLINE_EXCEEDED");
-            break;
-        }
-        case grpc::StatusCode::DO_NOT_USE:
-        {
-            THROW(__PRETTY_FUNCTION__, GRPCError, base_error_msg + dev_error_msg + "DO_NOT_USE");
-            break;
-        }
-        case grpc::StatusCode::FAILED_PRECONDITION:
-        {
-            THROW(__PRETTY_FUNCTION__, GRPCError, base_error_msg + server_error_msg + "FAILED_PRECONDITION");
-            break;
-        }
-        case grpc::StatusCode::INTERNAL:
-        {
-            THROW(__PRETTY_FUNCTION__, GRPCError, base_error_msg + server_error_msg + "INTERNAL");
-            break;
-        }
-        case grpc::StatusCode::INVALID_ARGUMENT:
-        {
-            THROW(__PRETTY_FUNCTION__, GRPCError, base_error_msg + server_error_msg + "INVALID_ARGUMENT");
-            break;
-        }
-        case grpc::StatusCode::NOT_FOUND:
-        {
-            THROW(__PRETTY_FUNCTION__, GRPCError, base_error_msg + server_error_msg + "NOT_FOUND");
-            break;
-        }
-        case grpc::StatusCode::OUT_OF_RANGE:
-        {
-            THROW(__PRETTY_FUNCTION__, GRPCError, base_error_msg + server_error_msg + "OUT_OF_RANGE");
-            break;
-        }
-        case grpc::StatusCode::PERMISSION_DENIED:
-        {
-            THROW(__PRETTY_FUNCTION__, GRPCError, base_error_msg + authentication_error_msg);
-            break;
-        }
-        case grpc::StatusCode::RESOURCE_EXHAUSTED:
-        {
-            THROW(__PRETTY_FUNCTION__, GRPCError, base_error_msg + server_error_msg + "RESOURCE_EXHAUSTED");
-            break;
-        }
-        case grpc::StatusCode::UNAUTHENTICATED:
-        {
-            THROW(__PRETTY_FUNCTION__, GRPCError, base_error_msg + authentication_error_msg);
-            break;
-        }
-        case grpc::StatusCode::UNAVAILABLE:
-        {
-            THROW(__PRETTY_FUNCTION__, GRPCError, base_error_msg  + network_error_msg + "UNAVAILABLE");
-            break;
-        }
-        case grpc::StatusCode::UNIMPLEMENTED:
-        {
-            THROW(__PRETTY_FUNCTION__, GRPCError, base_error_msg + unimplemented + "UNIMPLEMENTED");
-            break;
-        }
-        case grpc::StatusCode::UNKNOWN:
-        {
-            THROW(__PRETTY_FUNCTION__, GRPCError, base_error_msg + server_error_msg + "UNKNOWN");
-            break;
-        }
-        default:
-        {
-            return; // Do nothing: should never happen
-            break;
-        }
-    }
+    return "force model";
 }
 
 class GRPCForceModel::Impl
@@ -164,7 +56,7 @@ class GRPCForceModel::Impl
             SetForceParameterResponse response;
             grpc::ClientContext context;
             const grpc::Status status = stub->set_parameters(&context, to_grpc.from_yaml(yaml, body_name, instance_name), &response);
-            throw_if_invalid_status(input, "set_parameters", status);
+            throw_if_invalid_status<Input,GRPCForceModel>(input, "set_parameters", status);
             needs_wave_outputs = response.needs_wave_outputs();
             max_history_length = response.max_history_length();
             commands.reserve(response.commands_size());
@@ -184,7 +76,7 @@ class GRPCForceModel::Impl
             RequiredWaveInformationResponse response;
             grpc::ClientContext context;
             const grpc::Status status = stub->required_wave_information(&context, required_wave_information_request, &response);
-            throw_if_invalid_status(input, "required_wave_information", status);
+            throw_if_invalid_status<Input,GRPCForceModel>(input, "required_wave_information", status);
             return from_grpc.to_wave_request(response);
         }
 
@@ -195,7 +87,7 @@ class GRPCForceModel::Impl
             const auto states = to_grpc.from_state(state, max_history_length, env);
             const auto wave_information = get_wave_information(t, state.x(0), state.y(0), state.z(0), env);
             const grpc::Status status = stub->force(&context, to_grpc.from_force_request(states, commands, wave_information, instance_name), &response);
-            throw_if_invalid_status(input, "force", status);
+            throw_if_invalid_status<Input,GRPCForceModel>(input, "force", status);
             extra_observations = std::map<std::string,double>(response.extra_observations().begin(),response.extra_observations().end());
             return from_grpc.to_force(response);
         }

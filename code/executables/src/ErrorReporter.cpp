@@ -2,6 +2,7 @@
 #include "InternalErrorException.hpp"
 #include "ConnexionError.hpp"
 #include "MeshException.hpp"
+#include "GRPCError.hpp"
 #include "NumericalErrorException.hpp"
 #include "yaml-cpp/exceptions.h"
 #include "listeners.hpp"
@@ -44,6 +45,10 @@ void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f)
     catch(const MeshException& e)
     {
         invalid_input(std::string("A problem was detected with the STL file (mesh): ") + e.get_message() + "\n");
+    }
+    catch(const GRPCError& e)
+    {
+        invalid_input(std::string("A problem was detected when using a remote model (gRPC): ") + e.get_message() + "\n");
     }
     catch(const NumericalErrorException& e)
     {
@@ -158,7 +163,7 @@ ErrorReporter::Status ErrorReporter::get_status() const
 
 void ErrorReporter::internal_error(const std::string& error_message)
 {
-    ss << "The following error should never arise & is clearly a sign of a bug inxdyn: please send an email to the support team containing the following:" << std::endl
+    ss << "The following error should never arise & is clearly a sign of a bug in xdyn: please send an email to the support team containing the following:" << std::endl
           << "- Input YAML file(s) + STL (if needed)" << std::endl
           << "- Command-line arguments" << std::endl
           << "- The following error message: " << std::endl

@@ -1,3 +1,23 @@
+# v4.1.0 (2021-04-16)
+
+- #170 Remove local version of ssc solver
+- #164 Pid controller for xdyn
+- #5 Radiation damping force model improvement
+- #17 New feature generic quadratic aerodynamic polar model
+- #25 Holtrop mennen force model was not added to the simulator api
+- #151 Integrate fmi generation
+- #167 Bug sur le numero de version lors de l installation du paquet debian
+- #22 Grpc server modes cs and me do not return the details of errors occurring in xdyn
+- #21 Co simulation response always starts at t 0
+- #7 Adding air specific mass to environment description
+- #8 Outputting forces in server mode
+- #163 Fixed an equation typo in doc_user diffraction_radiation md
+- #4 Force models refactoring
+- #6 Fix yaml rendering problem
+- #1 Wind force models
+- #155 Frequency discretisation of irregular wave spectrum in equal energy bins
+
+
 # v4.0.4 (2020-11-20)
 
 - #157 Push to gitlab

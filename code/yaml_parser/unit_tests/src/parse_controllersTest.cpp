@@ -28,16 +28,16 @@ void parse_controllersTest::TearDown()
 TEST_F(parse_controllersTest, example)
 {
 //! [parse_controllersTest example]
-    std::vector<YamlController> controllers = parse_controller_yaml(test_data::controllers());
+    std::vector<YamlController> controllers = parse_controller_yaml(test_data::controllers()+test_data::grpc_controller());
     ASSERT_EQ(3, controllers.size());
 
-    ASSERT_EQ("PID", controllers[0].type);
+    ASSERT_EQ("pId", controllers[0].type);
     ASSERT_EQ(0.1, controllers[0].dt);
 
-    ASSERT_EQ("gRPC", controllers[1].type);
-    ASSERT_EQ(0.01, controllers[1].dt);
+    ASSERT_EQ("gRPC", controllers[2].type);
+    ASSERT_EQ(0.01, controllers[2].dt);
 
-    ASSERT_EQ("PID", controllers[2].type);
-    ASSERT_EQ(0.5, controllers[2].dt);
+    ASSERT_EQ("PID", controllers[1].type);
+    ASSERT_EQ(0.5, controllers[1].dt);
 //! [parse_controllersTest example]
 }

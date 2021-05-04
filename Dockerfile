@@ -23,14 +23,14 @@ RUN dpkg -r xdyn && \
 RUN echo "#!/bin/sh" > /usr/bin/xdyn_cli.sh && \
     echo "if [ \$# -eq 0 ];" >> /usr/bin/xdyn_cli.sh && \
     echo "then" >> /usr/bin/xdyn_cli.sh && \
-    echo "    echo \"XDyn docker help\"" >> /usr/bin/xdyn_cli.sh && \
+    echo "    echo \"xdyn docker help\"" >> /usr/bin/xdyn_cli.sh && \
     echo "    echo \"\"" >> /usr/bin/xdyn_cli.sh && \
     echo "    echo \"- Get help\"" >> /usr/bin/xdyn_cli.sh && \
     echo "    echo \"\"" >> /usr/bin/xdyn_cli.sh && \
     echo "    echo \"docker run sirehna/xdyn --help\"" >> /usr/bin/xdyn_cli.sh && \
     echo "    echo \"\"" >> /usr/bin/xdyn_cli.sh && \
     echo "    echo \"\"" >> /usr/bin/xdyn_cli.sh && \
-    echo "    echo \"- Run XDyn with input files located in pwd\"" >> /usr/bin/xdyn_cli.sh && \
+    echo "    echo \"- Run xdyn with input files located in pwd\"" >> /usr/bin/xdyn_cli.sh && \
     echo "    echo \"\"" >> /usr/bin/xdyn_cli.sh && \
     echo "    echo \"docker run --rm -u \\\`id -u\\\`:\\\`id -g\\\` -v \\\`pwd\\\`:/data -w /data sirehna/xdyn `/usr/bin/xdyn --help | grep USAGE | cut -f3- -d" "`\"" >> /usr/bin/xdyn_cli.sh && \
     echo "    echo \"\"" >> /usr/bin/xdyn_cli.sh && \
@@ -47,7 +47,7 @@ RUN echo "#!/bin/sh" > /usr/bin/xdyn_cli.sh && \
     echo "    echo \"  docker run --rm -u \\\`id -u\\\`:\\\`id -g\\\` -v \\\`pwd\\\`:/xdyn_demos -w /xdyn_demos sirehna/xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 10\"" >> /usr/bin/xdyn_cli.sh && \
     echo "    echo \"\"" >> /usr/bin/xdyn_cli.sh && \
     echo "    echo \"\"" >> /usr/bin/xdyn_cli.sh && \
-    echo "    echo \"- Below is XDyn help\"" >> /usr/bin/xdyn_cli.sh && \
+    echo "    echo \"- Here is xdyn's help message:\"" >> /usr/bin/xdyn_cli.sh && \
     echo "    echo \"\"" >> /usr/bin/xdyn_cli.sh && \
     echo "    /usr/bin/xdyn --help" >> /usr/bin/xdyn_cli.sh && \
     echo "else" >> /usr/bin/xdyn_cli.sh && \

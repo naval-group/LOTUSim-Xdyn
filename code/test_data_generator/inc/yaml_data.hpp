@@ -42,6 +42,8 @@ namespace test_data
     std::string controlled_forces();
     std::string bug_2961();
     std::string setpoints();
+    std::string unknown_controller();
+    std::string grpc_controller();
     std::string controllers();
     std::string wageningen();
     std::string resistance_curve();
@@ -104,10 +106,13 @@ namespace test_data
     std::string tutorial_09_gRPC_wave_model();
     std::string tutorial_10_gRPC_force_model();
     std::string tutorial_10_gRPC_force_model_commands();
+    std::string grpc_setpoints();
     std::string gRPC_force_model();
+    std::string gRPC_controller();
     std::string bug_3187();
     std::string bug_3185_with_invalid_frame();
     std::string bug_3185();
+    std::string tutorial_11_gRPC_controller();
 }
 
 #endif /* YAML_DATA_HPP_ */

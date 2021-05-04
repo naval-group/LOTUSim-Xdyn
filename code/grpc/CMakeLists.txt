@@ -5,6 +5,7 @@ set(SRC src/SurfaceElevationFromGRPC.cpp
         src/GRPCForceModel.cpp
         src/ToGRPC.cpp
         src/FromGRPC.cpp
+        src/GrpcControllerInterface.cpp
         )
 
 # Using C++ 2011
@@ -49,6 +50,7 @@ INCLUDE_DIRECTORIES(${exceptions_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${external_data_structures_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${core_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${environment_models_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${listeners_and_controllers_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${PROTOBUF_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(SYSTEM ${GRPC_INCLUDE_DIR})
@@ -58,9 +60,9 @@ INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS}) # For MeshIntersector
 include_directories(${hdb_interpolators_INCLUDE_DIRS}) # For History
 
 # gRPC
-SET(wave_proto_types ${CMAKE_CURRENT_SOURCE_DIR}/../waves_grpc/wave_types.proto)
-GET_FILENAME_COMPONENT(wave_proto_path "${wave_proto_types}" ABSOLUTE)
-GET_FILENAME_COMPONENT(wave_proto_path "${wave_proto_path}" DIRECTORY)
+SET(wave_proto_types ${CMAKE_CURRENT_SOURCE_DIR}/../../interfaces/wave_types.proto)
+GET_FILENAME_COMPONENT(proto_path "${wave_proto_types}" ABSOLUTE)
+GET_FILENAME_COMPONENT(proto_path "${proto_path}" DIRECTORY)
 
 SET(wave_proto_srcs_t "${CMAKE_CURRENT_BINARY_DIR}/wave_types.pb.cc")
 SET(wave_proto_hdrs_t "${CMAKE_CURRENT_BINARY_DIR}/wave_types.pb.h")
@@ -71,12 +73,12 @@ ADD_CUSTOM_COMMAND(
       COMMAND ${PROTOBUF_PROTOC}
       ARGS --grpc_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
            --cpp_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
-           -I "${PROTOC_PREFIX}${wave_proto_path}"
+           -I "${PROTOC_PREFIX}${proto_path}"
            --plugin=protoc-gen-grpc="${GRPC_CPP_PLUGIN_EXECUTABLE}"
            "wave_types.proto"
       DEPENDS "${waves_proto_types}")
 
-SET(wave_proto_grpc ${CMAKE_CURRENT_SOURCE_DIR}/../waves_grpc/wave_grpc.proto)
+SET(wave_proto_grpc ${CMAKE_CURRENT_SOURCE_DIR}/../../interfaces/wave_grpc.proto)
 SET(wave_proto_srcs_g "${CMAKE_CURRENT_BINARY_DIR}/wave_grpc.pb.cc")
 SET(wave_proto_hdrs_g "${CMAKE_CURRENT_BINARY_DIR}/wave_grpc.pb.h")
 SET(wave_grpc_srcs_g "${CMAKE_CURRENT_BINARY_DIR}/wave_grpc.grpc.pb.cc")
@@ -86,15 +88,12 @@ ADD_CUSTOM_COMMAND(
       COMMAND ${PROTOBUF_PROTOC}
       ARGS --grpc_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
            --cpp_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
-           -I "${PROTOC_PREFIX}${wave_proto_path}"
+           -I "${PROTOC_PREFIX}${proto_path}"
            --plugin=protoc-gen-grpc="${GRPC_CPP_PLUGIN_EXECUTABLE}"
            "wave_grpc.proto"
       DEPENDS "${wave_proto_grpc}")
 
-
-SET(force_proto ${CMAKE_CURRENT_SOURCE_DIR}/force.proto)
-GET_FILENAME_COMPONENT(force_proto_path "${force_proto}" PATH)
-
+SET(force_proto ${CMAKE_CURRENT_SOURCE_DIR}/../../interfaces/force.proto)
 SET(force_proto_srcs "${CMAKE_CURRENT_BINARY_DIR}/force.pb.cc")
 SET(force_proto_hdrs "${CMAKE_CURRENT_BINARY_DIR}/force.pb.h")
 SET(force_grpc_srcs "${CMAKE_CURRENT_BINARY_DIR}/force.grpc.pb.cc")
@@ -104,13 +103,37 @@ ADD_CUSTOM_COMMAND(
       COMMAND ${PROTOBUF_PROTOC}
       ARGS --grpc_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
            --cpp_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
-           -I "${PROTOC_PREFIX}${wave_proto_path}"
-           -I "${PROTOC_PREFIX}${force_proto_path}"
+           -I "${PROTOC_PREFIX}${proto_path}"
            --plugin=protoc-gen-grpc="${GRPC_CPP_PLUGIN_EXECUTABLE}"
-           "${PROTOC_PREFIX}${force_proto}"
+           "force.proto"
       DEPENDS "${force_proto}")
- 
-add_library (${PROJECT_NAME} OBJECT ${SRC} ${wave_proto_srcs_t} ${wave_grpc_srcs_t} ${wave_proto_srcs_g} ${wave_grpc_srcs_g} ${force_proto_srcs} ${force_grpc_srcs})
+
+SET(controller_proto ${CMAKE_CURRENT_SOURCE_DIR}/../../interfaces/controller.proto)
+SET(controller_proto_srcs "${CMAKE_CURRENT_BINARY_DIR}/controller.pb.cc")
+SET(controller_proto_hdrs "${CMAKE_CURRENT_BINARY_DIR}/controller.pb.h")
+SET(controller_grpc_srcs "${CMAKE_CURRENT_BINARY_DIR}/controller.grpc.pb.cc")
+SET(controller_grpc_hdrs "${CMAKE_CURRENT_BINARY_DIR}/controller.grpc.pb.h")
+ADD_CUSTOM_COMMAND(
+    OUTPUT "${controller_proto_srcs}" "${controller_proto_hdrs}" "${controller_grpc_srcs}" "${controller_grpc_hdrs}"
+    COMMAND ${PROTOBUF_PROTOC}
+    ARGS --grpc_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
+            --cpp_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
+            -I "${PROTOC_PREFIX}${proto_path}"
+            --plugin=protoc-gen-grpc="${GRPC_CPP_PLUGIN_EXECUTABLE}"
+            "controller.proto"
+    DEPENDS "${controller_proto}")
+
+add_library (${PROJECT_NAME} OBJECT
+             ${SRC}
+             ${wave_proto_srcs_t}
+             ${wave_grpc_srcs_t}
+             ${wave_proto_srcs_g}
+             ${wave_grpc_srcs_g}
+             ${force_proto_srcs}
+             ${force_grpc_srcs}
+             ${controller_proto_srcs}
+             ${controller_grpc_srcs}
+             )
 set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
 
 add_subdirectory(unit_tests)

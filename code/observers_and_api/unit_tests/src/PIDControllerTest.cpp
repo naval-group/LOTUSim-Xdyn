@@ -279,10 +279,10 @@ TEST_F(PIDControllerTest, can_initialize_controllers)
                    "        Ki: 0\n"
                    "        Kd: 0\n";
 
-    std::vector<PIDController> controllers = get_pid_controllers(tstart,
-                                                                 parse_controller_yaml(yaml_controllers.str()),
-                                                                 std::vector<YamlTimeSeries>()
-                                                                 );
+    const auto controllers = get_controllers(tstart,
+                                             parse_controller_yaml(yaml_controllers.str()),
+                                             std::vector<YamlTimeSeries>()
+                                             );
     initialize_controllers(controllers, scheduler, &sys);
 
     // Check controllers commands have been initialized in the datasource
@@ -302,4 +302,12 @@ TEST_F(PIDControllerTest, can_initialize_controllers)
     ASSERT_EQ(1, scheduler.get_discrete_state_updaters_to_run().size()); // controller callback
 
     //! [controllersTest initialize_controllers]
+}
+
+
+TEST_F(PIDControllerTest, can_get_the_commands_outputted_by_the_controller)
+{
+    const PIDController controller(a.random<double>(), a.random<double>(), pid_specific_yaml(a.random<double>(), a.random<double>(), a.random<double>(), "psi", "propeller(psi_co)") + "state weights:\n    psi: 1\n");
+    ASSERT_EQ(1, controller.get_command_names().size());
+    ASSERT_EQ("propeller(psi_co)", controller.get_command_names().at(0));
 }

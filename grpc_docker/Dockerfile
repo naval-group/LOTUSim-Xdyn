@@ -9,5 +9,5 @@ ADD wave_types.proto .
 ADD force.proto .
 RUN python -m grpc_tools.protoc -I . --python_out=/usr/python --grpc_python_out=/usr/python/ wave_types.proto && \
     python -m grpc_tools.protoc -I . --python_out=/usr/python --grpc_python_out=/usr/python/ force.proto
-ADD force.py /usr/python
+ADD controller.py force.py /usr/python/
 ENTRYPOINT ["python"]

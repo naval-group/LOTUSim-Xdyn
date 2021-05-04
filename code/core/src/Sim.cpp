@@ -114,8 +114,9 @@ Sim::Sim(const std::vector<BodyPtr>& bodies,
          const std::vector<ListOfForces>& forces,
          const EnvironmentAndFrames& env,
          const StateType& x,
-         const ssc::data_source::DataSource& command_listener) : state(x), pimpl(new Impl(bodies, forces, env, x, command_listener))
+         const ssc::data_source::DataSource& command_listener) : pimpl(new Impl(bodies, forces, env, x, command_listener))
 {
+    state = x;
 }
 
 StateType Sim::normalize_quaternions(const StateType& all_states
@@ -136,13 +137,6 @@ StateType Sim::normalize_quaternions(const StateType& all_states
     return normalized;
 }
 
-void Sim::operator()(const StateType& x, StateType& dxdt, double t)
-{
-    dx_dt(x, dxdt, t);
-    state = normalize_quaternions(x);
-    pimpl->_dx_dt = dxdt;
-}
-
 void Sim::force_states(StateType& x, const double t) const
 {
     for (auto body: pimpl->bodies)
@@ -159,6 +153,8 @@ void Sim::dx_dt(const StateType& x, StateType& dxdt, const double t)
         const auto Fext = sum_of_forces(x, body, t);
         body->calculate_state_derivatives(Fext, x, dxdt, t, pimpl->env);
     }
+    state = normalize_quaternions(x);
+    pimpl->_dx_dt = dxdt;
 }
 
 ssc::kinematics::Wrench project_into_NED_frame(const ssc::kinematics::Wrench& F, const ssc::kinematics::RotationMatrix& R);

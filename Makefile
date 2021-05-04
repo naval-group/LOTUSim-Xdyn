@@ -1,10 +1,36 @@
-all: submodule headers windows debian debug doc all_docker_images
+all: submodule windows debian debug doc all_docker_images
 
 BASE_IMAGE_VERSION=2021-04-16
 
-windows: headers windows_gccx_posix
-debian: headers debian_10_release_gcc_8
-debug: headers debian_10_debug_gcc_8
+
+HEADERS=code/ssc/ssc/check_ssc_version.hpp\
+        code/ssc/ssc/csv_file_reader.hpp\
+        code/ssc/ssc/csv_writer.hpp\
+        code/ssc/ssc/data_source.hpp\
+        code/ssc/ssc/decode_unit.hpp\
+        code/ssc/ssc/exception_handling.hpp\
+        code/ssc/ssc/functors_for_optimizer.hpp\
+        code/ssc/ssc/geometry.hpp\
+        code/ssc/ssc/integrate.hpp\
+        code/ssc/ssc/interpolation.hpp\
+        code/ssc/ssc/ipopt_interface.hpp\
+        code/ssc/ssc/json.hpp\
+        code/ssc/ssc/kinematics.hpp\
+        code/ssc/ssc/macros.hpp\
+        code/ssc/ssc/matrix_and_vector_classes.hpp\
+        code/ssc/ssc/numeric.hpp\
+        code/ssc/ssc/optimizer.hpp\
+        code/ssc/ssc/pimpl_idiom.hpp\
+        code/ssc/ssc/random_data_generator.hpp\
+        code/ssc/ssc/solver.hpp\
+        code/ssc/ssc/text_file_reader.hpp\
+        code/ssc/ssc/websocket.hpp\
+        code/ssc/ssc/yaml_parser.hpp
+
+windows: ${HEADERS} windows_gccx_posix
+debian: ${HEADERS} debian_10_release_gcc_8
+debug: ${HEADERS} debian_10_debug_gcc_8
+headers: ${HEADERS}
 
 .PHONY: all_docker_images cmake-debian debian cmake-windows windows doc submodule
 
@@ -13,7 +39,7 @@ submodule:
 	@git submodule sync --recursive
 	@git submodule update --init --recursive
 
-headers:
+${HEADERS}:
 	@cd code/ssc/ssc && sh generate_module_header.sh && cd ../../..
 
 cmake-debian: BUILD_TYPE = Release
@@ -21,7 +47,6 @@ cmake-debian: BUILD_DIR = build_deb10
 cmake-debian: CPACK_GENERATOR = DEB
 cmake-debian: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:${BASE_IMAGE_VERSION}
 cmake-debian: BOOST_ROOT = /opt/boost
-cmake-debian: SSC_ROOT = /opt/ssc
 cmake-debian: ci_env=
 cmake-debian: cmake-debian-target
 
@@ -30,7 +55,6 @@ cmake-windows: BUILD_DIR=build_win
 cmake-windows: CPACK_GENERATOR=ZIP
 cmake-windows: DOCKER_IMAGE=sirehna/base-image-win64-gcc540-win32threads-ssc-xdyn
 cmake-windows: BOOST_ROOT=/usr/src/mxe/usr/x86_64-w64-mingw32.static
-cmake-windows: SSC_ROOT=/opt/ssc
 cmake-windows: HDF5_DIR=/opt/HDF5_1_8_20/cmake
 cmake-windows: ci_env=
 cmake-windows: cmake-windows-target
@@ -40,7 +64,6 @@ debian_9_release_gcc_6: BUILD_DIR = build_deb9
 debian_9_release_gcc_6: CPACK_GENERATOR = DEB
 debian_9_release_gcc_6: DOCKER_IMAGE = sirehna/base-image-debian9-gcc6-xdyn
 debian_9_release_gcc_6: BOOST_ROOT = /opt/boost
-debian_9_release_gcc_6: SSC_ROOT = /opt/ssc
 debian_9_release_gcc_6: ci_env=
 debian_9_release_gcc_6: cmake-debian-target build-debian test-debian
 
@@ -49,7 +72,6 @@ debian_10_release_gcc_8: BUILD_DIR = build_deb10
 debian_10_release_gcc_8: CPACK_GENERATOR = DEB
 debian_10_release_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:${BASE_IMAGE_VERSION}
 debian_10_release_gcc_8: BOOST_ROOT = /opt/boost
-debian_10_release_gcc_8: SSC_ROOT = /opt/ssc
 debian_10_release_gcc_8: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_10_release_gcc_8: ci_env=
 debian_10_release_gcc_8: cmake-debian-target build-debian test-debian
@@ -59,7 +81,6 @@ debian_10_coverage_gcc_8: BUILD_DIR = build_deb10
 debian_10_coverage_gcc_8: CPACK_GENERATOR = DEB
 debian_10_coverage_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:${BASE_IMAGE_VERSION}
 debian_10_coverage_gcc_8: BOOST_ROOT = /opt/boost
-debian_10_coverage_gcc_8: SSC_ROOT = /opt/ssc
 debian_10_coverage_gcc_8: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_10_coverage_gcc_8: ci_env=`bash <(curl -s https://codecov.io/env)`
 debian_10_coverage_gcc_8: cmake-debian-target build-debian test-debian
@@ -69,7 +90,6 @@ debian_10_profile_gcc_8: BUILD_DIR = build_deb10_profile
 debian_10_profile_gcc_8: CPACK_GENERATOR = DEB
 debian_10_profile_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:${BASE_IMAGE_VERSION}
 debian_10_profile_gcc_8: BOOST_ROOT = /opt/boost
-debian_10_profile_gcc_8: SSC_ROOT = /opt/ssc
 debian_10_profile_gcc_8: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_10_profile_gcc_8: ci_env=
 debian_10_profile_gcc_8: cmake-debian-target build-debian test-debian
@@ -79,7 +99,6 @@ debian_10_debug_gcc_8: BUILD_DIR = build_deb10_dbg
 debian_10_debug_gcc_8: CPACK_GENERATOR = DEB
 debian_10_debug_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:${BASE_IMAGE_VERSION}
 debian_10_debug_gcc_8: BOOST_ROOT = /opt/boost
-debian_10_debug_gcc_8: SSC_ROOT = /opt/ssc
 debian_10_debug_gcc_8: ci_env=
 debian_10_debug_gcc_8: cmake-debian-target build-debian
 
@@ -88,7 +107,6 @@ windows_gccx_posix: BUILD_DIR=build_win_posix
 windows_gccx_posix: CPACK_GENERATOR=ZIP
 windows_gccx_posix: DOCKER_IMAGE=sirehna/base-image-win64-gccx-posixthreads-ssc-xdyn
 windows_gccx_posix: BOOST_ROOT=/usr/src/mxe/usr/x86_64-w64-mingw32.static.posix
-windows_gccx_posix: SSC_ROOT=/opt/ssc
 windows_gccx_posix: HDF5_DIR=/opt/HDF5_1_8_20/cmake
 windows_gccx_posix: ci_env=
 windows_gccx_posix: cmake-windows-target build-windows test-windows
@@ -125,7 +143,6 @@ cmake-windows-target: code/yaml-cpp/CMakeLists.txt
 	          -DCPACK_GENERATOR=$(CPACK_GENERATOR) \
 	          -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) \
 	          -DCMAKE_INSTALL_PREFIX:PATH=/opt/xdyn \
-	          -DSSC_ROOT=$(SSC_ROOT) \
 	          -DHDF5_DIR=$(HDF5_DIR) \
 	          -DBoost_DEBUG=0 \
 	          -DBOOST_ROOT:PATH=$(BOOST_ROOT) \
@@ -186,7 +203,6 @@ cmake-debian-target: code/yaml-cpp/CMakeLists.txt
 	         -DCPACK_GENERATOR=$(CPACK_GENERATOR) \
 	         -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) \
 	         -DCMAKE_INSTALL_PREFIX:PATH=/opt/xdyn \
-	         -DSSC_ROOT=$(SSC_ROOT) \
 	         -DHDF5_DIR=$(HDF5_DIR) \
 	         -DBOOST_ROOT:PATH=$(BOOST_ROOT) \
 	        /opt/share/code"
@@ -226,10 +242,10 @@ docker:
 	./ninja_debian.sh package && cp build_deb10/xdyn.deb . &&  docker build . --tag xdyn
 
 docker_grpc_force_model:
-	cd grpc_docker && make
+	make -C grpc_docker
 
 docker_grpc_waves_model:
-	cd code/waves_grpc/python_server && make CONTAINER_NAME=xdyn-waves-grpc:python3
+	make -C interfaces/waves/python/server CONTAINER_NAME=xdyn-waves-grpc:python3
 
 all_docker_images: docker docker_grpc_force_model docker_grpc_waves_model
 	echo "Build all docker images after having run 'make debian'"
@@ -240,7 +256,6 @@ doc: BUILD_DIR = build_deb10
 doc: CPACK_GENERATOR = DEB
 doc: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn
 doc: BOOST_ROOT = /opt/boost
-doc: SSC_ROOT = /opt/ssc
 doc: ci_env=
 doc: build-debian
 	cd doc_user && \

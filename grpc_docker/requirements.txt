@@ -1,3 +1,7 @@
-grpcio-tools==1.21.1
-numpy==1.16.4
-pyyaml==5.1.1
+grpcio-tools
+numpy
+pyyaml
+autopep8
+pylint
+nose
+rednose

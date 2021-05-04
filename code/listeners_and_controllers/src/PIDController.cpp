@@ -5,6 +5,7 @@
  *      Author: lincker
  */
 
+#include "yaml.h"
 #include "PIDController.hpp"
 #include "check_input_yaml.hpp"
 #include "InvalidInputException.hpp"
@@ -17,6 +18,11 @@ PIDController::PIDController (const double tstart,
       previous_t (0), previous_error (0),
       integral_term (0)
 {
+}
+
+std::vector<std::string> PIDController::get_command_names() const
+{
+    return {this->yaml.command_name};
 }
 
 PIDController::Yaml::Yaml (const std::string &yaml) : Kp (), Ki (), Kd (), state_weights (), setpoint_name (), command_name ()

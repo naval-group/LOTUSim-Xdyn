@@ -12,7 +12,6 @@
 #include <ssc/data_source.hpp>
 #include "State.hpp"
 #include "Controller.hpp"
-#include "yaml.h"
 
 /*
  * Tests for PIDController are found in `observers_and_api/unit_tests/src/PIDControllerTest.cpp`
@@ -43,6 +42,8 @@ class PIDController : public Controller
                       const double dt,
                       const std::string& yaml
                       );
+
+        std::vector<std::string> get_command_names() const;
 
         const Yaml yaml; //!< Controller-specific yaml
 

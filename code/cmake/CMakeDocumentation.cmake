@@ -118,6 +118,9 @@ IF(PANDOC)
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_02.md
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_03.md
            ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_06.md
+           ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_09.md
+           ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_10.md
+           ${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/tutorial_11.md
            )
 
     ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/../doc_user/images
