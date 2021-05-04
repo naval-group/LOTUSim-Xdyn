@@ -1,3 +1,12 @@
+# v4.2.0 (2021-05-04)
+
+- #166 External controllers
+- #16 New feature generic quadratic hydrodynamic polar model
+- #171 Fix error outputting
+- #28 Segfault in unit tests using googletest s testing internal capturestderr
+- #170 Remove local version of ssc solver
+
+
 # v4.1.0 (2021-04-16)
 
 - #170 Remove local version of ssc solver
