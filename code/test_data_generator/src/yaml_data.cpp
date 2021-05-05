@@ -4029,5 +4029,5 @@ std::string test_data::tutorial_11_gRPC_controller()
                 "output:\n"
                 "  - format: csv\n"
                 "    filename: tutorial_11.csv\n"
-                "    data: [t, 'psi(dtmb)']\n";
+                "    data: [t, 'psi(dtmb)', 'PSPropRudd(beta)', 'SBPropRudd(beta)']\n";
 }
