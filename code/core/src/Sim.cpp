@@ -234,7 +234,7 @@ void Sim::output(const StateType& x, Observer& obs, const double t) const
             const auto body_name = forces.first;
             const auto body = pimpl->name2bodyptr[body_name];
             const auto G = body->get_origin(x);
-            force->feed(obs,pimpl->env.k);
+            force->feed(obs,pimpl->env.k, pimpl->command_listener, t);
         }
     }
     for (auto body:pimpl->bodies)
