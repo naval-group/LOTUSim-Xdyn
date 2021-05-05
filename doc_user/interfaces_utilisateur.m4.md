@@ -702,8 +702,8 @@ l'historique des états de `t0` à `t0 + Dt` par pas de `dt`.
 | `qj`     | Flottant  | Seconde partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                         |
 | `qk`     | Flottant  | Troisième partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                       |
 | `phi`    | Flottant  | Angle d'Euler phi. Lire note ci-après                                                                                                                                                           |
-| `theta`  | Flottant  | Angle d'Euler phi. Lire note ci-après                                                                                                                                                           |
-| `psi`    | Flottant  | Angle d'Euler phi. Lire note ci-après                                                                                                                                                           |
+| `theta`  | Flottant  | Angle d'Euler theta. Lire note ci-après                                                                                                                                                           |
+| `psi`    | Flottant  | Angle d'Euler psi. Lire note ci-après                                                                                                                                                           |
 
 La signification exacte des angles d'Euler dépend de la convention d'angle
 choisie dans le fichier YAML d'entrée de xdyn (voir la section correspondante
