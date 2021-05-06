@@ -213,6 +213,11 @@ class DiffractionForceModel::Impl
             return v;
         }
 
+        Eigen::Vector3d get_application_point() const
+        {
+            return H0;
+        }
+
     private:
         Impl();
         bool initialized;
@@ -224,20 +229,20 @@ class DiffractionForceModel::Impl
 };
 
 DiffractionForceModel::DiffractionForceModel(const YamlDiffraction& data, const std::string& body_name_, const EnvironmentAndFrames& env):
-        ForceModel("diffraction", {}, YamlPosition(data.calculation_point, YamlAngle(), body_name_), body_name_, env),
+        ForceModel("diffraction", {}, body_name_, env),
         pimpl(new Impl(data, env, hdb_from_file(data.hdb_filename), body_name_))
 {
 }
 
 DiffractionForceModel::DiffractionForceModel(const Input& data, const std::string& body_name_, const EnvironmentAndFrames& env, const std::string& hdb_file_contents):
-        ForceModel("diffraction", {}, YamlPosition(data.calculation_point, YamlAngle(), body_name_), body_name_, env),
+        ForceModel("diffraction", {}, body_name_, env),
         pimpl(new Impl(data, env, HDBParser(hdb_file_contents), body_name_))
 {
 }
 
 Wrench DiffractionForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
 {
-    return Wrench(ssc::kinematics::Point(name,0,0,0), name, pimpl->evaluate(states, t, env));
+    return Wrench(ssc::kinematics::Point(body_name, pimpl->get_application_point()), body_name, pimpl->evaluate(states, t, env));
 }
 
 DiffractionForceModel::Input DiffractionForceModel::parse(const std::string& yaml)
