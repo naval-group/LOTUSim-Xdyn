@@ -114,12 +114,12 @@ class DiffractionForceModel::Impl
             }
         }
 
-        ssc::kinematics::Vector6d evaluate(const ssc::kinematics::Point& G, const std::string& body_name, const double t, const EnvironmentAndFrames& env, const double psi)
+        ssc::kinematics::Vector6d evaluate(const BodyStates& states, const double t, const EnvironmentAndFrames& env)
         {
             ssc::kinematics::Vector6d w;
-            auto T = env.k->get("NED", body_name);
+            auto T = env.k->get("NED", states.name);
             T.swap();
-            const ssc::kinematics::Point position_in_ned_for_the_wave_model = T*ssc::kinematics::Point(body_name,H0);
+            const ssc::kinematics::Point position_in_ned_for_the_wave_model = T*ssc::kinematics::Point(states.name,H0);
             std::array<std::vector<std::vector<double> >, 6 > rao_modules;
             std::array<std::vector<std::vector<double> >, 6 > rao_phases;
             if (env.w.use_count()>0)
@@ -144,7 +144,7 @@ class DiffractionForceModel::Impl
                         for (size_t omega_beta_idx = 0 ; omega_beta_idx < nb_of_period_incidence_pairs ; ++omega_beta_idx) // For each incidence and each period (omega[i[omega_beta_idx]], beta[j[omega_beta_idx]])
                         {
                             // Wave incidence
-                            const double beta = psi - psis.at(spectrum_idx).at(omega_beta_idx);
+                            const double beta = states.get_angles().psi - psis.at(spectrum_idx).at(omega_beta_idx);
                             // Interpolate RAO module for this axis, period and incidence
                             rao_modules[degree_of_freedom_idx][spectrum_idx][omega_beta_idx] = rao.interpolate_module(degree_of_freedom_idx, periods_for_each_direction[spectrum_idx][omega_beta_idx], beta);
                             // Interpolate RAO phase for this axis, period and incidence
@@ -237,7 +237,7 @@ DiffractionForceModel::DiffractionForceModel(const Input& data, const std::strin
 
 Wrench DiffractionForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
 {
-    return Wrench(ssc::kinematics::Point(name,0,0,0), name, pimpl->evaluate(states.G, states.name, t, env, states.get_angles().psi));
+    return Wrench(ssc::kinematics::Point(name,0,0,0), name, pimpl->evaluate(states, t, env));
 }
 
 DiffractionForceModel::Input DiffractionForceModel::parse(const std::string& yaml)
