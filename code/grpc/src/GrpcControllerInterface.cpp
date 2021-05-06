@@ -17,7 +17,7 @@ GrpcControllerInterface::Input::Input () : url (), name (), yaml () {}
 
 GrpcSetParametersResponse::GrpcSetParametersResponse ()
     : date_of_first_callback (), setpoint_names (), angle_representation (),
-      has_extra_observations (), command_names()
+      command_names()
 {
 }
 
@@ -162,7 +162,6 @@ struct GrpcControllerInterface::Impl
                 break;
         }
         ret.date_of_first_callback = response.date_of_first_callback();
-        ret.has_extra_observations = response.has_extra_observations();
         ret.setpoint_names.reserve(response.setpoint_names_size());
         std::copy(response.setpoint_names().begin(), response.setpoint_names().end(), std::back_inserter(ret.setpoint_names));
         ret.command_names.reserve(response.command_names_size());
@@ -191,16 +190,6 @@ struct GrpcControllerInterface::Impl
         return convert_controller_response(response);
     }
 
-    std::map<std::string, double> get_extra_observations()
-    {
-        ExtraObservationsResponse response;
-        grpc::ClientContext context;
-        const grpc::Status status = stub->get_extra_observations(&context, ExtraObservationsRequest(), &response);
-        throw_if_invalid_status<Input,GrpcControllerInterface>(input, "get_extra_observations", status);
-        return std::map<std::string, double>(response.extra_observations().begin(), response.extra_observations().end());
-    }
-
-
     private:
         GrpcControllerInterface::Input input;
         std::unique_ptr<Controller::Stub> stub;
@@ -218,11 +207,6 @@ GrpcControllerInterface::~GrpcControllerInterface()
 double GrpcControllerInterface::get_dt() const
 {
     return set_parameters_response.dt;
-}
-
-bool GrpcControllerInterface::has_extra_observations() const
-{
-    return set_parameters_response.has_extra_observations;
 }
 
 std::vector<std::string> GrpcControllerInterface::get_setpoint_names() const

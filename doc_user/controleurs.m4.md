@@ -257,8 +257,6 @@ Le contrôleur externe doit répondre en donnant :
 - la date à laquelle il doit être appelé pour la première fois (en général t0) : `date_of_first_callback`
 - les consignes `setpoint_names` qu'xdyn doit lui fournir (lues depuis la section `setpoints` du fichier YAML d'xdyn)
 - la représentation `angle_representation` que le contrôleur doit fournir (quaternions ou angles d'Euler)
-- si le contrôleur possède des valeurs à sérialiser en plus des commandes qu'il calcule (qui, elles,
-  sont automatiquement sérialisées) : clef `has_extra_observations`
 
 Après l'initialisation, le solveur d'xdyn appelle le contrôleur externe à la date `date_of_first_callback`.
 La méthode gRPC exacte appelée par xdyn dépend de la valeur de `angle_representation` retournée
@@ -272,7 +270,9 @@ consignes du contrôleur. La différence entre les deux méthodes est la représ
 du navire.
 
 Le contrôleur répond en donnant la valeur des commandes qu'il calcule ainsi que la date à laquelle
-il doit être rappelé.
+il doit être rappelé. Le contrôleur peut inclure dans sa réponse des variables qui ne sont pas utilisées
+dans les modèles d'effort : elles pourront alors apparaître dans la section `output` du fichier YAML
+pour être sérialisées.
 
 Le [tutoriel 11](#tutoriel-11-utilisation-dun-contr%C3%B4leur-distant) donne un exemple d'utilisation de contrôleur distant.
 
