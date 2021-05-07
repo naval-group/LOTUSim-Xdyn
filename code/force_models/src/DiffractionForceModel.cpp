@@ -99,19 +99,21 @@ class DiffractionForceModel::Impl
             ssc::kinematics::Vector6d w = ssc::kinematics::Vector6d::Zero();
             auto T = env.k->get("NED", states.name);
             T.swap();
-            const ssc::kinematics::Point position_in_ned_for_the_wave_model = T*ssc::kinematics::Point(states.name,H0);
+            const Eigen::Vector2d x = (T*ssc::kinematics::Point(states.name,H0)).v.head(2); // Position on horizontal plane of calculation point
             if (env.w.use_count()>0)
             {
                 try
                 {
                     for (size_t degree_of_freedom_idx = 0 ; degree_of_freedom_idx < 6 ; ++degree_of_freedom_idx) // For each degree of freedom (X, Y, Z, K, M, N)
                     {
-                        const auto directional_spectra = env.w->get_flat_directional_spectra(position_in_ned_for_the_wave_model.x(), position_in_ned_for_the_wave_model.y(), t);
+                        const auto directional_spectra = env.w->get_flat_directional_spectra(x(0), x(1), t);
                         for (const auto spectrum:directional_spectra) // For each directional spectrum
                         {
                             const size_t nb_of_period_incidence_pairs = spectrum.k.size();
                             for (size_t omega_beta_idx = 0 ; omega_beta_idx < nb_of_period_incidence_pairs ; ++omega_beta_idx) // For each incidence and each period (omega[i[omega_beta_idx]], beta[j[omega_beta_idx]])
                             {
+                                // Wave vector, i.e. angular wave number k as a vector along the direction of propagation
+                                const Eigen::Vector2d k(spectrum.k[omega_beta_idx]*spectrum.cos_psi[omega_beta_idx], spectrum.k[omega_beta_idx]*spectrum.sin_psi[omega_beta_idx]);
                                 // Period
                                 const double period = TWOPI/spectrum.omega.at(omega_beta_idx);
                                 // Wave incidence
@@ -122,9 +124,9 @@ class DiffractionForceModel::Impl
                                 // Evaluate force
                                 const double rao_amplitude = rao_module * spectrum.a[omega_beta_idx];
                                 const double omega_t = spectrum.omega.at(omega_beta_idx) * t;
-                                const double k_xCosPsi_ySinPsi = spectrum.k[omega_beta_idx] * (position_in_ned_for_the_wave_model.x() * spectrum.cos_psi[omega_beta_idx] + position_in_ned_for_the_wave_model.y() * spectrum.sin_psi[omega_beta_idx]);
+                                const double k_x = k.dot(x);
                                 const double theta = spectrum.phase.at(omega_beta_idx);
-                                w((int)degree_of_freedom_idx) -= rao_amplitude * sin(-omega_t + k_xCosPsi_ySinPsi + theta + rao_phase);
+                                w((int)degree_of_freedom_idx) -= rao_amplitude * sin(-omega_t + k_x + theta + rao_phase);
                             }
                         }
                     }
