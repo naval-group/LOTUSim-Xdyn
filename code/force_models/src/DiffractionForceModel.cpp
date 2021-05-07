@@ -102,9 +102,9 @@ class DiffractionForceModel::Impl
             const ssc::kinematics::Point position_in_ned_for_the_wave_model = T*ssc::kinematics::Point(states.name,H0);
             if (env.w.use_count()>0)
             {
-                for (size_t degree_of_freedom_idx = 0 ; degree_of_freedom_idx < 6 ; ++degree_of_freedom_idx) // For each degree of freedom (X, Y, Z, K, M, N)
+                try
                 {
-                    try
+                    for (size_t degree_of_freedom_idx = 0 ; degree_of_freedom_idx < 6 ; ++degree_of_freedom_idx) // For each degree of freedom (X, Y, Z, K, M, N)
                     {
                         const auto directional_spectra = env.w->get_flat_directional_spectra(position_in_ned_for_the_wave_model.x(), position_in_ned_for_the_wave_model.y(), t);
                         for (const auto spectrum:directional_spectra) // For each directional spectrum
@@ -128,10 +128,10 @@ class DiffractionForceModel::Impl
                             }
                         }
                     }
-                    catch (const ssc::exception_handling::Exception& e)
-                    {
-                        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the diffraction force model which evaluates a Response Amplitude Operator using a wave model. During this evaluation, the following problem occurred:\n" << e.get_message());
-                    }
+                }
+                catch (const ssc::exception_handling::Exception& e)
+                {
+                    THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the diffraction force model which evaluates a Response Amplitude Operator using a wave model. During this evaluation, the following problem occurred:\n" << e.get_message());
                 }
             }
             const auto ww = express_aquaplus_wrench_in_xdyn_coordinates(w);
