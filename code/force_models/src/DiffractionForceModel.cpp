@@ -78,34 +78,14 @@ class DiffractionForceModel::Impl
         Impl(const YamlDiffraction& data, const EnvironmentAndFrames& env, const HDBParser& hdb, const std::string& body_name)
           : initialized(false),
         H0(data.calculation_point.x,data.calculation_point.y,data.calculation_point.z),
-        rao(DiffractionInterpolator(hdb,std::vector<double>(),std::vector<double>(),data.mirror)),
-        periods_for_each_direction(),
-        psis()
+        rao(DiffractionInterpolator(hdb,std::vector<double>(),std::vector<double>(),data.mirror))
         {
             if (env.w.use_count()>0)
             {
-                // For each directional spectrum (i.e. for each direction), the wave angular frequencies the spectrum was discretized at.
-                // periods[direction][omega]
-                try
-                {
-                    periods_for_each_direction = convert_to_periods(env.w->get_wave_angular_frequency_for_each_model());
-                }
-                catch (const ssc::exception_handling::Exception& e)
-                {
-                    THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the diffraction force model which uses the spectral discretization (in angular frequency) of the wave models. When querying the wave model for this discretization, the following problem occurred:\n" << e.get_message());
-                }
                 const auto hdb_periods = hdb.get_diffraction_module_periods();
                 if (not(hdb_periods.empty()))
                 {
-                    check_all_omegas_are_within_bounds(hdb_periods.front(), periods_for_each_direction, hdb_periods.back());
-                }
-                try
-                {
-                    psis = env.w->get_wave_directions_for_each_model();
-                }
-                catch (const ssc::exception_handling::Exception& e)
-                {
-                    THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the diffraction force model which uses the spatial discretization (in incidence) of the wave models. When querying the wave model for this discretization, the following problem occurred:\n" << e.get_message());
+                    check_all_omegas_are_within_bounds(hdb_periods.front(), convert_to_periods(env.w->get_wave_angular_frequency_for_each_model()), hdb_periods.back());
                 }
             }
             else
@@ -122,35 +102,28 @@ class DiffractionForceModel::Impl
             const ssc::kinematics::Point position_in_ned_for_the_wave_model = T*ssc::kinematics::Point(states.name,H0);
             if (env.w.use_count()>0)
             {
-                const size_t nb_of_spectra = periods_for_each_direction.size();
                 for (size_t degree_of_freedom_idx = 0 ; degree_of_freedom_idx < 6 ; ++degree_of_freedom_idx) // For each degree of freedom (X, Y, Z, K, M, N)
                 {
                     try
                     {
                         const auto directional_spectra = env.w->get_flat_directional_spectra(position_in_ned_for_the_wave_model.x(), position_in_ned_for_the_wave_model.y(), t);
-                        for (size_t spectrum_idx = 0 ; spectrum_idx < nb_of_spectra ; ++spectrum_idx) // For each directional spectrum
+                        for (const auto spectrum:directional_spectra) // For each directional spectrum
                         {
-                            const size_t nb_of_period_incidence_pairs = periods_for_each_direction[spectrum_idx].size();
-                            const auto spectrum = directional_spectra.at(spectrum_idx);
-                            if (nb_of_period_incidence_pairs != spectrum.k.size())
-                            {
-                                THROW(__PRETTY_FUNCTION__, InternalErrorException, "Number of angular frequencies times number of incidences in HDB RAO is " << nb_of_period_incidence_pairs << ", which does not match spectrum size (" << spectrum.k.size() << " (omega,psi) pairs)");
-                            }
+                            const size_t nb_of_period_incidence_pairs = spectrum.k.size();
                             for (size_t omega_beta_idx = 0 ; omega_beta_idx < nb_of_period_incidence_pairs ; ++omega_beta_idx) // For each incidence and each period (omega[i[omega_beta_idx]], beta[j[omega_beta_idx]])
                             {
                                 // Period
-                                const double period = periods_for_each_direction[spectrum_idx][omega_beta_idx];
+                                const double period = TWOPI/spectrum.omega.at(omega_beta_idx);
                                 // Wave incidence
-                                const double beta = states.get_angles().psi - psis.at(spectrum_idx).at(omega_beta_idx);
-                                // Interpolate RAO module for this axis, period and incidence
+                                const double beta = states.get_angles().psi - spectrum.psi.at(omega_beta_idx);
+                                // Interpolate RAO module and phase for this axis, period and incidence
                                 const double rao_module = rao.interpolate_module(degree_of_freedom_idx, period, beta);
-                                // Interpolate RAO phase for this axis, period and incidence
                                 const double rao_phase = -rao.interpolate_phase(degree_of_freedom_idx, period, beta);
                                 // Evaluate force
                                 const double rao_amplitude = rao_module * spectrum.a[omega_beta_idx];
-                                const double omega_t = spectrum.omega[omega_beta_idx] * t;
+                                const double omega_t = spectrum.omega.at(omega_beta_idx) * t;
                                 const double k_xCosPsi_ySinPsi = spectrum.k[omega_beta_idx] * (position_in_ned_for_the_wave_model.x() * spectrum.cos_psi[omega_beta_idx] + position_in_ned_for_the_wave_model.y() * spectrum.sin_psi[omega_beta_idx]);
-                                const double theta = spectrum.phase[omega_beta_idx];
+                                const double theta = spectrum.phase.at(omega_beta_idx);
                                 w((int)degree_of_freedom_idx) -= rao_amplitude * sin(-omega_t + k_xCosPsi_ySinPsi + theta + rao_phase);
                             }
                         }
@@ -182,9 +155,6 @@ class DiffractionForceModel::Impl
         bool initialized;
         Eigen::Vector3d H0;
         DiffractionInterpolator rao;
-        std::vector<std::vector<double> > periods_for_each_direction;
-        std::vector<std::vector<double> > psis;
-
 };
 
 DiffractionForceModel::DiffractionForceModel(const YamlDiffraction& data, const std::string& body_name_, const EnvironmentAndFrames& env):
