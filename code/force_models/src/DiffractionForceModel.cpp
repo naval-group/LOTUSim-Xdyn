@@ -100,6 +100,7 @@ class DiffractionForceModel::Impl
             auto T = env.k->get("NED", states.name);
             T.swap();
             const Eigen::Vector2d x = (T*ssc::kinematics::Point(states.name,H0)).v.head(2); // Position on horizontal plane of calculation point
+            const double psi = states.get_angles().psi;
             if (env.w.use_count()>0)
             {
                 try
@@ -117,7 +118,7 @@ class DiffractionForceModel::Impl
                                 // Period
                                 const double period = TWOPI/spectrum.omega.at(omega_beta_idx);
                                 // Wave incidence
-                                const double beta = states.get_angles().psi - spectrum.psi.at(omega_beta_idx);
+                                const double beta = psi - spectrum.psi.at(omega_beta_idx);
                                 // Interpolate RAO module and phase for this axis, period and incidence
                                 const double rao_module = rao.interpolate_module(degree_of_freedom_idx, period, beta);
                                 const double rao_phase = -rao.interpolate_phase(degree_of_freedom_idx, period, beta);
