@@ -73,6 +73,7 @@ class DiffractionInterpolator
         bool mirror;
         std::vector<double> omegas;
         std::vector<double> psis;
+        std::pair<double, double> period_bounds;
 };
 
 #endif /* DIFFRACTIONINTERPOLATOR_HPP_ */
