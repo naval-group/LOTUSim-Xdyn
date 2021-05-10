@@ -78,7 +78,7 @@ class DiffractionForceModel::Impl
         Impl(const YamlDiffraction& data, const EnvironmentAndFrames& env, const HDBParser& hdb, const std::string& body_name)
           : initialized(false),
         H0(data.calculation_point.x,data.calculation_point.y,data.calculation_point.z),
-        rao(DiffractionInterpolator(hdb,std::vector<double>(),std::vector<double>(),data.mirror))
+        response(DiffractionInterpolator(hdb,std::vector<double>(),std::vector<double>(),data.mirror))
         {
             if (env.w.use_count()>0)
             {
@@ -120,8 +120,8 @@ class DiffractionForceModel::Impl
                                 // Wave incidence
                                 const double beta = psi - spectrum.psi.at(omega_beta_idx);
                                 // Interpolate RAO module and phase for this axis, period and incidence
-                                const double rao_module = rao.interpolate_module(degree_of_freedom_idx, period, beta);
-                                const double rao_phase = -rao.interpolate_phase(degree_of_freedom_idx, period, beta);
+                                const double rao_module = response.interpolate_module(degree_of_freedom_idx, period, beta);
+                                const double rao_phase = -response.interpolate_phase(degree_of_freedom_idx, period, beta);
                                 // Evaluate force
                                 const double rao_amplitude = rao_module * spectrum.a.at(omega_beta_idx);
                                 const double omega_t = spectrum.omega[omega_beta_idx] * t;
@@ -157,7 +157,7 @@ class DiffractionForceModel::Impl
         Impl();
         bool initialized;
         Eigen::Vector3d H0;
-        DiffractionInterpolator rao;
+        DiffractionInterpolator response;
 };
 
 DiffractionForceModel::DiffractionForceModel(const YamlDiffraction& data, const std::string& body_name_, const EnvironmentAndFrames& env):
