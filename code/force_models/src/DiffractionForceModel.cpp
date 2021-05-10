@@ -75,11 +75,10 @@ class DiffractionForceModel::Impl
 {
     public:
 
-        Impl(const YamlDiffraction& data, const EnvironmentAndFrames& env, const HDBParser& hdb, const std::string& body_name)
-          : initialized(false),
-        H0(data.calculation_point.x,data.calculation_point.y,data.calculation_point.z),
-        response(DiffractionInterpolator(hdb,std::vector<double>(),std::vector<double>(),data.mirror)),
-        use_encounter_period(false)
+        Impl(const YamlDiffraction& data, const EnvironmentAndFrames& env, const HDBParser& hdb, const std::string& body_name):
+                H0(data.calculation_point.x,data.calculation_point.y,data.calculation_point.z),
+                response(DiffractionInterpolator(hdb,std::vector<double>(),std::vector<double>(),data.mirror)),
+                use_encounter_period(false)
         {
             if (env.w.use_count()>0)
             {
@@ -160,7 +159,6 @@ class DiffractionForceModel::Impl
 
     private:
         Impl();
-        bool initialized;
         Eigen::Vector3d H0;
         DiffractionInterpolator response;
         bool use_encounter_period;
