@@ -7,6 +7,7 @@
 #define YAMLDIFFRACTION_HPP_
 
 #include <string>
+#include <boost/optional.hpp>
 
 #include "YamlCoordinates.hpp"
 /*
@@ -21,9 +22,10 @@
 struct YamlDiffraction
 {
     YamlDiffraction();
-    std::string     hdb_filename;
-    YamlCoordinates calculation_point;
-    bool            mirror;
+    std::string           hdb_filename;
+    YamlCoordinates       calculation_point;
+    bool                  mirror;
+    boost::optional<bool> use_encounter_period;
 };
 
 #endif /* YAMLDIFFRACTION_HPP_ */

@@ -78,7 +78,8 @@ class DiffractionForceModel::Impl
         Impl(const YamlDiffraction& data, const EnvironmentAndFrames& env, const HDBParser& hdb, const std::string& body_name)
           : initialized(false),
         H0(data.calculation_point.x,data.calculation_point.y,data.calculation_point.z),
-        response(DiffractionInterpolator(hdb,std::vector<double>(),std::vector<double>(),data.mirror))
+        response(DiffractionInterpolator(hdb,std::vector<double>(),std::vector<double>(),data.mirror)),
+        use_encounter_period(false)
         {
             if (env.w.use_count()>0)
             {
@@ -91,6 +92,10 @@ class DiffractionForceModel::Impl
             else
             {
                 THROW(__PRETTY_FUNCTION__, InvalidInputException, "Force model '" << DiffractionForceModel::model_name << "' needs a wave model, even if it's 'no waves'");
+            }
+            if (data.use_encounter_period.is_initialized())
+            {
+                use_encounter_period = data.use_encounter_period.get();
             }
         }
 
@@ -158,6 +163,7 @@ class DiffractionForceModel::Impl
         bool initialized;
         Eigen::Vector3d H0;
         DiffractionInterpolator response;
+        bool use_encounter_period;
 };
 
 DiffractionForceModel::DiffractionForceModel(const YamlDiffraction& data, const std::string& body_name_, const EnvironmentAndFrames& env):
@@ -187,5 +193,6 @@ DiffractionForceModel::Input DiffractionForceModel::parse(const std::string& yam
     node["hdb"]                             >> ret.hdb_filename;
     node["calculation point in body frame"] >> ret.calculation_point;
     node["mirror for 180 to 360"]           >> ret.mirror;
+    parse_optional(node, "use encounter period", ret.use_encounter_period);
     return ret;
 }
