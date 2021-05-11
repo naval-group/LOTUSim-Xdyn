@@ -8,7 +8,6 @@
                 "/opt/googletest/googlemock/include/**",
                 "/opt/boost/include/**",
                 "/opt/googletest/googletest/include/**",
-                "/opt/ssc/include/**",
                 "/opt/eigen/**"
             ],
             "compilerPath": "/usr/bin/gcc",
