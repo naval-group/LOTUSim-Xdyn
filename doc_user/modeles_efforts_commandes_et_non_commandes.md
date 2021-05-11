@@ -383,7 +383,7 @@ a_{i,j}^2=A(\omega_i,\gamma_j)^2 = 2 S(\omega_i)d\omega D(\gamma_j) d\gamma
 ```
  pour une houle irrégulière
 - $`\omega_i`$ et $`\psi_j`$ correspondent à la discrétisation du spectre de houle.
-  Il est à noter que $`\omega_i`$ ne correspond par à la pulsation de rencontre du
+  Il est à noter que $`\omega_i`$ ne correspond pas à la pulsation de rencontre du
   navire avec la houle puisque celle-ci est calculée par AQUA+. Le terme
   $`\mathbf{k}\cdot\mathbf{x}`$ permet de prendre en compte la vitesse d'avance.
 - $`\phi_{ij}`$ est une phase aléatoire (voir le [modèle de la houle
