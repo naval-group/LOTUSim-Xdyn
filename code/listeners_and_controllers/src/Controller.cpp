@@ -16,6 +16,11 @@ Controller::~Controller()
 {
 }
 
+std::vector<std::string> Controller::get_outputs() const
+{
+    return get_command_names();
+}
+
 /**
  * @brief Updates the controller output value in the datasource
     *
