@@ -10,7 +10,7 @@
 #include <ssc/text_file_reader.hpp>
 #include <ssc/check_ssc_version.hpp>
 
-CHECK_SSC_VERSION(9,0)
+CHECK_SSC_VERSION(10,0)
 
 XdynForCS get_SimServer(const XdynForCSCommandLineArguments& input_data, const std::string& yaml);
 XdynForCS get_SimServer(const XdynForCSCommandLineArguments& input_data, const std::string& yaml)
