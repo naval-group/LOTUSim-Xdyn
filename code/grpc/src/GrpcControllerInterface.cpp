@@ -167,6 +167,10 @@ struct GrpcControllerInterface::Impl
         ret.command_names.reserve(response.command_names_size());
         std::copy(response.command_names().begin(), response.command_names().end(), std::back_inserter(ret.command_names));
         ret.dt = response.dt();
+        if (ret.dt <= 0)
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "When calling the gRPC controller '" << input.name << "', the controller gave us a timestep dt of " << ret.dt << ": we expect a strictly positive value here. To fix this, ensure the gRPC controller's set_parameters method returns a strictly positive value for dt.");
+        }
         return ret;
     }
 
