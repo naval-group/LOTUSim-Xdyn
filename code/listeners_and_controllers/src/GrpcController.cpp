@@ -2,8 +2,9 @@
 
 GrpcController* GrpcController::build(const double tstart, const std::string& yaml)
 {
-    const auto grpc = GrpcControllerInterface::build(GrpcControllerInterface::parse(yaml), tstart);
-    return new GrpcController(tstart, grpc);
+    const auto parsed_yaml = GrpcControllerInterface::parse(yaml);
+    const auto grpc = GrpcControllerInterface::build(parsed_yaml, tstart);
+    return new GrpcController(tstart, grpc, parsed_yaml.name);
 }
 
 std::vector<std::string> GrpcController::get_command_names() const
@@ -11,9 +12,15 @@ std::vector<std::string> GrpcController::get_command_names() const
     return grpc->get_command_names();
 }
 
-GrpcController::GrpcController (const double tstart, const std::shared_ptr<GrpcControllerInterface>& grpc_) :
+std::string GrpcController::get_name() const
+{
+    return name;
+}
+
+GrpcController::GrpcController (const double tstart, const std::shared_ptr<GrpcControllerInterface>& grpc_, const std::string& name_) :
                     Controller(tstart, grpc_->get_dt())
                     , grpc(grpc_)
+                    , name(name_)
 {}
 
 

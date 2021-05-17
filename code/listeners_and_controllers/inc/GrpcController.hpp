@@ -15,10 +15,11 @@ class GrpcController : public Controller
   public:
     static GrpcController* build(const double tstart, const std::string& yaml);
     std::vector<std::string> get_command_names() const;
+    std::string get_name() const;
 
   private:
     GrpcController() = delete;
-    GrpcController (const double tstart, const std::shared_ptr<GrpcControllerInterface>& grpc);
+    GrpcController (const double tstart, const std::shared_ptr<GrpcControllerInterface>& grpc, const std::string& name);
     /**
      * @brief Updates the controller output value in the datasource.
      *
@@ -33,6 +34,7 @@ class GrpcController : public Controller
                                  ssc::solver::ContinuousSystem *system);
 
     std::shared_ptr<GrpcControllerInterface> grpc;
+    std::string name;
 };
 
 #endif /* GRPCCONTROLLER_HPP_ */
