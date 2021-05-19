@@ -105,6 +105,7 @@ class DiffractionForceModel::Impl
             T.swap();
             const Eigen::Vector2d x = (T*ssc::kinematics::Point(states.name,H0)).v.head(2); // Position on horizontal plane of calculation point
             const double psi = states.get_angles().psi;
+            const Eigen::Vector2d Vs_NED = (T.get_rot()*Eigen::Vector3d(states.u(), states.v(), states.w())).head(2); // Ship velocity in NED frame
             if (env.w.use_count()>0)
             {
                 try
@@ -120,7 +121,7 @@ class DiffractionForceModel::Impl
                                 // Wave vector, i.e. angular wave number k as a vector along the direction of propagation
                                 const Eigen::Vector2d k(spectrum.k.at(omega_beta_idx)*spectrum.cos_psi.at(omega_beta_idx), spectrum.k.at(omega_beta_idx)*spectrum.sin_psi.at(omega_beta_idx));
                                 // Period
-                                const double period = TWOPI/spectrum.omega[omega_beta_idx];
+                                const double period = get_interpolation_period(spectrum.omega[omega_beta_idx], Vs_NED, k);
                                 // Wave incidence
                                 const double beta = psi - spectrum.psi.at(omega_beta_idx);
                                 // Interpolate RAO module and phase for this axis, period and incidence
@@ -143,6 +144,24 @@ class DiffractionForceModel::Impl
             }
             const auto ww = express_aquaplus_wrench_in_xdyn_coordinates(w);
             return ww;
+        }
+
+        double get_interpolation_period(const double wave_angular_frequency, const Eigen::Vector2d& Vs, const Eigen::Vector2d& k)
+        {
+            double encounter_period;
+            if (use_encounter_period)
+            {
+                encounter_period = TWOPI/(wave_angular_frequency - Vs.dot(k));
+                if (abs(encounter_period) < response.period_bounds.first || abs(encounter_period) > response.period_bounds.second)
+                {
+                    std::cerr << "WARNING: The encounter period Te=" << abs(encounter_period) << "s is outside of the range [" << response.period_bounds.first << "," << response.period_bounds.second << "]s provided in the HDB file. The response will be interpolated outside the bounds." << std::endl;
+                }
+            }
+            else
+            {
+                encounter_period = TWOPI/wave_angular_frequency;
+            }
+            return encounter_period;
         }
 
         ssc::kinematics::Vector6d express_aquaplus_wrench_in_xdyn_coordinates(ssc::kinematics::Vector6d v) const
