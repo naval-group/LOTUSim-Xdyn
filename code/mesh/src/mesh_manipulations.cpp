@@ -201,15 +201,41 @@ bool oriented_clockwise(const VectorOfVectorOfPoints& v, const EPoint& O)
     for (size_t i = 1 ; i < v.size() ; ++i)
     {
         const bool facet_i_is_oriented_clockwise = oriented_clockwise(v[i],O);
-        if (facet_i_is_oriented_clockwise) nb_of_clockwise++;
+        if (facet_i_is_oriented_clockwise)
+        {
+            nb_of_clockwise++;
+        }
         else nb_of_anticlockwise++;
     }
-    if (nb_of_clockwise > 10*nb_of_anticlockwise) return true;
-    if (nb_of_anticlockwise > 10*nb_of_clockwise) return false;
+    if (nb_of_clockwise > 10*nb_of_anticlockwise)
+    {
+        return true;
+    }
+    if (nb_of_anticlockwise > 10*nb_of_clockwise)
+    {
+        return false;
+    }
     std::stringstream ss;
     ss << "Not all facets have the same orientation: " << nb_of_clockwise << " facets seem to be oriented clockwise, but "
-       << nb_of_anticlockwise << " facets seem to be oriented anticlockwise.";
-    THROW(__PRETTY_FUNCTION__, MeshException, ss.str());
+       << nb_of_anticlockwise << " facets seem to be oriented anticlockwise: we will therefore be using ";
+    if (nb_of_clockwise > nb_of_anticlockwise)
+    {
+        ss << "clockwise orientation.";
+        std::cerr << ss.str();
+        return true;
+    }
+    if (nb_of_clockwise < nb_of_anticlockwise)
+    {
+        ss << "anti-clockwise orientation.";
+        std::cerr << ss.str();
+        return false;
+    }
+    if (nb_of_clockwise == nb_of_anticlockwise)
+    {
+        ss << "clockwise orientation (arbitrary!).";
+        std::cerr << ss.str();
+        return true;
+    }
     return first_facet_is_oriented_clockwise;
 }
 

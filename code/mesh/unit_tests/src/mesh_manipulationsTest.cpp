@@ -117,9 +117,70 @@ TEST_F(mesh_manipulationsTest, can_deduce_the_orientation_of_the_normals_on_a_tr
     ASSERT_TRUE(oriented_clockwise(one_triangle(), EPoint(1,2,3)));
 }
 
-TEST_F(mesh_manipulationsTest, throws_if_not_all_facets_have_the_same_orientation)
+void flip(VectorOfVectorOfPoints& mesh, const size_t facet_index);
+void flip(VectorOfVectorOfPoints& mesh, const size_t facet_index)
 {
-    ASSERT_THROW(oriented_clockwise(unit_cube_with_incorrect_orientation(), a.random<EPoint>()), MeshException);
+    const size_t first_coordinate = 1;
+    const size_t second_coordinate = 2;
+    const auto pivot = mesh.at(facet_index).at(first_coordinate);
+    mesh.at(facet_index).at(first_coordinate) = mesh.at(facet_index).at(second_coordinate);
+    mesh.at(facet_index).at(second_coordinate) = pivot;
+}
+
+TEST_F(mesh_manipulationsTest, issue_an_error_message_if_not_all_facets_have_the_same_orientation_more_anticlockwise)
+{
+    std::stringstream error;
+    // Redirect cerr to our stringstream buffer or any other ostream
+    std::streambuf* orig =std::cerr.rdbuf(error.rdbuf());
+    ASSERT_TRUE(error.str().empty());
+    // Make a mesh with more anticlockwise-oriented facets
+    auto mesh = unit_cube_with_incorrect_orientation();
+    flip(mesh, 4);
+    flip(mesh, 5);
+    flip(mesh, 6);
+    flip(mesh, 7);
+    // Call the orientation test function
+    const bool clockwise = oriented_clockwise(mesh, EPoint(0, 0, 0));
+    // Restore cerr's buffer
+    std::cerr.rdbuf(orig);
+    // Run test assertions after to avoid segfaults if test assertions fail
+    ASSERT_EQ("Not all facets have the same orientation: 5 facets seem to be oriented clockwise, but 7 facets seem to be oriented anticlockwise: we will therefore be using anti-clockwise orientation.", error.str());
+    ASSERT_FALSE(clockwise);
+}
+
+TEST_F(mesh_manipulationsTest, issue_an_error_message_if_not_all_facets_have_the_same_orientation_more_clockwise)
+{
+    std::stringstream error;
+    // Redirect cerr to our stringstream buffer or any other ostream
+    std::streambuf* orig =std::cerr.rdbuf(error.rdbuf());
+    ASSERT_TRUE(error.str().empty());
+    // Call the orientation test function
+    const bool clockwise = oriented_clockwise(unit_cube_with_incorrect_orientation(), EPoint(0, 0, 0));
+    // Restore cerr's buffer
+    std::cerr.rdbuf(orig);
+    // Run test assertions after to avoid segfaults if test assertions fail
+    ASSERT_EQ("Not all facets have the same orientation: 9 facets seem to be oriented clockwise, but 3 facets seem to be oriented anticlockwise: we will therefore be using clockwise orientation.", error.str());
+    ASSERT_TRUE(clockwise);
+}
+
+TEST_F(mesh_manipulationsTest, issue_an_error_message_if_not_all_facets_have_the_same_orientation_as_many_clockwise_as_anticlockwise)
+{
+    std::stringstream error;
+    // Redirect cerr to our stringstream buffer or any other ostream
+    std::streambuf* orig =std::cerr.rdbuf(error.rdbuf());
+    ASSERT_TRUE(error.str().empty());
+    // Make a mesh with as many anticlockwise-oriented facets as clockwise
+    auto mesh = unit_cube_with_incorrect_orientation();
+    flip(mesh, 4);
+    flip(mesh, 5);
+    flip(mesh, 6);
+    // Call the orientation test function
+    const bool clockwise = oriented_clockwise(mesh, EPoint(0, 0, 0));
+    // Restore cerr's buffer
+    std::cerr.rdbuf(orig);
+    // Run test assertions after to avoid segfaults if test assertions fail
+    ASSERT_EQ("Not all facets have the same orientation: 6 facets seem to be oriented clockwise, but 6 facets seem to be oriented anticlockwise: we will therefore be using clockwise orientation (arbitrary!).", error.str());
+    ASSERT_TRUE(clockwise);
 }
 
 TEST_F(mesh_manipulationsTest, can_deduce_the_orientation_of_the_normals_on_a_tetrahedron)
