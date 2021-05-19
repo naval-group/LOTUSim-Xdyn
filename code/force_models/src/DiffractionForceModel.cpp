@@ -82,7 +82,15 @@ class DiffractionForceModel::Impl
         {
             if (env.w.use_count()>0)
             {
-                const auto hdb_periods = hdb.get_diffraction_module_periods();
+                std::vector<double> hdb_periods;
+                try
+                {
+                    hdb_periods = hdb.get_diffraction_module_periods();
+                }
+                catch(const ssc::exception_handling::Exception& e)
+                {
+                    THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the diffraction force model which uses the frequency-domain results of the HDB file. When querying the periods for the diffraction forces, the following problem occurred:\n" << e.get_message());
+                }
                 if (not(hdb_periods.empty()))
                 {
                     check_all_omegas_are_within_bounds(hdb_periods.front(), convert_to_periods(env.w->get_wave_angular_frequency_for_each_model()), hdb_periods.back());
