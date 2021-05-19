@@ -105,6 +105,11 @@ std::function<double(double)> operator-(const std::function<double(double)>& f, 
     return [f, g](double x){return f(x) - g(x);};
 }
 
+std::function<double(double)> operator-(const std::function<double(double)>& f, const double a)
+{
+    return [&f, a](double x){return f(x) - a;};
+}
+
 class RadiationDampingForceModel::Impl
 {
     public:
@@ -130,7 +135,7 @@ class RadiationDampingForceModel::Impl
                 for (size_t j = 0 ; j < 6 ; ++j)
                 {
                     const auto Ma = get_Ma(i,j);
-                    Ka[i][j] = [this, Ma, i, j](double tau){return get_K(Ma)(tau) - A(i,j);};
+                    Ka[i][j] = get_K(Ma - A(i,j));
                     const auto Br = get_Br(i,j);
                     Kb[i][j] = get_K(Br);
                     if (yaml.output_Br_and_K)
@@ -196,7 +201,7 @@ class RadiationDampingForceModel::Impl
 
         std::function<double(double)> get_K(const size_t i, const size_t j, const std::array<double, 6>& Ubar)
         {
-            if (forward_speed_correction && j < 3) // 3 last column
+            if (forward_speed_correction && j >= 3) // 3 last column
             {
                 if (j == 3) // Column 4
                 {
