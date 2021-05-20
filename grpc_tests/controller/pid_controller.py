@@ -63,7 +63,7 @@ class PIDController(controller.Model):
         -------
         - commands (List[str]): commands computed by this controller
         """
-        return [self.command_name]
+        return [self.command_name, 'Ten times current time']
 
 
     def get_setpoint_names(self) -> List[str]:
@@ -81,7 +81,7 @@ class PIDController(controller.Model):
         -------
         - commands (Dict[str,float]): commands used by xdyn's controlled forces
         """
-        return [self.setpoint_name]
+        return [self.setpoint_name, 'Ten times current time']
 
     def get_plant_output(self, states: StatesEuler) -> float:
         """Calculates the linear combination of states used to compute the
@@ -148,7 +148,7 @@ class PIDController(controller.Model):
         return {
             self.command_name: proportional_term
             + integral_term
-            + derivative_term
+            + derivative_term, 'Ten times current time': 10*states.t
         }
 
 
