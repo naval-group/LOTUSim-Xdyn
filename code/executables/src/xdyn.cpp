@@ -24,24 +24,24 @@
 
 CHECK_SSC_VERSION(10,0)
 
-void solve(const std::string& solver_name, Sim& sys, ssc::solver::Scheduler& scheduler, ListOfObservers& observer);
-void solve(const std::string& solver_name, Sim& sys, ssc::solver::Scheduler& scheduler, ListOfObservers& observer)
+void solve(const std::string& solver_name, Sim& sys, ssc::solver::Scheduler& scheduler, ListOfObservers& observer, const std::vector<ssc::solver::DiscreteSystemPtr>& controllers);
+void solve(const std::string& solver_name, Sim& sys, ssc::solver::Scheduler& scheduler, ListOfObservers& observer, const std::vector<ssc::solver::DiscreteSystemPtr>& controllers)
 {
     if (solver_name=="euler")
     {
-        ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observer);
+        ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observer, controllers);
     }
     else if (solver_name=="rk4")
     {
-        ssc::solver::quicksolve<ssc::solver::RK4Stepper>(sys, scheduler, observer);
+        ssc::solver::quicksolve<ssc::solver::RK4Stepper>(sys, scheduler, observer, controllers);
     }
     else if (solver_name=="rkck")
     {
-        ssc::solver::quicksolve<ssc::solver::RKCK>(sys, scheduler, observer);
+        ssc::solver::quicksolve<ssc::solver::RKCK>(sys, scheduler, observer, controllers);
     }
     else
     {
-        ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observer);
+        ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observer, controllers);
     }
 }
 
@@ -127,20 +127,14 @@ void run_simulation(const XdynCommandLineArguments& input_data, ErrorReporter& e
     const auto f = [input_data, yaml_input](){
     {
         const auto input = SimulatorYamlParser(yaml_input).parse();
-
         auto sys = get_system(input, input_data.tstart);
-
         ssc::solver::Scheduler scheduler(input_data.tstart, input_data.tend, input_data.initial_timestep);
-        const auto controllers = get_controllers(input_data.tstart, input.controllers, input.commands);
-        initialize_controllers(controllers, scheduler, &sys);
-
+        const auto controllers = get_initialized_controllers(input_data.tstart, input.controllers, input.commands, scheduler, &sys);
         auto observers_description = build_observers_description(yaml_input, input_data);
         ListOfObservers observers(observers_description);
-
         serialize_context_if_necessary(observers_description, sys, yaml_input, input_data_serialize(input_data));
         serialize_context_if_necessary_new(observers, sys);
-
-        solve(input_data.solver, sys, scheduler, observers);
+        solve(input_data.solver, sys, scheduler, observers, controllers);
     }};
     if (input_data.catch_exceptions)
     {

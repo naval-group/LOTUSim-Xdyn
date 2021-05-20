@@ -1,5 +1,6 @@
 #ifndef EXTERNAL_DATA_STRUCTURES_INC_YAMLSIMSERVERINPUTS_HPP_
 #define EXTERNAL_DATA_STRUCTURES_INC_YAMLSIMSERVERINPUTS_HPP_
+#include "YamlController.hpp"
 #include "YamlState.hpp"
 #include <map>
 #include <vector>
@@ -12,6 +13,7 @@ struct YamlSimServerInputs
     std::vector<YamlState> states;
     std::map<std::string, double> commands;
     std::vector<std::string> requested_output;
+    std::vector<YamlController> controllers;
 };
 
 

@@ -15,7 +15,7 @@ class EverythingObserver : public MapObserver
 {
     public:
         EverythingObserver();
-        void observe(const Sim& sys, const double t);
+        void observe(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems);
         std::vector<Res> get() const;
 
     private:

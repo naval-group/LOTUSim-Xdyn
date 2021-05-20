@@ -23,9 +23,9 @@ std::string get_body_name(const Sim& sys)
     return sys.get_bodies().front()->get_name();
 }
 
-void EverythingObserver::observe(const Sim& sys, const double t)
+void EverythingObserver::observe(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems)
 {
-    observe_everything(sys, t);
+    observe_everything(sys, t, discrete_systems);
     const std::string body_name = get_body_name(sys);
     for (const auto key_values:m)
     {

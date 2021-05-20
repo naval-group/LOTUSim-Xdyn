@@ -96,7 +96,7 @@ void add_setpoints_listener(ssc::data_source::DataSource& ds,
     ds.check_out();
 }
 
-Controller* build_controller(const double tstart, const YamlController& yaml_controller)
+Controller* build_controller(const double tstart, const YamlController& yaml_controller, Sim* sys)
 {
     if (yaml_controller.type == "PID")
     {
@@ -104,7 +104,7 @@ Controller* build_controller(const double tstart, const YamlController& yaml_con
     }
     if (yaml_controller.type == "GRPC")
     {
-        return GrpcController::build(tstart, yaml_controller.rest_of_the_yaml);
+        return GrpcController::build(tstart, yaml_controller.rest_of_the_yaml, sys);
     }
     THROW(__PRETTY_FUNCTION__, InvalidInputException, "Controller type '" << yaml_controller.type << "' is unknown. Known controller types are: PID, GRPC");
     return NULL;
@@ -119,23 +119,45 @@ void check_no_controller_outputs_are_defined_in_a_command(const Controller* cont
     }
 }
 
-std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > get_controllers(const double tstart,
-                                               const std::vector<YamlController>& yaml_controllers, //!< Parsed YAML controllers
-                                               const std::vector<YamlTimeSeries>& yaml_commands //!< Parsed YAML commands
+/**  \brief Initializes the given controllers commands in Sim datasource and
+  * adds their callbacks to the scheduler.
+  *  \snippet observers_and_api/unit_tests/src/PIDControllerTest.cpp controllersTest initialize_controllers
+  */
+void initialize_controllers(const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& controllers,
+                            ssc::solver::Scheduler& scheduler,
+                            Sim* system
+                            );
+
+
+std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > build_controllers(const double tstart,
+                                               const std::vector<YamlController>& yaml_controllers,
+                                               const std::vector<YamlTimeSeries>& yaml_commands,
+                                               Sim* sys
                                                )
 {
     std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > controllers;
     for (YamlController yaml_controller : yaml_controllers)
     {
         boost::to_upper(yaml_controller.type);
-        const auto controller = build_controller(tstart, yaml_controller);
+        const auto controller = build_controller(tstart, yaml_controller, sys);
         if (controller)
         {
             check_no_controller_outputs_are_defined_in_a_command(controller, yaml_commands);
             controllers.push_back(std::shared_ptr<ssc::solver::DiscreteSystem> (controller));
         }
     }
+    return controllers;
+}
 
+std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > get_initialized_controllers(const double tstart,
+                                               const std::vector<YamlController>& yaml_controllers, //!< Parsed YAML controllers
+                                               const std::vector<YamlTimeSeries>& yaml_commands, //!< Parsed YAML commands
+                                               ssc::solver::Scheduler& scheduler,
+                                               Sim* sys
+                                               )
+{
+    const auto controllers = build_controllers(tstart, yaml_controllers, yaml_commands, sys);
+    initialize_controllers(controllers, scheduler, sys);
     return controllers;
 }
 

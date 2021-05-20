@@ -13,6 +13,7 @@ struct YamlSimServerInputs;
 #include <map>
 #include <string>
 #include "State.hpp"
+#include "YamlController.hpp"
 
 struct SimServerInputs
 {
@@ -25,6 +26,7 @@ struct SimServerInputs
     State full_state_history;
     std::map<std::string, double> commands;
     std::vector<std::string> requested_output;
+    std::vector<YamlController> controllers;
     private: SimServerInputs(); // Disabled
 };
 
