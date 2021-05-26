@@ -130,17 +130,24 @@ class DiffractionForceModel::Impl
                                 const Eigen::Vector2d k(spectrum.k.at(omega_beta_idx)*spectrum.cos_psi.at(omega_beta_idx), spectrum.k.at(omega_beta_idx)*spectrum.sin_psi.at(omega_beta_idx));
                                 // Period
                                 const double period = get_interpolation_period(spectrum.omega[omega_beta_idx], Vs_NED, k);
-                                // Wave incidence
-                                const double beta = psi - spectrum.psi.at(omega_beta_idx);
-                                // Interpolate RAO module and phase for this axis, period and incidence
-                                const double rao_module = response.interpolate_module(degree_of_freedom_idx, period, beta);
-                                const double rao_phase = -response.interpolate_phase(degree_of_freedom_idx, period, beta);
-                                // Evaluate force
-                                const double rao_amplitude = rao_module * spectrum.a.at(omega_beta_idx);
-                                const double omega_t = spectrum.omega[omega_beta_idx] * t;
-                                const double k_x = k.dot(x);
-                                const double theta = spectrum.phase.at(omega_beta_idx);
-                                w((int)degree_of_freedom_idx) -= rao_amplitude * sin(-omega_t + k_x + theta + rao_phase);
+                                if (period > 0)
+                                {
+                                    // Wave incidence
+                                    const double beta = psi - spectrum.psi.at(omega_beta_idx);
+                                    // Interpolate RAO module and phase for this axis, period and incidence
+                                    const double rao_module = response.interpolate_module(degree_of_freedom_idx, period, beta);
+                                    const double rao_phase = -response.interpolate_phase(degree_of_freedom_idx, period, beta);
+                                    // Evaluate force
+                                    const double rao_amplitude = rao_module * spectrum.a.at(omega_beta_idx);
+                                    const double omega_t = spectrum.omega[omega_beta_idx] * t;
+                                    const double k_x = k.dot(x);
+                                    const double theta = spectrum.phase.at(omega_beta_idx);
+                                    w((int)degree_of_freedom_idx) -= rao_amplitude * sin(-omega_t + k_x + theta + rao_phase);
+                                }
+                                else
+                                {
+                                    std::cerr << "WARNING: The encounter period Te=" << period << "s is negative. This wave component will produce no diffraction force." << std::endl;
+                                }
                             }
                         }
                     }
@@ -160,7 +167,7 @@ class DiffractionForceModel::Impl
             if (use_encounter_period)
             {
                 encounter_period = TWOPI/(wave_angular_frequency - Vs.dot(k));
-                if (abs(encounter_period) < response.period_bounds.first || abs(encounter_period) > response.period_bounds.second)
+                if (encounter_period > 0 && (encounter_period < response.period_bounds.first || encounter_period > response.period_bounds.second))
                 {
                     std::cerr << "WARNING: The encounter period Te=" << abs(encounter_period) << "s is outside of the range [" << response.period_bounds.first << "," << response.period_bounds.second << "]s provided in the HDB file. The response will be interpolated outside the bounds." << std::endl;
                 }
