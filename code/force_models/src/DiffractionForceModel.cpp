@@ -127,21 +127,21 @@ class DiffractionForceModel::Impl
                             for (size_t omega_beta_idx = 0 ; omega_beta_idx < nb_of_period_incidence_pairs ; ++omega_beta_idx) // For each incidence and each period (omega[i[omega_beta_idx]], beta[j[omega_beta_idx]])
                             {
                                 // Wave vector, i.e. angular wave number k as a vector along the direction of propagation
-                                const Eigen::Vector2d k(spectrum.k.at(omega_beta_idx)*spectrum.cos_psi.at(omega_beta_idx), spectrum.k.at(omega_beta_idx)*spectrum.sin_psi.at(omega_beta_idx));
+                                const Eigen::Vector2d k(spectrum.k[omega_beta_idx]*spectrum.cos_psi[omega_beta_idx], spectrum.k[omega_beta_idx]*spectrum.sin_psi[omega_beta_idx]);
                                 // Period
                                 const double period = get_interpolation_period(spectrum.omega[omega_beta_idx], Vs_NED, k);
                                 if (period > 0)
                                 {
                                     // Wave incidence
-                                    const double beta = psi - spectrum.psi.at(omega_beta_idx);
+                                    const double beta = psi - spectrum.psi[omega_beta_idx];
                                     // Interpolate RAO module and phase for this axis, period and incidence
                                     const double rao_module = response.interpolate_module(degree_of_freedom_idx, period, beta);
                                     const double rao_phase = -response.interpolate_phase(degree_of_freedom_idx, period, beta);
                                     // Evaluate force
-                                    const double rao_amplitude = rao_module * spectrum.a.at(omega_beta_idx);
+                                    const double rao_amplitude = rao_module * spectrum.a[omega_beta_idx];
                                     const double omega_t = spectrum.omega[omega_beta_idx] * t;
                                     const double k_x = k.dot(x);
-                                    const double theta = spectrum.phase.at(omega_beta_idx);
+                                    const double theta = spectrum.phase[omega_beta_idx];
                                     w((int)degree_of_freedom_idx) -= rao_amplitude * sin(-omega_t + k_x + theta + rao_phase);
                                 }
                                 else
