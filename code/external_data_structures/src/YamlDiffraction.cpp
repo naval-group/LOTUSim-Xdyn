@@ -9,6 +9,7 @@
 
 YamlDiffraction::YamlDiffraction() : hdb_filename(),
                                      calculation_point(),
-                                     mirror(false)
+                                     mirror(false),
+                                     use_encounter_period()
 {
 }

@@ -11,6 +11,7 @@
 #include "DiffractionInterpolator.hpp"
 #include "HDBParser.hpp"
 #include "InvalidInputException.hpp"
+#include "InternalErrorException.hpp"
 #include "SurfaceElevationInterface.hpp"
 #include "yaml.h"
 #include "external_data_structures_parsers.hpp"
@@ -74,98 +75,108 @@ class DiffractionForceModel::Impl
 {
     public:
 
-        Impl(const YamlDiffraction& data, const EnvironmentAndFrames& env, const HDBParser& hdb, const std::string& body_name)
-          : initialized(false),
-        H0(data.calculation_point.x,data.calculation_point.y,data.calculation_point.z),
-        rao(DiffractionInterpolator(hdb,std::vector<double>(),std::vector<double>(),data.mirror)),
-        periods_for_each_direction(),
-        psis()
+        Impl(const YamlDiffraction& data, const EnvironmentAndFrames& env, const HDBParser& hdb, const std::string& body_name):
+                H0(data.calculation_point.x,data.calculation_point.y,data.calculation_point.z),
+                response(DiffractionInterpolator(hdb,std::vector<double>(),std::vector<double>(),data.mirror)),
+                use_encounter_period(false)
         {
             if (env.w.use_count()>0)
             {
-                // For each directional spectrum (i.e. for each direction), the wave angular frequencies the spectrum was discretized at.
-                // periods[direction][omega]
+                std::vector<double> hdb_periods;
                 try
                 {
-                    periods_for_each_direction = convert_to_periods(env.w->get_wave_angular_frequency_for_each_model());
+                    hdb_periods = hdb.get_diffraction_module_periods();
                 }
-                catch (const ssc::exception_handling::Exception& e)
+                catch(const ssc::exception_handling::Exception& e)
                 {
-                    THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the diffraction force model which uses the spectral discretization (in angular frequency) of the wave models. When querying the wave model for this discretization, the following problem occurred:\n" << e.get_message());
+                    THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the diffraction force model which uses the frequency-domain results of the HDB file. When querying the periods for the diffraction forces, the following problem occurred:\n" << e.get_message());
                 }
-                const auto hdb_periods = hdb.get_diffraction_module_periods();
                 if (not(hdb_periods.empty()))
                 {
-                    check_all_omegas_are_within_bounds(hdb_periods.front(), periods_for_each_direction, hdb_periods.back());
-                }
-                try
-                {
-                    psis = env.w->get_wave_directions_for_each_model();
-                }
-                catch (const ssc::exception_handling::Exception& e)
-                {
-                    THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the diffraction force model which uses the spatial discretization (in incidence) of the wave models. When querying the wave model for this discretization, the following problem occurred:\n" << e.get_message());
+                    check_all_omegas_are_within_bounds(hdb_periods.front(), convert_to_periods(env.w->get_wave_angular_frequency_for_each_model()), hdb_periods.back());
                 }
             }
             else
             {
                 THROW(__PRETTY_FUNCTION__, InvalidInputException, "Force model '" << DiffractionForceModel::model_name << "' needs a wave model, even if it's 'no waves'");
             }
+            if (data.use_encounter_period.is_initialized())
+            {
+                use_encounter_period = data.use_encounter_period.get();
+            }
         }
 
-        ssc::kinematics::Vector6d evaluate(const ssc::kinematics::Point& G, const std::string& body_name, const double t, const EnvironmentAndFrames& env, const double psi)
+        ssc::kinematics::Vector6d evaluate(const BodyStates& states, const double t, const EnvironmentAndFrames& env)
         {
-            ssc::kinematics::Vector6d w;
-            auto T = env.k->get("NED", body_name);
+            ssc::kinematics::Vector6d w = ssc::kinematics::Vector6d::Zero();
+            auto T = env.k->get("NED", states.name);
             T.swap();
-            const ssc::kinematics::Point position_in_ned_for_the_wave_model = T*ssc::kinematics::Point(body_name,H0);
-            std::array<std::vector<std::vector<double> >, 6 > rao_modules;
-            std::array<std::vector<std::vector<double> >, 6 > rao_phases;
+            const Eigen::Vector2d x = (T*ssc::kinematics::Point(states.name,H0)).v.head(2); // Position on horizontal plane of calculation point
+            const double psi = states.get_angles().psi;
+            const Eigen::Vector2d Vs_NED = (T.get_rot()*Eigen::Vector3d(states.u(), states.v(), states.w())).head(2); // Ship velocity in NED frame
             if (env.w.use_count()>0)
             {
-                const size_t nb_of_spectra = periods_for_each_direction.size();
-                if (not(periods_for_each_direction.empty()))
+                try
                 {
-                    // Resize for each degree of freedom
-                    for (size_t k = 0 ; k < 6 ; ++k)
+                    for (size_t degree_of_freedom_idx = 0 ; degree_of_freedom_idx < 6 ; ++degree_of_freedom_idx) // For each degree of freedom (X, Y, Z, K, M, N)
                     {
-                        rao_modules[k].resize(nb_of_spectra);
-                        rao_phases[k].resize(nb_of_spectra);
-                    }
-                }
-                for (size_t degree_of_freedom_idx = 0 ; degree_of_freedom_idx < 6 ; ++degree_of_freedom_idx) // For each degree of freedom (X, Y, Z, K, M, N)
-                {
-                    for (size_t spectrum_idx = 0 ; spectrum_idx < nb_of_spectra ; ++spectrum_idx) // For each directional spectrum
-                    {
-                        const size_t nb_of_period_incidence_pairs = periods_for_each_direction[spectrum_idx].size();
-                        rao_modules[degree_of_freedom_idx][spectrum_idx].resize(nb_of_period_incidence_pairs);
-                        rao_phases[degree_of_freedom_idx][spectrum_idx].resize(nb_of_period_incidence_pairs);
-                        for (size_t omega_beta_idx = 0 ; omega_beta_idx < nb_of_period_incidence_pairs ; ++omega_beta_idx) // For each incidence and each period (omega[i[omega_beta_idx]], beta[j[omega_beta_idx]])
+                        const auto directional_spectra = env.w->get_flat_directional_spectra(x(0), x(1), t);
+                        for (const auto spectrum:directional_spectra) // For each directional spectrum
                         {
-                            // Wave incidence
-                            const double beta = psi - psis.at(spectrum_idx).at(omega_beta_idx);
-                            // Interpolate RAO module for this axis, period and incidence
-                            rao_modules[degree_of_freedom_idx][spectrum_idx][omega_beta_idx] = rao.interpolate_module(degree_of_freedom_idx, periods_for_each_direction[spectrum_idx][omega_beta_idx], beta);
-                            // Interpolate RAO phase for this axis, period and incidence
-                            rao_phases[degree_of_freedom_idx][spectrum_idx][omega_beta_idx] = -rao.interpolate_phase(degree_of_freedom_idx, periods_for_each_direction[spectrum_idx][omega_beta_idx], beta);
+                            const size_t nb_of_period_incidence_pairs = spectrum.omega.size();
+                            for (size_t omega_beta_idx = 0 ; omega_beta_idx < nb_of_period_incidence_pairs ; ++omega_beta_idx) // For each incidence and each period (omega[i[omega_beta_idx]], beta[j[omega_beta_idx]])
+                            {
+                                // Wave vector, i.e. angular wave number k as a vector along the direction of propagation
+                                const Eigen::Vector2d k(spectrum.k[omega_beta_idx]*spectrum.cos_psi[omega_beta_idx], spectrum.k[omega_beta_idx]*spectrum.sin_psi[omega_beta_idx]);
+                                // Period
+                                const double period = get_interpolation_period(spectrum.omega[omega_beta_idx], Vs_NED, k);
+                                if (period > 0)
+                                {
+                                    // Wave incidence
+                                    const double beta = psi - spectrum.psi[omega_beta_idx];
+                                    // Interpolate RAO module and phase for this axis, period and incidence
+                                    const double rao_module = response.interpolate_module(degree_of_freedom_idx, period, beta);
+                                    const double rao_phase = -response.interpolate_phase(degree_of_freedom_idx, period, beta);
+                                    // Evaluate force
+                                    const double rao_amplitude = rao_module * spectrum.a[omega_beta_idx];
+                                    const double omega_t = spectrum.omega[omega_beta_idx] * t;
+                                    const double k_x = k.dot(x);
+                                    const double theta = spectrum.phase[omega_beta_idx];
+                                    w((int)degree_of_freedom_idx) -= rao_amplitude * sin(-omega_t + k_x + theta + rao_phase);
+                                }
+                                else
+                                {
+                                    std::cerr << "WARNING: The encounter period Te=" << period << "s is negative. This wave component will produce no diffraction force." << std::endl;
+                                }
+                            }
                         }
                     }
-                    try
-                    {
-                        w((int)degree_of_freedom_idx) = env.w->evaluate_rao(position_in_ned_for_the_wave_model.x(),
-                                                        position_in_ned_for_the_wave_model.y(),
-                                                        t,
-                                                        rao_modules[degree_of_freedom_idx],
-                                                        rao_phases[degree_of_freedom_idx]);
-                    }
-                    catch (const ssc::exception_handling::Exception& e)
-                    {
-                        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the diffraction force model which evaluates a Response Amplitude Operator using a wave model. During this evaluation, the following problem occurred:\n" << e.get_message());
-                    }
+                }
+                catch (const ssc::exception_handling::Exception& e)
+                {
+                    THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the diffraction force model which evaluates a Response Amplitude Operator using a wave model. During this evaluation, the following problem occurred:\n" << e.get_message());
                 }
             }
             const auto ww = express_aquaplus_wrench_in_xdyn_coordinates(w);
             return ww;
+        }
+
+        double get_interpolation_period(const double wave_angular_frequency, const Eigen::Vector2d& Vs, const Eigen::Vector2d& k)
+        {
+            double encounter_period;
+            if (use_encounter_period)
+            {
+                encounter_period = TWOPI/(wave_angular_frequency - Vs.dot(k));
+                if (encounter_period > 0 && (encounter_period < response.period_bounds.first || encounter_period > response.period_bounds.second))
+                {
+                    std::cerr << "WARNING: The encounter period Te=" << abs(encounter_period) << "s is outside of the range [" << response.period_bounds.first << "," << response.period_bounds.second << "]s provided in the HDB file. The response will be interpolated outside the bounds." << std::endl;
+                }
+            }
+            else
+            {
+                encounter_period = TWOPI/wave_angular_frequency;
+            }
+            return encounter_period;
         }
 
         ssc::kinematics::Vector6d express_aquaplus_wrench_in_xdyn_coordinates(ssc::kinematics::Vector6d v) const
@@ -175,31 +186,33 @@ class DiffractionForceModel::Impl
             return v;
         }
 
+        Eigen::Vector3d get_application_point() const
+        {
+            return H0;
+        }
+
     private:
         Impl();
-        bool initialized;
         Eigen::Vector3d H0;
-        DiffractionInterpolator rao;
-        std::vector<std::vector<double> > periods_for_each_direction;
-        std::vector<std::vector<double> > psis;
-
+        DiffractionInterpolator response;
+        bool use_encounter_period;
 };
 
 DiffractionForceModel::DiffractionForceModel(const YamlDiffraction& data, const std::string& body_name_, const EnvironmentAndFrames& env):
-        ForceModel("diffraction", {}, YamlPosition(data.calculation_point, YamlAngle(), body_name_), body_name_, env),
+        ForceModel("diffraction", {}, body_name_, env),
         pimpl(new Impl(data, env, hdb_from_file(data.hdb_filename), body_name_))
 {
 }
 
 DiffractionForceModel::DiffractionForceModel(const Input& data, const std::string& body_name_, const EnvironmentAndFrames& env, const std::string& hdb_file_contents):
-        ForceModel("diffraction", {}, YamlPosition(data.calculation_point, YamlAngle(), body_name_), body_name_, env),
+        ForceModel("diffraction", {}, body_name_, env),
         pimpl(new Impl(data, env, HDBParser(hdb_file_contents), body_name_))
 {
 }
 
 Wrench DiffractionForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
 {
-    return Wrench(ssc::kinematics::Point(name,0,0,0), name, pimpl->evaluate(states.G, states.name, t, env, states.get_angles().psi));
+    return Wrench(ssc::kinematics::Point(body_name, pimpl->get_application_point()), body_name, pimpl->evaluate(states, t, env));
 }
 
 DiffractionForceModel::Input DiffractionForceModel::parse(const std::string& yaml)
@@ -212,5 +225,6 @@ DiffractionForceModel::Input DiffractionForceModel::parse(const std::string& yam
     node["hdb"]                             >> ret.hdb_filename;
     node["calculation point in body frame"] >> ret.calculation_point;
     node["mirror for 180 to 360"]           >> ret.mirror;
+    parse_optional(node, "use encounter period", ret.use_encounter_period);
     return ret;
 }

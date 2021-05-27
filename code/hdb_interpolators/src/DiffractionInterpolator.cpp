@@ -25,19 +25,23 @@ DiffractionInterpolator::DiffractionInterpolator(const HDBParser& data, //!< Dat
                                              const std::vector<double>& omega, //!< Angular frequencies in the wave spectrum (points at which to interpolate the HDB data)
                                              const std::vector<double>& psi, //!< Wave directions (points at which to interpolate the HDB data)
                                              const bool mirror_ //!< Should the RAO for psi between 180° and 360° be calculated by mirroring the RAO between 0° and 180°?
-        ) : module(), phase(), mirror(mirror_), omegas(omega), psis(psi)
+        ) : module(), phase(), mirror(mirror_), omegas(omega), psis(psi), period_bounds()
 {
     const auto M_module = data.get_diffraction_module_tables();
     const auto M_phase = data.get_diffraction_phase_tables();
     std::reverse(omegas.begin(),omegas.end());
+    const auto diffraction_module_periods = data.get_diffraction_module_periods();
+    period_bounds.first = *std::min_element(diffraction_module_periods.begin(), diffraction_module_periods.end());
+    period_bounds.second = *std::max_element(diffraction_module_periods.begin(), diffraction_module_periods.end());
     // For each axis (X,Y,Z,phi,theta,psi)
     for (size_t i = 0 ; i < 6 ; ++i)
     {
         // module.at(i) and phase.at(i) are vectors of vectors: each element in the vector of vectors corresponds to a frequency omega
         // For each omega, we have a vector containing the RAO values for each incidence
-        module.at(i) = Interpolator(data.get_diffraction_module_periods(),data.get_diffraction_module_psis(),M_module.at(i));
+        module.at(i) = Interpolator(diffraction_module_periods,data.get_diffraction_module_psis(),M_module.at(i));
         phase.at(i) = Interpolator(data.get_diffraction_phase_periods(),data.get_diffraction_phase_psis(),M_phase.at(i));
     }
+
 }
 
 std::vector<std::vector<double> > DiffractionInterpolator::get_array_cartesian(Interpolator& i) const
