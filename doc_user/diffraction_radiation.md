@@ -441,7 +441,7 @@ L'ensemble de la théorie décrite jusqu'ici est valable pour un corps en oscill
 
 On note $`V_s = \bar{\dot{X}}  = \bar{\frac{dX}{dt}}`$ par commodité d'écriture.
 
-Dans xdyn, la vitesse moyenne est calculée sur une période T représentative des effets de radiation et déterminée par l'utilisateur, qui est aussi la période utilisée pour la convolution avec $`K`$. Ce comportement doit être spécifié explicitement.
+Dans xdyn, la vitesse moyenne est calculée sur une période T représentative des effets de radiation et déterminée par l'utilisateur, qui est aussi la période utilisée pour la convolution avec $`K`$. Ce comportement est contrôlé par la clef YAML `remove constant speed` dans les paramètres de ce modèle d'effort.
 
 ### Correction avec vitesse d'avance
 
