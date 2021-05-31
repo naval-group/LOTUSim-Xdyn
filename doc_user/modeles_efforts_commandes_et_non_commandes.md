@@ -433,6 +433,27 @@ M_X\\
 Le torseur calculé est ensuite déplacé par xdyn du point de calcul des
 [fichiers HDB](#fichiers-hdb) au point de résolution du bilan des efforts.
 
+### Prise en compte de la vitesse d'avance
+
+Les fichiers HDB donnent la fonction de transfert des efforts de diffraction en fonction de la période de houle incidente, à une vitesse d'avance donnée. Ces résultats prennent donc en compte la vitesse d'avance s'il y a lieu.
+
+Cependant, comme pour les coefficients de masse ajoutée et d'amortissement de radiation, il est plus simple - lorsque la vitesse d'avance est inconnue _a priori_ - d'utiliser des résultats à vitesse d'avance nulle.
+
+On considère alors la période donnée dans le fichier HDB comme la période de rencontre $`T_e = \frac{2 \pi}{\omega_e}`$, avec:
+
+```math
+\omega_e = \omega - \vec{V_s} \cdot \vec{k}
+```
+
+Où $`\vec{k}`$ est la vecteur d'onde, dans la direction de propagation de la vague et de longueur $`k = \frac{2 \pi}{\lambda}`$. On a alors l'expression suivante pour les efforts de diffraction :
+
+$`F_k(x_H,y_H,t,u) = -\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
+{RAO^{k}}_{\textrm{module}}(u,\omega_e,\psi-\psi_j)\cdot a_{i,j}
+\cdot\sin(k\cdot(x_H\cdot \cos(\psi_j) + y_H\cdot \sin(\psi_j))-\omega_i\cdot
+t-{RAO^{k}}_{\textrm{phase}}(u,\omega_e,\psi-\psi_j)+\phi_{ij})`$
+
+Ce choix correspond à une approximation qui néglige le couplage entre le champ de vagues lié à la vitesse d'avance et celui de la houle diffractée.
+
 ### Paramétrage
 
 Pour utiliser ce modèle, on écrit `model: diffraction`. Le seul paramètre de ce
@@ -447,6 +468,7 @@ ordre.
       y: {value: 0, unit: m}
       z: {value: 1.418, unit: m}
   mirror for 180 to 360: true
+  use encounter period: true
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 La section correspondante dans le [fichier HDB](#fichiers-hdb) est
@@ -465,6 +487,8 @@ de la RAO entre $`0^{\circ}`$ et $`180^{\circ}`$, quitte à la symétriser par r
 à l'axe (Ox) pour obtenir les points entre $`180^{\circ}`$ et $`360^{\circ}`$. En
 pratique, cela signifie que l'on prend $`RAO(T_p,\beta)=RAO(Tp,2\pi-\beta)`$ si
 $`\beta>\pi`$ et que `mirror for 180 to 360` vaut `true`.
+
+Le paramètre booléen `use encounter period` est optionnel et indique à xdyn de calculer la période de rencontre $`T_e`$ pour interpoler la force de diffraction depuis le fichier HDB. Cette option est utile lorsqu'on utilise des résultats fréquentiels à vitesse nulle.
 
 ### Références
 

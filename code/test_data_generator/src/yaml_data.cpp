@@ -2056,7 +2056,8 @@ std::string test_data::diffraction()
        << "    x: {value: 0.696, unit: m}\n"
        << "    y: {value: 0, unit: m}\n"
        << "    z: {value: 1.418, unit: m}\n"
-       << "mirror for 180 to 360: true\n";
+       << "mirror for 180 to 360: true\n"
+       << "use encounter period: true\n";
     return ss.str();
 }
 
