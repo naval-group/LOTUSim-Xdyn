@@ -45,6 +45,7 @@ TEST_F(DiffractionForceModelTest, parser)
     ASSERT_EQ(0, r.calculation_point.y);
     ASSERT_EQ(1.418, r.calculation_point.z);
     ASSERT_TRUE(r.mirror);
+    ASSERT_TRUE(r.use_encounter_period);
 }
 
 TR1(shared_ptr)<WaveModel> get_wave_model(const double period, const double direction=0., const double height=1.)
