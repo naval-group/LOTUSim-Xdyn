@@ -435,9 +435,9 @@ Le torseur calculé est ensuite déplacé par xdyn du point de calcul des
 
 ### Prise en compte de la vitesse d'avance
 
-Les fichiers HDB donnent la fonction de transfert de force de diffraction en fonction de la période de houle incidente, à une vitesse d'avance donnée. Ces résultats prennent donc en compte la vitesse d'avance s'il y a lieu.
+Les fichiers HDB donnent la fonction de transfert des efforts de diffraction en fonction de la période de houle incidente, à une vitesse d'avance donnée. Ces résultats prennent donc en compte la vitesse d'avance s'il y a lieu.
 
-Cependant, comme pour les coefficients de masse ajoutée et d'amortissement de radiation, il peut être pratique - lorsque la vitesse d'avance est inconnue a priori - d'utiliser des résultats à vitesse d'avance nulle.
+Cependant, comme pour les coefficients de masse ajoutée et d'amortissement de radiation, il est plus simple - lorsque la vitesse d'avance est inconnue _a priori_ - d'utiliser des résultats à vitesse d'avance nulle.
 
 On considère alors la période donnée dans le fichier HDB comme la période de rencontre $`T_e = \frac{2 \pi}{\omega_e}`$, avec:
 
@@ -445,7 +445,7 @@ On considère alors la période donnée dans le fichier HDB comme la période de
 \omega_e = \omega - \vec{V_s} \cdot \vec{k}
 ```
 
-Où $`\vec{k}`$ est la vecteur d'onde, dans la direction de propagation de la vague et de longueur $`k = \frac{2 \pi}{\lambda}`$. On a alors l'expression suivante pour la force de diffraction :
+Où $`\vec{k}`$ est la vecteur d'onde, dans la direction de propagation de la vague et de longueur $`k = \frac{2 \pi}{\lambda}`$. On a alors l'expression suivante pour les efforts de diffraction :
 
 $`F_k(x_H,y_H,t,u) = -\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
 {RAO^{k}}_{\textrm{module}}(u,\omega_e,\psi-\psi_j)\cdot a_{i,j}
