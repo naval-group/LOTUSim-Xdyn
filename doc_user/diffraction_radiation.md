@@ -433,7 +433,7 @@ K(t) = \frac{2}{\pi}\int_0^{+\infty} B_r(\omega)\cos(\omega\tau)d\omega
 
 ### Vitesse d'oscillation et vitesse moyenne
 
-L'ensemble de la théorie décrite jusqu'ici est valable pour un corps en oscillation autour d'une position d'équilibre. En pratique, elle est aussi applicable à un corps à vitesse constante de direction linéaire (pas de rotation constante) dans le plan horizontal, sous réserves de corrections détaillées dans la section suivante. La vitesse $`\frac{dX}{dt}`$ à utiliser dans la formulation précédente est alors la vitesse d'oscillation, c'est-à-dire la vitesse instantanée à laquelle on soustrait la vitesse moyenne :
+L'ensemble de la théorie décrite jusqu'ici est valable pour un corps en oscillation autour d'une position d'équilibre. En pratique, elle est aussi applicable à un corps en **translation à vitesse constante** (pas de rotation ni d'accélération pour que le repère mobile reste galiléen) dans le plan horizontal, sous réserves de corrections détaillées dans la section suivante. La vitesse $`\frac{dX}{dt}`$ à utiliser dans la formulation précédente est alors la vitesse d'oscillation, c'est-à-dire la vitesse instantanée à laquelle on soustrait la vitesse moyenne :
 
 ```math
 \dot{X_b} = \dot{X} - V_s
@@ -441,11 +441,11 @@ L'ensemble de la théorie décrite jusqu'ici est valable pour un corps en oscill
 
 On note $`V_s = \bar{\dot{X}}  = \bar{\frac{dX}{dt}}`$ par commodité d'écriture.
 
-Dans xdyn, la vitesse moyenne est calculée sur une période T représentative des effets de radiation et déterminée par l'utilisateur, qui est aussi la période utilisée pour la convolution avec $`K`$.
+Dans xdyn, la vitesse moyenne est calculée sur une période T représentative des effets de radiation et déterminée par l'utilisateur, qui est aussi la période utilisée pour la convolution avec $`K`$. Ce comportement est contrôlé par la clef YAML `remove constant speed` dans les paramètres de ce modèle d'effort.
 
 ### Correction avec vitesse d'avance
 
-Dans le cas d'un corps oscillant avec vitesse d'avance, les conditions aux limites sont modifiées :
+Dans le cas d'un corps oscillant avec **vitesse d'avance constante**, les conditions aux limites sont modifiées :
 
 - La condition de surface libre contient des termes supplémentaires proportionnels à la vitesse,
 - La condition de glissement sur le corps doit intégrer sa vitesse d'avance dans le terme $`V_0`$.
@@ -624,6 +624,7 @@ suivantes sont réalisées :
   fonctions de retard (afin de valider les bornes d'intégration et l'algorithme
   utilisés). Pour activer la verbosité, on met la clef `output Br and K` à
   `true`. Sinon on la met à `false`.
+- Utilisation de la vitesse d'oscillation : lorsque la clef booléenne `remove constant speed` vaut `true`, xdyn va soustraire la vitesse moyenne $`Vs`$ (calculée sur la période `tau max`) à la vitesse totale $`\dot{X}_b`$ pour utiliser la vitesse d'oscillation $`\dot{X}`$ pour le calcul de l'effort de radiation. Si cette clef est fixée à `false`, **xdyn utilise la vitesse totale**. Ce paramètre est optionnel et sa valeur par défaut est `false`.
 - Correction avec vitesse d'avance : la clée booléenne `forward speed correction` peut prendre la valeur `true` pour appliquer la correction des coefficients avec vitesse d'avance. Cette clé est optionelle et peut donc être omise, la correction ne sera alors pas appliquée.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
@@ -637,6 +638,7 @@ suivantes sont réalisées :
   tau min: {value: 0.2094395, unit: s}
   tau max: {value: 10, unit: s}
   output Br and K: true
+  remove constant speed: true
   forward speed correction: true
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
