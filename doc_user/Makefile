@@ -120,5 +120,6 @@ clean:
 	      concatenated_doc_pandoc.md \
 	      concatenated_doc_pandoc_png.md \
 	      doc.html \
+	      doc.docx \
 	      pict*.svg
 	rm -rf tuto_execution
