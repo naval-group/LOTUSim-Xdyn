@@ -1,3 +1,4 @@
+#include <boost/algorithm/string.hpp> // For boost::replace_all
 #include "ErrorReporter.hpp"
 #include "InternalErrorException.hpp"
 #include "ConnexionError.hpp"
@@ -22,6 +23,14 @@
 ErrorReporter::ErrorReporter() : ss(), status(Status::OK)
 {}
 
+std::string replace_whitespace(std::string str);
+std::string replace_whitespace(std::string str)
+{
+    boost::replace_all(str, " ", "⸱");
+    boost::replace_all(str, "\t", "→");
+    return str;
+}
+
 std::string dump(const std::string& yaml);
 std::string dump(const std::string& yaml)
 {
@@ -38,7 +47,7 @@ std::string dump(const std::string& yaml)
     line_number = 1;
     for (std::string line; std::getline(iss, line); line_number++)
     {
-        ss << std::setw(width) << line_number << " | " << line << std::endl;
+        ss << std::setw(width) << line_number << " | " << replace_whitespace(line) << std::endl;
     }
     return ss.str();
 }
