@@ -122,9 +122,10 @@ std::string input_data_serialize(const XdynCommandLineArguments& inputData)
 void run_simulation(const XdynCommandLineArguments& input_data, ErrorReporter& error_outputter);
 void run_simulation(const XdynCommandLineArguments& input_data, ErrorReporter& error_outputter)
 {
-    const auto f = [input_data](){
+    std::string yaml_input;
+    error_outputter.run_and_report_errors_without_yaml_dump([&yaml_input,&input_data](){yaml_input = ssc::text_file_reader::TextFileReader(input_data.yaml_filenames).get_contents();});
+    const auto f = [input_data, yaml_input](){
     {
-        const auto yaml_input = ssc::text_file_reader::TextFileReader(input_data.yaml_filenames).get_contents();
         const auto input = SimulatorYamlParser(yaml_input).parse();
 
         auto sys = get_system(input, input_data.tstart);
@@ -143,7 +144,7 @@ void run_simulation(const XdynCommandLineArguments& input_data, ErrorReporter& e
     }};
     if (input_data.catch_exceptions)
     {
-        error_outputter.run_and_report_errors(f);
+        error_outputter.run_and_report_errors_with_yaml_dump(f, yaml_input);
     }
     else
     {

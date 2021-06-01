@@ -110,11 +110,12 @@ int main(int argc, char** argv)
     const int error = get_gz_data(argc, argv, input_data, error_outputter);
     if (not(error))
     {
-        const auto f = [input_data]()
+        std::string yaml;
+        error_outputter.run_and_report_errors_without_yaml_dump([&yaml, input_data]{const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_files);yaml = yaml_reader.get_contents();});
+        const auto f = [input_data,yaml]()
             {
-                const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_files);
                 const ssc::text_file_reader::TextFileReader stl_reader(input_data.stl_filename);
-                const Sim sim = GZ::make_sim(yaml_reader.get_contents(), stl_reader.get_contents());
+                const Sim sim = GZ::make_sim(yaml, stl_reader.get_contents());
                 const GZ::Curve calculate(sim);
                 const auto phis = calculate.get_phi(input_data.dphi*PI/180., input_data.phi_max*PI/180.);
                 std::ofstream of;
@@ -132,7 +133,7 @@ int main(int argc, char** argv)
                     write(os, phi*180./PI, calculate.gz(phi), sep);
                 }
             };
-        error_outputter.run_and_report_errors(f);
+        error_outputter.run_and_report_errors_with_yaml_dump(f, yaml);
         if (error_outputter.contains_errors())
         {
             std::cerr << error_outputter.get_message() << std::endl;

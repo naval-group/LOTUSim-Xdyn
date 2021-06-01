@@ -12,25 +12,23 @@
 
 CHECK_SSC_VERSION(9,0)
 
-XdynForCS get_SimServer(const XdynForCSCommandLineArguments& input_data);
-XdynForCS get_SimServer(const XdynForCSCommandLineArguments& input_data)
+XdynForCS get_SimServer(const XdynForCSCommandLineArguments& input_data, const std::string& yaml);
+XdynForCS get_SimServer(const XdynForCSCommandLineArguments& input_data, const std::string& yaml)
 {
-    const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_filenames);
-    const auto yaml = yaml_reader.get_contents();
     return XdynForCS(yaml, input_data.solver, input_data.initial_timestep);
 }
 
-void start_ws_server(const XdynForCSCommandLineArguments& input_data);
-void start_ws_server(const XdynForCSCommandLineArguments& input_data)
+void start_ws_server(const XdynForCSCommandLineArguments& input_data, const std::string& yaml);
+void start_ws_server(const XdynForCSCommandLineArguments& input_data, const std::string& yaml)
 {
-    JSONWebSocketServer<XdynForCS> server(get_SimServer(input_data), input_data.verbose);
+    JSONWebSocketServer<XdynForCS> server(get_SimServer(input_data, yaml), input_data.verbose);
     server.start(input_data.port, input_data.show_websocket_debug_information);
 }
 
-void start_grpc_server(const XdynForCSCommandLineArguments& input_data);
-void start_grpc_server(const XdynForCSCommandLineArguments& input_data)
+void start_grpc_server(const XdynForCSCommandLineArguments& input_data, const std::string& yaml);
+void start_grpc_server(const XdynForCSCommandLineArguments& input_data, const std::string& yaml)
 {
-    XdynForCS simserver = get_SimServer(input_data);
+    XdynForCS simserver = get_SimServer(input_data, yaml);
     ErrorReporter error_outputter;
     std::shared_ptr<grpc::Service> handler(new CosimulationServiceImpl(simserver, error_outputter));
     gRPCProtoBufServer server(handler);
@@ -43,7 +41,7 @@ int main(int argc, char** argv)
     if (argc==1) return display_help(argv[0], input_data);
     int error = 0;
     ErrorReporter error_outputter;
-    error_outputter.run_and_report_errors([&error,&argc,&argv,&input_data]{error = get_input_data(argc, argv, input_data);});
+    error_outputter.run_and_report_errors_without_yaml_dump([&error,&argc,&argv,&input_data]{error = get_input_data(argc, argv, input_data);});
     if (error)
     {
         if (error_outputter.contains_errors())
@@ -53,18 +51,20 @@ int main(int argc, char** argv)
         return error;
     }
     if (input_data.empty() || input_data.show_help) return EXIT_SUCCESS;
-    const auto run_ws = [input_data](){
+    std::string yaml;
+    error_outputter.run_and_report_errors_without_yaml_dump([&yaml, input_data]{const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_filenames);yaml = yaml_reader.get_contents();});
+    const auto run_ws = [input_data, yaml](){
     {
-        start_ws_server(input_data);
+        start_ws_server(input_data, yaml);
     }};
-    const std::function< void(void) > run_grpc = [input_data](){
+    const std::function< void(void) > run_grpc = [input_data, yaml](){
     {
-        start_grpc_server(input_data);
+        start_grpc_server(input_data, yaml);
     }};
     const std::function< void(void) > run = input_data.grpc ? run_grpc : run_ws;
     if (input_data.catch_exceptions)
     {
-        error_outputter.run_and_report_errors(run);
+        error_outputter.run_and_report_errors_with_yaml_dump(run, yaml);
         if (error_outputter.contains_errors())
         {
             std::cerr << error_outputter.get_message() << std::endl;

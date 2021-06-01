@@ -20,7 +20,7 @@
 ErrorReporter::ErrorReporter() : ss(), status(Status::OK)
 {}
 
-void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f)
+void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f, const bool dump_yaml, const std::string& yaml_dump)
 {
     try
     {
@@ -90,8 +90,29 @@ void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f)
     }
     if (status != Status::OK)
     {
+        if (dump_yaml)
+        {
+            if (yaml_dump.empty())
+            {
+                ss << "No YAML content was found or there was an error before xdyn even got to the parsing stage." << std::endl;
+            }
+            else
+            {
+                ss << "The input YAML was:" << std::endl << yaml_dump << std::endl;
+            }
+        }
         std::cerr << ss.str();
     }
+}
+
+void ErrorReporter::run_and_report_errors_with_yaml_dump(const std::function<void(void)>& f, const std::string& yaml_dump)
+{
+    run_and_report_errors(f, true, yaml_dump);
+}
+
+void ErrorReporter::run_and_report_errors_without_yaml_dump(const std::function<void(void)>& f)
+{
+    run_and_report_errors(f, false, "");
 }
 
 void ErrorReporter::invalid_request(const std::string &function, const int line)

@@ -26,13 +26,15 @@ class ErrorReporter
         void internal_error(const std::string& error_message);
         void network_error(const std::string& error_message);
 
-        void run_and_report_errors(const std::function<void(void)>& f);
+        void run_and_report_errors_with_yaml_dump(const std::function<void(void)>& f, const std::string& yaml_dump);
+        void run_and_report_errors_without_yaml_dump(const std::function<void(void)>& f);
 
         bool contains_errors() const;
         std::string get_message() const;
         Status get_status() const;
 
       private:
+          void run_and_report_errors(const std::function<void(void)>& f, const bool dump_yaml, const std::string& yaml_dump);
           std::stringstream ss;
           Status status;
 
