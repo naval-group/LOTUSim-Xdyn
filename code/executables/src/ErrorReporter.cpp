@@ -16,9 +16,32 @@
 
 #include <functional>
 #include <boost/program_options.hpp>
+#include <sstream>
+#include <iomanip>
 
 ErrorReporter::ErrorReporter() : ss(), status(Status::OK)
 {}
+
+std::string dump(const std::string& yaml);
+std::string dump(const std::string& yaml)
+{
+    std::istringstream iss(yaml);
+    int line_number = 1;
+    std::stringstream ss;
+    for (std::string line; std::getline(iss, line); line_number++) {}
+    iss.clear();//Reset the flags only
+    iss.seekg(0, iss.beg);//Move the get pointer to the beginning of the stringstream
+    const int total_nb_of_lines = line_number;
+    ss << total_nb_of_lines;
+    const size_t width = ss.str().length();
+    ss.str("");
+    line_number = 1;
+    for (std::string line; std::getline(iss, line); line_number++)
+    {
+        ss << std::setw(width) << line_number << " | " << line << std::endl;
+    }
+    return ss.str();
+}
 
 void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f, const bool dump_yaml, const std::string& yaml_dump)
 {
@@ -98,7 +121,7 @@ void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f, co
             }
             else
             {
-                ss << "The input YAML was:" << std::endl << yaml_dump << std::endl;
+                ss << "The input YAML was:" << std::endl << dump(yaml_dump) << std::endl;
             }
         }
         std::cerr << ss.str();
