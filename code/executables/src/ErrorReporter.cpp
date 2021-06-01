@@ -130,7 +130,7 @@ void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f, co
             }
             else
             {
-                ss << "The input YAML was:" << std::endl << dump(yaml_dump) << std::endl;
+                ss << "The concatenatd YAML seen by xdyn was:" << std::endl << dump(yaml_dump) << std::endl;
             }
         }
         std::cerr << ss.str();
