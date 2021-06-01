@@ -31,8 +31,8 @@ std::string replace_whitespace(std::string str)
     return str;
 }
 
-std::string dump(const std::string& yaml);
-std::string dump(const std::string& yaml)
+std::string dump(const std::string& yaml, const int problematic_line);
+std::string dump(const std::string& yaml, const int problematic_line)
 {
     std::istringstream iss(yaml);
     int line_number = 1;
@@ -47,6 +47,14 @@ std::string dump(const std::string& yaml)
     line_number = 1;
     for (std::string line; std::getline(iss, line); line_number++)
     {
+        if (line_number-1 == problematic_line)
+        {
+            ss << "> ";
+        }
+        else
+        {
+            ss << "  ";
+        }
         ss << std::setw(width) << line_number << " | " << replace_whitespace(line) << std::endl;
     }
     return ss.str();
@@ -54,7 +62,7 @@ std::string dump(const std::string& yaml)
 
 void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f, const bool dump_yaml, const std::string& yaml_dump)
 {
-    bool show_yaml = false;
+    int problematic_line = 0;
     try
     {
         f();
@@ -116,7 +124,7 @@ void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f, co
         s << "There is a syntax problem with the YAML file line " << e.mark.line+1 << ", column " << e.mark.column+1 << ": " << e.msg << "." << std::endl
            << "Please note that as all YAML files supplied on the command-line are concatenated, the line number given here corresponds to the line number in the concatenated YAML." << std::endl;
         invalid_input(s.str());
-        show_yaml = true;
+        problematic_line = e.mark.line;
     }
     catch(std::exception& e)
     {
@@ -124,7 +132,7 @@ void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f, co
     }
     if (status != Status::OK)
     {
-        if (dump_yaml && show_yaml)
+        if (dump_yaml && problematic_line > 0)
         {
             if (yaml_dump.empty())
             {
@@ -132,7 +140,7 @@ void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f, co
             }
             else
             {
-                ss << "The concatenatd YAML seen by xdyn was:" << std::endl << dump(yaml_dump) << std::endl;
+                ss << "The concatenatd YAML seen by xdyn was:" << std::endl << dump(yaml_dump, problematic_line) << std::endl;
             }
         }
         std::cerr << ss.str();
