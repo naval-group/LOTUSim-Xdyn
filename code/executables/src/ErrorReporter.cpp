@@ -54,6 +54,7 @@ std::string dump(const std::string& yaml)
 
 void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f, const bool dump_yaml, const std::string& yaml_dump)
 {
+    bool show_yaml = false;
     try
     {
         f();
@@ -115,6 +116,7 @@ void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f, co
         s << "There is a syntax problem with the YAML file line " << e.mark.line+1 << ", column " << e.mark.column+1 << ": " << e.msg << "." << std::endl
            << "Please note that as all YAML files supplied on the command-line are concatenated, the line number given here corresponds to the line number in the concatenated YAML." << std::endl;
         invalid_input(s.str());
+        show_yaml = true;
     }
     catch(std::exception& e)
     {
@@ -122,7 +124,7 @@ void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f, co
     }
     if (status != Status::OK)
     {
-        if (dump_yaml)
+        if (dump_yaml && show_yaml)
         {
             if (yaml_dump.empty())
             {
