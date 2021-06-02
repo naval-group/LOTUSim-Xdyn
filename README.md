@@ -220,18 +220,6 @@ docker run -it --rm -u $(id -u):$(id -g) -v $(pwd):/build \
     tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o tsv
 ```
 
-Results can be plotted using [Matplotlib](https://matplotlib.org/) and
-[pandas](https://pandas.pydata.org/) (which can be installed using
-`pip3 install matplotlib pandas`):
-
-```bash
-docker run -it --rm -u $(id -u):$(id -g) -v $(pwd):/build \
-    -w /build/build_debian/executables/demos \
-    xdyn \
-    tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o csv | \
-    python3 postprocessing/Python/plot.py tutorial_01_plot 0 3
-```
-
 ## Debugging
 
 ### Valgrind
