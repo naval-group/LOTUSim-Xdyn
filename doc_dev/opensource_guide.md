@@ -17,12 +17,12 @@ gestion des branches...) et s'intègre avec de nombreux outils.
 ## Choix d'un dépôt public
 
 Pour rendre le code accessible, il faut le stocker sur un dépôt public. Le choix
-s'est porté sur [Gitlab](https://about.gitlab.com/), parce que SIREHNA en utilise
+s'est porté sur [GitLab](https://about.gitlab.com/), parce que SIREHNA en utilise
 une instance en interne, qu'il est très populaire et propose une intégration avec
 de nombreux outils (analyse statique de code, couverture de
 tests, intégration et déploiement continus, etc.).
 
-## Création d'un groupe Gitlab SIREHNA
+## Création d'un groupe GitLab SIREHNA
 
 En utilisant [ce
 guide](https://docs.gitlab.com/ee/user/group/),
@@ -32,7 +32,7 @@ système de SIREHNA.
 
 ## Création ou association des comptes utilisateurs
 
-Les contributeurs internes à SIREHNA peuvent soit [créer un compte sur Gitlab](https://gitlab.com/users/sign_up)
+Les contributeurs internes à SIREHNA peuvent soit [créer un compte sur GitLab](https://gitlab.com/users/sign_up)
 et demander son association au groupe, soit (le cas échéant) demander
 l'association de leur compte existant. Nous préconisons plutôt de
 systématiquement créer un nouveau compte afin de bien distinguer les
@@ -91,7 +91,7 @@ les comportements acceptables et non-acceptables et les règles de bienséances.
 Un exemple d'un tel code de conduite est le
 [contributor covenant](https://www.contributor-covenant.org/).
 
-## Upload sur Gitlab
+## Upload sur GitLab
 
 C'est l'étape la plus simple. Elle consiste simplement à lancer :
 
