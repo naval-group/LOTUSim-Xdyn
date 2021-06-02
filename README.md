@@ -311,7 +311,7 @@ The main contributors to this projects are:
 
 * [Charles-Edouard CADY](https://gitlab.com/CharlesEdouardCady_SIREHNA)
 * [Guillaume JACQUENOT](https://gitlab.com/GuillaumeJacquenot)
-* Léa LINCKER
+* [Léa LINCKER](https://gitlab.com/llincker)
 * [Moran CHARLOU](https://gitlab.com/mcharlou)
 
 
