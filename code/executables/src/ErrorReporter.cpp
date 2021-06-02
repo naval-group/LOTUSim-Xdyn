@@ -47,7 +47,7 @@ std::string dump(const std::string& yaml, const int problematic_line)
     line_number = 1;
     for (std::string line; std::getline(iss, line); line_number++)
     {
-        if (line_number-1 == problematic_line)
+        if (line_number == problematic_line)
         {
             ss << "> ";
         }
@@ -124,7 +124,7 @@ void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f, co
         s << "There is a syntax problem with the YAML file line " << e.mark.line+1 << ", column " << e.mark.column+1 << ": " << e.msg << "." << std::endl
            << "Please note that as all YAML files supplied on the command-line are concatenated, the line number given here corresponds to the line number in the concatenated YAML." << std::endl;
         invalid_input(s.str());
-        problematic_line = e.mark.line;
+        problematic_line = e.mark.line+1;
     }
     catch(std::exception& e)
     {
