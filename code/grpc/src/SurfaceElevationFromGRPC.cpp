@@ -37,6 +37,106 @@ class SurfaceElevationFromGRPC::Impl
             throw_if_invalid_status("set_parameters", status);
         }
 
+        void throw_invalid_size_error(const std::string& rpc_method, const std::string& grpc_type, const std::string& field, const size_t expected_size, const size_t actual_size) const
+        {
+            std::stringstream ss;
+            ss << "An error occurred when using the distant wave model defined via gRPC (method '"
+               << rpc_method
+               << "'): the structure returned by the gRPC wave server is invalid because some of its fields do not have the right size." << std::endl
+               << "The method returns type '" << grpc_type << "' which has a field named '" << field << "'." << std::endl
+               << "The definition of this type can be found here: https://gitlab.com/sirehna_naval_group/sirehna/interfaces/-/blob/master/wave_types.proto" << std::endl
+               << "This field is a 'repeated' field in the protobuf sense (see https://developers.google.com/protocol-buffers/docs/proto#specifying-field-rules)" << std::endl
+               << "and its size should be " << expected_size << " to match the other fields, but it was " << actual_size << ". Simulation cannot continue without crashing." << std::endl
+               << "Please note this is a problem with the gRPC wave server itself and not xdyn.";
+            THROW(__PRETTY_FUNCTION__, GRPCError, ss.str());
+        }
+
+        void check_sizes(const XYZTGrid& response) const
+        {
+            const std::string rpc_method = "elevations";
+            if (response.x_size() != response.y_size())
+            {
+                throw_invalid_size_error(rpc_method, "XYZTGrid", "y", response.x_size(), response.y_size());
+            }
+            if (response.y_size() != response.z_size())
+            {
+                throw_invalid_size_error(rpc_method, "XYZTGrid", "z", response.y_size(), response.z_size());
+            }
+        }
+
+        void check_sizes(const DynamicPressuresResponse& response) const
+        {
+            const std::string rpc_method = "dynamic_pressures";
+            if (response.x_size() != response.y_size())
+            {
+                throw_invalid_size_error(rpc_method, "DynamicPressuresResponse", "y", response.x_size(), response.y_size());
+            }
+            if (response.y_size() != response.z_size())
+            {
+                throw_invalid_size_error(rpc_method, "DynamicPressuresResponse", "z", response.y_size(), response.z_size());
+            }
+            if (response.z_size() != response.pdyn_size())
+            {
+                throw_invalid_size_error(rpc_method, "DynamicPressuresResponse", "pdyn", response.z_size(), response.pdyn_size());
+            }
+        }
+
+        void check_sizes(const OrbitalVelocitiesResponse& response) const
+        {
+            const std::string rpc_method = "orbital_velocities";
+            if (response.x_size() != response.y_size())
+            {
+                throw_invalid_size_error(rpc_method, "OrbitalVelocitiesResponse", "y", response.x_size(), response.y_size());
+            }
+            if (response.y_size() != response.z_size())
+            {
+                throw_invalid_size_error(rpc_method, "OrbitalVelocitiesResponse", "z", response.y_size(), response.z_size());
+            }
+            if (response.z_size() != response.vx_size())
+            {
+                throw_invalid_size_error(rpc_method, "OrbitalVelocitiesResponse", "vx", response.z_size(), response.vx_size());
+            }
+            if (response.vx_size() != response.vy_size())
+            {
+                throw_invalid_size_error(rpc_method, "OrbitalVelocitiesResponse", "vy", response.vx_size(), response.vy_size());
+            }
+            if (response.vy_size() != response.vz_size())
+            {
+                throw_invalid_size_error(rpc_method, "OrbitalVelocitiesResponse", "vz", response.vy_size(), response.vx_size());
+            }
+        }
+        void check_sizes(const SpectrumResponse& response) const
+        {
+            const std::string rpc_method = "spectrum";
+            for (int i = 0 ; i < response.spectrum_size() ; ++i)
+            {
+                const auto spectrum = response.spectrum(i);
+                if (spectrum.omega_size() != spectrum.si_size())
+                {
+                    throw_invalid_size_error(rpc_method, "Spectrum", "Si", spectrum.omega_size(), spectrum.si_size());
+                }
+                if (spectrum.psi_size() != spectrum.dj_size())
+                {
+                    throw_invalid_size_error(rpc_method, "Spectrum", "Dj", spectrum.psi_size(), spectrum.dj_size());
+                }
+                if (spectrum.omega_size() != spectrum.k_size())
+                {
+                    throw_invalid_size_error(rpc_method, "Spectrum", "k", spectrum.omega_size(), spectrum.k_size());
+                }
+                if (spectrum.omega_size() != spectrum.phase_size())
+                {
+                    throw_invalid_size_error(rpc_method, "Spectrum", "phase", spectrum.omega_size(), spectrum.phase_size());
+                }
+                for (int j = 0 ; j < spectrum.phase_size() ; ++j)
+                {
+                    if (spectrum.phase(j).phase_size() != spectrum.psi_size())
+                    {
+                        throw_invalid_size_error(rpc_method, "PhasesForEachFrequency", "phase", spectrum.psi_size(), spectrum.phase(j).phase_size());
+                    }
+                }
+            }
+        }
+
         void throw_if_invalid_status(const std::string& rpc_method, const grpc::Status& status) const
         {
             const std::string base_error_msg = "an error occurred when using the distant wave model defined via gRPC (method '" + rpc_method + "').\n";
@@ -158,6 +258,7 @@ class SurfaceElevationFromGRPC::Impl
             XYZTGrid response;
             const grpc::Status status = stub->elevations(&context, request, &response);
             throw_if_invalid_status("elevations", status);
+            check_sizes(response);
             std::vector<double> ret;
             ret.reserve(response.z_size());
             std::copy(response.z().begin(), response.z().end(), std::back_inserter(ret));
@@ -175,6 +276,11 @@ class SurfaceElevationFromGRPC::Impl
             DynamicPressuresResponse response;
             const grpc::Status status = stub->dynamic_pressures(&context, request, &response);
             throw_if_invalid_status("dynamic_pressures", status);
+            if (response.pdyn_size() != (int)x.size())
+            {
+                THROW(__PRETTY_FUNCTION__, GRPCError, "Dynamic pressure returned by gRPC model has the wrong size: should be " << x.size() << ", but got " << response.pdyn_size());
+            }
+            check_sizes(response);
             std::vector<double> ret;
             ret.reserve(response.pdyn_size());
             std::copy(response.pdyn().begin(), response.pdyn().end(), std::back_inserter(ret));
@@ -192,6 +298,7 @@ class SurfaceElevationFromGRPC::Impl
             OrbitalVelocitiesResponse response;
             const grpc::Status status = stub->orbital_velocities(&context, request, &response);
             throw_if_invalid_status("orbital_velocities", status);
+            check_sizes(response);
             if (response.vx_size() != 1)
             {
                 THROW(__PRETTY_FUNCTION__, GRPCError, "An error has occurred when using a distant wave model defined via gRPC. The model is defined in the YAML by:\n" + yaml + "\nxdyn managed to contact the wave server but during initialization (set_parameters), the server returned the following error message:\n" << "Was only expecting one orbital velocity for x, but got a vector of size " << response.vx_size());
@@ -231,6 +338,7 @@ class SurfaceElevationFromGRPC::Impl
             SpectrumResponse response;
             const grpc::Status status = stub->spectrum(&context, request, &response);
             throw_if_invalid_status("spectrum", status);
+            check_sizes(response);
             std::vector<DiscreteDirectionalWaveSpectrum> ret;
             {
                 for (int i = 0 ; i < response.spectrum_size() ; ++i)
@@ -249,10 +357,10 @@ class SurfaceElevationFromGRPC::Impl
                     if (response.spectrum(i).phase_size())
                     {
                         s.phase.resize(response.spectrum(i).phase_size());
-                        for (int i = 0 ; i < response.spectrum(i).phase_size() ; ++i)
+                        for (int j = 0 ; j < response.spectrum(i).phase_size() ; ++j)
                         {
-                            s.phase[i].reserve(response.spectrum(i).phase(i).phase_size());
-                            std::copy(response.spectrum(i).phase(i).phase().begin(), response.spectrum(i).phase(i).phase().end(), std::back_inserter(s.phase[i]));
+                            s.phase.at(i).reserve(response.spectrum(i).phase(j).phase_size());
+                            std::copy(response.spectrum(i).phase(j).phase().begin(), response.spectrum(i).phase(j).phase().end(), std::back_inserter(s.phase.at(i)));
                         }
                     }
                     ret.push_back(s);

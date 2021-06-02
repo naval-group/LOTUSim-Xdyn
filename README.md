@@ -1,11 +1,6 @@
 # xdyn
 
-[![License](https://img.shields.io/badge/License-EPL%202.0-blue.svg)](https://opensource.org/licenses/EPL-2.0)
-[![Build Status](https://travis-ci.org/sirehna/xdyn.svg?branch=master)](https://travis-ci.org/sirehna/xdyn)
-[![codecov](https://codecov.io/gh/sirehna/xdyn/branch/master/graph/badge.svg)](https://codecov.io/gh/sirehna/xdyn)
-[![](https://images.microbadger.com/badges/image/sirehna/xdyn.svg)](https://microbadger.com/images/sirehna/xdyn "xdyn layers")
-
-xdyn is a lightweight ship simulator modelling the dynamic behaviour of a ship at sea, with its actuators, including some non-linear aspects of that behaviour and featuring a customizable maneuvring model.
+xdyn is a lightweight time-domain ship simulator modelling the dynamic behaviour of a ship at sea, with its actuators, including some non-linear aspects of that behaviour and featuring a customizable maneuvring model.
 It simulates the mechanical behaviour of a solid body in a fluid environment by
 solving Newton's second law of motion, taking hydrodynamic forces into account.
 
@@ -16,7 +11,7 @@ project](https://www.irt-jules-verne.fr/wp-content/uploads/bassin-numerique.pdf)
 
 (c) 2015-2020 [SIREHNA](http://www.sirehna.com/) & [Naval Group](https://www.naval-group.com/en/) for all subsequent versions.
 
-**Disclaimer**: [Documentation](https://sirehna.github.io/xdyn)
+**Disclaimer**: [Documentation](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/tree/master/doc_user)
 was written for a French project, with
 French participants, therefore it is in French. It will be translated
 eventually. Also, please note that it is still a work-in-progress and, as such,
@@ -36,20 +31,25 @@ This does not require installing or downloading anything except Docker itself.
 
 Pre-built binaries of xdyn are also available:
 
-- [for Debian 9](https://github.com/sirehna/xdyn/releases/latest/download/xdyn_binary_debian9_amd64.deb)
-- [for Debian 10](https://github.com/sirehna/xdyn/releases/latest/download/xdyn_binary_debian10_amd64.deb)
-- [for Windows](https://github.com/sirehna/xdyn/releases/latest/download/xdyn_binary_windows_64_posixthread.zip)
+- [for Debian 10](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/jobs/artifacts/master/download?job=build%3Adebian)
+- [for Windows](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/jobs/artifacts/master/download?job=build%3Awindows)
 
 There are many other ways of using xdyn, all of which are described
-in [the documentation](https://sirehna.github.io/xdyn).
+in [the documentation](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/jobs/artifacts/master/download?job=doc).
 
-The **models** implemented inside xdyn are described in detail from
-[section 11](https://sirehna.github.io/xdyn/#modélisation-des-efforts-de-diffraction-et-de-radiation)
-to
-[section 13](https://sirehna.github.io/xdyn/#efforts-commandés)
-of the documentation.
-You can also learn how to use xdyn using the
-[tutorials](https://sirehna.github.io/xdyn/#tutoriels).
+The **environment models** implemented inside xdyn are described in detail [here](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/modeles_environnementaux.md)
+
+The **force models** implemented inside xdyn are described in detail [here](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/modeles_efforts_commandes_et_non_commandes.md)
+
+You can also learn how to use xdyn using the tutorials:
+
+- [Falling ball](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/tutorial_01.md)
+- [Hydrostatic](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/tutorial_02.md)
+- [Waves](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/tutorial_03.md)
+- [Propulsion](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/tutorial_06.md)
+- [gRPC wave model](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/tutorial_09.md)
+- [gRPC force model](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/tutorial_10.md)
+- [gRPC controller](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/tutorial_11.md)
 
 ## Building xdyn from source
 
@@ -154,9 +154,9 @@ Compile xdyn (`make windows`), install the xdyn executable, then run:
 ./xdyn <yaml file> [xdyn options]
 ```
 
-All options can be found in [the documentation](https://sirehna.github.io/xdyn/#ligne-de-commande).
+All options can be found in [the documentation](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/interfaces_utilisateur.m4.m).
 
-For example, to run the first [tutorial](https://sirehna.github.io/xdyn/#tutoriels),
+For example, to run the first [tutorial](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/tutorial_01.md),
 from the executables/demos folder, you can run:
 
 ```bash
@@ -176,10 +176,9 @@ You can then run:
 xdyn <yaml file> [xdyn options]
 ```
 
-All options can be found in [the documentation](https://sirehna.github.io/xdyn/#ligne-de-commande).
+All options can be found in [the documentation](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/interfaces_utilisateur.m4.m).
 
-For example, to run the first [tutorial](https://sirehna.github.io/xdyn/#tutoriels),
-from the executables/demos folder, you can run:
+For example, to run the first [tutorial](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/tutorial_01.md),
 
 ```bash
 xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1
@@ -212,27 +211,10 @@ owned by the current user
 More details can be found in
 [Docker's official documentation](https://docs.docker.com/engine/reference/commandline/run/).
 
-For example, to run the first [tutorial](https://sirehna.github.io/xdyn/#tutoriels)
-and display the results in the terminal, assuming we are in the project's root
-directory:
+For example, to run the first [tutorial](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/tutorial_01.md) and display the results in the terminal, assuming we are in the project's root directory:
 
 ```bash
-docker run -it --rm -u $(id -u):$(id -g) -v $(pwd):/build \
-    -w /build/build_debian/executables/demos \
-    xdyn \
-    tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o tsv
-```
-
-Results can be plotted using [Matplotlib](https://matplotlib.org/) and
-[pandas](https://pandas.pydata.org/) (which can be installed using
-`pip3 install matplotlib pandas`):
-
-```bash
-docker run -it --rm -u $(id -u):$(id -g) -v $(pwd):/build \
-    -w /build/build_debian/executables/demos \
-    xdyn \
-    tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o csv | \
-    python3 postprocessing/Python/plot.py tutorial_01_plot 0 3
+docker run -it --rm -w /usr/demos sirehna/xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o tsv
 ```
 
 ## Debugging
@@ -309,7 +291,7 @@ Add additional notes about how to deploy this on a live system.
 * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) - For matrix manipulations.
 * [Pandoc](https://pandoc.org/) - To generate the documentation.
 * [Pweave](http://mpastell.com/pweave/) - To generate the tutorials.
-* [SSC](https://github.com/sirehna/ssc) - For websockets, units decoding, interpolations, kinematics, CSV file reading and exception handling.
+* [SSC](https://gitlab.com/sirehna_naval_group/sirehna/ssc) - For websockets, units decoding, interpolations, kinematics, CSV file reading and exception handling.
 
 ## Contributing
 
@@ -321,14 +303,19 @@ version available
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/sirehna/xdyn/tags).
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/tags).
 
 ## Authors
 
-* [Charles-Edouard CADY](https://github.com/CharlesEdouardCady)
-* [Guillaume JACQUENOT](https://github.com/GuillaumeJacquenot)
+The main contributors to this projects are:
 
-See also the list of [contributors](https://github.com/sirehna/xdyn/contributors) who participated in this project.
+* [Charles-Edouard CADY](https://gitlab.com/CharlesEdouardCady_SIREHNA)
+* [Guillaume JACQUENOT](https://gitlab.com/GuillaumeJacquenot)
+* [Léa LINCKER](https://gitlab.com/llincker)
+* [Moran CHARLOU](https://gitlab.com/mcharlou)
+
+
+See also the [full list of contributors](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/contributors) who took part in this project.
 
 ## License
 
