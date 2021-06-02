@@ -1,12 +1,13 @@
 /*
- * utilities_for_InputData.cpp
+ * parse_XdynCommandLineArguments.cpp
  *
  *  Created on: Jun 24, 2014
  *      Author: cady
  */
 
-#include <iostream>
+#include <algorithm>
 #include <cstdlib> // EXIT_FAILURE, EXIT_SUCCESS
+#include <iostream>
 
 #include "display_command_line_arguments.hpp"
 #include "parse_XdynCommandLineArguments.hpp"
@@ -26,6 +27,15 @@ bool invalid(const XdynCommandLineArguments& input)
     if (input.solver.empty())
     {
         std::cerr << "Error: no solver defined." << std::endl;
+        return true;
+    }
+    const std::vector<std::string> list_valid_solvers {"euler", "rk4", "rkck"};
+    if(std::find(list_valid_solvers.begin(), list_valid_solvers.end(), input.solver) == list_valid_solvers.end())
+    {
+        std::cerr << "Error: solver '" << input.solver
+                  << "' is unknown." << std::endl
+                  << "Valid solvers are euler, rk4, rkck " << std::endl
+                  << std::endl;
         return true;
     }
     if (input.initial_timestep<=0)
@@ -53,8 +63,6 @@ po::options_description attach_command_line_arguments_to_options_description(Xdy
     return desc;
 }
 
-
-
 int parse_command_line_for_xdyn(int argc, char **argv, XdynCommandLineArguments& input_data)
 {
     const po::options_description desc = attach_command_line_arguments_to_options_description(input_data);
@@ -79,6 +87,3 @@ int fill_input_or_display_help(char *argv, XdynCommandLineArguments& input_data)
     print_usage(std::cout, desc, argv, "This is a ship simulator");
     return EXIT_SUCCESS;
 }
-
-
-

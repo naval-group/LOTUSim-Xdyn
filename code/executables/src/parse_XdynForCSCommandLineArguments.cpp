@@ -1,7 +1,6 @@
-#include <iostream>
+#include <algorithm>
 #include <cstdlib> // EXIT_FAILURE, EXIT_SUCCESS
-
-#include <ssc/check_ssc_version.hpp>
+#include <iostream>
 
 #include "display_command_line_arguments.hpp"
 #include "parse_XdynForCSCommandLineArguments.hpp"
@@ -18,6 +17,15 @@ bool invalid(const XdynForCSCommandLineArguments& input)
     if (input.solver.empty())
     {
         std::cerr << "Error: no solver defined." << std::endl;
+        return true;
+    }
+    const std::vector<std::string> list_valid_solvers {"euler", "rk4", "rkck"};
+    if(std::find(list_valid_solvers.begin(), list_valid_solvers.end(), input.solver) == list_valid_solvers.end())
+    {
+        std::cerr << "Error: solver '" << input.solver
+                  << "' is unknown." << std::endl
+                  << "Valid solvers are euler, rk4, rkck " << std::endl
+                  << std::endl;
         return true;
     }
     if (input.initial_timestep<=0)
