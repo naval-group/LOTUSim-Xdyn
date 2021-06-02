@@ -1,3 +1,4 @@
+#include <boost/algorithm/string.hpp> // For boost::replace_all
 #include "ErrorReporter.hpp"
 #include "InternalErrorException.hpp"
 #include "ConnexionError.hpp"
@@ -16,12 +17,52 @@
 
 #include <functional>
 #include <boost/program_options.hpp>
+#include <sstream>
+#include <iomanip>
 
 ErrorReporter::ErrorReporter() : ss(), status(Status::OK)
 {}
 
-void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f)
+std::string replace_whitespace(std::string str);
+std::string replace_whitespace(std::string str)
 {
+    boost::replace_all(str, " ", "⸱");
+    boost::replace_all(str, "\t", "→");
+    return str;
+}
+
+std::string dump(const std::string& yaml, const int problematic_line);
+std::string dump(const std::string& yaml, const int problematic_line)
+{
+    std::istringstream iss(yaml);
+    int line_number = 1;
+    std::stringstream ss;
+    for (std::string line; std::getline(iss, line); line_number++) {}
+    iss.clear();//Reset the flags only
+    iss.seekg(0, iss.beg);//Move the get pointer to the beginning of the stringstream
+    const int total_nb_of_lines = line_number;
+    ss << total_nb_of_lines;
+    const size_t width = ss.str().length();
+    ss.str("");
+    line_number = 1;
+    for (std::string line; std::getline(iss, line); line_number++)
+    {
+        if (line_number == problematic_line)
+        {
+            ss << "> ";
+        }
+        else
+        {
+            ss << "  ";
+        }
+        ss << std::setw(width) << line_number << " | " << replace_whitespace(line) << std::endl;
+    }
+    return ss.str();
+}
+
+void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f, const bool dump_yaml, const std::string& yaml_dump)
+{
+    int problematic_line = 0;
     try
     {
         f();
@@ -83,6 +124,7 @@ void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f)
         s << "There is a syntax problem with the YAML file line " << e.mark.line+1 << ", column " << e.mark.column+1 << ": " << e.msg << "." << std::endl
            << "Please note that as all YAML files supplied on the command-line are concatenated, the line number given here corresponds to the line number in the concatenated YAML." << std::endl;
         invalid_input(s.str());
+        problematic_line = e.mark.line+1;
     }
     catch(std::exception& e)
     {
@@ -90,8 +132,29 @@ void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f)
     }
     if (status != Status::OK)
     {
+        if (dump_yaml && problematic_line > 0)
+        {
+            if (yaml_dump.empty())
+            {
+                ss << "No YAML content was found or there was an error before xdyn even got to the parsing stage." << std::endl;
+            }
+            else
+            {
+                ss << "The concatenatd YAML seen by xdyn was:" << std::endl << dump(yaml_dump, problematic_line) << std::endl;
+            }
+        }
         std::cerr << ss.str();
     }
+}
+
+void ErrorReporter::run_and_report_errors_with_yaml_dump(const std::function<void(void)>& f, const std::string& yaml_dump)
+{
+    run_and_report_errors(f, true, yaml_dump);
+}
+
+void ErrorReporter::run_and_report_errors_without_yaml_dump(const std::function<void(void)>& f)
+{
+    run_and_report_errors(f, false, "");
 }
 
 void ErrorReporter::invalid_request(const std::string &function, const int line)

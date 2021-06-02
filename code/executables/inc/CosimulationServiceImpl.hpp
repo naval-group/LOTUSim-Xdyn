@@ -47,7 +47,7 @@ class CosimulationServiceImpl final : public Cosimulation::Service {
                     output = simserver.handle(inputs);
                     run_status = to_grpc(context, output, response);
                 };
-            error_outputter.run_and_report_errors(f);
+            error_outputter.run_and_report_errors_without_yaml_dump(f);
             return to_gRPC_status(error_outputter);
         }
         XdynForCS simserver;
