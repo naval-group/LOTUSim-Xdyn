@@ -7,6 +7,7 @@
 
 #include "PrecalParserTest.hpp"
 #include "PrecalParser.hpp"
+#include "precal_test_data.hpp"
 
 PrecalParserTest::PrecalParserTest() {}
 
@@ -16,12 +17,8 @@ void PrecalParserTest::SetUp() {}
 
 void PrecalParserTest::TearDown() {}
 
-TEST_F(PrecalParserTest, can_get_forward_speed)
+TEST_F(PrecalParserTest, can_get_the_right_number_of_signals)
 {
-    //! [PrecalParserTest example]
-
-    //! [PrecalParserTest example]
-    //! [PrecalParserTest expected output]
-
-    //! [PrecalParserTest expected output]
+    const auto signals = parse_signals(test_data::precal());
+    ASSERT_EQ(118, signals.size());
 }
