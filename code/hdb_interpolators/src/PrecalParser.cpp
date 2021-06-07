@@ -6,6 +6,8 @@
  */
 
 #include "PrecalParser.hpp"
+#include <boost/algorithm/string.hpp>
+#include <boost/lexical_cast.hpp>
 #include <cstdio>
 #include <sstream>
 
@@ -104,6 +106,16 @@ class Parser
     }
 
   private:
+    void flush(std::string& buffer, std::vector<std::string>& tokens) const
+    {
+        if (not(buffer.empty()))
+        {
+            boost::trim(buffer);
+            tokens.push_back(buffer);
+        }
+        buffer = "";
+    }
+
     std::vector<std::string> tokenize(const std::string& line) const
     {
         std::vector<std::string> tokens;
@@ -112,14 +124,13 @@ class Parser
         {
             if (c == ';')
             {
+                flush(buffer, tokens);
                 tokens.push_back(";");
-                buffer = "";
             }
             else if (c == '=')
             {
-                tokens.push_back(buffer);
+                flush(buffer, tokens);
                 tokens.push_back("=");
-                buffer = "";
             }
             else if (c == '[')
             {
@@ -128,27 +139,23 @@ class Parser
             }
             else if (c == ']')
             {
-                tokens.push_back(buffer);
+                flush(buffer, tokens);
                 tokens.push_back("]");
-                buffer = "";
             }
             else if (c == ',')
             {
-                tokens.push_back(buffer);
+                flush(buffer, tokens);
                 tokens.push_back(",");
-                buffer = "";
             }
             else if (c == '{')
             {
-                tokens.push_back(buffer);
+                flush(buffer, tokens);
                 tokens.push_back("{");
-                buffer = "";
             }
             else if (c == '}')
             {
-                tokens.push_back(buffer);
+                flush(buffer, tokens);
                 tokens.push_back("}");
-                buffer = "";
             }
             else
             {
@@ -157,20 +164,42 @@ class Parser
         }
         if (not(buffer.empty()))
         {
+            boost::trim(buffer);
             tokens.push_back(buffer);
         }
         return tokens;
     }
 
+    void add_key_value(const std::string& key, const std::string& value)
+    {
+        try
+        {
+            add_scalar_value_to_current_section(key, boost::lexical_cast<double>(value));
+        }
+        catch (const std::exception&)
+        {
+            add_string_value_to_current_section(key, value);
+        }
+    }
+
     void syntax_analysis(const std::vector<std::string>& tokens)
     {
-        bool key_value = false;
         bool vector_key_value = false;
         std::string previous_token = "";
+        std::string current_key = "";
         for (const auto token : tokens)
         {
             if (token == ";")
             {
+                if (not(current_key.empty()))
+                {
+                    add_key_value(current_key, previous_token);
+                    current_key = "";
+                }
+                else if (vector_key_value)
+                {
+                    append_value_to_current_vector_value(std::stod(previous_token));
+                }
                 previous_token = "";
                 return;
             }
@@ -201,26 +230,27 @@ class Parser
             }
             else if (token == "=")
             {
-                key_value = true;
+                current_key = previous_token;
+                previous_token = token;
             }
             else
             {
-                if (key_value)
+                if (not(current_key.empty()))
                 {
-                    try
-                    {
-                        add_scalar_value_to_current_section(previous_token, std::stod(token));
-                    }
-                    catch (const std::invalid_argument&)
-                    {
-                        add_string_value_to_current_section(previous_token, token);
-                    }
+                    add_key_value(current_key, token);
+                    current_key = "";
+                    previous_token = "";
                 }
                 else if (vector_key_value)
                 {
                     append_value_to_current_vector_value(std::stod(previous_token));
+                    vector_key_value = false;
+                    previous_token = token;
                 }
-                previous_token = token;
+                else
+                {
+                    previous_token = token;
+                }
             }
         }
     }
