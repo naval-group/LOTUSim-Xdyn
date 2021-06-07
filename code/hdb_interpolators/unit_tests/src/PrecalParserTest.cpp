@@ -65,3 +65,12 @@ TEST_F(PrecalParserTest, can_parse_ship_particulars)
     ASSERT_DOUBLE_EQ(0.112, precal.sections.at(0).scalar_values["T_mean"]);
     ASSERT_DOUBLE_EQ(0.156, precal.sections.at(0).vector_values["COG"].at(2));
 }
+
+TEST_F(PrecalParserTest, can_parse_rao_titles)
+{
+    auto precal = parse_precal(raos());
+    ASSERT_EQ("Signal 1: surge motion at (1.521,0.000,0.156), h=-1.000m, phi_a=16.000deg, "
+           "U=0.000kn, mu=0.000deg (amplitude unit = m/m, phase unit = deg)", precal.raos.at(0).title);
+    ASSERT_EQ("Signal 30: F_drift_m5_c4 at (1.521,0.000,0.156), h=-1.000m, phi_a=16.000deg, "
+           "U=0.000kn, mu=0.000deg (amplitude unit = N.m/m2, phase unit = N.A.)", precal.raos.at(29).title);
+}

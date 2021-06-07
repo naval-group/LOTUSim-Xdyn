@@ -75,6 +75,7 @@ class Parser
                                 raos.push_back(current_rao);
                             }
                             current_rao.title = current_line;
+                            current_rao.title.erase(0, 2);
                         }
                         else
                         {
