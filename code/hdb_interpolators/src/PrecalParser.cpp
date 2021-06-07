@@ -99,6 +99,11 @@ class Parser
     {
         if (not(current_section.title.empty()))
         {
+            if (not(current_vector_value.first.empty()))
+            {
+                current_section.vector_values[current_vector_value.first]
+                    = current_vector_value.second;
+            }
             parsed_sections.push_back(current_section);
         }
         current_section.title = "";
@@ -108,9 +113,9 @@ class Parser
   private:
     void flush(std::string& buffer, std::vector<std::string>& tokens) const
     {
+        boost::trim(buffer);
         if (not(buffer.empty()))
         {
-            boost::trim(buffer);
             tokens.push_back(buffer);
         }
         buffer = "";
@@ -162,9 +167,9 @@ class Parser
                 buffer.push_back(c);
             }
         }
+        boost::trim(buffer);
         if (not(buffer.empty()))
         {
-            boost::trim(buffer);
             tokens.push_back(buffer);
         }
         return tokens;
@@ -198,7 +203,14 @@ class Parser
                 }
                 else if (vector_key_value)
                 {
-                    append_value_to_current_vector_value(std::stod(previous_token));
+                    try
+                    {
+                        append_value_to_current_vector_value(
+                            boost::lexical_cast<double>(previous_token));
+                    }
+                    catch (const std::exception&)
+                    {
+                    }
                 }
                 previous_token = "";
                 return;
@@ -215,18 +227,18 @@ class Parser
             else if (token == "{")
             {
                 vector_key_value = true;
+                if (not(current_key.empty()))
+                {
+                    new_vector_value(current_key);
+                }
             }
             else if (token == "}")
             {
                 vector_key_value = false;
+                current_key = "";
             }
             else if (token == ",")
             {
-                if (vector_key_value)
-                {
-                    append_value_to_current_vector_value(std::stod(previous_token));
-                    previous_token = "";
-                }
             }
             else if (token == "=")
             {
@@ -237,20 +249,24 @@ class Parser
             {
                 if (not(current_key.empty()))
                 {
-                    add_key_value(current_key, token);
-                    current_key = "";
-                    previous_token = "";
+                    if (vector_key_value)
+                    {
+                        try
+                        {
+                            append_value_to_current_vector_value(
+                                boost::lexical_cast<double>(token));
+                        }
+                        catch (const std::exception&)
+                        {
+                        }
+                    }
+                    else
+                    {
+                        add_key_value(current_key, token);
+                        current_key = "";
+                    }
                 }
-                else if (vector_key_value)
-                {
-                    append_value_to_current_vector_value(std::stod(previous_token));
-                    vector_key_value = false;
-                    previous_token = token;
-                }
-                else
-                {
-                    previous_token = token;
-                }
+                previous_token = token;
             }
         }
     }

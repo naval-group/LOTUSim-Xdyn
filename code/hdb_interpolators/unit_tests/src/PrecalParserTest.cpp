@@ -43,3 +43,15 @@ TEST_F(PrecalParserTest, can_parse_general_section)
     ASSERT_EQ("Tue Dec 10 10:07:44 2019", precal.sections.at(0).string_values["CreationDate"]);
     ASSERT_DOUBLE_EQ(1800, precal.sections.at(0).scalar_values["IfortVersion"]);
 }
+
+
+TEST_F(PrecalParserTest, can_parse_vectors)
+{
+    auto precal = parse_precal("[Particulars-ship]\n"
+    "COB              = {1.519,0.000,0.066} ; (ship center of buoyancy w.r.t. aft "
+        "perpendicular - centerline - keel line, calculated from geometry)\n");
+    ASSERT_EQ(3, precal.sections.at(0).vector_values["COB"].size());
+    ASSERT_DOUBLE_EQ(1.519, precal.sections.at(0).vector_values["COB"].at(0));
+    ASSERT_DOUBLE_EQ(0.000, precal.sections.at(0).vector_values["COB"].at(1));
+    ASSERT_DOUBLE_EQ(0.066, precal.sections.at(0).vector_values["COB"].at(2));
+}
