@@ -44,7 +44,6 @@ TEST_F(PrecalParserTest, can_parse_general_section)
     ASSERT_DOUBLE_EQ(1800, precal.sections.at(0).scalar_values["IfortVersion"]);
 }
 
-
 TEST_F(PrecalParserTest, can_parse_vectors)
 {
     auto precal = parse_precal("[Particulars-ship]\n"
@@ -54,4 +53,15 @@ TEST_F(PrecalParserTest, can_parse_vectors)
     ASSERT_DOUBLE_EQ(1.519, precal.sections.at(0).vector_values["COB"].at(0));
     ASSERT_DOUBLE_EQ(0.000, precal.sections.at(0).vector_values["COB"].at(1));
     ASSERT_DOUBLE_EQ(0.066, precal.sections.at(0).vector_values["COB"].at(2));
+}
+
+TEST_F(PrecalParserTest, can_parse_ship_particulars)
+{
+    auto precal = parse_precal(ship_particulars());
+    ASSERT_EQ(3, precal.sections.at(0).vector_values["COB"].size());
+    ASSERT_DOUBLE_EQ(1.519, precal.sections.at(0).vector_values["COB"].at(0));
+    ASSERT_DOUBLE_EQ(0.000, precal.sections.at(0).vector_values["COB"].at(1));
+    ASSERT_DOUBLE_EQ(0.066, precal.sections.at(0).vector_values["COB"].at(2));
+    ASSERT_DOUBLE_EQ(0.112, precal.sections.at(0).scalar_values["T_mean"]);
+    ASSERT_DOUBLE_EQ(0.156, precal.sections.at(0).vector_values["COG"].at(2));
 }
