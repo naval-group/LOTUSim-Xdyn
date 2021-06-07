@@ -17,8 +17,7 @@ void PrecalParserTest::SetUp() {}
 
 void PrecalParserTest::TearDown() {}
 
-TEST_F(PrecalParserTest, can_get_the_right_number_of_signals)
+TEST_F(PrecalParserTest, can_parse_empty_section)
 {
-    const auto signals = parse_signals(test_data::precal());
-    ASSERT_EQ(118, signals.size());
+    ASSERT_EQ(1, parse_precal("[some section]").sections.size());
 }
