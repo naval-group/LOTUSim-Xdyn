@@ -40,7 +40,7 @@ update-submodules:
 	@git submodule sync --recursive
 	@git submodule update --init --recursive
 
-${HEADERS}:
+${HEADERS}: update-submodules
 	@cd code/ssc/ssc && sh generate_module_header.sh && cd ../../..
 
 cmake-debian: BUILD_TYPE = Release
