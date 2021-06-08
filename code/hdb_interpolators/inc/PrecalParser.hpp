@@ -40,7 +40,7 @@ struct RAOAttributes
 struct RAO
 {
     RAO();
-    std::string title;
+    std::string title_line;
     std::string name;
     std::vector<double> left_column;
     std::vector<double> right_column;

@@ -87,12 +87,12 @@ class Parser
                     {
                         if (current_line[0] == ';')
                         {
-                            if (not(current_rao.title.empty()))
+                            if (not(current_rao.title_line.empty()))
                             {
                                 raos.push_back(current_rao);
                             }
-                            current_rao.title = current_line;
-                            current_rao.title.erase(0, 2);
+                            current_rao.title_line = current_line;
+                            current_rao.title_line.erase(0, 2);
                         }
                         else
                         {
@@ -343,7 +343,7 @@ Section::Section()
 }
 
 RAO::RAO()
-    : title()
+    : title_line()
     , name()
     , left_column()
     , right_column()
