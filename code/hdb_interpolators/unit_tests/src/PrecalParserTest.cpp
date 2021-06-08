@@ -108,4 +108,11 @@ TEST_F(PrecalParserTest, full_rao_parse_test)
     ASSERT_EQ("deg", precal.raos.at(15).attributes.mu_unit);
     ASSERT_EQ("N/m2", precal.raos.at(15).attributes.amplitude_unit);
     ASSERT_EQ("N.A.", precal.raos.at(15).attributes.phase_unit);
+    ASSERT_DOUBLE_EQ(0.282862E+02, precal.raos.at(15).left_column[3]);
+    ASSERT_DOUBLE_EQ(0, precal.raos.at(15).right_column[3]);
+
+    ASSERT_DOUBLE_EQ(0.282862E+02, precal.raos.at(15).left_column[3]);
+    ASSERT_DOUBLE_EQ(0, precal.raos.at(15).right_column[3]);
+    ASSERT_DOUBLE_EQ(0.831906E-04, precal.raos.at(39).left_column[3]);
+    ASSERT_DOUBLE_EQ(-178.966675, precal.raos.at(5).right_column[29]);
 }

@@ -74,7 +74,7 @@ class Parser
         while (line_getter.has_more_lines())
         {
             current_line_number++;
-            const std::string current_line = line_getter.get_next_line();
+            std::string current_line = line_getter.get_next_line();
             if (current_line == "[RAOs]")
             {
                 started_parsing_raos = true;
@@ -90,6 +90,7 @@ class Parser
                             if (not(current_rao.title_line.empty()))
                             {
                                 raos.push_back(current_rao);
+                                current_rao = RAO();
                             }
                             current_rao.title_line = current_line;
                             current_rao.title_line.erase(0, 2);
@@ -97,8 +98,17 @@ class Parser
                         }
                         else
                         {
-                            double left, right;
-                            sscanf(current_line.c_str(), "   %lf   %lf", &left, &right);
+                            double left = 0;
+                            double right = 0;
+                            boost::trim(current_line);
+                            if (current_line.find(' ') != std::string::npos)
+                            {
+                                sscanf(current_line.c_str(), "%lf   %lf", &left, &right);
+                            }
+                            else
+                            {
+                                sscanf(current_line.c_str(), "%lf", &left);
+                            }
                             current_rao.left_column.push_back(left);
                             current_rao.right_column.push_back(right);
                         }
