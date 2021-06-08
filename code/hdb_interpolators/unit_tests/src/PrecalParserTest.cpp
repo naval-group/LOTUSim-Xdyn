@@ -92,3 +92,20 @@ TEST_F(PrecalParserTest, can_parse_rao_attributes)
     ASSERT_EQ("m/m", rao_attributes.amplitude_unit);
     ASSERT_EQ("deg", rao_attributes.phase_unit);
 }
+
+TEST_F(PrecalParserTest, full_rao_parse_test)
+{
+    auto precal = parse_precal(raos());
+    ASSERT_EQ("F_drift_m2", precal.raos.at(15).attributes.name);
+    ASSERT_EQ(Eigen::Vector3d(1.521,0.000,0.156), precal.raos.at(15).attributes.position);
+    ASSERT_DOUBLE_EQ(-1, precal.raos.at(15).attributes.h);
+    ASSERT_EQ("m", precal.raos.at(15).attributes.h_unit);
+    ASSERT_DOUBLE_EQ(16, precal.raos.at(15).attributes.phi_a);
+    ASSERT_EQ("deg", precal.raos.at(15).attributes.phi_a_unit);
+    ASSERT_DOUBLE_EQ(0, precal.raos.at(15).attributes.U);
+    ASSERT_EQ("kn", precal.raos.at(15).attributes.U_unit);
+    ASSERT_DOUBLE_EQ(0, precal.raos.at(15).attributes.mu);
+    ASSERT_EQ("deg", precal.raos.at(15).attributes.mu_unit);
+    ASSERT_EQ("N/m2", precal.raos.at(15).attributes.amplitude_unit);
+    ASSERT_EQ("N.A.", precal.raos.at(15).attributes.phase_unit);
+}

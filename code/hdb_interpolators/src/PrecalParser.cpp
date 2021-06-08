@@ -93,6 +93,7 @@ class Parser
                             }
                             current_rao.title_line = current_line;
                             current_rao.title_line.erase(0, 2);
+                            current_rao.attributes = parse_rao_attributes(current_rao.title_line);
                         }
                         else
                         {
@@ -344,7 +345,7 @@ Section::Section()
 
 RAO::RAO()
     : title_line()
-    , name()
+    , attributes()
     , left_column()
     , right_column()
 {

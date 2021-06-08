@@ -41,7 +41,7 @@ struct RAO
 {
     RAO();
     std::string title_line;
-    std::string name;
+    RAOAttributes attributes;
     std::vector<double> left_column;
     std::vector<double> right_column;
 };
