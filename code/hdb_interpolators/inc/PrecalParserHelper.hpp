@@ -1,12 +1,12 @@
 /*
- * PrecalParser.hpp
+ * PrecalParserHelper.hpp
  *
  *  Created on: May 03, 2021
  *      Author: cady
  */
 
-#ifndef PRECALPARSER_HPP_
-#define PRECALPARSER_HPP_
+#ifndef PRECALPARSERHELPER_HPP_
+#define PRECALPARSERHELPER_HPP_
 #include <map>
 #include <string>
 #include <vector>
@@ -56,4 +56,4 @@ struct PrecalFile
 PrecalFile parse_precal(const std::string& file_contents);
 RAOAttributes parse_rao_attributes(const std::string rao_attributes);
 
-#endif // PRECALPARSER_HPP_
+#endif // PRECALPARSERHELPER_HPP_
