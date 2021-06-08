@@ -334,7 +334,7 @@ class Parser
     bool started_parsing_raos;
 };
 
-PrecalFile parse_precal(const std::string& input)
+PrecalFile parse_precal_from_string(const std::string& input)
 {
     GetLineFromString line_getter(input);
     Parser parser(line_getter);

@@ -19,14 +19,14 @@ void PrecalParserTest::TearDown() {}
 
 TEST_F(PrecalParserTest, can_parse_empty_section)
 {
-    const auto precal = parse_precal("[some section]");
+    const auto precal = parse_precal_from_string("[some section]");
     ASSERT_EQ(1, precal.sections.size());
     ASSERT_EQ("some section", precal.sections.at(0).title);
 }
 
 TEST_F(PrecalParserTest, can_parse_general_section)
 {
-    auto precal = parse_precal(general());
+    auto precal = parse_precal_from_string(general());
     ASSERT_EQ(1, precal.sections.size());
     ASSERT_EQ("General", precal.sections.at(0).title);
     ASSERT_EQ("NOT SPECIFIED", precal.sections.at(0).string_values["userName"]);
@@ -46,7 +46,7 @@ TEST_F(PrecalParserTest, can_parse_general_section)
 
 TEST_F(PrecalParserTest, can_parse_vectors)
 {
-    auto precal = parse_precal("[Particulars-ship]\n"
+    auto precal = parse_precal_from_string("[Particulars-ship]\n"
     "COB              = {1.519,0.000,0.066} ; (ship center of buoyancy w.r.t. aft "
         "perpendicular - centerline - keel line, calculated from geometry)\n");
     ASSERT_EQ(3, precal.sections.at(0).vector_values["COB"].size());
@@ -57,7 +57,7 @@ TEST_F(PrecalParserTest, can_parse_vectors)
 
 TEST_F(PrecalParserTest, can_parse_ship_particulars)
 {
-    auto precal = parse_precal(ship_particulars());
+    auto precal = parse_precal_from_string(ship_particulars());
     ASSERT_EQ(3, precal.sections.at(0).vector_values["COB"].size());
     ASSERT_DOUBLE_EQ(1.519, precal.sections.at(0).vector_values["COB"].at(0));
     ASSERT_DOUBLE_EQ(0.000, precal.sections.at(0).vector_values["COB"].at(1));
@@ -68,7 +68,7 @@ TEST_F(PrecalParserTest, can_parse_ship_particulars)
 
 TEST_F(PrecalParserTest, can_parse_rao_titles)
 {
-    auto precal = parse_precal(raos());
+    auto precal = parse_precal_from_string(raos());
     ASSERT_EQ("Signal 1: surge motion at (1.521,0.000,0.156), h=-1.000m, phi_a=16.000deg, "
            "U=0.000kn, mu=0.000deg (amplitude unit = m/m, phase unit = deg)", precal.raos.at(0).title_line);
     ASSERT_EQ("Signal 30: F_drift_m5_c4 at (1.521,0.000,0.156), h=-1.000m, phi_a=16.000deg, "
@@ -95,7 +95,7 @@ TEST_F(PrecalParserTest, can_parse_rao_attributes)
 
 TEST_F(PrecalParserTest, full_rao_parse_test)
 {
-    auto precal = parse_precal(raos());
+    auto precal = parse_precal_from_string(raos());
     ASSERT_EQ("F_drift_m2", precal.raos.at(15).attributes.name);
     ASSERT_EQ(Eigen::Vector3d(1.521,0.000,0.156), precal.raos.at(15).attributes.position);
     ASSERT_DOUBLE_EQ(-1, precal.raos.at(15).attributes.h);

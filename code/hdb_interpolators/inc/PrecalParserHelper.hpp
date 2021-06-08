@@ -53,7 +53,7 @@ struct PrecalFile
     std::vector<RAO> raos;
 };
 
-PrecalFile parse_precal(const std::string& file_contents);
+PrecalFile parse_precal_from_string(const std::string& file_contents);
 RAOAttributes parse_rao_attributes(const std::string rao_attributes);
 
 #endif // PRECALPARSERHELPER_HPP_
