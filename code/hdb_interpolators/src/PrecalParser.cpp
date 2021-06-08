@@ -11,6 +11,23 @@
 #include <cstdio>
 #include <sstream>
 
+/**
+ * @brief Add the trimmed contents of the buffer to the list of tokens & reset the buffer.
+ *
+ * @param buffer
+ * @param tokens
+ */
+void flush(std::string& buffer, std::vector<std::string>& tokens);
+void flush(std::string& buffer, std::vector<std::string>& tokens)
+{
+    boost::trim(buffer);
+    if (not(buffer.empty()))
+    {
+        tokens.push_back(buffer);
+    }
+    buffer = "";
+}
+
 class LineGetter
 {
   public:
@@ -112,16 +129,6 @@ class Parser
     }
 
   private:
-    void flush(std::string& buffer, std::vector<std::string>& tokens) const
-    {
-        boost::trim(buffer);
-        if (not(buffer.empty()))
-        {
-            tokens.push_back(buffer);
-        }
-        buffer = "";
-    }
-
     std::vector<std::string> tokenize(const std::string& line) const
     {
         std::vector<std::string> tokens;
@@ -337,6 +344,7 @@ Section::Section()
 
 RAO::RAO()
     : title()
+    , name()
     , left_column()
     , right_column()
 {
@@ -346,4 +354,195 @@ PrecalFile::PrecalFile()
     : sections()
     , raos()
 {
+}
+
+RAOAttributes::RAOAttributes()
+    : name()
+    , position()
+    , h()
+    , h_unit()
+    , phi_a()
+    , phi_a_unit()
+    , U()
+    , U_unit()
+    , mu()
+    , mu_unit()
+    , amplitude_unit()
+    , phase_unit()
+{
+}
+
+std::vector<std::string> rao_lexer(const std::string rao_attributes);
+std::vector<std::string> rao_lexer(const std::string rao_attributes)
+{
+    std::vector<std::string> tokens;
+    std::string buffer;
+    for (const char c : rao_attributes)
+    {
+        if (c == ':')
+        {
+            flush(buffer, tokens);
+            tokens.push_back(":");
+        }
+        else if (c == ' ')
+        {
+            flush(buffer, tokens);
+        }
+        else if (c == '(')
+        {
+            flush(buffer, tokens);
+            tokens.push_back("[");
+        }
+        else if (c == ')')
+        {
+            flush(buffer, tokens);
+            tokens.push_back(")");
+        }
+        else if (c == ',')
+        {
+            flush(buffer, tokens);
+            tokens.push_back(",");
+        }
+        else if (c == '=')
+        {
+            flush(buffer, tokens);
+            tokens.push_back("=");
+        }
+        else
+        {
+            buffer.push_back(c);
+        }
+    }
+    boost::trim(buffer);
+    if (not(buffer.empty()))
+    {
+        tokens.push_back(buffer);
+    }
+    return tokens;
+}
+
+struct UnitValue
+{
+    UnitValue() = delete;
+
+    std::string name;
+    std::string unit;
+    double value;
+
+    static UnitValue parse(std::string s)
+    {
+        std::string key = "";
+        double val = 0;
+        std::string u = "";
+        size_t i = 0;
+        while (i < s.length() && s[i] != '=')
+        {
+            key.append(1, s[i]);
+            i++;
+        }
+        s = s.substr(i + 1, s.size());
+        char str[256];
+        sscanf(s.c_str(), "%lf%s", &val, str);
+        u = str;
+        return UnitValue(key, val, u);
+    }
+
+  private:
+    UnitValue(const std::string& name_, const double value_, const std::string unit_)
+        : name(name_)
+        , unit(unit_)
+        , value(value_)
+    {
+    }
+};
+
+void assign(RAOAttributes& left, const UnitValue& right);
+void assign(RAOAttributes& left, const UnitValue& right)
+{
+    if (right.name == "h")
+    {
+        left.h = right.value;
+        left.h_unit = right.unit;
+    }
+    else if (right.name == "phi_a")
+    {
+        left.phi_a = right.value;
+        left.phi_a_unit = right.unit;
+    }
+    else if (right.name == "U")
+    {
+        left.U = right.value;
+        left.U_unit = right.unit;
+    }
+    else if (right.name == "mu")
+    {
+        left.mu = right.value;
+        left.mu_unit = right.unit;
+    }
+}
+
+RAOAttributes analyze_rao_tokens(const std::vector<std::string>& tokens);
+RAOAttributes analyze_rao_tokens(const std::vector<std::string>& tokens)
+{
+    RAOAttributes ret;
+    std::string token = "";
+    size_t i = 0;
+    std::string header = "";
+    while (tokens[i] != ":" && i < tokens.size())
+    {
+        if (header.empty())
+        {
+            header = tokens[i];
+        }
+        else
+        {
+            header.append(std::string(" ") + tokens[i]);
+        }
+        i++;
+    }
+    i++; // Skip the ":" token itself
+    while (tokens[i] != "at" && i < tokens.size())
+    {
+        if (ret.name.empty())
+        {
+            ret.name = tokens[i];
+        }
+        else
+        {
+            ret.name.append(std::string(" ") + tokens[i]);
+        }
+        i++;
+    }
+    i++; // Skip the "at" token itself
+    i++; // Skip the "(" token
+    ret.position = Eigen::Vector3d(boost::lexical_cast<double>(tokens[i]),
+                                   boost::lexical_cast<double>(tokens[i + 2]),
+                                   boost::lexical_cast<double>(tokens[i + 4]));
+    i += 7; // Move past the 'position' tokens
+    assign(ret, UnitValue::parse(tokens[i] + tokens[i + 1] + tokens[i + 2]));
+    i += 4;
+    assign(ret, UnitValue::parse(tokens[i] + tokens[i + 1] + tokens[i + 2]));
+    i += 4;
+    assign(ret, UnitValue::parse(tokens[i] + tokens[i + 1] + tokens[i + 2]));
+    i += 4;
+    assign(ret, UnitValue::parse(tokens[i] + tokens[i + 1] + tokens[i + 2]));
+
+    for (; i < tokens.size() - 3; ++i)
+    {
+        if ((tokens[i] == "amplitude") && (tokens[i + 1] == "unit"))
+        {
+            ret.amplitude_unit = tokens[i + 3];
+        }
+        if ((tokens[i] == "phase") && (tokens[i + 1] == "unit"))
+        {
+            ret.phase_unit = tokens[i + 3];
+        }
+    }
+    return ret;
+}
+
+RAOAttributes parse_rao_attributes(const std::string rao_attributes)
+{
+    const std::vector<std::string> tokens = rao_lexer(rao_attributes);
+    return analyze_rao_tokens(tokens);
 }
