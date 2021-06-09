@@ -221,6 +221,18 @@ std::string rigid_body_inertia_matrix()
            "            row 6: [0,0,0,0,0,7.676e6]\n";
 }
 
+std::string centre_of_inertia(const std::string& frame, const double x, const double y, const double z);
+std::string centre_of_inertia(const std::string& frame, const double x, const double y, const double z)
+{
+    std::stringstream ss;
+    ss << "        centre of inertia:\n"
+       << "            frame: " << frame << "\n"
+       << "            x: {value: " << x << ", unit: m}\n"
+       << "            y: {value: " << y << ", unit: m}\n"
+       << "            z: {value: " << z << ", unit: m}\n";
+    return ss.str();
+}
+
 std::string test_data::bug_2655()
 {
     std::stringstream ss;
@@ -293,11 +305,7 @@ std::string test_data::hydrostatic_test()
        << initial_velocity("body", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: body 1\n"
-       << "            x: {value: 0, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0, unit: m}\n"
+       << centre_of_inertia("body 1", 0, 0, 0)
        << rigid_body_inertia_matrix()
        << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [3.519e4,0,0,0,0,0]\n"
@@ -337,11 +345,7 @@ std::string test_data::added_mass_from_file()
        << initial_velocity("body", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: body 1\n"
-       << "            x: {value: 0, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0, unit: m}\n"
+       << centre_of_inertia("body 1", 0,0,0)
        << rigid_body_inertia_matrix()
        << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            from hdb: test_ship.hdb\n"
@@ -376,11 +380,7 @@ std::string test_data::full_example()
        << initial_velocity("body 1", -8, -9, 14, 56, 7, 6)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: body 1\n"
-       << "            x: {value: 4, unit: m}\n"
-       << "            y: {value: 7, unit: m}\n"
-       << "            z: {value: -10, unit: m}\n"
+       << centre_of_inertia("body 1", 4, 7, -10)
        << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [11,    11,    11,    11,    11,    11]\n"
        << "            row 2: [11,    12,    13,    14,    15,    16]\n"
@@ -445,11 +445,7 @@ std::string test_data::full_example_with_diagonal_inertia()
        << initial_velocity("body 1", -8, -9, 14, 56, 7, 6)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: body 1\n"
-       << "            x: {value: 4, unit: m}\n"
-       << "            y: {value: 7, unit: m}\n"
-       << "            z: {value: -10, unit: m}\n"
+       << centre_of_inertia("body 1", 4, 7, -10)
        << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [1, 0, 0, 0, 0, 0]\n"
        << "            row 2: [0, 2, 0, 0, 0, 0]\n"
@@ -515,11 +511,7 @@ std::string test_data::full_example_with_propulsion()
        << initial_velocity("body 1", -8, -9, 14, 56, 7, 6)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: body 1\n"
-       << "            x: {value: 4, unit: m}\n"
-       << "            y: {value: 7, unit: m}\n"
-       << "            z: {value: -10, unit: m}\n"
+       << centre_of_inertia("body 1", 4, 7, -10)
        << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [1,2,3,4,5,6]\n"
        << "            row 2: [7,2,1,2,11,13]\n"
@@ -606,11 +598,7 @@ std::string test_data::full_example_with_propulsion_and_old_key_name()
        << initial_velocity("body 1", -8, -9, 14, 56, 7, 6)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: body 1\n"
-       << "            x: {value: 4, unit: m}\n"
-       << "            y: {value: 7, unit: m}\n"
-       << "            z: {value: -10, unit: m}\n"
+       << centre_of_inertia("body 1", 4, 7, -10)
        << "        rigid body inertia matrix at the center of buoyancy projected in the body frame:\n"
        << "            row 1: [1,2,3,4,5,6]\n"
        << "            row 2: [7,2,1,2,11,13]\n"
@@ -692,11 +680,7 @@ std::string test_data::falling_ball_example()
        << initial_velocity("ball", 1, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: ball\n"
-       << "            x: {value: 0, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0.5, unit: m}\n"
+       << centre_of_inertia("ball", 0, 0, 0.5)
        << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [1E6,0,0,0,0,0]\n"
        << "            row 2: [0,1E6,0,0,0,0]\n"
@@ -744,11 +728,7 @@ std::string test_data::simserver_test_with_commands_and_delay()
        << initial_velocity("ball", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: ball\n"
-       << "            x: {value: 0, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0, unit: m}\n"
+       << centre_of_inertia("ball", 0, 0, 0)
        << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [1,0,0,0,0,0]\n"
        << "            row 2: [0,1,0,0,0,0]\n"
@@ -803,11 +783,7 @@ std::string test_data::falling_cube()
        << initial_velocity("cube", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: cube\n"
-       << "            x: {value: 0, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0.5, unit: m}\n"
+       << centre_of_inertia("cube", 0, 0, 0.5)
        << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [1E3,0,0,0,0,0]\n"
        << "            row 2: [0,1E3,0,0,0,0]\n"
@@ -848,11 +824,7 @@ std::string test_data::rolling_cube()
        << initial_velocity("cube", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: cube\n"
-       << "            x: {value: 0, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0.5, unit: m}\n"
+       << centre_of_inertia("cube", 0, 0, 0.5)
        << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [1E3,0,0,0,0,0]\n"
        << "            row 2: [0,1E3,0,0,0,0]\n"
@@ -894,11 +866,7 @@ std::string test_data::oscillating_cube_example()
        << initial_velocity("cube", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: cube\n"
-       << "            x: {value: 0, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0, unit: m}\n"
+       << centre_of_inertia("cube", 0, 0, 0)
        << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [1E3,0,0,0,0,0]\n"
        << "            row 2: [0,1E3,0,0,0,0]\n"
@@ -940,11 +908,7 @@ std::string test_data::new_oscillating_cube_example()
        << initial_velocity("cube", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: cube\n"
-       << "            x: {value: 0, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0, unit: m}\n"
+       << centre_of_inertia("cube", 0, 0, 0)
        << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [5E2,0,0,0,0,0]\n"
        << "            row 2: [0,5E2,0,0,0,0]\n"
@@ -987,11 +951,7 @@ std::string test_data::stable_cube_example()
        << initial_velocity("cube", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: cube\n"
-       << "            x: {value: 0, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0, unit: m}\n"
+       << centre_of_inertia("cube", 0, 0, 0)
        << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [1E3,0,0,0,0,0]\n"
        << "            row 2: [0,1E3,0,0,0,0]\n"
@@ -1042,11 +1002,7 @@ std::string test_data::stable_rolling_cube_test()
        << initial_velocity("cube", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: cube\n"
-       << "            x: {value: 0, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0.4, unit: m}\n"
+       << centre_of_inertia("cube", 0, 0, 0.4)
        << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [83.33,0,0,0,0,0]\n"
        << "            row 2: [0,83.33,0,0,0,0]\n"
@@ -1412,11 +1368,7 @@ std::string test_data::cube_in_waves()
            << "            x: {value: 0.696, unit: m}\n"
            << "            y: {value: 0, unit: m}\n"
            << "            z: {value: 1.418, unit: m}\n"
-           << "        centre of inertia:\n"
-           << "            frame: cube\n"
-           << "            x: {value: 0, unit: m}\n"
-           << "            y: {value: 0, unit: m}\n"
-           << "            z: {value: 0.5, unit: m}\n"
+           << centre_of_inertia("cube", 0, 0, 0.5)
            << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
            << "            row 1: [1E3,0,0,0,0,0]\n"
            << "            row 2: [0,1E3,0,0,0,0]\n"
@@ -1739,11 +1691,7 @@ std::string test_data::propulsion_and_resistance()
        << "            x: {value: 0.696, unit: m}\n"
        << "            y: {value: 0, unit: m}\n"
        << "            z: {value: 0.432, unit: m}\n"
-       << "        centre of inertia:\n"
-       << "            frame: TestShip\n"
-       << "            x: {value: 0.258, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0.432, unit: m}\n"
+       << centre_of_inertia("TestShip", 0.258, 0, 0.432)
        << rigid_body_inertia_matrix()
        << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [3.519e4,0,0,0,0,0]\n"
@@ -1827,11 +1775,7 @@ std::string test_data::heading_keeping_base()
        << "            x: {value: 0, unit: m}\n"
        << "            y: {value: 0, unit: m}\n"
        << "            z: {value: 3.45, unit: m}\n"
-       << "        centre of inertia:\n"
-       << "            frame: dtmb\n"
-       << "            x: {value: 0, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0, unit: m} \n"
+       << centre_of_inertia("dtmb", 0, 0, 0)
        << "        mass: {value: 8569., unit: tonne} # Caution: 'ton' is the british ton which is 907.185 kg\n"
        << "        rigid body inertia matrix at the center of buoyancy projected in the body frame:\n"
        << "            frame: dtmb\n"
@@ -2322,11 +2266,7 @@ std::string test_data::bug_in_exact_hydrostatic()
        << initial_velocity("cube", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: cube\n"
-       << "            x: {value: 0, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0.5, unit: m}\n"
+       << centre_of_inertia("cube", 0, 0, 0.5)
        << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [1E3,0,0,0,0,0]\n"
        << "            row 2: [0,1E3,0,0,0,0]\n"
@@ -2545,11 +2485,7 @@ std::string test_data::L_config()
        << initial_velocity("cube", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: L\n"
-       << "            x: {value: 0, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0.5, unit: m}\n"
+       << centre_of_inertia("L", 0, 0, 0.5)
        << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [1E3,0,0,0,0,0]\n"
        << "            row 2: [0,1E3,0,0,0,0]\n"
@@ -2590,11 +2526,7 @@ std::string test_data::GM_cube()
        << initial_velocity("cube", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: cube\n"
-       << "            x: {value: 0, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0, unit: m}\n"
+       << centre_of_inertia("cube", 0, 0, 0)
        << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [1E3,0,0,0,0,0]\n"
        << "            row 2: [0,1E3,0,0,0,0]\n"
@@ -2963,11 +2895,7 @@ std::string test_data::test_ship_linear_hydrostatics_without_waves()
        << initial_velocity("TestShip", 0, 0, 1, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: TestShip\n"
-       << "            x: {value: 0.258, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0.432, unit: m}\n"
+       << centre_of_inertia("TestShip", 0.258, 0, 0.432)
        << rigid_body_inertia_matrix()
        << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [0,0,0,0,0,0]\n"
@@ -3027,11 +2955,7 @@ std::string test_data::test_ship_linear_hydrostatics_with_waves()
        << initial_velocity("TestShip", 0, 0, 1, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: TestShip\n"
-       << "            x: {value: 0.258, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0.432, unit: m}\n"
+       << centre_of_inertia("TestShip", 0.258, 0, 0.432)
        << rigid_body_inertia_matrix()
        << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [0,0,0,0,0,0]\n"
@@ -3073,11 +2997,7 @@ std::string test_data::bug_2963_hs_fast()
        << initial_velocity("TestShip", 0, 0, 1, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: TestShip\n"
-       << "            x: {value: 0.258, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0.432, unit: m}\n"
+       << centre_of_inertia("TestShip", 0.258, 0, 0.432)
        << rigid_body_inertia_matrix()
        << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [0,0,0,0,0,0]\n"
@@ -3105,11 +3025,7 @@ std::string test_data::bug_2963_hs_exact()
        << initial_velocity("TestShip", 0, 0, 1, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: TestShip\n"
-       << "            x: {value: 0.258, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0.432, unit: m}\n"
+       << centre_of_inertia("TestShip", 0.258, 0, 0.432)
        << rigid_body_inertia_matrix()
        << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [0,0,0,0,0,0]\n"
@@ -3137,11 +3053,7 @@ std::string test_data::bug_2963_fk()
        << initial_velocity("TestShip", 0, 0, 1, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: TestShip\n"
-       << "            x: {value: 0.258, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0.432, unit: m}\n"
+       << centre_of_inertia("TestShip", 0.258, 0, 0.432)
        << rigid_body_inertia_matrix()
        << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [0,0,0,0,0,0]\n"
@@ -3169,11 +3081,7 @@ std::string test_data::bug_2963_diff()
        << initial_velocity("TestShip", 0, 0, 1, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: TestShip\n"
-       << "            x: {value: 0.258, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0.432, unit: m}\n"
+       << centre_of_inertia("TestShip", 0.258, 0, 0.432)
        << rigid_body_inertia_matrix()
        << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [0,0,0,0,0,0]\n"
@@ -3207,11 +3115,7 @@ std::string test_data::bug_2963_gm()
        << initial_velocity("TestShip", 0, 0, 1, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: TestShip\n"
-       << "            x: {value: 0.258, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0.432, unit: m}\n"
+       << centre_of_inertia("TestShip", 0.258, 0, 0.432)
        << rigid_body_inertia_matrix()
        << "        added mass matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [0,0,0,0,0,0]\n"
@@ -3440,11 +3344,7 @@ std::string test_data::bug_3004()
        << "            x: {value: 0, unit: m}\n"
        << "            y: {value: 0, unit: m}\n"
        << "            z: {value: 0, unit: m}\n"
-       << "        centre of inertia:\n"
-       << "            frame: Ponton\n"
-       << "            x: {value: 0, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0, unit: m}\n"
+       << centre_of_inertia("Ponton", 0, 0, 0)
        << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [1.025e7,0,0,0,0,0]\n"
        << "            row 2: [0,1.025e7,0,0,0,0]\n"
@@ -3531,11 +3431,7 @@ std::string test_data::bug_2984()
        << "            x: {value: 0, unit: m}\n"
        << "            y: {value: 0, unit: m}\n"
        << "            z: {value: 4.15, unit: m}\n"
-       << "        centre of inertia:\n"
-       << "            frame: ship\n"
-       << "            x: {value: 0, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0, unit: m} \n"
+       << centre_of_inertia("ship", 0, 0, 0)
        << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [6.09e6,0,0,0,0,0]\n"
        << "            row 2: [0,6.09e6,0,0,0,0]\n"
@@ -3769,11 +3665,7 @@ std::string test_data::tutorial_09_gRPC_wave_model()
        << initial_velocity("cube", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: cube\n"
-       << "            x: {value: 0, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0.4, unit: m}\n"
+       << centre_of_inertia("cube", 0, 0, 0.4)
        << "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
        << "            row 1: [83.33,0,0,0,0,0]\n"
        << "            row 2: [0,83.33,0,0,0,0]\n"
@@ -3878,11 +3770,7 @@ std::string test_data::fmi()
        << initial_velocity_kt("TestShip", 10, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
-       << "        centre of inertia:\n"
-       << "            frame: TestShip\n"
-       << "            x: {value: 0.258, unit: m}\n"
-       << "            y: {value: 0, unit: m}\n"
-       << "            z: {value: 0.432, unit: m}\n"
+       << centre_of_inertia("TestShip", 0.258, 0, 0.432)
        << "        mass: {value: 253.31, unit: tonne} # Caution: 'ton' is the british ton which is 907.185 kg\n"
        << "        rigid body inertia matrix at the center of buoyancy projected in the body frame:\n"
        << "            frame: TestShip\n"
