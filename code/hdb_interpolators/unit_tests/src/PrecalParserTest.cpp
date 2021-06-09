@@ -5,11 +5,11 @@
  *      Author: cady
  */
 
-#include <cstdio>
-#include <fstream>
 #include "PrecalParserTest.hpp"
 #include "PrecalParserHelper.hpp"
 #include "precal_test_data.hpp"
+#include <cstdio>
+#include <fstream>
 
 PrecalParserTest::PrecalParserTest() {}
 
@@ -48,8 +48,9 @@ TEST_F(PrecalParserTest, can_parse_general_section)
 
 TEST_F(PrecalParserTest, can_parse_vectors)
 {
-    auto precal = parse_precal_from_string("[Particulars-ship]\n"
-    "COB              = {1.519,0.000,0.066} ; (ship center of buoyancy w.r.t. aft "
+    auto precal = parse_precal_from_string(
+        "[Particulars-ship]\n"
+        "COB              = {1.519,0.000,0.066} ; (ship center of buoyancy w.r.t. aft "
         "perpendicular - centerline - keel line, calculated from geometry)\n");
     ASSERT_EQ(3, precal.sections.at(0).vector_values["COB"].size());
     ASSERT_DOUBLE_EQ(1.519, precal.sections.at(0).vector_values["COB"].at(0));
@@ -72,17 +73,20 @@ TEST_F(PrecalParserTest, can_parse_rao_titles)
 {
     auto precal = parse_precal_from_string(raos());
     ASSERT_EQ("Signal 1: surge motion at (1.521,0.000,0.156), h=-1.000m, phi_a=16.000deg, "
-           "U=0.000kn, mu=0.000deg (amplitude unit = m/m, phase unit = deg)", precal.raos.at(0).title_line);
+              "U=0.000kn, mu=0.000deg (amplitude unit = m/m, phase unit = deg)",
+              precal.raos.at(0).title_line);
     ASSERT_EQ("Signal 30: F_drift_m5_c4 at (1.521,0.000,0.156), h=-1.000m, phi_a=16.000deg, "
-           "U=0.000kn, mu=0.000deg (amplitude unit = N.m/m2, phase unit = N.A.)", precal.raos.at(29).title_line);
+              "U=0.000kn, mu=0.000deg (amplitude unit = N.m/m2, phase unit = N.A.)",
+              precal.raos.at(29).title_line);
 }
 
 TEST_F(PrecalParserTest, can_parse_rao_attributes)
 {
-    const auto rao_attributes = parse_rao_attributes("Signal 1: surge motion at (1.521,0.000,0.156), h=-1.000m, phi_a=16.000deg, "
-           "U=0.000kn, mu=0.000deg (amplitude unit = m/m, phase unit = deg)");
+    const auto rao_attributes = parse_rao_attributes(
+        "Signal 1: surge motion at (1.521,0.000,0.156), h=-1.000m, phi_a=16.000deg, "
+        "U=0.000kn, mu=0.000deg (amplitude unit = m/m, phase unit = deg)");
     ASSERT_EQ("surge motion", rao_attributes.name);
-    ASSERT_EQ(Eigen::Vector3d(1.521,0.000,0.156), rao_attributes.position);
+    ASSERT_EQ(Eigen::Vector3d(1.521, 0.000, 0.156), rao_attributes.position);
     ASSERT_DOUBLE_EQ(-1, rao_attributes.h);
     ASSERT_EQ("m", rao_attributes.h_unit);
     ASSERT_DOUBLE_EQ(16, rao_attributes.phi_a);
@@ -99,7 +103,7 @@ TEST_F(PrecalParserTest, full_rao_parse_test)
 {
     auto precal = parse_precal_from_string(raos());
     ASSERT_EQ("F_drift_m2", precal.raos.at(15).attributes.name);
-    ASSERT_EQ(Eigen::Vector3d(1.521,0.000,0.156), precal.raos.at(15).attributes.position);
+    ASSERT_EQ(Eigen::Vector3d(1.521, 0.000, 0.156), precal.raos.at(15).attributes.position);
     ASSERT_DOUBLE_EQ(-1, precal.raos.at(15).attributes.h);
     ASSERT_EQ("m", precal.raos.at(15).attributes.h_unit);
     ASSERT_DOUBLE_EQ(16, precal.raos.at(15).attributes.phi_a);
