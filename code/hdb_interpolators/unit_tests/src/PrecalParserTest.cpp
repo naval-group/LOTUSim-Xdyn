@@ -6,6 +6,7 @@
  */
 
 #include "PrecalParserTest.hpp"
+#include "PrecalParser.hpp"
 #include "PrecalParserHelper.hpp"
 #include "precal_test_data.hpp"
 #include <cstdio>
@@ -130,4 +131,19 @@ TEST_F(PrecalParserTest, can_parse_from_file)
     auto precal = parse_precal_from_file(filename);
     ASSERT_EQ("F_drift_m2", precal.raos.at(15).attributes.name);
     remove(filename.c_str());
+}
+
+TEST_F(PrecalParserTest, can_parse_added_mass_matrix)
+{
+     const auto precal = PrecalParser::from_string(test_data::precal());
+     const auto Ma = precal.get_added_mass();
+     ASSERT_DOUBLE_EQ(0.582645, Ma(0,0));
+     ASSERT_DOUBLE_EQ(-0.117227E-05, Ma(0,1));
+     ASSERT_DOUBLE_EQ(0.431212E+01, Ma(0,4));
+     ASSERT_DOUBLE_EQ(-0.123341E-05, Ma(0,5));
+     ASSERT_DOUBLE_EQ(-0.170619E-04, Ma(1,0));
+     ASSERT_DOUBLE_EQ(0.430115E+01, Ma(4,0));
+     ASSERT_DOUBLE_EQ(-0.165006E-04, Ma(5,0));
+     ASSERT_DOUBLE_EQ(0.200769E+00, Ma(3,3));
+     ASSERT_DOUBLE_EQ(0.129615E+02, Ma(5,5));
 }

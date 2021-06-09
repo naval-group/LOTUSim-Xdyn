@@ -8,6 +8,8 @@
 #ifndef __PRECALPARSERHPP__
 #define __PRECALPARSERHPP__
 
+#include "PrecalParserHelper.hpp"
+
 class PrecalParser
 {
     public:
@@ -17,6 +19,8 @@ class PrecalParser
         Eigen::Matrix<double,6,6> get_added_mass() const;
 
     private:
+        PrecalParser(const PrecalFile& precal_file);
+        PrecalFile precal_file;
 
 
 };
