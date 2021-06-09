@@ -5,6 +5,8 @@
  *      Author: cady
  */
 
+#include <cstdio>
+#include <fstream>
 #include "PrecalParserTest.hpp"
 #include "PrecalParserHelper.hpp"
 #include "precal_test_data.hpp"
@@ -115,4 +117,15 @@ TEST_F(PrecalParserTest, full_rao_parse_test)
     ASSERT_DOUBLE_EQ(0, precal.raos.at(15).right_column[3]);
     ASSERT_DOUBLE_EQ(0.831906E-04, precal.raos.at(39).left_column[3]);
     ASSERT_DOUBLE_EQ(-178.966675, precal.raos.at(5).right_column[29]);
+}
+
+TEST_F(PrecalParserTest, can_parse_from_file)
+{
+    const std::string filename = "precal.ini";
+    std::ofstream of(filename);
+    of << test_data::precal();
+    of.close();
+    auto precal = parse_precal_from_file(filename);
+    ASSERT_EQ("F_drift_m2", precal.raos.at(15).attributes.name);
+    remove(filename.c_str());
 }

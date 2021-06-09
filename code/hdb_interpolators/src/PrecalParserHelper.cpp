@@ -6,9 +6,11 @@
  */
 
 #include "PrecalParserHelper.hpp"
+#include "InvalidInputException.hpp"
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
 #include <cstdio>
+#include <fstream>
 #include <sstream>
 
 /**
@@ -54,6 +56,30 @@ class GetLineFromString : public LineGetter
   private:
     std::istringstream stream;
 };
+
+class GetLineFromFile : public LineGetter
+{
+  public:
+    GetLineFromFile(const std::string& s)
+        : stream(s)
+    {
+        if (not(stream))
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, std::string("Unable to open file '") + s + "' for reading: check that the path is correct and that you have access to it. If all this checks out, perhaps the file is already opened?");
+        }
+    }
+    std::string get_next_line()
+    {
+        std::string line;
+        std::getline(stream, line);
+        return line;
+    }
+    bool has_more_lines() const { return not(stream.eof()); }
+
+  private:
+    std::ifstream stream;
+};
+
 class Parser
 {
   public:
@@ -334,15 +360,27 @@ class Parser
     bool started_parsing_raos;
 };
 
-PrecalFile parse_precal_from_string(const std::string& input)
+PrecalFile common_precal_parser(LineGetter& line_getter);
+PrecalFile common_precal_parser(LineGetter& line_getter)
 {
-    GetLineFromString line_getter(input);
     Parser parser(line_getter);
     parser.parse();
     PrecalFile ret;
     ret.sections = parser.get_sections();
     ret.raos = parser.get_raos();
     return ret;
+}
+
+PrecalFile parse_precal_from_string(const std::string& input)
+{
+    GetLineFromString line_getter(input);
+    return common_precal_parser(line_getter);
+}
+
+PrecalFile parse_precal_from_file(const std::string& filename)
+{
+    GetLineFromFile line_getter(filename);
+    return common_precal_parser(line_getter);
 }
 
 Section::Section()
