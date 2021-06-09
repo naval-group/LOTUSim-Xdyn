@@ -113,6 +113,7 @@ namespace test_data
     std::string bug_3185_with_invalid_frame();
     std::string bug_3185();
     std::string tutorial_11_gRPC_controller();
+    std::string added_mass_from_precal_file();
 }
 
 #endif /* YAML_DATA_HPP_ */

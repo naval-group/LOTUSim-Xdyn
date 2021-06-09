@@ -3919,3 +3919,43 @@ std::string test_data::tutorial_11_gRPC_controller()
                 "    filename: tutorial_11.csv\n"
                 "    data: [t, 'psi(dtmb)', 'PSPropRudd(beta)', 'SBPropRudd(beta)', 'Ten times current time']\n";
 }
+
+std::string test_data::added_mass_from_precal_file()
+{
+    std::stringstream ss;
+    ss << rotation_convention()
+       << "\n"
+       << "environmental constants:\n"
+       << "    g: {value: 9.81, unit: m/s^2}\n"
+       << "    rho: {value: 1000, unit: kg/m^3}\n"
+       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       << "environment models:\n"
+       << "  - model: no wind\n"
+       << "  - model: no waves\n"
+       << "    frame: NED\n"
+       << "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
+       << "    \n"
+       << "# Fixed frame: NED\n"
+       << "bodies: # All bodies have NED as parent frame\n"
+       << "  - name: body 1\n"
+       << "    mesh: test_ship.stl\n"
+       << position_relative_to_mesh(10, 0, 0, 0, 0, 0)
+       << initial_position_of_body_frame(0, 0, 0, 0, 0, 0)
+       << initial_velocity("body", 0, 0, 0, 0, 0, 0)
+       << "    dynamics:\n"
+       << hydrodynamic_calculation_point()
+       << centre_of_inertia("body 1", 0, 0, 0)
+       << "        centre of inertia:\n"
+       << "            frame: body 1\n"
+       << "            x: {value: 0, unit: m}\n"
+       << "            y: {value: 0, unit: m}\n"
+       << "            z: {value: 0, unit: m}\n"
+       << rigid_body_inertia_matrix()
+       << "        added mass matrix at the center of gravity and projected in the body frame:\n"
+       << "            from PRECAL_R: ONRT_SIMMAN.raodb.ini\n"
+       << "    external forces:\n"
+       << "      - model: gravity\n"
+       << "      - model: non-linear hydrostatic (fast)\n"
+       << "\n";
+    return ss.str();
+}
