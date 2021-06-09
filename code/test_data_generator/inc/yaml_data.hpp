@@ -14,7 +14,7 @@ namespace test_data
 {
     std::string bug_2655();
     std::string hydrostatic_test();
-    std::string added_mass_from_file();
+    std::string added_mass_from_hdb_file();
     std::string full_example();
     std::string full_example_with_diagonal_inertia();
     std::string full_example_with_propulsion();

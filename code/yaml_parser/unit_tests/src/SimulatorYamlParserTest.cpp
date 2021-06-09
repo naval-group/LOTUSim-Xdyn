@@ -221,7 +221,7 @@ TEST_F(SimulatorYamlParserTest, can_parse_added_mass_matrix)
 TEST_F(SimulatorYamlParserTest, can_parse_added_mass_matrix_from_hdb_file)
 {
     const YamlDynamics6x6Matrix M =  yaml.bodies.front().dynamics.added_mass;
-    const YamlSimulatorInput input = SimulatorYamlParser(test_data::added_mass_from_file()).parse();
+    const YamlSimulatorInput input = SimulatorYamlParser(test_data::added_mass_from_hdb_file()).parse();
     ASSERT_TRUE(input.bodies.front().dynamics.added_mass.read_from_file);
     ASSERT_EQ("test_ship.hdb", input.bodies.front().dynamics.added_mass.hdb_filename);
 }

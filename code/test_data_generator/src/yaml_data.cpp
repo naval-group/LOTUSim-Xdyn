@@ -321,7 +321,7 @@ std::string test_data::hydrostatic_test()
     return ss.str();
 }
 
-std::string test_data::added_mass_from_file()
+std::string test_data::added_mass_from_hdb_file()
 {
     std::stringstream ss;
     ss << rotation_convention()
