@@ -231,7 +231,7 @@ void parse_YamlDynamics6x6Matrix(const YAML::Node& node, YamlDynamics6x6Matrix& 
             or node.FindValue("row 5")
             or node.FindValue("row 6"))
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "cannot specify both an HDB filename & a matrix.");
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "cannot specify both an HDB filename & a matrix (both keys 'from hdb' and one of 'row 1', 'row 2', 'row 3', 'row 4', 'row 5' or 'row 6' were found in the YAML file).");
         }
         m.read_from_file = true;
         *parameter >> m.hdb_filename;
