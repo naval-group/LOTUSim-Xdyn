@@ -238,20 +238,27 @@ void parse_YamlDynamics6x6Matrix(const YAML::Node& node, YamlDynamics6x6Matrix& 
     }
     else
     {
-        if (parse_frame)
+        try
         {
-            node["frame"] >> m.frame;
+            if (parse_frame)
+            {
+                node["frame"] >> m.frame;
+            }
+            else
+            {
+                m.frame = frame_name;
+            }
+            node["row 1"] >> m.row_1;
+            node["row 2"] >> m.row_2;
+            node["row 3"] >> m.row_3;
+            node["row 4"] >> m.row_4;
+            node["row 5"] >> m.row_5;
+            node["row 6"] >> m.row_6;
         }
-        else
+        catch(const YAML::Exception& e)
         {
-            m.frame = frame_name;
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to parse matrix in the YAML file. The problem was: '" << e.msg << "' and it was detected line " << e.mark.line+1 << " column " << e.mark.column+1 << " of the concatenated YAML file.");
         }
-        node["row 1"] >> m.row_1;
-        node["row 2"] >> m.row_2;
-        node["row 3"] >> m.row_3;
-        node["row 4"] >> m.row_4;
-        node["row 5"] >> m.row_5;
-        node["row 6"] >> m.row_6;
     }
 }
 
