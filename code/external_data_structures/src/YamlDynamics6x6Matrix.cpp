@@ -9,6 +9,7 @@
 
 YamlDynamics6x6Matrix::YamlDynamics6x6Matrix() : read_from_file(false),
                                                  hdb_filename(),
+                                                 precal_filename(),
                                                  frame(),
                                                  row_1(),
                                                  row_2(),

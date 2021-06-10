@@ -7,7 +7,6 @@
 
 #include "gmock/gmock.h"
 using namespace testing; // So we can use 'ElementsAre' unqualified
-
 #include "external_data_structures_parsers.hpp"
 #include "SimulatorYamlParserTest.hpp"
 #include "yaml_data.hpp"
@@ -15,6 +14,7 @@ using namespace testing; // So we can use 'ElementsAre' unqualified
 #include "InvalidInputException.hpp"
 #include "parse_controllers.hpp"
 #include "parse_time_series.hpp"
+#include "precal_test_data.hpp"
 
 const YamlSimulatorInput SimulatorYamlParserTest::yaml = SimulatorYamlParser(test_data::full_example_with_propulsion()).parse();
 const YamlSimulatorInput SimulatorYamlParserTest::old_yaml = SimulatorYamlParser(test_data::full_example_with_propulsion_and_old_key_name()).parse();
@@ -224,6 +224,14 @@ TEST_F(SimulatorYamlParserTest, can_parse_added_mass_matrix_from_hdb_file)
     const YamlSimulatorInput input = SimulatorYamlParser(test_data::added_mass_from_hdb_file()).parse();
     ASSERT_TRUE(input.bodies.front().dynamics.added_mass.read_from_file);
     ASSERT_EQ("test_ship.hdb", input.bodies.front().dynamics.added_mass.hdb_filename);
+}
+
+TEST_F(SimulatorYamlParserTest, can_parse_added_mass_matrix_from_precal_file)
+{
+    const std::string filename = "ONRT_SIMMAN.raodb.ini";
+    const YamlSimulatorInput input = SimulatorYamlParser(test_data::added_mass_from_precal_file()).parse();
+    ASSERT_TRUE(input.bodies.front().dynamics.added_mass.read_from_file);
+    ASSERT_EQ(filename, input.bodies.front().dynamics.added_mass.precal_filename);
 }
 
 TEST_F(SimulatorYamlParserTest, should_not_throw_even_if_no_mesh_is_defined)

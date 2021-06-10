@@ -233,8 +233,17 @@ void parse_YamlDynamics6x6Matrix(const YAML::Node& node, YamlDynamics6x6Matrix& 
         {
             THROW(__PRETTY_FUNCTION__, InvalidInputException, "cannot specify both an HDB filename & a matrix (both keys 'from hdb' and one of 'row 1', 'row 2', 'row 3', 'row 4', 'row 5' or 'row 6' were found in the YAML file).");
         }
+        if (node.FindValue("from PRECAL_R"))
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "cannot specify both an HDB filename & a PRECAL_R filename (both keys 'from hdb' and 'from PRECAL_R' were found in the YAML file).");
+        }
         m.read_from_file = true;
         *parameter >> m.hdb_filename;
+    }
+    else if (const YAML::Node *parameter = node.FindValue("from PRECAL_R"))
+    {
+        m.read_from_file = true;
+        *parameter >> m.precal_filename;
     }
     else
     {
