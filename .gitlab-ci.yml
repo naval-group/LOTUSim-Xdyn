@@ -46,6 +46,12 @@ test:grpc:
      - make docker_grpc_waves_model
      - make -C grpc_tests
 
+test:integration:
+    stage: test
+    script:
+     - docker build . --tag xdyn
+     - make -C integration_tests
+
 doc:
    stage: doc
    script:
