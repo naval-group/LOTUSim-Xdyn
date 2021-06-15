@@ -134,11 +134,11 @@ int main(int argc, char** argv)
                 }
             };
         error_outputter.run_and_report_errors_with_yaml_dump(f, yaml);
-        if (error_outputter.contains_errors())
-        {
-            std::cerr << error_outputter.get_message() << std::endl;
-        }
     }
     google::protobuf::ShutdownProtobufLibrary();
-    return 0;
+    if (error_outputter.contains_errors())
+    {
+        return EXIT_FAILURE;
+    }
+    return EXIT_SUCCESS;
 }
