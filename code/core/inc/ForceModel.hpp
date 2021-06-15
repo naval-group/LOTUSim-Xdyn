@@ -116,7 +116,7 @@ class ForceModel
             return parser;
         }
 
-        void feed(Observer& observer, ssc::kinematics::KinematicsPtr& k) const;
+        void feed(Observer& observer, ssc::kinematics::KinematicsPtr& k, ssc::data_source::DataSource& command_listener, const double t) const;
 
     protected:
         virtual void extra_observations(Observer& observer) const;

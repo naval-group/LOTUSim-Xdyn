@@ -9,7 +9,8 @@
 #define SIMOBSERVER_HPP_
 
 #include "Res.hpp"
-
+#include <ssc/solver/DiscreteSystem.hpp>
+#include <memory>
 #include <vector>
 
 class Sim;
@@ -28,7 +29,7 @@ class SimObserver
 {
     public:
         SimObserver();
-        void observe(const Sim& sys, const double t);
+        void observe(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems);
         std::vector<Res> get() const;
 
     private:

@@ -28,24 +28,23 @@ ssc::data_source::DataSource make_command_listener(const std::vector<YamlTimeSer
 void add_setpoints_listener(ssc::data_source::DataSource& ds, const std::vector<YamlTimeSeries>& setpoints);
 
 class Controller;
-Controller* build_controller(const double tstart, const YamlController& yaml_controller);
+Controller* build_controller(const double tstart, const YamlController& yaml_controller, Sim* sys);
 void check_no_controller_outputs_are_defined_in_a_command(const Controller* controller, const std::vector<YamlTimeSeries>& yaml_commands);
 
 /**  \brief Reads data from YAML & returns the corresponding controllers.
   *  \snippet listeners_and_controllers/unit_tests/src/controllersTest.cpp controllersTest listen_to_file_example
   */
-std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > get_controllers(const double tstart,
+std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > get_initialized_controllers(const double tstart,
                                                const std::vector<YamlController>& yaml_controllers,
-                                               const std::vector<YamlTimeSeries>& yaml_commands
+                                               const std::vector<YamlTimeSeries>& yaml_commands,
+                                               ssc::solver::Scheduler& scheduler,
+                                               Sim* sys
                                                );
 
-/**  \brief Initializes the given controllers commands in Sim datasource and
-  * adds their callbacks to the scheduler.
-  *  \snippet observers_and_api/unit_tests/src/PIDControllerTest.cpp controllersTest initialize_controllers
-  */
-void initialize_controllers(const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& controllers,
-                            ssc::solver::Scheduler& scheduler,
-                            Sim* system
-                            );
+std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > build_controllers(const double tstart,
+                                               const std::vector<YamlController>& yaml_controllers,
+                                               const std::vector<YamlTimeSeries>& yaml_commands,
+                                               Sim* sys
+                                               );
 
 #endif /* LISTENERS_HPP_ */

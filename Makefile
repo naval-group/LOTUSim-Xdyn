@@ -1,4 +1,4 @@
-all: submodule windows debian debug doc all_docker_images
+all: update-submodules windows debian debug doc all_docker_images
 
 BASE_IMAGE_VERSION=2021-04-16
 
@@ -32,14 +32,17 @@ debian: ${HEADERS} debian_10_release_gcc_8
 debug: ${HEADERS} debian_10_debug_gcc_8
 headers: ${HEADERS}
 
-.PHONY: all_docker_images cmake-debian debian cmake-windows windows doc submodule
+.PHONY: all_docker_images cmake-debian debian cmake-windows windows doc update-submodules
 
 
-submodule:
+update-submodules:
+	@echo "Updating Git submodules..."
 	@git submodule sync --recursive
 	@git submodule update --init --recursive
 
 ${HEADERS}:
+	@git submodule sync --recursive
+	@git submodule update --init --recursive
 	@cd code/ssc/ssc && sh generate_module_header.sh && cd ../../..
 
 cmake-debian: BUILD_TYPE = Release

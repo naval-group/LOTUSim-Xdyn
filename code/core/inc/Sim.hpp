@@ -18,6 +18,7 @@
 #include "SurfaceElevationGrid.hpp"
 #include "State.hpp"
 #include <ssc/solver/ContinuousSystem.hpp>
+#include <ssc/solver/DiscreteSystem.hpp>
 
 typedef std::map<std::string, std::map< std::string,ssc::kinematics::Vector6d > > OuputtedForces;
 typedef std::vector<std::pair<std::string,std::vector<std::string> > > VectorOfStringModelForEachBody;
@@ -47,7 +48,7 @@ class Sim : public ssc::solver::ContinuousSystem
         ssc::kinematics::PointMatrix get_waves(const double t            //!< Current instant
                                               ) const;
 
-        void output(const StateType& x, Observer& obs, double t) const;
+        void output(const StateType& x, Observer& obs, double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems) const;
         ssc::data_source::DataSource& get_command_listener() const;
 
         void set_bodystates(const State& state_history);

@@ -29,6 +29,7 @@ class Controller : public ssc::solver::DiscreteSystem
          *
          */
         virtual std::vector<std::string> get_command_names() const = 0;
+        std::vector<std::string> get_outputs() const;
 
     protected:
         /**

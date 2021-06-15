@@ -111,6 +111,10 @@ système international.
 
 ## Sorties
 
+xdyn peut générer des fichiers dont le contenu est paramétrable.
+
+### Paramétrage
+
 La spécification des sorties se fait au moyen de la section `output`, à la
 racine du fichier YAML, dont voici un exemple :
 
@@ -122,23 +126,132 @@ output:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - `format` : `csv` pour un fichier texte dont les colonnes sont séparées par
-  une virgule ou `hdf5` pour le format des fichiers .mat de MatLab (HDF5)
+  une virgule, `tsv` pour un fichier texte dont les colonnes sont séparées par
+  des tabulations, ou `hdf5` pour le format des fichiers .mat de MatLab (HDF5)
 - `filename` : nom du fichier de sortie
-- `data` : liste des colonnes à écrire. Le temps est noté `t`, et les états
-  sont `x(body)`, `y(body)` `z(body)`, `u(body)`, `v(body)`, `w(body)`,
-  `p(body)`, `q(body)`, `r(body)`, `qr(body)`, `qi(body)`, `qj(body)`,
-  `qk(body)`. `body` doit être remplacé par le nom du corps (`ball` dans
-  l'exemple ci-dessus). Les sorties d'effort sont `Fx(modèle,corps,repère)`,
-  `Fy(modèle,corps,repère)`, `Fz(modèle,corps,repère)`,
-  `Mx(modèle,corps,repère)`, `My(modèle,corps,repère)`,
-  `Mz(modèle,corps,repère)` où `modèle` est le nom du modèle d'effort
-  (renseigné dans la clef `modèle` de chaque modèle d'effort),
-  `corps` est le nom du corps sur
-  lequel agit l'effort et `repère` est le repère d'expression (qui ne peut être
-  que `NED` ou le nom du corps). Les sorties de houle sont notées
-  `waves` et leur contenu est décrit dans la section [Modèle de
-  houle/Sorties](#sorties-1). La somme des efforts appliqués à un corps est
-  accessible par `Fx(sum of forces,corps,repère)` (resp. Fy, Fz, Mx, My, Mz).
+- `data` : liste des colonnes à écrire (cf. ci-après pour la description complète)
+
+### Temps et états
+
+Si l'on suppose que le nom du corps simulé est `TestShip` (configurable dans le YAML,
+section `bodies[0]/name`), le temps et les états sont accesibles de la façon suivante :
+
+| Variable    | Description                                       | Nom à utiliser dans la section `output` du YAML | Unité |
+| ----------- | ------------------------------------------------- | ----------------------------------------------- | ----- |
+| `x`         | Projection sur l'axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l'origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l'origine du [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) | `x(TestShip)` | m |
+| `y`         | Projection sur l'axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l'origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l'origine du repère BODY                                                                         | `y(TestShip)` | m |
+| `z`         | Projection sur l'axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur entre l'origine du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) et l'origine du repère BODY                                                                         | `z(TestShip)` | m |
+| `u`         | Projection sur l'axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).                                                                                                                             | `u(TestShip)` | m/s |
+| `v`         | Projection sur l'axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).                                                                                                                             | `v(TestShip)` | m/s |
+| `w`         | Projection sur l'axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse du navire par rapport au sol (BODY/NED).                                                                                                                             | `w(TestShip)` | m/s |
+| `p`         | Projection sur l'axe X du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).                                                                                                                 | `p(TestShip)` | rad/s |
+| `q`         | Projection sur l'axe Y du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).                                                                                                                 | `q(TestShip)` | rad/s |
+| `r`         | Projection sur l'axe Z du [repère NED](#rep%C3%A8re-de-r%C3%A9f%C3%A9rence-ned) du vecteur vitesse de rotation du navire par rapport au sol (BODY/NED).                                                                                                                 | `r(TestShip)` | rad/s |
+| `qr`        | Partie réelle du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                                                                                                             | `qr(TestShip)` | - |
+| `qi`        | Première partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                                                                                                | `qi(TestShip)` | - |
+| `qj`        | Seconde partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                                                                                                 | `qj(TestShip)` | - |
+| `qk`        | Troisième partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                                                                                               | `qk(TestShip)` | - |
+| `phi`       | Angle de roulis/gîte du navire par rapport au sol (BODY/NED)                                                                                                                                                                                                            | `phi(TestShip)` | rad |
+| `theta`     | Angle de tangage/assiette par rapport au sol (BODY/NED)                                                                                                                                                                                                                 | `theta(TestShip)` | rad |
+| `psi`       | Angle de lacet par rapport au sol (BODY/NED)                                                                                                                                                                                                                            | `psi(TestShip)` | rad |
+
+Par exemple, pour générer un fichier CSV contenant le temps, l'embardée et
+l'assiette pour le navire nommé `TestShip` on utiliserait la section suivante :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+output:
+   - format: csv
+     filename: exemple.csv
+     data: [t, y(TestShip), 'theta(TestShip)']
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+### Efforts
+
+Les sorties d'effort sont :
+
+- `Fx(modèle,corps,repère)` en N
+- `Fy(modèle,corps,repère)` en N 
+- `Fz(modèle,corps,repère)` en N
+- `Mx(modèle,corps,repère)` en N.m
+- `My(modèle,corps,repère)` en N.m
+- `Mz(modèle,corps,repère)` en N.m
+
+où `modèle` est le nom du modèle d'effort (renseigné dans la clef `modèle` de
+chaque modèle d'effort), `corps` est le nom du corps sur lequel agit l'effort
+et `repère` est le repère d'expression (qui ne peut être que `NED` ou le nom du
+corps). La somme des efforts appliqués au solide est accesible via les clefs
+suivantes :
+
+- `Fx(sum of forces,corps,repère)`
+- `Fy(sum of forces,corps,repère)`
+- `Fz(sum of forces,corps,repère)`
+- `Mx(sum of forces,corps,repère)`
+- `My(sum of forces,corps,repère)`
+- `Mz(sum of forces,corps,repère)`
+
+Par exemple, pour générer un fichier HDF5 contenant l'effort dû à la gravitée
+agissant sur un corps nommé `ball` projeté dans le repère du corps, ainsi que
+la somme des moments autour de l'axe X, on utiliserait la section suivante :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+output:
+   - format: hdf5
+     filename: test.h5
+     data: [Fx(gravity, ball, ball), Fy(gravity, ball, ball), Fz(gravity, ball, ball), Mx(sum of forces,ball,NED)]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+### Commandes
+
+Les commandes des efforts qui en possèdent (propeller+rudder, manoeuvring,
+etc.) peuvent également figurer dans les sorties. La syntaxe est la suivante :
+
+`name(command)`
+
+Par exemple, supposons que l'on utilise un modèle d'hélice et de safran définis
+par le YAML suivant :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+external forces:
+  - name: Prop. & rudder
+    model: propeller+rudder
+    position of propeller frame:
+        frame: TestShip
+        x: {value: -4, unit: m}
+        y: {value: -2, unit: m}
+        z: {value: 2, unit: m}
+        phi: {value: 0, unit: rad}
+        theta: {value: -10, unit: deg}
+        psi: {value: -1, unit: deg}
+    wake coefficient w: 0.9
+    relative rotative efficiency etaR: 1
+    thrust deduction factor t: 0.7
+    rotation: clockwise
+    number of blades: 3
+    blade area ratio AE/A0: 0.5
+    diameter: {value: 2, unit: m}
+    rudder area: {value: 2.2, unit: m^2}
+    rudder height: {value: 2, unit: m^2}
+    effective aspect ratio factor: 1.7
+    lift tuning coefficient: 2.1
+    drag tuning coefficient: 1
+    position of rudder in body frame:
+        x: {value: -5.1, unit: m}
+        y: {value: -2, unit: m}
+        z: {value: 2, unit: m}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Dans ce cas, on peut récupérer la vitesse de rotation de l'hélice et l'angle du
+safran en utilisant la section `output` suivante :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+output:
+   - format: csv
+     filename: propRudd.csv
+     data: [t, 'Prop. & rudder(rpm)', 'Prop. & rudder(beta)']
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Interface MatLab
 
@@ -702,8 +815,8 @@ l'historique des états de `t0` à `t0 + Dt` par pas de `dt`.
 | `qj`     | Flottant  | Seconde partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                         |
 | `qk`     | Flottant  | Troisième partie imaginaire du quaternion définissant la rotation du navire par rapport au sol (BODY/NED)                                                                                       |
 | `phi`    | Flottant  | Angle d'Euler phi. Lire note ci-après                                                                                                                                                           |
-| `theta`  | Flottant  | Angle d'Euler phi. Lire note ci-après                                                                                                                                                           |
-| `psi`    | Flottant  | Angle d'Euler phi. Lire note ci-après                                                                                                                                                           |
+| `theta`  | Flottant  | Angle d'Euler theta. Lire note ci-après                                                                                                                                                           |
+| `psi`    | Flottant  | Angle d'Euler psi. Lire note ci-après                                                                                                                                                           |
 
 La signification exacte des angles d'Euler dépend de la convention d'angle
 choisie dans le fichier YAML d'entrée de xdyn (voir la section correspondante

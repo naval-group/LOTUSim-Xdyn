@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 #include <ssc/macros.hpp>
+#include <ssc/solver/DiscreteSystem.hpp>
 #include TR1INC(memory)
 
 #include "DiscreteDirectionalWaveSpectrum.hpp"
@@ -35,8 +36,8 @@ class Observer
 {
     public:
         Observer(const std::vector<std::string>& data);
-        virtual void observe(const Sim& sys, const double t); // Only what was requested by the user in the YAML file
-        void observe_everything(const Sim& sys, const double t); // Everything (not just what the user asked). Used for co-simulation
+        virtual void observe(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems); // Only what was requested by the user in the YAML file
+        void observe_everything(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems); // Everything (not just what the user asked). Used for co-simulation
         virtual ~Observer();
 
         template <typename T> void write(

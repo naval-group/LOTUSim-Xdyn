@@ -1,3 +1,11 @@
+# v4.2.0 (2021-05-04)
+
+- #166 External controllers
+- #16 New feature generic quadratic hydrodynamic polar model
+- #171 Fix error outputting
+- #28 Segfault in unit tests using googletest s testing internal capturestderr
+
+
 # v4.1.0 (2021-04-16)
 
 - #170 Remove local version of ssc solver
@@ -11,7 +19,6 @@
 - #21 Co simulation response always starts at t 0
 - #7 Adding air specific mass to environment description
 - #8 Outputting forces in server mode
-- #163 Fixed an equation typo in doc_user diffraction_radiation md
 - #4 Force models refactoring
 - #6 Fix yaml rendering problem
 - #1 Wind force models
@@ -37,7 +44,6 @@
 
 # v4.0.3 (2020-03-16)
 
-- #99 Update spectrum images generation for documentation
 
 
 # v4.0.2 (2020-01-13)
@@ -63,7 +69,6 @@
 - #65 Remove hos that will be refactored later
 - #63 Build xdyn windows version with posix thread model
 - #64 Improve makefile build scripts for eclipse
-- #62 Updated ci build for gitlab and travis
 
 
 # v4.0.1 (2019-05-20)

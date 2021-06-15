@@ -12,7 +12,7 @@ SimObserver::SimObserver() : res(std::vector<Res>())
 {
 }
 
-void SimObserver::observe(const Sim& s, const double t)
+void SimObserver::observe(const Sim& s, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& )
 {
     res.push_back(Res(t,s.state));
 }

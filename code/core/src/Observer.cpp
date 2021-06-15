@@ -28,10 +28,10 @@ void Observer::before_write()
 {
 }
 
-void Observer::observe(const Sim& sys, const double t)
+void Observer::observe(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems)
 {
     write(t, DataAddressing(std::vector<std::string>(1,"t"), "t"));
-    sys.output(sys.state,*this, t);
+    sys.output(sys.state,*this, t, discrete_systems);
     initialize_serialization_of_requested_variables(requested_serializations);
     serialize_requested_variables(requested_serializations);
 }
@@ -44,10 +44,10 @@ std::vector<std::string> all_variables(std::map<std::string, std::function<void(
     return ret;
 }
 
-void Observer::observe_everything(const Sim& sys, const double t)
+void Observer::observe_everything(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems)
 {
     write(t, DataAddressing(std::vector<std::string>(1,"t"), "t"));
-    sys.output(sys.state,*this, t);
+    sys.output(sys.state,*this, t, discrete_systems);
     const auto all_vars = all_variables(initialize);
     initialize_serialization_of_requested_variables(all_vars);
     serialize_requested_variables(all_vars);

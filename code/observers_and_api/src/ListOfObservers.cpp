@@ -32,11 +32,11 @@ ListOfObservers::ListOfObservers(const std::vector<ObserverPtr>& observers_) : o
 {
 }
 
-void ListOfObservers::observe(const Sim& sys, const double t)
+void ListOfObservers::observe(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems)
 {
     for (auto observer:observers)
     {
-        observer->observe(sys,t);
+        observer->observe(sys,t, discrete_systems);
     }
 }
 

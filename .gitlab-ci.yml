@@ -9,7 +9,7 @@ stages:
 
 default:
   before_script:
-    - make submodule
+    - make update-submodules
 
 lint:
    stage: lint

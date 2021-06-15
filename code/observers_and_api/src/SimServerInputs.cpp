@@ -36,6 +36,7 @@ SimServerInputs::SimServerInputs(const YamlSimServerInputs& server_inputs, const
     , full_state_history(max_history_length)
     , commands(server_inputs.commands)
     , requested_output(server_inputs.requested_output)
+    , controllers(server_inputs.controllers)
 {
     if (not(server_inputs.states.empty()))
     {
@@ -71,5 +72,6 @@ SimServerInputs::SimServerInputs(const double Dt_)
     , full_state_history(Dt_)
     , commands({})
     , requested_output({})
+    , controllers()
 {
 }

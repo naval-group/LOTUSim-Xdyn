@@ -59,7 +59,8 @@ void SimTest::TearDown()
 TEST_F(SimTest, can_simulate_falling_ball)
 {
     const size_t N = 10;
-    const auto res = simulate<ssc::solver::EulerStepper>(test_data::falling_ball_example(), 0, N, 1);
+    ssc::solver::Scheduler scheduler(0, N, 1);
+    const auto res = simulate<ssc::solver::EulerStepper>(test_data::falling_ball_example(), scheduler);
     ASSERT_EQ(N+1, res.size());
     const double g = 9.81;
     for (size_t i = 0 ; i < N+1 ; ++i)
@@ -87,7 +88,8 @@ TEST_F(SimTest, LONG_can_simulate_oscillating_cube)
 {
     const double dt = 1E-1;
     const double tend = 10;
-    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::oscillating_cube_example(), test_data::cube(), 0, tend, dt);
+    ssc::solver::Scheduler scheduler(0, tend, dt);
+    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::oscillating_cube_example(), test_data::cube(), scheduler);
 
     const double g = 9.81;
     const double rho = 1026;
@@ -124,7 +126,8 @@ TEST_F(SimTest, LONG_can_simulate_stable_cube)
 {
     const double dt = 1E-1;
     const double tend = 10;
-    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::stable_cube_example(), test_data::cube(), 0, tend, dt);
+    ssc::solver::Scheduler scheduler(0, tend, dt);
+    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::stable_cube_example(), test_data::cube(), scheduler);
 
     const size_t N = (size_t)(floor(tend/dt+0.5))+1;
     const double rho = 1026;
@@ -160,7 +163,8 @@ TEST_F(SimTest, initial_angle_should_not_change_results_for_falling_ball)
     auto yaml = SimulatorYamlParser(test_data::falling_ball_example()).parse();
     yaml.bodies.front().initial_position_of_body_frame_relative_to_NED_projected_in_NED.angle.theta = 45*DEG;
     yaml.bodies.front().initial_velocity_of_body_frame_relative_to_NED_projected_in_body.u = 0;
-    const auto res = simulate<ssc::solver::EulerStepper>(yaml, 0, N, 1);
+    ssc::solver::Scheduler scheduler(0, N, 1);
+    const auto res = simulate<ssc::solver::EulerStepper>(yaml, scheduler);
     ASSERT_EQ(N+1, res.size());
     const double g = 9.81;
     for (size_t i = 0 ; i < N+1 ; ++i)
@@ -185,7 +189,8 @@ TEST_F(SimTest, initial_angle_should_not_change_results_for_falling_ball)
 TEST_F(SimTest, LONG_hydrostatic_test_on_test_ship)
 {
     const auto yaml = SimulatorYamlParser(test_data::test_ship_fast_hydrostatic_test()).parse();
-    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, 0, 4.79, 0.479);
+    ssc::solver::Scheduler scheduler(0, 4.79, 0.479);
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, scheduler);
     ASSERT_EQ(11, res.size());
     ASSERT_NEAR(0, res[0].x[XIDX(0)], EPS);
     ASSERT_NEAR(0, res[0].x[YIDX(0)], EPS);
@@ -206,7 +211,8 @@ TEST_F(SimTest, LONG_hydrostatic_test_on_test_ship)
 TEST_F(SimTest, LONG_exact_hydrostatic_test_on_test_ship)
 {
     const auto yaml = SimulatorYamlParser(test_data::test_ship_exact_hydrostatic_test()).parse();
-    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, 0, 0.1, 0.4);
+    ssc::solver::Scheduler scheduler(0, 0.1, 0.4);
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, scheduler);
 }
 
 TEST_F(SimTest, should_throw_if_wave_output_mesh_does_not_exist)
@@ -275,7 +281,8 @@ TEST_F(SimTest, can_generate_wave_height_on_mesh_for_default_wave_model)
 TEST_F(SimTest, LONG_waves_test_on_test_ship)
 {
     const auto yaml = SimulatorYamlParser(test_data::test_ship_waves_test()).parse();
-    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, 0, 4.79, 0.479);
+    ssc::solver::Scheduler scheduler(0, 4.79, 0.479);
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, scheduler);
     ASSERT_EQ(11, res.size());
     ASSERT_NEAR(0, res[0].x[XIDX(0)], EPS);
     ASSERT_NEAR(0, res[0].x[YIDX(0)], EPS);
@@ -286,13 +293,15 @@ TEST_F(SimTest, LONG_waves_test_on_test_ship)
 TEST_F(SimTest, LONG_froude_krylov)
 {
     const auto yaml = SimulatorYamlParser(test_data::test_ship_froude_krylov()).parse();
-    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, 0, 4.79, 0.479);
+    ssc::solver::Scheduler scheduler(0, 4.79, 0.479);
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, scheduler);
 }
 
 TEST_F(SimTest, LONG_test_ship_damping)
 {
     const auto yaml = SimulatorYamlParser(test_data::test_ship_damping()).parse();
-    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, 0, 20, 1);
+    ssc::solver::Scheduler scheduler(0, 20, 1);
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, scheduler);
     ASSERT_EQ(21, res.size());
     ASSERT_FALSE(std::isnan(res.back().x[ZIDX(0)]));
     ASSERT_EQ(res.back().x[ZIDX(0)],res.back().x[ZIDX(0)]); // Check if nan
@@ -301,7 +310,8 @@ TEST_F(SimTest, LONG_test_ship_damping)
 TEST_F(SimTest, DISABLED_LONG_bug_2655)
 {
     const auto yaml = SimulatorYamlParser(test_data::bug_2655()).parse();
-    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, 0, 1.4, 0.1);
+    ssc::solver::Scheduler scheduler(0, 1.4, 0.1);
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, scheduler);
     ASSERT_EQ(15, res.size());
     ASSERT_NEAR(-0.228388, res.back().x[WIDX(0)], 1e-6);
 }
@@ -313,7 +323,8 @@ TEST_F(SimTest, LONG_propulsion_and_resistance)
     commands.set<double>("propeller(rpm)", 100*(2*PI)/60.);
     commands.set<double>("propeller(P/D)", 1.064935);
     const size_t N = 250;
-    const auto res = simulate<ssc::solver::EulerStepper>(yaml, test_ship_stl, 0, N, 1, commands);
+    ssc::solver::Scheduler scheduler(0, N, 1);
+    const auto res = simulate<ssc::solver::EulerStepper>(yaml, test_ship_stl, scheduler, commands);
     ASSERT_EQ(N+1, res.size());
     ASSERT_EQ(13, res.at(0).x.size());
     const double tolerance = 1e-15;
@@ -338,14 +349,16 @@ TEST_F(SimTest, DISABLED_LONG_bug_2641)
     ssc::data_source::DataSource commands;
     commands.set<double>("propeller(rpm)", 5*(2*PI));
     commands.set<double>("propeller(P/D)", 0.67);
-    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, 0, 5, 1, commands);
+    ssc::solver::Scheduler scheduler(0, 5, 1);
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, scheduler, commands);
     ASSERT_LT(res.back().x[VIDX(0)], -0.003);
 }
 
 TEST_F(SimTest, bug_in_exact_hydrostatic)
 {
     const auto yaml = SimulatorYamlParser(test_data::test_ship_exact_hydrostatic_test()).parse();
-    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::bug_in_exact_hydrostatic(), test_data::cube(), 0, 0.1, 0.4);
+    ssc::solver::Scheduler scheduler(0, 0.1, 0.4);
+    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::bug_in_exact_hydrostatic(), test_data::cube(), scheduler);
     for (auto r:res)
     {
         ASSERT_FALSE(std::isnan(r.x.front()));
@@ -363,7 +376,8 @@ ssc::kinematics::EulerAngles convert(const double qr, const double qi, const dou
 
 TEST_F(SimTest, rolling_cube_with_big_mesh)
 {
-    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::new_oscillating_cube_example(), test_data::big_cube(), 0, 1, 0.1);
+    ssc::solver::Scheduler scheduler(0, 1, 0.1);
+    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::new_oscillating_cube_example(), test_data::big_cube(), scheduler);
     std::vector<double> phi;
     for (auto r:res)
     {
@@ -399,7 +413,8 @@ TEST_F(SimTest, LONG_bug_2714_heading_keeping)
     ssc::data_source::DataSource command_listener;
     command_listener.set<double>("controller(psi_co)", 0);
     const auto yaml = SimulatorYamlParser(test_data::bug_2714_heading_keeping()).parse();
-    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, 0, 0.1, 0.1, command_listener);
+    ssc::solver::Scheduler scheduler(0, 0.1, 0.1);
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, scheduler, command_listener);
     ASSERT_EQ(2, res.size());
 }
 
@@ -410,7 +425,8 @@ TEST_F(SimTest, LONG_bug_2714_station_keeping)
     command_listener.set<double>("controller(y_co)", 0);
     command_listener.set<double>("controller(psi_co)", 0);
     const auto yaml = SimulatorYamlParser(test_data::bug_2714_station_keeping()).parse();
-    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, 0, 0.1, 0.1, command_listener);
+    ssc::solver::Scheduler scheduler(0, 0.1, 0.1);
+    const auto res = simulate<ssc::solver::RK4Stepper>(yaml, test_ship_stl, scheduler, command_listener);
     ASSERT_EQ(2, res.size());
 }
 
@@ -509,7 +525,8 @@ TEST_F(SimTest, linear_hydrostatics_without_waves)
 {
     const double T = 10;
     const double dt = 0.1;
-    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::test_ship_linear_hydrostatics_without_waves(), test_data::cube(), 0, T, dt);
+    ssc::solver::Scheduler scheduler(0, T, dt);
+    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::test_ship_linear_hydrostatics_without_waves(), test_data::cube(), scheduler);
 
     const double k = 100002.8;
     const double m = 253310;
@@ -535,7 +552,8 @@ TEST_F(SimTest, LONG_linear_hydrostatics_with_waves)
 {
     const double T = 20;
     const double dt = 0.1;
-    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::test_ship_linear_hydrostatics_with_waves(), test_data::cube(), 0, T, dt);
+    ssc::solver::Scheduler scheduler(0, T, dt);
+    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::test_ship_linear_hydrostatics_with_waves(), test_data::cube(), scheduler);
 
     const double eps = 1E-3;
     EXPECT_NEAR(1      , res.at(0).x[ZIDX(0)], eps);
@@ -566,40 +584,47 @@ TEST_F(SimTest, LONG_can_simulate_radiation_damping)
     command_listener.set<double>("propeller(P/D)", 1);
     command_listener.set<double>("propeller(beta)", 0.8);
     command_listener.check_out();
-    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::test_ship_radiation_damping(), test_data::cube(), 0, T, dt, command_listener);
+    ssc::solver::Scheduler scheduler(0, T, dt);
+    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::test_ship_radiation_damping(), test_data::cube(), scheduler, command_listener);
     ASSERT_NEAR(0.64349959363750842, res.at(5).x[XIDX(0)], 1E-3);
 }
 
 TEST_F(SimTest, bug_2963_should_not_be_able_to_use_fast_hydrostatic_without_specifying_wave_model)
 {
-    ASSERT_THROW(simulate<ssc::solver::RK4Stepper>(test_data::bug_2963_hs_fast(), test_data::cube(), 0, 1, 1), InvalidInputException);
+    ssc::solver::Scheduler scheduler(0, 1, 1);
+    ASSERT_THROW(simulate<ssc::solver::RK4Stepper>(test_data::bug_2963_hs_fast(), test_data::cube(), scheduler), InvalidInputException);
 }
 
 TEST_F(SimTest, bug_2963_should_not_be_able_to_use_exact_hydrostatic_without_specifying_wave_model)
 {
-    ASSERT_THROW(simulate<ssc::solver::RK4Stepper>(test_data::bug_2963_hs_exact(), test_data::cube(), 0, 1, 1), InvalidInputException);
+    ssc::solver::Scheduler scheduler(0, 1, 1);
+    ASSERT_THROW(simulate<ssc::solver::RK4Stepper>(test_data::bug_2963_hs_exact(), test_data::cube(), scheduler), InvalidInputException);
 }
 
 TEST_F(SimTest, bug_2963_should_not_be_able_to_use_froude_krylov_without_specifying_wave_model)
 {
-    ASSERT_THROW(simulate<ssc::solver::RK4Stepper>(test_data::bug_2963_fk(), test_data::cube(), 0, 1, 1), InvalidInputException);
+    ssc::solver::Scheduler scheduler(0, 1, 1);
+    ASSERT_THROW(simulate<ssc::solver::RK4Stepper>(test_data::bug_2963_fk(), test_data::cube(), scheduler), InvalidInputException);
 }
 
 TEST_F(SimTest, bug_2963_should_not_be_able_to_use_GM_without_specifying_wave_model)
 {
-    ASSERT_THROW(simulate<ssc::solver::RK4Stepper>(test_data::bug_2963_gm(), test_data::cube(), 0, 1, 1), InvalidInputException);
+    ssc::solver::Scheduler scheduler(0, 1, 1);
+    ASSERT_THROW(simulate<ssc::solver::RK4Stepper>(test_data::bug_2963_gm(), test_data::cube(), scheduler), InvalidInputException);
 }
 
 TEST_F(SimTest, bug_2963_should_not_be_able_to_use_diffraction_without_specifying_wave_model)
 {
-    ASSERT_THROW(simulate<ssc::solver::RK4Stepper>(test_data::bug_2963_diff(), test_data::cube(), 0, 1, 1), InvalidInputException);
+    ssc::solver::Scheduler scheduler(0, 1, 1);
+    ASSERT_THROW(simulate<ssc::solver::RK4Stepper>(test_data::bug_2963_diff(), test_data::cube(), scheduler), InvalidInputException);
 }
 
 TEST_F(SimTest, bug_3003_crash_in_manoeuvring_model)
 {
     const double T = 0.1;
     const double dt = 0.1;
-    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::bug_3003(), 0, T, dt);
+    ssc::solver::Scheduler scheduler(0, T, dt);
+    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::bug_3003(), scheduler);
 
     const double eps = 1E-10;
     ASSERT_NEAR(-0.099, res.at(0).x[ZIDX(0)], eps);
@@ -841,7 +866,8 @@ TEST_F(SimTest, bug_3207_radiation_damping_crashes_LONG)
     const double t0 = 0;
     const double T = 15;
     const double dt = 0.2;
-    const auto res = simulate<ssc::solver::RK4Stepper>(input, test_ship_stl, t0, T, dt);
+    ssc::solver::Scheduler scheduler(t0, T, dt);
+    const auto res = simulate<ssc::solver::RK4Stepper>(input, test_ship_stl, scheduler);
     ASSERT_EQ(76, res.size());
 }
 
@@ -883,7 +909,8 @@ TEST_F(SimTest, issue_20_constant_force)
 
 TEST_F(SimTest, bug_3187)
 {
-    const std::vector<Res> res = simulate<ssc::solver::EulerStepper>(test_data::bug_3187(), 0, 11, 1);
+    ssc::solver::Scheduler scheduler(0, 11, 1);
+    const std::vector<Res> res = simulate<ssc::solver::EulerStepper>(test_data::bug_3187(), scheduler);
 
     ASSERT_DOUBLE_EQ(1, res.at(0).x[3]);
     ASSERT_DOUBLE_EQ(1, res.at(1).x[3]);
@@ -901,12 +928,14 @@ TEST_F(SimTest, bug_3187)
 
 TEST_F(SimTest, bug_3185_should_detect_frame_toto_does_not_exist)
 {
-    ASSERT_THROW(simulate<ssc::solver::EulerStepper>(test_data::bug_3185_with_invalid_frame(), 0, 11, 1), InvalidInputException);
+    ssc::solver::Scheduler scheduler(0, 11, 1);
+    ASSERT_THROW(simulate<ssc::solver::EulerStepper>(test_data::bug_3185_with_invalid_frame(), scheduler), InvalidInputException);
 }
 
 TEST_F(SimTest, bug_3185_should_simulate_properly)
 {
-    simulate<ssc::solver::EulerStepper>(test_data::bug_3185(), 0, 11, 1);
+    ssc::solver::Scheduler scheduler(0, 11, 1);
+    simulate<ssc::solver::EulerStepper>(test_data::bug_3185(), scheduler);
 }
 
 
@@ -1007,7 +1036,8 @@ TEST_F(SimTest, LONG_can_use_controllers_to_output_commands)
                                           test_data::dummy_controllers_and_commands_for_propulsion_and_resistance()
                                           ).parse();
     const size_t N = 250;
-    const std::vector<Res> res = simulate<ssc::solver::EulerStepper>(yaml, test_ship_stl, 0, N, 1);
+    ssc::solver::Scheduler scheduler(0, N, 1);
+    const std::vector<Res> res = simulate<ssc::solver::EulerStepper>(yaml, test_ship_stl, scheduler);
     ASSERT_EQ(N+1, res.size());
     ASSERT_EQ(13, res.at(0).x.size());
     const double tolerance = 1e-15;
@@ -1032,7 +1062,8 @@ TEST_F(SimTest, LONG_can_simulate_heading_keeping_using_controllers)
                                           test_data::heading_keeping_controllers()
                                           ).parse();
     const size_t N = 800;
-    const std::vector<Res> res = simulate<ssc::solver::EulerStepper>(yaml, 0, N, 1);
+    ssc::solver::Scheduler scheduler(0, N, 1);
+    const std::vector<Res> res = simulate<ssc::solver::EulerStepper>(yaml, scheduler);
     ASSERT_EQ(N+1, res.size());
     ASSERT_EQ(13, res.at(0).x.size());
     const double tolerance = 1e-15;
@@ -1081,7 +1112,8 @@ TEST_F(SimTest, LONG_can_simulate_heading_with_non_constant_controllers_setpoint
                                           heading_keeping_controllers.str()
                                           ).parse();
     const size_t N = 800;
-    const std::vector<Res> res = simulate<ssc::solver::EulerStepper>(yaml, 0, N, 1);
+    ssc::solver::Scheduler scheduler(0, N, 1);
+    const std::vector<Res> res = simulate<ssc::solver::EulerStepper>(yaml, scheduler);
     ASSERT_EQ(N+1, res.size());
     ASSERT_EQ(13, res.at(0).x.size());
     const double tolerance = 1e-15;
@@ -1099,9 +1131,10 @@ TEST_F(SimTest, LONG_can_simulate_heading_with_non_constant_controllers_setpoint
 
 TEST_F(SimTest, should_throw_if_a_controller_has_an_unknown_type)
 {
+    ssc::solver::Scheduler scheduler(0, 11, 1);
     ASSERT_THROW(simulate<ssc::solver::EulerStepper>(test_data::falling_ball_example()
                                                    + test_data::setpoints()
                                                    + test_data::controllers()
-                                                   + test_data::unknown_controller(), 0, 11, 1)
+                                                   + test_data::unknown_controller(), scheduler)
                                                    , InvalidInputException);
 }

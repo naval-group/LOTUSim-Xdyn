@@ -219,7 +219,7 @@ ssc::kinematics::PointMatrix Sim::get_waves(const double t//!< Current instant
     return ssc::kinematics::PointMatrix("NED",0);
 }
 
-void Sim::output(const StateType& x, Observer& obs, const double t) const
+void Sim::output(const StateType& x, Observer& obs, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems) const
 {
     StateType x_with_forced_states;
     for (auto body: pimpl->bodies)
@@ -234,7 +234,7 @@ void Sim::output(const StateType& x, Observer& obs, const double t) const
             const auto body_name = forces.first;
             const auto body = pimpl->name2bodyptr[body_name];
             const auto G = body->get_origin(x);
-            force->feed(obs,pimpl->env.k);
+            force->feed(obs,pimpl->env.k, pimpl->command_listener, t);
         }
     }
     for (auto body:pimpl->bodies)
@@ -252,6 +252,15 @@ void Sim::output(const StateType& x, Observer& obs, const double t) const
     for (auto body:pimpl->bodies)
     {
         pimpl->feed_sum_of_forces(obs, body->get_name());
+    }
+    for (const auto discrete_system : discrete_systems)
+    {
+        const auto name = discrete_system->get_name();
+        for (const auto output : discrete_system->get_outputs())
+        {
+            const double value = pimpl->command_listener.get<double>(output);
+            obs.write(value, DataAddressing(std::vector<std::string>{"controllers",name}, output));
+        }
     }
 }
 

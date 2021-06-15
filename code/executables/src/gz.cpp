@@ -22,7 +22,7 @@
 #include <cmath>
 #define PI M_PI
 
-CHECK_SSC_VERSION(9,0)
+CHECK_SSC_VERSION(10,0)
 struct GZOptions
 {
     GZOptions() : dphi(0), phi_max(0), stl_filename(), yaml_files(), output_csv_file()

@@ -5,5 +5,6 @@ YamlSimServerInputs::YamlSimServerInputs()
     , states()
     , commands()
     , requested_output()
+    , controllers()
 {
 }

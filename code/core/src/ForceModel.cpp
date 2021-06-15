@@ -131,7 +131,7 @@ void ForceModel::can_find_internal_frame(const ssc::kinematics::KinematicsPtr& k
     }
 }
 
-void ForceModel::feed(Observer& observer, ssc::kinematics::KinematicsPtr& k) const
+void ForceModel::feed(Observer& observer, ssc::kinematics::KinematicsPtr& k, ssc::data_source::DataSource& command_listener, const double t) const
 {
     // G is the point in which 'latest_force_in_body_frame' is expressed (sum of forces)
     // O is the origin of the NED frame
@@ -165,6 +165,12 @@ void ForceModel::feed(Observer& observer, ssc::kinematics::KinematicsPtr& k) con
     observer.write(tau_in_ned_frame_at_G.K(),DataAddressing({"efforts",body_name,name,"NED","Mx"},std::string("Mx(")+name+","+body_name+",NED)"));
     observer.write(tau_in_ned_frame_at_G.M(),DataAddressing({"efforts",body_name,name,"NED","My"},std::string("My(")+name+","+body_name+",NED)"));
     observer.write(tau_in_ned_frame_at_G.N(),DataAddressing({"efforts",body_name,name,"NED","Mz"},std::string("Mz(")+name+","+body_name+",NED)"));
+
+    for (const auto command_name:commands)
+    {
+        const double command_value = get_command(command_name, command_listener, t);
+        observer.write(command_value,DataAddressing({"efforts",body_name,name,"commands",command_name},std::string(name+"("+command_name+")")));
+    }
 
     extra_observations(observer);
 }
