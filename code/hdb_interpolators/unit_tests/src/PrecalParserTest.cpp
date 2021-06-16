@@ -133,6 +133,25 @@ TEST_F(PrecalParserTest, can_parse_from_file)
     remove(filename.c_str());
 }
 
+TEST_F(PrecalParserTest, can_parse_added_mass_multi_line_vector)
+{
+    auto precal = parse_precal_from_string(added_mass_damping_matrix_inf_freq());
+    ASSERT_EQ(1, precal.sections.size());
+    ASSERT_NE(precal.sections.at(0).vector_values.end(),
+              precal.sections.at(0).vector_values.find("total_added_mass_matrix_inf_freq_U1_mu1"));
+    ASSERT_EQ(
+        36, precal.sections.at(0).vector_values["total_added_mass_matrix_inf_freq_U1_mu1"].size());
+    ASSERT_DOUBLE_EQ(
+        0.110E+06,
+        precal.sections.at(0).vector_values["total_added_mass_matrix_inf_freq_U1_mu1"].at(0));
+    ASSERT_DOUBLE_EQ(
+        -0.888E-01,
+        precal.sections.at(0).vector_values["total_added_mass_matrix_inf_freq_U1_mu1"].at(1));
+    ASSERT_DOUBLE_EQ(
+        0.226E+06,
+        precal.sections.at(0).vector_values["total_added_mass_matrix_inf_freq_U1_mu1"].at(2));
+}
+
 TEST_F(PrecalParserTest, can_parse_added_mass_matrix)
 {
      const auto precal = PrecalParser::from_string(test_data::precal());

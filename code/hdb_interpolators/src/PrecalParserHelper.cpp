@@ -100,6 +100,7 @@ class Parser
 
     void parse()
     {
+        bool parsing_vector_key_value = false;
         while (line_getter.has_more_lines())
         {
             current_line_number++;
@@ -146,7 +147,7 @@ class Parser
                 else
                 {
                     const auto tokens = tokenize(current_line);
-                    syntax_analysis(tokens);
+                    parsing_vector_key_value = syntax_analysis(tokens, parsing_vector_key_value);
                 }
             }
         }
@@ -235,9 +236,9 @@ class Parser
         }
     }
 
-    void syntax_analysis(const std::vector<std::string>& tokens)
+    bool syntax_analysis(const std::vector<std::string>& tokens,
+                         bool parsing_vector_key_value = false)
     {
-        bool parsing_vector_key_value = false;
         std::string previous_token = "";
         std::string current_key = "";
         for (const auto token : tokens)
@@ -261,7 +262,7 @@ class Parser
                     }
                 }
                 previous_token = "";
-                return;
+                return parsing_vector_key_value;
             }
             else if (token == "[")
             {
@@ -295,28 +296,25 @@ class Parser
             }
             else
             {
-                if (not(current_key.empty()))
+                if (parsing_vector_key_value)
                 {
-                    if (parsing_vector_key_value)
+                    try
                     {
-                        try
-                        {
-                            append_value_to_current_vector_value(
-                                boost::lexical_cast<double>(token));
-                        }
-                        catch (const std::exception&)
-                        {
-                        }
+                        append_value_to_current_vector_value(boost::lexical_cast<double>(token));
                     }
-                    else
+                    catch (const std::exception&)
                     {
-                        add_key_value(current_key, token);
-                        current_key = "";
                     }
+                }
+                else
+                {
+                    add_key_value(current_key, token);
+                    current_key = "";
                 }
                 previous_token = token;
             }
         }
+        return parsing_vector_key_value;
     }
 
     void new_section(const std::string& section_title)
