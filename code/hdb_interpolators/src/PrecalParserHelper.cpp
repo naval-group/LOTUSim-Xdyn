@@ -65,7 +65,10 @@ class GetLineFromFile : public LineGetter
     {
         if (not(stream))
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, std::string("Unable to open file '") + s + "' for reading: check that the path is correct and that you have access to it. If all this checks out, perhaps the file is already opened?");
+            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                  std::string("Unable to open file '") + s
+                      + "' for reading: check that the path is correct and that you have access to "
+                        "it. If all this checks out, perhaps the file is already opened?");
         }
     }
     std::string get_next_line()
