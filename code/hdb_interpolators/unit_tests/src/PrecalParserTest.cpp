@@ -137,13 +137,13 @@ TEST_F(PrecalParserTest, can_parse_added_mass_matrix)
 {
      const auto precal = PrecalParser::from_string(test_data::precal());
      const auto Ma = precal.get_added_mass();
-     ASSERT_DOUBLE_EQ(0.582645, Ma(0,0));
-     ASSERT_DOUBLE_EQ(-0.117227E-05, Ma(0,1));
-     ASSERT_DOUBLE_EQ(0.431212E+01, Ma(0,4));
-     ASSERT_DOUBLE_EQ(-0.123341E-05, Ma(0,5));
-     ASSERT_DOUBLE_EQ(-0.170619E-04, Ma(1,0));
-     ASSERT_DOUBLE_EQ(0.430115E+01, Ma(4,0));
-     ASSERT_DOUBLE_EQ(-0.165006E-04, Ma(5,0));
-     ASSERT_DOUBLE_EQ(0.200769E+00, Ma(3,3));
-     ASSERT_DOUBLE_EQ(0.129615E+02, Ma(5,5));
+     ASSERT_DOUBLE_EQ(0.582645, Ma(0,0)); // Signal 37
+     ASSERT_DOUBLE_EQ(-0.117227E-05, Ma(0,1)); // Signal 39
+     ASSERT_DOUBLE_EQ(0.431212E+01, Ma(0,4)); // Signal 45
+     ASSERT_DOUBLE_EQ(-0.123341E-05, Ma(0,5)); // Signal 47
+     ASSERT_DOUBLE_EQ(-0.170619E-04, Ma(1,0)); // Signal 49
+     ASSERT_DOUBLE_EQ(0.430115E+01, Ma(4,0)); // Signal 85
+     ASSERT_DOUBLE_EQ(-0.165006E-04, Ma(5,0)); // Signal 97
+     ASSERT_DOUBLE_EQ(0.200769E+00, Ma(3,3)); // Signal 79
+     ASSERT_DOUBLE_EQ(0.129615E+02, Ma(5,5)); // Signal 107
 }
