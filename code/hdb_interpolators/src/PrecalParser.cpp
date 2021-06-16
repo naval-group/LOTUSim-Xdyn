@@ -10,7 +10,65 @@ PrecalParser PrecalParser::from_file(const std::string& path_to_precal_file)
     return PrecalParser(parse_precal_from_file(path_to_precal_file));
 }
 
-PrecalParser::PrecalParser(const PrecalFile& precal_file_) : precal_file(precal_file_) {}
+PrecalParser::PrecalParser(const PrecalFile& precal_file_)
+    : precal_file(precal_file_)
+{
+}
+
+void convert_matrix_to_xdyn_frame(Eigen::Matrix<double, 6, 6>& Ma);
+void convert_matrix_to_xdyn_frame(Eigen::Matrix<double, 6, 6>& Ma)
+{
+    // We need to transform the matrix into xdyn's frame (z downwards)
+    /*
+        *  import sympy
+
+        m =
+       sympy.Matrix([[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1]])
+        R =
+       sympy.Matrix([[1,0,0,0,0,0],[0,-1,0,0,0,0],[0,0,-1,0,0,0],[0,0,0,1,0,0],[0,0,0,0,-1,0],[0,0,0,0,0,-1]])
+        for i in range(1,7):
+            for j in range(1,7):
+            exec("m"+str(i)+str(j)+" = sympy.Symbol('m" + str(i) + str(j) + "')")
+        M =
+       sympy.Matrix([[m11,m12,m13,m14,m15,m16],[m21,m22,m23,m24,m25,m26],[m31,m32,m33,m34,m35,m36],[m41,m42,m43,m44,m45,m46],[m51,m52,m53,m54,m55,m56],[m61,m62,m63,m64,m65,m66]])
+        M
+        ⎡m₁₁   -m₁₂  -m₁₃  m₁₄   -m₁₅  -m₁₆⎤
+        ⎢                                  ⎥
+        ⎢-m₂₁  m₂₂   m₂₃   -m₂₄  m₂₅   m₂₆ ⎥
+        ⎢                                  ⎥
+        ⎢-m₃₁  m₃₂   m₃₃   -m₃₄  m₃₅   m₃₆ ⎥
+        ⎢                                  ⎥
+        ⎢m₄₁   -m₄₂  -m₄₃  m₄₄   -m₄₅  -m₄₆⎥
+        ⎢                                  ⎥
+        ⎢-m₅₁  m₅₂   m₅₃   -m₅₄  m₅₅   m₅₆ ⎥
+        ⎢                                  ⎥
+        ⎣-m₆₁  m₆₂   m₆₃   -m₆₄  m₆₅   m₆₆ ⎦
+        def f(m):
+            for i in range(0,6):
+                    for j in range(0,6):
+                        if m[i, j]<0:
+                            print("matrices[k].second["+str(i)+"]["+str(j)+"] =
+       -matrices[k].second["+str(i)+"]["+str(j)+"];") f(sympy.transpose(R)*m*R)
+
+        */
+
+    Ma(0, 1) = -Ma(0, 1);
+    Ma(0, 2) = -Ma(0, 2);
+    Ma(0, 4) = -Ma(0, 4);
+    Ma(0, 5) = -Ma(0, 5);
+    Ma(1, 0) = -Ma(1, 0);
+    Ma(1, 3) = -Ma(1, 3);
+    Ma(2, 0) = -Ma(2, 0);
+    Ma(2, 3) = -Ma(2, 3);
+    Ma(3, 1) = -Ma(3, 1);
+    Ma(3, 2) = -Ma(3, 2);
+    Ma(3, 4) = -Ma(3, 4);
+    Ma(3, 5) = -Ma(3, 5);
+    Ma(4, 0) = -Ma(4, 0);
+    Ma(4, 3) = -Ma(4, 3);
+    Ma(5, 0) = -Ma(5, 0);
+    Ma(5, 3) = -Ma(5, 3);
+}
 
 Eigen::Matrix<double,6,6> PrecalParser::get_added_mass() const
 {
@@ -36,5 +94,6 @@ Eigen::Matrix<double,6,6> PrecalParser::get_added_mass() const
             signal_idx++;
         }
     }
+    convert_matrix_to_xdyn_frame(Ma);
     return Ma;
 }
