@@ -18,6 +18,7 @@ std::string mass_properties();
 std::string mass_matrix();
 std::string restoring_matrix();
 std::string natural_periods_and_frequencies();
+std::string added_mass_damping_matrix_inf_freq();
 std::string roll_damping();
 std::string labels();
 std::string dimensions();
