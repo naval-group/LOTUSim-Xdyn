@@ -237,7 +237,7 @@ class Parser
 
     void syntax_analysis(const std::vector<std::string>& tokens)
     {
-        bool vector_key_value = false;
+        bool parsing_vector_key_value = false;
         std::string previous_token = "";
         std::string current_key = "";
         for (const auto token : tokens)
@@ -249,7 +249,7 @@ class Parser
                     add_key_value(current_key, previous_token);
                     current_key = "";
                 }
-                else if (vector_key_value)
+                else if (parsing_vector_key_value)
                 {
                     try
                     {
@@ -274,7 +274,7 @@ class Parser
             }
             else if (token == "{")
             {
-                vector_key_value = true;
+                parsing_vector_key_value = true;
                 if (not(current_key.empty()))
                 {
                     new_vector_value(current_key);
@@ -282,7 +282,7 @@ class Parser
             }
             else if (token == "}")
             {
-                vector_key_value = false;
+                parsing_vector_key_value = false;
                 current_key = "";
             }
             else if (token == ",")
@@ -297,7 +297,7 @@ class Parser
             {
                 if (not(current_key.empty()))
                 {
-                    if (vector_key_value)
+                    if (parsing_vector_key_value)
                     {
                         try
                         {
