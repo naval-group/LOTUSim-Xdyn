@@ -15,7 +15,7 @@ concatenated_doc.pmd: \
     calcul_de_GM.md \
     courbes_de_GZ.md \
     solver.md diffraction_radiation.md \
-    modeles_efforts_commandes_et_non_commandes.md \
+    modeles_efforts.md \
     controleurs.md \
     tutorial_00.md \
     tutorial_01.md \

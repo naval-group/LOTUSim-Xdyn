@@ -150,6 +150,10 @@ int run(const XdynCommandLineArguments& input_data, ErrorReporter& error_outputt
 int run(const XdynCommandLineArguments& input_data, ErrorReporter& error_outputter)
 {
     if (not(input_data.empty())) run_simulation(input_data, error_outputter);
+    if (error_outputter.contains_errors())
+    {
+        return EXIT_FAILURE;
+    }
     return EXIT_SUCCESS;
 }
 
@@ -166,7 +170,7 @@ int main(int argc, char** argv)
     catch(boost::program_options::error& e)
     {
         error_outputter.invalid_command_line(e.what());
-        return -1;
+        return EXIT_FAILURE;
     }
     if (error)
     {
@@ -185,7 +189,7 @@ int main(int argc, char** argv)
             {
                 std::cerr << error_outputter.get_message() << std::endl;
             }
-            return -1;
+            return EXIT_FAILURE;
         }
     }
     const auto ret = run(input_data, error_outputter);

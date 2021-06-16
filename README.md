@@ -11,7 +11,7 @@ project](https://www.irt-jules-verne.fr/wp-content/uploads/bassin-numerique.pdf)
 
 (c) 2015-2020 [SIREHNA](http://www.sirehna.com/) & [Naval Group](https://www.naval-group.com/en/) for all subsequent versions.
 
-**Disclaimer**: [Documentation](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/tree/master/doc_user)
+**Disclaimer**: [External documentation](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/tree/master/doc_user) and [internal documentation](https://sirehna.gitlab-pages.sirehna.com/xdyn/)
 was written for a French project, with
 French participants, therefore it is in French. It will be translated
 eventually. Also, please note that it is still a work-in-progress and, as such,

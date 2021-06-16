@@ -68,6 +68,7 @@ int main(int argc, char** argv)
         if (error_outputter.contains_errors())
         {
             std::cerr << error_outputter.get_message() << std::endl;
+            return EXIT_FAILURE;
         }
     }
     else
@@ -75,5 +76,9 @@ int main(int argc, char** argv)
         run();
     }
     google::protobuf::ShutdownProtobufLibrary();
-    return error;
+    if (error_outputter.contains_errors())
+    {
+        return EXIT_FAILURE;
+    }
+    return EXIT_SUCCESS;
 }

@@ -1,11 +1,13 @@
 image: sirehna/dind
 services:
     - docker:dind
+
 stages:
   - lint
   - build
   - test
   - doc
+  - deploy
 
 default:
   before_script:
@@ -44,6 +46,12 @@ test:grpc:
      - make docker_grpc_waves_model
      - make -C grpc_tests
 
+test:integration:
+    stage: test
+    script:
+     - docker build . --tag xdyn
+     - make -C integration_tests
+
 doc:
    stage: doc
    script:
@@ -55,3 +63,18 @@ doc:
      when: on_success
      paths:
      - doc.html
+
+pages:
+    stage: deploy
+    dependencies:
+        - doc
+    script:
+        - mkdir -p public
+        - mv doc.html public/index.html
+    artifacts:
+        when: on_success
+        paths:
+            - public
+              #    only:
+              #        - master
+

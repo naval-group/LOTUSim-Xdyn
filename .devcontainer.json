@@ -19,7 +19,7 @@
         "editor.tabSize": 4,
         "editor.detectIndentation": true,
         "editor.renderWhitespace": "all",
-        "terminal.integrated.shell.linux": "/bin/bash",
+        "terminal.integrated.defaultProfile.linux": "/bin/bash",
         "ms-vscode.cpptools.includePath": [
             "${workspaceFolder}/**",
             "/opt/googletest/googlemock/include/**",
