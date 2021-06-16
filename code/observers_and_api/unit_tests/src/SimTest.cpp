@@ -33,6 +33,7 @@
 #include "parse_output.hpp"
 #include "ListOfObservers.hpp"
 #include "MapObserverTest.hpp"
+#include "precal_test_data.hpp"
 
 #define EPS (1E-10)
 #define SQUARE(x) ((x)*(x))
@@ -587,6 +588,20 @@ TEST_F(SimTest, LONG_can_simulate_radiation_damping)
     ssc::solver::Scheduler scheduler(0, T, dt);
     const auto res = simulate<ssc::solver::RK4Stepper>(test_data::test_ship_radiation_damping(), test_data::cube(), scheduler, command_listener);
     ASSERT_NEAR(0.64349959363750842, res.at(5).x[XIDX(0)], 1E-3);
+}
+
+TEST_F(SimTest, can_use_added_mass_matrix_from_precalr_file)
+{
+    const std::string filename = "ONRT_SIMMAN.raodb.ini";
+    std::ofstream of(filename);
+    of << test_data::precal();
+    of.close();
+    const double T = 1;
+    const double dt = 0.2;
+    ssc::solver::Scheduler scheduler(0, T, dt);
+    const auto res = simulate<ssc::solver::RK4Stepper>(test_data::added_mass_from_precal_file(), test_data::cube(), scheduler);
+    ASSERT_NEAR(5.0265588674027609e-05, res.at(5).x[XIDX(0)], 1E-3);
+    remove(filename.c_str());
 }
 
 TEST_F(SimTest, bug_2963_should_not_be_able_to_use_fast_hydrostatic_without_specifying_wave_model)

@@ -7,10 +7,12 @@
 
 #include "BodyBuilder.hpp"
 #include "InvalidInputException.hpp"
+#include "InternalErrorException.hpp"
 #include "BodyWithSurfaceForces.hpp"
 #include "BodyWithoutSurfaceForces.hpp"
 #include "HDBParser.hpp"
 #include "MeshBuilder.hpp"
+#include "PrecalParser.hpp"
 #include "YamlBody.hpp"
 #include "yaml2eigen.hpp"
 
@@ -108,8 +110,24 @@ void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& r
     Eigen::Matrix<double,6,6> Ma;
     if (added_mass.read_from_file)
     {
-        const std::string hdb = ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,added_mass.hdb_filename)).get_contents();
-        Ma = HDBParser(hdb).get_added_mass();
+        if (added_mass.hdb_filename.empty())
+        {
+            if (added_mass.precal_filename.empty())
+            {
+                THROW(__PRETTY_FUNCTION__, InternalErrorException,
+                "Error reading the added mass matrix: xdyn was expecting a filename (as value for key 'from PRECAL_R' or 'from HDB') but an empty string was found."
+                );
+            }
+            else
+            {
+                Ma = PrecalParser::from_file(added_mass.precal_filename).get_added_mass();
+            }
+        }
+        else
+        {
+            const std::string hdb = ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,added_mass.hdb_filename)).get_contents();
+            Ma = HDBParser(hdb).get_added_mass();
+        }
     }
     else
     {
