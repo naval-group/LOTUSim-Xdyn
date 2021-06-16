@@ -117,24 +117,22 @@ void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& r
     }
     if(!isSymmetric(Ma))
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                "The input added mass is not symmetric"
-                << " for body '" << states.name << "': " << std::endl
-                << "Ma = " << std::endl
-                << Ma << std::endl);
+        std::cerr << "Warning! The input added mass is not symmetric"
+                  << " for body '" << states.name << "': " << std::endl
+                  << "Ma = " << std::endl
+                  << Ma << std::endl;
     }
     const Eigen::Matrix<double,6,6> Mt = Mrb + Ma;
     if(!isSymmetricDefinitePositive(Mt))
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                "The total inertia matrix (rigid body inertia + added mass) is not symmetric definite positive"
-                << " for body '" << states.name << "': " << std::endl
-                << "Mrb = " << std::endl
-                << Mrb << std::endl
-                << "Ma = " << std::endl
-                << Ma << std::endl
-                << "Mrb+Ma = " << std::endl
-                << Mt << std::endl);
+        std::cerr << "Warning! The total inertia matrix (rigid body inertia + added mass) is not symmetric definite positive"
+                  << " for body '" << states.name << "': " << std::endl
+                  << "Mrb = " << std::endl
+                  << Mrb << std::endl
+                  << "Ma = " << std::endl
+                  << Ma << std::endl
+                  << "Mrb+Ma = " << std::endl
+                  << Mt << std::endl;
     }
     Eigen::Matrix<double,6,6> M_inv = Mt.inverse();
     states.inverse_of_the_total_inertia = MatrixPtr(new Eigen::Matrix<double,6,6>(M_inv));
