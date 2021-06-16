@@ -17,6 +17,8 @@ RUN apt-get update -yq && \
     rm -rf /tmp/* /var/tmp/* && \
     rm -rf /var/lib/apt/lists
 
+ADD ./interfaces/forces/wait-for-it.sh /usr/bin/
+RUN chmod a+x /usr/bin/wait-for-it.sh
 ADD xdyn.deb /
 RUN dpkg -r xdyn && \
     dpkg -i xdyn.deb
@@ -54,7 +56,6 @@ RUN echo "#!/bin/sh" > /usr/bin/xdyn_cli.sh && \
     echo "    /usr/bin/xdyn \$@" >> /usr/bin/xdyn_cli.sh && \
     echo "fi" >> /usr/bin/xdyn_cli.sh && \
     chmod a+x /usr/bin/xdyn_cli.sh
-
 
 
 
