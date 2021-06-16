@@ -528,13 +528,23 @@ added mass matrix at the center of gravity and projected in the body frame:
     from hdb file: test_ship.hdb
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Dans ce cas, il ne faut pas spécifier les clefs `frame` et `row` (le programme
-lance une exception si on le fait).
-Comme le fichier STL, le chemin du [fichier HDB](#fichiers-hdb) est relatif à l'endroit d'où on
-lance l'exécutable.
-La section correspondante dans le [fichier HDB](#fichiers-hdb) est `Added_mass_Radiation_Damping`.
-La valeur utilisée est la matrice de masse ajoutée à la période minimale définie
-dans le [fichier HDB](#fichiers-hdb) (aucune extrapolation n'est faite).
+On peut également lire cette matrice depuis un fichier PRECAL_R, à condition
+d'avoir activé la clef `calcAmasDampCoefInfFreq` (section `sim` > `parHYD` >
+`calcAmasDampCoefInfFreq` du fichier XML d'entrée) :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+added mass matrix at the center of gravity and projected in the body frame:
+    from PRECAL_R: ONRT_SIMMAN.raodb.ini
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Dans le cas où les masses ajoutées proviennent d'un fichier, il ne faut pas
+spécifier les clefs `frame` et `row` (le programme lance une exception si on le
+fait pour éviter toute ambiguïté).  Comme le fichier STL, le chemin du [fichier
+HDB](#fichiers-hdb) est relatif à l'endroit d'où on lance l'exécutable.  La
+section correspondante dans le [fichier HDB](#fichiers-hdb) est
+`Added_mass_Radiation_Damping`.  La valeur utilisée est la matrice de masse
+ajoutée à la période minimale définie dans le [fichier HDB](#fichiers-hdb)
+(aucune extrapolation n'est faite).
 
 ### Forçage de degrés de liberté
 
@@ -622,6 +632,8 @@ Il est à noter que ces efforts sont exprimés dans le repère BODY.
 
 ## Fichiers HDB issus d'un calcul fréquentiel
 
+### Format HDB
+
 Le format HDB (Hydrodynamic DataBase) est le format standard du logiciel
 [Diodore](http://www.principia-group.com/blog/product/diodore/). Le logiciel
 AQUA+ (développé et utilisé en interne par l'École Centrale de Nantes et SIREHNA,
@@ -633,6 +645,18 @@ fichiers peuvent être utilisés par xdyn pour calculer :
 - les masses ajoutées (cf. paragraphe précédent)
 - les amortissements de radiation
 - les efforts de diffraction, calculés à partir de fonctions de transfert ([RAO](#efforts-de-diffraction))
+
+### Format PRECAL_R
+
+[PRECAL_R](https://www.marin.nl/facilities-and-tools/software/qship) est un
+outil développé par [Marin](https://www.marin.nl) dans le cadre du groupe
+[Cooperative Research Ships (CRS)](https://www.crships.org/) qui résout des
+problèmes de tenue à la mer (diffraction et radiation) par une [méthode
+potentielle](https://en.wikipedia.org/wiki/Potential_flow). Il peut être
+utilisé pour calculer les mouvements et les efforts dûs aux vagues sur une
+coque quelconque.
+
+xdyn peut lire les sorties de PRECAL_R et en extraire les masses ajoutées.
 
 ### Conventions des fichiers HDB
 
@@ -687,11 +711,13 @@ R_X(\pi)=\left[\begin{array}{ccc} 1 & 0 &0\\0&-1&0\\0&0&-1\end{array}\right]
 M_d = \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right]^\top M \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right]
 ```
 
+### Convention des ficheirs PRECAL_R
 
+Les conventions sont les mêmes que pour les fichiers HDB.
 
-Par conséquent, toutes les matrices lues depuis le fichier HDB (masses ajoutées
-et amortissement de radiation) subissent un changement de repère décrit au
-paragraphe suivant.
+Par conséquent, toutes les matrices lues depuis un fichier HDB ou PRECAL_R
+(masses ajoutées et amortissement de radiation) subissent le changement de
+repère décrit au paragraphe suivant.
 
 
 ### Transport des matrices d'inertie et d'amortissement lues depuis le fichier HDB

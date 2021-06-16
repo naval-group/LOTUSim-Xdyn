@@ -802,14 +802,17 @@ Subroutine Package for Automatic Integration**; Springer Verlag.
 
 Dans le simulateur, la matrice de masses ajoutées est soit lue directement
 depuis le fichier YAML, soit extraite et interpolée linéairement à partir d'un
-[fichier HDB](#fichiers-hdb). Pour le calcul des efforts d'amortissement de
-radiation, on a besoin de la masse ajoutée à fréquence infinie. Afin de garantir
-la symmétrie et le caractère positif et défini de la matrice (les coefficients
-ont tendance à osciller fortement au voisinage de $`T=0`$), on n'extrapole pas les
-données du [fichiers HDB](#fichiers-hdb) en zéro : on utilise directement les
-valeurs lues dans le fichier HDB pour la période la plus faible. On suppose que
-les mailles utilisées pour le calcul des masses ajoutées (résolution du
-potentiel) sont suffisamment fines pour que le résultat ait un sens.
+[fichier HDB](#fichiers-hdb) ou [PRECAL_R](#fichiers-precalr). Pour le calcul
+des efforts d'amortissement de radiation, on a besoin de la masse ajoutée à
+fréquence infinie. Afin de garantir la symmétrie et le caractère positif et
+défini de la matrice (les coefficients ont tendance à osciller fortement au
+voisinage de $`T=0`$), on n'extrapole pas les données du [fichiers
+HDB](#fichiers-hdb) en zéro : on utilise directement les valeurs lues dans le
+fichier HDB pour la période la plus faible. On suppose que les mailles
+utilisées pour le calcul des masses ajoutées (résolution du potentiel) sont
+suffisamment fines pour que le résultat ait un sens. Les résultats donnés par
+PRECAL_R étant déjà donnés à pulsation infinie, aucune interpolation n'est
+nécessaire.
 
 ## Références
 
