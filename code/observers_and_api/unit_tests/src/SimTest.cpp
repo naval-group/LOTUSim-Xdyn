@@ -600,7 +600,7 @@ TEST_F(SimTest, can_use_added_mass_matrix_from_precalr_file)
     const double dt = 0.2;
     ssc::solver::Scheduler scheduler(0, T, dt);
     const auto res = simulate<ssc::solver::RK4Stepper>(test_data::added_mass_from_precal_file(), test_data::cube(), scheduler);
-    ASSERT_NEAR(5.0265588674027609e-05, res.at(5).x[XIDX(0)], 1E-3);
+    ASSERT_NEAR(0.011316202309435556, res.at(5).x[XIDX(0)], 1E-3);
     remove(filename.c_str());
 }
 

@@ -1,4 +1,5 @@
 #include "PrecalParser.hpp"
+#include "InvalidInputException.hpp"
 
 PrecalParser PrecalParser::from_string(const std::string& precal_file_contents)
 {
@@ -70,29 +71,62 @@ void convert_matrix_to_xdyn_frame(Eigen::Matrix<double, 6, 6>& Ma)
     Ma(5, 3) = -Ma(5, 3);
 }
 
-Eigen::Matrix<double,6,6> PrecalParser::get_added_mass() const
+Eigen::Matrix<double, 6, 6> PrecalParser::get_added_mass() const
 {
-    Eigen::Matrix<double,6,6> Ma;
-    size_t signal_idx = 0;
+    Eigen::Matrix<double, 6, 6> Ma;
+    bool found_section = false;
     for (auto section : precal_file.sections)
     {
-        if (section.title.substr(0, 6) == "signal")
+        if (section.title == "added_mass_damping_matrix_inf_freq")
         {
-            const std::string section_name = section.string_values["name"];
-            for (size_t i = 0 ; i < 6 ; ++i)
+            if (section.vector_values.find("total_added_mass_matrix_inf_freq_U1_mu1")
+                == section.vector_values.end())
             {
-                for (size_t j = 0 ; j < 6 ; ++j)
+                std::stringstream ss;
+                for (const auto kv : section.vector_values)
                 {
-                    std::stringstream ss;
-                    ss << "A_m" << i+1 << "m" << j+1;
-                    if (section_name == ss.str())
-                    {
-                        Ma(i,j) = precal_file.raos.at(signal_idx).left_column.front();
-                    }
+                    ss << kv.first << ", ";
+                }
+                if (section.vector_values.empty())
+                {
+                    THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                          "There seems to be something wrong with PRECAL_R's output file: we did "
+                          "indeed find section 'added_mass_damping_matrix_inf_freq' in PRECAL_R's "
+                          "output file, but it didn't contain any vectors (in particular, we were "
+                          "not able to find the list 'total_added_mass_matrix_inf_freq_U1_mu1' "
+                          "which contains the matrix's coefficients).");
+                }
+                else
+                {
+                    THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                          "There seems to be something wrong with PRECAL_R's output file: we did "
+                          "indeed find section 'added_mass_damping_matrix_inf_freq' in PRECAL_R's "
+                          "output file, but we were not able to find the list "
+                          "'total_added_mass_matrix_inf_freq_U1_mu1' which contains the matrix's "
+                          "coefficients. We found keys "
+                              << ss.str() << " but none of them matched.");
                 }
             }
-            signal_idx++;
+            found_section = true;
+            const std::vector<double> values
+                = section.vector_values["total_added_mass_matrix_inf_freq_U1_mu1"];
+            for (size_t i = 0; i < 6; ++i)
+            {
+                for (size_t j = 0; j < 6; ++j)
+                {
+                    Ma(i, j) = values.at(6 * i + j);
+                }
+            }
         }
+    }
+    if (not(found_section))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+              "Unable to find section 'added_mass_damping_matrix_inf_freq' in PRECAL_R's "
+              "output file: perhaps you didn't set the boolean key 'calcAmasDampCoefInfFreq' "
+              "to true in PRECAL_R's input file (section sim > parHYD > calcAmasDampCoefInfFreq)? "
+              "Cf. PRECAL_R's Theory Manual, sections 2.3 & "
+              "2.4 and PRECAL_R's User Manual, section 3.3.2 p.25.");
     }
     convert_matrix_to_xdyn_frame(Ma);
     return Ma;
