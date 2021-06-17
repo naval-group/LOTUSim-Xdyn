@@ -77,3 +77,46 @@ pages:
         paths:
             - public
 
+Deploy to test tag:
+    stage: deploy
+    before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
+    script:
+    - docker build --pull --cache-from "$CI_REGISTRY_IMAGE:test" --tag "$CI_REGISTRY_IMAGE:test" .
+    - docker push "$CI_REGISTRY_IMAGE:test"
+    only:
+        variables:
+            - $CI_REGISTRY_PASSWORD
+    except:
+    - tags
+    - master
+
+Deploy to beta:
+    stage: deploy
+    before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
+    script:
+    - export VERSION=beta-$(date +%Y-%m-%d)
+    - docker build --pull --cache-from "$CI_REGISTRY_IMAGE:test" --tag "$CI_REGISTRY_IMAGE:$VERSION" .
+    - docker push "$CI_REGISTRY_IMAGE:$VERSION"
+    only:
+        variables:
+            - $CI_REGISTRY_PASSWORD
+        refs:
+            - master
+    except:
+    - tags
+
+Deploy tagged version:
+    stage: deploy
+    before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
+    script:
+    - docker build --pull --cache-from "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" --tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" .
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
+    - docker push "$CI_REGISTRY_IMAGE"
+    only:
+        variables:
+            - $CI_REGISTRY_PASSWORD
+        refs:
+            - tags
