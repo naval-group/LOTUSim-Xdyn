@@ -29,6 +29,7 @@ int main(int argc, const char* argv[])
     yaml["tutorial_10_gRPC_force_model.yml"]  = test_data::tutorial_10_gRPC_force_model();
     yaml["tutorial_10_gRPC_force_model_commands.yml"]  = test_data::tutorial_10_gRPC_force_model_commands();
     yaml["tutorial_11_gRPC_controller.yml"]   = test_data::tutorial_11_gRPC_controller();
+    yaml["tutorial_12_precal_r.yml"]          = test_data::added_mass_from_precal_file();
     yaml["oscillating_cube_test.yml"]         = test_data::oscillating_cube_example();
     yaml["stable_cube_test.yml"]              = test_data::stable_cube_example();
     yaml["stable_rolling_cube_test.yml"]      = test_data::stable_rolling_cube_test();
