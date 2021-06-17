@@ -76,6 +76,4 @@ pages:
         when: on_success
         paths:
             - public
-              #    only:
-              #        - master
 
