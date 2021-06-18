@@ -12,6 +12,7 @@ stages:
 default:
   before_script:
     - make update-submodules
+    - make headers
 
 lint:
    stage: lint

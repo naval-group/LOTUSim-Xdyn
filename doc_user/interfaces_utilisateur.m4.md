@@ -667,9 +667,9 @@ La sortie du "Model Exchange" correspond à la dérivée des états
 | `dtheta/dt`  | Flottant  | Dérivée par rapport au temps de l'angle de tangage/assiette par rapport au sol (BODY/NED)                                                                                       |
 | `dpsi/dt`  | Flottant  | Dérivée par rapport au temps de l'angle de lacet par rapport au sol (BODY/NED)                                                                                       |
 
-Il est important de noter que les dérivés des angles d'Euler sont calculées selon la convention d'angles `z, y', x''` (`id = 12` dans le tableau des conventions). Les autres conventions ne sont pas supportées pour le moment.
+Il est important de noter que les dérivées des angles d'Euler sont calculées selon la convention d'angles `z, y', x''` (`id = 12` dans le tableau des conventions). Les autres conventions ne sont pas prises en charge pour le moment.
 
-En plus des dérivées des états, le serveur renvoit dans la section "extra_observations" du JSON les valeurs des variables demandées dans la section "requested_output" de la requête.
+En plus des dérivées des états, le serveur renvoie dans la section "extra_observations" du JSON les valeurs des variables demandées dans la section "requested_output" de la requête.
 
 Exemple de sortie:
 
