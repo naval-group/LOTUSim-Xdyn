@@ -814,6 +814,20 @@ suffisamment fines pour que le résultat ait un sens. Les résultats donnés par
 PRECAL_R étant déjà donnés à pulsation infinie, aucune interpolation n'est
 nécessaire.
 
+Dans le fichier sortie de PRECAL_R, les matrices de masses ajoutées en fonction
+de la pulsation (qui ne sont pas utilisées par xdyn) sont dans des sections
+`signal` telles que:
+
+```ini
+[signal37]
+name        = A_m1m1
+description = A_m1m1 - added mass coefficient mode 1,1
+```
+
+Si la clef calcAmasDampCoefInfFreq` du fichier de paramètres de PRECAL_R est à
+`true`, PRECAL_R écrit la matrice de masses ajoutées à pulsation infinie
+(utilisée par xdyn) dans la section `[added_mass_damping_matrix_inf_freq]`.
+
 ## Références
 
 - *Practical Source Code for Ship Motions Time Domain Numerical Analysis and
