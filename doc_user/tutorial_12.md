@@ -8,8 +8,9 @@ Ce tutoriel explique comment utiliser les fichiers générés par PRECAL_R
 Le flag 'calcAmasDampCoefInfFreq' doit avoir la valueur `true` dans le fichier
 d'entrée de PRECAL_R (elle est à `false` par défaut). Elle est localisée dans
 la section `sim` > `parHYD` > `calcAmasDampCoefInfFreq`. Pour plus de détails,
-on pourra se référer au manuel théorique de PRECAL_R (sections 2.3 et 2.4) et à
-son manuel utilisateur (section 3.3.2, p. 25).
+on pourra se référer au manuel théorique de PRECAL_R version 18.1.3 (Report No.
+21447-7-RD, sections 2.3 et 2.4) et à son manuel utilisateur (section 3.3.2, p.
+25).
 
 ### Configuration d'xdyn
 
