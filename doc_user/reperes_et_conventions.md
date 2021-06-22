@@ -530,7 +530,7 @@ added mass matrix at the center of gravity and projected in the body frame:
 
 On peut également lire cette matrice depuis un fichier PRECAL_R, à condition
 d'avoir activé la clef `calcAmasDampCoefInfFreq` (section `sim` > `parHYD` >
-`calcAmasDampCoefInfFreq` du fichier XML d'entrée) :
+`calcAmasDampCoefInfFreq` du fichier XML d'entrée de PRECAL_R) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 added mass matrix at the center of gravity and projected in the body frame:
