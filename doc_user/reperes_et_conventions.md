@@ -656,16 +656,18 @@ fichiers peuvent être utilisés par xdyn pour calculer :
 
 ### Format PRECAL_R
 
+xdyn peut lire les sorties de PRECAL_R et en extraire les masses ajoutées.
 [PRECAL_R](https://www.marin.nl/facilities-and-tools/software/qship) est un
 logiciel développé par [Marin](https://www.marin.nl) dans le cadre du groupe
 [Cooperative Research Ships (CRS)](https://www.crships.org/). Il résout les des
 problèmes de tenue à la mer (diffraction et radiation) par une [méthode
 potentielle](https://en.wikipedia.org/wiki/Potential_flow) comme AQUA+. Il peut
 être utilisé pour calculer les mouvements et les efforts dus aux vagues sur une
-coque quelconque. Les différences entre AQUA+ et PRECAL_R se situent
-principalement sur la prise en compte de la vitesse d'avance.
-
-xdyn peut lire les sorties de PRECAL_R et en extraire les masses ajoutées.
+coque quelconque. Il est, entre autre, capable de prendre en compte la stabilisation,
+propose de l'équilinéarisation stochastique et permet un couplage avec la
+structure. PRECAL_R va évoluer à terme vers SEACAL qui améliorera la prise en
+compte de la vitesse d'avance, tout en conservant la même structure de données
+hydrodynamiques exportables, entre autres, vers xdyn.
 
 ### Conventions des fichiers HDB
 
