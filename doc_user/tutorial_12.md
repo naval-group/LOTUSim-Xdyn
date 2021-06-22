@@ -1,7 +1,7 @@
 ## Tutoriel 12 : utilisation des fichiers de résultat de PRECAL_R
 
 Ce tutoriel explique comment utiliser les fichiers générés par PRECAL_R
-à la place (ou en complément) des fichiers HDB pour les masses ajoutées.
+à la place des fichiers HDB pour les masses ajoutées.
 
 ### Préparation : génération des fichiers de sortie PRECAL_R
 
