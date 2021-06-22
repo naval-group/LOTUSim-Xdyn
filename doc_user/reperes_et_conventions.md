@@ -537,14 +537,22 @@ added mass matrix at the center of gravity and projected in the body frame:
     from PRECAL_R: ONRT_SIMMAN.raodb.ini
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Dans le cas où les masses ajoutées proviennent d'un fichier, il ne faut pas
-spécifier les clefs `frame` et `row` (le programme lance une exception si on le
-fait pour éviter toute ambiguïté).  Comme le fichier STL, le chemin du [fichier
-HDB](#fichiers-hdb) est relatif à l'endroit d'où on lance l'exécutable.  La
-section correspondante dans le [fichier HDB](#fichiers-hdb) est
-`Added_mass_Radiation_Damping`.  La valeur utilisée est la matrice de masse
-ajoutée à la période minimale définie dans le [fichier HDB](#fichiers-hdb)
-(aucune extrapolation n'est faite).
+Dans le cas où les masses ajoutées proviennent d'un fichier (PRECAL_R ou
+AQUA+/DIODORE), il ne faut pas spécifier les clefs `frame` et `row` (le
+programme s'arrête avec une erreur si on le fait afin d'éviter toute
+ambiguïté). Comme pour les fichiers STL, le chemin vers le fichier (HDB ou
+PRECAL_R) est relatif à l'endroit d'où on lance l'exécutable.
+
+Dans les [fichiers HDB](#fichiers-hdb), la section correspondant aux masses
+ajoutées est `Added_mass_Radiation_Damping`. La valeur utilisée est la matrice
+de masse ajoutée à la période minimale définie dans le [fichier
+HDB](#fichiers-hdb) (aucune extrapolation n'est faite).
+
+Dans les [fichiers PRECAL_R](#fichiers-precalr) la matrice de masses ajoutées à
+pulsation infinie figure dans la section
+`[added_mass_damping_matrix_inf_freq]`. PRECAL_R calculant directement des
+valeurs asymptotiques à pulsations infinies, aucune interpolation ou
+extrapolation n'est nécessaire.
 
 ### Forçage de degrés de liberté
 
@@ -1047,7 +1055,7 @@ autour du nouvel axe X.
 Des apostrophes sont utilisées pour indiquer des compositions de rotations
 par rapport au nouveau système d'axes, et donc une composition interne.
 Ainsi `[x,y',z'']` désignera une rotation autour X, suivie d'une rotation autour
-du  nouvel axe Y, appelé Y' et terminée par une rotation autour du nouvel axe Z,
+du nouvel axe Y, appelé Y' et terminée par une rotation autour du nouvel axe Z,
 appelé Z''. La double apostrophe fait référence au deuxième repère utilisée
 pour la composition de rotation.
 
