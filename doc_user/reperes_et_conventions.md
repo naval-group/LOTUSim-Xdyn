@@ -661,7 +661,7 @@ logiciel développé par [Marin](https://www.marin.nl) dans le cadre du groupe
 [Cooperative Research Ships (CRS)](https://www.crships.org/). Il résout les des
 problèmes de tenue à la mer (diffraction et radiation) par une [méthode
 potentielle](https://en.wikipedia.org/wiki/Potential_flow) comme AQUA+. Il peut
-être utilisé pour calculer les mouvements et les efforts dûs aux vagues sur une
+être utilisé pour calculer les mouvements et les efforts dus aux vagues sur une
 coque quelconque. Les différences entre AQUA+ et PRECAL_R se situent
 principalement sur la prise en compte de la vitesse d'avance.
 
