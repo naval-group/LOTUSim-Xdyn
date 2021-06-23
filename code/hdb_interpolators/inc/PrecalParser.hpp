@@ -1,0 +1,25 @@
+/*
+ * PrecalParser.hpp
+ *
+ *  Created on: Jun 8, 2021
+ *      Author: cady
+ */
+
+#ifndef __PRECALPARSERHPP__
+#define __PRECALPARSERHPP__
+
+class PrecalParser
+{
+    public:
+        PrecalParser() = delete;
+        static PrecalParser from_string(const std::string& precal_file_contents);
+        static PrecalParser from_file(const std::string& path_to_precal_file);
+        Eigen::Matrix<double,6,6> get_added_mass() const;
+
+    private:
+
+
+};
+
+
+#endif

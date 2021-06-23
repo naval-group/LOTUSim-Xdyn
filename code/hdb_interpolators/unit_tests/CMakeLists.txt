@@ -6,6 +6,7 @@ FILE(GLOB SRC src/HDBParserTest.cpp
               src/RadiationDampingBuilderTest.cpp
               src/DiffractionInterpolatorTest.cpp
               src/hdb_test.cpp
+              src/PrecalParserTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
