@@ -440,7 +440,7 @@ std::vector<std::string> rao_lexer(const std::string rao_attributes)
         else if (c == '(')
         {
             flush(buffer, tokens);
-            tokens.push_back("[");
+            tokens.push_back("(");
         }
         else if (c == ')')
         {
