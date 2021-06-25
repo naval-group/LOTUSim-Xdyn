@@ -23,7 +23,7 @@ tutorial_01_falling_ball.yml:
 tutorial_12:
 	@echo "Copying tutorial files from xdyn's Docker container..."
 	@${DOCKER_RUN} -v $(shell pwd):/xdyn_demos --entrypoint /bin/bash xdyn -c "cp /usr/demos/tutorial_12_precal_r.yml /usr/demos/ONRT_SIMMAN.raodb.ini /usr/demos/test_ship.stl /xdyn_demos/"
-	@echo "Launching tutorial..."
+	@echo "Launching tutorial 12..."
 	@${DOCKER_RUN} xdyn --dt 1 --tend 1 -o tsv tutorial_12_precal_r.yml
 	@echo "All good, cleaning up!"
 	@rm -rf ONRT_SIMMAN.raodb.ini tutorial_12_precal_r.yml test_ship.stl

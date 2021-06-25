@@ -543,7 +543,7 @@ programme s'arrête avec une erreur si on le fait afin d'éviter toute
 ambiguïté). Comme pour les fichiers STL, le chemin vers le fichier (HDB ou
 PRECAL_R) est relatif à l'endroit d'où on lance l'exécutable.
 
-Dans les [fichiers HDB](#fichiers-hdb), la section correspondant aux masses
+Dans les [fichiers HDB](#format-hdb), la section correspondant aux masses
 ajoutées est `Added_mass_Radiation_Damping`. La valeur utilisée est la matrice
 de masse ajoutée à la période minimale définie dans le [fichier
 HDB](#fichiers-hdb) (aucune extrapolation n'est faite).
@@ -659,7 +659,7 @@ fichiers peuvent être utilisés par xdyn pour calculer :
 xdyn peut lire les sorties de PRECAL_R et en extraire les masses ajoutées.
 [PRECAL_R](https://www.marin.nl/facilities-and-tools/software/qship) est un
 logiciel développé par [Marin](https://www.marin.nl) dans le cadre du groupe
-[Cooperative Research Ships (CRS)](https://www.crships.org/). Il résout les des
+[Cooperative Research Ships (CRS)](https://www.crships.org/). Il résout des
 problèmes de tenue à la mer (diffraction et radiation) par une [méthode
 potentielle](https://en.wikipedia.org/wiki/Potential_flow) comme AQUA+. Il peut
 être utilisé pour calculer les mouvements et les efforts dus aux vagues sur une

@@ -824,7 +824,7 @@ name        = A_m1m1
 description = A_m1m1 - added mass coefficient mode 1,1
 ```
 
-Si la clef calcAmasDampCoefInfFreq` du fichier de paramètres de PRECAL_R est à
+Si la clef `calcAmasDampCoefInfFreq` du fichier de paramètres de PRECAL_R est à
 `true`, PRECAL_R écrit la matrice de masses ajoutées à pulsation infinie
 (utilisée par xdyn) dans la section `[added_mass_damping_matrix_inf_freq]`.
 
