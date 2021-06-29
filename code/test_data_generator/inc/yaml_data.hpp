@@ -14,7 +14,7 @@ namespace test_data
 {
     std::string bug_2655();
     std::string hydrostatic_test();
-    std::string added_mass_from_file();
+    std::string added_mass_from_hdb_file();
     std::string full_example();
     std::string full_example_with_diagonal_inertia();
     std::string full_example_with_propulsion();
@@ -113,6 +113,7 @@ namespace test_data
     std::string bug_3185_with_invalid_frame();
     std::string bug_3185();
     std::string tutorial_11_gRPC_controller();
+    std::string added_mass_from_precal_file();
 }
 
 #endif /* YAML_DATA_HPP_ */

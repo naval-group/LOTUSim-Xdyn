@@ -125,7 +125,7 @@ class HDBParser::Impl
                 matrices[k].second[4][3] = -matrices[k].second[4][3];
                 matrices[k].second[5][0] = -matrices[k].second[5][0];
                 matrices[k].second[5][3] = -matrices[k].second[5][3];
-                // We need to transform the matrix into X-DYN's frame (z downwards)
+                // We need to transform the matrix into xdyn's frame (z downwards)
                 /*
                  *  import sympy
 

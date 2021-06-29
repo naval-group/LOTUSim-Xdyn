@@ -231,27 +231,43 @@ void parse_YamlDynamics6x6Matrix(const YAML::Node& node, YamlDynamics6x6Matrix& 
             or node.FindValue("row 5")
             or node.FindValue("row 6"))
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "cannot specify both an HDB filename & a matrix.");
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "cannot specify both an HDB filename & a matrix (both keys 'from hdb' and one of 'row 1', 'row 2', 'row 3', 'row 4', 'row 5' or 'row 6' were found in the YAML file).");
+        }
+        if (node.FindValue("from PRECAL_R"))
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "cannot specify both an HDB filename & a PRECAL_R filename (both keys 'from hdb' and 'from PRECAL_R' were found in the YAML file).");
         }
         m.read_from_file = true;
         *parameter >> m.hdb_filename;
     }
+    else if (const YAML::Node *parameter = node.FindValue("from PRECAL_R"))
+    {
+        m.read_from_file = true;
+        *parameter >> m.precal_filename;
+    }
     else
     {
-        if (parse_frame)
+        try
         {
-            node["frame"] >> m.frame;
+            if (parse_frame)
+            {
+                node["frame"] >> m.frame;
+            }
+            else
+            {
+                m.frame = frame_name;
+            }
+            node["row 1"] >> m.row_1;
+            node["row 2"] >> m.row_2;
+            node["row 3"] >> m.row_3;
+            node["row 4"] >> m.row_4;
+            node["row 5"] >> m.row_5;
+            node["row 6"] >> m.row_6;
         }
-        else
+        catch(const YAML::Exception& e)
         {
-            m.frame = frame_name;
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to parse matrix in the YAML file. The problem was: '" << e.msg << "' and it was detected line " << e.mark.line+1 << " column " << e.mark.column+1 << " of the concatenated YAML file.");
         }
-        node["row 1"] >> m.row_1;
-        node["row 2"] >> m.row_2;
-        node["row 3"] >> m.row_3;
-        node["row 4"] >> m.row_4;
-        node["row 5"] >> m.row_5;
-        node["row 6"] >> m.row_6;
     }
 }
 

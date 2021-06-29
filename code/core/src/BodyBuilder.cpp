@@ -7,10 +7,12 @@
 
 #include "BodyBuilder.hpp"
 #include "InvalidInputException.hpp"
+#include "InternalErrorException.hpp"
 #include "BodyWithSurfaceForces.hpp"
 #include "BodyWithoutSurfaceForces.hpp"
 #include "HDBParser.hpp"
 #include "MeshBuilder.hpp"
+#include "PrecalParser.hpp"
 #include "YamlBody.hpp"
 #include "yaml2eigen.hpp"
 
@@ -108,8 +110,24 @@ void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& r
     Eigen::Matrix<double,6,6> Ma;
     if (added_mass.read_from_file)
     {
-        const std::string hdb = ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,added_mass.hdb_filename)).get_contents();
-        Ma = HDBParser(hdb).get_added_mass();
+        if (added_mass.hdb_filename.empty())
+        {
+            if (added_mass.precal_filename.empty())
+            {
+                THROW(__PRETTY_FUNCTION__, InternalErrorException,
+                "Error reading the added mass matrix: xdyn was expecting a filename (as value for key 'from PRECAL_R' or 'from HDB') but an empty string was found."
+                );
+            }
+            else
+            {
+                Ma = PrecalParser::from_file(added_mass.precal_filename).get_added_mass();
+            }
+        }
+        else
+        {
+            const std::string hdb = ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,added_mass.hdb_filename)).get_contents();
+            Ma = HDBParser(hdb).get_added_mass();
+        }
     }
     else
     {
@@ -117,24 +135,22 @@ void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& r
     }
     if(!isSymmetric(Ma))
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                "The input added mass is not symmetric"
-                << " for body '" << states.name << "': " << std::endl
-                << "Ma = " << std::endl
-                << Ma << std::endl);
+        std::cerr << "Warning! The input added mass is not symmetric"
+                  << " for body '" << states.name << "': " << std::endl
+                  << "Ma = " << std::endl
+                  << Ma << std::endl;
     }
     const Eigen::Matrix<double,6,6> Mt = Mrb + Ma;
     if(!isSymmetricDefinitePositive(Mt))
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                "The total inertia matrix (rigid body inertia + added mass) is not symmetric definite positive"
-                << " for body '" << states.name << "': " << std::endl
-                << "Mrb = " << std::endl
-                << Mrb << std::endl
-                << "Ma = " << std::endl
-                << Ma << std::endl
-                << "Mrb+Ma = " << std::endl
-                << Mt << std::endl);
+        std::cerr << "Warning! The total inertia matrix (rigid body inertia + added mass) is not symmetric definite positive"
+                  << " for body '" << states.name << "': " << std::endl
+                  << "Mrb = " << std::endl
+                  << Mrb << std::endl
+                  << "Ma = " << std::endl
+                  << Ma << std::endl
+                  << "Mrb+Ma = " << std::endl
+                  << Mt << std::endl;
     }
     Eigen::Matrix<double,6,6> M_inv = Mt.inverse();
     states.inverse_of_the_total_inertia = MatrixPtr(new Eigen::Matrix<double,6,6>(M_inv));

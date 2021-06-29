@@ -238,7 +238,7 @@ d'angle adoptée.
 
 Lors des calculs de tenue à la mer (avec une formulation fréquentielle), on
 utilise souvent un repère linéarisé. Ce repère, qui peut être impliqué lors du
-lien avec les [bases de données hydrodynamiques](#fichiers-hdb-daqua) issues du
+lien avec les [bases de données hydrodynamiques](#format-hdb-daqua) issues du
 fréquentiel, est calculé de la façon suivante. En faisant l'hypothèse que les
 mouvements sont faibles, on effectue un développement des rotations limité au
 premier ordre et ainsi elles peuvent être exprimées indépendamment par rapport
@@ -251,7 +251,7 @@ Le simulateur est multi-corps en ce sens que plusieurs corps peuvent être
 simulés en même temps. Ainsi, on peut modéliser plusieurs corps mécaniquement
 indépendants, avec leurs interactions hydrodynamiques, pourvu que l'on
 implémente le modèle d'interaction (qui peut venir d'un [fichier
-HDB](#fichiers-hdb-daqua) multicorps). Actuellement, aucun effort d'interaction
+HDB](#format-hdb-daqua) multicorps). Actuellement, aucun effort d'interaction
 ni de liaison cinématique ne sont implémentés.
 
 Chaque corps possède des états, permettant de reconstituer exactement son
@@ -520,7 +520,7 @@ La matrice de masses ajoutées n'est cependant pas équivalente à une masse sup
 les termes de Coriolis et centripète qui correspondraient ne sont pas pris en compte.
 
 Il est également possible d'extrapoler les masses ajoutées à pulsation infinie à
-partir d'un [fichier HDB](#fichiers-hdb). Pour cela, on écrit (pour lire depuis
+partir d'un [fichier HDB](#format-hdb). Pour cela, on écrit (pour lire depuis
 le fichier `test_ship.hdb`) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
@@ -528,13 +528,31 @@ added mass matrix at the center of gravity and projected in the body frame:
     from hdb file: test_ship.hdb
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Dans ce cas, il ne faut pas spécifier les clefs `frame` et `row` (le programme
-lance une exception si on le fait).
-Comme le fichier STL, le chemin du [fichier HDB](#fichiers-hdb) est relatif à l'endroit d'où on
-lance l'exécutable.
-La section correspondante dans le [fichier HDB](#fichiers-hdb) est `Added_mass_Radiation_Damping`.
-La valeur utilisée est la matrice de masse ajoutée à la période minimale définie
-dans le [fichier HDB](#fichiers-hdb) (aucune extrapolation n'est faite).
+On peut également lire cette matrice depuis un fichier PRECAL_R, à condition
+d'avoir activé la clef `calcAmasDampCoefInfFreq` (section `sim` > `parHYD` >
+`calcAmasDampCoefInfFreq` du fichier XML d'entrée de PRECAL_R) :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+added mass matrix at the center of gravity and projected in the body frame:
+    from PRECAL_R: ONRT_SIMMAN.raodb.ini
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Dans le cas où les masses ajoutées proviennent d'un fichier (PRECAL_R ou
+AQUA+/DIODORE), il ne faut pas spécifier les clefs `frame` et `row` (le
+programme s'arrête avec une erreur si on le fait afin d'éviter toute
+ambiguïté). Comme pour les fichiers STL, le chemin vers le fichier (HDB ou
+PRECAL_R) est relatif à l'endroit d'où on lance l'exécutable.
+
+Dans les [fichiers HDB](#format-hdb), la section correspondant aux masses
+ajoutées est `Added_mass_Radiation_Damping`. La valeur utilisée est la matrice
+de masse ajoutée à la période minimale définie dans le [fichier
+HDB](#format-hdb) (aucune extrapolation n'est faite).
+
+Dans les [fichiers PRECAL_R](#format-precal_r) la matrice de masses ajoutées à
+pulsation infinie figure dans la section
+`[added_mass_damping_matrix_inf_freq]`. PRECAL_R calculant directement des
+valeurs asymptotiques à pulsations infinies, aucune interpolation ou
+extrapolation n'est nécessaire.
 
 ### Forçage de degrés de liberté
 
@@ -622,6 +640,8 @@ Il est à noter que ces efforts sont exprimés dans le repère BODY.
 
 ## Fichiers HDB issus d'un calcul fréquentiel
 
+### Format HDB
+
 Le format HDB (Hydrodynamic DataBase) est le format standard du logiciel
 [Diodore](http://www.principia-group.com/blog/product/diodore/). Le logiciel
 AQUA+ (développé et utilisé en interne par l'École Centrale de Nantes et SIREHNA,
@@ -633,6 +653,21 @@ fichiers peuvent être utilisés par xdyn pour calculer :
 - les masses ajoutées (cf. paragraphe précédent)
 - les amortissements de radiation
 - les efforts de diffraction, calculés à partir de fonctions de transfert ([RAO](#efforts-de-diffraction))
+
+### Format PRECAL_R
+
+xdyn peut lire les sorties de PRECAL_R et en extraire les masses ajoutées.
+[PRECAL_R](https://www.marin.nl/facilities-and-tools/software/qship) est un
+logiciel développé par [Marin](https://www.marin.nl) dans le cadre du groupe
+[Cooperative Research Ships (CRS)](https://www.crships.org/). Il résout des
+problèmes de tenue à la mer (diffraction et radiation) par une [méthode
+potentielle](https://en.wikipedia.org/wiki/Potential_flow) comme AQUA+. Il peut
+être utilisé pour calculer les mouvements et les efforts dus aux vagues sur une
+coque quelconque. Il est, entre autre, capable de prendre en compte la stabilisation,
+propose de l'équilinéarisation stochastique et permet un couplage avec la
+structure. PRECAL_R va évoluer à terme vers SEACAL qui améliorera la prise en
+compte de la vitesse d'avance, tout en conservant la même structure de données
+hydrodynamiques exportables, entre autres, vers xdyn.
 
 ### Conventions des fichiers HDB
 
@@ -687,11 +722,13 @@ R_X(\pi)=\left[\begin{array}{ccc} 1 & 0 &0\\0&-1&0\\0&0&-1\end{array}\right]
 M_d = \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right]^\top M \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right]
 ```
 
+### Convention des fichiers PRECAL_R
 
+Les conventions sont les mêmes que pour les fichiers HDB.
 
-Par conséquent, toutes les matrices lues depuis le fichier HDB (masses ajoutées
-et amortissement de radiation) subissent un changement de repère décrit au
-paragraphe suivant.
+Par conséquent, toutes les matrices lues depuis un fichier HDB ou PRECAL_R
+(masses ajoutées et amortissement de radiation) subissent le changement de
+repère décrit au paragraphe suivant.
 
 
 ### Transport des matrices d'inertie et d'amortissement lues depuis le fichier HDB
@@ -984,7 +1021,7 @@ coordonnées dans le repère NED en coordonnées du même point exprimées dans 
 repère de calcul hydrodynamique.
 
 Il convient de distinguer ce repère de celui utilisé dans la base de données
-hydrodynamiques ([fichiers HDB](#fichiers-hdb)), utilisé pour l'expression des
+hydrodynamiques ([fichiers HDB](#format-hdb)), utilisé pour l'expression des
 matrices d'amortissement de radiation, les RAO d'effort (pour le calcul des
 efforts de diffraction) et les masses ajoutées.
 
@@ -1020,7 +1057,7 @@ autour du nouvel axe X.
 Des apostrophes sont utilisées pour indiquer des compositions de rotations
 par rapport au nouveau système d'axes, et donc une composition interne.
 Ainsi `[x,y',z'']` désignera une rotation autour X, suivie d'une rotation autour
-du  nouvel axe Y, appelé Y' et terminée par une rotation autour du nouvel axe Z,
+du nouvel axe Y, appelé Y' et terminée par une rotation autour du nouvel axe Z,
 appelé Z''. La double apostrophe fait référence au deuxième repère utilisée
 pour la composition de rotation.
 

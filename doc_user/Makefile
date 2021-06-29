@@ -24,7 +24,8 @@ concatenated_doc.pmd: \
     tutorial_06.md \
     tutorial_09.md \
     tutorial_10.md \
-    tutorial_11.md
+    tutorial_11.md \
+    tutorial_12.md
 	rm -f concatenated_doc.pmd
 	for f in $^ ; do (cat $$f; echo "") >> concatenated_doc.pmd ; done
 

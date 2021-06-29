@@ -6,6 +6,7 @@
  */
 
 #include "PrecalParserTest.hpp"
+#include "PrecalParser.hpp"
 #include "PrecalParserHelper.hpp"
 #include "precal_test_data.hpp"
 #include <cstdio>
@@ -130,4 +131,96 @@ TEST_F(PrecalParserTest, can_parse_from_file)
     auto precal = parse_precal_from_file(filename);
     ASSERT_EQ("F_drift_m2", precal.raos.at(15).attributes.name);
     remove(filename.c_str());
+}
+
+TEST_F(PrecalParserTest, can_parse_added_mass_multi_line_vector)
+{
+    auto precal = parse_precal_from_string(added_mass_damping_matrix_inf_freq());
+    ASSERT_EQ(1, precal.sections.size());
+    ASSERT_NE(precal.sections.at(0).vector_values.end(),
+              precal.sections.at(0).vector_values.find("total_added_mass_matrix_inf_freq_U1_mu1"));
+    ASSERT_EQ(
+        36, precal.sections.at(0).vector_values["total_added_mass_matrix_inf_freq_U1_mu1"].size());
+    ASSERT_DOUBLE_EQ(
+        0.110E+06,
+        precal.sections.at(0).vector_values["total_added_mass_matrix_inf_freq_U1_mu1"].at(0));
+    ASSERT_DOUBLE_EQ(
+        -0.888E-01,
+        precal.sections.at(0).vector_values["total_added_mass_matrix_inf_freq_U1_mu1"].at(1));
+    ASSERT_DOUBLE_EQ(
+        0.226E+06,
+        precal.sections.at(0).vector_values["total_added_mass_matrix_inf_freq_U1_mu1"].at(2));
+}
+
+TEST_F(PrecalParserTest, can_parse_added_mass_matrix)
+{
+    /* FROM PRECAL_R
+              0.110E+06  -0.888E-01   0.226E+06  -0.144E+00   0.270E+08   0.551E+01
+             -0.122E-01   0.344E+07  -0.563E-02  -0.113E+07   0.157E+02   0.497E+08
+              0.227E+06  -0.898E+00   0.129E+08   0.763E+01   0.844E+08   0.130E+01
+              0.183E+00  -0.123E+07   0.251E+01   0.498E+08   0.104E+03   0.338E+09
+              0.270E+08   0.106E+01   0.845E+08  -0.431E+02   0.119E+11  -0.341E+03
+              0.164E+01   0.497E+08   0.101E+02   0.345E+09  -0.390E+03   0.522E+10
+
+
+    Ma(0,1) = -Ma(0,1);
+    Ma(0,2) = -Ma(0,2);
+    Ma(0,4) = -Ma(0,4);
+    Ma(0,5) = -Ma(0,5);
+    Ma(1,0) = -Ma(1,0);
+    Ma(1,3) = -Ma(1,3);
+    Ma(2,0) = -Ma(2,0);
+    Ma(2,3) = -Ma(2,3);
+    Ma(3,1) = -Ma(3,1);
+    Ma(3,2) = -Ma(3,2);
+    Ma(3,4) = -Ma(3,4);
+    Ma(3,5) = -Ma(3,5);
+    Ma(4,0) = -Ma(4,0);
+    Ma(4,3) = -Ma(4,3);
+    Ma(5,0) = -Ma(5,0);
+    Ma(5,3) = -Ma(5,3);
+    */
+    const auto precal = PrecalParser::from_string(test_data::precal());
+    const auto Ma = precal.get_added_mass();
+    ASSERT_DOUBLE_EQ(0.110E+06, Ma(0, 0));
+    ASSERT_DOUBLE_EQ(0.888E-01, Ma(0, 1));
+    ASSERT_DOUBLE_EQ(-0.226E+06, Ma(0, 2));
+    ASSERT_DOUBLE_EQ(-0.144E+00, Ma(0, 3));
+    ASSERT_DOUBLE_EQ(-0.270E+08, Ma(0, 4));
+    ASSERT_DOUBLE_EQ(-0.551E+01, Ma(0, 5));
+
+    ASSERT_DOUBLE_EQ(0.122E-01, Ma(1, 0));
+    ASSERT_DOUBLE_EQ(0.344E+07, Ma(1, 1));
+    ASSERT_DOUBLE_EQ(-0.563E-02, Ma(1, 2));
+    ASSERT_DOUBLE_EQ(0.113E+07, Ma(1, 3));
+    ASSERT_DOUBLE_EQ(0.157E+02, Ma(1, 4));
+    ASSERT_DOUBLE_EQ(0.497E+08, Ma(1, 5));
+
+    ASSERT_DOUBLE_EQ(-0.227E+06, Ma(2, 0));
+    ASSERT_DOUBLE_EQ(-0.898E+00, Ma(2, 1));
+    ASSERT_DOUBLE_EQ(0.129E+08, Ma(2, 2));
+    ASSERT_DOUBLE_EQ(-0.763E+01, Ma(2, 3));
+    ASSERT_DOUBLE_EQ(0.844E+08, Ma(2, 4));
+    ASSERT_DOUBLE_EQ(0.130E+01, Ma(2, 5));
+
+    ASSERT_DOUBLE_EQ(0.183E+00, Ma(3, 0));
+    ASSERT_DOUBLE_EQ(0.123E+07, Ma(3, 1));
+    ASSERT_DOUBLE_EQ(-0.251E+01, Ma(3, 2));
+    ASSERT_DOUBLE_EQ(0.498E+08, Ma(3, 3));
+    ASSERT_DOUBLE_EQ(-0.104E+03, Ma(3, 4));
+    ASSERT_DOUBLE_EQ(-0.338E+09, Ma(3, 5));
+
+    ASSERT_DOUBLE_EQ(-0.270E+08, Ma(4, 0));
+    ASSERT_DOUBLE_EQ(0.106E+01, Ma(4, 1));
+    ASSERT_DOUBLE_EQ(0.845E+08, Ma(4, 2));
+    ASSERT_DOUBLE_EQ(0.431E+02, Ma(4, 3));
+    ASSERT_DOUBLE_EQ(0.119E+11, Ma(4, 4));
+    ASSERT_DOUBLE_EQ(-0.341E+03, Ma(4, 5));
+
+    ASSERT_DOUBLE_EQ(-0.164E+01, Ma(5, 0));
+    ASSERT_DOUBLE_EQ(0.497E+08, Ma(5, 1));
+    ASSERT_DOUBLE_EQ(0.101E+02, Ma(5, 2));
+    ASSERT_DOUBLE_EQ(-0.345E+09, Ma(5, 3));
+    ASSERT_DOUBLE_EQ(-0.390E+03, Ma(5, 4));
+    ASSERT_DOUBLE_EQ(0.522E+10, Ma(5, 5));
 }

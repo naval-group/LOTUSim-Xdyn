@@ -4,8 +4,8 @@ std::string test_data::precal()
 {
     return glossary_of_terms() + general() + constants() + simulation() + exports()
            + ship_particulars() + mass_properties() + mass_matrix() + restoring_matrix()
-           + natural_periods_and_frequencies() + roll_damping() + labels() + dimensions()
-           + signals() + raos();
+           + natural_periods_and_frequencies() + added_mass_damping_matrix_inf_freq()
+           + roll_damping() + labels() + dimensions() + signals() + raos();
 }
 
 std::string glossary_of_terms()
@@ -408,6 +408,52 @@ std::string natural_periods_and_frequencies()
         "B_55_crit      = {0.146E+01}\n"
         "B_55_crit_unit = kN.m.s\n"
         "\n";
+}
+
+std::string added_mass_damping_matrix_inf_freq()
+{
+    return "[added_mass_damping_matrix_inf_freq]\n"
+           "\n"
+           "total_added_mass_matrix_inf_freq_U1_mu1 = {\n"
+           "0.110E+06,-0.888E-01,0.226E+06,-0.144E+00,0.270E+08,0.551E+01\n"
+           "-0.122E-01,0.344E+07,-0.563E-02,-0.113E+07,0.157E+02,0.497E+08\n"
+           "0.227E+06,-0.898E+00,0.129E+08,0.763E+01,0.844E+08,0.130E+01\n"
+           "0.183E+00,-0.123E+07,0.251E+01,0.498E+08,0.104E+03,0.338E+09\n"
+           "0.270E+08,0.106E+01,0.845E+08,-0.431E+02,0.119E+11,-0.341E+03\n"
+           "0.164E+01,0.497E+08,0.101E+02,0.345E+09,-0.390E+03,0.522E+10\n"
+           "}\n"
+           "\n"
+           "; total_added_mass_matrix_inf_freq\n"
+           "\n"
+           ";   0.110E+06  -0.888E-01   0.226E+06  -0.144E+00   0.270E+08   0.551E+01\n"
+           ";  -0.122E-01   0.344E+07  -0.563E-02  -0.113E+07   0.157E+02   0.497E+08\n"
+           ";   0.227E+06  -0.898E+00   0.129E+08   0.763E+01   0.844E+08   0.130E+01\n"
+           ";   0.183E+00  -0.123E+07   0.251E+01   0.498E+08   0.104E+03   0.338E+09\n"
+           ";   0.270E+08   0.106E+01   0.845E+08  -0.431E+02   0.119E+11  -0.341E+03\n"
+           ";   0.164E+01   0.497E+08   0.101E+02   0.345E+09  -0.390E+03   0.522E+10\n"
+           "\n"
+           "\n"
+           "\n"
+           "\n"
+           "total_damping_matrix_inf_freq_U1_mu1 = {\n"
+           "0.532E+05,-0.434E+00,-0.342E+06,0.766E+00,0.736E+06,0.416E+01\n"
+           "0.774E-01,0.583E+06,-0.113E-01,0.843E+06,-0.197E+02,0.553E+07\n"
+           "-0.449E+05,-0.207E+00,-0.475E+06,-0.645E+00,0.126E+09,0.524E+01\n"
+           "-0.172E+00,0.259E+07,0.592E+01,-0.193E+07,-0.121E+03,0.842E+08\n"
+           "-0.525E+07,-0.686E+01,-0.128E+09,0.115E+03,-0.104E+10,-0.278E+03\n"
+           "0.271E+01,0.718E+08,-0.210E+02,0.317E+08,0.523E+03,0.165E+10\n"
+           "}\n"
+           "\n"
+           "; damping_matrix_inf_freq\n"
+           "\n"
+           ";   0.532E+05  -0.434E+00  -0.342E+06   0.766E+00   0.736E+06   0.416E+01\n"
+           ";   0.774E-01   0.583E+06  -0.113E-01   0.843E+06  -0.197E+02   0.553E+07\n"
+           ";  -0.449E+05  -0.207E+00  -0.475E+06  -0.645E+00   0.126E+09   0.524E+01\n"
+           ";  -0.172E+00   0.259E+07   0.592E+01  -0.193E+07  -0.121E+03   0.842E+08\n"
+           ";  -0.525E+07  -0.686E+01  -0.128E+09   0.115E+03  -0.104E+10  -0.278E+03\n"
+           ";   0.271E+01   0.718E+08  -0.210E+02   0.317E+08   0.523E+03   0.165E+10\n"
+           "\n"
+           "";
 }
 
 std::string roll_damping()
