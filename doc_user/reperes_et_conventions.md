@@ -548,7 +548,7 @@ ajoutées est `Added_mass_Radiation_Damping`. La valeur utilisée est la matrice
 de masse ajoutée à la période minimale définie dans le [fichier
 HDB](#format-hdb) (aucune extrapolation n'est faite).
 
-Dans les [fichiers PRECAL_R](#fichiers-precalr) la matrice de masses ajoutées à
+Dans les [fichiers PRECAL_R](#format-precalr) la matrice de masses ajoutées à
 pulsation infinie figure dans la section
 `[added_mass_damping_matrix_inf_freq]`. PRECAL_R calculant directement des
 valeurs asymptotiques à pulsations infinies, aucune interpolation ou

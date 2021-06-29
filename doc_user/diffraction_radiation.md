@@ -802,7 +802,7 @@ Subroutine Package for Automatic Integration**; Springer Verlag.
 
 Dans le simulateur, la matrice de masses ajoutées est soit lue directement
 depuis le fichier YAML, soit extraite et interpolée linéairement à partir d'un
-[fichier HDB](#format-hdb) ou [PRECAL_R](#fichiers-precalr). Pour le calcul
+[fichier HDB](#format-hdb) ou [PRECAL_R](#format-precalr). Pour le calcul
 des efforts d'amortissement de radiation, on a besoin de la masse ajoutée à
 fréquence infinie. Afin de garantir la symmétrie et le caractère positif et
 défini de la matrice (les coefficients ont tendance à osciller fortement au
