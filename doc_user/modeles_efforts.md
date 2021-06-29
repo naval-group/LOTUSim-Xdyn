@@ -351,7 +351,7 @@ modélisation potentielle.
 ### Calcul numérique
 
 Les RAO d'efforts sont lues à partir d'un [fichier
-HDB](#fichiers-hdb). Cette table donne, une
+HDB](#format-hdb). Cette table donne, une
 fois interpolée, deux fonctions RAO par axe $`k`$
 
 ```math
@@ -431,7 +431,7 @@ M_X\\
 ```
 
 Le torseur calculé est ensuite déplacé par xdyn du point de calcul des
-[fichiers HDB](#fichiers-hdb) au point de résolution du bilan des efforts.
+[fichiers HDB](#format-hdb) au point de résolution du bilan des efforts.
 
 ### Prise en compte de la vitesse d'avance
 
@@ -457,7 +457,7 @@ Ce choix correspond à une approximation qui néglige le couplage entre le champ
 ### Paramétrage
 
 Pour utiliser ce modèle, on écrit `model: diffraction`. Le seul paramètre de ce
-modèle est le chemin vers le [fichier HDB](#fichiers-hdb) contenant les RAO d'effort du premier
+modèle est le chemin vers le [fichier HDB](#format-hdb) contenant les RAO d'effort du premier
 ordre.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
@@ -471,10 +471,10 @@ ordre.
   use encounter period: true
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-La section correspondante dans le [fichier HDB](#fichiers-hdb) est
+La section correspondante dans le [fichier HDB](#format-hdb) est
 `DIFFRACTION_FORCES_AND_MOMENTS`. Il est à noter que le point de calcul ne
 figurant pas dans les [fichiers
-HDB](#fichiers-hdb), il doit être renseigné dans le fichier YAML
+HDB](#format-hdb), il doit être renseigné dans le fichier YAML
 (`calculation point in body frame`) mais qu'aucune vérification ne peut être
 faite.
 

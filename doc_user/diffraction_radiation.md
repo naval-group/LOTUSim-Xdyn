@@ -548,7 +548,7 @@ Et :
 
 ## Calcul numérique des amortissements de radiation
 
-En pratique, on utilise en entrée du simulateur les [fichiers HDB](#fichiers-hdb)
+En pratique, on utilise en entrée du simulateur les [fichiers HDB](#format-hdb)
 (convention d'écriture de base hydrodynamique issue originellement de Diodore),
 qui contiennent les matrices d'amortissement de radiation à
 différentes pulsations. Ces fichiers sont utilisés dans une table
@@ -581,12 +581,12 @@ de repère est nécessaire pour les exprimer dans le repère "body".
 
 Pour utiliser ce modèle, on écrit `model: radiation damping`.
 Les matrices d'amortissement de radiation sont lues depuis un [fichier
-HDB](#fichiers-hdb)
+HDB](#format-hdb)
 (format Diodore). Ce fichier contient les matrices $`B_r`$ pour différentes
 périodes. Comme l'indique la [documentation](#impl%C3%A9mentation), les étapes
 suivantes sont réalisées :
 
-- Lecture du [fichier HDB](#fichiers-hdb) : son chemin est renseigné dans la clef `hdb`.
+- Lecture du [fichier HDB](#format-hdb) : son chemin est renseigné dans la clef `hdb`.
 - Interpolation des matrices de fonction d'amortissement : on utilise des
   splines dites "naturelles", c'est-à-dire
   dont la dérivée seconde est nulle aux extrémités ou, ce qui revient au même,
@@ -802,12 +802,12 @@ Subroutine Package for Automatic Integration**; Springer Verlag.
 
 Dans le simulateur, la matrice de masses ajoutées est soit lue directement
 depuis le fichier YAML, soit extraite et interpolée linéairement à partir d'un
-[fichier HDB](#fichiers-hdb) ou [PRECAL_R](#fichiers-precalr). Pour le calcul
+[fichier HDB](#format-hdb) ou [PRECAL_R](#fichiers-precalr). Pour le calcul
 des efforts d'amortissement de radiation, on a besoin de la masse ajoutée à
 fréquence infinie. Afin de garantir la symmétrie et le caractère positif et
 défini de la matrice (les coefficients ont tendance à osciller fortement au
 voisinage de $`T=0`$), on n'extrapole pas les données du [fichiers
-HDB](#fichiers-hdb) en zéro : on utilise directement les valeurs lues dans le
+HDB](#format-hdb) en zéro : on utilise directement les valeurs lues dans le
 fichier HDB pour la période la plus faible. On suppose que les mailles
 utilisées pour le calcul des masses ajoutées (résolution du potentiel) sont
 suffisamment fines pour que le résultat ait un sens. Les résultats donnés par

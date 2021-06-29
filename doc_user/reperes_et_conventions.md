@@ -238,7 +238,7 @@ d'angle adoptée.
 
 Lors des calculs de tenue à la mer (avec une formulation fréquentielle), on
 utilise souvent un repère linéarisé. Ce repère, qui peut être impliqué lors du
-lien avec les [bases de données hydrodynamiques](#fichiers-hdb-daqua) issues du
+lien avec les [bases de données hydrodynamiques](#format-hdb-daqua) issues du
 fréquentiel, est calculé de la façon suivante. En faisant l'hypothèse que les
 mouvements sont faibles, on effectue un développement des rotations limité au
 premier ordre et ainsi elles peuvent être exprimées indépendamment par rapport
@@ -251,7 +251,7 @@ Le simulateur est multi-corps en ce sens que plusieurs corps peuvent être
 simulés en même temps. Ainsi, on peut modéliser plusieurs corps mécaniquement
 indépendants, avec leurs interactions hydrodynamiques, pourvu que l'on
 implémente le modèle d'interaction (qui peut venir d'un [fichier
-HDB](#fichiers-hdb-daqua) multicorps). Actuellement, aucun effort d'interaction
+HDB](#format-hdb-daqua) multicorps). Actuellement, aucun effort d'interaction
 ni de liaison cinématique ne sont implémentés.
 
 Chaque corps possède des états, permettant de reconstituer exactement son
@@ -520,7 +520,7 @@ La matrice de masses ajoutées n'est cependant pas équivalente à une masse sup
 les termes de Coriolis et centripète qui correspondraient ne sont pas pris en compte.
 
 Il est également possible d'extrapoler les masses ajoutées à pulsation infinie à
-partir d'un [fichier HDB](#fichiers-hdb). Pour cela, on écrit (pour lire depuis
+partir d'un [fichier HDB](#format-hdb). Pour cela, on écrit (pour lire depuis
 le fichier `test_ship.hdb`) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
@@ -546,7 +546,7 @@ PRECAL_R) est relatif à l'endroit d'où on lance l'exécutable.
 Dans les [fichiers HDB](#format-hdb), la section correspondant aux masses
 ajoutées est `Added_mass_Radiation_Damping`. La valeur utilisée est la matrice
 de masse ajoutée à la période minimale définie dans le [fichier
-HDB](#fichiers-hdb) (aucune extrapolation n'est faite).
+HDB](#format-hdb) (aucune extrapolation n'est faite).
 
 Dans les [fichiers PRECAL_R](#fichiers-precalr) la matrice de masses ajoutées à
 pulsation infinie figure dans la section
@@ -1021,7 +1021,7 @@ coordonnées dans le repère NED en coordonnées du même point exprimées dans 
 repère de calcul hydrodynamique.
 
 Il convient de distinguer ce repère de celui utilisé dans la base de données
-hydrodynamiques ([fichiers HDB](#fichiers-hdb)), utilisé pour l'expression des
+hydrodynamiques ([fichiers HDB](#format-hdb)), utilisé pour l'expression des
 matrices d'amortissement de radiation, les RAO d'effort (pour le calcul des
 efforts de diffraction) et les masses ajoutées.
 
