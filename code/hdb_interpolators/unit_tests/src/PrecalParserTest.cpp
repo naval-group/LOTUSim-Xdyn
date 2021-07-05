@@ -12,6 +12,10 @@
 #include <cstdio>
 #include <fstream>
 
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
+
 PrecalParserTest::PrecalParserTest() {}
 
 PrecalParserTest::~PrecalParserTest() {}
@@ -223,4 +227,71 @@ TEST_F(PrecalParserTest, can_parse_added_mass_matrix)
     ASSERT_DOUBLE_EQ(-0.345E+09, Ma(5, 3));
     ASSERT_DOUBLE_EQ(-0.390E+03, Ma(5, 4));
     ASSERT_DOUBLE_EQ(0.522E+10, Ma(5, 5));
+}
+
+
+TEST_F(PrecalParserTest, can_parse_diffraction_module_raos)
+{
+    auto precal = PrecalParser::from_string(test_data::precal_with_diffraction());
+    precal.init_diffraction_tables();
+
+    const std::vector<double> periods = precal.get_diffraction_module_periods();
+    ASSERT_EQ(14, periods.size());
+    ASSERT_DOUBLE_EQ(2 * PI / 0.2, periods.at(0));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.3, periods.at(1));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.4, periods.at(2));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.5, periods.at(3));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.6, periods.at(4));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.7, periods.at(5));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.8, periods.at(6));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.9, periods.at(7));
+    ASSERT_DOUBLE_EQ(2 * PI,       periods.at(8));
+    ASSERT_DOUBLE_EQ(2 * PI / 1.1, periods.at(9));
+    ASSERT_DOUBLE_EQ(2 * PI / 1.2, periods.at(10));
+    ASSERT_DOUBLE_EQ(2 * PI / 1.3, periods.at(11));
+    ASSERT_DOUBLE_EQ(2 * PI / 1.4, periods.at(12));
+    ASSERT_DOUBLE_EQ(2 * PI / 1.5, periods.at(13));
+
+    const std::vector<double> psis = precal.get_diffraction_module_psis();
+    ASSERT_EQ(1, psis.size());
+    ASSERT_DOUBLE_EQ(PI, psis.at(0));
+
+    const std::array<std::vector<std::vector<double>>, 6> table = precal.get_diffraction_module_tables();
+    for (size_t mod_idx = 0; mod_idx < 6; ++mod_idx)
+    {
+        ASSERT_EQ(14, table.at(mod_idx).size());
+        for (size_t period_idx = 0; period_idx < 14; ++period_idx)
+        {
+            ASSERT_EQ(1, table.at(mod_idx).at(period_idx).size());
+        }
+    }
+
+    ASSERT_DOUBLE_EQ(0.836648E+02, table.at(0).at(0).at(0));
+    ASSERT_DOUBLE_EQ(0.810689E-04, table.at(1).at(0).at(0));
+    ASSERT_DOUBLE_EQ(0.168207E+04, table.at(2).at(0).at(0));
+    ASSERT_DOUBLE_EQ(0.384472E-03, table.at(3).at(0).at(0));
+    ASSERT_DOUBLE_EQ(0.246312E+05, table.at(4).at(0).at(0));
+    ASSERT_DOUBLE_EQ(0.268206E-02, table.at(5).at(0).at(0));
+
+    ASSERT_DOUBLE_EQ(0.385371E+03, table.at(0).at(4).at(0));
+    ASSERT_DOUBLE_EQ(0.850933E-03, table.at(1).at(4).at(0));
+    ASSERT_DOUBLE_EQ(0.281333E+04, table.at(2).at(4).at(0));
+    ASSERT_DOUBLE_EQ(0.477974E-02, table.at(3).at(4).at(0));
+    ASSERT_DOUBLE_EQ(0.117914E+06, table.at(4).at(4).at(0));
+    ASSERT_DOUBLE_EQ(0.311582E-01, table.at(5).at(4).at(0));
+
+    ASSERT_DOUBLE_EQ(0.116784E+03, table.at(0).at(9).at(0));
+    ASSERT_DOUBLE_EQ(0.370049E-03, table.at(1).at(9).at(0));
+    ASSERT_DOUBLE_EQ(0.246275E+03, table.at(2).at(9).at(0));
+    ASSERT_DOUBLE_EQ(0.711005E-03, table.at(3).at(9).at(0));
+    ASSERT_DOUBLE_EQ(0.522630E+05, table.at(4).at(9).at(0));
+    ASSERT_DOUBLE_EQ(0.969900E-02, table.at(5).at(9).at(0));
+
+    ASSERT_DOUBLE_EQ(0.694370E+02, table.at(0).at(13).at(0));
+    ASSERT_DOUBLE_EQ(0.723248E-03, table.at(1).at(13).at(0));
+    ASSERT_DOUBLE_EQ(0.655218E+03, table.at(2).at(13).at(0));
+    ASSERT_DOUBLE_EQ(0.254966E-02, table.at(3).at(13).at(0));
+    ASSERT_DOUBLE_EQ(0.504604E+05, table.at(4).at(13).at(0));
+    ASSERT_DOUBLE_EQ(0.916526E-02, table.at(5).at(13).at(0));
+
 }
