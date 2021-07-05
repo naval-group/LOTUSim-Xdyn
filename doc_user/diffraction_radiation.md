@@ -1,13 +1,18 @@
 # Modélisation des efforts de diffraction et de radiation
 
-Cette section propose une décomposition des efforts hydrodynamiques suivant un schéma classiquement utilisé pour la résolution des problèmes de tenue à la mer. Les efforts hydrodynamiques sont alors supposés constitués de la somme  des :
+Cette section propose une décomposition des efforts hydrodynamiques
+suivant un schéma classiquement utilisé pour la résolution des problèmes
+de tenue à la mer. Les efforts hydrodynamiques sont alors supposés
+constitués de la somme des :
+
 - efforts d'excitation résultant des pressions appliquées sur la coque, supposée fixe, par la houle incidente (efforts de Froude-Krylov) et la houle modifiée par le présence du corps (supposé fixe), ou diffraction.
     - la formulation temporelle considérée ici permet en outre d'aller plus loin dans la modélisation des efforts de Froude-Kryolv, en intégrant les pressions de houle incidente sur la géométrie exacte du corps en mouvement par rapport à la surface libre déformée (houle incidente seulement).
+
 - efforts liés aux mouvements du navire en eau initialement calme (sans houle), et à la génération de vagues associée (radiation). Ces efforts sont aux même constitués
     -  de composantes en phase avec l'accélération du corps, et assimilables à des termes inertiels. Ces termes sont d'un ordre de grandeur proche des termes d'inertie mécanique, et doivent être associés à ceux-ci (dans le membre de gauche de l'équation des mouvements à résoudre) afin d'éviter les instabilités numériques qui apparaissent si on les considère comme des efforts extérieurs.
     - de composantes en phase avec les vitesses du corps, correspondant à des termes d'amortissement. Ces termes peuvent être exprimés dans le domaine temporel à partir de formulations impulsionnelles, faisant appel à des informations issues d'un calcul fréquentiel.
-- ces termes d'amortissement sont uniquement d'origine potentielle, et ne sont pas suffisant pour représenter la physique des amortissements pour certaines degrés de liberté, correspondant notamment aux résonances mécaniques. Il est alors nécessaire d'ajouter un amortissement d'orignie visqueuse, qui peut être calcul de différentes manières.
 
+- ces termes d'amortissement sont uniquement d'origine potentielle, et ne sont pas suffisant pour représenter la physique des amortissements pour certaines degrés de liberté, correspondant notamment aux résonances mécaniques. Il est alors nécessaire d'ajouter un amortissement d'orignie visqueuse, qui peut être calcul de différentes manières.
 
 
 ![](images/efforts_hydros.svg)

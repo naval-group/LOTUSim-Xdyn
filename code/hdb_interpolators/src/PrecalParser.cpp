@@ -296,3 +296,33 @@ void PrecalParser::init_diffraction_tables()
     }
 
 }
+
+std::array<std::vector<std::vector<double> >,6 > PrecalParser::get_diffraction_module_tables() const
+{
+    return diffraction_module.values;
+}
+
+std::array<std::vector<std::vector<double> >,6 > PrecalParser::get_diffraction_phase_tables() const
+{
+    return diffraction_phase.values;
+}
+
+std::vector<double> PrecalParser::get_diffraction_module_periods() const
+{
+    return diffraction_module.periods;
+}
+
+std::vector<double> PrecalParser::get_diffraction_phase_periods() const
+{
+    return diffraction_phase.periods;
+}
+
+std::vector<double> PrecalParser::get_diffraction_module_psis() const
+{
+    return diffraction_module.psi;
+}
+
+std::vector<double> PrecalParser::get_diffraction_phase_psis() const
+{
+    return diffraction_phase.psi;
+}
