@@ -8,10 +8,11 @@
 #ifndef __PRECALPARSERHPP__
 #define __PRECALPARSERHPP__
 
+#include "Parser.hpp"
 #include "PrecalParserHelper.hpp"
 #include "TimestampedMatrix.hpp"
 
-class PrecalParser
+class PrecalParser : public Parser
 {
     public:
         PrecalParser() = delete;
