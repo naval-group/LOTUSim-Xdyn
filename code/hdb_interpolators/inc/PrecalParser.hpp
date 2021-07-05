@@ -21,6 +21,10 @@ class PrecalParser
                                              const std::string& vector_key,
                                              const std::string& object_name,
                                              const std::string& not_found_message) const;
+        std::string get_string_value(const std::string& section_title,
+                                     const std::string& string_key,
+                                     const std::string& object_name,
+                                     const std::string& not_found_message) const;
 
         Eigen::Matrix<double,6,6> get_added_mass() const;
 

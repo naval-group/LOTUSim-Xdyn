@@ -115,6 +115,50 @@ std::vector<double> PrecalParser::get_vector_value(const std::string& section_ti
         << not_found_message);
 }
 
+std::string PrecalParser::get_string_value(const std::string& section_title,
+                                           const std::string& string_key,
+                                           const std::string& object_name,
+                                           const std::string& not_found_message) const
+{
+    for (Section section : precal_file.sections)
+    {
+        if (section.title == section_title)
+        {
+            if (section.string_values.find(string_key) == section.string_values.end())
+            {
+                std::stringstream ss;
+                for (const auto kv : section.string_values)
+                {
+                    ss << kv.first << ", ";
+                }
+                if (section.string_values.empty())
+                {
+                    THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                          "There seems to be something wrong with PRECAL_R's output file: we did "
+                          "indeed find section '" << section_title << "' in PRECAL_R's output "
+                          "file, but it didn't contain any strings (in particular, we were not "
+                          "able to find the string '" << string_key << "' which contains the "
+                            << object_name << ").");
+                }
+                else
+                {
+                    THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                          "There seems to be something wrong with PRECAL_R's output file: we did "
+                          "indeed find section '" << section_title << "' in PRECAL_R's output "
+                          "file, but we were not able to find the list '" << string_key << "' "
+                          "which contains the " << object_name << ". We found keys " << ss.str()
+                            << " but none of them matched.");
+                }
+            }
+            const std::string value = section.string_values[string_key];
+            return value;
+        }
+    }
+    THROW(__PRETTY_FUNCTION__, InvalidInputException,
+        "Unable to find section '" << section_title << "' in PRECAL_R's output file. "
+        << not_found_message);
+}
+
 Eigen::Matrix<double, 6, 6> PrecalParser::get_added_mass() const
 {
     Eigen::Matrix<double, 6, 6> Ma;
