@@ -6,6 +6,7 @@
 namespace test_data
 {
     std::string precal();
+    std::string precal_with_diffraction();
 }
 
 std::string glossary_of_terms();
@@ -142,5 +143,11 @@ std::string signal_116();
 std::string signal_117();
 std::string signal_118();
 std::string raos();
+
+std::string simulation_with_diffraction();
+std::string exports_with_diffraction();
+std::string dimensions_with_diffraction();
+std::string signals_with_diffraction();
+std::string raos_with_diffraction();
 
 #endif
