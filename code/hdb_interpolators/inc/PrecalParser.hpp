@@ -9,6 +9,7 @@
 #define __PRECALPARSERHPP__
 
 #include "PrecalParserHelper.hpp"
+#include "TimestampedMatrix.hpp"
 
 class PrecalParser
 {
@@ -27,10 +28,13 @@ class PrecalParser
                                      const std::string& not_found_message) const;
 
         Eigen::Matrix<double,6,6> get_added_mass() const;
+        void init_diffraction_tables();
 
     private:
         PrecalParser(const PrecalFile& precal_file);
         PrecalFile precal_file;
+        RAOData diffraction_module;
+        RAOData diffraction_phase;
 
 
 };

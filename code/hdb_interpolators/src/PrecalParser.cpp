@@ -1,6 +1,10 @@
 #include "PrecalParser.hpp"
 #include "InvalidInputException.hpp"
 
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
+
 PrecalParser PrecalParser::from_string(const std::string& precal_file_contents)
 {
     return PrecalParser(parse_precal_from_string(precal_file_contents));
@@ -12,7 +16,7 @@ PrecalParser PrecalParser::from_file(const std::string& path_to_precal_file)
 }
 
 PrecalParser::PrecalParser(const PrecalFile& precal_file_)
-    : precal_file(precal_file_)
+    : precal_file(precal_file_), diffraction_module(), diffraction_phase()
 {
 }
 
@@ -179,4 +183,116 @@ Eigen::Matrix<double, 6, 6> PrecalParser::get_added_mass() const
     }
     convert_matrix_to_xdyn_frame(Ma);
     return Ma;
+}
+
+void PrecalParser::init_diffraction_tables()
+{
+    // Get the frequencies and directions values for which RAOs will be specified
+    const std::vector<double> frequencies = get_vector_value("Dimensions", "waveFreq",
+                                                             "wave frequencies", "");
+    const std::string frequencies_unit = get_string_value("Dimensions", "unitWaveFreq",
+                                                          "wave frequencies unit", "");
+
+    const std::vector<double> directions = get_vector_value("Dimensions", "waveDir",
+                                                             "wave directions", "");
+    const std::string directions_unit = get_string_value("Dimensions", "unitWaveDir",
+                                                         "wave directions unit", "");
+
+    // Initialize period and psi values for which RAOs will be specified
+    if (frequencies_unit == "rad/s")
+    {
+        for (size_t period_idx = 0 ; period_idx < frequencies.size() ; ++period_idx)
+        {
+            const double period = 2 * PI / frequencies.at(period_idx);
+            diffraction_module.periods.push_back(period);
+            diffraction_phase.periods.push_back(period);
+        }
+    }
+    else
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+            "Unknown unit '" << frequencies_unit << "' for wave frequencies "
+            "in PRECAL_R's output file. Known units: 'rad/s'.");
+    }
+
+    if (directions_unit == "deg")
+    {
+        for (size_t psi_idx = 0 ; psi_idx < directions.size() ; ++psi_idx)
+        {
+            const double psi = directions.at(psi_idx) * PI / 180.;
+            diffraction_module.psi.push_back(psi);
+            diffraction_phase.psi.push_back(psi);
+        }
+    }
+    else
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+            "Unknown unit '" << directions_unit << "' for wave directions "
+            "in PRECAL_R's output file. Known units: 'deg'.");
+    }
+
+    // Initialize the RAOs coefficients with 0s
+    diffraction_module.values.fill(std::vector<std::vector<double>>(
+                                     frequencies.size(), std::vector<double>(directions.size(), 0)
+                                   ));
+    diffraction_phase.values.fill(std::vector<std::vector<double>>(
+                                    frequencies.size(), std::vector<double>(directions.size(), 0)
+                                  ));
+
+    // Read the RAOs for each mode and direction.
+    for (size_t psi_idx = 0 ; psi_idx < directions.size() ; ++psi_idx)
+    {
+        for (size_t mode_idx = 0; mode_idx < 6; ++mode_idx)
+        {
+            const std::string signal_name = "F_dif_m" + std::to_string(mode_idx + 1);
+            bool found_rao = false;
+            for (RAO rao : precal_file.raos)
+            {
+                if (rao.attributes.name.compare(signal_name) == 0)
+                {
+                    found_rao = true;
+                    if (rao.left_column.size() != frequencies.size())
+                    {
+                        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                            "In PRECAL_R's output file, there isn't the expected number of amplitudes "
+                            "in the rao '" << signal_name << "' for direction '"
+                            << directions.at(psi_idx) << "'. Expected " << frequencies.size()
+                            << " values (which is the number of wave frequencies, as defined in "
+                            "'Dimensions'>'waveFreq'), but there are " << rao.left_column.size()
+                            << " values."
+                            );
+                    }
+                    if (rao.right_column.size() != frequencies.size())
+                    {
+                        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                            "In PRECAL_R's output file, there isn't the expected number of phases "
+                            "in the rao '" << signal_name << "' for direction '"
+                            << directions.at(psi_idx) << "'. Expected " << frequencies.size()
+                            << " values (which is the number of wave frequencies, as defined in "
+                            "'Dimensions'>'waveFreq'), but there are " << rao.right_column.size()
+                            << " values."
+                            );
+                    }
+                    for (size_t period_idx = 0 ; period_idx < frequencies.size() ; ++period_idx)
+                    {
+                        diffraction_module.values.at(mode_idx).at(period_idx).at(psi_idx) = 
+                            rao.left_column.at(period_idx);
+
+                        diffraction_phase.values.at(mode_idx).at(period_idx).at(psi_idx) =
+                            rao.right_column.at(period_idx);
+                    }
+                    break;
+                }
+            }
+            if (not(found_rao))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                    "Unable to find rao '" << signal_name << "' for direction '"
+                    << directions.at(psi_idx) << "' in PRECAL_R's output file. "
+                    "Perhaps you didn't set the boolean key 'expDifWaveFrc' to true "
+                    "in PRECAL_R's input file (section Export > expDifWaveFrc)?");
+            }
+        }
+    }
+
 }
