@@ -222,7 +222,28 @@ DiffractionForceModel::Input DiffractionForceModel::parse(const std::string& yam
     YAML::Node node;
     parser.GetNextDocument(node);
     YamlDiffraction ret;
-    node["hdb"]                             >> ret.hdb_filename;
+
+    if (node.FindValue("hdb"))
+    {
+        if (node.FindValue("precal"))
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                  "cannot specify both an HDB filename and a PRECAL_R filename "
+                  "(both keys 'hdb' and 'precal' were found in the YAML file).");
+        }
+        node["hdb"] >> ret.hdb_filename;
+    }
+    else if (node.FindValue("precal"))
+    {
+        node["precal"] >> ret.precal_filename;
+    }
+    else
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+              "should specify either an HDB filename or a PRECAL_R filename "
+              "(no 'hdb' or 'precal' keys were found in the YAML file).");
+    }
+
     node["calculation point in body frame"] >> ret.calculation_point;
     node["mirror for 180 to 360"]           >> ret.mirror;
     parse_optional(node, "use encounter period", ret.use_encounter_period);

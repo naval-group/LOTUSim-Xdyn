@@ -23,6 +23,7 @@ struct YamlDiffraction
 {
     YamlDiffraction();
     std::string           hdb_filename;
+    std::string           precal_filename;
     YamlCoordinates       calculation_point;
     bool                  mirror;
     boost::optional<bool> use_encounter_period;
