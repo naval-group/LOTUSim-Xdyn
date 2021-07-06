@@ -11,7 +11,7 @@
 #include <cmath>
 #define PI M_PI
 
-#include "HDBParser.hpp"
+#include "Parser.hpp"
 #include <algorithm>
 
 std::vector<double> reverse(std::vector<double> t);
@@ -21,7 +21,7 @@ std::vector<double> reverse(std::vector<double> t)
     return t;
 }
 
-DiffractionInterpolator::DiffractionInterpolator(const HDBParser& data, //!< Data read from the HDB file
+DiffractionInterpolator::DiffractionInterpolator(const Parser& data, //!< Data read from the HDB or Precal_R file
                                              const std::vector<double>& omega, //!< Angular frequencies in the wave spectrum (points at which to interpolate the HDB data)
                                              const std::vector<double>& psi, //!< Wave directions (points at which to interpolate the HDB data)
                                              const bool mirror_ //!< Should the RAO for psi between 180° and 360° be calculated by mirroring the RAO between 0° and 180°?
