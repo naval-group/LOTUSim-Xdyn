@@ -11,6 +11,7 @@
 #include "DiffractionForceModel.hpp"
 #include "yaml_data.hpp"
 #include "hdb_data.hpp"
+#include "precal_test_data.hpp"
 #include "DiracSpectralDensity.hpp"
 #include "DiracDirectionalSpreading.hpp"
 #include "YamlWaveModelInput.hpp"
@@ -37,15 +38,40 @@ void DiffractionForceModelTest::TearDown()
 {
 }
 
-TEST_F(DiffractionForceModelTest, parser)
+TEST_F(DiffractionForceModelTest, parser_hdb)
 {
     const YamlDiffraction r = DiffractionForceModel::parse(test_data::diffraction());
     ASSERT_EQ("test_ship.hdb", r.hdb_filename);
+    ASSERT_TRUE(r.precal_filename.empty());
     ASSERT_EQ(0.696, r.calculation_point.x);
     ASSERT_EQ(0, r.calculation_point.y);
     ASSERT_EQ(1.418, r.calculation_point.z);
     ASSERT_TRUE(r.mirror);
     ASSERT_TRUE(r.use_encounter_period);
+}
+
+TEST_F(DiffractionForceModelTest, parser_precalr)
+{
+    const YamlDiffraction r = DiffractionForceModel::parse(test_data::diffraction_precalr());
+    ASSERT_EQ("test_ship.raodb.ini", r.precal_filename);
+    ASSERT_TRUE(r.hdb_filename.empty());
+    ASSERT_EQ(0, r.calculation_point.x);
+    ASSERT_EQ(0, r.calculation_point.y);
+    ASSERT_EQ(0, r.calculation_point.z);
+    ASSERT_TRUE(r.mirror);
+    ASSERT_TRUE(r.use_encounter_period);
+}
+
+TEST_F(DiffractionForceModelTest, parser_precalr_ignores_calculation_point)
+{
+    const YamlDiffraction r = DiffractionForceModel::parse(test_data::diffraction_precalr() +
+       "calculation point in body frame:\n"
+       "    x: {value: 0.696, unit: m}\n"
+       "    y: {value: 0, unit: m}\n"
+       "    z: {value: 1.418, unit: m}\n");
+    ASSERT_EQ(0, r.calculation_point.x);
+    ASSERT_EQ(0, r.calculation_point.y);
+    ASSERT_EQ(0, r.calculation_point.z);
 }
 
 TR1(shared_ptr)<WaveModel> get_wave_model(const double period, const double direction=0., const double height=1.)
@@ -176,4 +202,88 @@ TEST_F(DiffractionForceModelTest, encounter_frequency_example)
     ASSERT_NEAR(F.N(), -2.301511e7*sin(5.846877e-1), 12000);// Still a small relative error
 }
 
+TEST_F(DiffractionForceModelTest, precal_r_example)
+{
+    EnvironmentAndFrames env = get_waves_env(10.47198, 0.);
+    BodyStates states;
+    std::ofstream precalr_file("data.raodb.ini");
+    precalr_file << test_data::precal();
+    YamlDiffraction input;
+    input.calculation_point = YamlCoordinates(0, 0, 0);
+    input.precal_filename = "data.raodb.ini";
+    input.mirror = true;
+    input.use_encounter_period = true;
+    const DiffractionForceModel force_model(input, BODY_NAME, env);
+    double T = 10.47198;
 
+    // Ship heading is always 0 (due North), encounter period varies with U and wave heading
+    // Values from the force model are compared to values from the PRECAL_R data (amplitude and phase)
+
+    // First battery of tests: wave direction=-180° (due South)
+    env = get_waves_env(T, -M_PI);
+
+    // U=0, wave direction=-180° -> encounter period = wave period = 10.47198s (frequency = 0.6 rad/s), incidence = 180°
+    states = get_states_with_forward_speed(0.);
+    auto F = force_model.get_force(states, 0., env, {});
+    ASSERT_NEAR(F.X(),  0.447085E+03 * 1e3 * sin( -28.844746 * M_PI / 180.), std::abs(F.X() * 1e-4));
+    ASSERT_NEAR(F.Y(), -0.112772E-02 * 1e3 * sin(-170.478134 * M_PI / 180.), std::abs(F.Y() * 1e-4));
+    ASSERT_NEAR(F.Z(), -0.309840E+04 * 1e3 * sin(-116.540771 * M_PI / 180.), std::abs(F.Z() * 1e-4));
+    ASSERT_NEAR(F.K(),  0.148446E-02 * 1e3 * sin(-102.782616 * M_PI / 180.), std::abs(F.K() * 1e-4));
+    ASSERT_NEAR(F.M(), -0.145031E+06 * 1e3 * sin( -39.633919 * M_PI / 180.), std::abs(F.M() * 1e-4));
+    ASSERT_NEAR(F.N(), -0.808052E-01 * 1e3 * sin( -21.082087 * M_PI / 180.), std::abs(F.N() * 1e-4));
+
+    // U=-5.45, wave direction=-180°, wave period = 10.47198s -> encounter frequency = 0.4 rad/s, incidence = 180°
+    states = get_states_with_forward_speed(-5.45);
+    F = force_model.get_force(states, 0., env, {});
+    ASSERT_NEAR(F.X(),  0.614690E+02 * 1e3 * sin( -78.508087 * M_PI / 180.), std::abs(F.X() * 1e-4));
+    ASSERT_NEAR(F.Y(), -0.121771E-02 * 1e3 * sin( -81.328613 * M_PI / 180.), std::abs(F.Y() * 1e-4));
+    ASSERT_NEAR(F.Z(), -0.444548E+04 * 1e3 * sin(-131.685837 * M_PI / 180.), std::abs(F.Z() * 1e-4));
+    ASSERT_NEAR(F.K(),  0.927719E-04 * 1e3 * sin(-127.574928 * M_PI / 180.), std::abs(F.K() * 1e-4));
+    ASSERT_NEAR(F.M(), -0.481271E+05 * 1e3 * sin( -97.924873 * M_PI / 180.), std::abs(F.M() * 1e-4));
+    ASSERT_NEAR(F.N(), -0.151559E-01 * 1e3 * sin( -68.464912 * M_PI / 180.), std::abs(F.N() * 1e-4));
+
+    // U=10.9, wave direction=-180°, wave period = 10.47198s -> encounter frequency = 1 rad/s, incidence = 180°
+    states = get_states_with_forward_speed(10.9);
+    F = force_model.get_force(states, 0., env, {});
+    ASSERT_NEAR(F.X(),  0.188522E+03 * 1e3 * sin( 155.721146 * M_PI / 180.), std::abs(F.X() * 1e-4));
+    ASSERT_NEAR(F.Y(), -0.390895E-03 * 1e3 * sin( -84.802406 * M_PI / 180.), std::abs(F.Y() * 1e-4));
+    ASSERT_NEAR(F.Z(), -0.832559E+03 * 1e3 * sin( 112.416695 * M_PI / 180.), std::abs(F.Z() * 1e-4));
+    ASSERT_NEAR(F.K(),  0.112438E-02 * 1e3 * sin(-149.386047 * M_PI / 180.), std::abs(F.K() * 1e-4));
+    ASSERT_NEAR(F.M(), -0.553710E+05 * 1e3 * sin( 179.790375 * M_PI / 180.), std::abs(F.M() * 5e-3));
+    ASSERT_NEAR(F.N(), -0.967943E-02 * 1e3 * sin( 163.360352 * M_PI / 180.), std::abs(F.N() * 1e-4));
+
+    // Second battery of tests: wave direction=-90° (North-West)
+    env = get_waves_env(T, -90.*M_PI/180);
+
+    // U=0, wave direction=-90° -> encounter period = wave period = 10.47198s (frequency = 0.6 rad/s), incidence = 90°
+    states = get_states_with_forward_speed(0.);
+    F = force_model.get_force(states, 0., env, {});
+    ASSERT_NEAR(F.X(),  0.213802E+03 * 1e3 * sin( 146.941406 * M_PI / 180.), std::abs(F.X() * 1e-4));
+    ASSERT_NEAR(F.Y(), -0.253451E+04 * 1e3 * sin( -75.123482 * M_PI / 180.), std::abs(F.Y() * 1e-4));
+    ASSERT_NEAR(F.Z(), -0.841796E+04 * 1e3 * sin(-131.750656 * M_PI / 180.), std::abs(F.Z() * 1e-4));
+    ASSERT_NEAR(F.K(),  0.126249E+04 * 1e3 * sin(  46.827698 * M_PI / 180.), std::abs(F.K() * 1e-4));
+    ASSERT_NEAR(F.M(), -0.668399E+05 * 1e3 * sin( 172.587128 * M_PI / 180.), std::abs(F.M() * 1e-4));
+    ASSERT_NEAR(F.N(), -0.496977E+05 * 1e3 * sin( -47.521080 * M_PI / 180.), std::abs(F.N() * 1e-4));
+
+    // U=10, wave direction=-90° -> encounter period = wave period = 15.70796s (frequency = 0.4 rad/s), incidence = 90°
+    env = get_waves_env(15.70796, -90.*M_PI/180);
+    states = get_states_with_forward_speed(10);
+    F = force_model.get_force(states, 0., env, {});
+    ASSERT_NEAR(F.X(),  0.127820E+03 * 1e3 * sin( 116.837296 * M_PI / 180.), std::abs(F.X() * 1e-4));
+    ASSERT_NEAR(F.Y(), -0.117869E+04 * 1e3 * sin( -82.125160 * M_PI / 180.), std::abs(F.Y() * 1e-4));
+    ASSERT_NEAR(F.Z(), -0.514178E+04 * 1e3 * sin(-147.132416 * M_PI / 180.), std::abs(F.Z() * 1e-4));
+    ASSERT_NEAR(F.K(),  0.111813E+04 * 1e3 * sin(  30.492355 * M_PI / 180.), std::abs(F.K() * 1e-4));
+    ASSERT_NEAR(F.M(), -0.381031E+05 * 1e3 * sin( 148.914230 * M_PI / 180.), std::abs(F.M() * 1e-4));
+    ASSERT_NEAR(F.N(), -0.271359E+05 * 1e3 * sin( -37.329960 * M_PI / 180.), std::abs(F.N() * 1e-4));
+
+    // U=-10, wave direction=-90° -> encounter period = wave period = 6.28319s (frequency = 1 rad/s), incidence = 90°
+    env = get_waves_env(6.28319, -90.*M_PI/180);
+    states = get_states_with_forward_speed(-12.586);
+    F = force_model.get_force(states, 0., env, {});
+    ASSERT_NEAR(F.X(),  0.231034E+03 * 1e3 * sin( 162.160065 * M_PI / 180.), std::abs(F.X() * 1e-4));
+    ASSERT_NEAR(F.Y(), -0.275595E+04 * 1e3 * sin( -50.503010 * M_PI / 180.), std::abs(F.Y() * 1e-4));
+    ASSERT_NEAR(F.Z(), -0.117092E+05 * 1e3 * sin(-128.845367 * M_PI / 180.), std::abs(F.Z() * 1e-4));
+    ASSERT_NEAR(F.K(),  0.571309E+04 * 1e3 * sin( -57.190521 * M_PI / 180.), std::abs(F.K() * 1e-4));
+    ASSERT_NEAR(F.M(), -0.888754E+05 * 1e3 * sin(-163.850571 * M_PI / 180.), std::abs(F.M() * 1e-4));
+    ASSERT_NEAR(F.N(), -0.117203E+06 * 1e3 * sin( -47.279522 * M_PI / 180.), std::abs(F.N() * 1e-4));
+}

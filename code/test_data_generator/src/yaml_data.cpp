@@ -2005,6 +2005,16 @@ std::string test_data::diffraction()
     return ss.str();
 }
 
+std::string test_data::diffraction_precalr()
+{
+    std::stringstream ss;
+    ss << "model: diffraction\n"
+       << "precal: test_ship.raodb.ini\n"
+       << "mirror for 180 to 360: true\n"
+       << "use encounter period: true\n";
+    return ss.str();
+}
+
 std::string test_data::test_ship_radiation_damping()
 {
     std::stringstream ss;
