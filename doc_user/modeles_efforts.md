@@ -508,13 +508,15 @@ Les RAOs sont alors présents dans les signaux `F_dif_m[...]` de la section `[RA
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: diffraction
   precal: test_ship.raodb.ini
-  calculation point in body frame:
-      x: {value: 0.696, unit: m}
-      y: {value: 0, unit: m}
-      z: {value: 1.418, unit: m}
   mirror for 180 to 360: true
   use encounter period: true
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Contrairement au cas d'un fichier HDB, le point de calcul est connu : il s'agit du centre de
+gravité. Il ne faut donc pas renseigner le champ `calculation point in body frame` dans le fichier
+YAML.
+
+Les autres paramètres sont identiques à ceux du cas du fichier HDB (présenté ci-dessus).
 
 ### Références
 

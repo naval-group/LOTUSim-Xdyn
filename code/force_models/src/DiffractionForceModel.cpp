@@ -242,10 +242,12 @@ DiffractionForceModel::Input DiffractionForceModel::parse(const std::string& yam
                   "(both keys 'hdb' and 'precal' were found in the YAML file).");
         }
         node["hdb"] >> ret.hdb_filename;
+        node["calculation point in body frame"] >> ret.calculation_point;
     }
     else if (node.FindValue("precal"))
     {
         node["precal"] >> ret.precal_filename;
+        ret.calculation_point = YamlCoordinates(0, 0, 0);
     }
     else
     {
@@ -254,7 +256,6 @@ DiffractionForceModel::Input DiffractionForceModel::parse(const std::string& yam
               "(no 'hdb' or 'precal' keys were found in the YAML file).");
     }
 
-    node["calculation point in body frame"] >> ret.calculation_point;
     node["mirror for 180 to 360"]           >> ret.mirror;
     parse_optional(node, "use encounter period", ret.use_encounter_period);
     return ret;
