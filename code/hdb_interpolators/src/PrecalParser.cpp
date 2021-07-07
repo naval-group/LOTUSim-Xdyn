@@ -283,13 +283,25 @@ void PrecalParser::init_diffraction_tables()
                                 << " values."
                                 );
                         }
+                        if (rao.attributes.amplitude_unit != "kN/m" && rao.attributes.amplitude_unit != "kN.m/m")
+                        {
+                            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                                "Unknown unit '" << rao.attributes.amplitude_unit << "' for diffraction RAO "
+                                "amplitudes in PRECAL_R's output file. Known units: 'kN/m', 'kN.m/m'.");
+                        }
+                        if (rao.attributes.phase_unit != "deg")
+                        {
+                            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                                "Unknown unit '" << rao.attributes.phase_unit << "' for diffraction RAO phases "
+                                "in PRECAL_R's output file. Known units: 'deg'.");
+                        }
                         for (size_t period_idx = 0 ; period_idx < frequencies.size() ; ++period_idx)
                         {
                             modules.values.at(mode_idx).at(period_idx).at(psi_idx) = 
-                                rao.left_column.at(period_idx);
+                                rao.left_column.at(period_idx) * 1e3;
 
                             phases.values.at(mode_idx).at(period_idx).at(psi_idx) =
-                                rao.right_column.at(period_idx);
+                                rao.right_column.at(period_idx) * PI / 180.;
                         }
                         break;
                     }
