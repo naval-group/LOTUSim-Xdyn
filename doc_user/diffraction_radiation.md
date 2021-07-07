@@ -630,7 +630,7 @@ suivantes sont réalisées :
   utilisés). Pour activer la verbosité, on met la clef `output Br and K` à
   `true`. Sinon on la met à `false`.
 - Utilisation de la vitesse d'oscillation : lorsque la clef booléenne `remove constant speed` vaut `true`, xdyn va soustraire la vitesse moyenne $`Vs`$ (calculée sur la période `tau max`) à la vitesse totale $`\dot{X}_b`$ pour utiliser la vitesse d'oscillation $`\dot{X}`$ pour le calcul de l'effort de radiation. Si cette clef est fixée à `false`, **xdyn utilise la vitesse totale**. Ce paramètre est optionnel et sa valeur par défaut est `false`.
-- Correction avec vitesse d'avance : la clée booléenne `forward speed correction` peut prendre la valeur `true` pour appliquer la correction des coefficients avec vitesse d'avance. Cette clé est optionelle et peut donc être omise, la correction ne sera alors pas appliquée.
+- Correction avec vitesse d'avance : la clé booléenne `forward speed correction` peut prendre la valeur `true` pour appliquer la correction des coefficients avec vitesse d'avance. Cette clé est optionelle et peut donc être omise, la correction ne sera alors pas appliquée.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: radiation damping
