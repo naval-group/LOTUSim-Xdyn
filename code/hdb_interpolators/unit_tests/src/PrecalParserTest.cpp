@@ -233,7 +233,6 @@ TEST_F(PrecalParserTest, can_parse_added_mass_matrix)
 TEST_F(PrecalParserTest, can_parse_diffraction_module_raos)
 {
     auto precal = PrecalParser::from_string(test_data::precal_with_diffraction());
-    precal.init_diffraction_tables();
 
     const std::vector<double> periods = precal.get_diffraction_module_periods();
     ASSERT_EQ(14, periods.size());

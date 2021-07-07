@@ -8,9 +8,9 @@
 #ifndef __PRECALPARSERHPP__
 #define __PRECALPARSERHPP__
 
+#include <boost/variant.hpp>
 #include "HydroDBParser.hpp"
 #include "PrecalParserHelper.hpp"
-#include "TimestampedMatrix.hpp"
 
 class PrecalParser : public HydroDBParser
 {
@@ -41,9 +41,8 @@ class PrecalParser : public HydroDBParser
     private:
         PrecalParser(const PrecalFile& precal_file);
         PrecalFile precal_file;
-        RAOData diffraction_module;
-        RAOData diffraction_phase;
-
+        boost::variant<RAOData,std::string> diffraction_module;
+        boost::variant<RAOData,std::string> diffraction_phase;
 
 };
 

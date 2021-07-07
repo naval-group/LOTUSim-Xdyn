@@ -8,13 +8,10 @@
 #ifndef HDBPARSER_HPP_
 #define HDBPARSER_HPP_
 
-#include <Eigen/Dense>
-
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 
 #include "HydroDBParser.hpp"
-#include "TimestampedMatrix.hpp"
 
 /** \brief
  *  \details
