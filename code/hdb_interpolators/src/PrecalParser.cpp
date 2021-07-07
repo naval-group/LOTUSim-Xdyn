@@ -186,6 +186,10 @@ Eigen::Matrix<double, 6, 6> PrecalParser::get_added_mass() const
     return Ma;
 }
 
+std::function<bool(double, double)> double_eq = [](double d1, double d2){
+    return fabs(d1 - d2) <= std::numeric_limits<double>::epsilon();
+};
+
 void PrecalParser::init_diffraction_tables()
 {
     RAOData modules;
@@ -254,7 +258,7 @@ void PrecalParser::init_diffraction_tables()
                 bool found_rao = false;
                 for (RAO rao : precal_file.raos)
                 {
-                    if (rao.attributes.name.compare(signal_name) == 0)
+                    if (rao.attributes.name.compare(signal_name) == 0 && double_eq(rao.attributes.mu, directions.at(psi_idx)) )
                     {
                         found_rao = true;
                         if (rao.left_column.size() != frequencies.size())
