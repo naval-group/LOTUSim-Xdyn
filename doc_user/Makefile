@@ -1,6 +1,9 @@
 .PHONY: all build clean check images
 
-all: check doc.html
+all: check doc.html training/remote_models.pptx
+
+training/remote_models.pptx:
+	@make -C training
 
 check: build concatenated_doc.md
 	@docker run -t --rm -u $(shell id -u):$(shell id -g) --entrypoint xdyn -w /work -v $(shell pwd)/tuto_execution:/work xweave tutorial_06_propulsion.yml --dt 0.1 --tend 1 > err
