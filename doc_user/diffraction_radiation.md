@@ -833,6 +833,10 @@ Si la clef `calcAmasDampCoefInfFreq` du fichier de paramètres de PRECAL_R est �
 `true`, PRECAL_R écrit la matrice de masses ajoutées à pulsation infinie
 (utilisée par xdyn) dans la section `[added_mass_damping_matrix_inf_freq]`.
 
+⚠ Si plusieurs vitesses d'avance ou plusieurs incidences de houle sont spécifiées dans le fichier
+PRECAL_R, seule la matrice concernant la première de ces vitesses et la première de ces incidences
+est prise en compte (il s'agit de la matrice `total_added_mass_matrix_inf_freq_U1_mu1`).
+
 ## Références
 
 - *Practical Source Code for Ship Motions Time Domain Numerical Analysis and

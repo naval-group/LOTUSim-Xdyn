@@ -518,6 +518,9 @@ YAML.
 
 Les autres paramètres sont identiques à ceux du cas du fichier HDB (présenté ci-dessus).
 
+⚠ Si plusieurs vitesses d'avance sont spécifiées dans le fichier PRECAL_R,
+seuls les RAO concernant la première de ces vitesses sont pris en compte.
+
 ### Références
 
 - *Notice d'utilisation AQUA+ 1.1/MF/N1*, septembre 1993, G. Delhommeau,
