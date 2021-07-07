@@ -8,11 +8,11 @@
 #ifndef __PRECALPARSERHPP__
 #define __PRECALPARSERHPP__
 
-#include "Parser.hpp"
+#include "HydroDBParser.hpp"
 #include "PrecalParserHelper.hpp"
 #include "TimestampedMatrix.hpp"
 
-class PrecalParser : public Parser
+class PrecalParser : public HydroDBParser
 {
     public:
         PrecalParser() = delete;

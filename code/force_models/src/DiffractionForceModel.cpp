@@ -9,8 +9,8 @@
 
 #include "Body.hpp"
 #include "DiffractionInterpolator.hpp"
-#include "Parser.hpp"
 #include "HDBParser.hpp"
+#include "HydroDBParser.hpp"
 #include "PrecalParser.hpp"
 #include "InvalidInputException.hpp"
 #include "InternalErrorException.hpp"
@@ -27,14 +27,14 @@
 
 std::string DiffractionForceModel::model_name() { return "diffraction";}
 
-std::shared_ptr<Parser> parser_factory(const std::string& hdb_filename, const std::string& precal_filename);
-std::shared_ptr<Parser> parser_factory(const std::string& hdb_filename, const std::string& precal_filename)
+std::shared_ptr<HydroDBParser> parser_factory(const std::string& hdb_filename, const std::string& precal_filename);
+std::shared_ptr<HydroDBParser> parser_factory(const std::string& hdb_filename, const std::string& precal_filename)
 {
     if (hdb_filename.empty())
     {
-        return std::shared_ptr<Parser>(new PrecalParser(PrecalParser::from_file(precal_filename)));
+        return std::shared_ptr<HydroDBParser>(new PrecalParser(PrecalParser::from_file(precal_filename)));
     }
-    return std::shared_ptr<Parser>(new HDBParser(ssc::text_file_reader::TextFileReader(hdb_filename).get_contents()));
+    return std::shared_ptr<HydroDBParser>(new HDBParser(ssc::text_file_reader::TextFileReader(hdb_filename).get_contents()));
 }
 
 void check_all_omegas_are_within_bounds(const double min_bound, const std::vector<std::vector<double> >& vector_to_check, const double max_bound);
@@ -81,7 +81,7 @@ class DiffractionForceModel::Impl
 {
     public:
 
-        Impl(const YamlDiffraction& data, const EnvironmentAndFrames& env, const Parser& parser, const std::string& body_name):
+        Impl(const YamlDiffraction& data, const EnvironmentAndFrames& env, const HydroDBParser& parser, const std::string& body_name):
                 H0(data.calculation_point.x,data.calculation_point.y,data.calculation_point.z),
                 response(DiffractionInterpolator(parser, std::vector<double>(), std::vector<double>(), data.mirror)),
                 use_encounter_period(false)
