@@ -192,6 +192,41 @@ Eigen::Matrix<double, 6, 6> PrecalParser::get_added_mass() const
 std::function<bool(double, double)> double_eq
     = [](double d1, double d2) { return fabs(d1 - d2) <= std::numeric_limits<double>::epsilon(); };
 
+bool rao_is_valid_and_corresponds_to_signal_and_direction(const RAO& rao,
+                                                          const std::string& signal_name,
+                                                          const double& direction_in_degrees,
+                                                          const size_t& input_frequencies_size);
+bool rao_is_valid_and_corresponds_to_signal_and_direction(const RAO& rao,
+                                                          const std::string& signal_name,
+                                                          const double& direction_in_degrees,
+                                                          const size_t& input_frequencies_size)
+{
+    if (rao.attributes.name.compare(signal_name) == 0
+        && double_eq(rao.attributes.mu, direction_in_degrees))
+    {
+        if (rao.left_column.size() != input_frequencies_size)
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                  "In PRECAL_R's output file, there isn't the expected number of amplitudes "
+                  "in the rao '" << signal_name << "' for direction '" << direction_in_degrees
+                  << "'. Expected " << input_frequencies_size << " values (which is the number "
+                  "of wave frequencies, as defined in 'Dimensions'>'waveFreq'), but there are "
+                  << rao.left_column.size() << " values.");
+        }
+        if (rao.right_column.size() != input_frequencies_size)
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                  "In PRECAL_R's output file, there isn't the expected number of phases "
+                  "in the rao '" << signal_name << "' for direction '" << direction_in_degrees
+                  << "'. Expected " << input_frequencies_size << " values (which is the number "
+                  "of wave frequencies, as defined in 'Dimensions'>'waveFreq'), but there are "
+                  << rao.right_column.size() << " values.");
+        }
+        return true;
+    }
+    return false;
+}
+
 void PrecalParser::init_diffraction_tables()
 {
     RAOData modules;
@@ -273,34 +308,13 @@ void PrecalParser::init_diffraction_tables()
             {
                 const std::string signal_name = "F_dif_m" + std::to_string(mode_idx + 1);
                 bool found_rao = false;
+
                 for (RAO rao : precal_file.raos)
                 {
-                    if (rao.attributes.name.compare(signal_name) == 0
-                        && double_eq(rao.attributes.mu, directions.at(psi_idx)))
+                    if (rao_is_valid_and_corresponds_to_signal_and_direction(
+                            rao, signal_name, directions.at(psi_idx), input_frequencies.size()))
                     {
                         found_rao = true;
-                        if (rao.left_column.size() != frequencies.size())
-                        {
-                            THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                                "In PRECAL_R's output file, there isn't the expected number of amplitudes "
-                                "in the rao '" << signal_name << "' for direction '"
-                                << directions.at(psi_idx) << "'. Expected " << frequencies.size()
-                                << " values (which is the number of wave frequencies, as defined in "
-                                "'Dimensions'>'waveFreq'), but there are " << rao.left_column.size()
-                                << " values."
-                                );
-                        }
-                        if (rao.right_column.size() != frequencies.size())
-                        {
-                            THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                                "In PRECAL_R's output file, there isn't the expected number of phases "
-                                "in the rao '" << signal_name << "' for direction '"
-                                << directions.at(psi_idx) << "'. Expected " << frequencies.size()
-                                << " values (which is the number of wave frequencies, as defined in "
-                                "'Dimensions'>'waveFreq'), but there are " << rao.right_column.size()
-                                << " values."
-                                );
-                        }
                         if (rao.attributes.amplitude_unit != "kN/m"
                             && rao.attributes.amplitude_unit != "kN.m/m")
                         {
