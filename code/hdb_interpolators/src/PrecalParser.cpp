@@ -8,6 +8,8 @@
 #include <cmath>
 #define PI M_PI
 
+#define DEG2RAD (PI/180.)
+
 PrecalParser PrecalParser::from_string(const std::string& precal_file_contents)
 {
     return PrecalParser(parse_precal_from_string(precal_file_contents));
@@ -238,13 +240,27 @@ void PrecalParser::init_diffraction_tables()
             = get_vector_value("Dimensions", "waveFreq", "wave frequencies", "");
         const std::string frequencies_unit
             = get_string_value("Dimensions", "unitWaveFreq", "wave frequencies unit", "");
+        if (frequencies_unit != "rad/s")
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                  "Unknown unit '" << frequencies_unit
+                                   << "' for wave frequencies in PRECAL_R's output file. "
+                                      "Known units: 'rad/s'.");
+        }
 
         const std::vector<double> input_directions
             = get_vector_value("Dimensions", "waveDir", "wave directions", "");
         const std::string directions_unit
             = get_string_value("Dimensions", "unitWaveDir", "wave directions unit", "");
+        if (directions_unit != "deg")
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                  "Unknown unit '" << directions_unit
+                                   << "' for wave directions in PRECAL_R's output file. "
+                                      "Known units: 'deg'.");
+        }
 
-        // Sort frequencies and psi values for which RAOs will be specified
+        // Sort frequencies and directions values for which RAOs will be specified
         std::vector<std::pair<size_t, double> > frequencies;
         size_t i = 0;
         std::transform(input_frequencies.begin(), input_frequencies.end(),
@@ -253,6 +269,7 @@ void PrecalParser::init_diffraction_tables()
         std::sort(
             frequencies.begin(), frequencies.end(),
             [](const std::pair<size_t, double>& left, const std::pair<size_t, double>& right) {
+                // the periods should be sorted in ascendant order, so the frequencies should be sorted in decreasing order.
                 return left.second >= right.second;
             });
 
@@ -260,39 +277,20 @@ void PrecalParser::init_diffraction_tables()
         sorted_directions.sort();
         std::vector<double> directions(sorted_directions.begin(), sorted_directions.end());
 
-        // Convert period and psi values to S.I. units
-        if (frequencies_unit == "rad/s")
+        // Insert sorted periods in modules and phases vectors
+        for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
         {
-            for (size_t period_idx = 0; period_idx < frequencies.size(); ++period_idx)
-            {
-                const double period = 2 * PI / frequencies.at(period_idx).second;
-                modules.periods.push_back(period);
-                phases.periods.push_back(period);
-            }
-        }
-        else
-        {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                  "Unknown unit '" << frequencies_unit
-                                   << "' for wave frequencies in PRECAL_R's output file. "
-                                      "Known units: 'rad/s'.");
+            const double period = 2 * PI / frequencies.at(frequency_idx).second;
+            modules.periods.push_back(period);
+            phases.periods.push_back(period);
         }
 
-        if (directions_unit == "deg")
+        // Insert sorted directions in modules and phases vectors (converting them to S.I. units)
+        for (size_t psi_idx = 0; psi_idx < directions.size(); ++psi_idx)
         {
-            for (size_t psi_idx = 0; psi_idx < directions.size(); ++psi_idx)
-            {
-                const double psi = directions.at(psi_idx) * PI / 180.;
-                modules.psi.push_back(psi);
-                phases.psi.push_back(psi);
-            }
-        }
-        else
-        {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                  "Unknown unit '" << directions_unit
-                                   << "' for wave directions in PRECAL_R's output file. "
-                                      "Known units: 'deg'.");
+            const double psi = directions.at(psi_idx) * DEG2RAD;
+            modules.psi.push_back(psi);
+            phases.psi.push_back(psi);
         }
 
         // Initialize the RAOs coefficients with 0s
@@ -328,14 +326,15 @@ void PrecalParser::init_diffraction_tables()
                                 "Unknown unit '" << rao.attributes.phase_unit << "' for diffraction RAO phases "
                                 "in PRECAL_R's output file. Known units: 'deg'.");
                         }
-                        for (size_t period_idx = 0; period_idx < frequencies.size(); ++period_idx)
+                        // Insert the RAO values for each period.
+                        for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
                         {
-                            const size_t period_idx_in_input_file
-                                = frequencies.at(period_idx).first;
-                            modules.values.at(mode_idx).at(period_idx).at(psi_idx)
-                                = rao.left_column.at(period_idx_in_input_file) * 1e3;
-                            phases.values.at(mode_idx).at(period_idx).at(psi_idx)
-                                = rao.right_column.at(period_idx_in_input_file) * PI / 180.;
+                            const size_t frequency_idx_in_input_file
+                                = frequencies.at(frequency_idx).first;
+                            modules.values.at(mode_idx).at(frequency_idx).at(psi_idx)
+                                = rao.left_column.at(frequency_idx_in_input_file) * 1e3;
+                            phases.values.at(mode_idx).at(frequency_idx).at(psi_idx)
+                                = rao.right_column.at(frequency_idx_in_input_file) * DEG2RAD;
                         }
                         break;
                     }
