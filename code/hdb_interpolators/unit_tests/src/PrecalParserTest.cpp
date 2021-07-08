@@ -264,18 +264,18 @@ TEST_F(PrecalParserTest, can_parse_diffraction_module_raos)
 
     const std::vector<double> periods = precal.get_diffraction_module_periods();
     ASSERT_EQ(7, periods.size());
-    ASSERT_DOUBLE_EQ(2 * PI / 0.4, periods.at(0));
-    ASSERT_DOUBLE_EQ(2 * PI / 0.5, periods.at(1));
-    ASSERT_DOUBLE_EQ(2 * PI / 0.6, periods.at(2));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.4, periods.at(6));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.5, periods.at(5));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.6, periods.at(4));
     ASSERT_DOUBLE_EQ(2 * PI / 0.7, periods.at(3));
-    ASSERT_DOUBLE_EQ(2 * PI / 0.8, periods.at(4));
-    ASSERT_DOUBLE_EQ(2 * PI / 0.9, periods.at(5));
-    ASSERT_DOUBLE_EQ(2 * PI,       periods.at(6));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.8, periods.at(2));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.9, periods.at(1));
+    ASSERT_DOUBLE_EQ(2 * PI,       periods.at(0));
 
     const std::vector<double> psis = precal.get_diffraction_module_psis();
     ASSERT_EQ(2, psis.size());
-    ASSERT_DOUBLE_EQ(PI, psis.at(0));
-    ASSERT_DOUBLE_EQ(PI / 2, psis.at(1));
+    ASSERT_DOUBLE_EQ(PI, psis.at(1));
+    ASSERT_DOUBLE_EQ(PI / 2, psis.at(0));
 
     const std::array<std::vector<std::vector<double>>, 6> table = precal.get_diffraction_module_tables();
     for (size_t mod_idx = 0; mod_idx < 6; ++mod_idx)
@@ -289,33 +289,33 @@ TEST_F(PrecalParserTest, can_parse_diffraction_module_raos)
 
     // Multiplied by 1e3 to convert the table data to N/m
 
-    ASSERT_DOUBLE_EQ(0.614690E+02 * 1e3, table.at(0).at(0).at(0));
-    ASSERT_DOUBLE_EQ(0.121771E-02 * 1e3, table.at(1).at(0).at(0));
-    ASSERT_DOUBLE_EQ(0.444548E+04 * 1e3, table.at(2).at(0).at(0));
-    ASSERT_DOUBLE_EQ(0.927719E-04 * 1e3, table.at(3).at(0).at(0));
-    ASSERT_DOUBLE_EQ(0.481271E+05 * 1e3, table.at(4).at(0).at(0));
-    ASSERT_DOUBLE_EQ(0.151559E-01 * 1e3, table.at(5).at(0).at(0));
+    ASSERT_DOUBLE_EQ(0.614690E+02 * 1e3, table.at(0).at(6).at(1));
+    ASSERT_DOUBLE_EQ(0.121771E-02 * 1e3, table.at(1).at(6).at(1));
+    ASSERT_DOUBLE_EQ(0.444548E+04 * 1e3, table.at(2).at(6).at(1));
+    ASSERT_DOUBLE_EQ(0.927719E-04 * 1e3, table.at(3).at(6).at(1));
+    ASSERT_DOUBLE_EQ(0.481271E+05 * 1e3, table.at(4).at(6).at(1));
+    ASSERT_DOUBLE_EQ(0.151559E-01 * 1e3, table.at(5).at(6).at(1));
 
-    ASSERT_DOUBLE_EQ(0.213802E+03 * 1e3, table.at(0).at(2).at(1));
-    ASSERT_DOUBLE_EQ(0.253451E+04 * 1e3, table.at(1).at(2).at(1));
-    ASSERT_DOUBLE_EQ(0.841796E+04 * 1e3, table.at(2).at(2).at(1));
-    ASSERT_DOUBLE_EQ(0.126249E+04 * 1e3, table.at(3).at(2).at(1));
-    ASSERT_DOUBLE_EQ(0.668399E+05 * 1e3, table.at(4).at(2).at(1));
-    ASSERT_DOUBLE_EQ(0.496977E+05 * 1e3, table.at(5).at(2).at(1));
+    ASSERT_DOUBLE_EQ(0.213802E+03 * 1e3, table.at(0).at(4).at(0));
+    ASSERT_DOUBLE_EQ(0.253451E+04 * 1e3, table.at(1).at(4).at(0));
+    ASSERT_DOUBLE_EQ(0.841796E+04 * 1e3, table.at(2).at(4).at(0));
+    ASSERT_DOUBLE_EQ(0.126249E+04 * 1e3, table.at(3).at(4).at(0));
+    ASSERT_DOUBLE_EQ(0.668399E+05 * 1e3, table.at(4).at(4).at(0));
+    ASSERT_DOUBLE_EQ(0.496977E+05 * 1e3, table.at(5).at(4).at(0));
 
-    ASSERT_DOUBLE_EQ(0.305769E+02 * 1e3, table.at(0).at(5).at(0));
-    ASSERT_DOUBLE_EQ(0.414881E-03 * 1e3, table.at(1).at(5).at(0));
-    ASSERT_DOUBLE_EQ(0.148203E+04 * 1e3, table.at(2).at(5).at(0));
-    ASSERT_DOUBLE_EQ(0.321678E+04 * 1e3, table.at(3).at(5).at(1));
-    ASSERT_DOUBLE_EQ(0.837050E+05 * 1e3, table.at(4).at(5).at(1));
-    ASSERT_DOUBLE_EQ(0.991290E+05 * 1e3, table.at(5).at(5).at(1));
+    ASSERT_DOUBLE_EQ(0.305769E+02 * 1e3, table.at(0).at(1).at(1));
+    ASSERT_DOUBLE_EQ(0.414881E-03 * 1e3, table.at(1).at(1).at(1));
+    ASSERT_DOUBLE_EQ(0.148203E+04 * 1e3, table.at(2).at(1).at(1));
+    ASSERT_DOUBLE_EQ(0.321678E+04 * 1e3, table.at(3).at(1).at(0));
+    ASSERT_DOUBLE_EQ(0.837050E+05 * 1e3, table.at(4).at(1).at(0));
+    ASSERT_DOUBLE_EQ(0.991290E+05 * 1e3, table.at(5).at(1).at(0));
 
-    ASSERT_DOUBLE_EQ(0.231034E+03 * 1e3, table.at(0).at(6).at(1));
-    ASSERT_DOUBLE_EQ(0.275595E+04 * 1e3, table.at(1).at(6).at(1));
-    ASSERT_DOUBLE_EQ(0.117092E+05 * 1e3, table.at(2).at(6).at(1));
-    ASSERT_DOUBLE_EQ(0.112438E-02 * 1e3, table.at(3).at(6).at(0));
-    ASSERT_DOUBLE_EQ(0.553710E+05 * 1e3, table.at(4).at(6).at(0));
-    ASSERT_DOUBLE_EQ(0.967943E-02 * 1e3, table.at(5).at(6).at(0));
+    ASSERT_DOUBLE_EQ(0.231034E+03 * 1e3, table.at(0).at(0).at(0));
+    ASSERT_DOUBLE_EQ(0.275595E+04 * 1e3, table.at(1).at(0).at(0));
+    ASSERT_DOUBLE_EQ(0.117092E+05 * 1e3, table.at(2).at(0).at(0));
+    ASSERT_DOUBLE_EQ(0.112438E-02 * 1e3, table.at(3).at(0).at(1));
+    ASSERT_DOUBLE_EQ(0.553710E+05 * 1e3, table.at(4).at(0).at(1));
+    ASSERT_DOUBLE_EQ(0.967943E-02 * 1e3, table.at(5).at(0).at(1));
 
 }
 
@@ -325,18 +325,18 @@ TEST_F(PrecalParserTest, can_parse_diffraction_phase_raos)
 
     const std::vector<double> periods = precal.get_diffraction_phase_periods();
     ASSERT_EQ(7, periods.size());
-    ASSERT_DOUBLE_EQ(2 * PI / 0.4, periods.at(0));
-    ASSERT_DOUBLE_EQ(2 * PI / 0.5, periods.at(1));
-    ASSERT_DOUBLE_EQ(2 * PI / 0.6, periods.at(2));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.4, periods.at(6));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.5, periods.at(5));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.6, periods.at(4));
     ASSERT_DOUBLE_EQ(2 * PI / 0.7, periods.at(3));
-    ASSERT_DOUBLE_EQ(2 * PI / 0.8, periods.at(4));
-    ASSERT_DOUBLE_EQ(2 * PI / 0.9, periods.at(5));
-    ASSERT_DOUBLE_EQ(2 * PI,       periods.at(6));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.8, periods.at(2));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.9, periods.at(1));
+    ASSERT_DOUBLE_EQ(2 * PI,       periods.at(0));
 
     const std::vector<double> psis = precal.get_diffraction_phase_psis();
     ASSERT_EQ(2, psis.size());
-    ASSERT_DOUBLE_EQ(PI, psis.at(0));
-    ASSERT_DOUBLE_EQ(PI / 2, psis.at(1));
+    ASSERT_DOUBLE_EQ(PI, psis.at(1));
+    ASSERT_DOUBLE_EQ(PI / 2, psis.at(0));
 
     const std::array<std::vector<std::vector<double>>, 6> table = precal.get_diffraction_phase_tables();
     for (size_t mod_idx = 0; mod_idx < 6; ++mod_idx)
@@ -348,32 +348,32 @@ TEST_F(PrecalParserTest, can_parse_diffraction_phase_raos)
         }
     }
 
-    ASSERT_DOUBLE_EQ( 78.508087 * PI / 180., table.at(0).at(0).at(0));
-    ASSERT_DOUBLE_EQ( 81.328613 * PI / 180., table.at(1).at(0).at(0));
-    ASSERT_DOUBLE_EQ(131.685837 * PI / 180., table.at(2).at(0).at(0));
-    ASSERT_DOUBLE_EQ(127.574928 * PI / 180., table.at(3).at(0).at(0));
-    ASSERT_DOUBLE_EQ( 97.924873 * PI / 180., table.at(4).at(0).at(0));
-    ASSERT_DOUBLE_EQ( 68.464912 * PI / 180., table.at(5).at(0).at(0));
+    ASSERT_DOUBLE_EQ( 78.508087 * PI / 180., table.at(0).at(6).at(1));
+    ASSERT_DOUBLE_EQ( 81.328613 * PI / 180., table.at(1).at(6).at(1));
+    ASSERT_DOUBLE_EQ(131.685837 * PI / 180., table.at(2).at(6).at(1));
+    ASSERT_DOUBLE_EQ(127.574928 * PI / 180., table.at(3).at(6).at(1));
+    ASSERT_DOUBLE_EQ( 97.924873 * PI / 180., table.at(4).at(6).at(1));
+    ASSERT_DOUBLE_EQ( 68.464912 * PI / 180., table.at(5).at(6).at(1));
 
-    ASSERT_DOUBLE_EQ(-146.941406 * PI / 180., table.at(0).at(2).at(1));
-    ASSERT_DOUBLE_EQ(  75.123482 * PI / 180., table.at(1).at(2).at(1));
-    ASSERT_DOUBLE_EQ( 131.750656 * PI / 180., table.at(2).at(2).at(1));
-    ASSERT_DOUBLE_EQ( -46.827698 * PI / 180., table.at(3).at(2).at(1));
-    ASSERT_DOUBLE_EQ(-172.587128 * PI / 180., table.at(4).at(2).at(1));
-    ASSERT_DOUBLE_EQ(  47.521080 * PI / 180., table.at(5).at(2).at(1));
+    ASSERT_DOUBLE_EQ(-146.941406 * PI / 180., table.at(0).at(4).at(0));
+    ASSERT_DOUBLE_EQ(  75.123482 * PI / 180., table.at(1).at(4).at(0));
+    ASSERT_DOUBLE_EQ( 131.750656 * PI / 180., table.at(2).at(4).at(0));
+    ASSERT_DOUBLE_EQ( -46.827698 * PI / 180., table.at(3).at(4).at(0));
+    ASSERT_DOUBLE_EQ(-172.587128 * PI / 180., table.at(4).at(4).at(0));
+    ASSERT_DOUBLE_EQ(  47.521080 * PI / 180., table.at(5).at(4).at(0));
 
-    ASSERT_DOUBLE_EQ( 166.040619 * PI / 180., table.at(0).at(5).at(0));
-    ASSERT_DOUBLE_EQ(   3.999577 * PI / 180., table.at(1).at(5).at(0));
-    ASSERT_DOUBLE_EQ(-100.059105 * PI / 180., table.at(2).at(5).at(0));
-    ASSERT_DOUBLE_EQ(  65.683235 * PI / 180., table.at(3).at(5).at(1));
-    ASSERT_DOUBLE_EQ( 165.935898 * PI / 180., table.at(4).at(5).at(1));
-    ASSERT_DOUBLE_EQ(  51.221420 * PI / 180., table.at(5).at(5).at(1));
+    ASSERT_DOUBLE_EQ( 166.040619 * PI / 180., table.at(0).at(1).at(1));
+    ASSERT_DOUBLE_EQ(   3.999577 * PI / 180., table.at(1).at(1).at(1));
+    ASSERT_DOUBLE_EQ(-100.059105 * PI / 180., table.at(2).at(1).at(1));
+    ASSERT_DOUBLE_EQ(  65.683235 * PI / 180., table.at(3).at(1).at(0));
+    ASSERT_DOUBLE_EQ( 165.935898 * PI / 180., table.at(4).at(1).at(0));
+    ASSERT_DOUBLE_EQ(  51.221420 * PI / 180., table.at(5).at(1).at(0));
 
-    ASSERT_DOUBLE_EQ(-162.160065 * PI / 180., table.at(0).at(6).at(1));
-    ASSERT_DOUBLE_EQ(  50.503010 * PI / 180., table.at(1).at(6).at(1));
-    ASSERT_DOUBLE_EQ( 128.845367 * PI / 180., table.at(2).at(6).at(1));
-    ASSERT_DOUBLE_EQ( 149.386047 * PI / 180., table.at(3).at(6).at(0));
-    ASSERT_DOUBLE_EQ(-179.790375 * PI / 180., table.at(4).at(6).at(0));
-    ASSERT_DOUBLE_EQ(-163.360352 * PI / 180., table.at(5).at(6).at(0));
+    ASSERT_DOUBLE_EQ(-162.160065 * PI / 180., table.at(0).at(0).at(0));
+    ASSERT_DOUBLE_EQ(  50.503010 * PI / 180., table.at(1).at(0).at(0));
+    ASSERT_DOUBLE_EQ( 128.845367 * PI / 180., table.at(2).at(0).at(0));
+    ASSERT_DOUBLE_EQ( 149.386047 * PI / 180., table.at(3).at(0).at(1));
+    ASSERT_DOUBLE_EQ(-179.790375 * PI / 180., table.at(4).at(0).at(1));
+    ASSERT_DOUBLE_EQ(-163.360352 * PI / 180., table.at(5).at(0).at(1));
 
 }

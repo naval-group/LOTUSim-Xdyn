@@ -1,5 +1,8 @@
+
 #include "PrecalParser.hpp"
 #include "InvalidInputException.hpp"
+#include <algorithm>
+#include <list>
 
 #define _USE_MATH_DEFINE
 #include <cmath>
@@ -198,22 +201,38 @@ void PrecalParser::init_diffraction_tables()
     {
     
         // Get the frequencies and directions values for which RAOs will be specified
-        const std::vector<double> frequencies = get_vector_value("Dimensions", "waveFreq",
-                                                                "wave frequencies", "");
+        const std::vector<double> input_frequencies = get_vector_value("Dimensions", "waveFreq",
+                                                                       "wave frequencies", "");
         const std::string frequencies_unit = get_string_value("Dimensions", "unitWaveFreq",
                                                             "wave frequencies unit", "");
 
-        const std::vector<double> directions = get_vector_value("Dimensions", "waveDir",
-                                                                "wave directions", "");
+        const std::vector<double> input_directions = get_vector_value("Dimensions", "waveDir",
+                                                                      "wave directions", "");
         const std::string directions_unit = get_string_value("Dimensions", "unitWaveDir",
                                                             "wave directions unit", "");
 
-        // Initialize period and psi values for which RAOs will be specified
+        // Sort frequencies and psi values for which RAOs will be specified
+        std::vector<std::pair<size_t, double> > frequencies;
+        size_t i = 0;
+        std::transform(input_frequencies.begin(), input_frequencies.end(),
+                       std::back_inserter(frequencies),
+                       [&i](const double omega) { return std::make_pair(i++, omega); });
+        std::sort(
+            frequencies.begin(), frequencies.end(),
+            [](const std::pair<size_t, double>& left, const std::pair<size_t, double>& right) {
+                return left.second >= right.second;
+            });
+
+        std::list<double> sorted_directions(input_directions.begin(), input_directions.end());
+        sorted_directions.sort();
+        std::vector<double> directions(sorted_directions.begin(), sorted_directions.end());
+
+        // Convert period and psi values to S.I. units
         if (frequencies_unit == "rad/s")
         {
-            for (size_t period_idx = 0 ; period_idx < frequencies.size() ; ++period_idx)
+            for (size_t period_idx = 0; period_idx < frequencies.size(); ++period_idx)
             {
-                const double period = 2 * PI / frequencies.at(period_idx);
+                const double period = 2 * PI / frequencies.at(period_idx).second;
                 modules.periods.push_back(period);
                 phases.periods.push_back(period);
             }
@@ -295,13 +314,14 @@ void PrecalParser::init_diffraction_tables()
                                 "Unknown unit '" << rao.attributes.phase_unit << "' for diffraction RAO phases "
                                 "in PRECAL_R's output file. Known units: 'deg'.");
                         }
-                        for (size_t period_idx = 0 ; period_idx < frequencies.size() ; ++period_idx)
+                        for (size_t period_idx = 0; period_idx < frequencies.size(); ++period_idx)
                         {
-                            modules.values.at(mode_idx).at(period_idx).at(psi_idx) = 
-                                rao.left_column.at(period_idx) * 1e3;
-
-                            phases.values.at(mode_idx).at(period_idx).at(psi_idx) =
-                                rao.right_column.at(period_idx) * PI / 180.;
+                            const size_t period_idx_in_input_file
+                                = frequencies.at(period_idx).first;
+                            modules.values.at(mode_idx).at(period_idx).at(psi_idx)
+                                = rao.left_column.at(period_idx_in_input_file) * 1e3;
+                            phases.values.at(mode_idx).at(period_idx).at(psi_idx)
+                                = rao.right_column.at(period_idx_in_input_file) * PI / 180.;
                         }
                         break;
                     }
