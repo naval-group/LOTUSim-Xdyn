@@ -19,7 +19,9 @@ PrecalParser PrecalParser::from_file(const std::string& path_to_precal_file)
 }
 
 PrecalParser::PrecalParser(const PrecalFile& precal_file_)
-    : precal_file(precal_file_), diffraction_module(), diffraction_phase()
+    : precal_file(precal_file_)
+    , diffraction_module()
+    , diffraction_phase()
 {
     init_diffraction_tables();
 }
@@ -119,8 +121,8 @@ std::vector<double> PrecalParser::get_vector_value(const std::string& section_ti
         }
     }
     THROW(__PRETTY_FUNCTION__, InvalidInputException,
-        "Unable to find section '" << section_title << "' in PRECAL_R's output file. "
-        << not_found_message);
+          "Unable to find section '" << section_title << "' in PRECAL_R's output file. "
+                                     << not_found_message);
 }
 
 std::string PrecalParser::get_string_value(const std::string& section_title,
@@ -163,21 +165,19 @@ std::string PrecalParser::get_string_value(const std::string& section_title,
         }
     }
     THROW(__PRETTY_FUNCTION__, InvalidInputException,
-        "Unable to find section '" << section_title << "' in PRECAL_R's output file. "
-        << not_found_message);
+          "Unable to find section '" << section_title << "' in PRECAL_R's output file. "
+                                     << not_found_message);
 }
 
 Eigen::Matrix<double, 6, 6> PrecalParser::get_added_mass() const
 {
     Eigen::Matrix<double, 6, 6> Ma;
     const std::vector<double> values = get_vector_value(
-        "added_mass_damping_matrix_inf_freq",
-        "total_added_mass_matrix_inf_freq_U1_mu1",
+        "added_mass_damping_matrix_inf_freq", "total_added_mass_matrix_inf_freq_U1_mu1",
         "matrix's coefficients",
         "Perhaps you didn't set the boolean key 'calcAmasDampCoefInfFreq' to true in PRECAL_R's "
         "input file (section sim > parHYD > calcAmasDampCoefInfFreq)? Cf. PRECAL_R's Theory "
-        "Manual, sections 2.3 & 2.4 and PRECAL_R's User Manual, section 3.3.2 p.25."
-        );
+        "Manual, sections 2.3 & 2.4 and PRECAL_R's User Manual, section 3.3.2 p.25.");
     for (size_t i = 0; i < 6; ++i)
     {
         for (size_t j = 0; j < 6; ++j)
@@ -189,9 +189,8 @@ Eigen::Matrix<double, 6, 6> PrecalParser::get_added_mass() const
     return Ma;
 }
 
-std::function<bool(double, double)> double_eq = [](double d1, double d2){
-    return fabs(d1 - d2) <= std::numeric_limits<double>::epsilon();
-};
+std::function<bool(double, double)> double_eq
+    = [](double d1, double d2) { return fabs(d1 - d2) <= std::numeric_limits<double>::epsilon(); };
 
 void PrecalParser::init_diffraction_tables()
 {
@@ -199,17 +198,16 @@ void PrecalParser::init_diffraction_tables()
     RAOData phases;
     try
     {
-    
         // Get the frequencies and directions values for which RAOs will be specified
-        const std::vector<double> input_frequencies = get_vector_value("Dimensions", "waveFreq",
-                                                                       "wave frequencies", "");
-        const std::string frequencies_unit = get_string_value("Dimensions", "unitWaveFreq",
-                                                            "wave frequencies unit", "");
+        const std::vector<double> input_frequencies
+            = get_vector_value("Dimensions", "waveFreq", "wave frequencies", "");
+        const std::string frequencies_unit
+            = get_string_value("Dimensions", "unitWaveFreq", "wave frequencies unit", "");
 
-        const std::vector<double> input_directions = get_vector_value("Dimensions", "waveDir",
-                                                                      "wave directions", "");
-        const std::string directions_unit = get_string_value("Dimensions", "unitWaveDir",
-                                                            "wave directions unit", "");
+        const std::vector<double> input_directions
+            = get_vector_value("Dimensions", "waveDir", "wave directions", "");
+        const std::string directions_unit
+            = get_string_value("Dimensions", "unitWaveDir", "wave directions unit", "");
 
         // Sort frequencies and psi values for which RAOs will be specified
         std::vector<std::pair<size_t, double> > frequencies;
@@ -240,13 +238,14 @@ void PrecalParser::init_diffraction_tables()
         else
         {
             THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                "Unknown unit '" << frequencies_unit << "' for wave frequencies "
-                "in PRECAL_R's output file. Known units: 'rad/s'.");
+                  "Unknown unit '" << frequencies_unit
+                                   << "' for wave frequencies in PRECAL_R's output file. "
+                                      "Known units: 'rad/s'.");
         }
 
         if (directions_unit == "deg")
         {
-            for (size_t psi_idx = 0 ; psi_idx < directions.size() ; ++psi_idx)
+            for (size_t psi_idx = 0; psi_idx < directions.size(); ++psi_idx)
             {
                 const double psi = directions.at(psi_idx) * PI / 180.;
                 modules.psi.push_back(psi);
@@ -256,20 +255,19 @@ void PrecalParser::init_diffraction_tables()
         else
         {
             THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                "Unknown unit '" << directions_unit << "' for wave directions "
-                "in PRECAL_R's output file. Known units: 'deg'.");
+                  "Unknown unit '" << directions_unit
+                                   << "' for wave directions in PRECAL_R's output file. "
+                                      "Known units: 'deg'.");
         }
 
         // Initialize the RAOs coefficients with 0s
-        modules.values.fill(std::vector<std::vector<double>>(
-                            frequencies.size(), std::vector<double>(directions.size(), 0)
-                            ));
-        phases.values.fill(std::vector<std::vector<double>>(
-                        frequencies.size(), std::vector<double>(directions.size(), 0)
-                        ));
+        modules.values.fill(std::vector<std::vector<double> >(
+            frequencies.size(), std::vector<double>(directions.size(), 0)));
+        phases.values.fill(std::vector<std::vector<double> >(
+            frequencies.size(), std::vector<double>(directions.size(), 0)));
 
         // Read the RAOs for each mode and direction.
-        for (size_t psi_idx = 0 ; psi_idx < directions.size() ; ++psi_idx)
+        for (size_t psi_idx = 0; psi_idx < directions.size(); ++psi_idx)
         {
             for (size_t mode_idx = 0; mode_idx < 6; ++mode_idx)
             {
@@ -277,7 +275,8 @@ void PrecalParser::init_diffraction_tables()
                 bool found_rao = false;
                 for (RAO rao : precal_file.raos)
                 {
-                    if (rao.attributes.name.compare(signal_name) == 0 && double_eq(rao.attributes.mu, directions.at(psi_idx)) )
+                    if (rao.attributes.name.compare(signal_name) == 0
+                        && double_eq(rao.attributes.mu, directions.at(psi_idx)))
                     {
                         found_rao = true;
                         if (rao.left_column.size() != frequencies.size())
@@ -302,7 +301,8 @@ void PrecalParser::init_diffraction_tables()
                                 << " values."
                                 );
                         }
-                        if (rao.attributes.amplitude_unit != "kN/m" && rao.attributes.amplitude_unit != "kN.m/m")
+                        if (rao.attributes.amplitude_unit != "kN/m"
+                            && rao.attributes.amplitude_unit != "kN.m/m")
                         {
                             THROW(__PRETTY_FUNCTION__, InvalidInputException,
                                 "Unknown unit '" << rao.attributes.amplitude_unit << "' for diffraction RAO "
@@ -336,19 +336,20 @@ void PrecalParser::init_diffraction_tables()
                 }
             }
         }
+
         diffraction_module = modules;
         diffraction_phase = phases;
     }
-    catch(const InvalidInputException& e)
+    catch (const InvalidInputException& e)
     {
         diffraction_module = e.what();
         diffraction_phase = e.what();
     }
 }
 
-std::array<std::vector<std::vector<double> >,6 > PrecalParser::get_diffraction_module_tables() const
+std::array<std::vector<std::vector<double> >, 6> PrecalParser::get_diffraction_module_tables() const
 {
-    if ( std::string* err = (std::string*)boost::get<std::string>(&diffraction_module))
+    if (std::string* err = (std::string*)boost::get<std::string>(&diffraction_module))
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
     }
@@ -356,9 +357,9 @@ std::array<std::vector<std::vector<double> >,6 > PrecalParser::get_diffraction_m
     return ret->values;
 }
 
-std::array<std::vector<std::vector<double> >,6 > PrecalParser::get_diffraction_phase_tables() const
+std::array<std::vector<std::vector<double> >, 6> PrecalParser::get_diffraction_phase_tables() const
 {
-    if ( std::string* err = (std::string*)boost::get<std::string>(&diffraction_phase))
+    if (std::string* err = (std::string*)boost::get<std::string>(&diffraction_phase))
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
     }
@@ -368,7 +369,7 @@ std::array<std::vector<std::vector<double> >,6 > PrecalParser::get_diffraction_p
 
 std::vector<double> PrecalParser::get_diffraction_module_periods() const
 {
-    if ( std::string* err = (std::string*)boost::get<std::string>(&diffraction_module))
+    if (std::string* err = (std::string*)boost::get<std::string>(&diffraction_module))
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
     }
@@ -378,7 +379,7 @@ std::vector<double> PrecalParser::get_diffraction_module_periods() const
 
 std::vector<double> PrecalParser::get_diffraction_phase_periods() const
 {
-    if ( std::string* err = (std::string*)boost::get<std::string>(&diffraction_phase))
+    if (std::string* err = (std::string*)boost::get<std::string>(&diffraction_phase))
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
     }
@@ -388,7 +389,7 @@ std::vector<double> PrecalParser::get_diffraction_phase_periods() const
 
 std::vector<double> PrecalParser::get_diffraction_module_psis() const
 {
-    if ( std::string* err = (std::string*)boost::get<std::string>(&diffraction_module))
+    if (std::string* err = (std::string*)boost::get<std::string>(&diffraction_module))
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
     }
@@ -398,7 +399,7 @@ std::vector<double> PrecalParser::get_diffraction_module_psis() const
 
 std::vector<double> PrecalParser::get_diffraction_phase_psis() const
 {
-    if ( std::string* err = (std::string*)boost::get<std::string>(&diffraction_phase))
+    if (std::string* err = (std::string*)boost::get<std::string>(&diffraction_phase))
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
     }
