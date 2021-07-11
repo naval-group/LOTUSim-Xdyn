@@ -237,3 +237,9 @@ TEST_F(HDBParserTest, can_get_forward_speed)
     HDBParser data(test_data::test_ship_hdb());
     ASSERT_DOUBLE_EQ(data.get_forward_speed(), 0.);
 }
+
+TEST_F(HDBParserTest, should_be_able_to_have_different_periods_for_added_mass_and_List_calculated_periods)
+{
+    HDBParser(test_data::hdb_issue_184());
+    ASSERT_NO_THROW(HDBParser(test_data::hdb_issue_184()));
+}
