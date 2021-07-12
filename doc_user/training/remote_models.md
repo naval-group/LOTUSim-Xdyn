@@ -26,7 +26,8 @@ Using gRPC allows us to __extend xdyn in our language of choice__:
 - gRPC supports all major platforms
 - Using authentication, we can share models
 - The gRPC interface forces us to specify the interface in a non-ambiguous way,
-  which facilitates communication.
+  which facilitates communication, although it does not solve _semantic_
+  ambiguities (e.g. Z axis up or down).
 
 
 ## How is gRPC used in xdyn?
