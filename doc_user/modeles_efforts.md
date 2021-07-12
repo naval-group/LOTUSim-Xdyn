@@ -350,9 +350,9 @@ modélisation potentielle.
 
 ### Calcul numérique
 
-Les RAO d'efforts sont lues à partir d'un [fichier
-HDB](#format-hdb). Cette table donne, une
-fois interpolée, deux fonctions RAO par axe $`k`$
+Les RAO d'efforts sont lues à partir d'un [fichier HDB](#format-hdb) ou
+[PRECAL_R](#format-precal_r). Cette table donne, une fois interpolée,
+deux fonctions RAO par axe $`k`$
 
 ```math
 (u,\omega,\beta)\mapsto {RAO^{k}}_{\textrm{module}}(u,\omega,\beta)
@@ -430,35 +430,45 @@ M_X\\
 \right]
 ```
 
-Le torseur calculé est ensuite déplacé par xdyn du point de calcul des
-[fichiers HDB](#format-hdb) au point de résolution du bilan des efforts.
+Le torseur calculé est ensuite déplacé par xdyn du point de calcul des fichiers
+[HDB](#format-hdb) ou [PRECAL_R](#format-precal_r) au point de résolution du bilan des efforts.
 
 ### Prise en compte de la vitesse d'avance
 
-Les fichiers HDB donnent la fonction de transfert des efforts de diffraction en fonction de la période de houle incidente, à une vitesse d'avance donnée. Ces résultats prennent donc en compte la vitesse d'avance s'il y a lieu.
+Les fichiers HDB et PRECAL_R donnent la fonction de transfert des efforts de diffraction en fonction
+de la période de houle incidente, à une vitesse d'avance donnée.
+Ces résultats prennent donc en compte la vitesse d'avance s'il y a lieu.
 
-Cependant, comme pour les coefficients de masse ajoutée et d'amortissement de radiation, il est plus simple - lorsque la vitesse d'avance est inconnue _a priori_ - d'utiliser des résultats à vitesse d'avance nulle.
+Cependant, comme pour les coefficients de masse ajoutée et d'amortissement de radiation,
+il est plus simple - lorsque la vitesse d'avance est inconnue _a priori_ - d'utiliser des résultats
+à vitesse d'avance nulle.
 
-On considère alors la période donnée dans le fichier HDB comme la période de rencontre $`T_e = \frac{2 \pi}{\omega_e}`$, avec:
+On considère alors la période donnée dans le fichier HDB ou PRECAL_R comme la période de
+rencontre $`T_e = \frac{2 \pi}{\omega_e}`$, avec:
 
 ```math
 \omega_e = \omega - \vec{V_s} \cdot \vec{k}
 ```
 
-Où $`\vec{k}`$ est la vecteur d'onde, dans la direction de propagation de la vague et de longueur $`k = \frac{2 \pi}{\lambda}`$. On a alors l'expression suivante pour les efforts de diffraction :
+Où $`\vec{k}`$ est la vecteur d'onde, dans la direction de propagation de la vague et de
+longueur $`k = \frac{2 \pi}{\lambda}`$.
+On a alors l'expression suivante pour les efforts de diffraction :
 
 $`F_k(x_H,y_H,t,u) = -\sum_{i=1}^{nfreq}\sum_{j=1}^{ndir}
 {RAO^{k}}_{\textrm{module}}(u,\omega_e,\psi-\psi_j)\cdot a_{i,j}
 \cdot\sin(k\cdot(x_H\cdot \cos(\psi_j) + y_H\cdot \sin(\psi_j))-\omega_i\cdot
 t-{RAO^{k}}_{\textrm{phase}}(u,\omega_e,\psi-\psi_j)+\phi_{ij})`$
 
-Ce choix correspond à une approximation qui néglige le couplage entre le champ de vagues lié à la vitesse d'avance et celui de la houle diffractée.
+Ce choix correspond à une approximation qui néglige le couplage entre le champ de vagues lié à la
+vitesse d'avance et celui de la houle diffractée.
 
 ### Paramétrage
 
+#### Avec un [ficher HDB](#format-hdb)
+
 Pour utiliser ce modèle, on écrit `model: diffraction`. Le seul paramètre de ce
-modèle est le chemin vers le [fichier HDB](#format-hdb) contenant les RAO d'effort du premier
-ordre.
+modèle est le chemin vers le fichier [HDB](#format-hdb) contenant les RAO d'effort du premier ordre.
+La section correspondante dans le fichier HDB est `DIFFRACTION_FORCES_AND_MOMENTS`.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: diffraction
@@ -471,12 +481,9 @@ ordre.
   use encounter period: true
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-La section correspondante dans le [fichier HDB](#format-hdb) est
-`DIFFRACTION_FORCES_AND_MOMENTS`. Il est à noter que le point de calcul ne
-figurant pas dans les [fichiers
-HDB](#format-hdb), il doit être renseigné dans le fichier YAML
-(`calculation point in body frame`) mais qu'aucune vérification ne peut être
-faite.
+Il est à noter que le point de calcul ne figurant pas dans les fichiers HDB,
+il doit être renseigné dans le fichier YAML (`calculation point in body frame`)
+mais qu'aucune vérification ne peut être faite.
 
 Le point de calcul des efforts de diffraction n'est pas nécessairement le centre
 de gravité, ni même le point de résolution de l'équation de Newton. En revanche,
@@ -488,7 +495,31 @@ de la RAO entre $`0^{\circ}`$ et $`180^{\circ}`$, quitte à la symétriser par r
 pratique, cela signifie que l'on prend $`RAO(T_p,\beta)=RAO(Tp,2\pi-\beta)`$ si
 $`\beta>\pi`$ et que `mirror for 180 to 360` vaut `true`.
 
-Le paramètre booléen `use encounter period` est optionnel et indique à xdyn de calculer la période de rencontre $`T_e`$ pour interpoler la force de diffraction depuis le fichier HDB. Cette option est utile lorsqu'on utilise des résultats fréquentiels à vitesse nulle.
+Le paramètre booléen `use encounter period` est optionnel et indique à xdyn de calculer la
+période de rencontre $`T_e`$ pour interpoler la force de diffraction depuis le fichier HDB.
+Cette option est utile lorsqu'on utilise des résultats fréquentiels à vitesse nulle.
+
+#### Avec un [ficher PRECAL_R](#format-precal_r)
+
+On peut également lire ces RAO depuis un fichier [PRECAL_R](#format-precal_r). Il faut que
+le fichier PRECAL_R ait été généré avec la clef `expIncWaveFrc` activée.
+Les RAOs sont alors présents dans les signaux `F_dif_m[...]` de la section `[RAOs]`.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: diffraction
+  precal: test_ship.raodb.ini
+  mirror for 180 to 360: true
+  use encounter period: true
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Contrairement au cas d'un fichier HDB, le point de calcul est connu : il s'agit du centre de
+gravité. Il ne faut donc pas renseigner le champ `calculation point in body frame` dans le fichier
+YAML.
+
+Les autres paramètres sont identiques à ceux du cas du fichier HDB (présenté ci-dessus).
+
+⚠ Si plusieurs vitesses d'avance sont spécifiées dans le fichier PRECAL_R,
+seuls les RAO concernant la première de ces vitesses sont pris en compte.
 
 ### Références
 

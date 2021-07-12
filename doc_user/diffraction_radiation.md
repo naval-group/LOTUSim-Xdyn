@@ -1,13 +1,18 @@
 # Modélisation des efforts de diffraction et de radiation
 
-Cette section propose une décomposition des efforts hydrodynamiques suivant un schéma classiquement utilisé pour la résolution des problèmes de tenue à la mer. Les efforts hydrodynamiques sont alors supposés constitués de la somme  des :
+Cette section propose une décomposition des efforts hydrodynamiques
+suivant un schéma classiquement utilisé pour la résolution des problèmes
+de tenue à la mer. Les efforts hydrodynamiques sont alors supposés
+constitués de la somme des :
+
 - efforts d'excitation résultant des pressions appliquées sur la coque, supposée fixe, par la houle incidente (efforts de Froude-Krylov) et la houle modifiée par le présence du corps (supposé fixe), ou diffraction.
     - la formulation temporelle considérée ici permet en outre d'aller plus loin dans la modélisation des efforts de Froude-Kryolv, en intégrant les pressions de houle incidente sur la géométrie exacte du corps en mouvement par rapport à la surface libre déformée (houle incidente seulement).
+
 - efforts liés aux mouvements du navire en eau initialement calme (sans houle), et à la génération de vagues associée (radiation). Ces efforts sont aux même constitués
     -  de composantes en phase avec l'accélération du corps, et assimilables à des termes inertiels. Ces termes sont d'un ordre de grandeur proche des termes d'inertie mécanique, et doivent être associés à ceux-ci (dans le membre de gauche de l'équation des mouvements à résoudre) afin d'éviter les instabilités numériques qui apparaissent si on les considère comme des efforts extérieurs.
     - de composantes en phase avec les vitesses du corps, correspondant à des termes d'amortissement. Ces termes peuvent être exprimés dans le domaine temporel à partir de formulations impulsionnelles, faisant appel à des informations issues d'un calcul fréquentiel.
-- ces termes d'amortissement sont uniquement d'origine potentielle, et ne sont pas suffisant pour représenter la physique des amortissements pour certaines degrés de liberté, correspondant notamment aux résonances mécaniques. Il est alors nécessaire d'ajouter un amortissement d'orignie visqueuse, qui peut être calcul de différentes manières.
 
+- ces termes d'amortissement sont uniquement d'origine potentielle, et ne sont pas suffisant pour représenter la physique des amortissements pour certaines degrés de liberté, correspondant notamment aux résonances mécaniques. Il est alors nécessaire d'ajouter un amortissement d'orignie visqueuse, qui peut être calcul de différentes manières.
 
 
 ![](images/efforts_hydros.svg)
@@ -625,7 +630,7 @@ suivantes sont réalisées :
   utilisés). Pour activer la verbosité, on met la clef `output Br and K` à
   `true`. Sinon on la met à `false`.
 - Utilisation de la vitesse d'oscillation : lorsque la clef booléenne `remove constant speed` vaut `true`, xdyn va soustraire la vitesse moyenne $`Vs`$ (calculée sur la période `tau max`) à la vitesse totale $`\dot{X}_b`$ pour utiliser la vitesse d'oscillation $`\dot{X}`$ pour le calcul de l'effort de radiation. Si cette clef est fixée à `false`, **xdyn utilise la vitesse totale**. Ce paramètre est optionnel et sa valeur par défaut est `false`.
-- Correction avec vitesse d'avance : la clée booléenne `forward speed correction` peut prendre la valeur `true` pour appliquer la correction des coefficients avec vitesse d'avance. Cette clé est optionelle et peut donc être omise, la correction ne sera alors pas appliquée.
+- Correction avec vitesse d'avance : la clé booléenne `forward speed correction` peut prendre la valeur `true` pour appliquer la correction des coefficients avec vitesse d'avance. Cette clé est optionelle et peut donc être omise, la correction ne sera alors pas appliquée.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: radiation damping
@@ -827,6 +832,10 @@ description = A_m1m1 - added mass coefficient mode 1,1
 Si la clef `calcAmasDampCoefInfFreq` du fichier de paramètres de PRECAL_R est à
 `true`, PRECAL_R écrit la matrice de masses ajoutées à pulsation infinie
 (utilisée par xdyn) dans la section `[added_mass_damping_matrix_inf_freq]`.
+
+⚠ Si plusieurs vitesses d'avance ou plusieurs incidences de houle sont spécifiées dans le fichier
+PRECAL_R, seule la matrice concernant la première de ces vitesses et la première de ces incidences
+est prise en compte (il s'agit de la matrice `total_added_mass_matrix_inf_freq_U1_mu1`).
 
 ## Références
 

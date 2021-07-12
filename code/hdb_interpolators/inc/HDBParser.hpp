@@ -8,12 +8,10 @@
 #ifndef HDBPARSER_HPP_
 #define HDBPARSER_HPP_
 
-#include <Eigen/Dense>
-
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 
-#include "TimestampedMatrix.hpp"
+#include "HydroDBParser.hpp"
 
 /** \brief
  *  \details
@@ -24,7 +22,7 @@
  *  \section ex2 Expected output
  *  \snippet hdb_interpolators/unit_tests/src/HDBParserTest.cpp HDBDataTest expected output
  */
-class HDBParser
+class HDBParser : public HydroDBParser
 {
     public:
         HDBParser(const std::string& data);

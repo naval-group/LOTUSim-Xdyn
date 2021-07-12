@@ -525,7 +525,7 @@ le fichier `test_ship.hdb`) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 added mass matrix at the center of gravity and projected in the body frame:
-    from hdb file: test_ship.hdb
+    from hdb: test_ship.hdb
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On peut également lire cette matrice depuis un fichier PRECAL_R, à condition

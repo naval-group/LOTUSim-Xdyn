@@ -53,6 +53,7 @@ namespace test_data
     std::string heading_keeping_controllers();
     std::string radiation_damping();
     std::string diffraction();
+    std::string diffraction_precalr();
     std::string test_ship_radiation_damping();
     std::string simple_track_keeping();
     std::string maneuvering_commands();

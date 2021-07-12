@@ -10,6 +10,8 @@
 #include "Body.hpp"
 #include "DiffractionInterpolator.hpp"
 #include "HDBParser.hpp"
+#include "HydroDBParser.hpp"
+#include "PrecalParser.hpp"
 #include "InvalidInputException.hpp"
 #include "InternalErrorException.hpp"
 #include "SurfaceElevationInterface.hpp"
@@ -25,10 +27,14 @@
 
 std::string DiffractionForceModel::model_name() { return "diffraction";}
 
-HDBParser hdb_from_file(const std::string& filename);
-HDBParser hdb_from_file(const std::string& filename)
+std::shared_ptr<HydroDBParser> parser_factory(const std::string& hdb_filename, const std::string& precal_filename);
+std::shared_ptr<HydroDBParser> parser_factory(const std::string& hdb_filename, const std::string& precal_filename)
 {
-    return HDBParser(ssc::text_file_reader::TextFileReader(filename).get_contents());
+    if (hdb_filename.empty())
+    {
+        return std::shared_ptr<HydroDBParser>(new PrecalParser(PrecalParser::from_file(precal_filename)));
+    }
+    return std::shared_ptr<HydroDBParser>(new HDBParser(ssc::text_file_reader::TextFileReader(hdb_filename).get_contents()));
 }
 
 void check_all_omegas_are_within_bounds(const double min_bound, const std::vector<std::vector<double> >& vector_to_check, const double max_bound);
@@ -75,30 +81,34 @@ class DiffractionForceModel::Impl
 {
     public:
 
-        Impl(const YamlDiffraction& data, const EnvironmentAndFrames& env, const HDBParser& hdb, const std::string& body_name):
+        Impl(const YamlDiffraction& data, const EnvironmentAndFrames& env, const HydroDBParser& parser, const std::string& body_name):
                 H0(data.calculation_point.x,data.calculation_point.y,data.calculation_point.z),
-                response(DiffractionInterpolator(hdb,std::vector<double>(),std::vector<double>(),data.mirror)),
+                response(DiffractionInterpolator(parser, std::vector<double>(), std::vector<double>(), data.mirror)),
                 use_encounter_period(false)
         {
             if (env.w.use_count()>0)
             {
-                std::vector<double> hdb_periods;
+                std::vector<double> periods;
                 try
                 {
-                    hdb_periods = hdb.get_diffraction_module_periods();
+                    periods = parser.get_diffraction_module_periods();
                 }
                 catch(const ssc::exception_handling::Exception& e)
                 {
-                    THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception, "This simulation uses the diffraction force model which uses the frequency-domain results of the HDB file. When querying the periods for the diffraction forces, the following problem occurred:\n" << e.get_message());
+                    THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception,
+                          "This simulation uses the diffraction force model which uses the frequency-domain "
+                          "results of the HDB or PRECAL_R file. When querying the periods for the diffraction "
+                          "forces, the following problem occurred:\n" << e.get_message());
                 }
-                if (not(hdb_periods.empty()))
+                if (not(periods.empty()))
                 {
-                    check_all_omegas_are_within_bounds(hdb_periods.front(), convert_to_periods(env.w->get_wave_angular_frequency_for_each_model()), hdb_periods.back());
+                    check_all_omegas_are_within_bounds(periods.front(), convert_to_periods(env.w->get_wave_angular_frequency_for_each_model()), periods.back());
                 }
             }
             else
             {
-                THROW(__PRETTY_FUNCTION__, InvalidInputException, "Force model '" << DiffractionForceModel::model_name << "' needs a wave model, even if it's 'no waves'");
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "Force model '"
+                      << DiffractionForceModel::model_name << "' needs a wave model, even if it's 'no waves'");
             }
             if (data.use_encounter_period.is_initialized())
             {
@@ -200,7 +210,7 @@ class DiffractionForceModel::Impl
 
 DiffractionForceModel::DiffractionForceModel(const YamlDiffraction& data, const std::string& body_name_, const EnvironmentAndFrames& env):
         ForceModel("diffraction", {}, body_name_, env),
-        pimpl(new Impl(data, env, hdb_from_file(data.hdb_filename), body_name_))
+        pimpl(new Impl(data, env, *parser_factory(data.hdb_filename, data.precal_filename), body_name_))
 {
 }
 
@@ -222,8 +232,30 @@ DiffractionForceModel::Input DiffractionForceModel::parse(const std::string& yam
     YAML::Node node;
     parser.GetNextDocument(node);
     YamlDiffraction ret;
-    node["hdb"]                             >> ret.hdb_filename;
-    node["calculation point in body frame"] >> ret.calculation_point;
+
+    if (node.FindValue("hdb"))
+    {
+        if (node.FindValue("precal"))
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                  "cannot specify both an HDB filename and a PRECAL_R filename "
+                  "(both keys 'hdb' and 'precal' were found in the YAML file).");
+        }
+        node["hdb"] >> ret.hdb_filename;
+        node["calculation point in body frame"] >> ret.calculation_point;
+    }
+    else if (node.FindValue("precal"))
+    {
+        node["precal"] >> ret.precal_filename;
+        ret.calculation_point = YamlCoordinates(0, 0, 0);
+    }
+    else
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+              "should specify either an HDB filename or a PRECAL_R filename "
+              "(no 'hdb' or 'precal' keys were found in the YAML file).");
+    }
+
     node["mirror for 180 to 360"]           >> ret.mirror;
     parse_optional(node, "use encounter period", ret.use_encounter_period);
     return ret;

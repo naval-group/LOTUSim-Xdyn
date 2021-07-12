@@ -8,6 +8,7 @@
 #include "YamlDiffraction.hpp"
 
 YamlDiffraction::YamlDiffraction() : hdb_filename(),
+                                     precal_filename(),
                                      calculation_point(),
                                      mirror(false),
                                      use_encounter_period()
