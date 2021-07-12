@@ -15,6 +15,7 @@ SET(SRC src/hdb_data.cpp
         src/bug_3187.cpp
         src/bug_3185.cpp
         src/precal_test_data.cpp
+        src/hdb_data_issue_184.cpp
     )
 
 INCLUDE_DIRECTORIES(inc)

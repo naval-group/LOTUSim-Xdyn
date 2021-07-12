@@ -62,17 +62,6 @@ class HDBParser::Impl
                 omega_rad.push_back(2*PI/ *T);
             }
             Tmin = periods.front();
-            const auto added_mass_periods = get_Tp(M_a);
-            if ((added_mass_periods.size() != periods.size()) || not(std::equal(periods.begin(), periods.end(), added_mass_periods.begin(), double_eq)))
-            {
-                THROW(__PRETTY_FUNCTION__, InvalidInputException, "The declared periods ('List_calculated_periods' section) and the added mass periods do not match in the HDB file.");
-            }
-            const auto radiation_damping_periods = get_Tp(B_r);
-            if ((radiation_damping_periods.size() != periods.size()) || not(std::equal(periods.begin(), periods.end(), radiation_damping_periods.begin(), double_eq)))
-            {
-                THROW(__PRETTY_FUNCTION__, InvalidInputException, "The declared periods ('List_calculated_periods' section) and the radiation damping periods do not match in the HDB file.");
-            }
-
             for (size_t i = 0 ; i < 6 ; ++i)
             {
                 for (size_t j = 0 ; j < 6 ; ++j)
