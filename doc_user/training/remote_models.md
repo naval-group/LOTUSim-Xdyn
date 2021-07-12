@@ -179,14 +179,12 @@ git clone git@gitlab.com:CharlesEdouardCady_SIREHNA/xdyn-remote-models-examples.
 
 Depending on what a given wave model implements, some force models may not be available.
 
-|--------------------|-------------------------|
 | Computed quantity  |  Force model using it   |
 |--------------------|-------------------------|
 | Wave elevations    | Non-linear hydrostatics |
 | Dynamic pressure   | Froude-Krylov           |
 | Orbital velocities | Rudder                  |
 | Linear spectrum    | Diffraction             |
-|--------------------|-------------------------|
 
 For example, for non-linear wave models (e.g. Choppy, HOS...) the wave model
 needs to be linearized to retrieve a linear spectrum. Other approaches might
@@ -194,8 +192,136 @@ be possible (uncharted territory!)
 
 # Remote controllers
 
-## Architecture
+## Interface (`set_parameters`)
 
-## Interface
+```protobuf
+service Controller
+{
+    // Initialize the controller with YAML parameters
+    rpc set_parameters(SetParametersRequest)                 returns (SetParametersResponse);
+}
+
+message SetParametersRequest
+{
+    string parameters = 1; // YAML string containing the parameters to set for this particular model. Extracted verbatim from xdyn's YAML file
+    double t0         = 2; // Date of the beginning of the simulation (first timestep) in seconds
+}
+
+message SetParametersResponse
+{
+    enum AngleRepresentation {
+        QUATERNION = 0;
+        EULER_321 = 1;
+    }
+    double              date_of_first_callback = 1; // Date at which the controller should be called for the first time. Will often be equal to just t0.
+    repeated string     setpoint_names         = 2; // Name of the controller inputs (setpoints) which xdyn must supply.
+    AngleRepresentation angle_representation   = 3; // Does the controller need to be called with get_commands_quaternion or with get_commands_euler_321?
+    double              dt                     = 4; // Constant step of the controller. Only taken into account if dt>0: if dt==0, the controller is assumed to be a variable step controller and has to give the date at which the solver should call it again in ControllerResponse (next_call >= 0).
+    repeated string     command_names          = 5; // Name of the outputs (commands) computed by the controller (matches the keys in ControllerResponse::commands)
+}
+```
+
+## Interface (`get_commands_quaternion`)
+
+```protobuf
+service Controller
+{
+    // Calculate the commands using quaternions instead of angles
+    rpc get_commands_quaternion(ControllerRequestQuaternion) returns (ControllerResponse);
+}
+```
+
+```protobuf
+message ControllerRequestQuaternion
+{
+    ControllerStatesQuaternion states     = 1; // Ship states
+    ControllerStatesQuaternion dstates_dt = 2; // Ship state derivatives (at the previous time step)
+    repeated double            setpoints  = 3; // Controller inputs (setpoints). Must have the same size as setpoint_names in SetParametersResponse.
+}
+```
+
+```protobuf
+message ControllerResponse
+{
+    map<string,double> commands = 1; // Commands computed by the controller
+    double next_call           = 2; // Date at which the solver should call the controller again
+}
+```
+
+
+```protobuf
+message ControllerStatesQuaternion
+{
+    double t  = 1;  // Simulation time (in seconds).
+    double x  = 2;  // Projection on axis X of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double y  = 3;  // Projection on axis Y of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double z  = 4;  // Projection on axis Z of the NED frame of the vector between the origin of the NED frame and the origin of the BODY frame
+    double u  = 5;  // Projection on axis X of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    double v  = 6;  // Projection on axis Y of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    double w  = 7;  // Projection on axis Z of the BODY frame of the vector of the ship's speed relative to the ground (BODY/NED)
+    double p  = 8;  // Projection on axis X of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    double q  = 9;  // Projection on axis Y of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    double r  = 10; // Projection on axis Z of the BODY frame of the vector of the ship's rotation speed relative to the ground (BODY/NED)
+    double qr = 11; // Real part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    double qi = 12; // First imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    double qj = 13; // Second imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+    double qk = 14; // Third imaginary part of the quaternion defining the rotation from the NED frame to the ship's BODY frame
+}
+```
+
+## Interface (`get_commands_euler_321`)
+
+```protobuf
+service Controller
+{
+    // Calculate the commands using angles in Rned2body = Rz(ψ).Ry(θ).Rx(ϕ) rotation convention
+    rpc get_commands_euler_321(ControllerRequestEuler)       returns (ControllerResponse);
+}
+```
+
+```protobuf
+message ControllerRequestEuler
+{
+    ControllerStatesEuler states     = 1; // Ship states history
+    ControllerStatesEuler dstates_dt = 2; // Ship state derivatives history
+    repeated double       setpoints  = 3; // Controller inputs (setpoints). Must have the same size as setpoint_names in SetParametersResponse.
+}
+```
+
+```protobuf
+message ControllerResponse
+{
+    map<string,double> commands = 1; // Commands computed by the controller
+    double next_call            = 2; // Date at which the solver should call the controller again
+}
+```
+
+## Sequence diagram
+
+```plantuml
+@startuml
+!theme cerulean
+skinparam responseMessageBelowArrow true
+xdyn -> controller: set_parameters (SetParametersRequest)
+controller --> xdyn: SetParametersResponse
+xdyn -> controller: get_commands_euler_321 (ControllerRequestEuler)
+controller --> xdyn: ControllerResponse (ControllerResponse)
+@enduml
+```
+
+```plantuml
+@startuml
+!theme cerulean
+skinparam responseMessageBelowArrow true
+xdyn -> controller: set_parameters (SetParametersRequest)
+controller --> xdyn: SetParametersResponse
+xdyn -> controller: get_commands_quaternion (ControllerRequestQuaternion)
+controller --> xdyn: ControllerResponse (ControllerResponse)
+@enduml
+```
 
 ## Example
+
+```bash
+git clone git@gitlab.com:CharlesEdouardCady_SIREHNA/xdyn-remote-models-examples.git
+```
