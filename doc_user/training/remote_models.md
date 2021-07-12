@@ -123,10 +123,14 @@ time step). It is used to supply information both to xdyn and to the force model
   - The commands needed by this model, so xdyn can check they are supplied
 
 ```python
-def __init__(self, parameters, body_name):
-    param = yaml.safe_load(parameters)
-    self.c = param['c']
-    self.body_name = body_name
+import yaml
+from force import Model
+
+class MyForceModel(Model):
+    def __init__(self, parameters, body_name):
+        param = yaml.safe_load(parameters)
+        self.c = param['c']
+        self.body_name = body_name
 ```
 
 ## Force interface - `force`
