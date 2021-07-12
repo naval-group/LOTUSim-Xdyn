@@ -8,8 +8,8 @@
 
 - Remote Procedure Call (RPC) allows calling functions from a
   different address space (or computer) as if they were local,
-  without coding the details of the remote interaction
-- gRPC is a RPC framework developped by Google & based on protocol buffers.
+  without coding the details of the remote interaction.
+- gRPC is a RPC framework developped by Google, based on Protocol Buffers.
 - It has pluggable support for load balancing, tracing, health checking and
   authentication.
 - As it uses Protocol Buffers, it has a schema and encoders/decoders are
@@ -101,7 +101,7 @@ service Force
 
 Implementing the gRPC interface directly can be a hassle, which is why we
 created the "interfaces" module
-(https://gitlab.com/sirehna_naval_group/sirehna/interfaces). in this module,
+(https://gitlab.com/sirehna_naval_group/sirehna/interfaces). In this module,
 there is a helper `force.py` module in Python: you just need to derive from the
 `force.Model` class.
 
@@ -130,7 +130,7 @@ def __init__(self, parameters, body_name):
 
 ## Force interface - `force`
 
-- This method is where the actual force and torques are calculated.
+- This method is where the actual forces and torques are calculated.
 - The force model can output extra observations (which can then be outputted
   by xdyn).
 
