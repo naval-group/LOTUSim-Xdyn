@@ -36,6 +36,10 @@ class PrecalParser : public HydroDBParser
         std::vector<double> get_diffraction_phase_periods() const;
         std::vector<double> get_diffraction_module_psis() const;
         std::vector<double> get_diffraction_phase_psis() const;
+        /**
+         * @brief Get the angular frequencies for the radiation damping and added mass matrices
+         */
+        std::vector<double> get_angular_frequencies() const;
 
 
     private:

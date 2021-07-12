@@ -419,3 +419,17 @@ std::vector<double> PrecalParser::get_diffraction_phase_psis() const
     const RAOData* ret = boost::get<RAOData>(&diffraction_phase);
     return ret->psi;
 }
+
+std::vector<double> PrecalParser::get_angular_frequencies() const
+{
+    for (const auto section : precal_file.sections)
+    {
+        const auto it = section.vector_values.find("waveFreq");
+        if (it != section.vector_values.end())
+        {
+            return it->second;
+        }
+    }
+    THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find value 'waveFreq' in PRECAL_R's input file.");
+    return std::vector<double>();
+}

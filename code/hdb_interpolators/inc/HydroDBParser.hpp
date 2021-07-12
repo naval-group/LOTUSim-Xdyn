@@ -27,6 +27,10 @@ class HydroDBParser
         virtual std::vector<double> get_diffraction_phase_periods() const = 0;
         virtual std::vector<double> get_diffraction_module_psis() const = 0;
         virtual std::vector<double> get_diffraction_phase_psis() const = 0;
+        /**
+         * @brief Get the angular frequencies for the radiation damping and added mass matrices
+         */
+        virtual std::vector<double> get_angular_frequencies() const = 0;
 
 };
 
