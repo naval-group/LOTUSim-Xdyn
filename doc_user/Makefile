@@ -127,3 +127,4 @@ clean:
 	      doc.docx \
 	      pict*.svg
 	rm -rf tuto_execution
+	@make -C training clean
