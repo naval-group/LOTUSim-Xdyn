@@ -3,7 +3,9 @@
 all: remote_models.pptx
 
 remote_models.pptx: remote_models.md
-	@docker run -t --rm -u $(shell id -u):$(shell id -g) -v $(shell pwd):/shared -w /shared pandoc/core:2.14.0.3 $< --toc -o $@
+	@docker build -t pandoc .
+	@docker run -t --rm -u $(shell id -u):$(shell id -g) -v $(shell pwd):/shared -w /shared pandoc $< --toc -o $@
+	@rm -rf plantuml-images/
 
 clean:
 	rm -rf remote_models.pptx
