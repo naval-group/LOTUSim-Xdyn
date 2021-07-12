@@ -554,7 +554,7 @@ Et :
 ## Calcul numérique des amortissements de radiation
 
 En pratique, on utilise en entrée du simulateur les [fichiers HDB](#format-hdb)
-(convention d'écriture de base hydrodynamique issue originellement de Diodore),
+(convention d'écriture de base hydrodynamique issue originellement de Diodore) ou les [fichiers PRECAL_R](#format-precal_r),
 qui contiennent les matrices d'amortissement de radiation à
 différentes pulsations. Ces fichiers sont utilisés dans une table
 d'interpolation (soit une interpolation linéaire par morceaux, soit des splines)
@@ -587,11 +587,11 @@ de repère est nécessaire pour les exprimer dans le repère "body".
 Pour utiliser ce modèle, on écrit `model: radiation damping`.
 Les matrices d'amortissement de radiation sont lues depuis un [fichier
 HDB](#format-hdb)
-(format Diodore). Ce fichier contient les matrices $`B_r`$ pour différentes
+(format Diodore) ou un [fichier PRECAL_R](#format-precal_r). Ce fichier contient les matrices $`B_r`$ pour différentes
 périodes. Comme l'indique la [documentation](#impl%C3%A9mentation), les étapes
 suivantes sont réalisées :
 
-- Lecture du [fichier HDB](#format-hdb) : son chemin est renseigné dans la clef `hdb`.
+- Lecture du [fichier HDB](#format-hdb) ou du [fichier PRECAL_R](#format-precal_r) : son chemin est renseigné dans la clef `hdb` (ou `precalr`, respectivement).
 - Interpolation des matrices de fonction d'amortissement : on utilise des
   splines dites "naturelles", c'est-à-dire
   dont la dérivée seconde est nulle aux extrémités ou, ce qui revient au même,
@@ -632,6 +632,8 @@ suivantes sont réalisées :
 - Utilisation de la vitesse d'oscillation : lorsque la clef booléenne `remove constant speed` vaut `true`, xdyn va soustraire la vitesse moyenne $`Vs`$ (calculée sur la période `tau max`) à la vitesse totale $`\dot{X}_b`$ pour utiliser la vitesse d'oscillation $`\dot{X}`$ pour le calcul de l'effort de radiation. Si cette clef est fixée à `false`, **xdyn utilise la vitesse totale**. Ce paramètre est optionnel et sa valeur par défaut est `false`.
 - Correction avec vitesse d'avance : la clé booléenne `forward speed correction` peut prendre la valeur `true` pour appliquer la correction des coefficients avec vitesse d'avance. Cette clé est optionelle et peut donc être omise, la correction ne sera alors pas appliquée.
 
+Voici un exemple de mise en données utilisant un fichier HDB :
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: radiation damping
   hdb: test_ship.hdb
@@ -646,6 +648,24 @@ suivantes sont réalisées :
   remove constant speed: true
   forward speed correction: true
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Voici la même mise en données utilisant un fichier PRECAL_R :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: radiation damping
+  precalr: test_ship.ini
+  type of quadrature for cos transform: simpson
+  type of quadrature for convolution: clenshaw-curtis
+  nb of points for retardation function discretization: 50
+  omega min: {value: 0, unit: rad/s}
+  omega max: {value: 30, unit: rad/s}
+  tau min: {value: 0.2094395, unit: s}
+  tau max: {value: 10, unit: s}
+  output Br and K: true
+  remove constant speed: true
+  forward speed correction: true
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 ### Méthode des rectangles
 
