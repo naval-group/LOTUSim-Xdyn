@@ -100,18 +100,18 @@ Eigen::Vector3d centre_of_gravity(const Matrix3x& polygon, const std::vector<siz
 Matrix3x convert(const VectorOfPoints& v //!< Points to convert
                 );
 
-/**  \brief Determines if the points in the facet are oriented by the right-hand rule
-  *  \returns True if the points in the mesh are oriented by the right-hand rule, false otherwise
+                /**  \brief Determines if the facet normal vector (oriented by the right-hand rule) is facing inwards (WRT the reference point)
+  *  \returns True if the normal is oriented inwards, false otherwise
   */
-bool oriented_clockwise(const VectorOfPoints& v, //!< Points in mesh
+bool oriented_inwards(const VectorOfPoints& v, //!< Points in mesh
                         const EPoint& O //!< Point inside the volume (eg. its centre of gravity)
         );
 
-/**  \brief Determines for each facet if the points in the mesh are oriented by the right-hand rule
-  *  \returns True all facets in the mesh are oriented by the right-hand rule (anti-clockwise),
-  *           false if all facets are oriented clockwise, throws otherwise.
+/**  \brief Determines for each facet if the normal is oriented inwards (WRT the reference point)
+  *  \returns True all facets in the mesh are oriented inwards,
+  *           false if all facets are oriented outwards, prints a warning to stderr otherwise.
   */
-bool oriented_clockwise(const VectorOfVectorOfPoints& v, //!< Points in mesh
+bool oriented_inwards(const VectorOfVectorOfPoints& v, //!< Points in mesh
                         const EPoint& O //!< Point inside the volume (eg. its centre of gravity)
         );
 

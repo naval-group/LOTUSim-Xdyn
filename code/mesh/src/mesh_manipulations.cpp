@@ -190,17 +190,17 @@ Matrix3x convert(const VectorOfPoints& v)
     return ret;
 }
 
-bool oriented_clockwise(const VectorOfVectorOfPoints& v, const EPoint& O)
+bool oriented_inwards(const VectorOfVectorOfPoints& v, const EPoint& O)
 {
     if (v.size() < 2) return true;
     size_t nb_of_clockwise = 0;
     size_t nb_of_anticlockwise = 0;
-    bool first_facet_is_oriented_clockwise = oriented_clockwise(v.front(),O);
+    bool first_facet_is_oriented_clockwise = oriented_inwards(v.front(),O);
     if (first_facet_is_oriented_clockwise) nb_of_clockwise++;
     else nb_of_anticlockwise++;
     for (size_t i = 1 ; i < v.size() ; ++i)
     {
-        const bool facet_i_is_oriented_clockwise = oriented_clockwise(v[i],O);
+        const bool facet_i_is_oriented_clockwise = oriented_inwards(v[i],O);
         if (facet_i_is_oriented_clockwise)
         {
             nb_of_clockwise++;
@@ -239,7 +239,7 @@ bool oriented_clockwise(const VectorOfVectorOfPoints& v, const EPoint& O)
     return first_facet_is_oriented_clockwise;
 }
 
-bool oriented_clockwise(const VectorOfPoints& facet, //!< Points to convert
+bool oriented_inwards(const VectorOfPoints& facet, //!< Points to convert
                         const EPoint& G //!< Point inside the volume (eg. its centre of gravity)
         )
 {

@@ -12,7 +12,7 @@ MeshBuilder::MeshBuilder(const VectorOfVectorOfPoints& v_, const bool check_orie
                                                                    nodes(Matrix3x()),
                                                                    edges(std::vector<Edge>()),
                                                                    facets(std::vector<Facet>()),
-                                                                   clockwise( check_orientation ? oriented_clockwise(v,barycenter(v)) : true)
+                                                                   clockwise( check_orientation ? oriented_inwards(v,barycenter(v)) : true)
 {
     if (not(v.empty())) nodes = Eigen::MatrixXd::Zero(3,(int)(v.size()*v.front().size()));
 }
@@ -25,7 +25,7 @@ MeshBuilder::MeshBuilder(const VectorOfPoints& tri, const bool check_orientation
                                                             nodes(Matrix3x()),
                                                             edges(std::vector<Edge>()),
                                                             facets(std::vector<Facet>()),
-                                                            clockwise( check_orientation ? oriented_clockwise(v,barycenter(v)) : true)
+                                                            clockwise( check_orientation ? oriented_inwards(v,barycenter(v)) : true)
 {
     if (not(tri.empty())) nodes = Eigen::MatrixXd::Zero(3,(int)(v.size()*v.front().size()));
 }
@@ -152,6 +152,6 @@ MeshBuilder::MeshBuilder(const Matrix3x& tri) : v(VectorOfVectorOfPoints()),
         vv.push_back(tri.col(i));
     }
     v.push_back(vv);
-    clockwise = oriented_clockwise(v,barycenter(v));
+    clockwise = oriented_inwards(v,barycenter(v));
     if (not(v.empty())) nodes = Eigen::MatrixXd::Zero(3,(int)(v.size()*v.front().size()));
 }
