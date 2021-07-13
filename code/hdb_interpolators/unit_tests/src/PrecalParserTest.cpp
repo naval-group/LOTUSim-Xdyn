@@ -380,7 +380,7 @@ TEST_F(PrecalParserTest, can_parse_diffraction_phase_raos)
 
 TEST_F(PrecalParserTest, can_parse_angular_frequencies)
 {
-    auto precal = PrecalParser::from_string(test_data::precal());
+    const auto precal = PrecalParser::from_string(test_data::precal());
     const std::vector<double> omegas = precal.get_angular_frequencies();
     ASSERT_EQ(7, omegas.size());
     ASSERT_DOUBLE_EQ(0.400, omegas.at(0));
@@ -390,4 +390,10 @@ TEST_F(PrecalParserTest, can_parse_angular_frequencies)
     ASSERT_DOUBLE_EQ(0.800, omegas.at(4));
     ASSERT_DOUBLE_EQ(0.900, omegas.at(5));
     ASSERT_DOUBLE_EQ(1.000, omegas.at(6));
+}
+
+TEST_F(PrecalParserTest, can_get_forward_speed)
+{
+    const auto precal = PrecalParser::from_string(test_data::precal());
+    ASSERT_DOUBLE_EQ(12.0*1852.0/3600.0, precal.get_forward_speed());
 }

@@ -40,6 +40,12 @@ class PrecalParser : public HydroDBParser
          * @brief Get the angular frequencies for the radiation damping and added mass matrices
          */
         std::vector<double> get_angular_frequencies() const;
+        /**
+         * @brief Speed at which the radiation damping matrices were calculated.
+         * Used to determine if we can apply a forward-speed correction to the radiation damping
+         * force model.
+         */
+        double get_forward_speed() const;
 
 
     private:

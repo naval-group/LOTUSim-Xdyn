@@ -7,7 +7,7 @@
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
-
+#include <ssc/decode_unit.hpp>
 #define DEG2RAD (PI/180.)
 
 PrecalParser PrecalParser::from_string(const std::string& precal_file_contents)
@@ -432,4 +432,29 @@ std::vector<double> PrecalParser::get_angular_frequencies() const
     }
     THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find value 'waveFreq' in PRECAL_R's input file.");
     return std::vector<double>();
+}
+
+double PrecalParser::get_forward_speed() const
+{
+    for (const auto section : precal_file.sections)
+    {
+        const auto it = section.vector_values.find("shipSpeed");
+        if (it != section.vector_values.end())
+        {
+            if (it->second.empty())
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "We found vector 'shipSpeed' in PRECAL_R's input file but it was empty.");
+            }
+            const auto it2 = section.string_values.find("unitShipSpeed");
+            if (it2 == section.string_values.end())
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find value 'unitShipSpeed' in the same section as 'shipSpeed' in PRECAL_R's input file.");
+            }
+            // decode_unit does not understand "kn" (which kind of defeats the purpose of using it)
+            const double factor = it2->second == "kn" ? ssc::decode_unit::decodeUnit("kt") : ssc::decode_unit::decodeUnit(it2->second);
+            return it->second.front()*factor;
+        }
+    }
+    THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find value 'waveFreq' in PRECAL_R's input file.");
+    return std::nan("");
 }
