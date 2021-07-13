@@ -39,6 +39,7 @@ update-submodules:
 	@echo "Updating Git submodules..."
 	@git submodule sync --recursive
 	@git submodule update --init --recursive
+	@git submodule foreach --recursive 'git fetch --tags'
 
 ${HEADERS}:
 	@git submodule sync --recursive
