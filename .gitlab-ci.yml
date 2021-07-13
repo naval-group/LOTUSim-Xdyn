@@ -64,6 +64,7 @@ doc:
      when: on_success
      paths:
      - doc.html
+     - doc_user/training/remote_models.pptx
 
 pages:
     stage: deploy
