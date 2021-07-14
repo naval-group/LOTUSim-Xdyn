@@ -413,6 +413,10 @@ RadiationDampingForceModel::Input RadiationDampingForceModel::parse(const std::s
     {
         node["hdb"] >> input.hdb_filename;
     }
+    if (node.FindValue("precal_r"))
+    {
+        node["precal_r"] >> input.precal_r_filename;
+    }
     std::string s;
     node["type of quadrature for cos transform"] >> s;
     input.type_of_quadrature_for_cos_transform = parse_type_of_quadrature_(s);

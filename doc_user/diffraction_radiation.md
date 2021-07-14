@@ -653,7 +653,7 @@ Voici la même mise en données utilisant un fichier PRECAL_R :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: radiation damping
-  precalr: test_ship.ini
+  precal_r: test_ship.ini
   type of quadrature for cos transform: simpson
   type of quadrature for convolution: clenshaw-curtis
   nb of points for retardation function discretization: 50
