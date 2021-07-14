@@ -78,10 +78,10 @@ TEST_F(PrecalParserTest, can_parse_rao_titles)
 {
     auto precal = parse_precal_from_string(raos());
     ASSERT_EQ("Signal 1: surge motion at (70.015,0.000,7.510), h=-1.000m, phi_a=0.500deg, "
-              "U=12.000kn, mu=180.000deg (amplitude unit = m/m, phase unit = deg)",
+              "U=0.000kn, mu=180.000deg (amplitude unit = m/m, phase unit = deg)",
               precal.raos.at(0).title_line);
     ASSERT_EQ("Signal 8: F_drift_m1_c2 at (70.015,0.000,7.510), h=-1.000m, phi_a=0.500deg, "
-              "U=12.000kn, mu=90.000deg (amplitude unit = kN/m2, phase unit = N.A.)",
+              "U=0.000kn, mu=90.000deg (amplitude unit = kN/m2, phase unit = N.A.)",
               precal.raos.at(29).title_line);
 }
 
