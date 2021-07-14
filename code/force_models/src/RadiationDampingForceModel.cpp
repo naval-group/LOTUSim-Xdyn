@@ -405,7 +405,10 @@ RadiationDampingForceModel::Input RadiationDampingForceModel::parse(const std::s
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "When using the radiation force model, you cannot specify both the 'hdb' and 'precal_r' in the YAML, as xdyn would not know which one to use to retrieve radiation damping coefficients: you should remove either 'hdb' or 'precal_r' from the YAML file.");
     }
-    node["hdb"] >> input.hdb_filename;
+    if (node.FindValue("hdb"))
+    {
+        node["hdb"] >> input.hdb_filename;
+    }
     std::string s;
     node["type of quadrature for cos transform"] >> s;
     input.type_of_quadrature_for_cos_transform = parse_type_of_quadrature_(s);
