@@ -46,15 +46,21 @@ class PrecalParser : public HydroDBParser
          * force model.
          */
         double get_forward_speed() const;
-        
+
         /**
          * @brief Added mass matrix coefficient Ma(i,j) = f(omega) for all omegas
          */
         std::vector<double> get_added_mass_coeff(const size_t i, const size_t j) const;
 
+        /**
+         * @brief Radiation damping matrix coefficient Br(i,j) = f(omega) for all omegas
+         */
+        std::vector<double> get_radiation_damping_coeff(const size_t i, const size_t j) const;
+
 
     private:
         PrecalParser(const PrecalFile& precal_file);
+        std::vector<double> extract_matrix_coeff(const std::string& short_name, const std::string& long_name, const size_t i, const size_t j) const;
         PrecalFile precal_file;
         boost::variant<RAOData,std::string> diffraction_module;
         boost::variant<RAOData,std::string> diffraction_phase;

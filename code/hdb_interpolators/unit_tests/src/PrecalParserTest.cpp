@@ -398,7 +398,6 @@ TEST_F(PrecalParserTest, can_get_forward_speed)
     ASSERT_DOUBLE_EQ(12.0*1852.0/3600.0, precal.get_forward_speed());
 }
 
-
 TEST_F(PrecalParserTest, can_get_added_mass_coefficients_for_each_frequency)
 {
     const auto precal = PrecalParser::from_string(test_data::precal());
@@ -411,4 +410,18 @@ TEST_F(PrecalParserTest, can_get_added_mass_coefficients_for_each_frequency)
     ASSERT_DOUBLE_EQ(0.998035E+02, A_11.at(4));
     ASSERT_DOUBLE_EQ(0.910424E+02, A_11.at(5));
     ASSERT_DOUBLE_EQ(0.871622E+02, A_11.at(6));
+}
+
+TEST_F(PrecalParserTest, can_get_radiation_damping_matrix_coefficients_for_each_frequency)
+{
+    const auto precal = PrecalParser::from_string(test_data::precal());
+    const std::vector<double> Br_34 = precal.get_radiation_damping_coeff(3, 4);
+    ASSERT_EQ(7, Br_34.size());
+    ASSERT_DOUBLE_EQ(-0.247268E-02, Br_34.at(0));
+    ASSERT_DOUBLE_EQ(-0.207622E-03, Br_34.at(1));
+    ASSERT_DOUBLE_EQ(-0.651597E-03, Br_34.at(2));
+    ASSERT_DOUBLE_EQ( 0.520615E-02, Br_34.at(3));
+    ASSERT_DOUBLE_EQ( 0.114931E-02, Br_34.at(4));
+    ASSERT_DOUBLE_EQ( 0.300196E-02, Br_34.at(5));
+    ASSERT_DOUBLE_EQ(-0.177476E-02, Br_34.at(6));
 }

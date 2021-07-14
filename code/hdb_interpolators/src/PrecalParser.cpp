@@ -506,3 +506,8 @@ std::vector<double> PrecalParser::get_added_mass_coeff(const size_t i, const siz
 {
     return extract_matrix_coeff("A", "added mass", i, j);
 }
+
+std::vector<double> PrecalParser::get_radiation_damping_coeff(const size_t i, const size_t j) const
+{
+    return extract_matrix_coeff("B", "damping matrix", i, j);
+}
