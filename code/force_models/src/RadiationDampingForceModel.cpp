@@ -392,7 +392,7 @@ TypeOfQuadrature parse_type_of_quadrature_(const std::string& s)
     return TypeOfQuadrature::FILON;
 }
 
-RadiationDampingForceModel::Input RadiationDampingForceModel::parse(const std::string& yaml, const bool parse_hdb)
+RadiationDampingForceModel::Input RadiationDampingForceModel::parse(const std::string& yaml, const bool parse_hdb_or_precalr)
 {
     RadiationDampingForceModel::Input ret;
     std::stringstream stream(yaml);
@@ -437,7 +437,7 @@ RadiationDampingForceModel::Input RadiationDampingForceModel::parse(const std::s
     {
         node["forward speed correction"] >> input.forward_speed_correction;
     }
-    if (parse_hdb)
+    if (parse_hdb_or_precalr)
     {
         ret.parser = TR1(shared_ptr)<HydroDBParser>(new HDBParser(ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,input.hdb_filename)).get_contents()));
     }
