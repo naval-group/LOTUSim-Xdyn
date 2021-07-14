@@ -37,6 +37,10 @@ class HydroDBParser
          * force model.
          */
         virtual double get_forward_speed() const = 0;
+        /**
+         * @brief Added mass matrix coefficient Ma(i,j) = f(omega) for all omegas
+         */
+        virtual std::vector<double> get_added_mass_coeff(const size_t i, const size_t j) const = 0;
 
 };
 
