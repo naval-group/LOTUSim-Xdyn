@@ -8,6 +8,7 @@
 #include "RadiationDampingForceModel.hpp"
 
 #include "Body.hpp"
+#include "HydroDBParser.hpp"
 #include "HDBParser.hpp"
 #include "History.hpp"
 #include "InvalidInputException.hpp"
@@ -113,7 +114,7 @@ std::function<double(double)> operator-(const std::function<double(double)>& f, 
 class RadiationDampingForceModel::Impl
 {
     public:
-        Impl(const TR1(shared_ptr)<HDBParser>& parser, const YamlRadiationDamping& yaml) : hdb{parser}, builder(RadiationDampingBuilder(yaml.type_of_quadrature_for_convolution, yaml.type_of_quadrature_for_cos_transform)),
+        Impl(const TR1(shared_ptr)<HydroDBParser>& parser_, const YamlRadiationDamping& yaml) : parser{parser_}, builder(RadiationDampingBuilder(yaml.type_of_quadrature_for_convolution, yaml.type_of_quadrature_for_cos_transform)),
         A(), Ka(), Kb(), omega(parser->get_angular_frequencies()), taus(),
         n(yaml.nb_of_points_for_retardation_function_discretization), Tmin(yaml.tau_min), Tmax(yaml.tau_max),
         H0(yaml.calculation_point_in_body_frame.x,yaml.calculation_point_in_body_frame.y,yaml.calculation_point_in_body_frame.y),
@@ -124,7 +125,7 @@ class RadiationDampingForceModel::Impl
             CSVWriter tau_writer(std::cerr, "tau", taus);
 
             // We can only apply the forward speed correction if the radiation damping coefficients were calculated at zero speed
-            if (forward_speed_correction && fabs(hdb->get_forward_speed()) > 1e-3)
+            if (forward_speed_correction && fabs(parser->get_forward_speed()) > 1e-3)
             {
                 std::cerr << "WARNING: You chose to apply a forward speed correction in the 'Radiation Damping' force model, but the forward velocity specified in the HDB file is not zero." << std::endl;
             }
@@ -157,12 +158,12 @@ class RadiationDampingForceModel::Impl
 
         std::function<double(double)> get_Ma(const size_t i, const size_t j) const
         {
-            return builder.build_interpolator(omega, hdb->get_added_mass_coeff(i, j));
+            return builder.build_interpolator(omega, parser->get_added_mass_coeff(i, j));
         }
 
         std::function<double(double)> get_Br(const size_t i, const size_t j) const
         {
-            return builder.build_interpolator(omega,hdb->get_radiation_damping_coeff(i,j));
+            return builder.build_interpolator(omega,parser->get_radiation_damping_coeff(i,j));
         }
 
         std::function<double(double)> get_K(const std::function<double(double)>& Br) const
@@ -342,7 +343,7 @@ class RadiationDampingForceModel::Impl
 
     private:
         Impl();
-        TR1(shared_ptr)<HDBParser> hdb;
+        TR1(shared_ptr)<HydroDBParser> parser;
         RadiationDampingBuilder builder;
         Eigen::Matrix<double, 6, 6> A;
         std::array<std::array<std::function<double(double)>,6>, 6> Ka;
@@ -360,7 +361,7 @@ class RadiationDampingForceModel::Impl
 
 RadiationDampingForceModel::RadiationDampingForceModel(const RadiationDampingForceModel::Input& input, const std::string& body_name, const EnvironmentAndFrames& env) :
         ForceModel("radiation damping", {}, body_name, env),
-        pimpl(new Impl(input.hdb, input.yaml))
+        pimpl(new Impl(input.parser, input.yaml))
 {
 }
 
@@ -423,8 +424,7 @@ RadiationDampingForceModel::Input RadiationDampingForceModel::parse(const std::s
     }
     if (parse_hdb)
     {
-        const TR1(shared_ptr)<HDBParser> hdb(new HDBParser(ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,input.hdb_filename)).get_contents()));
-        ret.hdb = hdb;
+        ret.parser = TR1(shared_ptr)<HydroDBParser>(new HDBParser(ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,input.hdb_filename)).get_contents()));
     }
     ret.yaml = input;
     return ret;

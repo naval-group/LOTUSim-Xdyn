@@ -132,7 +132,7 @@ TEST_F(RadiationDampingForceModelTest, example)
 //! [RadiationDampingForceModelTest example]
     const auto yaml = get_yaml_data(false);
     RadiationDampingForceModel::Input input;
-    input.hdb = get_hdb_data(yaml);
+    input.parser = get_hdb_data(yaml);
     input.yaml = yaml;
     const EnvironmentAndFrames env;
     const std::string body_name = a.random<std::string>();
@@ -167,7 +167,7 @@ TEST_F(RadiationDampingForceModelTest, results_are_zero_for_constant_velocity)
 {
     const auto yaml = get_yaml_data(false);
     RadiationDampingForceModel::Input input;
-    input.hdb = get_hdb_data(yaml);
+    input.parser = get_hdb_data(yaml);
     input.yaml = yaml;
     input.yaml.remove_constant_speed = true;
     const EnvironmentAndFrames env;
@@ -210,7 +210,7 @@ TEST_F(RadiationDampingForceModelTest, velocity_offset_should_not_change_the_res
 {
     const auto yaml = get_yaml_data(false);
     RadiationDampingForceModel::Input input;
-    input.hdb = get_hdb_data(yaml);
+    input.parser = get_hdb_data(yaml);
     input.yaml = yaml;
     input.yaml.remove_constant_speed = true;
     const EnvironmentAndFrames env;
@@ -246,7 +246,7 @@ TEST_F(RadiationDampingForceModelTest, should_print_debugging_information_if_req
     // Call the radiation damping model
     RadiationDampingForceModel::Input input;
     input.yaml = get_yaml_data(true);
-    input.hdb = get_hdb_data(input.yaml);
+    input.parser = get_hdb_data(input.yaml);
     RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
     ASSERT_FALSE(debug.str().empty());
     // Restore cerr's buffer
@@ -261,7 +261,7 @@ TEST_F(RadiationDampingForceModelTest, should_not_print_debugging_information_if
     // Call the radiation damping model
     RadiationDampingForceModel::Input input;
     input.yaml = get_yaml_data(false);
-    input.hdb = get_hdb_data(input.yaml);
+    input.parser = get_hdb_data(input.yaml);
     RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
     ASSERT_TRUE(debug.str().empty());
     // Restore cerr's buffer
@@ -272,7 +272,7 @@ TEST_F(RadiationDampingForceModelTest, force_model_knows_history_length)
 {
     RadiationDampingForceModel::Input input;
     input.yaml = get_yaml_data(false);
-    input.hdb = get_hdb_data(input.yaml);
+    input.parser = get_hdb_data(input.yaml);
     const RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
     ASSERT_DOUBLE_EQ(input.yaml.tau_max, F.get_Tmax());
 }
@@ -283,7 +283,7 @@ TEST_F(RadiationDampingForceModelTest, matrix_product_should_be_done_properly)
     RadiationDampingForceModel::Input input;
     input.yaml = get_yaml_data(false);
     const bool only_diagonal_terms = true;
-    input.hdb = get_hdb_data(input.yaml, not(only_diagonal_terms));
+    input.parser = get_hdb_data(input.yaml, not(only_diagonal_terms));
     input.yaml.type_of_quadrature_for_convolution = TypeOfQuadrature::RECTANGLE;
     EnvironmentAndFrames env;
     RadiationDampingForceModel F(input, "", env);

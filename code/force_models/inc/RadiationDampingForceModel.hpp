@@ -14,7 +14,7 @@
 #include "ForceModel.hpp"
 #include "YamlRadiationDamping.hpp"
 
-class HDBParser;
+class HydroDBParser;
 
 struct EnvironmentAndFrames;
 
@@ -23,8 +23,8 @@ class RadiationDampingForceModel : public ForceModel
     public:
         struct Input
         {
-            Input() : hdb(), yaml(){}
-            TR1(shared_ptr)<HDBParser> hdb;
+            Input() : parser(), yaml(){}
+            TR1(shared_ptr)<HydroDBParser> parser;
             YamlRadiationDamping yaml;
         };
         RadiationDampingForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env);
