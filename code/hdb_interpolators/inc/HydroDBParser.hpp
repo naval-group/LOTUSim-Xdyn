@@ -41,6 +41,10 @@ class HydroDBParser
          * @brief Added mass matrix coefficient Ma(i,j) = f(omega) for all omegas
          */
         virtual std::vector<double> get_added_mass_coeff(const size_t i, const size_t j) const = 0;
+        /**
+         * @brief Radiation damping matrix coefficient Br(i,j) = f(omega) for all omegas
+         */
+        virtual std::vector<double> get_radiation_damping_coeff(const size_t i, const size_t j) const = 0;
 
 };
 
