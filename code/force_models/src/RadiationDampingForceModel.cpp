@@ -10,8 +10,10 @@
 #include "Body.hpp"
 #include "HydroDBParser.hpp"
 #include "HDBParser.hpp"
+#include "PrecalParser.hpp"
 #include "History.hpp"
 #include "InvalidInputException.hpp"
+#include "InternalErrorException.hpp"
 #include "RadiationDampingBuilder.hpp"
 #include "external_data_structures_parsers.hpp"
 
@@ -439,7 +441,18 @@ RadiationDampingForceModel::Input RadiationDampingForceModel::parse(const std::s
     }
     if (parse_hdb_or_precalr)
     {
-        ret.parser = TR1(shared_ptr)<HydroDBParser>(new HDBParser(ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,input.hdb_filename)).get_contents()));
+        if (not(input.hdb_filename.empty()))
+        {
+            ret.parser = TR1(shared_ptr)<HydroDBParser>(new HDBParser(ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,input.hdb_filename)).get_contents()));
+        }
+        else
+        {
+            if (input.precal_r_filename.empty())
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "Neither hdb nor precal_r were defined: you need to define one of the keys 'hdb' or 'precal_r' in the YAML file, with a non-empty string.");
+            }
+            ret.parser = TR1(shared_ptr)<HydroDBParser>(new PrecalParser(PrecalParser::from_file(input.precal_r_filename)));
+        }
     }
     ret.yaml = input;
     return ret;

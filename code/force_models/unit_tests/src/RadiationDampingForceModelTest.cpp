@@ -8,7 +8,7 @@
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
-
+#include <fstream>
 #include <ssc/integrate.hpp>
 
 #include "BodyStates.hpp"
@@ -19,6 +19,7 @@
 #include "RadiationDampingForceModelTest.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "yaml_data.hpp"
+#include "precal_test_data.hpp"
 
 #define EPS 5E-2
 
@@ -402,4 +403,35 @@ TEST_F(RadiationDampingForceModelTest, precal_r_filename_is_read_properly)
                                    "    y: {value: 0, unit: m}\n"
                                    "    z: {value: 1.418, unit: m}\n";
     ASSERT_EQ("test_ship.ini", RadiationDampingForceModel::parse(valid_yaml,false).yaml.precal_r_filename);
+}
+
+TEST_F(RadiationDampingForceModelTest, can_use_data_from_precal_r)
+{
+    const std::string yaml = "model: radiation damping\n"
+                             "precal_r: data.raodb.ini\n"
+                             "type of quadrature for cos transform: simpson\n"
+                             "type of quadrature for convolution: trapezoidal\n"
+                             "nb of points for retardation function discretization: 50\n"
+                             "omega min: {value: 0, unit: rad/s}\n"
+                             "omega max: {value: 30, unit: rad/s}\n"
+                             "tau min: {value: 0.2094395, unit: s}\n"
+                             "tau max: {value: 10, unit: s}\n"
+                             "output Br and K: false\n"
+                             "forward speed correction: false\n"
+                             "calculation point in body frame:\n"
+                             "    x: {value: 0.696, unit: m}\n"
+                             "    y: {value: 0, unit: m}\n"
+                             "    z: {value: 1.418, unit: m}\n";
+    std::ofstream precalr_file("data.raodb.ini");
+    precalr_file << test_data::precal();
+    RadiationDampingForceModel::Input input = RadiationDampingForceModel::parse(yaml);
+    const EnvironmentAndFrames env;
+    const std::string body_name = a.random<std::string>();
+    RadiationDampingForceModel F(input, body_name, env);
+    BodyStates states(100);
+    states.name = body_name;
+    const auto T = 10;
+    const auto t = record_sine(states, 0, T, 10, 100);
+    const auto Frad = F.get_force(states, 0, env, {});
+    ASSERT_NE(0, Frad.X());
 }
