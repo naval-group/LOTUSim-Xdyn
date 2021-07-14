@@ -405,6 +405,10 @@ RadiationDampingForceModel::Input RadiationDampingForceModel::parse(const std::s
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "When using the radiation force model, you cannot specify both the 'hdb' and 'precal_r' in the YAML, as xdyn would not know which one to use to retrieve radiation damping coefficients: you should remove either 'hdb' or 'precal_r' from the YAML file.");
     }
+    if (!node.FindValue("hdb") && !node.FindValue("precal_r"))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "When using the radiation force model, you must use *either* the 'hdb' key in the YAML file (to read the radiation damping matrix coefficients from an HDB file) *or* 'precal_r' (if you wish to use the outputs of PRECAL_R): xdyn couldn't find either in the YAML file.");
+    }
     if (node.FindValue("hdb"))
     {
         node["hdb"] >> input.hdb_filename;

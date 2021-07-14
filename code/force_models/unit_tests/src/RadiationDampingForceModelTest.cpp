@@ -364,3 +364,22 @@ TEST_F(RadiationDampingForceModelTest, should_be_able_to_use_precal_r_files_only
                                    "    z: {value: 1.418, unit: m}\n";
     ASSERT_NO_THROW(RadiationDampingForceModel::parse(valid_yaml,false));
 }
+
+TEST_F(RadiationDampingForceModelTest, need_one_of_precal_r_or_hdb)
+{
+    const std::string invalid_yaml = "model: radiation damping\n"
+                                     "type of quadrature for cos transform: simpson\n"
+                                     "type of quadrature for convolution: clenshaw-curtis\n"
+                                     "nb of points for retardation function discretization: 50\n"
+                                     "omega min: {value: 0, unit: rad/s}\n"
+                                     "omega max: {value: 30, unit: rad/s}\n"
+                                     "tau min: {value: 0.2094395, unit: s}\n"
+                                     "tau max: {value: 10, unit: s}\n"
+                                     "output Br and K: true\n"
+                                     "forward speed correction: true\n"
+                                     "calculation point in body frame:\n"
+                                     "    x: {value: 0.696, unit: m}\n"
+                                     "    y: {value: 0, unit: m}\n"
+                                     "    z: {value: 1.418, unit: m}\n";
+    ASSERT_THROW(RadiationDampingForceModel::parse(invalid_yaml,false), InvalidInputException);
+}
