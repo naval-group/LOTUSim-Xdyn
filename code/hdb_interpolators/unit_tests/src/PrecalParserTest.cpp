@@ -401,7 +401,7 @@ TEST_F(PrecalParserTest, can_get_forward_speed)
 TEST_F(PrecalParserTest, can_get_added_mass_coefficients_for_each_frequency)
 {
     const auto precal = PrecalParser::from_string(test_data::precal());
-    const std::vector<double> A_11 = precal.get_added_mass_coeff(1, 1);
+    const std::vector<double> A_11 = precal.get_added_mass_coeff(0, 0);
     ASSERT_EQ(7, A_11.size());
     ASSERT_DOUBLE_EQ(0.272375E+03, A_11.at(0));
     ASSERT_DOUBLE_EQ(0.208589E+03, A_11.at(1));
@@ -415,7 +415,7 @@ TEST_F(PrecalParserTest, can_get_added_mass_coefficients_for_each_frequency)
 TEST_F(PrecalParserTest, can_get_radiation_damping_matrix_coefficients_for_each_frequency)
 {
     const auto precal = PrecalParser::from_string(test_data::precal());
-    const std::vector<double> Br_34 = precal.get_radiation_damping_coeff(3, 4);
+    const std::vector<double> Br_34 = precal.get_radiation_damping_coeff(2, 3);
     ASSERT_EQ(7, Br_34.size());
     ASSERT_DOUBLE_EQ(-0.247268E-02, Br_34.at(0));
     ASSERT_DOUBLE_EQ(-0.207622E-03, Br_34.at(1));

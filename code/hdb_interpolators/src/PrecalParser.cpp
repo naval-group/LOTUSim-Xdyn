@@ -463,7 +463,7 @@ std::string coeff_name(const std::string& prefix, const size_t i , const size_t 
 std::string coeff_name(const std::string& prefix, const size_t i , const size_t j)
 {
     std::stringstream ss;
-    ss << prefix << "_m" << i << "m" << j;
+    ss << prefix << "_m" << i+1 << "m" << j+1;
     return ss.str();
 }
 
