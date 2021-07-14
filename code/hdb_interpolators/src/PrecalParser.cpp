@@ -467,14 +467,14 @@ std::string coeff_name(const std::string& prefix, const size_t i , const size_t 
     return ss.str();
 }
 
-std::vector<double> PrecalParser::get_added_mass_coeff(const size_t i, const size_t j) const
+std::vector<double> PrecalParser::extract_matrix_coeff(const std::string& short_name, const std::string& long_name, const size_t i, const size_t j) const
 {
     bool found_signal = false;
     double min_speed = 1E300;
     std::string line;
     for (const auto rao : precal_file.raos)
     {
-        if (rao.attributes.name == coeff_name("A", i, j))
+        if (rao.attributes.name == coeff_name(short_name, i, j))
         {
             found_signal = true;
             if (rao.attributes.U == 0)
@@ -493,11 +493,16 @@ std::vector<double> PrecalParser::get_added_mass_coeff(const size_t i, const siz
     }
     if (not(found_signal))
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find added mass coefficient " << coeff_name("A", i, j) << " in PRECAL_R's output file. Check the value of the XML node sim > parRES > expAmasDampCoef is set to true/1 in PRECAL_R's input file.");
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find " << long_name << " coefficient " << coeff_name(short_name, i, j) << " in PRECAL_R's output file. Check the value of the XML node sim > parRES > expAmasDampCoef is set to true/1 in PRECAL_R's input file.");
     }
     else
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, "We found added mass coefficient " << coeff_name("A", i, j) << " in PRECAL_R's output file but it is calculated at non-zero velocity (the minimum velocity we found was " << min_speed << "). You can set this list in PRECAL_R's input file, XML node sim > parHYD > shipSpeedInp.");
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "We found " << long_name << " coefficient " << coeff_name(short_name, i, j) << " in PRECAL_R's output file but it is calculated at non-zero velocity (the minimum velocity we found was " << min_speed << "). You can set this list in PRECAL_R's input file, XML node sim > parHYD > shipSpeedInp.");
     }
     return std::vector<double>();
+}
+
+std::vector<double> PrecalParser::get_added_mass_coeff(const size_t i, const size_t j) const
+{
+    return extract_matrix_coeff("A", "added mass", i, j);
 }
