@@ -323,3 +323,24 @@ TEST_F(RadiationDampingForceModelTest, matrix_product_should_be_done_properly)
     ASSERT_NEAR(conv * (51*u0 + 52*v0 + 53*w0 + 54*p0 + 55*q0 + 56*r0), Frad.M(), 10*EPS);
     ASSERT_NEAR(conv * (61*u0 + 62*v0 + 63*w0 + 64*p0 + 65*q0 + 66*r0), Frad.N(), 10*EPS);
 }
+
+TEST_F(RadiationDampingForceModelTest, cannot_specify_both_hdb_and_precal_r_files)
+{
+    const std::string invalid_yaml = "model: radiation damping\n"
+                                     "hdb: test_ship.hdb\n"
+                                     "precal_r: test_ship.ini\n"
+                                     "type of quadrature for cos transform: simpson\n"
+                                     "type of quadrature for convolution: clenshaw-curtis\n"
+                                     "nb of points for retardation function discretization: 50\n"
+                                     "omega min: {value: 0, unit: rad/s}\n"
+                                     "omega max: {value: 30, unit: rad/s}\n"
+                                     "tau min: {value: 0.2094395, unit: s}\n"
+                                     "tau max: {value: 10, unit: s}\n"
+                                     "output Br and K: true\n"
+                                     "forward speed correction: true\n"
+                                     "calculation point in body frame:\n"
+                                     "    x: {value: 0.696, unit: m}\n"
+                                     "    y: {value: 0, unit: m}\n"
+                                     "    z: {value: 1.418, unit: m}\n";
+    ASSERT_THROW(RadiationDampingForceModel::parse(invalid_yaml,false), InvalidInputException);
+}
