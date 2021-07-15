@@ -33,8 +33,8 @@ class DiffractionForceModel : public ForceModel
 
     private:
         DiffractionForceModel();
-        class Impl;
-        TR1(shared_ptr)<Impl> pimpl;
+        class PhaseModuleRAOEvaluator;
+        TR1(shared_ptr)<PhaseModuleRAOEvaluator> pimpl;
 
 };
 

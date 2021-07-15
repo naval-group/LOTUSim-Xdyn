@@ -76,11 +76,11 @@ std::vector<std::vector<double> > convert_to_periods(std::vector<std::vector<dou
 }
 
 
-class DiffractionForceModel::Impl
+class DiffractionForceModel::PhaseModuleRAOEvaluator
 {
     public:
 
-        Impl(const YamlDiffraction& data, const EnvironmentAndFrames& env, const HydroDBParser& parser, const std::string& body_name):
+        PhaseModuleRAOEvaluator(const YamlDiffraction& data, const EnvironmentAndFrames& env, const HydroDBParser& parser, const std::string& body_name):
                 H0(data.calculation_point.x,data.calculation_point.y,data.calculation_point.z),
                 response(DiffractionInterpolator(parser, std::vector<double>(), std::vector<double>(), data.mirror)),
                 use_encounter_period(false)
@@ -201,7 +201,7 @@ class DiffractionForceModel::Impl
         }
 
     private:
-        Impl();
+        PhaseModuleRAOEvaluator();
         Eigen::Vector3d H0;
         DiffractionInterpolator response;
         bool use_encounter_period;
@@ -209,13 +209,13 @@ class DiffractionForceModel::Impl
 
 DiffractionForceModel::DiffractionForceModel(const YamlDiffraction& data, const std::string& body_name_, const EnvironmentAndFrames& env):
         ForceModel("diffraction", {}, body_name_, env),
-        pimpl(new Impl(data, env, *parser_factory(data.hdb_filename, data.precal_filename), body_name_))
+        pimpl(new PhaseModuleRAOEvaluator(data, env, *parser_factory(data.hdb_filename, data.precal_filename), body_name_))
 {
 }
 
 DiffractionForceModel::DiffractionForceModel(const Input& data, const std::string& body_name_, const EnvironmentAndFrames& env, const std::string& hdb_file_contents):
         ForceModel("diffraction", {}, body_name_, env),
-        pimpl(new Impl(data, env, HDBParser::from_string(hdb_file_contents), body_name_))
+        pimpl(new PhaseModuleRAOEvaluator(data, env, HDBParser::from_string(hdb_file_contents), body_name_))
 {
 }
 
