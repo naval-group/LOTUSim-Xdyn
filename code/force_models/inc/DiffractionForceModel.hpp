@@ -10,6 +10,7 @@
 
 #include "ForceModel.hpp"
 #include "EnvironmentAndFrames.hpp"
+#include "PhaseModuleRAOEvaluator.hpp"
 #include "YamlDiffraction.hpp"
 
 /** \brief Diffraction forces
@@ -33,7 +34,6 @@ class DiffractionForceModel : public ForceModel
 
     private:
         DiffractionForceModel();
-        class PhaseModuleRAOEvaluator;
         TR1(shared_ptr)<PhaseModuleRAOEvaluator> pimpl;
 
 };
