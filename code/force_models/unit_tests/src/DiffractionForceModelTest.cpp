@@ -222,7 +222,7 @@ TEST_F(DiffractionForceModelTest, precal_r_example)
     // First battery of tests: wave direction=-180° (due South)
     env = get_waves_env(T, -M_PI);
 
-    // U=0, wave direction=-180° -> encounter period = wave period = 10.47198s (frequency = 0.6 rad/s), incidence = 180°
+    // U=0, wave direction=-180° -> encounter period = wave period = 10.47198s (frequency = 0.6 rad/s => third line), incidence = 180°
     states = get_states_with_forward_speed(0.);
     auto F = force_model.get_force(states, 0., env, {});
     ASSERT_NEAR(F.X(),  0.447085E+03 * 1e3 * sin( -28.844746 * M_PI / 180.), std::abs(F.X() * 1e-4));
@@ -232,7 +232,7 @@ TEST_F(DiffractionForceModelTest, precal_r_example)
     ASSERT_NEAR(F.M(), -0.145031E+06 * 1e3 * sin( -39.633919 * M_PI / 180.), std::abs(F.M() * 1e-4));
     ASSERT_NEAR(F.N(), -0.808052E-01 * 1e3 * sin( -21.082087 * M_PI / 180.), std::abs(F.N() * 1e-4));
 
-    // U=-5.45, wave direction=-180°, wave period = 10.47198s -> encounter frequency = 0.4 rad/s, incidence = 180°
+    // U=-5.45, wave direction=-180°, wave period = 10.47198s -> encounter frequency = 0.4 rad/s => first line, incidence = 180°
     states = get_states_with_forward_speed(-5.45);
     F = force_model.get_force(states, 0., env, {});
     ASSERT_NEAR(F.X(),  0.614690E+02 * 1e3 * sin( -78.508087 * M_PI / 180.), std::abs(F.X() * 1e-4));
@@ -242,7 +242,7 @@ TEST_F(DiffractionForceModelTest, precal_r_example)
     ASSERT_NEAR(F.M(), -0.481271E+05 * 1e3 * sin( -97.924873 * M_PI / 180.), std::abs(F.M() * 1e-4));
     ASSERT_NEAR(F.N(), -0.151559E-01 * 1e3 * sin( -68.464912 * M_PI / 180.), std::abs(F.N() * 1e-4));
 
-    // U=10.9, wave direction=-180°, wave period = 10.47198s -> encounter frequency = 1 rad/s, incidence = 180°
+    // U=10.9, wave direction=-180°, wave period = 10.47198s -> encounter frequency = 1 rad/s => seventh line, incidence = 180°
     states = get_states_with_forward_speed(10.9);
     F = force_model.get_force(states, 0., env, {});
     ASSERT_NEAR(F.X(),  0.188522E+03 * 1e3 * sin( 155.721146 * M_PI / 180.), std::abs(F.X() * 1e-4));
@@ -255,7 +255,7 @@ TEST_F(DiffractionForceModelTest, precal_r_example)
     // Second battery of tests: wave direction=-90° (North-West)
     env = get_waves_env(T, -90.*M_PI/180);
 
-    // U=0, wave direction=-90° -> encounter period = wave period = 10.47198s (frequency = 0.6 rad/s), incidence = 90°
+    // U=0, wave direction=-90° -> encounter period = wave period = 10.47198s (frequency = 0.6 rad/s => third line), incidence = 90°
     states = get_states_with_forward_speed(0.);
     F = force_model.get_force(states, 0., env, {});
     ASSERT_NEAR(F.X(),  0.213802E+03 * 1e3 * sin( 146.941406 * M_PI / 180.), std::abs(F.X() * 1e-4));
@@ -265,7 +265,7 @@ TEST_F(DiffractionForceModelTest, precal_r_example)
     ASSERT_NEAR(F.M(), -0.668399E+05 * 1e3 * sin( 172.587128 * M_PI / 180.), std::abs(F.M() * 1e-4));
     ASSERT_NEAR(F.N(), -0.496977E+05 * 1e3 * sin( -47.521080 * M_PI / 180.), std::abs(F.N() * 1e-4));
 
-    // U=10, wave direction=-90° -> encounter period = wave period = 15.70796s (frequency = 0.4 rad/s), incidence = 90°
+    // U=10, wave direction=-90° -> encounter period = wave period = 15.70796s (frequency = 0.4 rad/s => first line), incidence = 90°
     env = get_waves_env(15.70796, -90.*M_PI/180);
     states = get_states_with_forward_speed(10);
     F = force_model.get_force(states, 0., env, {});
@@ -276,7 +276,7 @@ TEST_F(DiffractionForceModelTest, precal_r_example)
     ASSERT_NEAR(F.M(), -0.381031E+05 * 1e3 * sin( 148.914230 * M_PI / 180.), std::abs(F.M() * 1e-4));
     ASSERT_NEAR(F.N(), -0.271359E+05 * 1e3 * sin( -37.329960 * M_PI / 180.), std::abs(F.N() * 1e-4));
 
-    // U=-10, wave direction=-90° -> encounter period = wave period = 6.28319s (frequency = 1 rad/s), incidence = 90°
+    // U=-10, wave direction=-90° -> encounter period = wave period = 6.28319s (frequency = 1 rad/s => seventh line), incidence = 90°
     env = get_waves_env(6.28319, -90.*M_PI/180);
     states = get_states_with_forward_speed(-12.586);
     F = force_model.get_force(states, 0., env, {});
