@@ -18,7 +18,6 @@
 #include "external_data_structures_parsers.hpp"
 
 #include <ssc/macros.hpp>
-#include <ssc/text_file_reader.hpp>
 
 #include <ssc/yaml_parser.hpp>
 
@@ -443,7 +442,7 @@ RadiationDampingForceModel::Input RadiationDampingForceModel::parse(const std::s
     {
         if (not(input.hdb_filename.empty()))
         {
-            ret.parser = TR1(shared_ptr)<HydroDBParser>(new HDBParser(ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,input.hdb_filename)).get_contents()));
+            ret.parser = TR1(shared_ptr)<HydroDBParser>(new HDBParser(HDBParser::from_file(input.hdb_filename)));
         }
         else
         {

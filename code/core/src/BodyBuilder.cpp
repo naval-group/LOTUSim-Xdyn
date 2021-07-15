@@ -17,7 +17,6 @@
 #include "yaml2eigen.hpp"
 
 #include <ssc/kinematics.hpp>
-#include <ssc/text_file_reader.hpp>
 
 bool isSymmetric(const Eigen::MatrixXd& m)
 {
@@ -125,8 +124,7 @@ void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& r
         }
         else
         {
-            const std::string hdb = ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,added_mass.hdb_filename)).get_contents();
-            Ma = HDBParser(hdb).get_added_mass();
+            Ma = HDBParser::from_file(added_mass.hdb_filename).get_added_mass();
         }
     }
     else

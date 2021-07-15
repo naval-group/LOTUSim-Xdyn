@@ -22,7 +22,7 @@
 #include <boost/variant.hpp>
 
 #include <ssc/interpolation.hpp>
-
+#include <ssc/text_file_reader.hpp>
 #include "hdb_parser_internal_data_structures.hpp"
 #include "InvalidInputException.hpp"
 #include "hdb_to_ast.hpp"
@@ -628,4 +628,14 @@ std::vector<double> HDBParser::get_froude_krylov_module_psis() const
 std::vector<double> HDBParser::get_froude_krylov_module_periods() const
 {
     return pimpl->get_froude_krylov_module_periods();
+}
+
+HDBParser HDBParser::from_file(const std::string& filename)
+{
+    return HDBParser(ssc::text_file_reader::TextFileReader(filename).get_contents());
+}
+
+HDBParser HDBParser::from_string(const std::string& contents)
+{
+    return HDBParser(contents);
 }
