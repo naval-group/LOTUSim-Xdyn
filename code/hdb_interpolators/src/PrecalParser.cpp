@@ -458,3 +458,46 @@ double PrecalParser::get_forward_speed() const
     THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find value 'waveFreq' in PRECAL_R's input file.");
     return std::nan("");
 }
+
+std::string added_mass_coeff_name(const size_t i , const size_t j);
+std::string added_mass_coeff_name(const size_t i , const size_t j)
+{
+    std::stringstream ss;
+    ss << "A_m" << i << "m" << j;
+    return ss.str();
+}
+
+std::vector<double> PrecalParser::get_added_mass_coeff(const size_t i, const size_t j) const
+{
+    bool found_signal = false;
+    double min_speed = 1E300;
+    std::string line;
+    for (const auto rao : precal_file.raos)
+    {
+        if (rao.attributes.name == added_mass_coeff_name(i, j))
+        {
+            found_signal = true;
+            if (rao.attributes.U == 0)
+            {
+                return rao.left_column;
+            }
+            else
+            {
+                if (min_speed > rao.attributes.U)
+                {
+                    line = rao.title_line;
+                    min_speed = rao.attributes.U;
+                }
+            }
+        }
+    }
+    if (not(found_signal))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find added mass coefficient " << added_mass_coeff_name(i, j) << " in PRECAL_R's output file. Check the value of the XML node sim > parRES > expAmasDampCoef is set to true/1 in PRECAL_R's input file.");
+    }
+    else
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "We found added mass coefficient " << added_mass_coeff_name(i, j) << " in PRECAL_R's output file but it is calculated at non-zero velocity (the minimum velocity we found was " << min_speed << "). You can set this list in PRECAL_R's input file, XML node sim > parHYD > shipSpeedInp.");
+    }
+    return std::vector<double>();
+}

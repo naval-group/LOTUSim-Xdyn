@@ -46,6 +46,11 @@ class PrecalParser : public HydroDBParser
          * force model.
          */
         double get_forward_speed() const;
+        
+        /**
+         * @brief Added mass matrix coefficient Ma(i,j) = f(omega) for all omegas
+         */
+        std::vector<double> get_added_mass_coeff(const size_t i, const size_t j) const;
 
 
     private:

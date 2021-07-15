@@ -397,3 +397,18 @@ TEST_F(PrecalParserTest, can_get_forward_speed)
     const auto precal = PrecalParser::from_string(test_data::precal());
     ASSERT_DOUBLE_EQ(12.0*1852.0/3600.0, precal.get_forward_speed());
 }
+
+
+TEST_F(PrecalParserTest, can_get_added_mass_coefficients_for_each_frequency)
+{
+    const auto precal = PrecalParser::from_string(test_data::precal());
+    const std::vector<double> A_11 = precal.get_added_mass_coeff(1, 1);
+    ASSERT_EQ(7, A_11.size());
+    ASSERT_DOUBLE_EQ(0.272375E+03, A_11.at(0));
+    ASSERT_DOUBLE_EQ(0.208589E+03, A_11.at(1));
+    ASSERT_DOUBLE_EQ(0.144170E+03, A_11.at(2));
+    ASSERT_DOUBLE_EQ(0.115635E+03, A_11.at(3));
+    ASSERT_DOUBLE_EQ(0.998035E+02, A_11.at(4));
+    ASSERT_DOUBLE_EQ(0.910424E+02, A_11.at(5));
+    ASSERT_DOUBLE_EQ(0.871622E+02, A_11.at(6));
+}
