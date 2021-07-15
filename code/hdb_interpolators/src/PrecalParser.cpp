@@ -462,9 +462,7 @@ double PrecalParser::get_forward_speed() const
 std::string coeff_name(const std::string& prefix, const size_t i , const size_t j);
 std::string coeff_name(const std::string& prefix, const size_t i , const size_t j)
 {
-    std::stringstream ss;
-    ss << prefix << "_m" << i+1 << "m" << j+1;
-    return ss.str();
+    return prefix + "_m" + std::to_string(i+1) + "m" + std::to_string(j+1);
 }
 
 std::vector<double> PrecalParser::extract_matrix_coeff(const std::string& short_name, const std::string& long_name, const size_t i, const size_t j) const
