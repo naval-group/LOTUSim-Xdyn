@@ -28,6 +28,16 @@ RaoInterpolator::RAO RaoInterpolator::RAO::for_diffraction(const HydroDBParser& 
                parser.get_diffraction_phase_psis());
 }
 
+RaoInterpolator::RAO RaoInterpolator::RAO::for_froude_krylov(const HydroDBParser& parser)
+{
+    return RaoInterpolator::RAO(parser.get_froude_krylov_module_tables(),
+               parser.get_froude_krylov_phase_tables(),
+               parser.get_froude_krylov_module_periods(),
+               parser.get_froude_krylov_phase_periods(),
+               parser.get_froude_krylov_module_psis(),
+               parser.get_froude_krylov_phase_psis());
+}
+
 RaoInterpolator::RAO::RAO(const std::array<std::vector<std::vector<double> >,6 > module_tables_,
     const std::array<std::vector<std::vector<double> >,6 > phase_tables_,
     const std::vector<double> module_periods_,
@@ -42,6 +52,22 @@ RaoInterpolator::RAO::RAO(const std::array<std::vector<std::vector<double> >,6 >
     , phase_incidence(phase_incidence_)
         {}
 
+RaoInterpolator::RAO RaoInterpolator::RAO::get(const YamlRAO::TypeOfRao& type_of_rao, const HydroDBParser& parser)
+{
+    switch(type_of_rao)
+    {
+        case YamlRAO::TypeOfRao::DIFFRACTION_RAO:
+            return for_diffraction(parser);
+            break;
+        case YamlRAO::TypeOfRao::FROUDE_KRYLOV_RAO:
+            return for_froude_krylov(parser);
+            break;
+        default:
+            THROW(__PRETTY_FUNCTION__, InternalErrorException, "Switch case is not exhaustive.");
+            break;
+    }
+    return for_diffraction(parser);
+}
 
 
 RaoInterpolator::RaoInterpolator(const HydroDBParser& parser, //!< Data read from the HDB or Precal_R file
@@ -55,11 +81,10 @@ RaoInterpolator::RaoInterpolator(const HydroDBParser& parser, //!< Data read fro
         , omegas(omega)
         , psis(psi)
         , period_bounds()
-        , rao(RAO::for_diffraction(parser))
+        , rao(RAO::get(yaml_rao.type_of_rao, parser))
         , rao_calculation_point(yaml_rao.calculation_point.x,yaml_rao.calculation_point.y,yaml_rao.calculation_point.z)
         , use_encounter_period(false)
 {
-    const RAO rao = RAO::for_diffraction(parser);
     std::reverse(omegas.begin(),omegas.end());
     period_bounds.first = *std::min_element(rao.module_periods.begin(), rao.module_periods.end());
     period_bounds.second = *std::max_element(rao.module_periods.begin(), rao.module_periods.end());

@@ -5,9 +5,11 @@
 #include <vector>
 #include <Eigen/Dense>
 #include <ssc/interpolation.hpp>
+#include "YamlRAO.hpp"
+
 typedef ssc::interpolation::TwoDimensionalInterpolationVariableStep Interpolator;
 class HydroDBParser;
-struct YamlRAO;
+
 
 class RaoInterpolator
 {
@@ -60,7 +62,7 @@ class RaoInterpolator
         struct RAO
         {
             RAO() = delete;
-            static RAO for_diffraction(const HydroDBParser& parser);
+            static RAO get(const YamlRAO::TypeOfRao& type_of_rao, const HydroDBParser& parser);
             const std::array<std::vector<std::vector<double> >,6 > module_tables;
             const std::array<std::vector<std::vector<double> >,6 > phase_tables;
             const std::vector<double> module_periods;
@@ -69,6 +71,8 @@ class RaoInterpolator
             const std::vector<double> phase_incidence;
 
             private:
+                static RAO for_diffraction(const HydroDBParser& parser);
+                static RAO for_froude_krylov(const HydroDBParser& parser);
                 RAO(const std::array<std::vector<std::vector<double> >,6 > module_tables_,
                     const std::array<std::vector<std::vector<double> >,6 > phase_tables_,
                     const std::vector<double> module_periods_,
