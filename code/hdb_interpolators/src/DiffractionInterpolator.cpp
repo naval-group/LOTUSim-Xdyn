@@ -27,6 +27,31 @@ DiffractionInterpolator::DiffractionInterpolator(const HydroDBParser& data, //!<
         ) : DiffractionInterpolator(data, {}, {}, diffraction_yaml)
 {}
 
+std::array<std::vector<std::vector<double> >,6 > DiffractionInterpolator::get_module_tables(const HydroDBParser& parser) const
+{
+    return parser.get_diffraction_module_tables();
+}
+
+std::array<std::vector<std::vector<double> >,6 > DiffractionInterpolator::get_phase_tables(const HydroDBParser& parser) const
+{
+    return parser.get_diffraction_phase_tables();
+}
+
+std::vector<double> DiffractionInterpolator::get_phase_periods(const HydroDBParser& parser) const
+{
+    return parser.get_diffraction_phase_periods();
+}
+
+std::vector<double> DiffractionInterpolator::get_module_incidence(const HydroDBParser& parser) const
+{
+    return parser.get_diffraction_module_psis();
+}
+
+std::vector<double> DiffractionInterpolator::get_phase_incidence(const HydroDBParser& parser) const
+{
+    return parser.get_diffraction_phase_psis();
+}
+
 DiffractionInterpolator::DiffractionInterpolator(const HydroDBParser& parser, //!< Data read from the HDB or Precal_R file
                                                  const std::vector<double>& omega, //!< Angular frequencies in the wave spectrum (points at which to interpolate the HDB data)
                                                  const std::vector<double>& psi, //!< Wave directions (points at which to interpolate the HDB data)
@@ -42,11 +67,11 @@ DiffractionInterpolator::DiffractionInterpolator(const HydroDBParser& parser, //
         , rao_calculation_point(yaml_rao.calculation_point.x,yaml_rao.calculation_point.y,yaml_rao.calculation_point.z)
         , use_encounter_period(false)
 {
-    const auto module_tables = parser.get_diffraction_module_tables();
-    const auto phase_tables = parser.get_diffraction_phase_tables();
-    const auto phase_periods = parser.get_diffraction_phase_periods();
-    const auto module_incidence = parser.get_diffraction_module_psis();
-    const auto phase_incidence = parser.get_diffraction_phase_psis();
+    const auto module_tables = get_module_tables(parser);
+    const auto phase_tables = get_phase_tables(parser);
+    const auto phase_periods = get_phase_periods(parser);
+    const auto module_incidence = get_module_incidence(parser);
+    const auto phase_incidence = get_phase_incidence(parser);
     std::reverse(omegas.begin(),omegas.end());
     period_bounds.first = *std::min_element(module_periods.begin(), module_periods.end());
     period_bounds.second = *std::max_element(module_periods.begin(), module_periods.end());

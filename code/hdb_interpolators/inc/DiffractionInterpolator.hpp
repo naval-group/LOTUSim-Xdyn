@@ -75,6 +75,11 @@ class DiffractionInterpolator
     private:
         DiffractionInterpolator();
         std::vector<std::vector<double> > get_array_cartesian(Interpolator& i) const;
+        std::array<std::vector<std::vector<double> >,6 > get_module_tables(const HydroDBParser& parser) const;
+        std::array<std::vector<std::vector<double> >,6 > get_phase_tables(const HydroDBParser& parser) const;
+        std::vector<double> get_phase_periods(const HydroDBParser& parser) const;
+        std::vector<double> get_module_incidence(const HydroDBParser& parser) const;
+        std::vector<double> get_phase_incidence(const HydroDBParser& parser) const;
     public:
         std::array<Interpolator,6> module; //!< 2D spline interpolation function (omega,psi) for RAO's module
         std::array<Interpolator,6> phase; //!< 2D spline interpolation function (omega,psi) for RAO's phase
