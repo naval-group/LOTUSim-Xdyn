@@ -11,7 +11,7 @@
 #include <array>
 #include <cstdlib> // For size_t
 #include <vector>
-
+#include <Eigen/Dense>
 #include <ssc/interpolation.hpp>
 
 class HydroDBParser;
@@ -69,6 +69,7 @@ class DiffractionInterpolator
         double interpolate_phase(const size_t axis, const double Tp, double beta);
 
         std::vector<double> get_diffraction_module_periods() const;
+        Eigen::Vector3d get_rao_calculation_point() const;
 
     private:
         DiffractionInterpolator();
@@ -81,6 +82,7 @@ class DiffractionInterpolator
         std::vector<double> psis;
         std::pair<double, double> period_bounds;
         std::vector<double> diffraction_module_periods;
+        Eigen::Vector3d rao_calculation_point;
 };
 
 #endif /* DIFFRACTIONINTERPOLATOR_HPP_ */

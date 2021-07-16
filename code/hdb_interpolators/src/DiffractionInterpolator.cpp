@@ -31,7 +31,15 @@ DiffractionInterpolator::DiffractionInterpolator(const HydroDBParser& data, //!<
                                                  const std::vector<double>& omega, //!< Angular frequencies in the wave spectrum (points at which to interpolate the HDB data)
                                                  const std::vector<double>& psi, //!< Wave directions (points at which to interpolate the HDB data)
                                                  const YamlRAO& diffraction_yaml //<! Contents of the force model's parsed YAML data
-        ) : module(), phase(), mirror(diffraction_yaml.mirror), omegas(omega), psis(psi), period_bounds(), diffraction_module_periods(data.get_diffraction_module_periods())
+        )
+        : module()
+        , phase()
+        , mirror(diffraction_yaml.mirror)
+        , omegas(omega)
+        , psis(psi)
+        , period_bounds()
+        , diffraction_module_periods(data.get_diffraction_module_periods())
+        , rao_calculation_point(diffraction_yaml.calculation_point.x,diffraction_yaml.calculation_point.y,diffraction_yaml.calculation_point.z)
 {
     const auto M_module = data.get_diffraction_module_tables();
     const auto M_phase = data.get_diffraction_phase_tables();
@@ -132,4 +140,10 @@ double DiffractionInterpolator::interpolate_phase(const size_t axis, const doubl
         THROW(__PRETTY_FUNCTION__, InternalErrorException, ss.str());
     }
     return ret;
+}
+
+
+Eigen::Vector3d DiffractionInterpolator::get_rao_calculation_point() const
+{
+    return rao_calculation_point;
 }

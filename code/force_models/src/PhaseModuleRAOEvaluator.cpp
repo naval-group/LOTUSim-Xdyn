@@ -51,8 +51,8 @@ PhaseModuleRAOEvaluator::PhaseModuleRAOEvaluator(
     const HydroDBParser& parser,
     const std::string& body_name,
     const std::string& force_model_name):
-                H0(diffraction_yaml.calculation_point.x,diffraction_yaml.calculation_point.y,diffraction_yaml.calculation_point.z),
                 rao_interpolator(DiffractionInterpolator(parser, diffraction_yaml)),
+                H0(rao_interpolator.get_rao_calculation_point()),
                 use_encounter_period(false)
 {
     if (env.w.use_count()>0)
