@@ -7,6 +7,7 @@ set(SRC src/HDBParser.cpp
         src/History.cpp
         src/PrecalParserHelper.cpp
         src/PrecalParser.cpp
+        src/RaoInterpolator.cpp
         )
 
 # Using C++ 2011
