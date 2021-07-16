@@ -9,26 +9,6 @@ typedef ssc::interpolation::TwoDimensionalInterpolationVariableStep Interpolator
 class HydroDBParser;
 struct YamlRAO;
 
-struct RAO
-{
-    RAO() = delete;
-    static RAO for_diffraction(const HydroDBParser& parser);
-    const std::array<std::vector<std::vector<double> >,6 > module_tables;
-    const std::array<std::vector<std::vector<double> >,6 > phase_tables;
-    const std::vector<double> module_periods;
-    const std::vector<double> phase_periods;
-    const std::vector<double> module_incidence;
-    const std::vector<double> phase_incidence;
-
-    private:
-        RAO(const std::array<std::vector<std::vector<double> >,6 > module_tables_,
-            const std::array<std::vector<std::vector<double> >,6 > phase_tables_,
-            const std::vector<double> module_periods_,
-            const std::vector<double> phase_periods_,
-            const std::vector<double> module_incidence_,
-            const std::vector<double> phase_incidence_);
-};
-
 class RaoInterpolator
 {
     public:
@@ -77,6 +57,25 @@ class RaoInterpolator
     private:
         RaoInterpolator();
         std::vector<std::vector<double> > get_array_cartesian(Interpolator& i) const;
+        struct RAO
+        {
+            RAO() = delete;
+            static RAO for_diffraction(const HydroDBParser& parser);
+            const std::array<std::vector<std::vector<double> >,6 > module_tables;
+            const std::array<std::vector<std::vector<double> >,6 > phase_tables;
+            const std::vector<double> module_periods;
+            const std::vector<double> phase_periods;
+            const std::vector<double> module_incidence;
+            const std::vector<double> phase_incidence;
+
+            private:
+                RAO(const std::array<std::vector<std::vector<double> >,6 > module_tables_,
+                    const std::array<std::vector<std::vector<double> >,6 > phase_tables_,
+                    const std::vector<double> module_periods_,
+                    const std::vector<double> phase_periods_,
+                    const std::vector<double> module_incidence_,
+                    const std::vector<double> phase_incidence_);
+        };
 
     public:
         std::array<Interpolator,6> module; //!< 2D spline interpolation function (omega,psi) for RAO's module

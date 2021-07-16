@@ -3,7 +3,6 @@ project(hdb_interpolators)
 
 set(SRC src/HDBParser.cpp
         src/RadiationDampingBuilder.cpp
-        src/DiffractionInterpolator.cpp
         src/History.cpp
         src/PrecalParserHelper.cpp
         src/PrecalParser.cpp

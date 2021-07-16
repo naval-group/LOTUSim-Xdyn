@@ -14,7 +14,7 @@
 
 #include "HDBParser.hpp"
 #include "hdb_data.hpp"
-#include "DiffractionInterpolator.hpp"
+#include "RaoInterpolator.hpp"
 #include "YamlRAO.hpp"
 
 DiffractionInterpolatorTest::DiffractionInterpolatorTest() : a(ssc::random_data_generator::DataGenerator(989899))
@@ -44,7 +44,7 @@ TEST_F(DiffractionInterpolatorTest, example)
     for (size_t i = 0 ; i < psis.size() ; ++i) psis[i] *= PI/180.;
     YamlRAO yaml;
     yaml.mirror = true;
-    DiffractionInterpolator radiation(parser, omegas, psis, yaml);
+    RaoInterpolator radiation(parser, omegas, psis, yaml);
     const size_t k = 0; // X-axis
     const std::vector<std::vector<double> > modules = radiation.get_modules_cartesian(k);
     const std::vector<std::vector<double> > phases = radiation.get_phases_cartesian(k);

@@ -46,7 +46,7 @@ void check_all_omegas_are_within_bounds(const double min_bound, const std::vecto
 }
 
 PhaseModuleRAOEvaluator::PhaseModuleRAOEvaluator(
-    const DiffractionInterpolator& rao_interpolator_,
+    const RaoInterpolator& rao_interpolator_,
     const EnvironmentAndFrames& env,
     const std::string& body_name,
     const std::string& force_model_name):

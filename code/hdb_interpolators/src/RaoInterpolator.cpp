@@ -18,9 +18,9 @@ RaoInterpolator::RaoInterpolator(const HydroDBParser& data, //!< Data read from 
         ) : RaoInterpolator(data, {}, {}, diffraction_yaml)
 {}
 
-RAO RAO::for_diffraction(const HydroDBParser& parser)
+RaoInterpolator::RAO RaoInterpolator::RAO::for_diffraction(const HydroDBParser& parser)
 {
-    return RAO(parser.get_diffraction_module_tables(),
+    return RaoInterpolator::RAO(parser.get_diffraction_module_tables(),
                parser.get_diffraction_phase_tables(),
                parser.get_diffraction_module_periods(),
                parser.get_diffraction_phase_periods(),
@@ -28,7 +28,7 @@ RAO RAO::for_diffraction(const HydroDBParser& parser)
                parser.get_diffraction_phase_psis());
 }
 
-RAO::RAO(const std::array<std::vector<std::vector<double> >,6 > module_tables_,
+RaoInterpolator::RAO::RAO(const std::array<std::vector<std::vector<double> >,6 > module_tables_,
     const std::array<std::vector<std::vector<double> >,6 > phase_tables_,
     const std::vector<double> module_periods_,
     const std::vector<double> phase_periods_,

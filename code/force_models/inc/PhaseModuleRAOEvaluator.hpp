@@ -2,7 +2,7 @@
 #define _PHASEMODULERAOEVALUATORHPP_
 
 #include <ssc/kinematics.hpp>
-#include "DiffractionInterpolator.hpp"
+#include "RaoInterpolator.hpp"
 
 struct YamlRAO;
 class BodyStates;
@@ -13,7 +13,7 @@ class PhaseModuleRAOEvaluator
     public:
 
         PhaseModuleRAOEvaluator(
-            const DiffractionInterpolator& rao_interpolator,
+            const RaoInterpolator& rao_interpolator,
             const EnvironmentAndFrames& env,
             const std::string& body_name,
             const std::string& force_model_name);
@@ -24,7 +24,7 @@ class PhaseModuleRAOEvaluator
 
     private:
         PhaseModuleRAOEvaluator();
-        DiffractionInterpolator rao_interpolator;
+        RaoInterpolator rao_interpolator;
         Eigen::Vector3d H0;
         bool use_encounter_period;
 };

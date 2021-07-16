@@ -35,16 +35,16 @@ std::shared_ptr<HydroDBParser> parser_factory(const std::string& hdb_filename, c
     return std::shared_ptr<HydroDBParser>(new HDBParser(HDBParser::from_file(hdb_filename)));
 }
 
-DiffractionInterpolator rao_interpolator_factory(const YamlRAO& yaml_rao);
-DiffractionInterpolator rao_interpolator_factory(const YamlRAO& yaml_rao)
+RaoInterpolator rao_interpolator_factory(const YamlRAO& yaml_rao);
+RaoInterpolator rao_interpolator_factory(const YamlRAO& yaml_rao)
 {
-    return DiffractionInterpolator(*parser_factory(yaml_rao.hdb_filename, yaml_rao.precal_filename), yaml_rao);
+    return RaoInterpolator(*parser_factory(yaml_rao.hdb_filename, yaml_rao.precal_filename), yaml_rao);
 }
 
-DiffractionInterpolator rao_interpolator_factory(const YamlRAO& yaml_rao, const std::string& hdb_contents);
-DiffractionInterpolator rao_interpolator_factory(const YamlRAO& yaml_rao, const std::string& hdb_contents)
+RaoInterpolator rao_interpolator_factory(const YamlRAO& yaml_rao, const std::string& hdb_contents);
+RaoInterpolator rao_interpolator_factory(const YamlRAO& yaml_rao, const std::string& hdb_contents)
 {
-    return DiffractionInterpolator(HDBParser(HDBParser::from_string(hdb_contents)), yaml_rao);
+    return RaoInterpolator(HDBParser(HDBParser::from_string(hdb_contents)), yaml_rao);
 }
 
 DiffractionForceModel::DiffractionForceModel(const YamlRAO& yaml_rao, const std::string& body_name_, const EnvironmentAndFrames& env):
