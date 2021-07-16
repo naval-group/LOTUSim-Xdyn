@@ -730,31 +730,13 @@ M_d = \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right
 
 Les conventions sont les mêmes que pour les fichiers HDB (expression des
 efforts au centre de gravité, repère Z vers le haut, définition de l'angle
-de propagation de la houle). La seule différence se situe dans l'expression
-de l'élévation de surface libre, qui est déphasée de $`\pi/2`$ par rapport à
-AQUA+ : $`\phi_{\mbox{PRECAL_R}} = \phi_{\mbox{Aqua+}} + \pi/2`$ En effet, dans
-la _NOTICE D'UTILISATION AQUA+ 1.1/MF/N1_ de G. DELHOMMEAU figure, à la page 5
-:
+de propagation de la houle).
 
-```math
-h(x=x_G=0,y=y_G=0,t) = -A \sin(\omega * t)
-```
-
-Or dans le manuel théorique de PRECAL_R, équation 335 on a :
-
-```math
-\zeta(G) = A*\cos(\omega * t)
-```
-
-et le déphasage est illustré figure 30.
-
-Cependant, les formules de reconstruction pour les efforts de diffration et de Froude-Krylov
-sont identiques. En effet, si l'expression de l'élévation de la surface libre est différente (en cos pour PRECAL_R, -sin pour Aqua+),
-la référence des phases est cependant identique (la hauteur de surface libre au centre de gravité).
-Les déphasages des grandeurs sont donc exprimées par rapport à la même chose. Les résultats des codes
-potentiels sont ainsi calculés avec le même déphasage utilisé pour la reconstruction dans xdyn.
-Du coup, AQUA+ et PRECAL_R sont déphasés entre eux, mais RAO et efforts dans chaque outil ne le sont pas.
-Cette situation peut être représentée par la figure suivante :
+Quel que soit le potentiel de vitesse choisi comme solution de l'équation
+de Laplace décrivant une houle monochromatique (plusieurs potentiels
+peuvent être solution), les déphasages entre l'excitation dûe à la
+houle et les réponses du navire calculés par les codes potentiels
+seront les mêmes, comme illustré dans la figure ci-dessous :
 
 ```python echo=False, results='raw', name='tutorial_01_plot_results'
 import matplotlib.pyplot as plt
@@ -785,6 +767,9 @@ plt.text(2.65, 1.1, r'$\varphi$')
 plt.text(3.65, 1.1, r'$\varphi$')
 plt.show()
 ```
+
+Par conséquent, xdyn utilise les résultats d'AQUA+ et de PRECAL_R
+de la même manière pour reconstruire les efforts provenant de RAO (cf. [détail du calcul des efforts de diffraction](calcul-numérique)).
 
 Par ailleurs, toutes les matrices lues depuis un fichier HDB ou PRECAL_R
 (masses ajoutées et amortissement de radiation) subissent le changement de
