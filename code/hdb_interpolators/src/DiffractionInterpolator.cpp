@@ -42,19 +42,23 @@ DiffractionInterpolator::DiffractionInterpolator(const HydroDBParser& parser, //
         , rao_calculation_point(diffraction_yaml.calculation_point.x,diffraction_yaml.calculation_point.y,diffraction_yaml.calculation_point.z)
         , use_encounter_period(false)
 {
-    const auto M_module = parser.get_diffraction_module_tables();
-    const auto M_phase = parser.get_diffraction_phase_tables();
+    const auto module_tables = parser.get_diffraction_module_tables();
+    const auto phase_tables = parser.get_diffraction_phase_tables();
+    const auto module_periods = parser.get_diffraction_module_periods();
+    const auto phase_periods = parser.get_diffraction_phase_periods();
+    const auto module_incidence = parser.get_diffraction_module_psis();
+    const auto phase_incidence = parser.get_diffraction_phase_psis();
     std::reverse(omegas.begin(),omegas.end());
-    const auto diffraction_module_periods = parser.get_diffraction_module_periods();
-    period_bounds.first = *std::min_element(diffraction_module_periods.begin(), diffraction_module_periods.end());
-    period_bounds.second = *std::max_element(diffraction_module_periods.begin(), diffraction_module_periods.end());
+    period_bounds.first = *std::min_element(module_periods.begin(), module_periods.end());
+    period_bounds.second = *std::max_element(module_periods.begin(), module_periods.end());
+    
     // For each axis (X,Y,Z,phi,theta,psi)
     for (size_t i = 0 ; i < 6 ; ++i)
     {
         // module.at(i) and phase.at(i) are vectors of vectors: each element in the vector of vectors corresponds to a frequency omega
         // For each omega, we have a vector containing the RAO values for each incidence
-        module.at(i) = Interpolator(diffraction_module_periods, parser.get_diffraction_module_psis(), M_module.at(i));
-        phase.at(i) = Interpolator(parser.get_diffraction_phase_periods(), parser.get_diffraction_phase_psis(),M_phase.at(i));
+        module.at(i) = Interpolator(module_periods, module_incidence, module_tables.at(i));
+        phase.at(i) = Interpolator(phase_periods, phase_incidence, phase_tables.at(i));
     }
     if (diffraction_yaml.use_encounter_period.is_initialized())
     {
