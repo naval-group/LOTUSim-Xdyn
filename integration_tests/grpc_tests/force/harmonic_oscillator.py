@@ -7,7 +7,7 @@ import force
 class HarmonicOscillator(force.Model):
     """Restoring force F proportional to the displacement x."""
 
-    def __init__(self, parameters, body_name):
+    def __init__(self, parameters, body_name, _):
         """Initialize parameters from gRPC's set_parameters."""
         param = yaml.safe_load(parameters)
         self.k = param['k']

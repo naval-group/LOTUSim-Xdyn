@@ -42,8 +42,13 @@ class GRPCForceModel::Impl
             , from_grpc(FromGRPC())
             , commands()
             , force_frame()
+            , needs_results_from_potential_theory()
         {
             set_parameters(input.yaml, body_name, input.name);
+            if (needs_results_from_potential_theory)
+            {
+
+            }
         }
 
         GRPCForceModel::Input get_input() const
@@ -133,6 +138,7 @@ class GRPCForceModel::Impl
         FromGRPC from_grpc;
         std::vector<std::string> commands;
         YamlPosition force_frame;
+        bool needs_results_from_potential_theory;
 };
 
 std::string GRPCForceModel::model_name() {return "grpc";}
