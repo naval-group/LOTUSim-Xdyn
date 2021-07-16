@@ -24,8 +24,11 @@ PrecalParser::PrecalParser(const PrecalFile& precal_file_)
     : precal_file(precal_file_)
     , diffraction_module()
     , diffraction_phase()
+    , froude_krylov_module()
+    , froude_krylov_phase()
 {
     init_diffraction_tables();
+    init_froude_krylov_tables();
 }
 
 void convert_matrix_to_xdyn_frame(Eigen::Matrix<double, 6, 6>& Ma);
@@ -360,6 +363,137 @@ void PrecalParser::init_diffraction_tables()
     }
 }
 
+void PrecalParser::init_froude_krylov_tables()
+{
+    RAOData modules;
+    RAOData phases;
+    try
+    {
+        // Get the frequencies and directions values for which RAOs will be specified
+        const std::vector<double> input_frequencies
+            = get_vector_value("Dimensions", "waveFreq", "wave frequencies", "");
+        const std::string frequencies_unit
+            = get_string_value("Dimensions", "unitWaveFreq", "wave frequencies unit", "");
+        if (frequencies_unit != "rad/s")
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                  "Unknown unit '" << frequencies_unit
+                                   << "' for wave frequencies in PRECAL_R's output file. "
+                                      "Known units: 'rad/s'.");
+        }
+
+        const std::vector<double> input_directions
+            = get_vector_value("Dimensions", "waveDir", "wave directions", "");
+        const std::string directions_unit
+            = get_string_value("Dimensions", "unitWaveDir", "wave directions unit", "");
+        if (directions_unit != "deg")
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                  "Unknown unit '" << directions_unit
+                                   << "' for wave directions in PRECAL_R's output file. "
+                                      "Known units: 'deg'.");
+        }
+
+        // Sort frequencies and directions values for which RAOs will be specified
+        std::vector<std::pair<size_t, double> > frequencies;
+        size_t i = 0;
+        std::transform(input_frequencies.begin(), input_frequencies.end(),
+                       std::back_inserter(frequencies),
+                       [&i](const double omega) { return std::make_pair(i++, omega); });
+        std::sort(
+            frequencies.begin(), frequencies.end(),
+            [](const std::pair<size_t, double>& left, const std::pair<size_t, double>& right) {
+                // the periods should be sorted in ascendant order, so the frequencies should be sorted in decreasing order.
+                return left.second >= right.second;
+            });
+
+        std::list<double> sorted_directions(input_directions.begin(), input_directions.end());
+        sorted_directions.sort();
+        std::vector<double> directions(sorted_directions.begin(), sorted_directions.end());
+
+        // Insert sorted periods in modules and phases vectors
+        for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
+        {
+            const double period = 2 * PI / frequencies.at(frequency_idx).second;
+            modules.periods.push_back(period);
+            phases.periods.push_back(period);
+        }
+
+        // Insert sorted directions in modules and phases vectors (converting them to S.I. units)
+        for (size_t psi_idx = 0; psi_idx < directions.size(); ++psi_idx)
+        {
+            const double psi = directions.at(psi_idx) * DEG2RAD;
+            modules.psi.push_back(psi);
+            phases.psi.push_back(psi);
+        }
+
+        // Initialize the RAOs coefficients with 0s
+        modules.values.fill(std::vector<std::vector<double> >(
+            frequencies.size(), std::vector<double>(directions.size(), 0)));
+        phases.values.fill(std::vector<std::vector<double> >(
+            frequencies.size(), std::vector<double>(directions.size(), 0)));
+
+        // Read the RAOs for each mode and direction.
+        for (size_t psi_idx = 0; psi_idx < directions.size(); ++psi_idx)
+        {
+            for (size_t mode_idx = 0; mode_idx < 6; ++mode_idx)
+            {
+                const std::string signal_name = "F_inc_m" + std::to_string(mode_idx + 1);
+                bool found_rao = false;
+
+                for (RAO rao : precal_file.raos)
+                {
+                    if (rao_is_valid_and_corresponds_to_signal_and_direction(
+                            rao, signal_name, directions.at(psi_idx), input_frequencies.size()))
+                    {
+                        found_rao = true;
+                        if (rao.attributes.amplitude_unit != "kN/m"
+                            && rao.attributes.amplitude_unit != "kN.m/m")
+                        {
+                            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                                "Unknown unit '" << rao.attributes.amplitude_unit << "' for Froude-Krylov RAO "
+                                "amplitudes in PRECAL_R's output file. Known units: 'kN/m', 'kN.m/m'.");
+                        }
+                        if (rao.attributes.phase_unit != "deg")
+                        {
+                            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                                "Unknown unit '" << rao.attributes.phase_unit << "' for Froude-Krylov RAO phases "
+                                "in PRECAL_R's output file. Known units: 'deg'.");
+                        }
+                        // Insert the RAO values for each period.
+                        for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
+                        {
+                            const size_t frequency_idx_in_input_file
+                                = frequencies.at(frequency_idx).first;
+                            modules.values.at(mode_idx).at(frequency_idx).at(psi_idx)
+                                = rao.left_column.at(frequency_idx_in_input_file) * 1e3;
+                            phases.values.at(mode_idx).at(frequency_idx).at(psi_idx)
+                                = rao.right_column.at(frequency_idx_in_input_file) * DEG2RAD;
+                        }
+                        break;
+                    }
+                }
+                if (not(found_rao))
+                {
+                    THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                        "Unable to find rao '" << signal_name << "' for direction '"
+                        << directions.at(psi_idx) << "' in PRECAL_R's output file. "
+                        "Perhaps you didn't set the boolean key 'sim > parRES > expIncWaveFrc' to true "
+                        "in PRECAL_R's input file?");
+                }
+            }
+        }
+
+        froude_krylov_module = modules;
+        froude_krylov_phase = phases;
+    }
+    catch (const InvalidInputException& e)
+    {
+        froude_krylov_module = e.what();
+        froude_krylov_phase = e.what();
+    }
+}
+
 std::array<std::vector<std::vector<double> >, 6> PrecalParser::get_diffraction_module_tables() const
 {
     if (std::string* err = (std::string*)boost::get<std::string>(&diffraction_module))
@@ -417,6 +551,66 @@ std::vector<double> PrecalParser::get_diffraction_phase_psis() const
         THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
     }
     const RAOData* ret = boost::get<RAOData>(&diffraction_phase);
+    return ret->psi;
+}
+
+std::array<std::vector<std::vector<double> >, 6> PrecalParser::get_froude_krylov_module_tables() const
+{
+    if (std::string* err = (std::string*)boost::get<std::string>(&froude_krylov_module))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+    }
+    const RAOData* ret = boost::get<RAOData>(&froude_krylov_module);
+    return ret->values;
+}
+
+std::array<std::vector<std::vector<double> >, 6> PrecalParser::get_froude_krylov_phase_tables() const
+{
+    if (std::string* err = (std::string*)boost::get<std::string>(&froude_krylov_phase))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+    }
+    const RAOData* ret = boost::get<RAOData>(&froude_krylov_phase);
+    return ret->values;
+}
+
+std::vector<double> PrecalParser::get_froude_krylov_module_periods() const
+{
+    if (std::string* err = (std::string*)boost::get<std::string>(&froude_krylov_module))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+    }
+    const RAOData* ret = boost::get<RAOData>(&froude_krylov_module);
+    return ret->periods;
+}
+
+std::vector<double> PrecalParser::get_froude_krylov_phase_periods() const
+{
+    if (std::string* err = (std::string*)boost::get<std::string>(&froude_krylov_phase))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+    }
+    const RAOData* ret = boost::get<RAOData>(&froude_krylov_phase);
+    return ret->periods;
+}
+
+std::vector<double> PrecalParser::get_froude_krylov_module_psis() const
+{
+    if (std::string* err = (std::string*)boost::get<std::string>(&froude_krylov_module))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+    }
+    const RAOData* ret = boost::get<RAOData>(&froude_krylov_module);
+    return ret->psi;
+}
+
+std::vector<double> PrecalParser::get_froude_krylov_phase_psis() const
+{
+    if (std::string* err = (std::string*)boost::get<std::string>(&froude_krylov_phase))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+    }
+    const RAOData* ret = boost::get<RAOData>(&froude_krylov_phase);
     return ret->psi;
 }
 
