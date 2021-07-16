@@ -52,7 +52,7 @@ PhaseModuleRAOEvaluator::PhaseModuleRAOEvaluator(
     const std::string& body_name,
     const std::string& force_model_name):
                 H0(data.calculation_point.x,data.calculation_point.y,data.calculation_point.z),
-                response(DiffractionInterpolator(parser, std::vector<double>(), std::vector<double>(), data.mirror)),
+                response(DiffractionInterpolator(parser, data.mirror)),
                 use_encounter_period(false)
 {
     if (env.w.use_count()>0)
