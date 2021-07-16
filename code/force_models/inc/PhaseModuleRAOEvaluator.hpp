@@ -13,9 +13,8 @@ class PhaseModuleRAOEvaluator
     public:
 
         PhaseModuleRAOEvaluator(
-            const YamlRAO& data,
+            const DiffractionInterpolator& rao_interpolator,
             const EnvironmentAndFrames& env,
-            const HydroDBParser& parser,
             const std::string& body_name,
             const std::string& force_model_name);
         ssc::kinematics::Vector6d evaluate(const BodyStates& states, const double t, const EnvironmentAndFrames& env);

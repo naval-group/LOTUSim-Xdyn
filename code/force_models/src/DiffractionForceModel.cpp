@@ -35,15 +35,27 @@ std::shared_ptr<HydroDBParser> parser_factory(const std::string& hdb_filename, c
     return std::shared_ptr<HydroDBParser>(new HDBParser(HDBParser::from_file(hdb_filename)));
 }
 
-DiffractionForceModel::DiffractionForceModel(const YamlRAO& data, const std::string& body_name_, const EnvironmentAndFrames& env):
+DiffractionInterpolator rao_interpolator_factory(const YamlRAO& yaml_rao);
+DiffractionInterpolator rao_interpolator_factory(const YamlRAO& yaml_rao)
+{
+    return DiffractionInterpolator(*parser_factory(yaml_rao.hdb_filename, yaml_rao.precal_filename), yaml_rao);
+}
+
+DiffractionInterpolator rao_interpolator_factory(const YamlRAO& yaml_rao, const std::string& hdb_contents);
+DiffractionInterpolator rao_interpolator_factory(const YamlRAO& yaml_rao, const std::string& hdb_contents)
+{
+    return DiffractionInterpolator(HDBParser(HDBParser::from_string(hdb_contents)), yaml_rao);
+}
+
+DiffractionForceModel::DiffractionForceModel(const YamlRAO& yaml_rao, const std::string& body_name_, const EnvironmentAndFrames& env):
         ForceModel(DiffractionForceModel::model_name(), {}, body_name_, env),
-        pimpl(new PhaseModuleRAOEvaluator(data, env, *parser_factory(data.hdb_filename, data.precal_filename), body_name_, DiffractionForceModel::model_name()))
+        pimpl(new PhaseModuleRAOEvaluator(rao_interpolator_factory(yaml_rao), env, body_name_, DiffractionForceModel::model_name()))
 {
 }
 
-DiffractionForceModel::DiffractionForceModel(const Input& data, const std::string& body_name_, const EnvironmentAndFrames& env, const std::string& hdb_file_contents):
+DiffractionForceModel::DiffractionForceModel(const Input& yaml_rao, const std::string& body_name_, const EnvironmentAndFrames& env, const std::string& hdb_file_contents):
         ForceModel("diffraction", {}, body_name_, env),
-        pimpl(new PhaseModuleRAOEvaluator(data, env, HDBParser::from_string(hdb_file_contents), body_name_, DiffractionForceModel::model_name()))
+        pimpl(new PhaseModuleRAOEvaluator(rao_interpolator_factory(yaml_rao, hdb_file_contents), env, body_name_, DiffractionForceModel::model_name()))
 {
 }
 
