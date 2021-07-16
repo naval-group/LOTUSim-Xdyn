@@ -67,6 +67,8 @@ class DiffractionInterpolator
           */
         double interpolate_phase(const size_t axis, const double Tp, double beta);
 
+        std::vector<double> get_diffraction_module_periods() const;
+
     private:
         DiffractionInterpolator();
         std::vector<std::vector<double> > get_array_cartesian(Interpolator& i) const;
@@ -77,6 +79,7 @@ class DiffractionInterpolator
         std::vector<double> omegas;
         std::vector<double> psis;
         std::pair<double, double> period_bounds;
+        std::vector<double> diffraction_module_periods;
 };
 
 #endif /* DIFFRACTIONINTERPOLATOR_HPP_ */

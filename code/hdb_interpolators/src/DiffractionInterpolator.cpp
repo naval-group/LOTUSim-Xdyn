@@ -30,7 +30,7 @@ DiffractionInterpolator::DiffractionInterpolator(const HydroDBParser& data, //!<
                                                  const std::vector<double>& omega, //!< Angular frequencies in the wave spectrum (points at which to interpolate the HDB data)
                                                  const std::vector<double>& psi, //!< Wave directions (points at which to interpolate the HDB data)
                                                  const bool mirror_ //!< Should the RAO for psi between 180° and 360° be calculated by mirroring the RAO between 0° and 180°?
-        ) : module(), phase(), mirror(mirror_), omegas(omega), psis(psi), period_bounds()
+        ) : module(), phase(), mirror(mirror_), omegas(omega), psis(psi), period_bounds(), diffraction_module_periods(data.get_diffraction_module_periods())
 {
     const auto M_module = data.get_diffraction_module_tables();
     const auto M_phase = data.get_diffraction_phase_tables();
@@ -47,6 +47,11 @@ DiffractionInterpolator::DiffractionInterpolator(const HydroDBParser& data, //!<
         phase.at(i) = Interpolator(data.get_diffraction_phase_periods(),data.get_diffraction_phase_psis(),M_phase.at(i));
     }
 
+}
+
+std::vector<double> DiffractionInterpolator::get_diffraction_module_periods() const
+{
+    return diffraction_module_periods;
 }
 
 std::vector<std::vector<double> > DiffractionInterpolator::get_array_cartesian(Interpolator& i) const
