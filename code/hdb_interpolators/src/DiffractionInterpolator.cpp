@@ -70,7 +70,7 @@ bool DiffractionInterpolator::using_encounter_period() const
     return use_encounter_period;
 }
 
-std::vector<double> DiffractionInterpolator::get_diffraction_module_periods() const
+std::vector<double> DiffractionInterpolator::get_module_periods() const
 {
     return module_periods;
 }

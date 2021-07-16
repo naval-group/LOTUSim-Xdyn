@@ -59,7 +59,7 @@ PhaseModuleRAOEvaluator::PhaseModuleRAOEvaluator(
         std::vector<double> periods;
         try
         {
-            periods = rao_interpolator.get_diffraction_module_periods();
+            periods = rao_interpolator.get_module_periods();
         }
         catch(const ssc::exception_handling::Exception& e)
         {

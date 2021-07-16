@@ -68,7 +68,7 @@ class DiffractionInterpolator
           */
         double interpolate_phase(const size_t axis, const double Tp, double beta);
 
-        std::vector<double> get_diffraction_module_periods() const;
+        std::vector<double> get_module_periods() const;
         Eigen::Vector3d get_rao_calculation_point() const;
         bool using_encounter_period() const;
 
