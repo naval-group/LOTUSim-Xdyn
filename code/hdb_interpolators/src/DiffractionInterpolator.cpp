@@ -38,13 +38,12 @@ DiffractionInterpolator::DiffractionInterpolator(const HydroDBParser& parser, //
         , omegas(omega)
         , psis(psi)
         , period_bounds()
-        , diffraction_module_periods(parser.get_diffraction_module_periods())
+        , module_periods(parser.get_diffraction_module_periods())
         , rao_calculation_point(yaml_rao.calculation_point.x,yaml_rao.calculation_point.y,yaml_rao.calculation_point.z)
         , use_encounter_period(false)
 {
     const auto module_tables = parser.get_diffraction_module_tables();
     const auto phase_tables = parser.get_diffraction_phase_tables();
-    const auto module_periods = parser.get_diffraction_module_periods();
     const auto phase_periods = parser.get_diffraction_phase_periods();
     const auto module_incidence = parser.get_diffraction_module_psis();
     const auto phase_incidence = parser.get_diffraction_phase_psis();
@@ -73,7 +72,7 @@ bool DiffractionInterpolator::using_encounter_period() const
 
 std::vector<double> DiffractionInterpolator::get_diffraction_module_periods() const
 {
-    return diffraction_module_periods;
+    return module_periods;
 }
 
 std::vector<std::vector<double> > DiffractionInterpolator::get_array_cartesian(Interpolator& i) const

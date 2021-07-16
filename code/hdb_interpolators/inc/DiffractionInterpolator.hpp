@@ -82,7 +82,7 @@ class DiffractionInterpolator
         std::vector<double> omegas;
         std::vector<double> psis;
         std::pair<double, double> period_bounds;
-        std::vector<double> diffraction_module_periods;
+        std::vector<double> module_periods;
         Eigen::Vector3d rao_calculation_point;
         bool use_encounter_period;
 };
