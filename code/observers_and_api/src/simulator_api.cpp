@@ -40,6 +40,7 @@
 #include "HoltropMennenForceModel.hpp"
 #include "AeroPolarForceModel.hpp"
 #include "HydroPolarForceModel.hpp"
+#include "LinearFroudeKrylovForceModel.hpp"
 
 SimulatorBuilder get_builder(const YamlSimulatorInput& input, const double t0, const ssc::data_source::DataSource& command_listener);
 SimulatorBuilder get_builder(const YamlSimulatorInput& input, const double t0, const ssc::data_source::DataSource& command_listener)
@@ -81,7 +82,8 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& input, const double t0, c
 		   .can_parse<LogWindVelocityProfile>()
 		   .can_parse<HoltropMennenForceModel>()
 		   .can_parse<AeroPolarForceModel>()
-		   .can_parse<HydroPolarForceModel>();
+		   .can_parse<HydroPolarForceModel>()
+           .can_parse<LinearFroudeKrylovForceModel>();
     return builder;
 }
 
