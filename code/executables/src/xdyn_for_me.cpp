@@ -8,9 +8,6 @@
 #include "ErrorReporter.hpp"
 
 #include <ssc/text_file_reader.hpp>
-#include <ssc/check_ssc_version.hpp>
-
-CHECK_SSC_VERSION(10,0)
 
 void start_ws_server(const XdynForMECommandLineArguments& input_data);
 void start_ws_server(const XdynForMECommandLineArguments& input_data)

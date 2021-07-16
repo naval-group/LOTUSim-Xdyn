@@ -8,7 +8,6 @@
 
 
 #include <google/protobuf/stubs/common.h>
-#include <ssc/check_ssc_version.hpp>
 #include <ssc/text_file_reader.hpp>
 
 #include "display_command_line_arguments.hpp"
@@ -22,7 +21,6 @@
 #include <cmath>
 #define PI M_PI
 
-CHECK_SSC_VERSION(10,0)
 struct GZOptions
 {
     GZOptions() : dphi(0), phi_max(0), stl_filename(), yaml_files(), output_csv_file()
