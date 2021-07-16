@@ -40,6 +40,7 @@ DiffractionInterpolator::DiffractionInterpolator(const HydroDBParser& data, //!<
         , period_bounds()
         , diffraction_module_periods(data.get_diffraction_module_periods())
         , rao_calculation_point(diffraction_yaml.calculation_point.x,diffraction_yaml.calculation_point.y,diffraction_yaml.calculation_point.z)
+        , use_encounter_period(false)
 {
     const auto M_module = data.get_diffraction_module_tables();
     const auto M_phase = data.get_diffraction_phase_tables();
@@ -55,7 +56,15 @@ DiffractionInterpolator::DiffractionInterpolator(const HydroDBParser& data, //!<
         module.at(i) = Interpolator(diffraction_module_periods,data.get_diffraction_module_psis(),M_module.at(i));
         phase.at(i) = Interpolator(data.get_diffraction_phase_periods(),data.get_diffraction_phase_psis(),M_phase.at(i));
     }
+    if (diffraction_yaml.use_encounter_period.is_initialized())
+    {
+        use_encounter_period = diffraction_yaml.use_encounter_period.get();
+    }
+}
 
+bool DiffractionInterpolator::using_encounter_period() const
+{
+    return use_encounter_period;
 }
 
 std::vector<double> DiffractionInterpolator::get_diffraction_module_periods() const

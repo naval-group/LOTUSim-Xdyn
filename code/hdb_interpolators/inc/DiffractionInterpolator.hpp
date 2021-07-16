@@ -70,6 +70,7 @@ class DiffractionInterpolator
 
         std::vector<double> get_diffraction_module_periods() const;
         Eigen::Vector3d get_rao_calculation_point() const;
+        bool using_encounter_period() const;
 
     private:
         DiffractionInterpolator();
@@ -83,6 +84,7 @@ class DiffractionInterpolator
         std::pair<double, double> period_bounds;
         std::vector<double> diffraction_module_periods;
         Eigen::Vector3d rao_calculation_point;
+        bool use_encounter_period;
 };
 
 #endif /* DIFFRACTIONINTERPOLATOR_HPP_ */

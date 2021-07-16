@@ -53,7 +53,7 @@ PhaseModuleRAOEvaluator::PhaseModuleRAOEvaluator(
     const std::string& force_model_name):
                 rao_interpolator(DiffractionInterpolator(parser, diffraction_yaml)),
                 H0(rao_interpolator.get_rao_calculation_point()),
-                use_encounter_period(false)
+                use_encounter_period(rao_interpolator.using_encounter_period())
 {
     if (env.w.use_count()>0)
     {
@@ -78,10 +78,6 @@ PhaseModuleRAOEvaluator::PhaseModuleRAOEvaluator(
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "Force model '"
                 << force_model_name << "' needs a wave model, even if it's 'no waves'");
-    }
-    if (diffraction_yaml.use_encounter_period.is_initialized())
-    {
-        use_encounter_period = diffraction_yaml.use_encounter_period.get();
     }
 }
 
