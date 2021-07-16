@@ -30,16 +30,16 @@ DiffractionInterpolator::DiffractionInterpolator(const HydroDBParser& data, //!<
 DiffractionInterpolator::DiffractionInterpolator(const HydroDBParser& parser, //!< Data read from the HDB or Precal_R file
                                                  const std::vector<double>& omega, //!< Angular frequencies in the wave spectrum (points at which to interpolate the HDB data)
                                                  const std::vector<double>& psi, //!< Wave directions (points at which to interpolate the HDB data)
-                                                 const YamlRAO& diffraction_yaml //<! Contents of the force model's parsed YAML data
+                                                 const YamlRAO& yaml_rao //<! Contents of the force model's parsed YAML data
         )
         : module()
         , phase()
-        , mirror(diffraction_yaml.mirror)
+        , mirror(yaml_rao.mirror)
         , omegas(omega)
         , psis(psi)
         , period_bounds()
         , diffraction_module_periods(parser.get_diffraction_module_periods())
-        , rao_calculation_point(diffraction_yaml.calculation_point.x,diffraction_yaml.calculation_point.y,diffraction_yaml.calculation_point.z)
+        , rao_calculation_point(yaml_rao.calculation_point.x,yaml_rao.calculation_point.y,yaml_rao.calculation_point.z)
         , use_encounter_period(false)
 {
     const auto module_tables = parser.get_diffraction_module_tables();
@@ -60,9 +60,9 @@ DiffractionInterpolator::DiffractionInterpolator(const HydroDBParser& parser, //
         module.at(i) = Interpolator(module_periods, module_incidence, module_tables.at(i));
         phase.at(i) = Interpolator(phase_periods, phase_incidence, phase_tables.at(i));
     }
-    if (diffraction_yaml.use_encounter_period.is_initialized())
+    if (yaml_rao.use_encounter_period.is_initialized())
     {
-        use_encounter_period = diffraction_yaml.use_encounter_period.get();
+        use_encounter_period = yaml_rao.use_encounter_period.get();
     }
 }
 
