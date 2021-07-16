@@ -666,6 +666,16 @@ Voici la même mise en données utilisant un fichier PRECAL_R :
   forward speed correction: true
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Les sections utilisées des fichiers de sortie des codes de calcul potentiel sont :
+
+- Pour les fichiers HDB : `Added_mass_Radiation_Damping`, sous-sections
+  `DAMPING_TERM_*` où * est un entier de 1 à 6 désignant l'axe (x, y, z, k, m,
+  n, respectivement).
+- Pour les fichiers PRECAL_R : `B_mimj` où `i` et `j` sont des entiers de 1 à 6
+  représentant les positions dans les matrices. Ces sections sont présentes si
+  la clef `sim > parRES > expAmasDampCoef` du fichier XML d'entrée de PRECAL_R
+  est à `true` (ou 1).
+
 
 ### Méthode des rectangles
 

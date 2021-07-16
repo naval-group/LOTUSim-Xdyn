@@ -519,8 +519,8 @@ de l'équation fondamentale de la dynamique).
 La matrice de masses ajoutées n'est cependant pas équivalente à une masse supplémentaire, car
 les termes de Coriolis et centripète qui correspondraient ne sont pas pris en compte.
 
-Il est également possible d'extrapoler les masses ajoutées à pulsation infinie à
-partir d'un [fichier HDB](#format-hdb). Pour cela, on écrit (pour lire depuis
+Il est également possible d'extrapoler les masses ajoutées à pulsation infinie
+à partir d'un [fichier HDB](#format-hdb). Pour cela, on écrit (pour lire depuis
 le fichier `test_ship.hdb`) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
@@ -528,7 +528,8 @@ added mass matrix at the center of gravity and projected in the body frame:
     from hdb: test_ship.hdb
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-On peut également lire cette matrice depuis un fichier PRECAL_R, à condition
+On peut également lire cette matrice depuis un fichier PRECAL_R. La section
+utilisée est `[added_mass_damping_matrix_inf_freq]`, présente à condition
 d'avoir activé la clef `calcAmasDampCoefInfFreq` (section `sim` > `parHYD` >
 `calcAmasDampCoefInfFreq` du fichier XML d'entrée de PRECAL_R) :
 
@@ -544,9 +545,10 @@ ambiguïté). Comme pour les fichiers STL, le chemin vers le fichier (HDB ou
 PRECAL_R) est relatif à l'endroit d'où on lance l'exécutable.
 
 Dans les [fichiers HDB](#format-hdb), la section correspondant aux masses
-ajoutées est `Added_mass_Radiation_Damping`. La valeur utilisée est la matrice
-de masse ajoutée à la période minimale définie dans le [fichier
-HDB](#format-hdb) (aucune extrapolation n'est faite).
+ajoutées est `[Added_mass_Radiation_Damping]`, sous-sections
+`[ADDED_MASS_LINE_*]` où * vaut 1 à 6 et désigne la ligne de la matrice. La
+valeur utilisée par xdyn est la matrice de masse ajoutée à la période minimale définie
+dans le [fichier HDB](#format-hdb) (aucune extrapolation n'est faite).
 
 Dans les [fichiers PRECAL_R](#format-precal_r) la matrice de masses ajoutées à
 pulsation infinie figure dans la section
