@@ -23,14 +23,14 @@ std::vector<double> reverse(std::vector<double> t)
 }
 
 DiffractionInterpolator::DiffractionInterpolator(const HydroDBParser& data, //!< Data read from the HDB or Precal_R file
-                                                 const YamlDiffraction& diffraction_yaml //<! Contents of the force model's parsed YAML data
+                                                 const YamlRAO& diffraction_yaml //<! Contents of the force model's parsed YAML data
         ) : DiffractionInterpolator(data, {}, {}, diffraction_yaml)
 {}
 
 DiffractionInterpolator::DiffractionInterpolator(const HydroDBParser& data, //!< Data read from the HDB or Precal_R file
                                                  const std::vector<double>& omega, //!< Angular frequencies in the wave spectrum (points at which to interpolate the HDB data)
                                                  const std::vector<double>& psi, //!< Wave directions (points at which to interpolate the HDB data)
-                                                 const YamlDiffraction& diffraction_yaml //<! Contents of the force model's parsed YAML data
+                                                 const YamlRAO& diffraction_yaml //<! Contents of the force model's parsed YAML data
         ) : module(), phase(), mirror(diffraction_yaml.mirror), omegas(omega), psis(psi), period_bounds(), diffraction_module_periods(data.get_diffraction_module_periods())
 {
     const auto M_module = data.get_diffraction_module_tables();

@@ -35,7 +35,7 @@ std::shared_ptr<HydroDBParser> parser_factory(const std::string& hdb_filename, c
     return std::shared_ptr<HydroDBParser>(new HDBParser(HDBParser::from_file(hdb_filename)));
 }
 
-DiffractionForceModel::DiffractionForceModel(const YamlDiffraction& data, const std::string& body_name_, const EnvironmentAndFrames& env):
+DiffractionForceModel::DiffractionForceModel(const YamlRAO& data, const std::string& body_name_, const EnvironmentAndFrames& env):
         ForceModel(DiffractionForceModel::model_name(), {}, body_name_, env),
         pimpl(new PhaseModuleRAOEvaluator(data, env, *parser_factory(data.hdb_filename, data.precal_filename), body_name_, DiffractionForceModel::model_name()))
 {
@@ -58,7 +58,7 @@ DiffractionForceModel::Input DiffractionForceModel::parse(const std::string& yam
     YAML::Parser parser(stream);
     YAML::Node node;
     parser.GetNextDocument(node);
-    YamlDiffraction ret;
+    YamlRAO ret;
 
     if (node.FindValue("hdb"))
     {

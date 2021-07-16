@@ -7,7 +7,7 @@
 
 #include "YamlDiffraction.hpp"
 
-YamlDiffraction::YamlDiffraction() : hdb_filename(),
+YamlRAO::YamlRAO() : hdb_filename(),
                                      precal_filename(),
                                      calculation_point(),
                                      mirror(false),

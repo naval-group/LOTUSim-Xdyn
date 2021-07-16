@@ -19,9 +19,9 @@
        << "    z: {value: 1.418, unit: m}\n"
        << "mirror for 180 to 360: true\n";
  */
-struct YamlDiffraction
+struct YamlRAO
 {
-    YamlDiffraction();
+    YamlRAO();
     std::string           hdb_filename;
     std::string           precal_filename;
     YamlCoordinates       calculation_point;

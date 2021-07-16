@@ -15,7 +15,7 @@
 #include <ssc/interpolation.hpp>
 
 class HydroDBParser;
-struct YamlDiffraction;
+struct YamlRAO;
 
 typedef ssc::interpolation::TwoDimensionalInterpolationVariableStep Interpolator;
 
@@ -34,10 +34,10 @@ class DiffractionInterpolator
         DiffractionInterpolator(const HydroDBParser& data, //<! Data read from the HDB or Precal_R file
                                 const std::vector<double>& omega, //<! Angular frequencies in the wave spectrum (points at which to interpolate the HDB data)
                                 const std::vector<double>& psi, //<! Wave directions (points at which to interpolate the HDB data)
-                                const YamlDiffraction& diffraction_yaml //<! Contents of the force model's parsed YAML data
+                                const YamlRAO& diffraction_yaml //<! Contents of the force model's parsed YAML data
         );
         DiffractionInterpolator(const HydroDBParser& data, //<! Data read from the HDB or Precal_R file
-                                const YamlDiffraction& diffraction_yaml //<! Contents of the force model's parsed YAML data
+                                const YamlRAO& diffraction_yaml //<! Contents of the force model's parsed YAML data
         );
 
         /**  \brief Interpolates the RAO's module for the values of omega & psi in the wave spectrum

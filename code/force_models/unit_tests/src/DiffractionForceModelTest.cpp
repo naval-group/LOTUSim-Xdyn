@@ -40,7 +40,7 @@ void DiffractionForceModelTest::TearDown()
 
 TEST_F(DiffractionForceModelTest, parser_hdb)
 {
-    const YamlDiffraction r = DiffractionForceModel::parse(test_data::diffraction());
+    const YamlRAO r = DiffractionForceModel::parse(test_data::diffraction());
     ASSERT_EQ("test_ship.hdb", r.hdb_filename);
     ASSERT_TRUE(r.precal_filename.empty());
     ASSERT_EQ(0.696, r.calculation_point.x);
@@ -52,7 +52,7 @@ TEST_F(DiffractionForceModelTest, parser_hdb)
 
 TEST_F(DiffractionForceModelTest, parser_precalr)
 {
-    const YamlDiffraction r = DiffractionForceModel::parse(test_data::diffraction_precalr());
+    const YamlRAO r = DiffractionForceModel::parse(test_data::diffraction_precalr());
     ASSERT_EQ("test_ship.raodb.ini", r.precal_filename);
     ASSERT_TRUE(r.hdb_filename.empty());
     ASSERT_EQ(0, r.calculation_point.x);
@@ -64,7 +64,7 @@ TEST_F(DiffractionForceModelTest, parser_precalr)
 
 TEST_F(DiffractionForceModelTest, parser_precalr_ignores_calculation_point)
 {
-    const YamlDiffraction r = DiffractionForceModel::parse(test_data::diffraction_precalr() +
+    const YamlRAO r = DiffractionForceModel::parse(test_data::diffraction_precalr() +
        "calculation point in body frame:\n"
        "    x: {value: 0.696, unit: m}\n"
        "    y: {value: 0, unit: m}\n"
@@ -124,7 +124,7 @@ TEST_F(DiffractionForceModelTest, encounter_frequency_example)
     BodyStates states;
     std::ofstream hdb_file("data.hdb");
     hdb_file << test_data::bug_3210();
-    YamlDiffraction input;
+    YamlRAO input;
     input.calculation_point = YamlCoordinates(0.696, 0, 1.418);
     input.hdb_filename = "data.hdb";
     input.mirror = true;
@@ -215,7 +215,7 @@ TEST_F(DiffractionForceModelTest, precal_r_example)
     BodyStates states;
     std::ofstream precalr_file("data.raodb.ini");
     precalr_file << test_data::precal();
-    YamlDiffraction input;
+    YamlRAO input;
     input.calculation_point = YamlCoordinates(0, 0, 0);
     input.precal_filename = "data.raodb.ini";
     input.mirror = true;

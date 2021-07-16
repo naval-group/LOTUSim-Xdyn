@@ -42,7 +42,7 @@ TEST_F(DiffractionInterpolatorTest, example)
     for (size_t i = 0 ; i < omegas.size() ; ++i) omegas[i] = 2*PI/omegas[i];
     std::reverse(omegas.begin(),omegas.end());
     for (size_t i = 0 ; i < psis.size() ; ++i) psis[i] *= PI/180.;
-    YamlDiffraction yaml;
+    YamlRAO yaml;
     yaml.mirror = true;
     DiffractionInterpolator radiation(parser, omegas, psis, yaml);
     const size_t k = 0; // X-axis

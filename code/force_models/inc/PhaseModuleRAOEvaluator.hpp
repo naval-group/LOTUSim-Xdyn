@@ -4,7 +4,7 @@
 #include <ssc/kinematics.hpp>
 #include "DiffractionInterpolator.hpp"
 
-struct YamlDiffraction;
+struct YamlRAO;
 class BodyStates;
 class EnvironmentAndFrames;
 class HydroDBParser;
@@ -13,7 +13,7 @@ class PhaseModuleRAOEvaluator
     public:
 
         PhaseModuleRAOEvaluator(
-            const YamlDiffraction& data,
+            const YamlRAO& data,
             const EnvironmentAndFrames& env,
             const HydroDBParser& parser,
             const std::string& body_name,

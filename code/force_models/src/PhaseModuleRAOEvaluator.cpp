@@ -46,7 +46,7 @@ void check_all_omegas_are_within_bounds(const double min_bound, const std::vecto
 }
 
 PhaseModuleRAOEvaluator::PhaseModuleRAOEvaluator(
-    const YamlDiffraction& diffraction_yaml,
+    const YamlRAO& diffraction_yaml,
     const EnvironmentAndFrames& env,
     const HydroDBParser& parser,
     const std::string& body_name,

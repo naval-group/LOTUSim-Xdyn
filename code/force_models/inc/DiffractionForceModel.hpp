@@ -25,7 +25,7 @@
 class DiffractionForceModel : public ForceModel
 {
     public:
-        typedef YamlDiffraction Input;
+        typedef YamlRAO Input;
         DiffractionForceModel(const Input& data, const std::string& body_name, const EnvironmentAndFrames& env);
         DiffractionForceModel(const Input& data, const std::string& body_name, const EnvironmentAndFrames& env, const std::string& hdb_file_contents);
         Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const override;
