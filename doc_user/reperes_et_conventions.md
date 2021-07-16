@@ -731,9 +731,10 @@ M_d = \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right
 Les conventions sont les mêmes que pour les fichiers HDB (expression des
 efforts au centre de gravité, repère Z vers le haut, définition de l'angle
 de propagation de la houle). La seule différence se situe dans l'expression
-de l'élévation de surface libre, qui est déphasée de $`\pi/2`$ par rapport à AQUA+.
-En effet, dans la _NOTICE D'UTILISATION AQUA+ 1.1/MF/N1_ de G. DELHOMMEAU
-figure, à la page 5 :
+de l'élévation de surface libre, qui est déphasée de $`\pi/2`$ par rapport à
+AQUA+ : $`\phi_{\mbox{PRECAL_R}} = \phi_{\mbox{Aqua+}} + \pi/2`$ En effet, dans
+la _NOTICE D'UTILISATION AQUA+ 1.1/MF/N1_ de G. DELHOMMEAU figure, à la page 5
+:
 
 ```math
 h(x=x_G=0,y=y_G=0,t) = -\sin(\omega * t)
