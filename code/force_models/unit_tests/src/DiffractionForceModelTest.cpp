@@ -74,7 +74,7 @@ TEST_F(DiffractionForceModelTest, parser_precalr_ignores_calculation_point)
     ASSERT_EQ(0, r.calculation_point.z);
 }
 
-TR1(shared_ptr)<WaveModel> get_wave_model(const double period, const double direction=0., const double height=1.)
+TR1(shared_ptr)<WaveModel> DiffractionForceModelTest::get_wave_model(const double period, const double direction, const double height)
 {
     const double omega = 2*M_PI/period;
     YamlStretching ys;
@@ -85,7 +85,7 @@ TR1(shared_ptr)<WaveModel> get_wave_model(const double period, const double dire
     return TR1(shared_ptr)<WaveModel>(new Airy(A, 0.));
 }
 
-EnvironmentAndFrames get_waves_env(const double period, const double direction=0., const double amplitude = 1.)
+EnvironmentAndFrames DiffractionForceModelTest::get_waves_env(const double period, const double direction, const double amplitude)
 {
     EnvironmentAndFrames env;
     env.g = 9.81;
@@ -97,7 +97,7 @@ EnvironmentAndFrames get_waves_env(const double period, const double direction=0
     return env;
 }
 
-BodyStates get_states_with_forward_speed(const double u = 0)
+BodyStates DiffractionForceModelTest::get_states_with_forward_speed(const double u)
 {
     BodyStates states;
     states.name = BODY_NAME;
