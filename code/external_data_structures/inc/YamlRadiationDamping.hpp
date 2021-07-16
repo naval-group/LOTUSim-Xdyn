@@ -17,7 +17,8 @@ enum class TypeOfQuadrature {RECTANGLE, TRAPEZOIDAL, SIMPSON, GAUSS_KRONROD, BUR
 struct YamlRadiationDamping
 {
     YamlRadiationDamping();
-    std::string         hdb_filename;                                         //!< Path to HDB file storing the radiation damping matrices
+    std::string         hdb_filename;                                         //!< Path to a HDB file storing the radiation damping matrices
+    std::string         precal_r_filename;                                    //!< Path to a PRECAL_R file storing the radiation damping matrices
     TypeOfQuadrature    type_of_quadrature_for_cos_transform;                 //!< What integration algorithm to use to compute retardation functions?
     TypeOfQuadrature    type_of_quadrature_for_convolution;                   //!< What integration algorithm to use to compute the radiation forces (convolution)?
     size_t              nb_of_points_for_retardation_function_discretization; //!< How many points to use to compute the spline interpolating the retardation functions?

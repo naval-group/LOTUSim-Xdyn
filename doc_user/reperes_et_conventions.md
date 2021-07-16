@@ -656,7 +656,11 @@ fichiers peuvent être utilisés par xdyn pour calculer :
 
 ### Format PRECAL_R
 
-xdyn peut lire les sorties de PRECAL_R et en extraire les masses ajoutées.
+xdyn peut lire les sorties de PRECAL_R et en extraire :
+
+- les masses ajoutées
+- les amortissements de radiation
+
 [PRECAL_R](https://www.marin.nl/facilities-and-tools/software/qship) est un
 logiciel développé par [Marin](https://www.marin.nl) dans le cadre du groupe
 [Cooperative Research Ships (CRS)](https://www.crships.org/). Il résout des

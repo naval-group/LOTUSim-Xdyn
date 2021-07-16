@@ -7,7 +7,7 @@
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
-
+#include <ssc/decode_unit.hpp>
 #define DEG2RAD (PI/180.)
 
 PrecalParser PrecalParser::from_string(const std::string& precal_file_contents)
@@ -418,4 +418,94 @@ std::vector<double> PrecalParser::get_diffraction_phase_psis() const
     }
     const RAOData* ret = boost::get<RAOData>(&diffraction_phase);
     return ret->psi;
+}
+
+std::vector<double> PrecalParser::get_angular_frequencies() const
+{
+    for (const auto section : precal_file.sections)
+    {
+        const auto it = section.vector_values.find("waveFreq");
+        if (it != section.vector_values.end())
+        {
+            return it->second;
+        }
+    }
+    THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find value 'waveFreq' in PRECAL_R's input file.");
+    return std::vector<double>();
+}
+
+double PrecalParser::get_forward_speed() const
+{
+    for (const auto section : precal_file.sections)
+    {
+        const auto it = section.vector_values.find("shipSpeed");
+        if (it != section.vector_values.end())
+        {
+            if (it->second.empty())
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "We found vector 'shipSpeed' in PRECAL_R's input file but it was empty.");
+            }
+            const auto it2 = section.string_values.find("unitShipSpeed");
+            if (it2 == section.string_values.end())
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find value 'unitShipSpeed' in the same section as 'shipSpeed' in PRECAL_R's input file.");
+            }
+            // decode_unit does not understand "kn" (which kind of defeats the purpose of using it)
+            const double factor = it2->second == "kn" ? ssc::decode_unit::decodeUnit("kt") : ssc::decode_unit::decodeUnit(it2->second);
+            return it->second.front()*factor;
+        }
+    }
+    THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find value 'waveFreq' in PRECAL_R's input file.");
+    return std::nan("");
+}
+
+std::string coeff_name(const std::string& prefix, const size_t i , const size_t j);
+std::string coeff_name(const std::string& prefix, const size_t i , const size_t j)
+{
+    return prefix + "_m" + std::to_string(i+1) + "m" + std::to_string(j+1);
+}
+
+std::vector<double> PrecalParser::extract_matrix_coeff(const std::string& short_name, const std::string& long_name, const size_t i, const size_t j) const
+{
+    bool found_signal = false;
+    double min_speed = 1E300;
+    std::string line;
+    for (const auto rao : precal_file.raos)
+    {
+        if (rao.attributes.name == coeff_name(short_name, i, j))
+        {
+            found_signal = true;
+            if (rao.attributes.U == 0)
+            {
+                return rao.left_column;
+            }
+            else
+            {
+                if (min_speed > rao.attributes.U)
+                {
+                    line = rao.title_line;
+                    min_speed = rao.attributes.U;
+                }
+            }
+        }
+    }
+    if (not(found_signal))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find " << long_name << " coefficient " << coeff_name(short_name, i, j) << " in PRECAL_R's output file. Check the value of the XML node sim > parRES > expAmasDampCoef is set to true/1 in PRECAL_R's input file.");
+    }
+    else
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "We found " << long_name << " coefficient " << coeff_name(short_name, i, j) << " in PRECAL_R's output file but it is calculated at non-zero velocity (the minimum velocity we found was " << min_speed << "). You can set this list in PRECAL_R's input file, XML node sim > parHYD > shipSpeedInp.");
+    }
+    return std::vector<double>();
+}
+
+std::vector<double> PrecalParser::get_added_mass_coeff(const size_t i, const size_t j) const
+{
+    return extract_matrix_coeff("A", "added mass", i, j);
+}
+
+std::vector<double> PrecalParser::get_radiation_damping_coeff(const size_t i, const size_t j) const
+{
+    return extract_matrix_coeff("B", "damping matrix", i, j);
 }

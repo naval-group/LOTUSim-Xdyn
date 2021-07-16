@@ -36,7 +36,7 @@ void DiffractionInterpolatorTest::TearDown()
 TEST_F(DiffractionInterpolatorTest, example)
 {
 //! [DiffractionInterpolatorTest example]
-    const HDBParser data(test_data::bug_3210());
+    const HDBParser data = HDBParser::from_string(test_data::bug_3210());
     std::vector<double> omegas = {4,64,125};
     std::vector<double> psis = {0,30};
     const bool mirror = true;

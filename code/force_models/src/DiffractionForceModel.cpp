@@ -20,7 +20,6 @@
 #include "yaml2eigen.hpp"
 
 #include <ssc/interpolation.hpp>
-#include <ssc/text_file_reader.hpp>
 
 #include <array>
 #define TWOPI 6.283185307179586232
@@ -34,7 +33,7 @@ std::shared_ptr<HydroDBParser> parser_factory(const std::string& hdb_filename, c
     {
         return std::shared_ptr<HydroDBParser>(new PrecalParser(PrecalParser::from_file(precal_filename)));
     }
-    return std::shared_ptr<HydroDBParser>(new HDBParser(ssc::text_file_reader::TextFileReader(hdb_filename).get_contents()));
+    return std::shared_ptr<HydroDBParser>(new HDBParser(HDBParser::from_file(hdb_filename)));
 }
 
 void check_all_omegas_are_within_bounds(const double min_bound, const std::vector<std::vector<double> >& vector_to_check, const double max_bound);
@@ -216,7 +215,7 @@ DiffractionForceModel::DiffractionForceModel(const YamlDiffraction& data, const 
 
 DiffractionForceModel::DiffractionForceModel(const Input& data, const std::string& body_name_, const EnvironmentAndFrames& env, const std::string& hdb_file_contents):
         ForceModel("diffraction", {}, body_name_, env),
-        pimpl(new Impl(data, env, HDBParser(hdb_file_contents), body_name_))
+        pimpl(new Impl(data, env, HDBParser::from_string(hdb_file_contents), body_name_))
 {
 }
 

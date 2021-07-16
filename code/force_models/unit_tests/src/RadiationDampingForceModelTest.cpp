@@ -8,7 +8,7 @@
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
-
+#include <fstream>
 #include <ssc/integrate.hpp>
 
 #include "BodyStates.hpp"
@@ -19,6 +19,7 @@
 #include "RadiationDampingForceModelTest.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "yaml_data.hpp"
+#include "precal_test_data.hpp"
 
 #define EPS 5E-2
 
@@ -132,7 +133,7 @@ TEST_F(RadiationDampingForceModelTest, example)
 //! [RadiationDampingForceModelTest example]
     const auto yaml = get_yaml_data(false);
     RadiationDampingForceModel::Input input;
-    input.hdb = get_hdb_data(yaml);
+    input.parser = get_hdb_data(yaml);
     input.yaml = yaml;
     const EnvironmentAndFrames env;
     const std::string body_name = a.random<std::string>();
@@ -167,7 +168,7 @@ TEST_F(RadiationDampingForceModelTest, results_are_zero_for_constant_velocity)
 {
     const auto yaml = get_yaml_data(false);
     RadiationDampingForceModel::Input input;
-    input.hdb = get_hdb_data(yaml);
+    input.parser = get_hdb_data(yaml);
     input.yaml = yaml;
     input.yaml.remove_constant_speed = true;
     const EnvironmentAndFrames env;
@@ -210,7 +211,7 @@ TEST_F(RadiationDampingForceModelTest, velocity_offset_should_not_change_the_res
 {
     const auto yaml = get_yaml_data(false);
     RadiationDampingForceModel::Input input;
-    input.hdb = get_hdb_data(yaml);
+    input.parser = get_hdb_data(yaml);
     input.yaml = yaml;
     input.yaml.remove_constant_speed = true;
     const EnvironmentAndFrames env;
@@ -246,7 +247,7 @@ TEST_F(RadiationDampingForceModelTest, should_print_debugging_information_if_req
     // Call the radiation damping model
     RadiationDampingForceModel::Input input;
     input.yaml = get_yaml_data(true);
-    input.hdb = get_hdb_data(input.yaml);
+    input.parser = get_hdb_data(input.yaml);
     RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
     ASSERT_FALSE(debug.str().empty());
     // Restore cerr's buffer
@@ -261,7 +262,7 @@ TEST_F(RadiationDampingForceModelTest, should_not_print_debugging_information_if
     // Call the radiation damping model
     RadiationDampingForceModel::Input input;
     input.yaml = get_yaml_data(false);
-    input.hdb = get_hdb_data(input.yaml);
+    input.parser = get_hdb_data(input.yaml);
     RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
     ASSERT_TRUE(debug.str().empty());
     // Restore cerr's buffer
@@ -272,7 +273,7 @@ TEST_F(RadiationDampingForceModelTest, force_model_knows_history_length)
 {
     RadiationDampingForceModel::Input input;
     input.yaml = get_yaml_data(false);
-    input.hdb = get_hdb_data(input.yaml);
+    input.parser = get_hdb_data(input.yaml);
     const RadiationDampingForceModel F(input, "", EnvironmentAndFrames());
     ASSERT_DOUBLE_EQ(input.yaml.tau_max, F.get_Tmax());
 }
@@ -283,7 +284,7 @@ TEST_F(RadiationDampingForceModelTest, matrix_product_should_be_done_properly)
     RadiationDampingForceModel::Input input;
     input.yaml = get_yaml_data(false);
     const bool only_diagonal_terms = true;
-    input.hdb = get_hdb_data(input.yaml, not(only_diagonal_terms));
+    input.parser = get_hdb_data(input.yaml, not(only_diagonal_terms));
     input.yaml.type_of_quadrature_for_convolution = TypeOfQuadrature::RECTANGLE;
     EnvironmentAndFrames env;
     RadiationDampingForceModel F(input, "", env);
@@ -322,4 +323,115 @@ TEST_F(RadiationDampingForceModelTest, matrix_product_should_be_done_properly)
     ASSERT_NEAR(conv * (41*u0 + 42*v0 + 43*w0 + 44*p0 + 45*q0 + 46*r0), Frad.K(), 10*EPS);
     ASSERT_NEAR(conv * (51*u0 + 52*v0 + 53*w0 + 54*p0 + 55*q0 + 56*r0), Frad.M(), 10*EPS);
     ASSERT_NEAR(conv * (61*u0 + 62*v0 + 63*w0 + 64*p0 + 65*q0 + 66*r0), Frad.N(), 10*EPS);
+}
+
+TEST_F(RadiationDampingForceModelTest, cannot_specify_both_hdb_and_precal_r_files)
+{
+    const std::string invalid_yaml = "model: radiation damping\n"
+                                     "hdb: test_ship.hdb\n"
+                                     "precal_r: test_ship.ini\n"
+                                     "type of quadrature for cos transform: simpson\n"
+                                     "type of quadrature for convolution: clenshaw-curtis\n"
+                                     "nb of points for retardation function discretization: 50\n"
+                                     "omega min: {value: 0, unit: rad/s}\n"
+                                     "omega max: {value: 30, unit: rad/s}\n"
+                                     "tau min: {value: 0.2094395, unit: s}\n"
+                                     "tau max: {value: 10, unit: s}\n"
+                                     "output Br and K: true\n"
+                                     "forward speed correction: true\n"
+                                     "calculation point in body frame:\n"
+                                     "    x: {value: 0.696, unit: m}\n"
+                                     "    y: {value: 0, unit: m}\n"
+                                     "    z: {value: 1.418, unit: m}\n";
+    ASSERT_THROW(RadiationDampingForceModel::parse(invalid_yaml,false), InvalidInputException);
+}
+
+TEST_F(RadiationDampingForceModelTest, should_be_able_to_use_precal_r_files_only)
+{
+    const std::string valid_yaml = "model: radiation damping\n"
+                                   "precal_r: test_ship.ini\n"
+                                   "type of quadrature for cos transform: simpson\n"
+                                   "type of quadrature for convolution: clenshaw-curtis\n"
+                                   "nb of points for retardation function discretization: 50\n"
+                                   "omega min: {value: 0, unit: rad/s}\n"
+                                   "omega max: {value: 30, unit: rad/s}\n"
+                                   "tau min: {value: 0.2094395, unit: s}\n"
+                                   "tau max: {value: 10, unit: s}\n"
+                                   "output Br and K: true\n"
+                                   "forward speed correction: true\n"
+                                   "calculation point in body frame:\n"
+                                   "    x: {value: 0.696, unit: m}\n"
+                                   "    y: {value: 0, unit: m}\n"
+                                   "    z: {value: 1.418, unit: m}\n";
+    ASSERT_NO_THROW(RadiationDampingForceModel::parse(valid_yaml,false));
+}
+
+TEST_F(RadiationDampingForceModelTest, need_one_of_precal_r_or_hdb)
+{
+    const std::string invalid_yaml = "model: radiation damping\n"
+                                     "type of quadrature for cos transform: simpson\n"
+                                     "type of quadrature for convolution: clenshaw-curtis\n"
+                                     "nb of points for retardation function discretization: 50\n"
+                                     "omega min: {value: 0, unit: rad/s}\n"
+                                     "omega max: {value: 30, unit: rad/s}\n"
+                                     "tau min: {value: 0.2094395, unit: s}\n"
+                                     "tau max: {value: 10, unit: s}\n"
+                                     "output Br and K: true\n"
+                                     "forward speed correction: true\n"
+                                     "calculation point in body frame:\n"
+                                     "    x: {value: 0.696, unit: m}\n"
+                                     "    y: {value: 0, unit: m}\n"
+                                     "    z: {value: 1.418, unit: m}\n";
+    ASSERT_THROW(RadiationDampingForceModel::parse(invalid_yaml,false), InvalidInputException);
+}
+
+TEST_F(RadiationDampingForceModelTest, precal_r_filename_is_read_properly)
+{
+    const std::string valid_yaml = "model: radiation damping\n"
+                                   "precal_r: test_ship.ini\n"
+                                   "type of quadrature for cos transform: simpson\n"
+                                   "type of quadrature for convolution: clenshaw-curtis\n"
+                                   "nb of points for retardation function discretization: 50\n"
+                                   "omega min: {value: 0, unit: rad/s}\n"
+                                   "omega max: {value: 30, unit: rad/s}\n"
+                                   "tau min: {value: 0.2094395, unit: s}\n"
+                                   "tau max: {value: 10, unit: s}\n"
+                                   "output Br and K: true\n"
+                                   "forward speed correction: true\n"
+                                   "calculation point in body frame:\n"
+                                   "    x: {value: 0.696, unit: m}\n"
+                                   "    y: {value: 0, unit: m}\n"
+                                   "    z: {value: 1.418, unit: m}\n";
+    ASSERT_EQ("test_ship.ini", RadiationDampingForceModel::parse(valid_yaml,false).yaml.precal_r_filename);
+}
+
+TEST_F(RadiationDampingForceModelTest, can_use_data_from_precal_r)
+{
+    const std::string yaml = "model: radiation damping\n"
+                             "precal_r: data.raodb.ini\n"
+                             "type of quadrature for cos transform: simpson\n"
+                             "type of quadrature for convolution: trapezoidal\n"
+                             "nb of points for retardation function discretization: 50\n"
+                             "omega min: {value: 0, unit: rad/s}\n"
+                             "omega max: {value: 30, unit: rad/s}\n"
+                             "tau min: {value: 0.2094395, unit: s}\n"
+                             "tau max: {value: 10, unit: s}\n"
+                             "output Br and K: false\n"
+                             "forward speed correction: false\n"
+                             "calculation point in body frame:\n"
+                             "    x: {value: 0.696, unit: m}\n"
+                             "    y: {value: 0, unit: m}\n"
+                             "    z: {value: 1.418, unit: m}\n";
+    std::ofstream precalr_file("data.raodb.ini");
+    precalr_file << test_data::precal();
+    RadiationDampingForceModel::Input input = RadiationDampingForceModel::parse(yaml);
+    const EnvironmentAndFrames env;
+    const std::string body_name = a.random<std::string>();
+    RadiationDampingForceModel F(input, body_name, env);
+    BodyStates states(100);
+    states.name = body_name;
+    const auto T = 10;
+    const auto t = record_sine(states, 0, T, 10, 100);
+    const auto Frad = F.get_force(states, 0, env, {});
+    ASSERT_NE(0, Frad.X());
 }

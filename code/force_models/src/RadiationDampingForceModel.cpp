@@ -8,14 +8,16 @@
 #include "RadiationDampingForceModel.hpp"
 
 #include "Body.hpp"
+#include "HydroDBParser.hpp"
 #include "HDBParser.hpp"
+#include "PrecalParser.hpp"
 #include "History.hpp"
 #include "InvalidInputException.hpp"
+#include "InternalErrorException.hpp"
 #include "RadiationDampingBuilder.hpp"
 #include "external_data_structures_parsers.hpp"
 
 #include <ssc/macros.hpp>
-#include <ssc/text_file_reader.hpp>
 
 #include <ssc/yaml_parser.hpp>
 
@@ -113,7 +115,7 @@ std::function<double(double)> operator-(const std::function<double(double)>& f, 
 class RadiationDampingForceModel::Impl
 {
     public:
-        Impl(const TR1(shared_ptr)<HDBParser>& parser, const YamlRadiationDamping& yaml) : hdb{parser}, builder(RadiationDampingBuilder(yaml.type_of_quadrature_for_convolution, yaml.type_of_quadrature_for_cos_transform)),
+        Impl(const TR1(shared_ptr)<HydroDBParser>& parser_, const YamlRadiationDamping& yaml) : parser{parser_}, builder(RadiationDampingBuilder(yaml.type_of_quadrature_for_convolution, yaml.type_of_quadrature_for_cos_transform)),
         A(), Ka(), Kb(), omega(parser->get_angular_frequencies()), taus(),
         n(yaml.nb_of_points_for_retardation_function_discretization), Tmin(yaml.tau_min), Tmax(yaml.tau_max),
         H0(yaml.calculation_point_in_body_frame.x,yaml.calculation_point_in_body_frame.y,yaml.calculation_point_in_body_frame.y),
@@ -124,7 +126,7 @@ class RadiationDampingForceModel::Impl
             CSVWriter tau_writer(std::cerr, "tau", taus);
 
             // We can only apply the forward speed correction if the radiation damping coefficients were calculated at zero speed
-            if (forward_speed_correction && fabs(hdb->get_forward_speed()) > 1e-3)
+            if (forward_speed_correction && fabs(parser->get_forward_speed()) > 1e-3)
             {
                 std::cerr << "WARNING: You chose to apply a forward speed correction in the 'Radiation Damping' force model, but the forward velocity specified in the HDB file is not zero." << std::endl;
             }
@@ -157,12 +159,12 @@ class RadiationDampingForceModel::Impl
 
         std::function<double(double)> get_Ma(const size_t i, const size_t j) const
         {
-            return builder.build_interpolator(omega, hdb->get_added_mass_coeff(i, j));
+            return builder.build_interpolator(omega, parser->get_added_mass_coeff(i, j));
         }
 
         std::function<double(double)> get_Br(const size_t i, const size_t j) const
         {
-            return builder.build_interpolator(omega,hdb->get_radiation_damping_coeff(i,j));
+            return builder.build_interpolator(omega,parser->get_radiation_damping_coeff(i,j));
         }
 
         std::function<double(double)> get_K(const std::function<double(double)>& Br) const
@@ -342,7 +344,7 @@ class RadiationDampingForceModel::Impl
 
     private:
         Impl();
-        TR1(shared_ptr)<HDBParser> hdb;
+        TR1(shared_ptr)<HydroDBParser> parser;
         RadiationDampingBuilder builder;
         Eigen::Matrix<double, 6, 6> A;
         std::array<std::array<std::function<double(double)>,6>, 6> Ka;
@@ -360,7 +362,7 @@ class RadiationDampingForceModel::Impl
 
 RadiationDampingForceModel::RadiationDampingForceModel(const RadiationDampingForceModel::Input& input, const std::string& body_name, const EnvironmentAndFrames& env) :
         ForceModel("radiation damping", {}, body_name, env),
-        pimpl(new Impl(input.hdb, input.yaml))
+        pimpl(new Impl(input.parser, input.yaml))
 {
 }
 
@@ -391,7 +393,7 @@ TypeOfQuadrature parse_type_of_quadrature_(const std::string& s)
     return TypeOfQuadrature::FILON;
 }
 
-RadiationDampingForceModel::Input RadiationDampingForceModel::parse(const std::string& yaml, const bool parse_hdb)
+RadiationDampingForceModel::Input RadiationDampingForceModel::parse(const std::string& yaml, const bool parse_hdb_or_precalr)
 {
     RadiationDampingForceModel::Input ret;
     std::stringstream stream(yaml);
@@ -400,7 +402,22 @@ RadiationDampingForceModel::Input RadiationDampingForceModel::parse(const std::s
     YAML::Node node;
     parser.GetNextDocument(node);
     YamlRadiationDamping input;
-    node["hdb"] >> input.hdb_filename;
+    if (node.FindValue("hdb") && node.FindValue("precal_r"))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "When using the radiation force model, you cannot specify both the 'hdb' and 'precal_r' in the YAML, as xdyn would not know which one to use to retrieve radiation damping coefficients: you should remove either 'hdb' or 'precal_r' from the YAML file.");
+    }
+    if (!node.FindValue("hdb") && !node.FindValue("precal_r"))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "When using the radiation force model, you must use *either* the 'hdb' key in the YAML file (to read the radiation damping matrix coefficients from an HDB file) *or* 'precal_r' (if you wish to use the outputs of PRECAL_R): xdyn couldn't find either in the YAML file.");
+    }
+    if (node.FindValue("hdb"))
+    {
+        node["hdb"] >> input.hdb_filename;
+    }
+    if (node.FindValue("precal_r"))
+    {
+        node["precal_r"] >> input.precal_r_filename;
+    }
     std::string s;
     node["type of quadrature for cos transform"] >> s;
     input.type_of_quadrature_for_cos_transform = parse_type_of_quadrature_(s);
@@ -421,10 +438,20 @@ RadiationDampingForceModel::Input RadiationDampingForceModel::parse(const std::s
     {
         node["forward speed correction"] >> input.forward_speed_correction;
     }
-    if (parse_hdb)
+    if (parse_hdb_or_precalr)
     {
-        const TR1(shared_ptr)<HDBParser> hdb(new HDBParser(ssc::text_file_reader::TextFileReader(std::vector<std::string>(1,input.hdb_filename)).get_contents()));
-        ret.hdb = hdb;
+        if (not(input.hdb_filename.empty()))
+        {
+            ret.parser = TR1(shared_ptr)<HydroDBParser>(new HDBParser(HDBParser::from_file(input.hdb_filename)));
+        }
+        else
+        {
+            if (input.precal_r_filename.empty())
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "Neither hdb nor precal_r were defined: you need to define one of the keys 'hdb' or 'precal_r' in the YAML file, with a non-empty string.");
+            }
+            ret.parser = TR1(shared_ptr)<HydroDBParser>(new PrecalParser(PrecalParser::from_file(input.precal_r_filename)));
+        }
     }
     ret.yaml = input;
     return ret;

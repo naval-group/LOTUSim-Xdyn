@@ -202,6 +202,13 @@ TEST_F(DiffractionForceModelTest, encounter_frequency_example)
     ASSERT_NEAR(F.N(), -2.301511e7*sin(5.846877e-1), 12000);// Still a small relative error
 }
 
+double small_relative_error(const double val);
+double small_relative_error(const double val)
+{
+    const double eps = 1E-4;
+    return std::max(eps, std::abs(val * eps));
+}
+
 TEST_F(DiffractionForceModelTest, precal_r_example)
 {
     EnvironmentAndFrames env = get_waves_env(10.47198, 0.);
@@ -222,68 +229,71 @@ TEST_F(DiffractionForceModelTest, precal_r_example)
     // First battery of tests: wave direction=-180° (due South)
     env = get_waves_env(T, -M_PI);
 
-    // U=0, wave direction=-180° -> encounter period = wave period = 10.47198s (frequency = 0.6 rad/s), incidence = 180°
+    // U=0, wave direction=-180° -> encounter period = wave period = 10.47198s (frequency = 0.6 rad/s => third line), incidence = 180°
     states = get_states_with_forward_speed(0.);
     auto F = force_model.get_force(states, 0., env, {});
-    ASSERT_NEAR(F.X(),  0.447085E+03 * 1e3 * sin( -28.844746 * M_PI / 180.), std::abs(F.X() * 1e-4));
-    ASSERT_NEAR(F.Y(), -0.112772E-02 * 1e3 * sin(-170.478134 * M_PI / 180.), std::abs(F.Y() * 1e-4));
-    ASSERT_NEAR(F.Z(), -0.309840E+04 * 1e3 * sin(-116.540771 * M_PI / 180.), std::abs(F.Z() * 1e-4));
-    ASSERT_NEAR(F.K(),  0.148446E-02 * 1e3 * sin(-102.782616 * M_PI / 180.), std::abs(F.K() * 1e-4));
-    ASSERT_NEAR(F.M(), -0.145031E+06 * 1e3 * sin( -39.633919 * M_PI / 180.), std::abs(F.M() * 1e-4));
-    ASSERT_NEAR(F.N(), -0.808052E-01 * 1e3 * sin( -21.082087 * M_PI / 180.), std::abs(F.N() * 1e-4));
 
-    // U=-5.45, wave direction=-180°, wave period = 10.47198s -> encounter frequency = 0.4 rad/s, incidence = 180°
+    ASSERT_NEAR( F.X(), 0.549354E+03 * 1e3 * sin(-  (51.238937) * M_PI / 180.), small_relative_error(F.X()));
+    ASSERT_NEAR(-F.Y(), 0.187922E-02 * 1e3 * sin(- (-47.399357) * M_PI / 180.), small_relative_error(F.Y()));
+    ASSERT_NEAR(-F.Z(), 0.414623E+04 * 1e3 * sin(- (117.171936) * M_PI / 180.), small_relative_error(F.Z()));
+    ASSERT_NEAR( F.K(), 0.688938E-02 * 1e3 * sin(- (-73.747025) * M_PI / 180.), small_relative_error(F.K()));
+    ASSERT_NEAR(-F.M(), 0.197622E+06 * 1e3 * sin(-  (55.770741) * M_PI / 180.), small_relative_error(F.M()));
+    ASSERT_NEAR(-F.N(), 0.418582E-01 * 1e3 * sin(-  (66.399605) * M_PI / 180.), small_relative_error(F.N()));
+
+    // U=-5.45, wave direction=-180°, wave period = 10.47198s -> encounter frequency = 0.4 rad/s => first line, incidence = 180°
     states = get_states_with_forward_speed(-5.45);
     F = force_model.get_force(states, 0., env, {});
-    ASSERT_NEAR(F.X(),  0.614690E+02 * 1e3 * sin( -78.508087 * M_PI / 180.), std::abs(F.X() * 1e-4));
-    ASSERT_NEAR(F.Y(), -0.121771E-02 * 1e3 * sin( -81.328613 * M_PI / 180.), std::abs(F.Y() * 1e-4));
-    ASSERT_NEAR(F.Z(), -0.444548E+04 * 1e3 * sin(-131.685837 * M_PI / 180.), std::abs(F.Z() * 1e-4));
-    ASSERT_NEAR(F.K(),  0.927719E-04 * 1e3 * sin(-127.574928 * M_PI / 180.), std::abs(F.K() * 1e-4));
-    ASSERT_NEAR(F.M(), -0.481271E+05 * 1e3 * sin( -97.924873 * M_PI / 180.), std::abs(F.M() * 1e-4));
-    ASSERT_NEAR(F.N(), -0.151559E-01 * 1e3 * sin( -68.464912 * M_PI / 180.), std::abs(F.N() * 1e-4));
+    
+    ASSERT_NEAR( F.X(),  0.138050E+03 * 1e3 * sin(-   (90.317017) * M_PI / 180.), small_relative_error(F.X()));
+    ASSERT_NEAR(-F.Y(),  0.117473E-02 * 1e3 * sin(- (- 48.947906) * M_PI / 180.), small_relative_error(F.Y()));
+    ASSERT_NEAR(-F.Z(),  0.444391E+04 * 1e3 * sin(-  (140.987823) * M_PI / 180.), small_relative_error(F.Z()));
+    ASSERT_NEAR( F.K(),  0.121499E-02 * 1e3 * sin(- (- 77.528954) * M_PI / 180.), small_relative_error(F.K()));
+    ASSERT_NEAR(-F.M(),  0.692932E+05 * 1e3 * sin(-  (100.971458) * M_PI / 180.), small_relative_error(F.M()));
+    ASSERT_NEAR(-F.N(),  0.883748E-02 * 1e3 * sin(-  (-61.118809) * M_PI / 180.), small_relative_error(F.N()));
 
-    // U=10.9, wave direction=-180°, wave period = 10.47198s -> encounter frequency = 1 rad/s, incidence = 180°
+    // U=10.9, wave direction=-180°, wave period = 10.47198s -> encounter frequency = 1 rad/s => seventh line, incidence = 180°
     states = get_states_with_forward_speed(10.9);
     F = force_model.get_force(states, 0., env, {});
-    ASSERT_NEAR(F.X(),  0.188522E+03 * 1e3 * sin( 155.721146 * M_PI / 180.), std::abs(F.X() * 1e-4));
-    ASSERT_NEAR(F.Y(), -0.390895E-03 * 1e3 * sin( -84.802406 * M_PI / 180.), std::abs(F.Y() * 1e-4));
-    ASSERT_NEAR(F.Z(), -0.832559E+03 * 1e3 * sin( 112.416695 * M_PI / 180.), std::abs(F.Z() * 1e-4));
-    ASSERT_NEAR(F.K(),  0.112438E-02 * 1e3 * sin(-149.386047 * M_PI / 180.), std::abs(F.K() * 1e-4));
-    ASSERT_NEAR(F.M(), -0.553710E+05 * 1e3 * sin( 179.790375 * M_PI / 180.), std::abs(F.M() * 5e-3));
-    ASSERT_NEAR(F.N(), -0.967943E-02 * 1e3 * sin( 163.360352 * M_PI / 180.), std::abs(F.N() * 1e-4));
+    ASSERT_NEAR( F.X(), 0.248856E+03 * 1e3 * sin(- (-146.170074) * M_PI / 180.), small_relative_error(F.X()));
+    ASSERT_NEAR(-F.Y(), 0.205086E-03 * 1e3 * sin(- (-169.398438) * M_PI / 180.), small_relative_error(F.Y()));
+    ASSERT_NEAR(-F.Z(), 0.127826E+04 * 1e3 * sin(- (-114.645767) * M_PI / 180.), small_relative_error(F.Z()));
+    ASSERT_NEAR( F.K(), 0.191906E-02 * 1e3 * sin(-   (63.095062) * M_PI / 180.), small_relative_error(F.K()));
+    ASSERT_NEAR(-F.M(), 0.911647E+05 * 1e3 * sin(- (-164.636292) * M_PI / 180.), small_relative_error(F.M()));
+    ASSERT_NEAR(-F.N(), 0.291656E-01 * 1e3 * sin(-  (-50.890854) * M_PI / 180.), small_relative_error(F.N()));
 
     // Second battery of tests: wave direction=-90° (North-West)
     env = get_waves_env(T, -90.*M_PI/180);
 
-    // U=0, wave direction=-90° -> encounter period = wave period = 10.47198s (frequency = 0.6 rad/s), incidence = 90°
+    // U=0, wave direction=-90° -> encounter period = wave period = 10.47198s (frequency = 0.6 rad/s => third line), incidence = 90°
     states = get_states_with_forward_speed(0.);
     F = force_model.get_force(states, 0., env, {});
-    ASSERT_NEAR(F.X(),  0.213802E+03 * 1e3 * sin( 146.941406 * M_PI / 180.), std::abs(F.X() * 1e-4));
-    ASSERT_NEAR(F.Y(), -0.253451E+04 * 1e3 * sin( -75.123482 * M_PI / 180.), std::abs(F.Y() * 1e-4));
-    ASSERT_NEAR(F.Z(), -0.841796E+04 * 1e3 * sin(-131.750656 * M_PI / 180.), std::abs(F.Z() * 1e-4));
-    ASSERT_NEAR(F.K(),  0.126249E+04 * 1e3 * sin(  46.827698 * M_PI / 180.), std::abs(F.K() * 1e-4));
-    ASSERT_NEAR(F.M(), -0.668399E+05 * 1e3 * sin( 172.587128 * M_PI / 180.), std::abs(F.M() * 1e-4));
-    ASSERT_NEAR(F.N(), -0.496977E+05 * 1e3 * sin( -47.521080 * M_PI / 180.), std::abs(F.N() * 1e-4));
+    //0.114735E+03     164.462891
+    ASSERT_NEAR( F.X(), 0.114735E+03 * 1e3 * sin(-  (164.462891) * M_PI / 180.), small_relative_error(F.X()));
+    ASSERT_NEAR(-F.Y(), 0.250271E+04 * 1e3 * sin(-   (78.760712) * M_PI / 180.), small_relative_error(F.Y()));
+    ASSERT_NEAR(-F.Z(), 0.847017E+04 * 1e3 * sin(-  (131.552856) * M_PI / 180.), small_relative_error(F.Z()));
+    ASSERT_NEAR( F.K(), 0.967723E+03 * 1e3 * sin(- (-128.995148) * M_PI / 180.), small_relative_error(F.K()));
+    ASSERT_NEAR(-F.M(), 0.611019E+05 * 1e3 * sin(-  (138.192886) * M_PI / 180.), small_relative_error(F.M()));
+    ASSERT_NEAR(-F.N(), 0.400660E+05 * 1e3 * sin(-   (84.480057) * M_PI / 180.), small_relative_error(F.N()));
 
-    // U=10, wave direction=-90° -> encounter period = wave period = 15.70796s (frequency = 0.4 rad/s), incidence = 90°
+    // U=10, wave direction=-90° -> encounter period = wave period = 15.70796s (frequency = 0.4 rad/s => first line), incidence = 90°
     env = get_waves_env(15.70796, -90.*M_PI/180);
     states = get_states_with_forward_speed(10);
     F = force_model.get_force(states, 0., env, {});
-    ASSERT_NEAR(F.X(),  0.127820E+03 * 1e3 * sin( 116.837296 * M_PI / 180.), std::abs(F.X() * 1e-4));
-    ASSERT_NEAR(F.Y(), -0.117869E+04 * 1e3 * sin( -82.125160 * M_PI / 180.), std::abs(F.Y() * 1e-4));
-    ASSERT_NEAR(F.Z(), -0.514178E+04 * 1e3 * sin(-147.132416 * M_PI / 180.), std::abs(F.Z() * 1e-4));
-    ASSERT_NEAR(F.K(),  0.111813E+04 * 1e3 * sin(  30.492355 * M_PI / 180.), std::abs(F.K() * 1e-4));
-    ASSERT_NEAR(F.M(), -0.381031E+05 * 1e3 * sin( 148.914230 * M_PI / 180.), std::abs(F.M() * 1e-4));
-    ASSERT_NEAR(F.N(), -0.271359E+05 * 1e3 * sin( -37.329960 * M_PI / 180.), std::abs(F.N() * 1e-4));
+    ASSERT_NEAR( F.X(), 0.517219E+02       * 1e3 * sin(- (-175.715546) * M_PI / 180.), small_relative_error(F.X()));
+    ASSERT_NEAR(-F.Y(), 0.116960E+04       * 1e3 * sin(- (88.327232) * M_PI / 180.), small_relative_error(F.Y()));
+    ASSERT_NEAR(-F.Z(), 0.516786E+04      * 1e3 * sin(- (146.821213) * M_PI / 180.), small_relative_error(F.Z()));
+    ASSERT_NEAR( F.K(), 0.554469E+03      * 1e3 * sin(- (-94.531265) * M_PI / 180.), small_relative_error(F.K()));
+    ASSERT_NEAR(-F.M(), 0.355934E+05      * 1e3 * sin(- (150.882507) * M_PI / 180.), small_relative_error(F.M()));
+    ASSERT_NEAR(-F.N(), 0.167614E+05       * 1e3 * sin(- (89.216774) * M_PI / 180.), small_relative_error(F.N()));
 
-    // U=-10, wave direction=-90° -> encounter period = wave period = 6.28319s (frequency = 1 rad/s), incidence = 90°
+    // U=-10, wave direction=-90° -> encounter period = wave period = 6.28319s (frequency = 1 rad/s => seventh line), incidence = 90°
     env = get_waves_env(6.28319, -90.*M_PI/180);
     states = get_states_with_forward_speed(-12.586);
     F = force_model.get_force(states, 0., env, {});
-    ASSERT_NEAR(F.X(),  0.231034E+03 * 1e3 * sin( 162.160065 * M_PI / 180.), std::abs(F.X() * 1e-4));
-    ASSERT_NEAR(F.Y(), -0.275595E+04 * 1e3 * sin( -50.503010 * M_PI / 180.), std::abs(F.Y() * 1e-4));
-    ASSERT_NEAR(F.Z(), -0.117092E+05 * 1e3 * sin(-128.845367 * M_PI / 180.), std::abs(F.Z() * 1e-4));
-    ASSERT_NEAR(F.K(),  0.571309E+04 * 1e3 * sin( -57.190521 * M_PI / 180.), std::abs(F.K() * 1e-4));
-    ASSERT_NEAR(F.M(), -0.888754E+05 * 1e3 * sin(-163.850571 * M_PI / 180.), std::abs(F.M() * 1e-4));
-    ASSERT_NEAR(F.N(), -0.117203E+06 * 1e3 * sin( -47.279522 * M_PI / 180.), std::abs(F.N() * 1e-4));
+    ASSERT_NEAR( F.X(), 0.175932E+03 * 1e3 * sin(- (163.390305) * M_PI / 180.), small_relative_error(F.X()));
+    ASSERT_NEAR(-F.Y(), 0.261594E+04 * 1e3 * sin(- (53.043697) * M_PI / 180.), small_relative_error(F.Y()));
+    ASSERT_NEAR(-F.Z(), 0.117765E+05 * 1e3 * sin(- (128.725204) * M_PI / 180.), small_relative_error(F.Z()));
+    ASSERT_NEAR( F.K(), 0.587610E+04 * 1e3 * sin(- (72.772514) * M_PI / 180.), small_relative_error(F.K()));
+    ASSERT_NEAR(-F.M(), 0.977144E+05 * 1e3 * sin(- (138.608902) * M_PI / 180.), small_relative_error(F.M()));
+    ASSERT_NEAR(-F.N(), 0.108441E+06 * 1e3 * sin(- (59.445541) * M_PI / 180.), small_relative_error(F.N()));
 }
