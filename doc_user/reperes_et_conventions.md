@@ -748,7 +748,7 @@ Or dans le manuel théorique de PRECAL_R, équation 335 on a :
 et le déphasage est illustré figure 30.
 
 Cependant, les formules de reconstruction pour les efforts de diffration et de Froude-Krylov
-sont identiques. En effet, si l'expression est différente (en cos pour PRECAL_R, -sin pour Aqua+),
+sont identiques. En effet, si l'expression de l'élévation de la surface libre est différente (en cos pour PRECAL_R, -sin pour Aqua+),
 la référence des phases est cependant identique (la hauteur de surface libre au centre de gravité).
 Les déphasages des grandeurs sont donc exprimées par rapport à la même chose. Les résultats des codes
 potentiels sont ainsi calculés avec le même déphasage utilisé pour la reconstruction dans xdyn.
