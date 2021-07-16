@@ -12,6 +12,7 @@
 #define PI M_PI
 
 #include "HydroDBParser.hpp"
+#include "YamlDiffraction.hpp"
 #include <algorithm>
 
 std::vector<double> reverse(std::vector<double> t);
@@ -22,15 +23,15 @@ std::vector<double> reverse(std::vector<double> t)
 }
 
 DiffractionInterpolator::DiffractionInterpolator(const HydroDBParser& data, //!< Data read from the HDB or Precal_R file
-                                                 const bool mirror_ //!< Should the RAO for psi between 180° and 360° be calculated by mirroring the RAO between 0° and 180°?
-        ) : DiffractionInterpolator(data, {}, {}, mirror_)
+                                                 const YamlDiffraction& diffraction_yaml //<! Contents of the force model's parsed YAML data
+        ) : DiffractionInterpolator(data, {}, {}, diffraction_yaml)
 {}
 
 DiffractionInterpolator::DiffractionInterpolator(const HydroDBParser& data, //!< Data read from the HDB or Precal_R file
                                                  const std::vector<double>& omega, //!< Angular frequencies in the wave spectrum (points at which to interpolate the HDB data)
                                                  const std::vector<double>& psi, //!< Wave directions (points at which to interpolate the HDB data)
-                                                 const bool mirror_ //!< Should the RAO for psi between 180° and 360° be calculated by mirroring the RAO between 0° and 180°?
-        ) : module(), phase(), mirror(mirror_), omegas(omega), psis(psi), period_bounds(), diffraction_module_periods(data.get_diffraction_module_periods())
+                                                 const YamlDiffraction& diffraction_yaml //<! Contents of the force model's parsed YAML data
+        ) : module(), phase(), mirror(diffraction_yaml.mirror), omegas(omega), psis(psi), period_bounds(), diffraction_module_periods(data.get_diffraction_module_periods())
 {
     const auto M_module = data.get_diffraction_module_tables();
     const auto M_phase = data.get_diffraction_phase_tables();

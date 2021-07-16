@@ -14,8 +14,8 @@
 
 #include "HDBParser.hpp"
 #include "hdb_data.hpp"
-
 #include "DiffractionInterpolator.hpp"
+#include "YamlDiffraction.hpp"
 
 DiffractionInterpolatorTest::DiffractionInterpolatorTest() : a(ssc::random_data_generator::DataGenerator(989899))
 {
@@ -36,14 +36,15 @@ void DiffractionInterpolatorTest::TearDown()
 TEST_F(DiffractionInterpolatorTest, example)
 {
 //! [DiffractionInterpolatorTest example]
-    const HDBParser data = HDBParser::from_string(test_data::bug_3210());
+    const HDBParser parser = HDBParser::from_string(test_data::bug_3210());
     std::vector<double> omegas = {4,64,125};
     std::vector<double> psis = {0,30};
-    const bool mirror = true;
     for (size_t i = 0 ; i < omegas.size() ; ++i) omegas[i] = 2*PI/omegas[i];
     std::reverse(omegas.begin(),omegas.end());
     for (size_t i = 0 ; i < psis.size() ; ++i) psis[i] *= PI/180.;
-    DiffractionInterpolator radiation(data,omegas,psis,mirror);
+    YamlDiffraction yaml;
+    yaml.mirror = true;
+    DiffractionInterpolator radiation(parser, omegas, psis, yaml);
     const size_t k = 0; // X-axis
     const std::vector<std::vector<double> > modules = radiation.get_modules_cartesian(k);
     const std::vector<std::vector<double> > phases = radiation.get_phases_cartesian(k);

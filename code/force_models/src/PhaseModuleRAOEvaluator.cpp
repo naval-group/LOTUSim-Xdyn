@@ -46,13 +46,13 @@ void check_all_omegas_are_within_bounds(const double min_bound, const std::vecto
 }
 
 PhaseModuleRAOEvaluator::PhaseModuleRAOEvaluator(
-    const YamlDiffraction& data,
+    const YamlDiffraction& diffraction_yaml,
     const EnvironmentAndFrames& env,
     const HydroDBParser& parser,
     const std::string& body_name,
     const std::string& force_model_name):
-                H0(data.calculation_point.x,data.calculation_point.y,data.calculation_point.z),
-                response(DiffractionInterpolator(parser, data.mirror)),
+                H0(diffraction_yaml.calculation_point.x,diffraction_yaml.calculation_point.y,diffraction_yaml.calculation_point.z),
+                response(DiffractionInterpolator(parser, diffraction_yaml)),
                 use_encounter_period(false)
 {
     if (env.w.use_count()>0)
@@ -79,9 +79,9 @@ PhaseModuleRAOEvaluator::PhaseModuleRAOEvaluator(
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "Force model '"
                 << force_model_name << "' needs a wave model, even if it's 'no waves'");
     }
-    if (data.use_encounter_period.is_initialized())
+    if (diffraction_yaml.use_encounter_period.is_initialized())
     {
-        use_encounter_period = data.use_encounter_period.get();
+        use_encounter_period = diffraction_yaml.use_encounter_period.get();
     }
 }
 
