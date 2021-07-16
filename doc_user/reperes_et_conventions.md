@@ -737,7 +737,7 @@ la _NOTICE D'UTILISATION AQUA+ 1.1/MF/N1_ de G. DELHOMMEAU figure, à la page 5
 :
 
 ```math
-h(x=x_G=0,y=y_G=0,t) = -\sin(\omega * t)
+h(x=x_G=0,y=y_G=0,t) = -A \sin(\omega * t)
 ```
 
 Or dans le manuel théorique de PRECAL_R, équation 335 on a :
