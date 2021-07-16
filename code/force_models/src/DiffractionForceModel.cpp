@@ -26,26 +26,10 @@
 std::string DiffractionForceModel::model_name() { return "diffraction";}
 
 std::shared_ptr<HydroDBParser> parser_factory(const std::string& hdb_filename, const std::string& precal_filename);
-std::shared_ptr<HydroDBParser> parser_factory(const std::string& hdb_filename, const std::string& precal_filename)
-{
-    if (hdb_filename.empty())
-    {
-        return std::shared_ptr<HydroDBParser>(new PrecalParser(PrecalParser::from_file(precal_filename)));
-    }
-    return std::shared_ptr<HydroDBParser>(new HDBParser(HDBParser::from_file(hdb_filename)));
-}
 
 RaoInterpolator rao_interpolator_factory(const YamlRAO& yaml_rao);
-RaoInterpolator rao_interpolator_factory(const YamlRAO& yaml_rao)
-{
-    return RaoInterpolator(*parser_factory(yaml_rao.hdb_filename, yaml_rao.precal_filename), yaml_rao);
-}
 
 RaoInterpolator rao_interpolator_factory(const YamlRAO& yaml_rao, const std::string& hdb_contents);
-RaoInterpolator rao_interpolator_factory(const YamlRAO& yaml_rao, const std::string& hdb_contents)
-{
-    return RaoInterpolator(HDBParser(HDBParser::from_string(hdb_contents)), yaml_rao);
-}
 
 DiffractionForceModel::DiffractionForceModel(const YamlRAO& yaml_rao, const std::string& body_name_, const EnvironmentAndFrames& env):
         ForceModel(DiffractionForceModel::model_name(), {}, body_name_, env),

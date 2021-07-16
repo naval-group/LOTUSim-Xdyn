@@ -30,6 +30,7 @@ set(SRC src/QuadraticDampingForceModel.cpp
         src/AeroPolarForceModel.cpp
         src/HydroPolarForceModel.cpp
         src/PhaseModuleRAOEvaluator.cpp
+        src/AbstractRaoForceModel.cpp
         )
 
 # Disabled virtual destructors warning in Boost

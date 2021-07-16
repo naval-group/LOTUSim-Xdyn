@@ -21,12 +21,14 @@
  */
 struct YamlRAO
 {
+    enum class TypeOfRao {DIFFRACTION_RAO, FROUDE_KRYLOV_RAO};
     YamlRAO();
     std::string           hdb_filename;
     std::string           precal_filename;
     YamlCoordinates       calculation_point;
     bool                  mirror;
     boost::optional<bool> use_encounter_period;
+    TypeOfRao             type_of_rao;
 };
 
 #endif /* YAMLDIFFRACTION_HPP_ */
