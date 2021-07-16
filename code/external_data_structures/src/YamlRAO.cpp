@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "YamlDiffraction.hpp"
+#include "YamlRAO.hpp"
 
 YamlRAO::YamlRAO() : hdb_filename(),
                                      precal_filename(),

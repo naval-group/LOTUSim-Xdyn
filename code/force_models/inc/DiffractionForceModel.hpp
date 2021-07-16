@@ -11,7 +11,7 @@
 #include "ForceModel.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "PhaseModuleRAOEvaluator.hpp"
-#include "YamlDiffraction.hpp"
+#include "YamlRAO.hpp"
 
 /** \brief Diffraction forces
  *  \details

@@ -2,7 +2,7 @@
 #include "HydroDBParser.hpp"
 #include "InvalidInputException.hpp"
 #include "PhaseModuleRAOEvaluator.hpp"
-#include "YamlDiffraction.hpp"
+#include "YamlRAO.hpp"
 
 #define TWOPI 6.283185307179586232
 

@@ -15,7 +15,7 @@
 #include "HDBParser.hpp"
 #include "hdb_data.hpp"
 #include "DiffractionInterpolator.hpp"
-#include "YamlDiffraction.hpp"
+#include "YamlRAO.hpp"
 
 DiffractionInterpolatorTest::DiffractionInterpolatorTest() : a(ssc::random_data_generator::DataGenerator(989899))
 {
