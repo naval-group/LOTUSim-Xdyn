@@ -52,7 +52,7 @@ PhaseModuleRAOEvaluator::PhaseModuleRAOEvaluator(
     const std::string& body_name,
     const std::string& force_model_name):
                 H0(diffraction_yaml.calculation_point.x,diffraction_yaml.calculation_point.y,diffraction_yaml.calculation_point.z),
-                response(DiffractionInterpolator(parser, diffraction_yaml)),
+                rao_interpolator(DiffractionInterpolator(parser, diffraction_yaml)),
                 use_encounter_period(false)
 {
     if (env.w.use_count()>0)
@@ -60,7 +60,7 @@ PhaseModuleRAOEvaluator::PhaseModuleRAOEvaluator(
         std::vector<double> periods;
         try
         {
-            periods = response.get_diffraction_module_periods();
+            periods = rao_interpolator.get_diffraction_module_periods();
         }
         catch(const ssc::exception_handling::Exception& e)
         {
@@ -114,8 +114,8 @@ ssc::kinematics::Vector6d PhaseModuleRAOEvaluator::evaluate(const BodyStates& st
                             // Wave incidence
                             const double beta = psi - spectrum.psi[omega_beta_idx];
                             // Interpolate RAO module and phase for this axis, period and incidence
-                            const double rao_module = response.interpolate_module(degree_of_freedom_idx, period, beta);
-                            const double rao_phase = -response.interpolate_phase(degree_of_freedom_idx, period, beta);
+                            const double rao_module = rao_interpolator.interpolate_module(degree_of_freedom_idx, period, beta);
+                            const double rao_phase = -rao_interpolator.interpolate_phase(degree_of_freedom_idx, period, beta);
                             // Evaluate force
                             const double rao_amplitude = rao_module * spectrum.a[omega_beta_idx];
                             const double omega_t = spectrum.omega[omega_beta_idx] * t;
@@ -146,9 +146,9 @@ double PhaseModuleRAOEvaluator::get_interpolation_period(const double wave_angul
     if (use_encounter_period)
     {
         encounter_period = TWOPI/(wave_angular_frequency - Vs.dot(k));
-        if (encounter_period > 0 && (encounter_period < response.period_bounds.first || encounter_period > response.period_bounds.second))
+        if (encounter_period > 0 && (encounter_period < rao_interpolator.period_bounds.first || encounter_period > rao_interpolator.period_bounds.second))
         {
-            std::cerr << "WARNING: The encounter period Te=" << abs(encounter_period) << "s is outside of the range [" << response.period_bounds.first << "," << response.period_bounds.second << "]s provided in the HDB file. The response will be interpolated outside the bounds." << std::endl;
+            std::cerr << "WARNING: The encounter period Te=" << abs(encounter_period) << "s is outside of the range [" << rao_interpolator.period_bounds.first << "," << rao_interpolator.period_bounds.second << "]s provided in the HDB file. The response will be interpolated outside the bounds." << std::endl;
         }
     }
     else

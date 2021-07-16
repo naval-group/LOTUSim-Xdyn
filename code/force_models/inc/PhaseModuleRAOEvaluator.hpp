@@ -26,7 +26,7 @@ class PhaseModuleRAOEvaluator
     private:
         PhaseModuleRAOEvaluator();
         Eigen::Vector3d H0;
-        DiffractionInterpolator response;
+        DiffractionInterpolator rao_interpolator;
         bool use_encounter_period;
 };
 
