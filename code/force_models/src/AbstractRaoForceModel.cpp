@@ -30,7 +30,7 @@ std::string AbstractRaoForceModel::get_model_name(const YamlRAO::TypeOfRao& type
             return "diffraction";
             break;
         case YamlRAO::TypeOfRao::FROUDE_KRYLOV_RAO:
-            return "linear froude-krylov";
+            return "linear Froude-Krylov";
             break;
     }
     return "";
