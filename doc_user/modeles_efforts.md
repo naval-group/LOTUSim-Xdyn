@@ -324,7 +324,7 @@ Pour utiliser ce modèle, on insère la ligne suivante dans la section `external
 #### Version linéaire
 
 Cette version utilise les résultats d'un calcul potentiel (AQUA+ ou PRECAL_R) et effectue
-la multiplication avec le spectre le la houle. Sa paramétrisation est identique à celle
+la multiplication avec le spectre de la houle. Sa paramétrisation est identique à celle
 des efforts de diffraction, eux aussi basés sur des RAOs. Les mêmes remarques s'appliquent
 que pour les efforts de diffraction (changements de repère et méthode de calcul), décrites
 ci-après (section [efforts de diffraction](#efforts-de-diffraction)).
