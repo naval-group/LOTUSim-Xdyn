@@ -7,7 +7,6 @@
 struct YamlRAO;
 class BodyStates;
 class EnvironmentAndFrames;
-class HydroDBParser;
 class PhaseModuleRAOEvaluator
 {
     public:
