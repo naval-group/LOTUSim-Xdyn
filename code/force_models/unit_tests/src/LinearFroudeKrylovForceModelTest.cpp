@@ -5,21 +5,13 @@
  *      Author: cady
  */
 
-#include <fstream>
-
 #include "LinearFroudeKrylovForceModelTest.hpp"
 #include "DiffractionForceModelTest.hpp"
 #include "LinearFroudeKrylovForceModel.hpp"
-#include "yaml_data.hpp"
 #include "hdb_data.hpp"
 #include "precal_test_data.hpp"
-#include "DiracSpectralDensity.hpp"
-#include "DiracDirectionalSpreading.hpp"
-#include "YamlWaveModelInput.hpp"
-#include "Stretching.hpp"
-#include "discretize.hpp"
-#include "Airy.hpp"
-#include "SurfaceElevationFromWaves.hpp"
+
+#include <fstream>
 
 #define BODY_NAME "TestShip"
 
