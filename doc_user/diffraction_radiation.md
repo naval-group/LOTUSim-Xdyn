@@ -539,10 +539,10 @@ En utilisant la correction précédente et la notation $`A = {M_A}_{0,\infty}`$,
 K(\tau,V_s) = \frac{2}{\pi}\int_0^{+\infty} [{B_r}_0(V_s) - {M_A}_0(\omega) \cdot L_s(V_s) + {M_A}_{0,\infty} \cdot L_s(V_s)]\cos(\omega\tau)d\omega
 ```
 ```math
-K(\tau,V_s) = \frac{2}{\pi}\int_0^{+\infty} {B_r}_0(V_s) \cos(\omega\tau)d\omega - \frac{2}{\pi}\int_0^{+\infty} [{M_A}_0(\omega) - A]\cos(\omega\tau)d\omega \cdot L_s(V_s) 
+K(\tau,V_s) = \frac{2}{\pi}\int_0^{+\infty} {B_r}_0(V_s) \cos(\omega\tau)d\omega - \frac{2}{\pi}\int_0^{+\infty} [{M_A}_0(\omega) - A]\cos(\omega\tau)d\omega \cdot L_s(V_s)
 ```
 ```math
-K(\tau,V_s) = K_B(\tau) - K_A(\tau) \cdot L_s(V_s) 
+K(\tau,V_s) = K_B(\tau) - K_A(\tau) \cdot L_s(V_s)
 ```
 
 Et :
