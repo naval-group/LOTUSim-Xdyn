@@ -9,7 +9,6 @@
 #include <functional>
 #include <iostream>
 #include <google/protobuf/stubs/common.h>
-#include <ssc/check_ssc_version.hpp>
 #include <ssc/text_file_reader.hpp>
 
 #include "build_observers_description.hpp"
@@ -21,8 +20,6 @@
 #include <ssc/solver/steppers.hpp>
 #include <ssc/solver/Scheduler.hpp>
 #include "ErrorReporter.hpp"
-
-CHECK_SSC_VERSION(10,0)
 
 void solve(const std::string& solver_name, Sim& sys, ssc::solver::Scheduler& scheduler, ListOfObservers& observer, const std::vector<ssc::solver::DiscreteSystemPtr>& controllers);
 void solve(const std::string& solver_name, Sim& sys, ssc::solver::Scheduler& scheduler, ListOfObservers& observer, const std::vector<ssc::solver::DiscreteSystemPtr>& controllers)

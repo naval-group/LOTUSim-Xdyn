@@ -6,10 +6,7 @@
  */
 
 #include <iostream>
-#include <ssc/check_ssc_version.hpp>
 #include <ssc/kinematics.hpp>
-
-CHECK_SSC_VERSION(10,0)
 
 #define _USE_MATH_DEFINE
 #include <cmath>

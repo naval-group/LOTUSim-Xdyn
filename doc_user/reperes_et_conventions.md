@@ -728,9 +728,50 @@ M_d = \left[\begin{array}{cc}R_X(\pi)&S(AB)R_X(\pi)\\0&R_X(\pi)\end{array}\right
 
 ### Convention des fichiers PRECAL_R
 
-Les conventions sont les mêmes que pour les fichiers HDB.
+Les conventions sont les mêmes que pour les fichiers HDB (expression des
+efforts au centre de gravité, repère Z vers le haut, définition de l'angle
+de propagation de la houle).
 
-Par conséquent, toutes les matrices lues depuis un fichier HDB ou PRECAL_R
+Quel que soit le potentiel de vitesse choisi comme solution de l'équation
+de Laplace décrivant une houle monochromatique (plusieurs potentiels
+peuvent être solution), les déphasages entre l'excitation dûe à la
+houle et les réponses du navire calculés par les codes potentiels
+seront les mêmes, comme illustré dans la figure ci-dessous :
+
+```python echo=False, results='raw', name='tutorial_01_plot_results'
+import matplotlib.pyplot as plt
+import numpy as np
+from numpy import cos, pi, sin
+
+Tp = 4
+omega = 2*pi/Tp
+phi = pi/4
+t = np.arange(0, 2*Tp, 0.1)   # start,stop,step
+aqua_plus_wave_elevation = -sin(omega*t)
+aqua_plus_response = -2*sin(omega*t + phi)
+precal_r_wave_elevation = cos(omega*t)
+precal_r_wave_response = 2*cos(omega*t + phi)
+
+plt.plot(t, aqua_plus_wave_elevation, 'r-')
+plt.plot(t, aqua_plus_response, 'r--')
+plt.plot(t, precal_r_wave_elevation, 'b-')
+plt.plot(t, precal_r_wave_response, 'b--')
+plt.xlabel('Temps (s)')
+plt.title('Déphasage entre PRECAL_R et AQUA+')
+plt.legend(['Élévations AQUA+', 'Réponse AQUA+', 'Élévations PRECAL_R', 'Réponse PRECAL_R'])
+plt.arrow(2.5, 1, 0.5, 0, shape='left', color='black', linestyle='-')
+plt.axvline(x=2.5, color='red', linestyle='--', lw=1)
+plt.arrow(3.5, 1, 0.5, 0, shape='left', color='black', linestyle='-')
+plt.axvline(x=3.5, color='blue', linestyle='--', lw=1)
+plt.text(2.65, 1.1, r'$\varphi$')
+plt.text(3.65, 1.1, r'$\varphi$')
+plt.show()
+```
+
+Par conséquent, xdyn utilise les résultats d'AQUA+ et de PRECAL_R
+de la même manière pour reconstruire les efforts provenant de RAO (cf. [détail du calcul des efforts de diffraction](calcul-numérique)).
+
+Par ailleurs, toutes les matrices lues depuis un fichier HDB ou PRECAL_R
 (masses ajoutées et amortissement de radiation) subissent le changement de
 repère décrit au paragraphe suivant.
 
