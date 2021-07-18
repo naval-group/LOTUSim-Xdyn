@@ -12,7 +12,7 @@
 #include "gtest/gtest.h"
 #include <ssc/random_data_generator/DataGenerator.hpp>
 #include "EnvironmentAndFrames.hpp"
-# include "WaveModel.hpp"
+#include "WaveModel.hpp"
 
 class DiffractionForceModelTest : public ::testing::Test
 {
