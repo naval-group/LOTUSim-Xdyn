@@ -28,4 +28,4 @@ class PhaseModuleRAOEvaluator
         bool use_encounter_period;
 };
 
-#endif
+#endif /* _PHASEMODULERAOEVALUATORHPP_ */
