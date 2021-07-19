@@ -117,19 +117,6 @@ ssc::kinematics::Vector6d PhaseModuleRAOEvaluator::evaluate(const BodyStates& st
                             const double omega_t = spectrum.omega[omega_beta_idx] * t;
                             const double k_x = k.dot(x);
                             const double theta = spectrum.phase[omega_beta_idx];
-                            /*if (degree_of_freedom_idx == 2)
-                            {
-                                COUT(rao_module);
-                                COUT(rao_phase);
-                                COUT(omega_t);
-                                COUT(k_x);
-                                COUT(theta);
-                                COUT(rao_amplitude);
-                                COUT(k);
-                                COUT(x);
-                                COUT(-omega_t + k_x + theta + rao_phase);
-                                COUT(rao_amplitude * sin(-omega_t + k_x + theta + rao_phase));
-                            }*/
                             w((int)degree_of_freedom_idx) -= rao_amplitude * sin(-omega_t + k_x + theta + rao_phase);
                         }
                         else
