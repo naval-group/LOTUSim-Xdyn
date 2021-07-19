@@ -20,3 +20,6 @@ all:
 #@docker run -it --rm -v $(shell pwd)/../:/work -w /work changelog v2.0.0 v3.0.0 >> CHANGELOG.md
 #@docker run -it --rm -v $(shell pwd)/../:/work -w /work changelog v1.0.0 v1.0.0 >> CHANGELOG.md
 #@docker run -it --rm -v $(shell pwd)/../:/work -w /work changelog 8fac6c21 v1.0.0 >> CHANGELOG.md
+
+clean:
+	@rm -f CHANGELOG.md

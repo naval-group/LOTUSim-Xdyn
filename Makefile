@@ -284,3 +284,10 @@ lint:
 	then echo "Tabs found in the lines shown above."; false; \
 	else echo "Repo passed no-tabs check."; fi && \
 	cd ..
+
+changelog: CHANGELOG.md
+changelog: ## Generates CHANGELOG.md from git merge commits
+CHANGELOG.md: ## Generates CHANGELOG.md from git merge commits
+	@make -C changelog
+	@cp changelog/$@ .
+.PHONY: changelog CHANGELOG.md

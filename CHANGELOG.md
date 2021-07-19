@@ -1,3 +1,20 @@
+# v4.3.0 (2021-06-29)
+
+- #176 Precal r extraction des masses ajoutees
+- #165 Mise en place de l interface precal_r x dyn
+- #182 Fixed typo in doc_user interfaces_utilisateur m4 md
+- #154 Rendre le developpement de modules modeles d efforts essentiellement possible facile par les
+- #172 Should be able to output commands
+- #95 Fix wave grpc
+- #174 Add a command line flag to display concatenated yaml
+- #89 Problem with history class
+- #90 Add a word target for user documentation
+- #39 Missing parameter documentation for radiation damping force model
+- #37 Undocumented changes on diffraction force model
+- #32 Diffraction force model does not take encounter frequency into account
+- #31 Bug correction and performance improvement in radiationdampingforcemodel
+
+
 # v4.2.0 (2021-05-04)
 
 - #166 External controllers
