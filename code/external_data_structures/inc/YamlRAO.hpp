@@ -1,5 +1,5 @@
 /*
- * YamlDiffraction.hpp
+ * YamlRAO.hpp
  *
  */
 
