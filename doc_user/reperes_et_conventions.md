@@ -546,7 +546,7 @@ PRECAL_R) est relatif à l'endroit d'où on lance l'exécutable.
 
 Dans les [fichiers HDB](#format-hdb), la section correspondant aux masses
 ajoutées est `[Added_mass_Radiation_Damping]`, sous-sections
-`[ADDED_MASS_LINE_*]` où * vaut 1 à 6 et désigne la ligne de la matrice. La
+`[ADDED_MASS_LINE_*]` où `*` vaut 1 à 6 et désigne la ligne de la matrice. La
 valeur utilisée par xdyn est la matrice de masse ajoutée à la période minimale définie
 dans le [fichier HDB](#format-hdb) (aucune extrapolation n'est faite).
 

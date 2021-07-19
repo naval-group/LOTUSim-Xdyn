@@ -331,7 +331,7 @@ ci-après (section [efforts de diffraction](#efforts-de-diffraction)).
 
 La section utilisée pour les fichiers HDB est
 `FROUDE-KRYLOV_FORCES_AND_MOMENTS`, sous-section `INCIDENCE_FKFM_MOD_*` pour
-les modules (où * est un numéro désignant l'incidence) et `INCIDENCE_FKFM_PH_*`
+les modules (où `*` est un numéro désignant l'incidence) et `INCIDENCE_FKFM_PH_*`
 pour les phases. Par exemple :
 
 ```
@@ -345,7 +345,7 @@ pour les phases. Par exemple :
       3.700  1.316362E+00 -3.141593E+00  2.356064E-01 -3.141593E+00  4.982495E-02 -3.141593E+00
 ```
 
-Pour les fichiers PRECAL_R il s'agit de `F_inc_m*` (où * vaut 1 à 6, pour x, y,
+Pour les fichiers PRECAL_R il s'agit de `F_inc_m*` (où `*` vaut 1 à 6, pour x, y,
 z, k, m, n), présente lorsque l'option `sim > parRES > expIncWaveFrc` du
 fichier XML d'entrée de PRECAL_R est mise à `true` ou 1.
 
