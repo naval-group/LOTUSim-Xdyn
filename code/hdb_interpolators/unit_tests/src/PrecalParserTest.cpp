@@ -307,6 +307,84 @@ TEST_F(PrecalParserTest, can_get_radiation_damping_matrix_coefficients_for_each_
     ASSERT_DOUBLE_EQ(-0.102490E-02, Br_34.at(6));
 }
 
+TEST_F(PrecalParserTest, can_parse_diffraction_module_raos)
+{
+    auto precal = PrecalParser::from_string(test_data::precal());
+
+    const std::vector<double> periods = precal.get_diffraction_module_periods();
+    ASSERT_EQ(7, periods.size());
+    ASSERT_DOUBLE_EQ(2 * PI / 0.4, periods.at(6));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.5, periods.at(5));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.6, periods.at(4));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.7, periods.at(3));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.8, periods.at(2));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.9, periods.at(1));
+    ASSERT_DOUBLE_EQ(2 * PI,       periods.at(0));
+
+    const std::vector<double> psis = precal.get_diffraction_module_psis();
+    ASSERT_EQ(2, psis.size());
+    ASSERT_DOUBLE_EQ(PI, psis.at(1));
+    ASSERT_DOUBLE_EQ(PI / 2, psis.at(0));
+
+    const std::array<std::vector<std::vector<double>>, 6> table = precal.get_diffraction_module_tables();
+    for (size_t mod_idx = 0; mod_idx < 6; ++mod_idx)
+    {
+        ASSERT_EQ(7, table.at(mod_idx).size());
+        for (size_t period_idx = 0; period_idx < 7; ++period_idx)
+        {
+            ASSERT_EQ(2, table.at(mod_idx).at(period_idx).size());
+        }
+    }
+
+    // Multiplied by 1e3 to convert the table data to N/m
+    // column (axis), pulsation, incidence
+    ASSERT_DOUBLE_EQ(0.138050E+03 * 1e3, table.at(0).at(6).at(1)); // X (F_dif_m1), first line, 180°
+    ASSERT_DOUBLE_EQ(0.117473E-02 * 1e3, table.at(1).at(6).at(1)); // Y (F_dif_m2), first line, 180°
+    ASSERT_DOUBLE_EQ(0.847017E+04 * 1e3, table.at(2).at(4).at(0)); // Z (F_dif_m3), third line, 90°
+    ASSERT_DOUBLE_EQ(0.360716E+04 * 1e3, table.at(3).at(1).at(0)); // K (F_dif_m4), sixth line, 90°
+    ASSERT_DOUBLE_EQ(0.898604E+05 * 1e3, table.at(4).at(1).at(0)); // M (F_dif_m5), sixth line, 90°
+    ASSERT_DOUBLE_EQ(0.291656E-01 * 1e3, table.at(5).at(0).at(1)); // N (F_dif_m6), seventh line, 180°
+
+}
+
+TEST_F(PrecalParserTest, can_parse_diffraction_phase_raos)
+{
+    auto precal = PrecalParser::from_string(test_data::precal());
+
+    const std::vector<double> periods = precal.get_diffraction_phase_periods();
+    ASSERT_EQ(7, periods.size());
+    ASSERT_DOUBLE_EQ(2 * PI / 0.4, periods.at(6));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.5, periods.at(5));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.6, periods.at(4));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.7, periods.at(3));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.8, periods.at(2));
+    ASSERT_DOUBLE_EQ(2 * PI / 0.9, periods.at(1));
+    ASSERT_DOUBLE_EQ(2 * PI,       periods.at(0));
+
+    const std::vector<double> psis = precal.get_diffraction_phase_psis();
+    ASSERT_EQ(2, psis.size());
+    ASSERT_DOUBLE_EQ(PI, psis.at(1));
+    ASSERT_DOUBLE_EQ(PI / 2, psis.at(0));
+
+    const std::array<std::vector<std::vector<double>>, 6> table = precal.get_diffraction_phase_tables();
+    for (size_t mod_idx = 0; mod_idx < 6; ++mod_idx)
+    {
+        ASSERT_EQ(7, table.at(mod_idx).size());
+        for (size_t period_idx = 0; period_idx < 7; ++period_idx)
+        {
+            ASSERT_EQ(2, table.at(mod_idx).at(period_idx).size());
+        }
+    }
+
+    // column (axis), pulsation, incidence
+    ASSERT_DOUBLE_EQ(  90.317017 * PI / 180, table.at(0).at(6).at(1)); // X (F_dif_m1), first line, 180°
+    ASSERT_DOUBLE_EQ( -48.947906 * PI / 180, table.at(1).at(6).at(1)); // Y (F_dif_m2), first line, 180°
+    ASSERT_DOUBLE_EQ( 131.552856 * PI / 180, table.at(2).at(4).at(0)); // Z (F_dif_m3), third line, 90°
+    ASSERT_DOUBLE_EQ(-128.995148 * PI / 180, table.at(3).at(4).at(0)); // K (F_dif_m4), third line, 90°
+    ASSERT_DOUBLE_EQ( 137.499237 * PI / 180, table.at(4).at(1).at(0)); // M (F_dif_m5), sixth line, 90°
+    ASSERT_DOUBLE_EQ( -50.890854 * PI / 180, table.at(5).at(0).at(1)); // N (F_dif_m6), seventh line, 180°
+}
+
 TEST_F(PrecalParserTest, can_parse_froude_krylov_module_raos)
 {
     // sim > parRES > expIncWaveFrc
