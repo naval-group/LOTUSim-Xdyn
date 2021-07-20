@@ -84,7 +84,7 @@ RaoInterpolator::RaoInterpolator(const HydroDBParser& parser, //!< Data read fro
     std::reverse(omegas.begin(),omegas.end());
     period_bounds.first = *std::min_element(rao.module_periods.begin(), rao.module_periods.end());
     period_bounds.second = *std::max_element(rao.module_periods.begin(), rao.module_periods.end());
-    
+
     // For each axis (X,Y,Z,phi,theta,psi)
     for (size_t i = 0 ; i < 6 ; ++i)
     {
