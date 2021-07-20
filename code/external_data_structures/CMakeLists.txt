@@ -21,7 +21,7 @@ SET(SRC src/YamlAngle.cpp
         src/YamlSimulatorInput.cpp
         src/YamlSpeed.cpp
         src/YamlWaveModelInput.cpp
-        src/YamlDiffraction.cpp
+        src/YamlRAO.cpp
         src/YamlState.cpp
         src/YamlSimServerInputs.cpp
         src/YamlTimeSeries.cpp

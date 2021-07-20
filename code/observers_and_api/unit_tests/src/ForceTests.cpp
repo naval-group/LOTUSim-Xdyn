@@ -668,7 +668,7 @@ EnvironmentAndFrames ForceTests::get_env(const YamlModel& waves, const std::stri
 
 DiffractionForceModel ForceTests::get_diffraction_force_model(const EnvironmentAndFrames& env, const std::string& body_name, const std::string& diffraction_yaml, const std::string& hdb_file_contents) const
 {
-    const YamlDiffraction data = DiffractionForceModel::parse(diffraction_yaml);
+    const YamlRAO data = DiffractionForceModel::parse(diffraction_yaml);
     return DiffractionForceModel(data, body_name, env, hdb_file_contents);
 }
 

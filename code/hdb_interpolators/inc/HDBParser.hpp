@@ -43,10 +43,16 @@ class HDBParser : public HydroDBParser
         std::array<std::vector<std::vector<double> >,6 > get_diffraction_phase_tables() const;
         std::array<std::vector<std::vector<double> >,6 > get_froude_krylov_module_tables() const;
         std::array<std::vector<std::vector<double> >,6 > get_froude_krylov_phase_tables() const;
+        std::array<std::vector<std::vector<double> >,6 > get_total_excitation_force_module_tables() const;
+        std::array<std::vector<std::vector<double> >,6 > get_total_excitation_force_phase_tables() const;
         std::vector<double> get_diffraction_phase_psis() const;
         std::vector<double> get_diffraction_phase_periods() const;
         std::vector<double> get_diffraction_module_psis() const;
         std::vector<double> get_diffraction_module_periods() const;
+        std::vector<double> get_total_excitation_force_phase_psis() const;
+        std::vector<double> get_total_excitation_force_phase_periods() const;
+        std::vector<double> get_total_excitation_force_module_psis() const;
+        std::vector<double> get_total_excitation_force_module_periods() const;
         std::vector<double> get_froude_krylov_phase_psis() const;
         std::vector<double> get_froude_krylov_phase_periods() const;
         std::vector<double> get_froude_krylov_module_psis() const;

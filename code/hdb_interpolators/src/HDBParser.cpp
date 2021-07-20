@@ -32,7 +32,19 @@
 class HDBParser::Impl
 {
     public:
-        Impl() : omega_rad(), tree(), M(), Ma(), Br(), Tmin(0), diffraction_module(), diffraction_phase(), froude_krylov_module(), froude_krylov_phase()
+        Impl() 
+        : omega_rad()
+        , tree()
+        , M()
+        , Ma()
+        , Br()
+        , Tmin(0)
+        , diffraction_module()
+        , diffraction_phase()
+        , total_excitation_forces_module()
+        , total_excitation_forces_phase()
+        , froude_krylov_module()
+        , froude_krylov_phase()
         {
         }
 
@@ -45,6 +57,8 @@ class HDBParser::Impl
         , Tmin(0)
         , diffraction_module(get_diffraction_module())
         , diffraction_phase(get_diffraction_phase())
+        , total_excitation_forces_module(get_total_excitation_forces_module())
+        , total_excitation_forces_phase(get_total_excitation_forces_phase())
         , froude_krylov_module(get_froude_krylov_module())
         , froude_krylov_phase(get_froude_krylov_phase())
         {
@@ -291,10 +305,20 @@ class HDBParser::Impl
 
         boost::variant<RAOData,std::string> get_froude_krylov_module() const
         {
-            return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_EFM_MOD_001");
+            return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_FKFM_MOD_001");
         }
 
         boost::variant<RAOData,std::string> get_froude_krylov_phase() const
+        {
+            return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_FKFM_PH_001");
+        }
+
+        boost::variant<RAOData,std::string> get_total_excitation_forces_module() const
+        {
+            return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_EFM_MOD_001");
+        }
+
+        boost::variant<RAOData,std::string> get_total_excitation_forces_phase() const
         {
             return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_EFM_PH_001");
         }
@@ -336,6 +360,26 @@ class HDBParser::Impl
                 THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
             }
             const RAOData* ret = boost::get<RAOData>(&froude_krylov_phase);
+            return ret->values;
+        }
+
+        std::array<std::vector<std::vector<double> >,6 > get_total_excitation_force_module_tables() const
+        {
+            if ( std::string* err = (std::string*)boost::get<std::string>(&total_excitation_forces_module))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+            }
+            const RAOData* ret = boost::get<RAOData>(&total_excitation_forces_module);
+            return ret->values;
+        }
+
+        std::array<std::vector<std::vector<double> >,6 > get_total_excitation_force_phase_tables() const
+        {
+            if ( std::string* err = (std::string*)boost::get<std::string>(&total_excitation_forces_phase))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+            }
+            const RAOData* ret = boost::get<RAOData>(&total_excitation_forces_phase);
             return ret->values;
         }
 
@@ -459,6 +503,46 @@ class HDBParser::Impl
             return ret->periods;
         }
 
+        std::vector<double> get_total_excitation_force_phase_psis() const
+        {
+            if ( std::string* err = (std::string*)boost::get<std::string>(&total_excitation_forces_phase))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+            }
+            const RAOData* ret = boost::get<RAOData>(&total_excitation_forces_phase);
+            return ret->psi;
+        }
+
+        std::vector<double> get_total_excitation_force_phase_periods() const
+        {
+            if ( std::string* err = (std::string*)boost::get<std::string>(&total_excitation_forces_phase))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+            }
+            const RAOData* ret = boost::get<RAOData>(&total_excitation_forces_phase);
+            return ret->periods;
+        }
+
+        std::vector<double> get_total_excitation_force_module_psis() const
+        {
+            if ( std::string* err = (std::string*)boost::get<std::string>(&total_excitation_forces_module))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+            }
+            const RAOData* ret = boost::get<RAOData>(&total_excitation_forces_module);
+            return ret->psi;
+        }
+
+        std::vector<double> get_total_excitation_force_module_periods() const
+        {
+            if ( std::string* err = (std::string*)boost::get<std::string>(&total_excitation_forces_module))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+            }
+            const RAOData* ret = boost::get<RAOData>(&total_excitation_forces_module);
+            return ret->periods;
+        }
+
         double get_forward_speed() const
         {
             return get_value("FORWARD_SPEED");
@@ -488,6 +572,8 @@ class HDBParser::Impl
         double Tmin;
         boost::variant<RAOData,std::string> diffraction_module;
         boost::variant<RAOData,std::string> diffraction_phase;
+        boost::variant<RAOData,std::string> total_excitation_forces_module;
+        boost::variant<RAOData,std::string> total_excitation_forces_phase;
         boost::variant<RAOData,std::string> froude_krylov_module;
         boost::variant<RAOData,std::string> froude_krylov_phase;
 };
@@ -590,6 +676,16 @@ std::array<std::vector<std::vector<double> >,6 > HDBParser::get_froude_krylov_ph
     return pimpl->get_froude_krylov_phase_tables();
 }
 
+std::array<std::vector<std::vector<double> >,6 > HDBParser::get_total_excitation_force_module_tables() const
+{
+    return pimpl->get_total_excitation_force_module_tables();
+}
+
+std::array<std::vector<std::vector<double> >,6 > HDBParser::get_total_excitation_force_phase_tables() const
+{
+    return pimpl->get_total_excitation_force_phase_tables();
+}
+
 std::vector<double> HDBParser::get_diffraction_phase_psis() const
 {
     return pimpl->get_diffraction_phase_psis();
@@ -628,6 +724,26 @@ std::vector<double> HDBParser::get_froude_krylov_module_psis() const
 std::vector<double> HDBParser::get_froude_krylov_module_periods() const
 {
     return pimpl->get_froude_krylov_module_periods();
+}
+
+std::vector<double> HDBParser::get_total_excitation_force_phase_psis() const
+{
+    return pimpl->get_total_excitation_force_phase_psis();
+}
+
+std::vector<double> HDBParser::get_total_excitation_force_phase_periods() const
+{
+    return pimpl->get_total_excitation_force_phase_periods();
+}
+
+std::vector<double> HDBParser::get_total_excitation_force_module_psis() const
+{
+    return pimpl->get_total_excitation_force_module_psis();
+}
+
+std::vector<double> HDBParser::get_total_excitation_force_module_periods() const
+{
+    return pimpl->get_total_excitation_force_module_periods();
 }
 
 HDBParser HDBParser::from_file(const std::string& filename)

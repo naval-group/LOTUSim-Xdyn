@@ -1,5 +1,5 @@
 /*
- * YamlDiffraction.hpp
+ * YamlRAO.hpp
  *
  */
 
@@ -19,14 +19,16 @@
        << "    z: {value: 1.418, unit: m}\n"
        << "mirror for 180 to 360: true\n";
  */
-struct YamlDiffraction
+struct YamlRAO
 {
-    YamlDiffraction();
+    enum class TypeOfRao {DIFFRACTION_RAO, FROUDE_KRYLOV_RAO};
+    YamlRAO();
     std::string           hdb_filename;
     std::string           precal_filename;
     YamlCoordinates       calculation_point;
     bool                  mirror;
     boost::optional<bool> use_encounter_period;
+    TypeOfRao             type_of_rao;
 };
 
 #endif /* YAMLDIFFRACTION_HPP_ */

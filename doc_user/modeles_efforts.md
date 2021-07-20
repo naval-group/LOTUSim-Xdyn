@@ -313,12 +313,80 @@ dans la situation suivante :
 
 ### Paramétrage
 
+#### Version non-linéaire (intégration des pressions)
+
 Pour utiliser ce modèle, on insère la ligne suivante dans la section `external forces` :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: non-linear Froude-Krylov
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+#### Version linéaire
+
+Cette version utilise les résultats d'un calcul potentiel (AQUA+ ou PRECAL_R) et effectue
+la multiplication avec le spectre de la houle. Sa paramétrisation est identique à celle
+des efforts de diffraction, eux aussi basés sur des RAOs. Les mêmes remarques s'appliquent
+que pour les efforts de diffraction (changements de repère et méthode de calcul), décrites
+ci-après (section [efforts de diffraction](#efforts-de-diffraction)).
+
+La section utilisée pour les fichiers HDB est
+`FROUDE-KRYLOV_FORCES_AND_MOMENTS`, sous-section `INCIDENCE_FKFM_MOD_*` pour
+les modules (où `*` est un numéro désignant l'incidence) et `INCIDENCE_FKFM_PH_*`
+pour les phases. Par exemple :
+
+```
+[FROUDE-KRYLOV_FORCES_AND_MOMENTS]
+[INCIDENCE_FKFM_MOD_001]    0.0000
+      3.500  4.832189E+04  0.000000E+00  2.475141E+05  0.000000E+00  2.139539E+07  0.000000E+00
+      3.600  4.103861E+04  0.000000E+00  3.251938E+05  0.000000E+00  1.861110E+07  0.000000E+00
+[INCIDENCE_FKFM_PH_001]    0.0000
+      3.500 -1.806307E+00 -3.141593E+00  2.527970E+00 -3.141593E+00  2.627867E+00 -3.141593E+00
+      3.600  1.320355E+00 -3.141593E+00  1.264921E+00 -3.141593E+00  1.403906E+00 -3.141593E+00
+      3.700  1.316362E+00 -3.141593E+00  2.356064E-01 -3.141593E+00  4.982495E-02 -3.141593E+00
+```
+
+Pour les fichiers PRECAL_R il s'agit de `F_inc_m*` (où `*` vaut 1 à 6, pour x, y,
+z, k, m, n), présente lorsque l'option `sim > parRES > expIncWaveFrc` du
+fichier XML d'entrée de PRECAL_R est mise à `true` ou 1.
+
+Dans la section `external forces` on ajoute (pour utiliser un fichier HDB) :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: linear Froude-Krylov
+  hdb: test_ship.hdb
+  calculation point in body frame:
+      x: {value: 0.696, unit: m}
+      y: {value: 0, unit: m}
+      z: {value: 1.418, unit: m}
+  mirror for 180 to 360: true
+  use encounter period: true
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ou (pour utiliser un fichier PRECAL_R) :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: linear Froude-Krylov
+  precal: test_ship.ini
+  mirror for 180 to 360: true
+  use encounter period: true
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- `hdb` ou `precal` : chemin vers le fichier de résultats de calcul
+  fréquentiels. Le chemin peut être absolu ou relatif : s'il est relatif, c'est
+  relativement au dossier d'où est lancé xdyn.
+- `mirror for 180 to 360` : sert à pouvoir ne spécifier que la partie de la RAO
+  entre $`0^{\circ}`$ et $`180^{\circ}`$, quitte à la symétriser par rapport à
+  l'axe (Ox) pour obtenir les points entre $`180^{\circ}`$ et $`360^{\circ}`$.
+  En pratique, cela signifie que l'on prend
+  $`RAO(T_p,\beta)=RAO(Tp,2\pi-\beta)`$ si $`\beta>\pi`$ et que `mirror for 180
+  to 360` vaut `true`.
+- `calculation point in body frame` : coordonnées du point de calcul.
+  Uniquement pour les fichiers HDB. Pour les fichiers PRECAL_R, le point de
+  calcul est nécessairement le centre de gravité.
+- `use encounter period` : Optionnel. Indique à xdyn de calculer la période de
+  rencontre $`T_e`$ pour interpoler la force de diffraction depuis le fichier
+  HDB ou PRECAL_R. Cette option ne fonctionne que lorsqu'on utilise des
+  résultats fréquentiels à vitesse nulle.
 
 ### Références
 

@@ -13,6 +13,7 @@ namespace test_data
     std::string bug_3207_hdb();
     std::string bug_3238_hdb();
     std::string hdb_issue_184();
+    std::string big_hdb();
 }
 
 #endif

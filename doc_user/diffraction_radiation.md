@@ -5,14 +5,18 @@ suivant un schéma classiquement utilisé pour la résolution des problèmes
 de tenue à la mer. Les efforts hydrodynamiques sont alors supposés
 constitués de la somme des :
 
-- efforts d'excitation résultant des pressions appliquées sur la coque, supposée fixe, par la houle incidente (efforts de Froude-Krylov) et la houle modifiée par le présence du corps (supposé fixe), ou diffraction.
-    - la formulation temporelle considérée ici permet en outre d'aller plus loin dans la modélisation des efforts de Froude-Kryolv, en intégrant les pressions de houle incidente sur la géométrie exacte du corps en mouvement par rapport à la surface libre déformée (houle incidente seulement).
+- efforts d'excitation résultant:
+  - des pressions appliquées sur la coque par la houle incidente (efforts de Froude-Krylov).
+    xdyn permet deux modélisations de ces efforts:
+      - une modélisation linéaire reposant sur les interpolations des bases de données hydrodynamiques [HDB](#format-hdb) ou [PRECAL_R](#format-precal_r),
+      - une modélisation non-linéaire, où les pressions de houle incidente sont intégrées à chaque instant sur la géométrie exacte du corps en mouvement par rapport à la surface libre déformée.
+  - de la houle modifiée par la présence du corps (supposé fixe), ou diffraction.
 
-- efforts liés aux mouvements du navire en eau initialement calme (sans houle), et à la génération de vagues associée (radiation). Ces efforts sont aux même constitués
+- efforts liés aux mouvements du navire en eau initialement calme (sans houle), et à la génération de vagues associée (radiation). Ces efforts sont eux-mêmes constitués:
     -  de composantes en phase avec l'accélération du corps, et assimilables à des termes inertiels. Ces termes sont d'un ordre de grandeur proche des termes d'inertie mécanique, et doivent être associés à ceux-ci (dans le membre de gauche de l'équation des mouvements à résoudre) afin d'éviter les instabilités numériques qui apparaissent si on les considère comme des efforts extérieurs.
     - de composantes en phase avec les vitesses du corps, correspondant à des termes d'amortissement. Ces termes peuvent être exprimés dans le domaine temporel à partir de formulations impulsionnelles, faisant appel à des informations issues d'un calcul fréquentiel.
 
-- ces termes d'amortissement sont uniquement d'origine potentielle, et ne sont pas suffisant pour représenter la physique des amortissements pour certaines degrés de liberté, correspondant notamment aux résonances mécaniques. Il est alors nécessaire d'ajouter un amortissement d'orignie visqueuse, qui peut être calcul de différentes manières.
+- ces termes d'amortissement sont uniquement d'origine potentielle, et ne sont pas suffisants pour représenter la physique des amortissements pour certains degrés de liberté, correspondant notamment aux résonances mécaniques. Il est alors nécessaire d'ajouter un amortissement d'origine visqueuse, qui peut être calculé de différentes manières.
 
 
 ![](images/efforts_hydros.svg)
@@ -539,10 +543,10 @@ En utilisant la correction précédente et la notation $`A = {M_A}_{0,\infty}`$,
 K(\tau,V_s) = \frac{2}{\pi}\int_0^{+\infty} [{B_r}_0(V_s) - {M_A}_0(\omega) \cdot L_s(V_s) + {M_A}_{0,\infty} \cdot L_s(V_s)]\cos(\omega\tau)d\omega
 ```
 ```math
-K(\tau,V_s) = \frac{2}{\pi}\int_0^{+\infty} {B_r}_0(V_s) \cos(\omega\tau)d\omega - \frac{2}{\pi}\int_0^{+\infty} [{M_A}_0(\omega) - A]\cos(\omega\tau)d\omega \cdot L_s(V_s) 
+K(\tau,V_s) = \frac{2}{\pi}\int_0^{+\infty} {B_r}_0(V_s) \cos(\omega\tau)d\omega - \frac{2}{\pi}\int_0^{+\infty} [{M_A}_0(\omega) - A]\cos(\omega\tau)d\omega \cdot L_s(V_s)
 ```
 ```math
-K(\tau,V_s) = K_B(\tau) - K_A(\tau) \cdot L_s(V_s) 
+K(\tau,V_s) = K_B(\tau) - K_A(\tau) \cdot L_s(V_s)
 ```
 
 Et :
@@ -665,6 +669,16 @@ Voici la même mise en données utilisant un fichier PRECAL_R :
   remove constant speed: true
   forward speed correction: true
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Les sections utilisées des fichiers de sortie des codes de calcul potentiel sont :
+
+- Pour les fichiers HDB : `Added_mass_Radiation_Damping`, sous-sections
+  `DAMPING_TERM_*` où `*` est un entier de 1 à 6 désignant l'axe (x, y, z, k, m,
+  n, respectivement).
+- Pour les fichiers PRECAL_R : `B_mimj` où `i` et `j` sont des entiers de 1 à 6
+  représentant les positions dans les matrices. Ces sections sont présentes si
+  la clef `sim > parRES > expAmasDampCoef` du fichier XML d'entrée de PRECAL_R
+  est à `true` (ou 1).
 
 
 ### Méthode des rectangles
