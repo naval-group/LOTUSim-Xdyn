@@ -76,13 +76,13 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& input, const double t0, c
            .can_parse<ConstantForceModel>()
            .can_parse<LinearHydrostaticForceModel>()
            .can_parse<GRPCForceModel>()
-		   .can_parse<DefaultWindModel>()
-		   .can_parse<UniformWindVelocityProfile>()
-		   .can_parse<PowerLawWindVelocityProfile>()
-		   .can_parse<LogWindVelocityProfile>()
-		   .can_parse<HoltropMennenForceModel>()
-		   .can_parse<AeroPolarForceModel>()
-		   .can_parse<HydroPolarForceModel>()
+           .can_parse<DefaultWindModel>()
+           .can_parse<UniformWindVelocityProfile>()
+           .can_parse<PowerLawWindVelocityProfile>()
+           .can_parse<LogWindVelocityProfile>()
+           .can_parse<HoltropMennenForceModel>()
+           .can_parse<AeroPolarForceModel>()
+           .can_parse<HydroPolarForceModel>()
            .can_parse<LinearFroudeKrylovForceModel>();
     return builder;
 }
