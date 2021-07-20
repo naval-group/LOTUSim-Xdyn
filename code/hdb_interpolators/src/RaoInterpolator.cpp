@@ -8,8 +8,6 @@
 #include "YamlRAO.hpp"
 #include <algorithm>
 
-std::vector<double> reverse(std::vector<double> t);
-
 
 RaoInterpolator::~RaoInterpolator(){}
 
