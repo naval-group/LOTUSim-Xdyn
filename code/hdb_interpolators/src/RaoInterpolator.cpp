@@ -14,7 +14,7 @@ std::vector<double> reverse(std::vector<double> t);
 RaoInterpolator::~RaoInterpolator(){}
 
 RaoInterpolator::RaoInterpolator(const HydroDBParser& data, //!< Data read from the HDB or Precal_R file
-                                                 const YamlRAO& diffraction_yaml //<! Contents of the force model's parsed YAML data
+                                 const YamlRAO& diffraction_yaml //<! Contents of the force model's parsed YAML data
         ) : RaoInterpolator(data, {}, {}, diffraction_yaml)
 {}
 
