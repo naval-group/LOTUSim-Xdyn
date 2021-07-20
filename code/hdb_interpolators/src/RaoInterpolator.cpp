@@ -56,10 +56,8 @@ RaoInterpolator::RAO RaoInterpolator::RAO::get(const YamlRAO::TypeOfRao& type_of
     {
         case YamlRAO::TypeOfRao::DIFFRACTION_RAO:
             return for_diffraction(parser);
-            break;
         case YamlRAO::TypeOfRao::FROUDE_KRYLOV_RAO:
             return for_froude_krylov(parser);
-            break;
         default:
             THROW(__PRETTY_FUNCTION__, InternalErrorException, "Switch case is not exhaustive.");
             break;
