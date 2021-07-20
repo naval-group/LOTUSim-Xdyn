@@ -1,7 +1,7 @@
+#include "PhaseModuleRAOEvaluator.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "HydroDBParser.hpp"
 #include "InvalidInputException.hpp"
-#include "PhaseModuleRAOEvaluator.hpp"
 #include "YamlRAO.hpp"
 
 #define TWOPI 6.283185307179586232
@@ -111,7 +111,7 @@ ssc::kinematics::Vector6d PhaseModuleRAOEvaluator::evaluate(const BodyStates& st
                             // Interpolate RAO module and phase for this axis, period and incidence
                             const double rao_module = rao_interpolator.interpolate_module(degree_of_freedom_idx, period, beta);
                             const double rao_phase = -rao_interpolator.interpolate_phase(degree_of_freedom_idx, period, beta);
-                            
+
                             // Evaluate force
                             const double rao_amplitude = rao_module * spectrum.a[omega_beta_idx];
                             const double omega_t = spectrum.omega[omega_beta_idx] * t;
