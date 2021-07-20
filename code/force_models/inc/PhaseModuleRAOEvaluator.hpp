@@ -4,7 +4,6 @@
 #include <ssc/kinematics.hpp>
 #include "RaoInterpolator.hpp"
 
-struct YamlRAO;
 class BodyStates;
 class EnvironmentAndFrames;
 class PhaseModuleRAOEvaluator
