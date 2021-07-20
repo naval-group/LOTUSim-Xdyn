@@ -5,8 +5,12 @@ suivant un schéma classiquement utilisé pour la résolution des problèmes
 de tenue à la mer. Les efforts hydrodynamiques sont alors supposés
 constitués de la somme des :
 
-- efforts d'excitation résultant des pressions appliquées sur la coque, supposée fixe, par la houle incidente (efforts de Froude-Krylov) et la houle modifiée par le présence du corps (supposé fixe), ou diffraction.
-    - la formulation temporelle considérée ici permet en outre d'aller plus loin dans la modélisation des efforts de Froude-Krylov, en intégrant les pressions de houle incidente sur la géométrie exacte du corps en mouvement par rapport à la surface libre déformée (houle incidente seulement).
+- efforts d'excitation résultant:
+  - des pressions appliquées sur la coque par la houle incidente (efforts de Froude-Krylov).
+    xdyn permet deux modélisations de ces efforts:
+      - une modélisation linéaire reposant sur les interpolations des bases de données hydrodynamiques [HDB](#format-hdb) ou [PRECAL_R](#format-precal_r),
+      - une modélisation non-linéaire, où les pressions de houle incidente sont intégrées à chaque instant sur la géométrie exacte du corps en mouvement par rapport à la surface libre déformée.
+  - de la houle modifiée par la présence du corps (supposé fixe), ou diffraction.
 
 - efforts liés aux mouvements du navire en eau initialement calme (sans houle), et à la génération de vagues associée (radiation). Ces efforts sont eux-mêmes constitués:
     -  de composantes en phase avec l'accélération du corps, et assimilables à des termes inertiels. Ces termes sont d'un ordre de grandeur proche des termes d'inertie mécanique, et doivent être associés à ceux-ci (dans le membre de gauche de l'équation des mouvements à résoudre) afin d'éviter les instabilités numériques qui apparaissent si on les considère comme des efforts extérieurs.
