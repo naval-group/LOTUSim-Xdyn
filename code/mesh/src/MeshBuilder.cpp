@@ -15,7 +15,7 @@ MeshBuilder::MeshBuilder(const VectorOfVectorOfPoints& v_, const bool check_orie
 {
     if(check_orientation)
     {
-        oriented_inwards(v,barycenter(v));
+        check_oriented_inwards(v,barycenter(v));
     }
     if (not(v.empty())) nodes = Eigen::MatrixXd::Zero(3,(int)(v.size()*v.front().size()));
 }
@@ -31,7 +31,7 @@ MeshBuilder::MeshBuilder(const VectorOfPoints& tri, const bool check_orientation
 {
     if(check_orientation)
     {
-        oriented_inwards(v,barycenter(v));
+        check_oriented_inwards(v,barycenter(v));
     }
     if (not(tri.empty())) nodes = Eigen::MatrixXd::Zero(3,(int)(v.size()*v.front().size()));
 }
@@ -157,6 +157,6 @@ MeshBuilder::MeshBuilder(const Matrix3x& tri) : v(VectorOfVectorOfPoints()),
         vv.push_back(tri.col(i));
     }
     v.push_back(vv);
-    oriented_inwards(v,barycenter(v));
+    check_oriented_inwards(v,barycenter(v));
     if (not(v.empty())) nodes = Eigen::MatrixXd::Zero(3,(int)(v.size()*v.front().size()));
 }

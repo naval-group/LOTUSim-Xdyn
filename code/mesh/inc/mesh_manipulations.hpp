@@ -111,7 +111,7 @@ bool oriented_inwards(const VectorOfPoints& v, //!< Points in mesh
   *  \returns True all facets in the mesh are oriented inwards,
   *           false if all facets are oriented outwards, prints a warning to stderr otherwise.
   */
-bool oriented_inwards(const VectorOfVectorOfPoints& v, //!< Points in mesh
+bool check_oriented_inwards(const VectorOfVectorOfPoints& v, //!< Points in mesh
                         const EPoint& O //!< Point inside the volume (eg. its centre of gravity)
         );
 

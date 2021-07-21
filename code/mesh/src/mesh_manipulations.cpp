@@ -190,7 +190,7 @@ Matrix3x convert(const VectorOfPoints& v)
     return ret;
 }
 
-bool oriented_inwards(const VectorOfVectorOfPoints& v, const EPoint& O)
+bool check_oriented_inwards(const VectorOfVectorOfPoints& v, const EPoint& O)
 {
     if (v.size() < 2) return true;
     size_t nb_of_inward = 0;

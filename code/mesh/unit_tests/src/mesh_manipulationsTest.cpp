@@ -141,7 +141,7 @@ TEST_F(mesh_manipulationsTest, issue_an_error_message_if_too_many_inward_facing_
     flip(mesh, 6);
     flip(mesh, 7);
     // Call the orientation test function
-    const bool inwards = oriented_inwards(mesh, EPoint(0, 0, 0));
+    const bool inwards = check_oriented_inwards(mesh, EPoint(0, 0, 0));
     // Restore cerr's buffer
     std::cerr.rdbuf(orig);
     // Run test assertions after to avoid segfaults if test assertions fail
@@ -159,7 +159,7 @@ TEST_F(mesh_manipulationsTest, no_error_message_if_few_inward_facing_faces)
     auto mesh = unit_cube();
     flip(mesh, 4);
     // Call the orientation test function
-    const bool inwards = oriented_inwards(mesh, EPoint(0, 0, 0));
+    const bool inwards = check_oriented_inwards(mesh, EPoint(0, 0, 0));
     // Restore cerr's buffer
     std::cerr.rdbuf(orig);
     // Run test assertions after to avoid segfaults if test assertions fail
@@ -169,14 +169,14 @@ TEST_F(mesh_manipulationsTest, no_error_message_if_few_inward_facing_faces)
 
 TEST_F(mesh_manipulationsTest, can_deduce_the_orientation_of_the_normals_on_a_tetrahedron)
 {
-    ASSERT_FALSE(oriented_inwards(tetrahedron(1,4,5,6), EPoint(4,5,6+sqrt(6.)/4.)));
-    ASSERT_TRUE(oriented_inwards(tetrahedron_clockwise(1,2,3,4), EPoint(2,3,4+sqrt(6.)/4.)));
+    ASSERT_FALSE(check_oriented_inwards(tetrahedron(1,4,5,6), EPoint(4,5,6+sqrt(6.)/4.)));
+    ASSERT_TRUE(check_oriented_inwards(tetrahedron_clockwise(1,2,3,4), EPoint(2,3,4+sqrt(6.)/4.)));
 }
 
 TEST_F(mesh_manipulationsTest, can_deduce_the_orientation_of_the_normals_on_a_cube)
 {
-    ASSERT_FALSE(oriented_inwards(unit_cube(), EPoint(0,0,0)));
-    ASSERT_TRUE(oriented_inwards(unit_cube_clockwise(), EPoint(0,0,0)));
+    ASSERT_FALSE(check_oriented_inwards(unit_cube(), EPoint(0,0,0)));
+    ASSERT_TRUE(check_oriented_inwards(unit_cube_clockwise(), EPoint(0,0,0)));
 }
 
 Matrix3x mesh_manipulationsTest::get_rectangle(const double w, const double h) const
