@@ -85,8 +85,6 @@ class MeshBuilder
         bool point_is_in_map(const EPoint& xyz);
         bool add_edge_if_missing(const Edge& e);
         bool add_point_if_missing(const EPoint& xyz);
-
-        bool clockwise;
 };
 
 #endif

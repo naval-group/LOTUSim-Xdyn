@@ -13,8 +13,7 @@ Mesh::Mesh():
     nb_of_static_edges(),
     nb_of_static_facets(),
     all_nodes(),
-    total_number_of_nodes(),
-    orientation_factor(1)
+    total_number_of_nodes()
 {
 }
 
@@ -23,8 +22,8 @@ Mesh::Mesh(
         const ArrayOfEdges& edges_,
         const std::vector<Facet>& facets_,
         const std::vector<std::vector<size_t> >& facetsPerEdge_ , //!< for each Edge (index), the list of Facet (indices) to which the edge belongs
-        const std::vector<std::vector<size_t> >& orientedEdgesPerFacet_,  //!< for each Facet (index), the list of Edges (indices) composing the facet
-        const bool clockwise)
+        const std::vector<std::vector<size_t> >& orientedEdgesPerFacet_  //!< for each Facet (index), the list of Edges (indices) composing the facet
+        )
 :nodes(nodes_)
 ,edges(edges_)
 ,facets(facets_)
@@ -35,7 +34,6 @@ Mesh::Mesh(
 ,nb_of_static_facets(facets_.size())
 ,all_nodes(3,nb_of_static_nodes+nb_of_static_edges)
 ,total_number_of_nodes(nb_of_static_nodes)
-,orientation_factor(clockwise ? -1 : 1)
 {
     Matrix3x room_for_dynamic_vertices(3,all_nodes.cols()-nodes.cols());
     room_for_dynamic_vertices.fill(0);

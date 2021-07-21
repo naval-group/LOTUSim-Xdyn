@@ -20,8 +20,8 @@ public:
          const ArrayOfEdges& edges_,
          const std::vector<Facet>& facets_,
          const std::vector<std::vector<size_t> >& facetsPerEdge_ , //!< for each Edge (index), the list of Facet (indices) to which the edge belongs
-         const std::vector<std::vector<size_t> >& orientedEdgesPerFacet_,  //!< for each Facet (index), the list of Edges composing the facet and their running direction of each edge
-         const bool clockwise);
+         const std::vector<std::vector<size_t> >& orientedEdgesPerFacet_  //!< for each Facet (index), the list of Edges composing the facet and their running direction of each edge
+         );
 
 
     /** \brief Reset the dynamic data related to the mesh intersection with free surface */
@@ -75,7 +75,6 @@ public:
     size_t nb_of_static_facets;                                 //!< Number of static facets (ie. read from an STL file & not generated dynamically)
     Matrix3x all_nodes;                                         //!< Coordinates of all vertices in mesh, including dynamic ones added for free surface intersection
     size_t total_number_of_nodes;                               //!< Total number of nodes used, including dynamic ones
-    double orientation_factor;                                  //!< -1 if the facet is orientation clockwise, +1 otherwise
 };
 
 typedef TR1(shared_ptr)<Mesh> MeshPtr;
