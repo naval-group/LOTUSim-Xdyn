@@ -193,50 +193,24 @@ Matrix3x convert(const VectorOfPoints& v)
 bool oriented_inwards(const VectorOfVectorOfPoints& v, const EPoint& O)
 {
     if (v.size() < 2) return true;
-    size_t nb_of_clockwise = 0;
-    size_t nb_of_anticlockwise = 0;
-    bool first_facet_is_oriented_clockwise = oriented_inwards(v.front(),O);
-    if (first_facet_is_oriented_clockwise) nb_of_clockwise++;
-    else nb_of_anticlockwise++;
-    for (size_t i = 1 ; i < v.size() ; ++i)
+    size_t nb_of_inward = 0;
+    size_t nb_of_outward = 0;
+    for (size_t i = 0 ; i < v.size() ; ++i)
     {
-        const bool facet_i_is_oriented_clockwise = oriented_inwards(v[i],O);
-        if (facet_i_is_oriented_clockwise)
+        if (oriented_inwards(v[i],O))
         {
-            nb_of_clockwise++;
+            nb_of_inward++;
         }
-        else nb_of_anticlockwise++;
+        else nb_of_outward++;
     }
-    if (nb_of_clockwise > 10*nb_of_anticlockwise)
+    if (nb_of_inward > nb_of_outward/10)
     {
+        std::stringstream ss;
+        ss << "Warning: " << nb_of_inward << " facets seem oriented inwards (body) while " << nb_of_outward << " facets seem oriented outwards (fluid). Please check that all the facet normals in your mesh are oriented outwards (fluid).";
+        std::cerr << ss.str() << std::endl;
         return true;
     }
-    if (nb_of_anticlockwise > 10*nb_of_clockwise)
-    {
-        return false;
-    }
-    std::stringstream ss;
-    ss << "Not all facets have the same orientation: " << nb_of_clockwise << " facets seem to be oriented clockwise, but "
-       << nb_of_anticlockwise << " facets seem to be oriented anticlockwise: we will therefore be using ";
-    if (nb_of_clockwise > nb_of_anticlockwise)
-    {
-        ss << "clockwise orientation.";
-        std::cerr << ss.str();
-        return true;
-    }
-    if (nb_of_clockwise < nb_of_anticlockwise)
-    {
-        ss << "anti-clockwise orientation.";
-        std::cerr << ss.str();
-        return false;
-    }
-    if (nb_of_clockwise == nb_of_anticlockwise)
-    {
-        ss << "clockwise orientation (arbitrary!).";
-        std::cerr << ss.str();
-        return true;
-    }
-    return first_facet_is_oriented_clockwise;
+    return false;
 }
 
 bool oriented_inwards(const VectorOfPoints& facet, //!< Points to convert
@@ -247,7 +221,7 @@ bool oriented_inwards(const VectorOfPoints& facet, //!< Points to convert
     const Matrix3x M = convert(facet);
     const Eigen::Vector3d C = barycenter(M);
     const Eigen::Vector3d n = unit_normal(M);
-    return n.dot(C-G)<=0;
+    return n.dot(C-G)<0;
 }
 
 Eigen::Matrix3d inertia_of_triangle(
