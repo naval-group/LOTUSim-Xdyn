@@ -405,6 +405,12 @@ le maillage `m.stl` est dans `A` et qu'on lance l'exécutable depuis `B`, on
 mesh: ../m.stl
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+#### Convention d'orientation des maillages
+
+Bien que le format STL contienne la normale de chaque face, xdyn n'utilise pas cette information. À la place, la normale est calculée par la "règle de la main droite" (conformément au standard STL), c'est-à-dire que la normale est orientée directement par rapport à la base locale formée par les vecteurs entres les points ordonnés de la face.
+
+De plus, xdyn suppose que les normales sont orientées vers le fluide. Un avertissement est émis si une part significative des faces est orientée vers le barycentre du maillage, mais cela peut-être le cas même quand les normales sont bien orientées vers le fluide avec des géométries complexes (plusieurs coques par exemple). Il revient donc à l'utilisateur de vérifier que les normales sont correctement orientées vers le fluide.
+
 #### Passage du repère maillage au repère body
 
 L'origine du repère "body" (qui est le repère dans lequel est réalisé le bilan
