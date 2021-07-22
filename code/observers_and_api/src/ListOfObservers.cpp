@@ -49,3 +49,8 @@ bool ListOfObservers::empty() const
 {
     return observers.empty();
 }
+
+void ListOfObservers::add_observer(const ObserverPtr& observer)
+{
+    observers.push_back(observer);
+}
