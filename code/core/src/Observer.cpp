@@ -10,7 +10,11 @@
 #include "Sim.hpp"
 #include "SurfaceElevationGrid.hpp"
 
-Observer::Observer(const std::vector<std::string>& data_) : initialized(false), requested_serializations(data_), serialize(), initialize()
+Observer::Observer() : initialized(false), output_everything(true), requested_serializations(), serialize(), initialize()
+{
+}
+
+Observer::Observer(const std::vector<std::string>& data_) : initialized(false), output_everything(false), requested_serializations(data_), serialize(), initialize()
 {
 }
 
@@ -28,20 +32,29 @@ void Observer::before_write()
 {
 }
 
-void Observer::observe(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems)
-{
-    write(t, DataAddressing(std::vector<std::string>(1,"t"), "t"));
-    sys.output(sys.state,*this, t, discrete_systems);
-    initialize_serialization_of_requested_variables(requested_serializations);
-    serialize_requested_variables(requested_serializations);
-}
-
 std::vector<std::string> all_variables(std::map<std::string, std::function<void()> >& map);
 std::vector<std::string> all_variables(std::map<std::string, std::function<void()> >& map)
 {
     std::vector<std::string> ret;
     std::transform(map.begin(), map.end(), std::back_inserter(ret), [](const std::pair<std::string, std::function<void()> >& p){return p.first;});
     return ret;
+}
+
+void Observer::observe(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems)
+{
+    write(t, DataAddressing(std::vector<std::string>(1,"t"), "t"));
+    sys.output(sys.state,*this, t, discrete_systems);
+    if(output_everything)
+    {
+        const auto all_vars = all_variables(initialize);
+        initialize_serialization_of_requested_variables(all_vars);
+        serialize_requested_variables(all_vars);
+    }
+    else
+    {
+        initialize_serialization_of_requested_variables(requested_serializations);
+        serialize_requested_variables(requested_serializations);
+    }
 }
 
 void Observer::observe_everything(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems)
