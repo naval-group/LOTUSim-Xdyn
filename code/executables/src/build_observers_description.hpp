@@ -8,6 +8,8 @@
 
 class XdynCommandLineArguments;
 
-std::vector<YamlOutput> build_observers_description(const std::string& yaml, const XdynCommandLineArguments& input_data);
+std::vector<YamlOutput> build_observers_description(const std::string& yaml);
+
+void add_observers_from_cli(const std::string& yaml,const XdynCommandLineArguments& input_data,std::vector<YamlOutput>& out);
 
 #endif

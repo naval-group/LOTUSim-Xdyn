@@ -6,11 +6,6 @@
 YamlOutput create_a_wave_observer(
         const XdynCommandLineArguments& input_data);
 
-void add_observers_from_cli(
-        const std::string& yaml,
-        const XdynCommandLineArguments& input_data,
-        std::vector<YamlOutput>& out);
-
 void add_observers_from_cli_with_output_filename(
         const std::string& yaml,
         const XdynCommandLineArguments& input_data,
@@ -60,10 +55,9 @@ void add_observers_from_cli(
     }
 }
 
-std::vector<YamlOutput> build_observers_description(const std::string& yaml, const XdynCommandLineArguments& input_data)
+std::vector<YamlOutput> build_observers_description(const std::string& yaml)
 {
     auto out = parse_output(yaml);
-    add_observers_from_cli(yaml, input_data, out);
     return out;
 }
 

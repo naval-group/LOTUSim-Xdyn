@@ -127,7 +127,8 @@ void run_simulation(const XdynCommandLineArguments& input_data, ErrorReporter& e
         auto sys = get_system(input, input_data.tstart);
         ssc::solver::Scheduler scheduler(input_data.tstart, input_data.tend, input_data.initial_timestep);
         const auto controllers = get_initialized_controllers(input_data.tstart, input.controllers, input.commands, scheduler, &sys);
-        auto observers_description = build_observers_description(yaml_input, input_data);
+        auto observers_description = build_observers_description(yaml_input);
+        add_observers_from_cli(yaml_input, input_data, observers_description);
         ListOfObservers observers(observers_description);
         serialize_context_if_necessary(observers_description, sys, yaml_input, input_data_serialize(input_data));
         serialize_context_if_necessary_new(observers, sys);
