@@ -23,6 +23,8 @@ class ListOfObservers
 
         void add_observer(const ObserverPtr& observer);
 
+        static ObserverPtr parse_observer(const YamlOutput& output);
+
         template <typename T> void write(
                 const T& val,
                 const DataAddressing& address)

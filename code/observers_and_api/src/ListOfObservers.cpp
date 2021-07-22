@@ -14,17 +14,24 @@
 #include "WebSocketObserver.hpp"
 #include "ListOfObservers.hpp"
 
+ObserverPtr ListOfObservers::parse_observer(const YamlOutput& output)
+{
+    ObserverPtr obs;
+    if (output.format == "csv")  obs.reset(new CsvObserver(output.filename,output.data));
+    if (output.format == "h5")   obs.reset(new Hdf5Observer(output.filename,output.data));
+    if (output.format == "hdf5") obs.reset(new Hdf5Observer(output.filename,output.data));
+    if (output.format == "tsv")  obs.reset(new TsvObserver(output.filename,output.data));
+    if (output.format == "map")  obs.reset(new MapObserver(output.data));
+    if (output.format == "json") obs.reset(new JsonObserver(output.filename,output.data));
+    if (output.format == "ws")   obs.reset(new WebSocketObserver(output.address,output.port,output.data));
+    return obs;
+}
+
 ListOfObservers::ListOfObservers(const std::vector<YamlOutput>& yaml) : observers()
 {
     for (auto output:yaml)
     {
-        if (output.format == "csv")  observers.push_back(ObserverPtr(new CsvObserver(output.filename,output.data)));
-        if (output.format == "h5")   observers.push_back(ObserverPtr(new Hdf5Observer(output.filename,output.data)));
-        if (output.format == "hdf5") observers.push_back(ObserverPtr(new Hdf5Observer(output.filename,output.data)));
-        if (output.format == "tsv")  observers.push_back(ObserverPtr(new TsvObserver(output.filename,output.data)));
-        if (output.format == "map")  observers.push_back(ObserverPtr(new MapObserver(output.data)));
-        if (output.format == "json") observers.push_back(ObserverPtr(new JsonObserver(output.filename,output.data)));
-        if (output.format == "ws")   observers.push_back(ObserverPtr(new WebSocketObserver(output.address,output.port,output.data)));
+        observers.push_back(parse_observer(output));
     }
 }
 
