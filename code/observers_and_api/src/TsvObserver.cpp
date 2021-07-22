@@ -8,6 +8,17 @@
 #define PRECISION 3
 #define WIDTH (PRECISION+6)
 
+TsvObserver::TsvObserver(const std::string& filename) :
+            Observer(),
+            output_to_file(not(filename.empty())),
+            os(output_to_file ? *(new std::ofstream(filename)) : std::cout),
+            length_of_title_line(0)
+{
+    os << std::scientific
+       << std::setw(WIDTH)
+       << std::setprecision(PRECISION);
+}
+
 TsvObserver::TsvObserver(const std::string& filename, const std::vector<std::string>& d) :
             Observer(d),
             output_to_file(not(filename.empty())),

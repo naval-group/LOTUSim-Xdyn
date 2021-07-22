@@ -10,6 +10,7 @@
 class JsonObserver : public DictObserver
 {
     public:
+        JsonObserver(const std::string& filename);
         JsonObserver(const std::string& filename, const std::vector<std::string>& d);
         ~JsonObserver();
 

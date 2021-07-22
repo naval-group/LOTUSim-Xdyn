@@ -22,6 +22,11 @@ DictMapKeyVar extractKeyVarFromString(const std::string& s)
     return j;
 }
 
+DictObserver::DictObserver() :
+        Observer(), ss(), ssSurfaceElevationGrid(), dictMap1(), dictMap2(), shouldWeAddAStartingComma(false)
+{
+}
+
 DictObserver::DictObserver(const std::vector<std::string>& d) :
         Observer(d), ss(), ssSurfaceElevationGrid(), dictMap1(), dictMap2(), shouldWeAddAStartingComma(false)
 {

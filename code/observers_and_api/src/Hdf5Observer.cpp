@@ -18,6 +18,21 @@ Hdf5Addressing::Hdf5Addressing(
 {
 }
 
+Hdf5Observer::Hdf5Observer(const std::string& filename) :
+            Observer(),
+            h5File(H5_Tools::openEmptyHdf5File(filename)),
+            basename("outputs"),
+            name2address(),
+            name2dataset(),
+            name2datatype(),
+            name2dataspace(),
+            wave_serializer()
+{
+    h5_writeFileDescription(h5File);
+    exportMatLabScripts(h5File, filename, basename, "/scripts/MatLab");
+    exportPythonScripts(h5File, filename, basename, "/scripts/Python");
+}
+
 Hdf5Observer::Hdf5Observer(
         const std::string& filename,
         const std::vector<std::string>& d) :
