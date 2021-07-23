@@ -19,6 +19,7 @@ struct YamlOutput
     std::string address;
     short unsigned int port;
     std::vector<std::string> data;
+    bool full_output;
 };
 
 #endif /* YAMLOUTPUT_HPP_ */
