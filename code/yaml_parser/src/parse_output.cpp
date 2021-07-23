@@ -131,7 +131,6 @@ std::string get_format(const std::string& filename)
     }
 }
 
-YamlOutput build_YamlOutput_from_filename(const std::string& filename);
 YamlOutput build_YamlOutput_from_filename(const std::string& filename)
 {
     YamlOutput out;

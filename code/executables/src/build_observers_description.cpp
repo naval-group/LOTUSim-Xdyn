@@ -23,7 +23,8 @@ void add_observers_from_cli_with_output_filename(
         const XdynCommandLineArguments& input_data,
         ListOfObservers& out)
 {
-    YamlOutput outputterCli = generate_default_outputter_with_all_states_in_it(input_data.output_filename);
+    YamlOutput outputterCli = build_YamlOutput_from_filename(input_data.output_filename);
+    outputterCli.full_output = true;
     if (not(input_data.wave_output.empty()))
     {
         if ((outputterCli.format=="ws") or (outputterCli.format=="hdf5") or (outputterCli.format=="json"))
