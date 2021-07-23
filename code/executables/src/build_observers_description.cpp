@@ -23,7 +23,7 @@ YamlOutput create_a_wave_observer(const XdynCommandLineArguments& input_data)
 void add_observers_from_cli_with_output_filename(
         const std::string& yaml,
         const XdynCommandLineArguments& input_data,
-        std::vector<YamlOutput>& out)
+        ListOfObservers& out)
 {
     YamlOutput outputterCli = generate_default_outputter_with_all_states_in_it(yaml,input_data.output_filename);
     if (not(input_data.wave_output.empty()))
@@ -34,16 +34,16 @@ void add_observers_from_cli_with_output_filename(
         }
         else
         {
-            out.push_back(create_a_wave_observer(input_data));
+            out.add_observer(ListOfObservers::parse_observer(create_a_wave_observer(input_data)));
         }
     }
-    out.push_back(outputterCli);
+    out.add_observer(ListOfObservers::parse_observer(outputterCli));
 }
 
 void add_observers_from_cli(
         const std::string& yaml,
         const XdynCommandLineArguments& input_data,
-        std::vector<YamlOutput>& out)
+        ListOfObservers& out)
 {
     if (not(input_data.output_filename.empty()))
     {
@@ -51,7 +51,7 @@ void add_observers_from_cli(
     }
     else if (not(input_data.wave_output.empty()))
     {
-        out.push_back(create_a_wave_observer(input_data));
+        out.add_observer(ListOfObservers::parse_observer(create_a_wave_observer(input_data)));
     }
 }
 
