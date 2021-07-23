@@ -9,7 +9,7 @@
 #include "Sim.hpp"
 #include "StateMacros.hpp"
 
-EverythingObserver::EverythingObserver() : MapObserver({}), res()
+EverythingObserver::EverythingObserver() : MapObserver(std::vector<std::string>({})), res()
 {
 }
 
