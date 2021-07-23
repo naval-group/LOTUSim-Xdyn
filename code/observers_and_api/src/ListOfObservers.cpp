@@ -17,13 +17,26 @@
 ObserverPtr ListOfObservers::parse_observer(const YamlOutput& output)
 {
     ObserverPtr obs;
-    if (output.format == "csv")  obs.reset(new CsvObserver(output.filename,output.data));
-    if (output.format == "h5")   obs.reset(new Hdf5Observer(output.filename,output.data));
-    if (output.format == "hdf5") obs.reset(new Hdf5Observer(output.filename,output.data));
-    if (output.format == "tsv")  obs.reset(new TsvObserver(output.filename,output.data));
-    if (output.format == "map")  obs.reset(new MapObserver(output.data));
-    if (output.format == "json") obs.reset(new JsonObserver(output.filename,output.data));
-    if (output.format == "ws")   obs.reset(new WebSocketObserver(output.address,output.port,output.data));
+    if (output.full_output)
+    {
+        if (output.format == "csv")  obs.reset(new CsvObserver(output.filename));
+        if (output.format == "h5")   obs.reset(new Hdf5Observer(output.filename));
+        if (output.format == "hdf5") obs.reset(new Hdf5Observer(output.filename));
+        if (output.format == "tsv")  obs.reset(new TsvObserver(output.filename));
+        if (output.format == "map")  obs.reset(new MapObserver());
+        if (output.format == "json") obs.reset(new JsonObserver(output.filename));
+        if (output.format == "ws")   obs.reset(new WebSocketObserver(output.address,output.port));
+    }
+    else
+    {
+        if (output.format == "csv")  obs.reset(new CsvObserver(output.filename,output.data));
+        if (output.format == "h5")   obs.reset(new Hdf5Observer(output.filename,output.data));
+        if (output.format == "hdf5") obs.reset(new Hdf5Observer(output.filename,output.data));
+        if (output.format == "tsv")  obs.reset(new TsvObserver(output.filename,output.data));
+        if (output.format == "map")  obs.reset(new MapObserver(output.data));
+        if (output.format == "json") obs.reset(new JsonObserver(output.filename,output.data));
+        if (output.format == "ws")   obs.reset(new WebSocketObserver(output.address,output.port,output.data));
+    }
     return obs;
 }
 
