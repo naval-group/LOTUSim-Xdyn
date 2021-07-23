@@ -28,6 +28,10 @@ void operator >> (const YAML::Node& node, YamlOutput& f)
     }
     node["format"]   >> f.format;
     node["data"]     >> f.data;
+    if (node.FindValue("full output"))
+    {
+        node["full output"] >> f.full_output;
+    }
 }
 
 std::vector<YamlOutput> parse_output(const std::string& yaml)
