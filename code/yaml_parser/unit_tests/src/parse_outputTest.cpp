@@ -52,7 +52,7 @@ TEST_F(parse_outputTest, should_work_even_if_string_is_empty)
 
 TEST_F(parse_outputTest, DISABLED_can_create_list_of_all_outputs_for_a_given_yaml)
 {
-    const YamlOutput res = generate_default_outputter_with_all_states_in_it("");
+    const YamlOutput res; // This test is no longer relevant and should be moved to ObserverTest to test the behavior of Observer's default constructor.
     ASSERT_EQ("", res.filename);
     ASSERT_EQ("tsv", res.format);
     ASSERT_EQ(13+1+3,res.data.size());
@@ -77,14 +77,14 @@ TEST_F(parse_outputTest, DISABLED_can_create_list_of_all_outputs_for_a_given_yam
 
 TEST_F(parse_outputTest, format_is_HDF5_if_extension_is_h5)
 {
-    const YamlOutput res = generate_default_outputter_with_all_states_in_it("blabla.h5");
+    const YamlOutput res = build_YamlOutput_from_filename("blabla.h5");
     ASSERT_EQ("blabla.h5", res.filename);
     ASSERT_EQ("hdf5", res.format);
 }
 
 TEST_F(parse_outputTest, format_is_CSV_if_extension_is_csv)
 {
-    const YamlOutput res = generate_default_outputter_with_all_states_in_it("blabla.csv");
+    const YamlOutput res = build_YamlOutput_from_filename("blabla.csv");
     ASSERT_EQ("blabla.csv", res.filename);
     ASSERT_EQ("csv", res.format);
 }
