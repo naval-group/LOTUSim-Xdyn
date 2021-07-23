@@ -167,11 +167,9 @@ YamlOutput build_YamlOutput_from_filename(const std::string& filename)
     return out;
 }
 
-YamlOutput generate_default_outputter_with_all_states_in_it(const std::string& yaml, const std::string& filename)
+YamlOutput generate_default_outputter_with_all_states_in_it(const std::string& filename)
 {
-    auto out = build_YamlOutput_from_filename(filename);
-    out.data.push_back("t");
-    const auto bodies = get_body_names(yaml);
-    for (auto body:bodies) fill(out, body);
+    YamlOutput out = build_YamlOutput_from_filename(filename);
+    out.full_output = true;
     return out;
 }

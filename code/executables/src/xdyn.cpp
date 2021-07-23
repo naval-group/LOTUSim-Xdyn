@@ -129,7 +129,7 @@ void run_simulation(const XdynCommandLineArguments& input_data, ErrorReporter& e
         const auto controllers = get_initialized_controllers(input_data.tstart, input.controllers, input.commands, scheduler, &sys);
         auto observers_description = build_observers_description(yaml_input);
         ListOfObservers observers(observers_description);
-        add_observers_from_cli(yaml_input, input_data, observers);
+        add_observers_from_cli(input_data, observers);
         serialize_context_if_necessary(observers_description, sys, yaml_input, input_data_serialize(input_data));
         serialize_context_if_necessary_new(observers, sys);
         solve(input_data.solver, sys, scheduler, observers, controllers);

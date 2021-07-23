@@ -7,7 +7,6 @@ YamlOutput create_a_wave_observer(
         const XdynCommandLineArguments& input_data);
 
 void add_observers_from_cli_with_output_filename(
-        const std::string& yaml,
         const XdynCommandLineArguments& input_data,
         std::vector<YamlOutput>& out);
 
@@ -21,11 +20,10 @@ YamlOutput create_a_wave_observer(const XdynCommandLineArguments& input_data)
 }
 
 void add_observers_from_cli_with_output_filename(
-        const std::string& yaml,
         const XdynCommandLineArguments& input_data,
         ListOfObservers& out)
 {
-    YamlOutput outputterCli = generate_default_outputter_with_all_states_in_it(yaml,input_data.output_filename);
+    YamlOutput outputterCli = generate_default_outputter_with_all_states_in_it(input_data.output_filename);
     if (not(input_data.wave_output.empty()))
     {
         if ((outputterCli.format=="ws") or (outputterCli.format=="hdf5") or (outputterCli.format=="json"))
@@ -41,13 +39,12 @@ void add_observers_from_cli_with_output_filename(
 }
 
 void add_observers_from_cli(
-        const std::string& yaml,
         const XdynCommandLineArguments& input_data,
         ListOfObservers& out)
 {
     if (not(input_data.output_filename.empty()))
     {
-        add_observers_from_cli_with_output_filename(yaml, input_data, out);
+        add_observers_from_cli_with_output_filename(input_data, out);
     }
     else if (not(input_data.wave_output.empty()))
     {
