@@ -118,3 +118,6 @@ void Observer::flush_value_during_initialization()
 
 void Observer::write_before_simulation(const std::vector<FlatDiscreteDirectionalWaveSpectrum>& , const DataAddressing& )
 {}
+
+void Observer::write_before_simulation(const MeshPtr, const DataAddressing&)
+{}

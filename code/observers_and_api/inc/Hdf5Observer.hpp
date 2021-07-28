@@ -23,6 +23,7 @@ class Hdf5Observer : public Observer
     public:
         Hdf5Observer(const std::string& filename);
         Hdf5Observer(const std::string& filename, const std::vector<std::string>& data);
+        void write_before_simulation(const MeshPtr mesh, const DataAddressing& address) override;
         void write_before_simulation(const std::vector<FlatDiscreteDirectionalWaveSpectrum>& val, const DataAddressing& address);
     private:
         void flush_after_initialization();

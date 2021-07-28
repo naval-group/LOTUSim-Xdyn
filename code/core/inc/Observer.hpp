@@ -17,6 +17,7 @@
 #include TR1INC(memory)
 
 #include "DiscreteDirectionalWaveSpectrum.hpp"
+#include "Mesh.hpp"
 
 class Sim;
 class SurfaceElevationGrid;
@@ -50,6 +51,7 @@ class Observer
         }
 
         virtual void write_before_simulation(const std::vector<FlatDiscreteDirectionalWaveSpectrum>& val, const DataAddressing& address);
+        virtual void write_before_simulation(const MeshPtr mesh, const DataAddressing& address);
 
     protected:
 

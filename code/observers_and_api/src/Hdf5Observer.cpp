@@ -2,6 +2,7 @@
 
 #include "h5_version.hpp"
 #include "h5_tools.hpp"
+#include "stl_io_hdf5.hpp"
 
 #include "demoMatLab.hpp"
 #include "demoPython.hpp"
@@ -119,4 +120,13 @@ void Hdf5Observer::flush_value_during_write()
 void Hdf5Observer::write_before_simulation(const std::vector<FlatDiscreteDirectionalWaveSpectrum>& s, const DataAddressing&)
 {
     hdf5WaveSpectrumObserver(h5File,"/outputs/spectra", s);
+}
+
+
+void Hdf5Observer::write_before_simulation(const MeshPtr mesh, const DataAddressing& address)
+{
+    if (mesh->nb_of_static_nodes>0)
+    {
+        writeMeshToHdf5File(h5File, Hdf5Addressing(address, basename).address, mesh->nodes, mesh->facets);
+    }
 }
