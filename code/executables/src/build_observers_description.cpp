@@ -6,8 +6,8 @@
 #include "stl_io_hdf5.hpp"
 #include "h5_tools.hpp"
 
-YamlOutput create_a_wave_observer(const XdynCommandLineArguments& input_data);
-YamlOutput create_a_wave_observer(const XdynCommandLineArguments& input_data)
+YamlOutput create_wave_observer_description(const XdynCommandLineArguments& input_data);
+YamlOutput create_wave_observer_description(const XdynCommandLineArguments& input_data)
 {
     YamlOutput o;
     o.data = {"waves"};
@@ -16,25 +16,48 @@ YamlOutput create_a_wave_observer(const XdynCommandLineArguments& input_data)
     return o;
 }
 
-void serialize_context_if_necessary_new(ListOfObservers& observers, const Sim& sys);
-void serialize_context_if_necessary_new(ListOfObservers& observers, const Sim& sys)
+void add_wave_spectra(ObserverPtr& observer, const Sim& sys);
+void add_wave_spectra(ObserverPtr& observer, const Sim& sys)
 {
     const auto env = sys.get_env();
     const auto w = env.w;
     if (w)
     {
-        for (auto observer:observers.get())
-        {
-            w->serialize_wave_spectra_before_simulation(observer);
-        }
+        w->serialize_wave_spectra_before_simulation(observer);
     }
 }
 
-void serialize_context_if_necessary(YamlOutput& observer, const Sim& sys, const std::string& yaml_input, const std::string& prog_command);
-void serialize_context_if_necessary(YamlOutput& observer, const Sim& sys, const std::string& yaml_input, const std::string& prog_command)
+std::string serialize_command(const XdynCommandLineArguments& inputData);
+std::string serialize_command(const XdynCommandLineArguments& inputData)
+{
+    std::stringstream s;
+    s << "xdyn ";
+    if (not inputData.yaml_filenames.empty()) s << "-y ";
+    for (const auto& f:inputData.yaml_filenames)
+    {
+        s << f << " ";
+    }
+    s << " --tstart " << inputData.tstart<<" ";
+    s << " --tend " << inputData.tend<<" ";
+    s << " --dt " << inputData.initial_timestep<<" ";
+    s << " --solver "<<inputData.solver;
+    if (not(inputData.output_filename.empty()))
+    {
+        s << " -o " << inputData.output_filename;
+    }
+    if (not(inputData.wave_output.empty()))
+    {
+        s << " -w " << inputData.wave_output;
+    }
+    return s.str();
+}
+
+void write_context_to_hdf5_file(YamlOutput& observer, const Sim& sys, const std::string& yaml_input, const XdynCommandLineArguments& input_data);
+void write_context_to_hdf5_file(YamlOutput& observer, const Sim& sys, const std::string& yaml_input, const XdynCommandLineArguments& input_data)
 {
     if(observer.format=="hdf5")
     {
+        auto prog_command = serialize_command(input_data);
         if (not(prog_command.empty()))
         {
             H5_Tools::write(observer.filename, "/inputs/command", prog_command);
@@ -60,56 +83,27 @@ void serialize_context_if_necessary(YamlOutput& observer, const Sim& sys, const 
     }
 }
 
-std::string input_data_serialize(const XdynCommandLineArguments& inputData);
-std::string input_data_serialize(const XdynCommandLineArguments& inputData)
-{
-    std::stringstream s;
-    s << "xdyn ";
-    if (not inputData.yaml_filenames.empty()) s << "-y ";
-    for (const auto& f:inputData.yaml_filenames)
-    {
-        s << f << " ";
-    }
-    s << " --tstart " << inputData.tstart<<" ";
-    s << " --tend " << inputData.tend<<" ";
-    s << " --dt " << inputData.initial_timestep<<" ";
-    s << " --solver "<<inputData.solver;
-    if (not(inputData.output_filename.empty()))
-    {
-        s << " -o " << inputData.output_filename;
-    }
-    if (not(inputData.wave_output.empty()))
-    {
-        s << " -w " << inputData.wave_output;
-    }
-    return s.str();
-}
-
-void add_observers_from_cli_with_output_filename(const XdynCommandLineArguments& input_data, std::vector<YamlOutput>& out,const std::string& simulator_input,const Sim& sys);
-void add_observers_from_cli_with_output_filename(
+void add_main_observer_from_cli(const XdynCommandLineArguments& input_data, std::vector<YamlOutput>& out,const std::string& simulator_input,const Sim& sys);
+void add_main_observer_from_cli(
         const XdynCommandLineArguments& input_data,
         ListOfObservers& out,
         const std::string& simulator_input,
         const Sim& sys)
 {
-    YamlOutput outputterCli = build_YamlOutput_from_filename(input_data.output_filename);
-    outputterCli.full_output = true;
-    if(outputterCli.format=="hdf5")
+    YamlOutput CLI_observer_description = build_YamlOutput_from_filename(input_data.output_filename);
+    CLI_observer_description.full_output = true;
+    if ((CLI_observer_description.format=="ws") or (CLI_observer_description.format=="hdf5") or (CLI_observer_description.format=="json"))
     {
-        serialize_context_if_necessary(outputterCli, sys, simulator_input, input_data_serialize(input_data));
+        CLI_observer_description.data.push_back("waves");
     }
-    if (not(input_data.wave_output.empty()))
+    auto CLI_observer = ListOfObservers::parse_observer(CLI_observer_description);
+    if(CLI_observer_description.format=="hdf5")
     {
-        if ((outputterCli.format=="ws") or (outputterCli.format=="hdf5") or (outputterCli.format=="json"))
-        {
-            outputterCli.data.push_back("waves");
-        }
-        else
-        {
-            out.add_observer(ListOfObservers::parse_observer(create_a_wave_observer(input_data)));
-        }
+        // This has to be done after the HDF5 observer has been constructed. Maybe this should be moved inside HDF5Observer?
+        write_context_to_hdf5_file(CLI_observer_description, sys, simulator_input, input_data);
     }
-    out.add_observer(ListOfObservers::parse_observer(outputterCli));
+    add_wave_spectra(CLI_observer, sys);
+    out.add_observer(CLI_observer);
 }
 
 void add_observers_from_cli(
@@ -120,13 +114,14 @@ void add_observers_from_cli(
 {
     if (not(input_data.output_filename.empty()))
     {
-        add_observers_from_cli_with_output_filename(input_data, out, simulator_input, sys);
+        add_main_observer_from_cli(input_data, out, simulator_input, sys);
     }
-    else if (not(input_data.wave_output.empty()))
+    if (not(input_data.wave_output.empty()))
     {
-        out.add_observer(ListOfObservers::parse_observer(create_a_wave_observer(input_data)));
+        auto wave_observer = ListOfObservers::parse_observer(create_wave_observer_description(input_data));
+        add_wave_spectra(wave_observer, sys);
+        out.add_observer(wave_observer);
     }
-    serialize_context_if_necessary_new(out, sys);
 }
 
 std::vector<YamlOutput> build_observers_description(const std::string& yaml)
