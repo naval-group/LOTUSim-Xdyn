@@ -121,3 +121,6 @@ void Observer::write_before_simulation(const std::vector<FlatDiscreteDirectional
 
 void Observer::write_before_simulation(const MeshPtr, const DataAddressing&)
 {}
+
+void Observer::write_before_simulation(const std::string&, const DataAddressing&)
+{}

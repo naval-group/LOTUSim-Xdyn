@@ -52,6 +52,7 @@ class Observer
 
         virtual void write_before_simulation(const std::vector<FlatDiscreteDirectionalWaveSpectrum>& val, const DataAddressing& address);
         virtual void write_before_simulation(const MeshPtr mesh, const DataAddressing& address);
+        virtual void write_before_simulation(const std::string& data, const DataAddressing& address);
 
     protected:
 

@@ -2,6 +2,7 @@
 
 #include "h5_version.hpp"
 #include "h5_tools.hpp"
+#include "h5_tools.hpp"
 #include "stl_io_hdf5.hpp"
 
 #include "demoMatLab.hpp"
@@ -127,6 +128,16 @@ void Hdf5Observer::write_before_simulation(const MeshPtr mesh, const DataAddress
 {
     if (mesh->nb_of_static_nodes>0)
     {
-        writeMeshToHdf5File(h5File, Hdf5Addressing(address, basename).address, mesh->nodes, mesh->facets);
+        writeMeshToHdf5File(h5File, Hdf5Addressing(address, "inputs").address, mesh->nodes, mesh->facets);
     }
+}
+
+
+void Hdf5Observer::write_before_simulation(const std::string& data, const DataAddressing& address)
+{
+    if(not(data.empty()))
+    {
+        H5_Tools::write(h5File, Hdf5Addressing(address, "inputs").address, data);
+    }
+    
 }
