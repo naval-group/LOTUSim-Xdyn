@@ -52,34 +52,18 @@ std::string serialize_command(const XdynCommandLineArguments& inputData)
     return s.str();
 }
 
-void write_context_to_hdf5_file(YamlOutput& observer, const Sim& sys, const std::string& yaml_input, const XdynCommandLineArguments& input_data);
-void write_context_to_hdf5_file(YamlOutput& observer, const Sim& sys, const std::string& yaml_input, const XdynCommandLineArguments& input_data)
+void send_context_to_observer(const ObserverPtr& observer, const Sim& sys, const std::string& yaml_input, const XdynCommandLineArguments& input_data);
+void send_context_to_observer(const ObserverPtr& observer, const Sim& sys, const std::string& yaml_input, const XdynCommandLineArguments& input_data)
 {
-    if(observer.format=="hdf5")
+    auto prog_command = serialize_command(input_data);
+    observer->write_before_simulation(prog_command, DataAddressing({"command"}, "CLI command"));
+    observer->write_before_simulation(yaml_input, DataAddressing({"yaml","input"}, "YAML input"));
+    for (const auto& bodies : sys.get_bodies())
     {
-        auto prog_command = serialize_command(input_data);
-        if (not(prog_command.empty()))
-        {
-            H5_Tools::write(observer.filename, "/inputs/command", prog_command);
-        }
-        if (not(yaml_input.empty()))
-        {
-            H5_Tools::write(observer.filename, "/inputs/yaml/input", yaml_input);
-        }
-
-        for (const auto& bodies : sys.get_bodies())
-        {
-            const auto& states = bodies->get_states();
-            const auto& name = states.name;
-            const auto& mesh = states.mesh;
-            if (mesh->nb_of_static_nodes>0)
-            {
-                writeMeshToHdf5File(observer.filename,
-                                    "/inputs/meshes/"+name,
-                                    mesh->nodes,
-                                    mesh->facets);
-            }
-        }
+        const auto& states = bodies->get_states();
+        const auto& name = states.name;
+        const auto& mesh = states.mesh;
+        observer->write_before_simulation(mesh, DataAddressing({"meshes",name}, "mesh("+name+")"));
     }
 }
 
@@ -97,11 +81,7 @@ void add_main_observer_from_cli(
         CLI_observer_description.data.push_back("waves");
     }
     auto CLI_observer = ListOfObservers::parse_observer(CLI_observer_description);
-    if(CLI_observer_description.format=="hdf5")
-    {
-        // This has to be done after the HDF5 observer has been constructed. Maybe this should be moved inside HDF5Observer?
-        write_context_to_hdf5_file(CLI_observer_description, sys, simulator_input, input_data);
-    }
+    send_context_to_observer(CLI_observer, sys, simulator_input, input_data);
     add_wave_spectra(CLI_observer, sys);
     out.add_observer(CLI_observer);
 }
