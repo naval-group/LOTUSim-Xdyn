@@ -6,7 +6,7 @@
 
 #include "ForceModel.hpp"
 
-class MMGManoeuvringForceModel : public ForceModel
+class MMGManeuveringForceModel : public ForceModel
 {
 public:
 	struct Input
@@ -32,13 +32,13 @@ public:
 		double Nvrr;
 		double Nrrr;
 	};
-	MMGManoeuvringForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env);
+	MMGManeuveringForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env);
 	Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const;
 	static Input parse(const std::string& yaml);
 	static std::string model_name();
 
 private:
-	MMGManoeuvringForceModel(); // Deactivating default constructor
+	MMGManeuveringForceModel(); // Deactivating default constructor
 	double Lpp;
 	double T;
 	double Xvv;

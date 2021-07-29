@@ -9,11 +9,11 @@
 #include "YamlPosition.hpp"
 #include "BodyStates.hpp"
 
-#include "MMGManoeuvringForceModel.hpp"
+#include "MMGManeuveringForceModel.hpp"
 
-std::string MMGManoeuvringForceModel::model_name() {return "MMG manoeuvring";}
+std::string MMGManeuveringForceModel::model_name() {return "MMG maneuvering";}
 
-MMGManoeuvringForceModel::Input::Input():
+MMGManeuveringForceModel::Input::Input():
 		application_point(),
 		Lpp(),
 		T(),
@@ -35,8 +35,8 @@ MMGManoeuvringForceModel::Input::Input():
 		Nrrr()
 {}
 
-MMGManoeuvringForceModel::MMGManoeuvringForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env):
-		ForceModel(MMGManoeuvringForceModel::model_name(), {}, YamlPosition(input.application_point, YamlAngle(), body_name), body_name, env),
+MMGManeuveringForceModel::MMGManeuveringForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env):
+		ForceModel(MMGManeuveringForceModel::model_name(), {}, YamlPosition(input.application_point, YamlAngle(), body_name), body_name, env),
 		Lpp(input.Lpp),
 		T(input.T),
 		Xvv(input.Xvv),
@@ -57,7 +57,7 @@ MMGManoeuvringForceModel::MMGManoeuvringForceModel(const Input& input, const std
 		Nrrr(input.Nrrr)
 {}
 
-MMGManoeuvringForceModel::Input MMGManoeuvringForceModel::parse(const std::string& yaml)
+MMGManeuveringForceModel::Input MMGManeuveringForceModel::parse(const std::string& yaml)
 {
     std::stringstream stream(yaml);
     YAML::Parser parser(stream);
@@ -88,7 +88,7 @@ MMGManoeuvringForceModel::Input MMGManoeuvringForceModel::parse(const std::strin
     return ret;
 }
 
-Wrench MMGManoeuvringForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
+Wrench MMGManeuveringForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
 {
     ssc::kinematics::Vector6d tau = ssc::kinematics::Vector6d::Zero();
     double v = states.v();
