@@ -1140,6 +1140,45 @@ Les données polaires de coefficients de portance et traînée peuvent être don
 
 - [Page Wikipedia "Effort sur une voile"](https://fr.wikipedia.org/wiki/Effort_sur_une_voile)
 
+
+## Modèle de manœuvrabilité MMG
+
+### Description
+
+Le modèle de manœuvrabilité proposé par le Maneuvering Modeling Group fait partie des quelques modèles de manoeuvrabilité largement utilisés. Il se base sur le calcul préalable des coefficient hydrodynamiques de la carène d'un navire, à l'aide de méthodes expérimentales ou numériques avancées (CFD). Une fois ces coefficients obtenus, les efforts sur la carène dans le plan horizontal sont calculés par des polynômes.
+
+### Paramétrage
+
+Ce modèle est paramétré par la section YAML suivante :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+  - model: MMG maneuvering
+    calculation point in body frame:
+        x: {value: -11.1, unit: m}
+        y: {value: 0, unit: m}
+        z: {value: 0, unit: m}
+    Lpp: {value: 320, unit: m}
+    T: {value: 20.8, unit: m}
+    Xvv: -0.04
+    Xrr: 0.011
+    Xvr: 0.002
+    Xvvvv: 0.771
+    Yv: -0.315
+    Yr: 0.083
+    Yvvv: -1.607
+    Yrvv: 0.379
+    Yvrr: -0.391
+    Yrrr: 0.008
+    Nv: -0.137
+    Nr: -0.049
+    Nvvv: -0.03
+    Nrvv: -0.294
+    Nvrr: 0.055
+    Nrrr: -0.013
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+### Références
+
+- *Introduction of MMG standard method for ship maneuvering predictions*, 2014, H. Yasukawa, Y. Yoshimura, Journal of Marine Science and Technology 20(1):37-52, [doi:10.1007/s00773-014-0293-y](http://dx.doi.org/10.1007/s00773-014-0293-y).
 ## Efforts commandés
 
 Les efforts commandés correspondent, par exemple, aux efforts de propulsion, de
