@@ -271,7 +271,10 @@ void Sim::set_bodystates(const State& states_history)
     {
         // Initialize current body state with last state in history
         state = states_history.get_StateType(states_history.x.size()-1);
+        pimpl->bodies.at(0)->update_kinematics(state, pimpl->env.k);
+        pimpl->bodies.at(0)->update_intersection_with_free_surface(pimpl->env, states_history.x.get_current_time());
     }
+    pimpl->bodies.at(0)->update_projection_of_z_in_mesh_frame(pimpl->env.g, pimpl->env.k);
 }
 
 void Sim::set_command_listener(const std::map<std::string, double>& new_commands)
