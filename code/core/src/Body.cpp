@@ -126,6 +126,17 @@ void Body::update(const EnvironmentAndFrames& env, const StateType& x, const dou
     update_projection_of_z_in_mesh_frame(env.g, env.k);
 }
 
+void Body::set_history(const EnvironmentAndFrames& env, const State& states)
+{
+    set_states_history(states);
+    if (not(states.x.is_empty()))
+    {
+        update_kinematics(states.get_StateType(states.x.size()-1), env.k);
+        update_intersection_with_free_surface(env, states.x.get_current_time());
+    }
+    update_projection_of_z_in_mesh_frame(env.g, env.k);
+}
+
 void Body::calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_forces,
                                          const StateType& x,
                                          StateType& dx_dt,

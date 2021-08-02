@@ -11,6 +11,7 @@
 #include "BlockedDOF.hpp"
 #include "BodyStates.hpp"
 #include "StateMacros.hpp"
+#include "State.hpp"
 
 #include <ssc/kinematics.hpp>
 
@@ -46,6 +47,7 @@ class Body
         /**  \brief Update Body structure taking the new coordinates & wave heights into account
          */
         void update(const EnvironmentAndFrames& env, const StateType& x, const double t);
+        void set_history(const EnvironmentAndFrames& env, const State& states);
         void update_kinematics(StateType x, const ssc::kinematics::KinematicsPtr& k) const;
         void update_body_states(StateType x, const double t);
         void force_states(StateType& x, const double t) const;
