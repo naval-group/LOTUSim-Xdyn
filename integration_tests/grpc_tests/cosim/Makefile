@@ -6,7 +6,7 @@ run: cosimulation.proto tutorial_01_falling_ball.yml
 	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose rm -f
 	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose up -t 0 --exit-code-from test --abort-on-container-exit --build
 
-cosimulation.proto: ../../interfaces/cosimulation.proto
+cosimulation.proto: ../../../interfaces/cosimulation.proto
 	cp $< $@
 
 tutorial_01_falling_ball.yml:
