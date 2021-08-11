@@ -29,7 +29,7 @@ build:windows:
      paths:
      - xdyn.zip
 
-build:debian:
+build:debian10:
    stage: build
    script:
      - make NB_OF_PARALLEL_BUILDS="-j 1" debian
@@ -59,7 +59,7 @@ doc:
      - mkdir -p build_deb10 && cp xdyn.deb build_deb10/.
      - make doc -W build-debian
    dependencies:
-     - build:debian
+     - build:debian10
    artifacts:
      when: on_success
      paths:
