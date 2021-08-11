@@ -28,6 +28,7 @@ HEADERS=code/ssc/ssc/check_ssc_version.hpp\
         code/ssc/ssc/yaml_parser.hpp
 
 windows: ${HEADERS} windows_gccx_posix
+debian11: ${HEADERS} debian_11_release_gcc_10
 debian: ${HEADERS} debian_10_release_gcc_8
 debug: ${HEADERS} debian_10_debug_gcc_8
 headers: ${HEADERS}
@@ -105,6 +106,15 @@ debian_10_debug_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:${BA
 debian_10_debug_gcc_8: BOOST_ROOT = /opt/boost
 debian_10_debug_gcc_8: ci_env=
 debian_10_debug_gcc_8: cmake-debian-target build-debian
+
+debian_11_release_gcc_10: BUILD_TYPE = Release
+debian_11_release_gcc_10: BUILD_DIR = build_deb11
+debian_11_release_gcc_10: CPACK_GENERATOR = DEB
+debian_11_release_gcc_10: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-08-11
+debian_11_release_gcc_10: BOOST_ROOT = /opt/boost
+debian_11_release_gcc_10: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_11_release_gcc_10: ci_env=
+debian_11_release_gcc_10: cmake-debian-target build-debian test-debian
 
 windows_gccx_posix: BUILD_TYPE=Release
 windows_gccx_posix: BUILD_DIR=build_win_posix
