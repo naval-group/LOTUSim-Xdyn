@@ -23,8 +23,6 @@
 #include "YamlRotation.hpp"
 #include "AbstractStates.hpp"
 
-struct YamlRotation;
-
 
 class Mesh;
 typedef TR1(shared_ptr)<Mesh> MeshPtr;
