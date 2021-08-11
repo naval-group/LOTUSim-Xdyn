@@ -2,6 +2,7 @@
 #define EXTERNAL_DATA_STRUCTURES_INC_YAMLSTATE_HPP_
 
 #include <map>
+#include <string>
 #include <vector>
 #include "AbstractStates.hpp"
 
