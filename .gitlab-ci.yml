@@ -39,6 +39,16 @@ build:debian10:
      paths:
      - xdyn.deb
 
+build:debian11:
+   stage: build
+   script:
+     - make NB_OF_PARALLEL_BUILDS="-j 1" debian11
+     - mv build_deb11/xdyn.deb xdyn_debian11.deb
+   artifacts:
+     when: on_success
+     paths:
+     - xdyn_debian11.deb
+
 test:grpc:
     stage: test
     script:
