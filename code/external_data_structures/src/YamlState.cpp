@@ -27,7 +27,7 @@ YamlState::YamlState(const double t_
 
 bool operator==(const YamlState& lhs, const YamlState& rhs)
 {
-    return ((AbstractStates<double>)lhs == (AbstractStates<double>)rhs)
+    return ((AbstractStates<double>&)lhs == (AbstractStates<double>&)rhs)
             and (lhs.t == rhs.t)
             and (lhs.phi == rhs.phi)
             and (lhs.theta == rhs.theta)
