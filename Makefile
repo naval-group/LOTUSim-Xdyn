@@ -45,9 +45,9 @@ ${HEADERS}:
 	@cd code/ssc/ssc && sh generate_module_header.sh && cd ../../..
 
 cmake-debian: BUILD_TYPE = Release
-cmake-debian: BUILD_DIR = build_deb10
+cmake-debian: BUILD_DIR = build_deb11
 cmake-debian: CPACK_GENERATOR = DEB
-cmake-debian: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:2021-04-16
+cmake-debian: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-08-17
 cmake-debian: BOOST_ROOT = /opt/boost
 cmake-debian: ci_env=
 cmake-debian: cmake-debian-target
@@ -266,7 +266,7 @@ test-debian:
 
 
 docker:
-	./ninja_debian.sh package && cp build_deb10/xdyn.deb . &&  docker build . --tag xdyn
+	./ninja_debian.sh package && cp build_deb11/xdyn.deb . &&  docker build . --tag xdyn
 
 docker_grpc_force_model:
 	make -C grpc_docker
@@ -279,7 +279,7 @@ all_docker_images: docker docker_grpc_force_model docker_grpc_waves_model
 
 
 doc: BUILD_TYPE = Release
-doc: BUILD_DIR = build_deb10
+doc: BUILD_DIR = build_deb11
 doc: CPACK_GENERATOR = DEB
 doc: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn
 doc: BOOST_ROOT = /opt/boost
