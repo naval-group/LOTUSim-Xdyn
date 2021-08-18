@@ -65,11 +65,11 @@ build:debian11-release:
    stage: build
    script:
      - make NB_OF_PARALLEL_BUILDS="-j 1" debian_11_release_gcc_10
-     - mv build_deb11/xdyn.deb xdyn_debian11.deb
+     - mv build_deb11/xdyn.deb .
    artifacts:
      when: on_success
      paths:
-     - xdyn_debian11.deb
+     - xdyn.deb
 
 build:debian11-debug:
    stage: build
