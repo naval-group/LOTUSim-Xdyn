@@ -26,8 +26,8 @@ HEADERS=code/ssc/ssc/check_ssc_version.hpp\
 
 windows: ${HEADERS} windows_gccx_posix
 debian11: ${HEADERS} debian_11_release_gcc_10
-debian: ${HEADERS} debian_10_release_gcc_8
-debug: ${HEADERS} debian_10_debug_gcc_8
+debian: ${HEADERS} debian_11_release_gcc_10
+debug: ${HEADERS} debian_11_debug_gcc_10
 headers: ${HEADERS}
 
 .PHONY: all_docker_images cmake-debian debian cmake-windows windows doc update-submodules
