@@ -33,21 +33,33 @@ build:debian9-release:
    stage: build
    script:
      - make NB_OF_PARALLEL_BUILDS="-j 1" debian_9_release_gcc_6
+   only:
+       variables:
+        - $NIGHTLY_BUILD
 
 build:debian10-release:
    stage: build
    script:
      - make NB_OF_PARALLEL_BUILDS="-j 1" debian_10_release_gcc_8
+   only:
+       variables:
+        - $NIGHTLY_BUILD
 
 build:debian10-coverage:
    stage: build
    script:
      - make NB_OF_PARALLEL_BUILDS="-j 1" debian_10_coverage_gcc_8
+   only:
+       variables:
+        - $NIGHTLY_BUILD
 
 build:debian10-profile:
    stage: build
    script:
      - make NB_OF_PARALLEL_BUILDS="-j 1" debian_10_profile_gcc_8
+   only:
+       variables:
+        - $NIGHTLY_BUILD
 
 build:debian11-release:
    stage: build
@@ -63,6 +75,9 @@ build:debian11-debug:
    stage: build
    script:
      - make NB_OF_PARALLEL_BUILDS="-j 1" debian_11_debug_gcc_10
+   only:
+       variables:
+        - $NIGHTLY_BUILD
 
 test:grpc:
     stage: test
