@@ -6,7 +6,7 @@ docker run $TERMINAL \
     --security-opt seccomp=unconfined \
     --rm \
     -u $(id -u):$(id -g) \
-    -v $(pwd)/build_deb10_dbg:/build \
+    -v $(pwd)/build_deb11_dbg:/build \
     -v $(pwd)/code:/opt/share/code/ \
     -w /build \
     -it \

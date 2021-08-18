@@ -1,7 +1,7 @@
 # Dockerfile with xdyn, a python interpreter, various python libraries, and
 # pandoc
-#
-FROM python@sha256:0bb57c218e452ace5a4d55ee3c56e3c57e29c7f43cf55192acf7289becff4b0e
+# python:3.7-bullseye
+FROM python@sha256:6790dfb201d2fa06b0935ea0bfa1227d2240280af56d0fe08772b11eb31402b5
 
 # Install
 # - gcc to build psutil package used by pandoc-eqnos

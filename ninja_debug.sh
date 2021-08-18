@@ -4,8 +4,8 @@ docker run \
     -t \
     --rm \
     -u $( id -u ):$( id -g ) \
-    -v $(pwd)/build_deb10_dbg:/build \
+    -v $(pwd)/build_deb11_dbg:/build \
     -w /build \
     -v $(pwd):/opt/share \
-    sirehna/base-image-debian10-gcc8-xdyn \
+    sirehna/base-image-debian11-gcc10:2021-08-17 \
     /bin/sh -c "cd /build && ninja `echo $*`"

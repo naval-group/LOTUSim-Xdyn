@@ -12,14 +12,38 @@ IF(MINGW)
     SET(GRPC_CPP_PLUGIN_EXECUTABLE /opt/GRPC/bin/grpc_cpp_plugin.exe)
     SET(GRPC_INCLUDE_DIR /opt/GRPC/include)
 ELSE()
-    SET(GRPC_GRPCPP_UNSECURE
-        /usr/lib/x86_64-linux-gnu/libgrpc++_unsecure.a
-        /usr/lib/x86_64-linux-gnu/libgrpc.a
-        /usr/lib/x86_64-linux-gnu/libcares.a
-        /usr/lib/x86_64-linux-gnu/libssl.a
-        /usr/lib/x86_64-linux-gnu/libcrypto.a
-        z
-        dl)
+    IF(CMAKE_COMPILER_IS_GNUCC AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 10)
+        SET(GRPC_GRPCPP_UNSECURE
+            /usr/lib/x86_64-linux-gnu/libgrpc++_unsecure.a
+            /usr/lib/x86_64-linux-gnu/libgrpc.a
+            /usr/lib/x86_64-linux-gnu/libcares.a
+            /usr/lib/x86_64-linux-gnu/libssl.a
+            /usr/lib/x86_64-linux-gnu/libcrypto.a
+            z
+            dl)
+    ELSE()
+        SET(GRPC_GRPCPP_UNSECURE
+            /usr/lib/x86_64-linux-gnu/libgrpc++_unsecure.a
+            /usr/lib/x86_64-linux-gnu/libgrpc.a
+            /usr/lib/x86_64-linux-gnu/libabsl_strings.a
+            /usr/lib/x86_64-linux-gnu/libabsl_strings_internal.a
+            /usr/lib/x86_64-linux-gnu/libabsl_str_format_internal.a
+            /usr/lib/x86_64-linux-gnu/libabsl_int128.a
+            /usr/lib/x86_64-linux-gnu/libabsl_flags.a
+            /usr/lib/x86_64-linux-gnu/libabsl_flags_internal.a
+            /usr/lib/x86_64-linux-gnu/libabsl_raw_logging_internal.a
+            /usr/lib/x86_64-linux-gnu/libabsl_throw_delegate.a
+            /usr/lib/x86_64-linux-gnu/libabsl_bad_optional_access.a
+            /usr/lib/x86_64-linux-gnu/libabsl_time.a
+            /usr/lib/x86_64-linux-gnu/libabsl_time_zone.a
+            /usr/lib/x86_64-linux-gnu/libabsl_base.a
+            /usr/lib/x86_64-linux-gnu/libcares.a
+            /usr/lib/x86_64-linux-gnu/libssl.a
+            /usr/lib/x86_64-linux-gnu/libcrypto.a
+            z
+            m
+            dl)
+    ENDIF()
     SET(GRPC_CPP_PLUGIN_EXECUTABLE /usr/bin/grpc_cpp_plugin)
     SET(GRPC_INCLUDE_DIR /usr/include)
 ENDIF()

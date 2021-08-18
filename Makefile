@@ -1,8 +1,5 @@
 all: update-submodules windows debian debug doc all_docker_images
 
-BASE_IMAGE_VERSION=2021-04-16
-
-
 HEADERS=code/ssc/ssc/check_ssc_version.hpp\
         code/ssc/ssc/csv_file_reader.hpp\
         code/ssc/ssc/csv_writer.hpp\
@@ -28,8 +25,9 @@ HEADERS=code/ssc/ssc/check_ssc_version.hpp\
         code/ssc/ssc/yaml_parser.hpp
 
 windows: ${HEADERS} windows_gccx_posix
-debian: ${HEADERS} debian_10_release_gcc_8
-debug: ${HEADERS} debian_10_debug_gcc_8
+debian11: ${HEADERS} debian_11_release_gcc_10
+debian: ${HEADERS} debian_11_release_gcc_10
+debug: ${HEADERS} debian_11_debug_gcc_10
 headers: ${HEADERS}
 
 .PHONY: all_docker_images cmake-debian debian cmake-windows windows doc update-submodules
@@ -47,9 +45,9 @@ ${HEADERS}:
 	@cd code/ssc/ssc && sh generate_module_header.sh && cd ../../..
 
 cmake-debian: BUILD_TYPE = Release
-cmake-debian: BUILD_DIR = build_deb10
+cmake-debian: BUILD_DIR = build_deb11
 cmake-debian: CPACK_GENERATOR = DEB
-cmake-debian: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:${BASE_IMAGE_VERSION}
+cmake-debian: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-08-17
 cmake-debian: BOOST_ROOT = /opt/boost
 cmake-debian: ci_env=
 cmake-debian: cmake-debian-target
@@ -74,7 +72,7 @@ debian_9_release_gcc_6: cmake-debian-target build-debian test-debian
 debian_10_release_gcc_8: BUILD_TYPE = Release
 debian_10_release_gcc_8: BUILD_DIR = build_deb10
 debian_10_release_gcc_8: CPACK_GENERATOR = DEB
-debian_10_release_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:${BASE_IMAGE_VERSION}
+debian_10_release_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:2021-04-16
 debian_10_release_gcc_8: BOOST_ROOT = /opt/boost
 debian_10_release_gcc_8: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_10_release_gcc_8: ci_env=
@@ -83,7 +81,7 @@ debian_10_release_gcc_8: cmake-debian-target build-debian test-debian
 debian_10_coverage_gcc_8: BUILD_TYPE = Coverage
 debian_10_coverage_gcc_8: BUILD_DIR = build_deb10
 debian_10_coverage_gcc_8: CPACK_GENERATOR = DEB
-debian_10_coverage_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:${BASE_IMAGE_VERSION}
+debian_10_coverage_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:2021-04-16
 debian_10_coverage_gcc_8: BOOST_ROOT = /opt/boost
 debian_10_coverage_gcc_8: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_10_coverage_gcc_8: ci_env=`bash <(curl -s https://codecov.io/env)`
@@ -92,7 +90,7 @@ debian_10_coverage_gcc_8: cmake-debian-target build-debian test-debian
 debian_10_profile_gcc_8: BUILD_TYPE = Profile
 debian_10_profile_gcc_8: BUILD_DIR = build_deb10_profile
 debian_10_profile_gcc_8: CPACK_GENERATOR = DEB
-debian_10_profile_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:${BASE_IMAGE_VERSION}
+debian_10_profile_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:2021-04-16
 debian_10_profile_gcc_8: BOOST_ROOT = /opt/boost
 debian_10_profile_gcc_8: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_10_profile_gcc_8: ci_env=
@@ -101,10 +99,35 @@ debian_10_profile_gcc_8: cmake-debian-target build-debian test-debian
 debian_10_debug_gcc_8: BUILD_TYPE = Debug
 debian_10_debug_gcc_8: BUILD_DIR = build_deb10_dbg
 debian_10_debug_gcc_8: CPACK_GENERATOR = DEB
-debian_10_debug_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:${BASE_IMAGE_VERSION}
+debian_10_debug_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:2021-04-16
 debian_10_debug_gcc_8: BOOST_ROOT = /opt/boost
 debian_10_debug_gcc_8: ci_env=
 debian_10_debug_gcc_8: cmake-debian-target build-debian
+
+debian_11_debug_gcc_10: BUILD_TYPE = Debug
+debian_11_debug_gcc_10: BUILD_DIR = build_deb11_dbg
+debian_11_debug_gcc_10: CPACK_GENERATOR = DEB
+debian_11_debug_gcc_10: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-08-17
+debian_11_debug_gcc_10: BOOST_ROOT = /opt/boost
+debian_11_debug_gcc_10: ci_env=
+debian_11_debug_gcc_10: cmake-debian-target build-debian
+
+debian_11_profile_gcc_10: BUILD_TYPE = Profile
+debian_11_profile_gcc_10: BUILD_DIR = build_deb11_profile
+debian_11_profile_gcc_10: CPACK_GENERATOR = DEB
+debian_11_profile_gcc_10: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-08-17
+debian_11_profile_gcc_10: BOOST_ROOT = /opt/boost
+debian_11_profile_gcc_10: ci_env=
+debian_11_profile_gcc_10: cmake-debian-target build-debian
+
+debian_11_release_gcc_10: BUILD_TYPE = Release
+debian_11_release_gcc_10: BUILD_DIR = build_deb11
+debian_11_release_gcc_10: CPACK_GENERATOR = DEB
+debian_11_release_gcc_10: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-08-17
+debian_11_release_gcc_10: BOOST_ROOT = /opt/boost
+debian_11_release_gcc_10: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_11_release_gcc_10: ci_env=
+debian_11_release_gcc_10: cmake-debian-target build-debian test-debian
 
 windows_gccx_posix: BUILD_TYPE=Release
 windows_gccx_posix: BUILD_DIR=build_win_posix
@@ -243,7 +266,7 @@ test-debian:
 
 
 docker:
-	./ninja_debian.sh package && cp build_deb10/xdyn.deb . &&  docker build . --tag xdyn
+	./ninja_debian.sh package && cp build_deb11/xdyn.deb . &&  docker build . --tag xdyn
 
 docker_grpc_force_model:
 	make -C grpc_docker
@@ -256,7 +279,7 @@ all_docker_images: docker docker_grpc_force_model docker_grpc_waves_model
 
 
 doc: BUILD_TYPE = Release
-doc: BUILD_DIR = build_deb10
+doc: BUILD_DIR = build_deb11
 doc: CPACK_GENERATOR = DEB
 doc: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn
 doc: BOOST_ROOT = /opt/boost

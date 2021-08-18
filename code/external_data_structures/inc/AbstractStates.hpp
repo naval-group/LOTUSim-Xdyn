@@ -35,6 +35,7 @@ template <typename T> struct AbstractStates
     }
 
     AbstractStates(const double Tmax=0) : x(Tmax),y(Tmax),z(Tmax),u(Tmax),v(Tmax),w(Tmax),p(Tmax),q(Tmax),r(Tmax),qr(Tmax),qi(Tmax),qj(Tmax),qk(Tmax) {}
+    AbstractStates(const AbstractStates<T>& rhs) = default;
     AbstractStates<T>& operator=(const AbstractStates<T>& rhs)
     {
         ASSIGN(x);

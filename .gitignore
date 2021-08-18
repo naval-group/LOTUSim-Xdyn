@@ -1,14 +1,8 @@
 build
 build*32
 build*64
-build_debian
-build_deb8
-build_deb9
-build_deb9_dbg
-build_deb10
-build_deb10_dbg
-build_windows
-build_win_posix
+build_deb*
+build_win*
 code/build_*
 code/yaml-cpp
 build_doc

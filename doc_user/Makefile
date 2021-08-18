@@ -80,7 +80,7 @@ images: images/spectrum.py
 	    spectrum.py && \
 	cd ..
 
-build: ../build_deb10/xdyn.deb
+build: ../build_deb11/xdyn.deb
 	@cp $< .
 	@docker build --tag xweave .
 	@rm xdyn.deb

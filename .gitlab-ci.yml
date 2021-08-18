@@ -29,15 +29,55 @@ build:windows:
      paths:
      - xdyn.zip
 
-build:debian:
+build:debian9-release:
    stage: build
    script:
-     - make NB_OF_PARALLEL_BUILDS="-j 1" debian
-     - mv build_deb10/xdyn.deb .
+     - make NB_OF_PARALLEL_BUILDS="-j 1" debian_9_release_gcc_6
+   only:
+       variables:
+        - $NIGHTLY_BUILD
+
+build:debian10-release:
+   stage: build
+   script:
+     - make NB_OF_PARALLEL_BUILDS="-j 1" debian_10_release_gcc_8
+   only:
+       variables:
+        - $NIGHTLY_BUILD
+
+build:debian10-coverage:
+   stage: build
+   script:
+     - make NB_OF_PARALLEL_BUILDS="-j 1" debian_10_coverage_gcc_8
+   only:
+       variables:
+        - $NIGHTLY_BUILD
+
+build:debian10-profile:
+   stage: build
+   script:
+     - make NB_OF_PARALLEL_BUILDS="-j 1" debian_10_profile_gcc_8
+   only:
+       variables:
+        - $NIGHTLY_BUILD
+
+build:debian11-release:
+   stage: build
+   script:
+     - make NB_OF_PARALLEL_BUILDS="-j 1" debian_11_release_gcc_10
+     - mv build_deb11/xdyn.deb .
    artifacts:
      when: on_success
      paths:
      - xdyn.deb
+
+build:debian11-debug:
+   stage: build
+   script:
+     - make NB_OF_PARALLEL_BUILDS="-j 1" debian_11_debug_gcc_10
+   only:
+       variables:
+        - $NIGHTLY_BUILD
 
 test:grpc:
     stage: test
@@ -56,10 +96,10 @@ test:integration:
 doc:
    stage: doc
    script:
-     - mkdir -p build_deb10 && cp xdyn.deb build_deb10/.
+     - mkdir -p build_deb11 && cp xdyn.deb build_deb11/.
      - make doc -W build-debian
    dependencies:
-     - build:debian
+     - build:debian11-release
    artifacts:
      when: on_success
      paths:
