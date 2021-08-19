@@ -54,3 +54,9 @@ TEST_F(GRPCForceModelTest, can_parse_hdb)
     const auto input = GRPCForceModel::parse(test_data::gRPC_force_model()+"hdb: some_hdb.hdb\n");
     ASSERT_EQ("some_hdb.hdb", input.hdb_filename);
 }
+
+TEST_F(GRPCForceModelTest, can_parse_precal)
+{
+    const auto input = GRPCForceModel::parse(test_data::gRPC_force_model()+"precal: some_precal.ini\n");
+    ASSERT_EQ("some_precal.ini", input.precal_filename);
+}

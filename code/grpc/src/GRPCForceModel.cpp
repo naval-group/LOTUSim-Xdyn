@@ -157,6 +157,10 @@ GRPCForceModel::Input GRPCForceModel::parse(const std::string& yaml)
     {
         node["hdb"] >> ret.hdb_filename;
     }
+    if (node.FindValue("precal"))
+    {
+        node["precal"] >> ret.precal_filename;
+    }
     YAML::Emitter out;
     out << node;
     ret.yaml = out.c_str();
