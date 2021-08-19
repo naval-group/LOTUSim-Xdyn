@@ -4,7 +4,7 @@
 # cp code/build_deb10/xdyn.deb .
 # docker build . -f Dockerfile --tag sirehna/xdyn
 # docker run sirehna/xdyn --help
-FROM debian:stable-slim
+FROM debian:bullseye-slim
 RUN apt-get update -yq && \
     apt-get install \
         --yes \
