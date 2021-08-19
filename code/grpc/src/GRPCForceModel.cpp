@@ -155,6 +155,12 @@ GRPCForceModel::Input GRPCForceModel::parse(const std::string& yaml)
     node["name"] >> ret.name;
     if (node.FindValue("hdb"))
     {
+        if (node.FindValue("precal"))
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                  "When parsing the gRPC force model '" << ret.name << "': you cannot specify both an HDB filename and a PRECAL_R filename "
+                  "(both keys 'hdb' and 'precal' were found in the YAML file).");
+        }
         node["hdb"] >> ret.hdb_filename;
     }
     if (node.FindValue("precal"))
