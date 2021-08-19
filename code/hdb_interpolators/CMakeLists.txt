@@ -7,6 +7,7 @@ set(SRC src/HDBParser.cpp
         src/PrecalParserHelper.cpp
         src/PrecalParser.cpp
         src/RaoInterpolator.cpp
+        src/HydroDBParser.cpp
         )
 
 # Using C++ 2011

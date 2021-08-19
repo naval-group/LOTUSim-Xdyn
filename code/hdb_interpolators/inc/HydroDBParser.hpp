@@ -55,5 +55,6 @@ class HydroDBParser
 
 };
 
+std::shared_ptr<HydroDBParser> parser_factory(const std::string& hdb_filename, const std::string& precal_filename);
 
 #endif
