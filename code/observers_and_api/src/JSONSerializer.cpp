@@ -133,22 +133,22 @@ std::string serialize(const std::vector<YamlState>& states)
     for(auto state:states)
     {
         PUSH_BACK(doc["t"], state.t, doc);
-        PUSH_BACK(doc["x"], state.t, doc);
-        PUSH_BACK(doc["y"], state.t, doc);
-        PUSH_BACK(doc["z"], state.t, doc);
-        PUSH_BACK(doc["u"], state.t, doc);
-        PUSH_BACK(doc["v"], state.t, doc);
-        PUSH_BACK(doc["w"], state.t, doc);
-        PUSH_BACK(doc["p"], state.t, doc);
-        PUSH_BACK(doc["q"], state.t, doc);
-        PUSH_BACK(doc["r"], state.t, doc);
-        PUSH_BACK(doc["qr"], state.t, doc);
-        PUSH_BACK(doc["qi"], state.t, doc);
-        PUSH_BACK(doc["qj"], state.t, doc);
-        PUSH_BACK(doc["qk"], state.t, doc);
-        PUSH_BACK(doc["phi"], state.t, doc);
-        PUSH_BACK(doc["theta"], state.t, doc);
-        PUSH_BACK(doc["psi"], state.t, doc);
+        PUSH_BACK(doc["x"], state.x, doc);
+        PUSH_BACK(doc["y"], state.y, doc);
+        PUSH_BACK(doc["z"], state.z, doc);
+        PUSH_BACK(doc["u"], state.u, doc);
+        PUSH_BACK(doc["v"], state.v, doc);
+        PUSH_BACK(doc["w"], state.w, doc);
+        PUSH_BACK(doc["p"], state.p, doc);
+        PUSH_BACK(doc["q"], state.q, doc);
+        PUSH_BACK(doc["r"], state.r, doc);
+        PUSH_BACK(doc["qr"], state.qr, doc);
+        PUSH_BACK(doc["qi"], state.qi, doc);
+        PUSH_BACK(doc["qj"], state.qj, doc);
+        PUSH_BACK(doc["qk"], state.qk, doc);
+        PUSH_BACK(doc["phi"], state.phi, doc);
+        PUSH_BACK(doc["theta"], state.theta, doc);
+        PUSH_BACK(doc["psi"], state.psi, doc);
         for(auto obs:state.extra_observations)
             {
                 PUSH_BACK(doc["extra_observations"][obs.first.c_str()], obs.second, doc);

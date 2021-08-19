@@ -35,7 +35,7 @@ concatenated_doc.pmd: \
 m4 :=  docker run -t --rm \
                -v $(shell pwd):/work \
                -v $(shell pwd)/../interfaces:/interfaces \
-               -v $(shell pwd)/../grpc_tests/controller:/controller \
+               -v $(shell pwd)/../integration_tests/grpc_tests/controller:/controller \
                -w /work \
                -u $(shell id -u):$(shell id -g) \
                --entrypoint /usr/bin/m4 \

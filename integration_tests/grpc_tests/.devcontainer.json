@@ -1,7 +1,7 @@
 {
     "dockerFile": "Dockerfile.vscode.devcontainer",
     "name": "xdyn_gRPC",
-    "context": "..",
+    "context": "../..",
     "extensions": [
         "eamodio.gitlens",
         "ms-python.python",

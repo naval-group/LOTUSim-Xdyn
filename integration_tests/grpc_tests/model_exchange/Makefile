@@ -12,7 +12,7 @@ tutorial_01_falling_ball.yml:
         --entrypoint /bin/bash xdyn \
         -c "cp /usr/demos/tutorial_01_falling_ball.yml /xdyn_demos/"
 
-model_exchange.proto: ../../interfaces/model_exchange.proto
+model_exchange.proto: ../../../interfaces/model_exchange.proto
 	cp $< $@
 
 clean:

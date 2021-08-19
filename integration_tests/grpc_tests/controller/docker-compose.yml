@@ -2,7 +2,7 @@ version: '3'
 services:
   pid:
     build:
-      context: ../../interfaces
+      context: ../../../interfaces
       dockerfile: controllers/Dockerfile.python
     user: ${CURRENT_UID}
     environment:
