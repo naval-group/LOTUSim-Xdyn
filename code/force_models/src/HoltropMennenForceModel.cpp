@@ -95,12 +95,12 @@ HoltropMennenForceModel::DerivedData::DerivedData(const Input& base_data) :
         Cp(base_data.Vol / (base_data.Cm * base_data.B * T * base_data.Lwl)),
         c3(0.56 * std::pow(base_data.Abt, 1.5) / (base_data.B * T * (0.31 * std::sqrt(base_data.Abt) + base_data.Tf - base_data.hb))),
         // Dependencies of rank 2
+        c2(std::exp(-1.89 * std::sqrt(c3))),
         Ca(0.006 * std::pow(base_data.Lwl + 100., -0.16) - 0.00205 + 0.003 * std::sqrt(base_data.Lwl / 7.5) * std::pow(Cb, 4.) * c2 * (0.04 - c4)),
         S(base_data.S.is_initialized() ? base_data.S.get() : base_data.Lwl * (2 * T + base_data.B) * std::sqrt(base_data.Cm) * (0.453 + 0.4425 * Cb - 0.2862 * base_data.Cm - 0.003467 * base_data.B / T + 0.3696 * base_data.Cwp) + 2.38 * base_data.Abt / Cb),
         c16(Cp < 0.8 ? 8.07981 * Cp - 13.8673 * std::pow(Cp, 2.) + 6.984388 * std::pow(Cp, 3.) : 1.73014 - 0.7067 * Cp),
         Lr(base_data.Lwl * (1 - Cp + 0.06 * Cp * base_data.lcb / (4 * Cp - 1))),
         lambda(base_data.Lwl / base_data.B < 12 ? 1.446 * Cp - 0.03 * base_data.Lwl / base_data.B : 1.446 * Cp - 0.36),
-        c2(std::exp(-1.89 * std::sqrt(c3))),
         iE(base_data.iE.is_initialized() ? base_data.iE.get() : 1 + 89 * std::exp(-std::pow(base_data.Lwl / base_data.B, 0.80856) * std::pow(1 - base_data.Cwp, 0.30484) * std::pow(1 - Cp - 0.0225 * base_data.lcb, 0.6367) * std::pow(Lr / base_data.B, 0.34574) * std::pow(100 * base_data.Vol / std::pow(base_data.Lwl, 3.), 0.16302))),
         // Dependencies of rank 3
         c1(2223105 * std::pow(c7, 3.78613) * std::pow(T / base_data.B, 1.07961) * std::pow(90 - iE, -1.37565)),
