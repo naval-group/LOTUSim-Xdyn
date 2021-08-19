@@ -7,6 +7,7 @@
 
 
 #include "ToGRPC.hpp"
+#include "HydroDBParser.hpp"
 
 ToGRPC::ToGRPC(const GRPCForceModel::Input& input_)
     : input(input_)
@@ -204,12 +205,68 @@ ForceRequest ToGRPC::from_force_request(States* states, const std::map<std::stri
     return request;
 }
 
-SetForceParameterRequest ToGRPC::from_yaml(const std::string& yaml, const std::string body_name, const std::string& instance_name) const
+AddedMassMatrix* get_added_mass_matrix(const std::shared_ptr<HydroDBParser>& hydro_db_parser);
+AddedMassMatrix* get_added_mass_matrix(const std::shared_ptr<HydroDBParser>& hydro_db_parser)
+{
+    AddedMassMatrix* ma = new AddedMassMatrix();
+    const auto Ma = hydro_db_parser->get_added_mass();
+    ma->set_ma_11(Ma(0,0));
+    ma->set_ma_12(Ma(0,1));
+    ma->set_ma_13(Ma(0,2));
+    ma->set_ma_14(Ma(0,3));
+    ma->set_ma_15(Ma(0,4));
+    ma->set_ma_16(Ma(0,5));
+    ma->set_ma_21(Ma(1,0));
+    ma->set_ma_22(Ma(1,1));
+    ma->set_ma_23(Ma(1,2));
+    ma->set_ma_24(Ma(1,3));
+    ma->set_ma_25(Ma(1,4));
+    ma->set_ma_26(Ma(1,5));
+    ma->set_ma_31(Ma(2,0));
+    ma->set_ma_32(Ma(2,1));
+    ma->set_ma_33(Ma(2,2));
+    ma->set_ma_34(Ma(2,3));
+    ma->set_ma_35(Ma(2,4));
+    ma->set_ma_36(Ma(2,5));
+    ma->set_ma_41(Ma(3,0));
+    ma->set_ma_42(Ma(3,1));
+    ma->set_ma_43(Ma(3,2));
+    ma->set_ma_44(Ma(3,3));
+    ma->set_ma_45(Ma(3,4));
+    ma->set_ma_46(Ma(3,5));
+    ma->set_ma_51(Ma(4,0));
+    ma->set_ma_52(Ma(4,1));
+    ma->set_ma_53(Ma(4,2));
+    ma->set_ma_54(Ma(4,3));
+    ma->set_ma_55(Ma(4,4));
+    ma->set_ma_56(Ma(4,5));
+    ma->set_ma_61(Ma(5,0));
+    ma->set_ma_62(Ma(5,1));
+    ma->set_ma_63(Ma(5,2));
+    ma->set_ma_64(Ma(5,3));
+    ma->set_ma_65(Ma(5,4));
+    ma->set_ma_66(Ma(5,5));
+    return ma;
+}
+
+ResultsFromPotentialTheory* get_results_from_potential_theory(const std::shared_ptr<HydroDBParser>& hydro_db_parser);
+ResultsFromPotentialTheory* get_results_from_potential_theory(const std::shared_ptr<HydroDBParser>& hydro_db_parser)
+{
+    ResultsFromPotentialTheory* pot = new ResultsFromPotentialTheory();
+    if (hydro_db_parser.use_count())
+    {
+        pot->set_allocated_ma(get_added_mass_matrix(hydro_db_parser));
+    }
+    return pot;
+}
+
+SetForceParameterRequest ToGRPC::from_yaml(const std::string& yaml, const std::string body_name, const std::string& instance_name, const std::shared_ptr<HydroDBParser>& hydro_db_parser) const
 {
     SetForceParameterRequest request;
     request.set_parameters(yaml);
     request.set_body_name(body_name);
     request.set_instance_name(instance_name);
+    request.set_allocated_results_from_potential_theory(get_results_from_potential_theory(hydro_db_parser));
     return request;
 }
 

@@ -20,7 +20,17 @@ tutorial_13_hdb_force_model.yml:
         --entrypoint /bin/bash xdyn \
         -c "cp /usr/demos/$@ /xdyn_demos/"
 
-hdb: tutorial_13_hdb_force_model.yml
+test_ship.hdb:
+	@echo "Copying $@ from xdyn's Docker container..."
+	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/xdyn_demos \
+        --entrypoint /bin/bash xdyn \
+        -c "cp /usr/demos/$@ /xdyn_demos/"
+
+hdb: hdb_output.csv test_hdb.py
+	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/work -w /work python:3.8-slim-buster python3 test_hdb.py
+	@echo "All HDB data was properly passed to the gRPC force model! Test passed!"
+
+hdb_output.csv: tutorial_13_hdb_force_model.yml test_ship.hdb
 	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose -f docker-compose-hdb.yml rm -f
 	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose -f docker-compose-hdb.yml up -t 0 --exit-code-from xdyn --abort-on-container-exit --build --remove-orphans
 
@@ -36,4 +46,4 @@ sim: tutorial_10_gRPC_force_model.yml tutorial_10_gRPC_force_model_commands.yml
 	@if [ `cat out.csv | wc -l ` -eq 4 ]; then echo "...OK!"; else echo "***error: CSV file has `cat out.csv | wc -l ` line(s)" && exit 1; fi
 
 clean:
-	rm -f out.csv tutorial_10_gRPC_force_model.yml tutorial_10_gRPC_force_model_commands.yml hdb_output.csv
+	rm -f out.csv tutorial_10_gRPC_force_model.yml tutorial_10_gRPC_force_model_commands.yml hdb_output.csv tutorial_13_hdb_force_model.yml hdb_output.csv

@@ -33,7 +33,24 @@ class HarmonicOscillator(force.Model):
     def force(self, states, _, __):
         """Force model."""
         extra_observations = {}
+        extra_observations['Ma(0,0)'] = self.pot.Ma[0][0]
+        extra_observations['Ma(0,2)'] = self.pot.Ma[0][2]
+        extra_observations['Ma(0,4)'] = self.pot.Ma[0][4]
+        extra_observations['Ma(1,1)'] = self.pot.Ma[1][1]
+        extra_observations['Ma(1,3)'] = self.pot.Ma[1][3]
+        extra_observations['Ma(1,5)'] = self.pot.Ma[1][5]
+        extra_observations['Ma(2,0)'] = self.pot.Ma[2][0]
+        extra_observations['Ma(2,2)'] = self.pot.Ma[2][2]
         extra_observations['Ma(2,4)'] = self.pot.Ma[2][4]
+        extra_observations['Ma(3,1)'] = self.pot.Ma[3][1]
+        extra_observations['Ma(3,3)'] = self.pot.Ma[3][3]
+        extra_observations['Ma(3,5)'] = self.pot.Ma[3][5]
+        extra_observations['Ma(4,0)'] = self.pot.Ma[4][0]
+        extra_observations['Ma(4,2)'] = self.pot.Ma[4][2]
+        extra_observations['Ma(4,4)'] = self.pot.Ma[4][4]
+        extra_observations['Ma(5,1)'] = self.pot.Ma[5][1]
+        extra_observations['Ma(5,3)'] = self.pot.Ma[5][3]
+        extra_observations['Ma(5,5)'] = self.pot.Ma[5][5]
         return {'Fx': 0,
                 'Fy': 0,
                 'Fz': 0,
