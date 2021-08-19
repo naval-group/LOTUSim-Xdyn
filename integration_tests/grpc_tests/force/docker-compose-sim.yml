@@ -1,7 +1,7 @@
 version: '3'
 services:
   force-model:
-    image: xdyn-force-grpc:python3
+    image: xdyn-grpc-force:python-test
     command: harmonic_oscillator.py
     working_dir: /work
     volumes:

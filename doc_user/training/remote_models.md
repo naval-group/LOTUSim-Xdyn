@@ -64,7 +64,7 @@ Any time we use remote models in xdyn we can use `docker-compose`.
 version: '3'
 services:
   force-model:
-    image: sirehna/xdyn-force-grpc:python3
+    image: sirehna/xdyn-grpc-force:python-v1.0.0
     command: harmonic_oscillator.py
     working_dir: /work
     volumes:

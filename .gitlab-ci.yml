@@ -82,9 +82,7 @@ build:debian11-debug:
 integration tests:
     stage: test
     script:
-     - docker build . --tag xdyn
-     - make docker_grpc_force_model
-     - make docker_grpc_waves_model
+     - make all_docker_images
      - make -C integration_tests
 
 doc:
