@@ -82,7 +82,7 @@ build:debian11-debug:
 integration tests:
     stage: test
     script:
-     - make all_docker_images
+     - make debian_11_release_gcc_10 all_docker_images
      - make -C integration_tests
 
 doc:
