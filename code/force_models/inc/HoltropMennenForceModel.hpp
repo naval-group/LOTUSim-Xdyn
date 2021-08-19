@@ -51,12 +51,12 @@ class HoltropMennenForceModel : public ForceModel
                 double Cp;
                 double c3;
                 // Dependencies of rank 2
+                double c2;
                 double Ca;
                 double S;
                 double c16;
                 double Lr;
                 double lambda;
-                double c2;
                 double iE;
                 // Dependencies of rank 3
                 double c1;
