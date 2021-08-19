@@ -48,3 +48,9 @@ TEST_F(GRPCForceModelTest, can_parse_rest_of_yaml_parameters)
               "url: force-model:9002"
               , input.yaml);
 }
+
+TEST_F(GRPCForceModelTest, can_parse_hdb)
+{
+    const auto input = GRPCForceModel::parse(test_data::gRPC_force_model()+"hdb: some_hdb.hdb\n");
+    ASSERT_EQ("some_hdb.hdb", input.hdb_filename);
+}

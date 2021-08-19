@@ -153,6 +153,10 @@ GRPCForceModel::Input GRPCForceModel::parse(const std::string& yaml)
     GRPCForceModel::Input ret;
     node["url"] >> ret.url;
     node["name"] >> ret.name;
+    if (node.FindValue("hdb"))
+    {
+        node["hdb"] >> ret.hdb_filename;
+    }
     YAML::Emitter out;
     out << node;
     ret.yaml = out.c_str();
