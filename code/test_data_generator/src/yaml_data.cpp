@@ -3725,12 +3725,10 @@ std::string test_data::tutorial_10_gRPC_force_model()
 
 std::string test_data::tutorial_10_gRPC_force_model_commands()
 {
-    std::stringstream ss;
-    ss << "commands:\n"
-       << "  - name: parametric oscillator\n"
-       << "    t: [0,1,3,10]\n"
-       << "    omega: {unit: rad/s, values: [3, 30, 30, 40]}\n";
-    return ss.str();
+    return "commands:\n"
+           "  - name: parametric oscillator\n"
+           "    t: [0,1,3,10]\n"
+           "    omega: {unit: rad/s, values: [3, 30, 30, 40]}\n";
 }
 
 std::string test_data::gRPC_force_model()
@@ -3928,6 +3926,35 @@ std::string test_data::tutorial_11_gRPC_controller()
                 "  - format: csv\n"
                 "    filename: tutorial_11.csv\n"
                 "    data: [t, 'psi(dtmb)', 'PSPropRudd(beta)', 'SBPropRudd(beta)', 'Ten times current time']\n";
+}
+
+std::string test_data::tutorial_13_hdb_force_model()
+{
+    return rotation_convention()
+       + "\n"
+       + environmental_constants()
+       + "environment models:\n"
+       + "  - model: no waves\n"
+       + "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
+       + "    \n"
+       + "# Fixed frame: NED\n"
+       + "bodies: # All bodies have NED as parent frame\n"
+       + "  - name: TestShip\n"
+       + position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
+       + initial_position_of_body_frame(5, 0, 1, 0, 0, 0)
+       + initial_velocity("TestShip", 0, 0, 0, 0, 0, 0)
+       + dynamics()
+       + "    external forces:\n"
+       + "      - model: grpc\n"
+       + "        name: hdb force model\n"
+       + "        url: force-model:9002\n"
+       + "        hdb: test_ship.hdb\n"
+       + "output:\n"
+       + "   - format: csv\n"
+       + "     filename: hdb_output.csv\n"
+       + "     data:\n"
+       + "     - 'Ma(2,4)(TestShip)'\n"
+       ;
 }
 
 std::string test_data::added_mass_from_precal_file()
