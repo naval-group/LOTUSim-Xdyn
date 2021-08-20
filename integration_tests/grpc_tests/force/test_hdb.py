@@ -70,10 +70,59 @@ def check_diffraction_module_tables(results):
     print("✓ Diffraction module table test passed!")
 
 
+def check_diffraction_phase_tables(results):
+    """Verify the diffraction phase tables."""
+    # First line of [INCIDENCE_EFM_PH_001]   0.000000
+    assert results['diffpX(0 0)(TestShip)'] == '-1.135123e+00'
+    assert results['diffpY(0 0)(TestShip)'] == '1.570796e+00'
+    assert results['diffpZ(0 0)(TestShip)'] == '-8.389206e-01'
+    assert results['diffpK(0 0)(TestShip)'] == '1.570796e+00'
+    assert results['diffpM(0 0)(TestShip)'] == '-8.356066e-01'
+    assert results['diffpN(0 0)(TestShip)'] == '1.570796e+00'
+    # Second line of [INCIDENCE_EFM_PH_001]   0.000000
+    assert results['diffpX(1 0)(TestShip)'] == '2.088816e+00'
+    assert results['diffpY(1 0)(TestShip)'] == '1.570796e+00'
+    assert results['diffpZ(1 0)(TestShip)'] == '1.636404e+00'
+    assert results['diffpK(1 0)(TestShip)'] == '1.570796e+00'
+    assert results['diffpM(1 0)(TestShip)'] == '1.789263e+00'
+    assert results['diffpN(1 0)(TestShip)'] == '1.570796e+00'
+    # Third line of [INCIDENCE_EFM_PH_001]   0.000000
+    assert results['diffpX(2 0)(TestShip)'] == '2.189364e+00'
+    assert results['diffpY(2 0)(TestShip)'] == '1.570796e+00'
+    assert results['diffpZ(2 0)(TestShip)'] == '1.596137e+00'
+    assert results['diffpK(2 0)(TestShip)'] == '1.570796e+00'
+    assert results['diffpM(2 0)(TestShip)'] == '1.825686e+00'
+    assert results['diffpN(2 0)(TestShip)'] == '1.570796e+00'
+    # First line of [INCIDENCE_EFM_PH_001]   30.00000
+    assert results['diffpX(0 1)(TestShip)'] == '2.077326e+00'
+    assert results['diffpY(0 1)(TestShip)'] == '-5.459499e-01'
+    assert results['diffpZ(0 1)(TestShip)'] == '1.525810e+00'
+    assert results['diffpK(0 1)(TestShip)'] == '-6.670656e-01'
+    assert results['diffpM(0 1)(TestShip)'] == '1.375271e+00'
+    assert results['diffpN(0 1)(TestShip)'] == '-5.846877e-01'
+    # Second line of [INCIDENCE_EFM_PH_001]   30.00000
+    assert results['diffpX(1 1)(TestShip)'] == '2.028876e+00'
+    assert results['diffpY(1 1)(TestShip)'] == '-3.130008e+00'
+    assert results['diffpZ(1 1)(TestShip)'] == '1.636047e+00'
+    assert results['diffpK(1 1)(TestShip)'] == '-1.350179e-01'
+    assert results['diffpM(1 1)(TestShip)'] == '1.768062e+00'
+    assert results['diffpN(1 1)(TestShip)'] == '-3.053413e+00'
+    # Third line of [INCIDENCE_EFM_PH_001]   30.00000
+    assert results['diffpX(2 1)(TestShip)'] == '2.123063e+00'
+    assert results['diffpY(2 1)(TestShip)'] == '-3.138567e+00'
+    assert results['diffpZ(2 1)(TestShip)'] == '1.595086e+00'
+    assert results['diffpK(2 1)(TestShip)'] == '-3.533363e-02'
+    assert results['diffpM(2 1)(TestShip)'] == '1.794767e+00'
+    assert results['diffpN(2 1)(TestShip)'] == '-3.118377e+00'
+    print("✓ Diffraction phase table test passed!")
+
+
+
 def check(results):
     """Make sure the results contain all necessary data."""
     check_added_mass_matrix(results)
     check_diffraction_module_tables(results)
+    check_diffraction_phase_tables(results)
 
 
 with open('hdb_output.csv', newline='') as csvfile:

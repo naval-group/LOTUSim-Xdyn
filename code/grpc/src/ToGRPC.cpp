@@ -267,11 +267,10 @@ Array* to_grpc_array(const std::vector<std::vector<double> >& array)
     return ret;
 }
 
-WrenchMatrices* get_diffraction_module_tables(const std::shared_ptr<HydroDBParser>& hydro_db_parser);
-WrenchMatrices* get_diffraction_module_tables(const std::shared_ptr<HydroDBParser>& hydro_db_parser)
+WrenchMatrices* to_WrenchMatrices(const std::array<std::vector<std::vector<double> >,6 >& T);
+WrenchMatrices* to_WrenchMatrices(const std::array<std::vector<std::vector<double> >,6 >& T)
 {
     WrenchMatrices* ret = new WrenchMatrices();
-    const auto T = hydro_db_parser->get_diffraction_module_tables();
     ret->set_allocated_x(to_grpc_array(T[0]));
     ret->set_allocated_y(to_grpc_array(T[1]));
     ret->set_allocated_z(to_grpc_array(T[2]));
@@ -288,7 +287,8 @@ ResultsFromPotentialTheory* get_results_from_potential_theory(const std::shared_
     if (hydro_db_parser.use_count())
     {
         pot->set_allocated_ma(get_added_mass_matrix(hydro_db_parser));
-        pot->set_allocated_diffraction_module_tables(get_diffraction_module_tables(hydro_db_parser));
+        pot->set_allocated_diffraction_module_tables(to_WrenchMatrices(hydro_db_parser->get_diffraction_module_tables()));
+        pot->set_allocated_diffraction_phase_tables(to_WrenchMatrices(hydro_db_parser->get_diffraction_phase_tables()));
     }
     return pot;
 }
