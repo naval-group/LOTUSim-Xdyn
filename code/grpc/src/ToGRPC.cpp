@@ -287,6 +287,7 @@ ResultsFromPotentialTheory* get_results_from_potential_theory(const std::shared_
         pot->set_allocated_diffraction_module_tables(to_WrenchMatrices(hydro_db_parser->get_diffraction_module_tables()));
         pot->set_allocated_diffraction_phase_tables(to_WrenchMatrices(hydro_db_parser->get_diffraction_phase_tables()));
         copy_from_double_vector(hydro_db_parser->get_diffraction_module_periods(), pot->mutable_diffraction_module_periods());
+        copy_from_double_vector(hydro_db_parser->get_diffraction_phase_periods(), pot->mutable_diffraction_phase_periods());
     }
     return pot;
 }
