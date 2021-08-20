@@ -292,6 +292,7 @@ ResultsFromPotentialTheory* get_results_from_potential_theory(const std::shared_
         copy_from_double_vector(hydro_db_parser->get_diffraction_phase_psis(), pot->mutable_diffraction_phase_psis());
         pot->set_allocated_froude_krylov_module_tables(to_WrenchMatrices(hydro_db_parser->get_froude_krylov_module_tables()));
         pot->set_allocated_froude_krylov_phase_tables(to_WrenchMatrices(hydro_db_parser->get_froude_krylov_phase_tables()));
+        copy_from_double_vector(hydro_db_parser->get_froude_krylov_module_periods(), pot->mutable_froude_krylov_module_periods());
     }
     return pot;
 }

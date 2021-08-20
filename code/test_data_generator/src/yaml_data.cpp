@@ -4089,6 +4089,9 @@ std::string test_data::tutorial_13_hdb_force_model()
        + "     - 'FKFMpK(1,0)(TestShip)'\n"
        + "     - 'FKFMpM(1,0)(TestShip)'\n"
        + "     - 'FKFMpN(1,0)(TestShip)'\n"
+       + "     - 'FKT0(TestShip)'\n"
+       + "     - 'FKT1(TestShip)'\n"
+       + "     - 'FKT2(TestShip)'\n"
        ;
 }
 

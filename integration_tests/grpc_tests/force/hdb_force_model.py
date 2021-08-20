@@ -190,6 +190,10 @@ class HDBForceModel(force.Model):
         extra_observations['FKFMpM(1,0)'] = self.pot.froude_krylov_phase_tables.X[1][0]
         extra_observations['FKFMpN(1,0)'] = self.pot.froude_krylov_phase_tables.X[1][0]
 
+        extra_observations['FKT0'] = self.pot.froude_krylov_module_periods[0]
+        extra_observations['FKT1'] = self.pot.froude_krylov_module_periods[1]
+        extra_observations['FKT2'] = self.pot.froude_krylov_module_periods[2]
+
         return {'Fx': 0,
                 'Fy': 0,
                 'Fz': 0,

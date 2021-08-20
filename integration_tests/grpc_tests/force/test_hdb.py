@@ -174,6 +174,11 @@ def check_froude_krylov_phase_tables(results):
     assert results['FKFMpN(1 0)(TestShip)'] == ''
     print("✓ Froude-Krylov phase tables test passed!")
 
+def check_froude_krylov_module_periods(results):
+    assert results['FKT0(TestShip)'] == '3.500000e+00'
+    assert results['FKT1(TestShip)'] == '3.600000e+00'
+    assert results['FKT2(TestShip)'] == '3.700000e+00'
+    print("✓ Froude-Krylov module periods test passed!")
 
 def check(results):
     """Make sure the results contain all necessary data."""
@@ -185,6 +190,7 @@ def check(results):
     check_diffraction_module_psis(results)
     check_diffraction_phase_psis(results)
     check_froude_krylov_module_tables(results)
+    check_froude_krylov_module_periods(results)
 
 
 with open('hdb_output.csv', newline='') as csvfile:
