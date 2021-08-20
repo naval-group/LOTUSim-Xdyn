@@ -289,6 +289,7 @@ ResultsFromPotentialTheory* get_results_from_potential_theory(const std::shared_
         copy_from_double_vector(hydro_db_parser->get_diffraction_module_periods(), pot->mutable_diffraction_module_periods());
         copy_from_double_vector(hydro_db_parser->get_diffraction_phase_periods(), pot->mutable_diffraction_phase_periods());
         copy_from_double_vector(hydro_db_parser->get_diffraction_module_psis(), pot->mutable_diffraction_module_psis());
+        copy_from_double_vector(hydro_db_parser->get_diffraction_phase_psis(), pot->mutable_diffraction_phase_psis());
     }
     return pot;
 }

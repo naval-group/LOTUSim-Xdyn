@@ -136,6 +136,9 @@ class HDBForceModel(force.Model):
         extra_observations['diffpsi0'] = self.pot.diffraction_module_psis[0]
         extra_observations['diffpsi1'] = self.pot.diffraction_module_psis[1]
 
+        extra_observations['diffppsi0'] = self.pot.diffraction_phase_psis[0]
+        extra_observations['diffppsi1'] = self.pot.diffraction_phase_psis[1]
+
         return {'Fx': 0,
                 'Fy': 0,
                 'Fz': 0,
