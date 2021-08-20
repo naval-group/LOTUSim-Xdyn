@@ -1,3 +1,17 @@
+# v5.0.0 (2021-08-23)
+
+- #187 Add results from precal_r or hdb to grpc force interface
+- #42 Co simulation json websocket mode returns the time vector for all states
+- #193 Fix failing unit test for debian 9 for holtropmennenforcemodeltest numerical_example_1984
+- #178 Precal r extraction des informations necessaires au calcul des efforts de froude krylov
+- #191 Update current changelog md
+- #188 Describe wave model conventions used by precal_r and aqua
+- #177 Precal r extraction des matrices d amortissement de radiation
+- #183 Slides for remote model training
+- #184 Fix pulsation size check in hdb
+- #175 Precal r extraction des informations necessaires au calcul des efforts de diffraction
+
+
 # v4.3.0 (2021-06-29)
 
 - #176 Precal r extraction des masses ajoutees
