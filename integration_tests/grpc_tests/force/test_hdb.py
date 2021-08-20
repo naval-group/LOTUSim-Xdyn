@@ -199,6 +199,11 @@ def check_froude_krylov_phase_psis(results):
     assert results['FKppsi2(TestShip)'] == '5.235988e-01'
     print("✓ Froude-Krylov phase incidence test passed!")
 
+def check_angular_frequencies(results):
+    assert results['omega0(TestShip)'] == '5.026548e-02'
+    assert results['omega1(TestShip)'] == '1.000507e-01'
+    assert results['omega2(TestShip)'] == '1.499567e-01'
+    print("✓ Angular frequencies test passed!")
 
 def check(results):
     """Make sure the results contain all necessary data."""
@@ -214,6 +219,7 @@ def check(results):
     check_froude_krylov_phase_periods(results)
     check_froude_krylov_module_psis(results)
     check_froude_krylov_phase_psis(results)
+    check_angular_frequencies(results)
 
 
 with open('hdb_output.csv', newline='') as csvfile:

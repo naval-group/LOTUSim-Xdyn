@@ -296,6 +296,7 @@ ResultsFromPotentialTheory* get_results_from_potential_theory(const std::shared_
         copy_from_double_vector(hydro_db_parser->get_froude_krylov_phase_periods(), pot->mutable_froude_krylov_phase_periods());
         copy_from_double_vector(hydro_db_parser->get_froude_krylov_module_psis(), pot->mutable_froude_krylov_module_psis());
         copy_from_double_vector(hydro_db_parser->get_froude_krylov_phase_psis(), pot->mutable_froude_krylov_phase_psis());
+        copy_from_double_vector(hydro_db_parser->get_angular_frequencies(), pot->mutable_angular_frequencies());
     }
     return pot;
 }
