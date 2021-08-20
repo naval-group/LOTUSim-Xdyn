@@ -16,8 +16,8 @@ LOGGER.setLevel(logging.INFO)
 
 
 
-class HarmonicOscillator(force.Model):
-    """Restoring force F proportional to the displacement x."""
+class HDBForceModel(force.Model):
+    """Outputs data from HDB in extra_observations."""
 
     def __init__(self, _, body_name, pot):
         """Initialize parameters from gRPC's set_parameters."""
@@ -61,4 +61,4 @@ class HarmonicOscillator(force.Model):
 
 
 if __name__ == '__main__':
-    force.serve(HarmonicOscillator)
+    force.serve(HDBForceModel)
