@@ -258,10 +258,7 @@ Array* to_grpc_array(const std::vector<std::vector<double> >& array)
         if (not(line.empty()))
         {
             Line* grpc_line = ret->add_line();
-            for (const auto element:line)
-            {
-                grpc_line->add_element(element);
-            }
+            copy_from_double_vector(line, grpc_line->mutable_element());
         }
     }
     return ret;
