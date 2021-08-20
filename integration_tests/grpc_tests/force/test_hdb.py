@@ -26,7 +26,6 @@ def check_added_mass_matrix(results):
 def check_diffraction_module_tables(results):
     """Verify the diffraction module tables."""
     # First line of [INCIDENCE_EFM_MOD_001]   0.000000
-    print(results['diffX(0 0)(TestShip)'])
     assert results['diffX(0 0)(TestShip)'] == '3.010048e+04'
     assert results['diffY(0 0)(TestShip)'] == '0.000000e+00'
     assert results['diffZ(0 0)(TestShip)'] == '3.715063e+05'
@@ -141,6 +140,23 @@ def check_diffraction_phase_psis(results):
     assert results['diffppsi1(TestShip)'] == '2.617994e-01'
     print("✓ Diffraction phase incidences test passed!")
 
+def check_froude_krylov_module_tables(results):
+    # First line of [INCIDENCE_FKFM_MOD_001]   0.000000
+    assert results['FKFMX(0 0)(TestShip)'] == '4.832189e+04'
+    assert results['FKFMY(0 0)(TestShip)'] == '0.000000e+00'
+    assert results['FKFMZ(0 0)(TestShip)'] == '2.475141e+05'
+    assert results['FKFMK(0 0)(TestShip)'] == '0.000000e+00'
+    assert results['FKFMM(0 0)(TestShip)'] == '2.139539e+07'
+    assert results['FKFMN(0 0)(TestShip)'] == '0.000000e+00'
+    # Second line of [INCIDENCE_FKFM_MOD_001]   0.000000
+    assert results['FKFMX(1 0)(TestShip)'] == '4.103861e+04'
+    assert results['FKFMY(1 0)(TestShip)'] == '0.000000e+00'
+    assert results['FKFMZ(1 0)(TestShip)'] == '3.251938e+05'
+    assert results['FKFMK(1 0)(TestShip)'] == '0.000000e+00'
+    assert results['FKFMM(1 0)(TestShip)'] == '1.861110e+07'
+    assert results['FKFMN(1 0)(TestShip)'] == '0.000000e+00'
+    print("✓ Froude-Krylov module tables test passed!")
+
 def check(results):
     """Make sure the results contain all necessary data."""
     check_added_mass_matrix(results)
@@ -150,6 +166,7 @@ def check(results):
     check_diffraction_phase_periods(results)
     check_diffraction_module_psis(results)
     check_diffraction_phase_psis(results)
+    check_froude_krylov_module_tables(results)
 
 
 with open('hdb_output.csv', newline='') as csvfile:
