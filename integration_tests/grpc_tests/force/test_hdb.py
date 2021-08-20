@@ -157,6 +157,24 @@ def check_froude_krylov_module_tables(results):
     assert results['FKFMN(1 0)(TestShip)'] == '0.000000e+00'
     print("✓ Froude-Krylov module tables test passed!")
 
+def check_froude_krylov_phase_tables(results):
+    # First line of [INCIDENCE_FKFM_PH_001]   0.000000
+    assert results['FKFMpX(0 0)(TestShip)'] == ''
+    assert results['FKFMpY(0 0)(TestShip)'] == ''
+    assert results['FKFMpZ(0 0)(TestShip)'] == ''
+    assert results['FKFMpK(0 0)(TestShip)'] == ''
+    assert results['FKFMpM(0 0)(TestShip)'] == ''
+    assert results['FKFMpN(0 0)(TestShip)'] == ''
+    # Second line of [INCIDENCE_FKFM_PH_001]   0.000000
+    assert results['FKFMpX(1 0)(TestShip)'] == ''
+    assert results['FKFMpY(1 0)(TestShip)'] == ''
+    assert results['FKFMpZ(1 0)(TestShip)'] == ''
+    assert results['FKFMpK(1 0)(TestShip)'] == ''
+    assert results['FKFMpM(1 0)(TestShip)'] == ''
+    assert results['FKFMpN(1 0)(TestShip)'] == ''
+    print("✓ Froude-Krylov phase tables test passed!")
+
+
 def check(results):
     """Make sure the results contain all necessary data."""
     check_added_mass_matrix(results)

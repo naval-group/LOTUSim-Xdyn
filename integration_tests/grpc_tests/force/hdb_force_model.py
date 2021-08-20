@@ -176,6 +176,19 @@ class HDBForceModel(force.Model):
         extra_observations['FKFMN(2,0)'] = self.pot.froude_krylov_module_tables.N[2][0]
         extra_observations['FKFMN(2,1)'] = self.pot.froude_krylov_module_tables.N[2][1]
 
+        extra_observations['FKFMpX(0,0)'] = self.pot.froude_krylov_phase_tables.X[0][0]
+        extra_observations['FKFMpY(0,0)'] = self.pot.froude_krylov_phase_tables.X[0][0]
+        extra_observations['FKFMpZ(0,0)'] = self.pot.froude_krylov_phase_tables.X[0][0]
+        extra_observations['FKFMpK(0,0)'] = self.pot.froude_krylov_phase_tables.X[0][0]
+        extra_observations['FKFMpM(0,0)'] = self.pot.froude_krylov_phase_tables.X[0][0]
+        extra_observations['FKFMpN(0,0)'] = self.pot.froude_krylov_phase_tables.X[0][0]
+
+        extra_observations['FKFMpX(1,0)'] = self.pot.froude_krylov_phase_tables.X[1][0]
+        extra_observations['FKFMpY(1,0)'] = self.pot.froude_krylov_phase_tables.X[1][0]
+        extra_observations['FKFMpZ(1,0)'] = self.pot.froude_krylov_phase_tables.X[1][0]
+        extra_observations['FKFMpK(1,0)'] = self.pot.froude_krylov_phase_tables.X[1][0]
+        extra_observations['FKFMpM(1,0)'] = self.pot.froude_krylov_phase_tables.X[1][0]
+        extra_observations['FKFMpN(1,0)'] = self.pot.froude_krylov_phase_tables.X[1][0]
 
         return {'Fx': 0,
                 'Fy': 0,

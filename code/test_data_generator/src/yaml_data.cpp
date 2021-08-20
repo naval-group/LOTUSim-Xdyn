@@ -4077,6 +4077,18 @@ std::string test_data::tutorial_13_hdb_force_model()
        + "     - 'FKFMN(1,1)(TestShip)'\n"
        + "     - 'FKFMN(2,0)(TestShip)'\n"
        + "     - 'FKFMN(2,1)(TestShip)'\n"
+       + "     - 'FKFMpX(0,0)(TestShip)'\n"
+       + "     - 'FKFMpY(0,0)(TestShip)'\n"
+       + "     - 'FKFMpZ(0,0)(TestShip)'\n"
+       + "     - 'FKFMpK(0,0)(TestShip)'\n"
+       + "     - 'FKFMpM(0,0)(TestShip)'\n"
+       + "     - 'FKFMpN(0,0)(TestShip)'\n"
+       + "     - 'FKFMpX(1,0)(TestShip)'\n"
+       + "     - 'FKFMpY(1,0)(TestShip)'\n"
+       + "     - 'FKFMpZ(1,0)(TestShip)'\n"
+       + "     - 'FKFMpK(1,0)(TestShip)'\n"
+       + "     - 'FKFMpM(1,0)(TestShip)'\n"
+       + "     - 'FKFMpN(1,0)(TestShip)'\n"
        ;
 }
 
