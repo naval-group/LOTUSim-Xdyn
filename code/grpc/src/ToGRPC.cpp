@@ -303,12 +303,12 @@ SetForceParameterRequest ToGRPC::from_yaml(const std::string& yaml, const std::s
     return request;
 }
 
-void ToGRPC::copy_from_double_vector(const std::vector<double>& origin, ::google::protobuf::RepeatedField< double >* destination) const
+void copy_from_double_vector(const std::vector<double>& origin, ::google::protobuf::RepeatedField< double >* destination)
 {
     *destination = {origin.begin(), origin.end()};
 }
 
-void ToGRPC::copy_from_string_vector(const std::vector<std::string>& origin, ::google::protobuf::RepeatedPtrField< std::string >* destination) const
+void copy_from_string_vector(const std::vector<std::string>& origin, ::google::protobuf::RepeatedPtrField< std::string >* destination)
 {
     *destination = {origin.begin(), origin.end()};
 }

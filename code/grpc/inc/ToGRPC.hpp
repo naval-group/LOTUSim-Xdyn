@@ -34,12 +34,11 @@ class ToGRPC
         SetForceParameterRequest from_yaml(const std::string& yaml, const std::string body_name, const std::string& instance_name, const std::shared_ptr<HydroDBParser>& hydro_db_parser) const;
 
     private:
-        void copy_from_double_vector(const std::vector<double>& origin, ::google::protobuf::RepeatedField< double >* destination) const;
-        void copy_from_string_vector(const std::vector<std::string>& origin, ::google::protobuf::RepeatedPtrField< std::string >* destination) const;
         GRPCForceModel::Input input;
         ToGRPC(); // Disabled
 };
 
-
+void copy_from_double_vector(const std::vector<double>& origin, ::google::protobuf::RepeatedField< double >* destination);
+void copy_from_string_vector(const std::vector<std::string>& origin, ::google::protobuf::RepeatedPtrField< std::string >* destination);
 
 #endif /* GRPC_INC_TOGRPC_HPP_ */
