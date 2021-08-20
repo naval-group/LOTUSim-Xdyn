@@ -220,6 +220,8 @@ def check(results):
     check_froude_krylov_module_psis(results)
     check_froude_krylov_phase_psis(results)
     check_angular_frequencies(results)
+    assert results['forwardSpeed(TestShip)'] == '0.000000e+00'
+    print("✓ Forward speed test passed!")
 
 
 with open('hdb_output.csv', newline='') as csvfile:

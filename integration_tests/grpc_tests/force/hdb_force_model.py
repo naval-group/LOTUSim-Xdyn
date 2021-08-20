@@ -211,6 +211,8 @@ class HDBForceModel(force.Model):
         extra_observations['omega1'] = self.pot.angular_frequencies[1]
         extra_observations['omega2'] = self.pot.angular_frequencies[2]
 
+        extra_observations['forwardSpeed'] = self.pot.forward_speed
+
         return {'Fx': 0,
                 'Fy': 0,
                 'Fz': 0,

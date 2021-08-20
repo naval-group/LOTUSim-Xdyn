@@ -4105,6 +4105,7 @@ std::string test_data::tutorial_13_hdb_force_model()
        + "     - 'omega0(TestShip)'\n"
        + "     - 'omega1(TestShip)'\n"
        + "     - 'omega2(TestShip)'\n"
+       + "     - 'forwardSpeed(TestShip)'\n"
        ;
 }
 
