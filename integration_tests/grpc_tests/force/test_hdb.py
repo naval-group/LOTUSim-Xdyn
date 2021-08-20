@@ -232,6 +232,18 @@ def check_added_mass_coeff(results):
     assert results['Ma552(TestShip)'] == '9.795376e+09'
     print("✓ Added mass coefficient test passed!")
 
+def check_radiation_damping_coeff(results):
+    assert results['Br_0_0_0(TestShip)']  == '1.670416e-02'
+    assert results['Br_0_0_46(TestShip)'] == '8.995314e+04'
+    assert results['Br_5_0_0(TestShip)']  == '-0.000000e+00'
+    assert results['Br_5_0_46(TestShip)'] == '-0.000000e+00'
+    assert results['Br_0_5_0(TestShip)']  == '-0.000000e+00'
+    assert results['Br_0_5_46(TestShip)'] == '-0.000000e+00'
+    assert results['Br_5_5_0(TestShip)']  == '2.736394e+00'
+    assert results['Br_5_5_46(TestShip)'] == '6.970750e+09'
+    print("✓ Radiation damping coefficient test passed!")
+
+
 def check(results):
     """Make sure the results contain all necessary data."""
     check_added_mass_matrix(results)
@@ -250,6 +262,7 @@ def check(results):
     assert results['forwardSpeed(TestShip)'] == '0.000000e+00'
     print("✓ Forward speed test passed!")
     check_added_mass_coeff(results)
+    check_radiation_damping_coeff(results)
 
 
 with open('hdb_output.csv', newline='') as csvfile:

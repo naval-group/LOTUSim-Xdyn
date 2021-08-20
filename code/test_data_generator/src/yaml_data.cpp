@@ -4124,6 +4124,14 @@ std::string test_data::tutorial_13_hdb_force_model()
        + "     - 'Ma550(TestShip)'\n"
        + "     - 'Ma551(TestShip)'\n"
        + "     - 'Ma552(TestShip)'\n"
+       + "     - 'Br_0_0_0(TestShip)'\n"
+       + "     - 'Br_0_0_46(TestShip)'\n"
+       + "     - 'Br_5_0_0(TestShip)'\n"
+       + "     - 'Br_5_0_46(TestShip)'\n"
+       + "     - 'Br_0_5_0(TestShip)'\n"
+       + "     - 'Br_0_5_46(TestShip)'\n"
+       + "     - 'Br_5_5_0(TestShip)'\n"
+       + "     - 'Br_5_5_46(TestShip)'\n"
        ;
 }
 

@@ -231,6 +231,15 @@ class HDBForceModel(force.Model):
         extra_observations['Ma550'] = self.pot.added_mass_coeff[5][5][0]
         extra_observations['Ma551'] = self.pot.added_mass_coeff[5][5][1]
         extra_observations['Ma552'] = self.pot.added_mass_coeff[5][5][2]
+       
+        extra_observations['Br_0_0_0']  = self.pot.radiation_damping_coeff[0][0][0]
+        extra_observations['Br_0_0_46'] = self.pot.radiation_damping_coeff[0][0][46]
+        extra_observations['Br_5_0_0']  = self.pot.radiation_damping_coeff[5][0][0]
+        extra_observations['Br_5_0_46'] = self.pot.radiation_damping_coeff[5][0][46]
+        extra_observations['Br_0_5_0']  = self.pot.radiation_damping_coeff[0][5][0]
+        extra_observations['Br_0_5_46'] = self.pot.radiation_damping_coeff[0][5][46]
+        extra_observations['Br_5_5_0']  = self.pot.radiation_damping_coeff[5][5][0]
+        extra_observations['Br_5_5_46'] = self.pot.radiation_damping_coeff[5][5][46]
 
         return {'Fx': 0,
                 'Fy': 0,
