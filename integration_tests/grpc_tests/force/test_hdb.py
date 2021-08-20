@@ -23,9 +23,57 @@ def check_added_mass_matrix(results):
     print("✓ Added mass matrix test passed!")
 
 
+def check_diffraction_module_tables(results):
+    """Verify the diffraction module tables."""
+    # First line of [INCIDENCE_EFM_MOD_001]   0.000000
+    assert results['diffX(0 0)(TestShip)'] == '5.084407e+04'
+    assert results['diffY(0 0)(TestShip)'] == '0.000000e+00'
+    assert results['diffZ(0 0)(TestShip)'] == '3.997774e+05'
+    assert results['diffK(0 0)(TestShip)'] == '0.000000e+00'
+    assert results['diffM(0 0)(TestShip)'] == '3.209051e+07'
+    assert results['diffN(0 0)(TestShip)'] == '0.000000e+00'
+    # Second line of [INCIDENCE_EFM_MOD_001]   0.000000
+    assert results['diffX(1 0)(TestShip)'] == '3.378373e+03'
+    assert results['diffY(1 0)(TestShip)'] == '0.000000e+00'
+    assert results['diffZ(1 0)(TestShip)'] == '3.282703e+05'
+    assert results['diffK(1 0)(TestShip)'] == '0.000000e+00'
+    assert results['diffM(1 0)(TestShip)'] == '2.267054e+06'
+    assert results['diffN(1 0)(TestShip)'] == '0.000000e+00'
+    # Third line of [INCIDENCE_EFM_MOD_001]   0.000000
+    assert results['diffX(2 0)(TestShip)'] == '9.472648e+02'
+    assert results['diffY(2 0)(TestShip)'] == '0.000000e+00'
+    assert results['diffZ(2 0)(TestShip)'] == '8.336677e+04'
+    assert results['diffK(2 0)(TestShip)'] == '0.000000e+00'
+    assert results['diffM(2 0)(TestShip)'] == '5.817311e+05'
+    assert results['diffN(2 0)(TestShip)'] == '0.000000e+00'
+    # First line of [INCIDENCE_EFM_MOD_001]   30.00000
+    assert results['diffX(0 1)(TestShip)'] == '8.567009e+04'
+    assert results['diffY(0 1)(TestShip)'] == '3.284304e+05'
+    assert results['diffZ(0 1)(TestShip)'] == '5.820626e+05'
+    assert results['diffK(0 1)(TestShip)'] == '1.460688e+06'
+    assert results['diffM(0 1)(TestShip)'] == '3.140660e+07'
+    assert results['diffN(0 1)(TestShip)'] == '2.301511e+07'
+    # Second line of [INCIDENCE_EFM_MOD_001]   30.00000
+    assert results['diffX(1 1)(TestShip)'] == '3.275670e+03'
+    assert results['diffY(1 1)(TestShip)'] == '3.409648e+04'
+    assert results['diffZ(1 1)(TestShip)'] == '3.283568e+05'
+    assert results['diffK(1 1)(TestShip)'] == '1.685674e+04'
+    assert results['diffM(1 1)(TestShip)'] == '2.255748e+06'
+    assert results['diffN(1 1)(TestShip)'] == '4.594584e+05'
+    # Third line of [INCIDENCE_EFM_MOD_001]   30.00000
+    assert results['diffX(2 1)(TestShip)'] == '9.067188e+02'
+    assert results['diffY(2 1)(TestShip)'] == '8.953133e+03'
+    assert results['diffZ(2 1)(TestShip)'] == '8.339660e+04'
+    assert results['diffK(2 1)(TestShip)'] == '4.420171e+03'
+    assert results['diffM(2 1)(TestShip)'] == '5.772251e+05'
+    assert results['diffN(2 1)(TestShip)'] == '1.199319e+05'
+    print("✓ Diffraction module table test passed!")
+
+
 def check(results):
     """Make sure the results contain all necessary data."""
     check_added_mass_matrix(results)
+    check_diffraction_module_tables(results)
 
 
 with open('hdb_output.csv', newline='') as csvfile:
