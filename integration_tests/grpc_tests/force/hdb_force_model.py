@@ -203,6 +203,9 @@ class HDBForceModel(force.Model):
         extra_observations['FKpsi1'] = self.pot.froude_krylov_module_psis[1]
         extra_observations['FKpsi2'] = self.pot.froude_krylov_module_psis[2]
 
+        extra_observations['FKppsi0'] = self.pot.froude_krylov_phase_psis[0]
+        extra_observations['FKppsi1'] = self.pot.froude_krylov_phase_psis[1]
+        extra_observations['FKppsi2'] = self.pot.froude_krylov_phase_psis[2]
         return {'Fx': 0,
                 'Fy': 0,
                 'Fz': 0,

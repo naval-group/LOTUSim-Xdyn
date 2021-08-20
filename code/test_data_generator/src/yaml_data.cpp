@@ -4099,6 +4099,9 @@ std::string test_data::tutorial_13_hdb_force_model()
        + "     - 'FKpsi0(TestShip)'\n"
        + "     - 'FKpsi1(TestShip)'\n"
        + "     - 'FKpsi2(TestShip)'\n"
+       + "     - 'FKppsi0(TestShip)'\n"
+       + "     - 'FKppsi1(TestShip)'\n"
+       + "     - 'FKppsi2(TestShip)'\n"
        ;
 }
 
