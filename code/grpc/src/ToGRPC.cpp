@@ -277,6 +277,49 @@ WrenchMatrices* to_WrenchMatrices(const std::array<std::vector<std::vector<doubl
     return ret;
 }
 
+FrequencyMatrix* get_added_mass_coeff_matrix(const std::shared_ptr<HydroDBParser>& hydro_db_parser);
+FrequencyMatrix* get_added_mass_coeff_matrix(const std::shared_ptr<HydroDBParser>& hydro_db_parser)
+{
+    FrequencyMatrix* ret = new FrequencyMatrix();
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(0,0), ret->mutable_ma_11());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(0,1), ret->mutable_ma_12());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(0,2), ret->mutable_ma_13());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(0,3), ret->mutable_ma_14());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(0,4), ret->mutable_ma_15());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(0,5), ret->mutable_ma_16());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(1,0), ret->mutable_ma_21());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(1,1), ret->mutable_ma_22());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(1,2), ret->mutable_ma_23());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(1,3), ret->mutable_ma_24());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(1,4), ret->mutable_ma_25());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(1,5), ret->mutable_ma_26());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(2,0), ret->mutable_ma_31());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(2,1), ret->mutable_ma_32());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(2,2), ret->mutable_ma_33());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(2,3), ret->mutable_ma_34());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(2,4), ret->mutable_ma_35());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(2,5), ret->mutable_ma_36());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(3,0), ret->mutable_ma_41());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(3,1), ret->mutable_ma_42());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(3,2), ret->mutable_ma_43());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(3,3), ret->mutable_ma_44());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(3,4), ret->mutable_ma_45());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(3,5), ret->mutable_ma_46());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(4,0), ret->mutable_ma_51());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(4,1), ret->mutable_ma_52());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(4,2), ret->mutable_ma_53());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(4,3), ret->mutable_ma_54());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(4,4), ret->mutable_ma_55());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(4,5), ret->mutable_ma_56());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(5,0), ret->mutable_ma_61());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(5,1), ret->mutable_ma_62());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(5,2), ret->mutable_ma_63());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(5,3), ret->mutable_ma_64());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(5,4), ret->mutable_ma_65());
+    copy_from_double_vector(hydro_db_parser->get_added_mass_coeff(5,5), ret->mutable_ma_66());
+    return ret;
+}
+
 ResultsFromPotentialTheory* get_results_from_potential_theory(const std::shared_ptr<HydroDBParser>& hydro_db_parser);
 ResultsFromPotentialTheory* get_results_from_potential_theory(const std::shared_ptr<HydroDBParser>& hydro_db_parser)
 {
@@ -298,6 +341,7 @@ ResultsFromPotentialTheory* get_results_from_potential_theory(const std::shared_
         copy_from_double_vector(hydro_db_parser->get_froude_krylov_phase_psis(), pot->mutable_froude_krylov_phase_psis());
         copy_from_double_vector(hydro_db_parser->get_angular_frequencies(), pot->mutable_angular_frequencies());
         pot->set_forward_speed(hydro_db_parser->get_forward_speed());
+        pot->set_allocated_added_mass_coeff(get_added_mass_coeff_matrix(hydro_db_parser));
     }
     return pot;
 }

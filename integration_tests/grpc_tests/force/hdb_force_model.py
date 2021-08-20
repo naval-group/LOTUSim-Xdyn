@@ -213,6 +213,25 @@ class HDBForceModel(force.Model):
 
         extra_observations['forwardSpeed'] = self.pot.forward_speed
 
+        extra_observations['Ma000'] = self.pot.added_mass_coeff[0][0][0]
+        extra_observations['Ma001'] = self.pot.added_mass_coeff[0][0][1]
+        extra_observations['Ma002'] = self.pot.added_mass_coeff[0][0][2]
+        extra_observations['Ma110'] = self.pot.added_mass_coeff[1][1][0]
+        extra_observations['Ma111'] = self.pot.added_mass_coeff[1][1][1]
+        extra_observations['Ma112'] = self.pot.added_mass_coeff[1][1][2]
+        extra_observations['Ma220'] = self.pot.added_mass_coeff[2][2][0]
+        extra_observations['Ma221'] = self.pot.added_mass_coeff[2][2][1]
+        extra_observations['Ma222'] = self.pot.added_mass_coeff[2][2][2]
+        extra_observations['Ma330'] = self.pot.added_mass_coeff[3][3][0]
+        extra_observations['Ma331'] = self.pot.added_mass_coeff[3][3][1]
+        extra_observations['Ma332'] = self.pot.added_mass_coeff[3][3][2]
+        extra_observations['Ma440'] = self.pot.added_mass_coeff[4][4][0]
+        extra_observations['Ma441'] = self.pot.added_mass_coeff[4][4][1]
+        extra_observations['Ma442'] = self.pot.added_mass_coeff[4][4][2]
+        extra_observations['Ma550'] = self.pot.added_mass_coeff[5][5][0]
+        extra_observations['Ma551'] = self.pot.added_mass_coeff[5][5][1]
+        extra_observations['Ma552'] = self.pot.added_mass_coeff[5][5][2]
+
         return {'Fx': 0,
                 'Fy': 0,
                 'Fz': 0,

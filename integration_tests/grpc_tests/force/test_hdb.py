@@ -205,6 +205,33 @@ def check_angular_frequencies(results):
     assert results['omega2(TestShip)'] == '1.499567e-01'
     print("✓ Angular frequencies test passed!")
 
+def check_added_mass_coeff(results):
+    # First column of ADDED_MASS_LINE_1 
+    assert results['Ma000(TestShip)'] == '2.311887e+05'
+    assert results['Ma001(TestShip)'] == '2.334768e+05'
+    assert results['Ma002(TestShip)'] == '2.375058e+05'
+    # Second column of ADDED_MASS_LINE_2 
+    assert results['Ma110(TestShip)'] == '7.109483e+06'
+    assert results['Ma111(TestShip)'] == '7.143786e+06'
+    assert results['Ma112(TestShip)'] == '7.214230e+06'
+    # Third column of ADDED_MASS_LINE_3 
+    assert results['Ma220(TestShip)'] == '3.313060e+07'
+    assert results['Ma221(TestShip)'] == '3.419406e+07'
+    assert results['Ma222(TestShip)'] == '3.487423e+07'
+    # Fourth column of ADDED_MASS_LINE_4 
+    assert results['Ma330(TestShip)'] == '7.217430e+07'
+    assert results['Ma331(TestShip)'] == '7.245468e+07'
+    assert results['Ma332(TestShip)'] == '7.298803e+07'
+    # Fifth column of ADDED_MASS_LINE_5 
+    assert results['Ma440(TestShip)'] == '2.286834e+10'
+    assert results['Ma441(TestShip)'] == '2.309700e+10'
+    assert results['Ma442(TestShip)'] == '2.347057e+10'
+    # Sixth column of ADDED_MASS_LINE_6 
+    assert results['Ma550(TestShip)'] == '9.666651e+09'
+    assert results['Ma551(TestShip)'] == '9.702429e+09'
+    assert results['Ma552(TestShip)'] == '9.795376e+09'
+    print("✓ Added mass coefficient test passed!")
+
 def check(results):
     """Make sure the results contain all necessary data."""
     check_added_mass_matrix(results)
@@ -222,6 +249,7 @@ def check(results):
     check_angular_frequencies(results)
     assert results['forwardSpeed(TestShip)'] == '0.000000e+00'
     print("✓ Forward speed test passed!")
+    check_added_mass_coeff(results)
 
 
 with open('hdb_output.csv', newline='') as csvfile:
