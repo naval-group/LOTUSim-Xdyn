@@ -4092,6 +4092,10 @@ std::string test_data::tutorial_13_hdb_force_model()
        + "     - 'FKT0(TestShip)'\n"
        + "     - 'FKT1(TestShip)'\n"
        + "     - 'FKT2(TestShip)'\n"
+       + "     - 'FKTp0(TestShip)'\n"
+       + "     - 'FKTp1(TestShip)'\n"
+       + "     - 'FKTp2(TestShip)'\n"
+       + "     - 'FKTp46(TestShip)'\n"
        ;
 }
 
