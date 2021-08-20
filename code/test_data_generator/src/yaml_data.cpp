@@ -3936,7 +3936,7 @@ std::string test_data::tutorial_13_hdb_force_model()
        + "      - model: grpc\n"
        + "        name: hdb force model\n"
        + "        url: force-model:9002\n"
-       + "        hdb: test_ship.hdb\n"
+       + "        hdb: big.hdb\n"
        + "output:\n"
        + "   - format: csv\n"
        + "     filename: hdb_output.csv\n"
