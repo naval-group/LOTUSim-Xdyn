@@ -4031,6 +4031,9 @@ std::string test_data::tutorial_13_hdb_force_model()
        + "     - 'diffpN(1,1)(TestShip)'\n"
        + "     - 'diffpN(2,0)(TestShip)'\n"
        + "     - 'diffpN(2,1)(TestShip)'\n"
+       + "     - 'diffT0(TestShip)'\n"
+       + "     - 'diffT1(TestShip)'\n"
+       + "     - 'diffT2(TestShip)'\n"
        ;
 }
 

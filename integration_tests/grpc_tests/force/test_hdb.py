@@ -117,12 +117,19 @@ def check_diffraction_phase_tables(results):
     print("✓ Diffraction phase table test passed!")
 
 
+def check_diffraction_module_periods(results):
+    assert results['diffT0(TestShip)'] == '4.000000e+00'
+    assert results['diffT1(TestShip)'] == '6.400000e+01'
+    assert results['diffT2(TestShip)'] == '1.250000e+02'
+    print("✓ Diffraction module periods test passed!")
+
 
 def check(results):
     """Make sure the results contain all necessary data."""
     check_added_mass_matrix(results)
     check_diffraction_module_tables(results)
     check_diffraction_phase_tables(results)
+    check_diffraction_module_periods(results)
 
 
 with open('hdb_output.csv', newline='') as csvfile:

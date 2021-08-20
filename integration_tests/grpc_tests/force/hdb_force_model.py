@@ -125,6 +125,10 @@ class HDBForceModel(force.Model):
         extra_observations['diffpN(2,0)'] = self.pot.diffraction_phase_tables.N[2][0]
         extra_observations['diffpN(2,1)'] = self.pot.diffraction_phase_tables.N[2][1]
 
+        extra_observations['diffT0'] = self.pot.diffraction_module_periods[0]
+        extra_observations['diffT1'] = self.pot.diffraction_module_periods[1]
+        extra_observations['diffT2'] = self.pot.diffraction_module_periods[2]
+
         return {'Fx': 0,
                 'Fy': 0,
                 'Fz': 0,
