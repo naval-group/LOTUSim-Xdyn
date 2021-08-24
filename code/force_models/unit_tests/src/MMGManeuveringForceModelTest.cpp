@@ -2,7 +2,7 @@
 
 #include "MMGManeuveringForceModelTest.hpp"
 
-MMGManeuveringForceModelTest::MMGManeuveringForceModelTest() : a(ssc::random_data_generator::DataGenerator(167238))
+MMGManeuveringForceModelTest::MMGManeuveringForceModelTest()
 {
 }
 
