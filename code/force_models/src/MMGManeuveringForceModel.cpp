@@ -91,19 +91,19 @@ MMGManeuveringForceModel::Input MMGManeuveringForceModel::parse(const std::strin
 Wrench MMGManeuveringForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
 {
     ssc::kinematics::Vector6d tau = ssc::kinematics::Vector6d::Zero();
-    double v = states.v();
-    double r = states.r();
-    double xG = states.G.v(0) - env.k->get(body_name, name).get_point().v(0); // The point in the transform is always P in body frame as per the input
-    double vm = v - xG*r;
-    double U = sqrt(pow(states.u(),2)+pow(vm,2));
+    const double v = states.v();
+    const double r = states.r();
+    const double xG = states.G.v(0) - env.k->get(body_name, name).get_point().v(0); // The point in the transform is always P in body frame as per the input
+    const double vm = v - xG*r;
+    const double U = sqrt(pow(states.u(),2)+pow(vm,2));
     if (U!=0)
     {
-        double u_ = states.u()/U;
-        double vm_ = vm/U;
-        double r_ = r*Lpp/U;
-        double X = Xvv*vm_*vm_ + Xrr*r_*r_ + Xvr*vm_*r_ + Xvvvv*vm_*vm_*vm_*vm_;
-        double Y = Yv*vm_ + Yr*r_ + Yvvv*vm_*vm_*vm_ + Yvrr*vm_*r_*r_  + Yrrr*r_*r_*r_ + Yrvv*r_*vm_*vm_;
-        double N = Nv*vm_ + Nr*r_ + Nvvv*vm_*vm_*vm_ + Nvrr*vm_*r_*r_  + Nrrr*r_*r_*r_ + Nrvv*r_*vm_*vm_;
+        const double u_ = states.u()/U;
+        const double vm_ = vm/U;
+        const double r_ = r*Lpp/U;
+        const double X = Xvv*vm_*vm_ + Xrr*r_*r_ + Xvr*vm_*r_ + Xvvvv*vm_*vm_*vm_*vm_;
+        const double Y = Yv*vm_ + Yr*r_ + Yvvv*vm_*vm_*vm_ + Yvrr*vm_*r_*r_  + Yrrr*r_*r_*r_ + Yrvv*r_*vm_*vm_;
+        const double N = Nv*vm_ + Nr*r_ + Nvvv*vm_*vm_*vm_ + Nvrr*vm_*r_*r_  + Nrrr*r_*r_*r_ + Nrvv*r_*vm_*vm_;
         tau(0) = 0.5*env.rho*pow(U,2)*Lpp*T*X;
         tau(1) = 0.5*env.rho*pow(U,2)*Lpp*T*Y;
         tau(5) = 0.5*env.rho*pow(U,2)*Lpp*Lpp*T*N;
