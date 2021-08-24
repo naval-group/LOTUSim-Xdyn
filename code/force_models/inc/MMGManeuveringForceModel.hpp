@@ -39,25 +39,7 @@ public:
     static std::string model_name();
 
 private:
-    double Lpp;
-    double T;
-    double Xvv;
-    double Xrr;
-    double Xvr;
-    double Xvvvv;
-    double Yv;
-    double Yr;
-    double Yvvv;
-    double Yrvv;
-    double Yvrr;
-    double Yrrr;
-    double Nv;
-    double Nr;
-    double Nvvv;
-    double Nrvv;
-    double Nvrr;
-    double Nrrr;
-
+    Input input;
 };
 
 #endif /* FORCE_MODELS_INC_MMGMANOEUVRINGFORCEMODEL_HPP_ */
