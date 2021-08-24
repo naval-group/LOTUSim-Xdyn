@@ -78,7 +78,7 @@ Wrench MMGManeuveringForceModel::get_force(const BodyStates& states, const doubl
     const double r = states.r();
     const double xG = states.G.v(0) - env.k->get(body_name, name).get_point().v(0); // The point in the transform is always P in body frame as per the input
     const double vm = v - xG*r;
-    const double U = sqrt(pow(states.u(),2)+pow(vm,2));
+    const double U = hypot(states.u(), vm);
     if (U!=0)
     {
         const double u_ = states.u()/U;
