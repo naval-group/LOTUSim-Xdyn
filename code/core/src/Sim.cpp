@@ -182,12 +182,8 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const BodyP
 void Sim::initialize_system_outputs_before_first_observation()
 {
     StateType dxdt(13);
-    double t;
-    if (pimpl->bodies.empty())
-    {
-        t = 0;
-    }
-    else
+    double t = 0;
+    if (not(pimpl->bodies.empty()))
     {
         t = pimpl->bodies.at(0)->get_states().u.get_current_time();
     }
