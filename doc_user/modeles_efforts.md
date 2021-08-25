@@ -2591,7 +2591,7 @@ Pour utiliser un fichier PRECAL_R on écrirait :
 ```yaml
 external forces:
   - model: grpc
-    name: hdb force model
+    name: precal force model
     url: force-model:9002
     precal: test_ship.ini
 ```
