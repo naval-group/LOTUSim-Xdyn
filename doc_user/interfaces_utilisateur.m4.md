@@ -173,8 +173,9 @@ du YAML d'xdyn et peuvent donc être incluses dans les fichiers de sortie.
 
 Les modèles définissant des observations supplémentaires sont :
 
-- Modèle d'effort `GM`: fournit GM, GZ
-- `hydrodynamic polar`: fournit 
+- Modèle d'effort hydrostatique : fournit `Bx`, `By`, `Bz`.
+- Modèle d'effort `GM` : fournit `GM`, `GZ`.
+- Modèle d'effort `hydrodynamic polar` : fournit `alpha`, `U`.
 - Modèles gRPC : peuvent définir des observations externes
 
 Un modèle gRPC externe Python déclarant la méthode `force` suivante :
