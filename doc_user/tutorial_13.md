@@ -23,7 +23,7 @@ Le fichier complet est:
 print_yaml(yaml_data)
 ```
 
-xdyn ne garantie pas que les fichiers HDB ou PRECAL_R utilisés dans le
+xdyn ne garantit pas que les fichiers HDB ou PRECAL_R utilisés dans le
 YAML sont cohérents : il est tout à fait possible d'utiliser des fichiers
 différents pour les efforts internes et pour les efforts externes.
 
