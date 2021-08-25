@@ -2598,7 +2598,7 @@ external forces:
 
 Le fichier HDB ou PRECAL_R est alors lu par xdyn et son contenu est envoyé au
 modèle d'effort (valeur de retour de la méthode `set_parameters`). Si l'on
-utilise le framework Python du dépôt [`interfaces`](), ces résultats sont
+utilise le framework Python du dépôt [`interfaces`](https://gitlab.com/sirehna_naval_group/sirehna/interfaces/-/blob/1795c55006d11ec46bf25a8cac410be00698a8ba/forces/force.py#L44), ces résultats sont
 stockés dans le troisième argument du constructeur :
 
 ```
