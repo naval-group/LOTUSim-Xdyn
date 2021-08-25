@@ -2611,7 +2611,7 @@ class HDBForceModel(force.Model):
         self.results_from_potential_theory = results_from_potential_theory
 ```
 
-On peut en suite accéder aux champs suivants :
+On peut ensuite accéder aux champs suivants :
 
 Champs    | Description              | Clef HDB | Clef PRECAL_R |
 --------- | ------------------------ | -------- | ------------- |
