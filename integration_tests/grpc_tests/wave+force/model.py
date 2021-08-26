@@ -17,7 +17,7 @@ LOGGER.setLevel(logging.INFO)
 class Model(force.Model):
     """
     """
-    def __init__(self, _, body_name):
+    def __init__(self, _, body_name, __):
         self.body_name = body_name
 
     def get_parameters(self):
