@@ -63,6 +63,7 @@ std::string dump(const std::string& yaml, const int problematic_line)
 void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f, const bool dump_yaml, const std::string& yaml_dump)
 {
     int problematic_line = 0;
+    status = Status::OK;
     try
     {
         f();
