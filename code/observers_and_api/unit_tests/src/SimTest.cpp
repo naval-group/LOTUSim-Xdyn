@@ -431,7 +431,7 @@ TEST_F(SimTest, LONG_bug_2714_station_keeping)
     ASSERT_EQ(2, res.size());
 }
 
-TEST_F(SimTest, LONG_bug_2732)
+TEST_F(SimTest, DISABLED_LONG_bug_2732)
 {
     const auto yaml = test_data::bug_2732();
     ListOfObservers observer(parse_output(yaml));

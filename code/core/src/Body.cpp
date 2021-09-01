@@ -61,7 +61,7 @@ ssc::kinematics::Transform Body::get_transform_from_ned_to_local_ned(const State
     return ssc::kinematics::Transform(get_origin(x), std::string("NED(") + states.name + ")");
 }
 
-void Body::update_kinematics(StateType x, const ssc::kinematics::KinematicsPtr& k) const
+void Body::update_kinematics(const StateType& x, const ssc::kinematics::KinematicsPtr& k) const
 {
     k->add(get_transform_from_ned_to_body(x));
     k->add(get_transform_from_ned_to_local_ned(x));
@@ -123,6 +123,17 @@ void Body::update(const EnvironmentAndFrames& env, const StateType& x, const dou
     update_kinematics(x,env.k);
     update_body_states(x, t);
     update_intersection_with_free_surface(env, t);
+    update_projection_of_z_in_mesh_frame(env.g, env.k);
+}
+
+void Body::set_history(const EnvironmentAndFrames& env, const State& states)
+{
+    set_states_history(states);
+    if (not(states.x.is_empty()))
+    {
+        update_kinematics(states.get_StateType(states.x.size()-1), env.k);
+        update_intersection_with_free_surface(env, states.x.get_current_time());
+    }
     update_projection_of_z_in_mesh_frame(env.g, env.k);
 }
 
