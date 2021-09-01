@@ -23,7 +23,6 @@ Wrench SurfaceForceModel::get_force(const BodyStates& states, const double t, co
 {
     zg_calculator->update_transform(env.k->get("NED", states.name));
     Wrench F(states.G, body_name);
-    const double orientation_factor = states.intersector->mesh->orientation_factor;
 
     const auto b = begin(states.intersector);
     const auto e = end(states.intersector);
@@ -41,12 +40,12 @@ Wrench SurfaceForceModel::get_force(const BodyStates& states, const double t, co
         const double x = (f.C(0)-states.G.v(0));
         const double y = (f.C(1)-states.G.v(1));
         const double z = (f.C(2)-states.G.v(2));
-        F.X() += orientation_factor*f.dF(0);
-        F.Y() += orientation_factor*f.dF(1);
-        F.Z() += orientation_factor*f.dF(2);
-        F.K() += orientation_factor*(y*f.dF(2)-z*f.dF(1));
-        F.M() += orientation_factor*(z*f.dF(0)-x*f.dF(2));
-        F.N() += orientation_factor*(x*f.dF(1)-y*f.dF(0));
+        F.X() += f.dF(0);
+        F.Y() += f.dF(1);
+        F.Z() += f.dF(2);
+        F.K() += (y*f.dF(2)-z*f.dF(1));
+        F.M() += (z*f.dF(0)-x*f.dF(2));
+        F.N() += (x*f.dF(1)-y*f.dF(0));
         ++facet_index;
     }
     return F;
