@@ -165,7 +165,48 @@ output:
      data: [t, y(TestShip), 'theta(TestShip)']
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+### Observations supplémentaires des modèles d'effort
 
+Lorsqu'un modèle d'effort déclare des observations supplémentaires
+(`extra_observations`), celles-ci sont accessibles depuis la section `output`
+du YAML d'xdyn et peuvent donc être incluses dans les fichiers de sortie.
+
+Les modèles définissant des observations supplémentaires sont :
+
+- Modèle d'effort hydrostatique : fournit `Bx`, `By`, `Bz`.
+- Modèle d'effort `GM` : fournit `GM`, `GZ`.
+- Modèle d'effort `hydrodynamic polar` : fournit `alpha`, `U`.
+- Modèles gRPC : peuvent définir des observations externes
+
+Un modèle gRPC externe Python déclarant la méthode `force` suivante :
+
+```python
+def force(self, states, commands, __):
+    """Force model."""
+    return {'Fx': 0, 
+            'Fy': 0,
+            'Fz': 0,
+            'Mx': 0,
+            'My': 0,
+            'Mz': 0,
+            'extra_observations': {'k': 2, 'harmonic_oscillator_time': states.t[0]}}
+```
+
+rendra `harmonic_oscillator_time` disponible.
+
+On peut ensuite accéder à ces sorties supplémentaires de la façon suivante :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+output:
+   - format: tsv
+     filename: exemple.tsv
+     data:
+        - 'harmonic_oscillator_time(TestShip)'
+        - 'alpha(centreboard,TestShip)'
+        - 'U(centreboard,TestShip)'
+        - 'GM(TestShip)'
+        - 'GZ(TestShip)'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Efforts
 

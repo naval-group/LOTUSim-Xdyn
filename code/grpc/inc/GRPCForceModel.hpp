@@ -21,6 +21,8 @@ class GRPCForceModel : public ForceModel
             std::string url;
             std::string name;
             std::string yaml;
+            std::string hdb_filename;
+            std::string precal_filename;
         };
         GRPCForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env);
         Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const;

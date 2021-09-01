@@ -34,16 +34,6 @@ std::string AbstractRaoForceModel::get_model_name(const YamlRAO::TypeOfRao& type
     return "";
 }
 
-std::shared_ptr<HydroDBParser> parser_factory(const std::string& hdb_filename, const std::string& precal_filename);
-std::shared_ptr<HydroDBParser> parser_factory(const std::string& hdb_filename, const std::string& precal_filename)
-{
-    if (hdb_filename.empty())
-    {
-        return std::shared_ptr<HydroDBParser>(new PrecalParser(PrecalParser::from_file(precal_filename)));
-    }
-    return std::shared_ptr<HydroDBParser>(new HDBParser(HDBParser::from_file(hdb_filename)));
-}
-
 RaoInterpolator rao_interpolator_factory(const YamlRAO& yaml_rao);
 RaoInterpolator rao_interpolator_factory(const YamlRAO& yaml_rao)
 {

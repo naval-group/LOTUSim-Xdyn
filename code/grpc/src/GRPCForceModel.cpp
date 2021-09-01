@@ -22,6 +22,7 @@
 #include "GRPCTypes.hpp"
 #include "ToGRPC.hpp"
 #include "FromGRPC.hpp"
+#include "HydroDBParser.hpp"
 
 template <> std::string get_type_of_service<GRPCForceModel>()
 {
@@ -32,7 +33,8 @@ class GRPCForceModel::Impl
 {
     public:
         Impl(const GRPCForceModel::Input& input_, const std::vector<std::string>& rotation_convention_, const std::string& body_name)
-            : input(input_)
+            : hydro_db_parser(parser_factory(input_.hdb_filename, input_.precal_filename))
+            , input(input_)
             , stub(Force::NewStub(grpc::CreateChannel(input.url, grpc::InsecureChannelCredentials())))
             , extra_observations()
             , max_history_length()
@@ -55,7 +57,7 @@ class GRPCForceModel::Impl
         {
             SetForceParameterResponse response;
             grpc::ClientContext context;
-            const grpc::Status status = stub->set_parameters(&context, to_grpc.from_yaml(yaml, body_name, instance_name), &response);
+            const grpc::Status status = stub->set_parameters(&context, to_grpc.from_yaml(yaml, body_name, instance_name, hydro_db_parser), &response);
             throw_if_invalid_status<Input,GRPCForceModel>(input, "set_parameters", status);
             needs_wave_outputs = response.needs_wave_outputs();
             max_history_length = response.max_history_length();
@@ -112,6 +114,8 @@ class GRPCForceModel::Impl
             return force_frame;
         }
 
+        std::shared_ptr<HydroDBParser> hydro_db_parser;
+
     private:
         Impl(); // Disabled
         WaveInformation* get_wave_information(const double t, const double x, const double y, const double z, const EnvironmentAndFrames& env) const
@@ -147,6 +151,20 @@ GRPCForceModel::Input GRPCForceModel::parse(const std::string& yaml)
     GRPCForceModel::Input ret;
     node["url"] >> ret.url;
     node["name"] >> ret.name;
+    if (node.FindValue("hdb"))
+    {
+        if (node.FindValue("precal"))
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                  "When parsing the gRPC force model '" << ret.name << "': you cannot specify both an HDB filename and a PRECAL_R filename "
+                  "(both keys 'hdb' and 'precal' were found in the YAML file).");
+        }
+        node["hdb"] >> ret.hdb_filename;
+    }
+    if (node.FindValue("precal"))
+    {
+        node["precal"] >> ret.precal_filename;
+    }
     YAML::Emitter out;
     out << node;
     ret.yaml = out.c_str();

@@ -18,6 +18,10 @@
 
 #include "GRPCForceModel.hpp"
 
+#include <ssc/macros.hpp>
+#include TR1INC(memory)
+
+class HydroDBParser;
 class ToGRPC
 {
     public:
@@ -27,15 +31,14 @@ class ToGRPC
         WaveInformation* from_wave_information(const WaveRequest& wave_request, const double t, const EnvironmentAndFrames& env) const;
         States* from_state(const BodyStates& state, const double max_history_length, const EnvironmentAndFrames& env) const;
         ForceRequest from_force_request(States* states, const std::map<std::string, double >& commands, WaveInformation* wave_information, const std::string& instance_name) const;
-        SetForceParameterRequest from_yaml(const std::string& yaml, const std::string body_name, const std::string& instance_name) const;
+        SetForceParameterRequest from_yaml(const std::string& yaml, const std::string body_name, const std::string& instance_name, const std::shared_ptr<HydroDBParser>& hydro_db_parser) const;
 
     private:
-        void copy_from_double_vector(const std::vector<double>& origin, ::google::protobuf::RepeatedField< double >* destination) const;
-        void copy_from_string_vector(const std::vector<std::string>& origin, ::google::protobuf::RepeatedPtrField< std::string >* destination) const;
         GRPCForceModel::Input input;
         ToGRPC(); // Disabled
 };
 
-
+void copy_from_double_vector(const std::vector<double>& origin, ::google::protobuf::RepeatedField< double >* destination);
+void copy_from_string_vector(const std::vector<std::string>& origin, ::google::protobuf::RepeatedPtrField< std::string >* destination);
 
 #endif /* GRPC_INC_TOGRPC_HPP_ */

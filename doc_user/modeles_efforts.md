@@ -2547,6 +2547,7 @@ Dans la section `external forces`, on ajoute une section de la forme suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: grpc
+  name: some name
   url: http://localhost:50001
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -2572,6 +2573,71 @@ message ForceResponse
 }
 ```
 
+### Accès aux résultats des codes potentiels
+
+Il est possible de donner accès aux résultats des codes potentiels (HDB our PRECAL_R) à un modèle d'effort distant.
+Pour ce faire, il faut mettre une clef `hdb` (ou `precal`) dans le section définissant ce modèle. Par exemple :
+
+```yaml
+external forces:
+  - model: grpc
+    name: hdb force model
+    url: force-model:9002
+    hdb: test_ship.hdb
+```
+
+Pour utiliser un fichier PRECAL_R on écrirait :
+
+```yaml
+external forces:
+  - model: grpc
+    name: precal force model
+    url: force-model:9002
+    precal: test_ship.ini
+```
+
+Le fichier HDB ou PRECAL_R est alors lu par xdyn et son contenu est envoyé au
+modèle d'effort (valeur de retour de la méthode `set_parameters`). Si l'on
+utilise le framework Python du dépôt [`interfaces`](https://gitlab.com/sirehna_naval_group/sirehna/interfaces/-/blob/1795c55006d11ec46bf25a8cac410be00698a8ba/forces/force.py#L44), ces résultats sont
+stockés dans le troisième argument du constructeur :
+
+```
+class HDBForceModel(force.Model):
+    """Outputs data from HDB in extra_observations."""
+
+    def __init__(self, _, body_name, results_from_potential_theory):
+        """Initialize parameters from gRPC's set_parameters."""
+        self.body_name = body_name
+        self.results_from_potential_theory = results_from_potential_theory
+```
+
+On peut ensuite accéder aux champs suivants :
+
+Champs    | Description              | Clef HDB | Clef PRECAL_R |
+--------- | ------------------------ | -------- | ------------- |
+`Ma`      | Matrice de masse ajoutée à fréquence infinie | `[Added_mass_Radiation_Damping]/[ADDED_MASS_LINE_i]` (uniquement la première ligne, à période minimale) | `added_mass_damping_matrix_inf_freq/total_added_mass_matrix_inf_freq_U1_mu1`
+`diffraction_module_tables` | Module des efforts de diffraction, par pulsation omega et par incidence psi (M[omega][psi]) | `[DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_MOD_i]` | Colonne de gauche des signaux `F_dif_mi` où i désigne le degré de liberté, de 1 à 6
+`diffraction_phase_tables` | Phase des efforts de diffraction, par pulsation omega et par incidence psi (M[omega][psi]) | `[DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_PH_i]` | Colonne de droite des signaux `F_dif_mi` où i désigne le degré de liberté, de 1 à 6
+`diffraction_module_periods` | Périodes auxquelles sont définis les modules des efforts de diffraction | Première colonne de `[DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_MOD_i]` | `Dimensions/WAVE FREQUENCIES/waveFreq`
+`diffraction_phase_periods` | Périodes auxquelles sont définies les phases des efforts de diffraction | Première colonne de `[DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_PH_i]` | `Dimensions/WAVE FREQUENCIES/waveFreq`
+`diffraction_module_psis` | Incidences auxquelles sont définis les modules des efforts de diffraction | `[DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_MOD_i]` | `Dimensions/WAVE DIRECTIONS/waveDir`
+`diffraction_phase_psis` | Incidences auxquelles sont définies les phases des efforts de diffraction | `[DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_PH_i]` | `Dimensions/WAVE DIRECTIONS/waveDir`
+`froude_krylov_module_tables` | Module des efforts de Froude-Krylov, par pulsation omega et par incidence psi (M[omega][psi]) | `[FROUDE-KRYLOV_FORCES_AND_MOMENTS]/[INCIDENCE_FKFM_MOD_i]` | Colonne de gauche des signaux `F_inc_mi` où i désigne le degré de liberté, de 1 à 6
+`froude_krylov_phase_tables` | Phase des efforts de Froude-Krylov, , par pulsation omega et par incidence psi (M[omega][psi]) | `[FROUDE-KRYLOV_FORCES_AND_MOMENTS]/[INCIDENCE_FKFM_PH_i]` | Colonne de droite des signaux `F_inc_mi` où i désigne le degré de liberté, de 1 à 6
+`froude_krylov_module_periods` | Périodes auxquelles sont définis les modules des efforts de Froude-Krylov | Première colonne de chaque ligne de `[FROUDE-KRYLOV_FORCES_AND_MOMENTS]/[INCIDENCE_FKFM_MOD_i]` | `Dimensions/WAVE FREQUENCIES/waveFreq`
+`froude_krylov_phase_periods` | Périodes auxquelles sont définies les phases des efforts de Froude-Krylov | Première colonne de chaque ligne de `[FROUDE-KRYLOV_FORCES_AND_MOMENTS]/[INCIDENCE_FKFM_PH_i]` | `Dimensions/WAVE FREQUENCIES/waveFreq`
+`froude_krylov_module_psis` | Incidences auxquelles sont définis les modules des efforts de Froude-Krylov | `[FROUDE-KRYLOV_FORCES_AND_MOMENTS]/[INCIDENCE_FKFM_MOD_i]` | `Dimensions/WAVE DIRECTIONS/waveDir`
+`froude_krylov_phase_psis` | Incidences auxquelles sont définies les phases des efforts de Froude-Krylov | `[FROUDE-KRYLOV_FORCES_AND_MOMENTS]/[INCIDENCE_FKFM_PH_i]` | `Dimensions/WAVE DIRECTIONS/waveDir`
+`angular_frequencies` | Pulsations auxquelles sont définis les coefficients de la matrice de masses ajoutées et les coefficients d'amortissement de radiation | Première colonne de `[Added_mass_Radiation_Damping]/[ADDED_MASS_LINE_i]` | `Dimensions/WAVE FREQUENCIES/waveFreq`
+`forward_speed` | Vitesse à laquelle les calculs ont été réalisés | `[FORWARD_SPEED]` | `shipSpeed`
+`added_mass_coeff` | Coefficients de la matrice de masses ajoutées, par pulsation | `[Added_mass_Radiation_Damping]/[ADDED_MASS_LINE_i]` | Signaux `A_mimj` où i et j sont les numéros de ligne et de colonne (de 1 à 6)
+`radiation_damping_coeff` | Coefficients de la matrice d'amortissements de radiation, par pulsation | `[Added_mass_Radiation_Damping]/[DAMPING_TERM]` | Signaux `B_mimj` où i et j sont les numéros de ligne et de colonne (de 1 à 6)
+
+
+Dans l'API Python, ces champs utilisent des tableaux Numpy afin de
+faciliter leur exploitation.
+
 ### Exemple d'utilisation
 
-Le [tutoriel 10](#tutoriel-10-utilisation-dun-modèle-deffort-distant) détaille
+Le [tutoriel 10](#tutoriel-10-utilisation-dun-modèle-deffort-distant) détaille l'utilisation d'un modèle distant.
+Le [tutoriel 13](#tutoriel-13-) montre comment exploiter les données issues d'un calcul potentiel depuis un modèle d'effort distant.

@@ -7,6 +7,7 @@
 
 #include "GRPCForceModel.hpp"
 #include "GRPCForceModelTest.hpp"
+#include "InvalidInputException.hpp"
 #include "yaml_data.hpp"
 
 
@@ -47,4 +48,22 @@ TEST_F(GRPCForceModelTest, can_parse_rest_of_yaml_parameters)
               "name: parametric oscillator\n"
               "url: force-model:9002"
               , input.yaml);
+}
+
+TEST_F(GRPCForceModelTest, can_parse_hdb)
+{
+    const auto input = GRPCForceModel::parse(test_data::gRPC_force_model()+"hdb: some_hdb.hdb\n");
+    ASSERT_EQ("some_hdb.hdb", input.hdb_filename);
+}
+
+TEST_F(GRPCForceModelTest, can_parse_precal)
+{
+    const auto input = GRPCForceModel::parse(test_data::gRPC_force_model()+"precal: some_precal.ini\n");
+    ASSERT_EQ("some_precal.ini", input.precal_filename);
+}
+
+TEST_F(GRPCForceModelTest, should_throw_if_both_hdb_and_precal_are_defined_in_any_order)
+{
+    ASSERT_THROW(GRPCForceModel::parse(test_data::gRPC_force_model()+"hdb: some_hdb.hdb\n"+"precal: some_precal.ini\n"), InvalidInputException);
+    ASSERT_THROW(GRPCForceModel::parse(test_data::gRPC_force_model()+"precal: some_precal.ini\n"+"hdb: some_hdb.hdb\n"), InvalidInputException);
 }

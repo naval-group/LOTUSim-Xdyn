@@ -28,6 +28,7 @@ int main(int argc, const char* argv[])
     stl["U.stl"]            = write_stl(U());
     stl["test_ship.stl"]    = write_stl(test_ship());
     stl["test_ship.hdb"]    = test_data::bug_3210();
+    stl["big.hdb"]          = test_data::big_hdb();
 
     write_files(path, stl);
     google::protobuf::ShutdownProtobufLibrary();

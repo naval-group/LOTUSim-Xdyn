@@ -76,7 +76,18 @@
         "thread": "cpp",
         "typeindex": "cpp",
         "typeinfo": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "any": "cpp",
+        "ranges": "cpp",
+        "span": "cpp",
+        "bit": "cpp",
+        "compare": "cpp",
+        "concepts": "cpp",
+        "coroutine": "cpp",
+        "netfwd": "cpp",
+        "numbers": "cpp",
+        "stop_token": "cpp",
+        "variant": "cpp"
     },
     "python.formatting.provider": "autopep8"
 }

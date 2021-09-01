@@ -269,13 +269,13 @@ docker:
 	./ninja_debian.sh package && cp build_deb11/xdyn.deb . &&  docker build . --tag xdyn
 
 docker_grpc_force_model:
-	make -C grpc_docker
+	make -C interfaces docker-images
 
 docker_grpc_waves_model:
 	make -C interfaces/waves/python/server CONTAINER_NAME=xdyn-waves-grpc:python3
 
 all_docker_images: docker docker_grpc_force_model docker_grpc_waves_model
-	echo "Build all docker images after having run 'make debian'"
+	echo "Built all docker images after having run 'make debian'"
 
 
 doc: BUILD_TYPE = Release
