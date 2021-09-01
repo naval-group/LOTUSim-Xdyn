@@ -21,6 +21,7 @@
 #include "parse_output.hpp"
 #include "ListOfObservers.hpp"
 #include "simulator_api.hpp"
+#include "MapObserver.hpp"
 
 #include <unistd.h> // usleep
 
@@ -82,5 +83,57 @@ TEST_F(ObserverTests, can_observe_using_a_websocket)
     ASSERT_EQ(11, handler.messages.size());
     ASSERT_EQ("{\"t\":0,\"states\":{\"cube\":{\"theta\":-0,\"x\":0}}}", handler.messages.front());
 //! [ObserverTests expected output]
+}
+
+TEST_F(ObserverTests, can_output_all_results)
+{
+    // This is to test Observer 
+    const auto yaml = test_data::oscillating_cube_example();
+    const auto mesh = test_data::cube();
+    Sim sys = get_system(yaml, mesh, 0);
+    MapObserver observer = MapObserver(); // Should output all results when using default constructor
+    ssc::solver::Scheduler scheduler(0, 1, 0.1);
+    ssc::solver::quicksolve<ssc::solver::RK4Stepper>(sys, scheduler, observer);
+    auto results = observer.get();
+    ASSERT_TRUE(results.find("u(cube)")!= results.end());
+    ASSERT_TRUE(results.find("v(cube)")!= results.end());
+    ASSERT_TRUE(results.find("w(cube)")!= results.end());
+    ASSERT_TRUE(results.find("p(cube)")!= results.end());
+    ASSERT_TRUE(results.find("q(cube)")!= results.end());
+    ASSERT_TRUE(results.find("r(cube)")!= results.end());
+    ASSERT_TRUE(results.find("x(cube)")!= results.end());
+    ASSERT_TRUE(results.find("y(cube)")!= results.end());
+    ASSERT_TRUE(results.find("z(cube)")!= results.end());
+    ASSERT_TRUE(results.find("qr(cube)")!= results.end());
+    ASSERT_TRUE(results.find("qi(cube)")!= results.end());
+    ASSERT_TRUE(results.find("qj(cube)")!= results.end());
+    ASSERT_TRUE(results.find("qk(cube)")!= results.end());
+    ASSERT_TRUE(results.find("phi(cube)")!= results.end());
+    ASSERT_TRUE(results.find("theta(cube)")!= results.end());
+    ASSERT_TRUE(results.find("psi(cube)")!= results.end());
+    ASSERT_TRUE(results.find("Fx(gravity,cube,cube)")!= results.end());
+    ASSERT_TRUE(results.find("Fy(gravity,cube,cube)")!= results.end());
+    ASSERT_TRUE(results.find("Fz(gravity,cube,cube)")!= results.end());
+    ASSERT_TRUE(results.find("Mx(gravity,cube,cube)")!= results.end());
+    ASSERT_TRUE(results.find("My(gravity,cube,cube)")!= results.end());
+    ASSERT_TRUE(results.find("Mz(gravity,cube,cube)")!= results.end());
+    ASSERT_TRUE(results.find("Fx(gravity,cube,NED)")!= results.end());
+    ASSERT_TRUE(results.find("Fy(gravity,cube,NED)")!= results.end());
+    ASSERT_TRUE(results.find("Fz(gravity,cube,NED)")!= results.end());
+    ASSERT_TRUE(results.find("Mx(gravity,cube,NED)")!= results.end());
+    ASSERT_TRUE(results.find("My(gravity,cube,NED)")!= results.end());
+    ASSERT_TRUE(results.find("Mz(gravity,cube,NED)")!= results.end());
+    ASSERT_TRUE(results.find("Fx(non-linear hydrostatic (fast),cube,cube)")!= results.end());
+    ASSERT_TRUE(results.find("Fy(non-linear hydrostatic (fast),cube,cube)")!= results.end());
+    ASSERT_TRUE(results.find("Fz(non-linear hydrostatic (fast),cube,cube)")!= results.end());
+    ASSERT_TRUE(results.find("Mx(non-linear hydrostatic (fast),cube,cube)")!= results.end());
+    ASSERT_TRUE(results.find("My(non-linear hydrostatic (fast),cube,cube)")!= results.end());
+    ASSERT_TRUE(results.find("Mz(non-linear hydrostatic (fast),cube,cube)")!= results.end());
+    ASSERT_TRUE(results.find("Fx(non-linear hydrostatic (fast),cube,NED)")!= results.end());
+    ASSERT_TRUE(results.find("Fy(non-linear hydrostatic (fast),cube,NED)")!= results.end());
+    ASSERT_TRUE(results.find("Fz(non-linear hydrostatic (fast),cube,NED)")!= results.end());
+    ASSERT_TRUE(results.find("Mx(non-linear hydrostatic (fast),cube,NED)")!= results.end());
+    ASSERT_TRUE(results.find("My(non-linear hydrostatic (fast),cube,NED)")!= results.end());
+    ASSERT_TRUE(results.find("Mz(non-linear hydrostatic (fast),cube,NED)")!= results.end());
 }
 

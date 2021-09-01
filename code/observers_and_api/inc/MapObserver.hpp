@@ -13,6 +13,7 @@
 class MapObserver : public Observer
 {
     public:
+        MapObserver();
         MapObserver(const std::vector<std::string>& data);
         std::map<std::string,std::vector<double> > get() const;
 

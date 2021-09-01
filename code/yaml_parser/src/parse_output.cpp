@@ -12,10 +12,6 @@
 #include "parse_output.hpp"
 
 void operator >> (const YAML::Node& node, YamlOutput& f);
-std::string customize(const std::string& var_name, const std::string& body_name);
-void fill(YamlOutput& out, const std::string& body_name);
-std::vector<std::string> get_body_names(const std::string yaml);
-
 void operator >> (const YAML::Node& node, YamlOutput& f)
 {
     if(const YAML::Node *pName = node.FindValue("filename"))
@@ -32,6 +28,10 @@ void operator >> (const YAML::Node& node, YamlOutput& f)
     }
     node["format"]   >> f.format;
     node["data"]     >> f.data;
+    if (node.FindValue("full output"))
+    {
+        node["full output"] >> f.full_output;
+    }
 }
 
 std::vector<YamlOutput> parse_output(const std::string& yaml)
@@ -49,52 +49,6 @@ std::vector<YamlOutput> parse_output(const std::string& yaml)
     {
     }
     return ret;
-}
-
-std::string customize(const std::string& var_name, const std::string& body_name)
-{
-    return var_name + "(" + body_name + ")";
-}
-
-void fill(YamlOutput& out, const std::string& body_name)
-{
-    out.data.push_back(customize("x", body_name));
-    out.data.push_back(customize("y", body_name));
-    out.data.push_back(customize("z", body_name));
-    out.data.push_back(customize("u", body_name));
-    out.data.push_back(customize("v", body_name));
-    out.data.push_back(customize("w", body_name));
-    out.data.push_back(customize("p", body_name));
-    out.data.push_back(customize("q", body_name));
-    out.data.push_back(customize("r", body_name));
-    out.data.push_back(customize("qr", body_name));
-    out.data.push_back(customize("qi", body_name));
-    out.data.push_back(customize("qj", body_name));
-    out.data.push_back(customize("qk", body_name));
-
-    out.data.push_back(customize("phi", body_name));
-    out.data.push_back(customize("theta", body_name));
-    out.data.push_back(customize("psi", body_name));
-}
-
-std::vector<std::string> get_body_names(const std::string yaml)
-{
-    std::vector<std::string> out;
-    std::stringstream stream(yaml);
-    YAML::Parser parser(stream);
-    YAML::Node node;
-    parser.GetNextDocument(node);
-    const YAML::Node *parameter = node.FindValue("bodies");
-    if (parameter)
-    {
-        for (size_t i = 0 ; i < parameter->size() ; ++i)
-        {
-            std::string name;
-            (*parameter)[i]["name"] >> name;
-            out.push_back(name);
-        }
-    }
-    return out;
 }
 
 std::string get_format_for_wave_observer(const std::string& filename)
@@ -131,7 +85,6 @@ std::string get_format(const std::string& filename)
     }
 }
 
-YamlOutput build_YamlOutput_from_filename(const std::string& filename);
 YamlOutput build_YamlOutput_from_filename(const std::string& filename)
 {
     YamlOutput out;
@@ -164,14 +117,5 @@ YamlOutput build_YamlOutput_from_filename(const std::string& filename)
         out.format = get_format(filename);
         out.filename = filename;
     }
-    return out;
-}
-
-YamlOutput generate_default_outputter_with_all_states_in_it(const std::string& yaml, const std::string& filename)
-{
-    auto out = build_YamlOutput_from_filename(filename);
-    out.data.push_back("t");
-    const auto bodies = get_body_names(yaml);
-    for (auto body:bodies) fill(out, body);
     return out;
 }

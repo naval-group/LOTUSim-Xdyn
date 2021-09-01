@@ -17,6 +17,7 @@
 #include TR1INC(memory)
 
 #include "DiscreteDirectionalWaveSpectrum.hpp"
+#include "Mesh.hpp"
 
 class Sim;
 class SurfaceElevationGrid;
@@ -35,6 +36,7 @@ struct DataAddressing
 class Observer
 {
     public:
+        Observer(); // Outputs everything by default
         Observer(const std::vector<std::string>& data);
         virtual void observe(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems); // Only what was requested by the user in the YAML file
         void observe_everything(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems); // Everything (not just what the user asked). Used for co-simulation
@@ -49,6 +51,8 @@ class Observer
         }
 
         virtual void write_before_simulation(const std::vector<FlatDiscreteDirectionalWaveSpectrum>& val, const DataAddressing& address);
+        virtual void write_before_simulation(const MeshPtr mesh, const DataAddressing& address);
+        virtual void write_before_simulation(const std::string& data, const DataAddressing& address);
 
     protected:
 
@@ -65,12 +69,11 @@ class Observer
         virtual void flush_value_during_initialization();
 
     private:
-        Observer(); // Disabled
-
         void initialize_serialization_of_requested_variables(const std::vector<std::string>& variables_to_serialize);
         void serialize_requested_variables(const std::vector<std::string>& variables_to_serialize);
 
         bool initialized;
+        bool output_everything;
         std::vector<std::string> requested_serializations;
         std::map<std::string, std::function<void()> > serialize;
         std::map<std::string, std::function<void()> > initialize;

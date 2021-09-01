@@ -196,6 +196,7 @@ TARGET_LINK_LIBRARIES(gz
         boost_program_options_descriptions_static
         ${GRPC_GRPCPP_UNSECURE}
         ${PROTOBUF_LIBPROTOBUF}
+        ${Boost_THREAD_LIBRARY}
         )
 
 ADD_EXECUTABLE(generate_yaml_example

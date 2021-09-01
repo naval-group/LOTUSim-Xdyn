@@ -22,6 +22,7 @@ typedef TR1(shared_ptr)<ssc::websocket::Client> WebSocketPtr;
 class WebSocketObserver : public DictObserver
 {
     public:
+        WebSocketObserver(const std::string& address, const short unsigned int port);
         WebSocketObserver(const std::string& address, const short unsigned int port, const std::vector<std::string>& data);
         ~WebSocketObserver();
 

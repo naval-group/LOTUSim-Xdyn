@@ -42,80 +42,6 @@ void solve(const std::string& solver_name, Sim& sys, ssc::solver::Scheduler& sch
     }
 }
 
-void serialize_context_if_necessary_new(ListOfObservers& observers, const Sim& sys);
-void serialize_context_if_necessary_new(ListOfObservers& observers, const Sim& sys)
-{
-    const auto env = sys.get_env();
-    const auto w = env.w;
-    if (w)
-    {
-        for (auto observer:observers.get())
-        {
-            w->serialize_wave_spectra_before_simulation(observer);
-        }
-    }
-}
-
-#include "stl_io_hdf5.hpp"
-#include "h5_tools.hpp"
-void serialize_context_if_necessary(std::vector<YamlOutput>& observers, const Sim& sys, const std::string& yaml_input, const std::string& prog_command);
-void serialize_context_if_necessary(std::vector<YamlOutput>& observers, const Sim& sys, const std::string& yaml_input, const std::string& prog_command)
-{
-    for (const auto observer:observers)
-    {
-        if(observer.format=="hdf5")
-        {
-            if (not(prog_command.empty()))
-            {
-                H5_Tools::write(observer.filename, "/inputs/command", prog_command);
-            }
-            if (not(yaml_input.empty()))
-            {
-                H5_Tools::write(observer.filename, "/inputs/yaml/input", yaml_input);
-            }
-
-            for (const auto& bodies : sys.get_bodies())
-            {
-                const auto& states = bodies->get_states();
-                const auto& name = states.name;
-                const auto& mesh = states.mesh;
-                if (mesh->nb_of_static_nodes>0)
-                {
-                    writeMeshToHdf5File(observer.filename,
-                                        "/inputs/meshes/"+name,
-                                        mesh->nodes,
-                                        mesh->facets);
-                }
-            }
-        }
-    }
-}
-
-std::string input_data_serialize(const XdynCommandLineArguments& inputData);
-std::string input_data_serialize(const XdynCommandLineArguments& inputData)
-{
-    std::stringstream s;
-    s << "xdyn ";
-    if (not inputData.yaml_filenames.empty()) s << "-y ";
-    for (const auto& f:inputData.yaml_filenames)
-    {
-        s << f << " ";
-    }
-    s << " --tstart " << inputData.tstart<<" ";
-    s << " --tend " << inputData.tend<<" ";
-    s << " --dt " << inputData.initial_timestep<<" ";
-    s << " --solver "<<inputData.solver;
-    if (not(inputData.output_filename.empty()))
-    {
-        s << " -o " << inputData.output_filename;
-    }
-    if (not(inputData.wave_output.empty()))
-    {
-        s << " -w " << inputData.wave_output;
-    }
-    return s.str();
-}
-
 void run_simulation(const XdynCommandLineArguments& input_data, ErrorReporter& error_outputter);
 void run_simulation(const XdynCommandLineArguments& input_data, ErrorReporter& error_outputter)
 {
@@ -127,10 +53,9 @@ void run_simulation(const XdynCommandLineArguments& input_data, ErrorReporter& e
         auto sys = get_system(input, input_data.tstart);
         ssc::solver::Scheduler scheduler(input_data.tstart, input_data.tend, input_data.initial_timestep);
         const auto controllers = get_initialized_controllers(input_data.tstart, input.controllers, input.commands, scheduler, &sys);
-        auto observers_description = build_observers_description(yaml_input, input_data);
+        auto observers_description = build_observers_description(yaml_input);
         ListOfObservers observers(observers_description);
-        serialize_context_if_necessary(observers_description, sys, yaml_input, input_data_serialize(input_data));
-        serialize_context_if_necessary_new(observers, sys);
+        add_observers_from_cli(input_data, observers, yaml_input, sys);
         solve(input_data.solver, sys, scheduler, observers, controllers);
     }};
     if (input_data.catch_exceptions)

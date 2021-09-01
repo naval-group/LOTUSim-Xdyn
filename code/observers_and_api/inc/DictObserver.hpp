@@ -14,6 +14,7 @@ typedef std::map<std::string, std::map<std::string, double> > DictMap2;
 class DictObserver : public Observer
 {
     public:
+        DictObserver();
         DictObserver(const std::vector<std::string>& d);
         ~DictObserver();
 

@@ -12,6 +12,14 @@
 
 #include "CsvObserver.hpp"
 
+CsvObserver::CsvObserver(const std::string& filename) :
+        Observer(),
+        output_to_file(not(filename.empty())),
+        os(output_to_file ? *(new std::ofstream(filename)) : std::cout)
+{
+    os << std::scientific;
+}
+
 CsvObserver::CsvObserver(const std::string& filename, const std::vector<std::string>& d) :
         Observer(d),
         output_to_file(not(filename.empty())),

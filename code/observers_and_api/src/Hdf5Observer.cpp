@@ -2,6 +2,8 @@
 
 #include "h5_version.hpp"
 #include "h5_tools.hpp"
+#include "h5_tools.hpp"
+#include "stl_io_hdf5.hpp"
 
 #include "demoMatLab.hpp"
 #include "demoPython.hpp"
@@ -16,6 +18,21 @@ Hdf5Addressing::Hdf5Addressing(
             address(H5_Tools::ensureStringStartsWithAPattern(basename,"/") +
                     H5_Tools::ensureStringStartsWithAPattern(H5_Tools::join(addressing.address,"/"),"/"))
 {
+}
+
+Hdf5Observer::Hdf5Observer(const std::string& filename) :
+            Observer(),
+            h5File(H5_Tools::openEmptyHdf5File(filename)),
+            basename("outputs"),
+            name2address(),
+            name2dataset(),
+            name2datatype(),
+            name2dataspace(),
+            wave_serializer()
+{
+    h5_writeFileDescription(h5File);
+    exportMatLabScripts(h5File, filename, basename, "/scripts/MatLab");
+    exportPythonScripts(h5File, filename, basename, "/scripts/Python");
 }
 
 Hdf5Observer::Hdf5Observer(
@@ -104,4 +121,23 @@ void Hdf5Observer::flush_value_during_write()
 void Hdf5Observer::write_before_simulation(const std::vector<FlatDiscreteDirectionalWaveSpectrum>& s, const DataAddressing&)
 {
     hdf5WaveSpectrumObserver(h5File,"/outputs/spectra", s);
+}
+
+
+void Hdf5Observer::write_before_simulation(const MeshPtr mesh, const DataAddressing& address)
+{
+    if (mesh->nb_of_static_nodes>0)
+    {
+        writeMeshToHdf5File(h5File, Hdf5Addressing(address, "inputs").address, mesh->nodes, mesh->facets);
+    }
+}
+
+
+void Hdf5Observer::write_before_simulation(const std::string& data, const DataAddressing& address)
+{
+    if(not(data.empty()))
+    {
+        H5_Tools::write(h5File, Hdf5Addressing(address, "inputs").address, data);
+    }
+    
 }

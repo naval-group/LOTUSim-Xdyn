@@ -8,6 +8,7 @@
 class TsvObserver : public Observer
 {
     public:
+        TsvObserver(const std::string& filename);
         TsvObserver(const std::string& filename, const std::vector<std::string>& data);
         ~TsvObserver();
 
