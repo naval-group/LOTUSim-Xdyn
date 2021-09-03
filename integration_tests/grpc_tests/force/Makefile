@@ -1,4 +1,4 @@
-.PHONY: all clean cosim sim
+.PHONY: all clean cosim hdb sim
 
 all: cosim sim hdb clean
 
