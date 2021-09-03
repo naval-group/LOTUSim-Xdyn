@@ -6,6 +6,7 @@
  */
 
 #include "yaml_data.hpp"
+#include <boost/algorithm/string.hpp> 
 #include <sstream>
 
 std::string rotation_convention();
@@ -4133,6 +4134,15 @@ std::string test_data::tutorial_13_hdb_force_model()
        + "     - 'Br_5_5_0(TestShip)'\n"
        + "     - 'Br_5_5_46(TestShip)'\n"
        ;
+}
+
+std::string test_data::tutorial_13_precal_r_force_model()
+{
+    std::string ret(tutorial_13_hdb_force_model());
+    boost::replace_all(ret, "hdb: big.hdb", "precal: ONRT_SIMMAN.raodb.ini");
+    boost::replace_all(ret, "hdb force model", "precal-r force model");
+    boost::replace_all(ret, "filename: hdb_output.csv", "filename: precal_r_output.csv");
+    return ret;
 }
 
 std::string test_data::added_mass_from_precal_file()
