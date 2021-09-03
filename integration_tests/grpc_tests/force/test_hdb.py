@@ -184,19 +184,17 @@ def check_froude_krylov_phase_periods(results):
     assert results['FKTp0(TestShip)'] == '3.500000e+00'
     assert results['FKTp1(TestShip)'] == '3.600000e+00'
     assert results['FKTp2(TestShip)'] == '3.700000e+00'
-    assert results['FKTp46(TestShip)'] == '1.250000e+02'
+    assert results['FKTp6(TestShip)'] == '4.100000e+00'
     print("✓ Froude-Krylov phase periods test passed!")
 
 def check_froude_krylov_module_psis(results):
     assert results['FKpsi0(TestShip)'] == '0.000000e+00'
     assert results['FKpsi1(TestShip)'] == '2.617994e-01'
-    assert results['FKpsi2(TestShip)'] == '5.235988e-01'
     print("✓ Froude-Krylov module incidence test passed!")
 
 def check_froude_krylov_phase_psis(results):
     assert results['FKppsi0(TestShip)'] == '0.000000e+00'
     assert results['FKppsi1(TestShip)'] == '2.617994e-01'
-    assert results['FKppsi2(TestShip)'] == '5.235988e-01'
     print("✓ Froude-Krylov phase incidence test passed!")
 
 def check_angular_frequencies(results):
@@ -233,14 +231,14 @@ def check_added_mass_coeff(results):
     print("✓ Added mass coefficient test passed!")
 
 def check_radiation_damping_coeff(results):
-    assert results['Br_0_0_0(TestShip)']  == '1.670416e-02'
-    assert results['Br_0_0_46(TestShip)'] == '8.995314e+04'
-    assert results['Br_5_0_0(TestShip)']  == '-0.000000e+00'
-    assert results['Br_5_0_46(TestShip)'] == '-0.000000e+00'
-    assert results['Br_0_5_0(TestShip)']  == '-0.000000e+00'
-    assert results['Br_0_5_46(TestShip)'] == '-0.000000e+00'
-    assert results['Br_5_5_0(TestShip)']  == '2.736394e+00'
-    assert results['Br_5_5_46(TestShip)'] == '6.970750e+09'
+    assert results['Br_0_0_0(TestShip)'] == '1.670416e-02'
+    assert results['Br_0_0_6(TestShip)'] == '8.688346e+03'
+    assert results['Br_5_0_0(TestShip)'] == '-0.000000e+00'
+    assert results['Br_5_0_6(TestShip)'] == '-0.000000e+00'
+    assert results['Br_0_5_0(TestShip)'] == '-0.000000e+00'
+    assert results['Br_0_5_6(TestShip)'] == '-0.000000e+00'
+    assert results['Br_5_5_0(TestShip)'] == '2.736394e+00'
+    assert results['Br_5_5_6(TestShip)'] == '3.191245e+06'
     print("✓ Radiation damping coefficient test passed!")
 
 
