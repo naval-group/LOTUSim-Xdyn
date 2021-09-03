@@ -20,6 +20,12 @@ tutorial_13_hdb_force_model.yml:
         --entrypoint /bin/bash xdyn \
         -c "cp /usr/demos/$@ /xdyn_demos/"
 
+ONRT_SIMMAN.raodb.ini:
+	@echo "Copying $@ from xdyn's Docker container..."
+	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/xdyn_demos \
+        --entrypoint /bin/bash xdyn \
+        -c "cp /usr/demos/$@ /xdyn_demos/"
+
 big.hdb:
 	@echo "Copying $@ from xdyn's Docker container..."
 	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/xdyn_demos \
