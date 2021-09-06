@@ -2637,6 +2637,41 @@ Champs    | Description              | Clef HDB | Clef PRECAL_R |
 Dans l'API Python, ces champs utilisent des tableaux Numpy afin de
 faciliter leur exploitation.
 
+Les matrices des fichiers PRECAL_R et HDB sont supposées exprimées dans un
+repère "Z vers le haut" : elles sont dont systématiquement converties dans le
+repère "BODY" d'xdyn (Z vers le bas).
+
+Si $`M_h=((m_{ij}))_{1\leq i,j\leq 6}`$ désigne une matrice d'un fichier
+PRECAL_R ou HDB et $`M_x`$ est la représentation de cette matrice dans le
+repère BODY d'xdyn, xdyn effectue le calcul suivant :
+
+```math
+M_x=t(R)M_h R =
+\left[\begin{array}{rrrrrr}
+ m_{11} & -m_{12} & -m_{13} &  m_{14} & -m_{15} & -m_{16}\\
+-m_{21} &  m_{22} &  m_{23} & -m_{24} &  m_{25} &  m_{26}\\
+ m_{31} & -m_{32} & -m_{33} &  m_{34} & -m_{35} & -m_{36}\\
+-m_{41} &  m_{42} &  m_{43} & -m_{44} &  m_{45} &  m_{46}\\
+ m_{51} & -m_{52} & -m_{53} &  m_{54} & -m_{55} & -m_{56}\\
+-m_{61} &  m_{62} &  m_{63} & -m_{64} &  m_{65} &  m_{66}
+\end{array}\right]
+```
+
+où $`R`$ est la matrice de passage du repère PRECAL_R/AQUA+ vers le repère xdyn :
+
+```math
+R=\left[
+\begin{array}{rrrrrr}
+1 &  0 &  0 & 0 &  0 &  0\\
+0 & -1 &  0 & 0 &  0 &  0\\
+0 &  0 & -1 & 0 &  0 &  0\\
+0 &  0 &  0 & 1 &  0 &  0\\
+0 &  0 &  0 & 0 & -1 &  0\\
+0 &  0 &  0 & 0 &  0 & -1
+\end{array}\right]
+```
+
+
 ### Exemple d'utilisation
 
 - Le [tutoriel 10](#tutoriel-10-utilisation-dun-modèle-deffort-distant) détaille l'utilisation d'un modèle distant.
