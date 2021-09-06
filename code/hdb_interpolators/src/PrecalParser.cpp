@@ -271,17 +271,21 @@ std::vector<std::pair<size_t, double> > PrecalParser::get_sorted_indexed_frequen
     return frequencies;
 }
 
-ModulePhase PrecalParser::retrieve_module_phase_tables(const std::string& signal_basename, const std::string& pretty_name, const std::string& path_to_boolean_parameter) const
+std::vector<double> PrecalParser::get_sorted_directions() const
 {
-    ModulePhase ret;
-    // Get the frequencies and directions values for which RAOs will be specified
     const std::vector<double> input_directions
         = get_vector_value("Dimensions", "waveDir", "wave directions", "");
     check_unit("Dimensions", "unitWaveDir", "wave directions unit", "deg");
     std::list<double> sorted_directions(input_directions.begin(), input_directions.end());
     sorted_directions.sort();
-    std::vector<double> directions(sorted_directions.begin(), sorted_directions.end());
+    return std::vector<double>(sorted_directions.begin(), sorted_directions.end());
+}
 
+ModulePhase PrecalParser::retrieve_module_phase_tables(const std::string& signal_basename, const std::string& pretty_name, const std::string& path_to_boolean_parameter) const
+{
+    ModulePhase ret;
+    // Get the frequencies and directions values for which RAOs will be specified
+    const auto directions = get_sorted_directions();
     const auto frequencies = get_sorted_indexed_frequencies();
 
     // Insert sorted periods in modules and phases vectors
