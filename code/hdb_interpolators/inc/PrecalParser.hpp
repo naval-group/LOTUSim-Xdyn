@@ -78,6 +78,7 @@ class PrecalParser : public HydroDBParser
         std::vector<double> extract_matrix_coeff(const std::string& short_name, const std::string& long_name, const size_t i, const size_t j) const;
         void init_diffraction_tables();
         void init_froude_krylov_tables();
+        ModulePhase retrieve_module_phase_tables(const std::string& signal_basename, const std::string& pretty_name, const std::string& path_to_boolean_parameter) const;
         PrecalFile precal_file;
         boost::variant<RAOData,std::string> diffraction_module;
         boost::variant<RAOData,std::string> diffraction_phase;

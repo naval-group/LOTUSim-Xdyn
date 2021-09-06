@@ -238,129 +238,133 @@ bool rao_is_valid_and_corresponds_to_signal_and_direction(const RAO& rao,
     return false;
 }
 
-void PrecalParser::init_diffraction_tables()
+ModulePhase PrecalParser::retrieve_module_phase_tables(const std::string& signal_basename, const std::string& pretty_name, const std::string& path_to_boolean_parameter) const
 {
-    RAOData modules;
-    RAOData phases;
-    try
+    ModulePhase ret;
+    // Get the frequencies and directions values for which RAOs will be specified
+    const std::vector<double> input_frequencies
+        = get_vector_value("Dimensions", "waveFreq", "wave frequencies", "");
+    const std::string frequencies_unit
+        = get_string_value("Dimensions", "unitWaveFreq", "wave frequencies unit", "");
+    if (frequencies_unit != "rad/s")
     {
-        // Get the frequencies and directions values for which RAOs will be specified
-        const std::vector<double> input_frequencies
-            = get_vector_value("Dimensions", "waveFreq", "wave frequencies", "");
-        const std::string frequencies_unit
-            = get_string_value("Dimensions", "unitWaveFreq", "wave frequencies unit", "");
-        if (frequencies_unit != "rad/s")
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                "Unknown unit '" << frequencies_unit
+                                << "' for wave frequencies in PRECAL_R's output file. "
+                                    "Known units: 'rad/s'.");
+    }
+
+    const std::vector<double> input_directions
+        = get_vector_value("Dimensions", "waveDir", "wave directions", "");
+    const std::string directions_unit
+        = get_string_value("Dimensions", "unitWaveDir", "wave directions unit", "");
+    if (directions_unit != "deg")
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                "Unknown unit '" << directions_unit
+                                << "' for wave directions in PRECAL_R's output file. "
+                                    "Known units: 'deg'.");
+    }
+
+    // Sort frequencies and directions values for which RAOs will be specified
+    std::vector<std::pair<size_t, double> > frequencies;
+    size_t i = 0;
+    std::transform(input_frequencies.begin(), input_frequencies.end(),
+                    std::back_inserter(frequencies),
+                    [&i](const double omega) { return std::make_pair(i++, omega); });
+    std::sort(
+        frequencies.begin(), frequencies.end(),
+        [](const std::pair<size_t, double>& left, const std::pair<size_t, double>& right) {
+            // the periods should be sorted in ascendant order, so the frequencies should be sorted in decreasing order.
+            return left.second >= right.second;
+        });
+
+    std::list<double> sorted_directions(input_directions.begin(), input_directions.end());
+    sorted_directions.sort();
+    std::vector<double> directions(sorted_directions.begin(), sorted_directions.end());
+
+    // Insert sorted periods in modules and phases vectors
+    for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
+    {
+        const double period = 2 * PI / frequencies.at(frequency_idx).second;
+        ret.modules.periods.push_back(period);
+        ret.phases.periods.push_back(period);
+    }
+
+    // Insert sorted directions in modules and phases vectors (converting them to S.I. units)
+    for (size_t psi_idx = 0; psi_idx < directions.size(); ++psi_idx)
+    {
+        const double psi = directions.at(psi_idx) * DEG2RAD;
+        ret.modules.psi.push_back(psi);
+        ret.phases.psi.push_back(psi);
+    }
+
+    // Initialize the RAOs coefficients with 0s
+    ret.modules.values.fill(std::vector<std::vector<double> >(
+        frequencies.size(), std::vector<double>(directions.size(), 0)));
+    ret.phases.values.fill(std::vector<std::vector<double> >(
+        frequencies.size(), std::vector<double>(directions.size(), 0)));
+
+    // Read the RAOs for each mode and direction.
+    for (size_t psi_idx = 0; psi_idx < directions.size(); ++psi_idx)
+    {
+        for (size_t mode_idx = 0; mode_idx < 6; ++mode_idx)
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                  "Unknown unit '" << frequencies_unit
-                                   << "' for wave frequencies in PRECAL_R's output file. "
-                                      "Known units: 'rad/s'.");
-        }
+            const std::string signal_name = signal_basename + std::to_string(mode_idx + 1);
+            bool found_rao = false;
 
-        const std::vector<double> input_directions
-            = get_vector_value("Dimensions", "waveDir", "wave directions", "");
-        const std::string directions_unit
-            = get_string_value("Dimensions", "unitWaveDir", "wave directions unit", "");
-        if (directions_unit != "deg")
-        {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                  "Unknown unit '" << directions_unit
-                                   << "' for wave directions in PRECAL_R's output file. "
-                                      "Known units: 'deg'.");
-        }
-
-        // Sort frequencies and directions values for which RAOs will be specified
-        std::vector<std::pair<size_t, double> > frequencies;
-        size_t i = 0;
-        std::transform(input_frequencies.begin(), input_frequencies.end(),
-                       std::back_inserter(frequencies),
-                       [&i](const double omega) { return std::make_pair(i++, omega); });
-        std::sort(
-            frequencies.begin(), frequencies.end(),
-            [](const std::pair<size_t, double>& left, const std::pair<size_t, double>& right) {
-                // the periods should be sorted in ascendant order, so the frequencies should be sorted in decreasing order.
-                return left.second >= right.second;
-            });
-
-        std::list<double> sorted_directions(input_directions.begin(), input_directions.end());
-        sorted_directions.sort();
-        std::vector<double> directions(sorted_directions.begin(), sorted_directions.end());
-
-        // Insert sorted periods in modules and phases vectors
-        for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
-        {
-            const double period = 2 * PI / frequencies.at(frequency_idx).second;
-            modules.periods.push_back(period);
-            phases.periods.push_back(period);
-        }
-
-        // Insert sorted directions in modules and phases vectors (converting them to S.I. units)
-        for (size_t psi_idx = 0; psi_idx < directions.size(); ++psi_idx)
-        {
-            const double psi = directions.at(psi_idx) * DEG2RAD;
-            modules.psi.push_back(psi);
-            phases.psi.push_back(psi);
-        }
-
-        // Initialize the RAOs coefficients with 0s
-        modules.values.fill(std::vector<std::vector<double> >(
-            frequencies.size(), std::vector<double>(directions.size(), 0)));
-        phases.values.fill(std::vector<std::vector<double> >(
-            frequencies.size(), std::vector<double>(directions.size(), 0)));
-
-        // Read the RAOs for each mode and direction.
-        for (size_t psi_idx = 0; psi_idx < directions.size(); ++psi_idx)
-        {
-            for (size_t mode_idx = 0; mode_idx < 6; ++mode_idx)
+            for (RAO rao : precal_file.raos)
             {
-                const std::string signal_name = "F_dif_m" + std::to_string(mode_idx + 1);
-                bool found_rao = false;
-
-                for (RAO rao : precal_file.raos)
+                if (rao_is_valid_and_corresponds_to_signal_and_direction(
+                        rao, signal_name, directions.at(psi_idx), input_frequencies.size()))
                 {
-                    if (rao_is_valid_and_corresponds_to_signal_and_direction(
-                            rao, signal_name, directions.at(psi_idx), input_frequencies.size()))
+                    found_rao = true;
+                    if (rao.attributes.amplitude_unit != "kN/m"
+                        && rao.attributes.amplitude_unit != "kN.m/m")
                     {
-                        found_rao = true;
-                        if (rao.attributes.amplitude_unit != "kN/m"
-                            && rao.attributes.amplitude_unit != "kN.m/m")
-                        {
-                            THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                                "Unknown unit '" << rao.attributes.amplitude_unit << "' for diffraction RAO "
-                                "amplitudes in PRECAL_R's output file. Known units: 'kN/m', 'kN.m/m'.");
-                        }
-                        if (rao.attributes.phase_unit != "deg")
-                        {
-                            THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                                "Unknown unit '" << rao.attributes.phase_unit << "' for diffraction RAO phases "
-                                "in PRECAL_R's output file. Known units: 'deg'.");
-                        }
-                        // Insert the RAO values for each period.
-                        for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
-                        {
-                            const size_t frequency_idx_in_input_file
-                                = frequencies.at(frequency_idx).first;
-                            modules.values.at(mode_idx).at(frequency_idx).at(psi_idx)
-                                = rao.left_column.at(frequency_idx_in_input_file) * 1e3;
-                            phases.values.at(mode_idx).at(frequency_idx).at(psi_idx)
-                                = rao.right_column.at(frequency_idx_in_input_file) * DEG2RAD;
-                        }
-                        break;
+                        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                            "Unknown unit '" << rao.attributes.amplitude_unit << "' for " << pretty_name << " RAO "
+                            "amplitudes in PRECAL_R's output file. Known units: 'kN/m', 'kN.m/m'.");
                     }
-                }
-                if (not(found_rao))
-                {
-                    THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                        "Unable to find rao '" << signal_name << "' for direction '"
-                        << directions.at(psi_idx) << "' in PRECAL_R's output file. "
-                        "Perhaps you didn't set the boolean key 'expDifWaveFrc' to true "
-                        "in PRECAL_R's input file (section Export > expDifWaveFrc)?");
+                    if (rao.attributes.phase_unit != "deg")
+                    {
+                        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                            "Unknown unit '" << rao.attributes.phase_unit << "' for " << pretty_name << " RAO phases "
+                            "in PRECAL_R's output file. Known units: 'deg'.");
+                    }
+                    // Insert the RAO values for each period.
+                    for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
+                    {
+                        const size_t frequency_idx_in_input_file
+                            = frequencies.at(frequency_idx).first;
+                        ret.modules.values.at(mode_idx).at(frequency_idx).at(psi_idx)
+                            = rao.left_column.at(frequency_idx_in_input_file) * 1e3;
+                        ret.phases.values.at(mode_idx).at(frequency_idx).at(psi_idx)
+                            = rao.right_column.at(frequency_idx_in_input_file) * DEG2RAD;
+                    }
+                    break;
                 }
             }
+            if (not(found_rao))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                    "Unable to find RAO '" << signal_name << "' for direction '"
+                    << directions.at(psi_idx) << "' in PRECAL_R's output file. "
+                    "Perhaps you didn't set the boolean key '" << path_to_boolean_parameter << "' to true "
+                    "in PRECAL_R's input file?");
+            }
         }
+    }
+    return ret;
+}
 
-        diffraction_module = modules;
-        diffraction_phase = phases;
+void PrecalParser::init_diffraction_tables()
+{
+    try
+    {
+        const auto rao = retrieve_module_phase_tables("F_dif_m", "diffraction", "Export > expDifWaveFrc");
+        diffraction_module = rao.modules;
+        diffraction_phase = rao.phases;
     }
     catch (const InvalidInputException& e)
     {
@@ -371,127 +375,11 @@ void PrecalParser::init_diffraction_tables()
 
 void PrecalParser::init_froude_krylov_tables()
 {
-    RAOData modules;
-    RAOData phases;
     try
     {
-        // Get the frequencies and directions values for which RAOs will be specified
-        const std::vector<double> input_frequencies
-            = get_vector_value("Dimensions", "waveFreq", "wave frequencies", "");
-        const std::string frequencies_unit
-            = get_string_value("Dimensions", "unitWaveFreq", "wave frequencies unit", "");
-        if (frequencies_unit != "rad/s")
-        {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                  "Unknown unit '" << frequencies_unit
-                                   << "' for wave frequencies in PRECAL_R's output file. "
-                                      "Known units: 'rad/s'.");
-        }
-
-        const std::vector<double> input_directions
-            = get_vector_value("Dimensions", "waveDir", "wave directions", "");
-        const std::string directions_unit
-            = get_string_value("Dimensions", "unitWaveDir", "wave directions unit", "");
-        if (directions_unit != "deg")
-        {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                  "Unknown unit '" << directions_unit
-                                   << "' for wave directions in PRECAL_R's output file. "
-                                      "Known units: 'deg'.");
-        }
-
-        // Sort frequencies and directions values for which RAOs will be specified
-        std::vector<std::pair<size_t, double> > frequencies;
-        size_t i = 0;
-        std::transform(input_frequencies.begin(), input_frequencies.end(),
-                       std::back_inserter(frequencies),
-                       [&i](const double omega) { return std::make_pair(i++, omega); });
-        std::sort(
-            frequencies.begin(), frequencies.end(),
-            [](const std::pair<size_t, double>& left, const std::pair<size_t, double>& right) {
-                // the periods should be sorted in ascendant order, so the frequencies should be sorted in decreasing order.
-                return left.second >= right.second;
-            });
-
-        std::list<double> sorted_directions(input_directions.begin(), input_directions.end());
-        sorted_directions.sort();
-        std::vector<double> directions(sorted_directions.begin(), sorted_directions.end());
-
-        // Insert sorted periods in modules and phases vectors
-        for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
-        {
-            const double period = 2 * PI / frequencies.at(frequency_idx).second;
-            modules.periods.push_back(period);
-            phases.periods.push_back(period);
-        }
-
-        // Insert sorted directions in modules and phases vectors (converting them to S.I. units)
-        for (size_t psi_idx = 0; psi_idx < directions.size(); ++psi_idx)
-        {
-            const double psi = directions.at(psi_idx) * DEG2RAD;
-            modules.psi.push_back(psi);
-            phases.psi.push_back(psi);
-        }
-
-        // Initialize the RAOs coefficients with 0s
-        modules.values.fill(std::vector<std::vector<double> >(
-            frequencies.size(), std::vector<double>(directions.size(), 0)));
-        phases.values.fill(std::vector<std::vector<double> >(
-            frequencies.size(), std::vector<double>(directions.size(), 0)));
-
-        // Read the RAOs for each mode and direction.
-        for (size_t psi_idx = 0; psi_idx < directions.size(); ++psi_idx)
-        {
-            for (size_t mode_idx = 0; mode_idx < 6; ++mode_idx)
-            {
-                const std::string signal_name = "F_inc_m" + std::to_string(mode_idx + 1);
-                bool found_rao = false;
-
-                for (RAO rao : precal_file.raos)
-                {
-                    if (rao_is_valid_and_corresponds_to_signal_and_direction(
-                            rao, signal_name, directions.at(psi_idx), input_frequencies.size()))
-                    {
-                        found_rao = true;
-                        if (rao.attributes.amplitude_unit != "kN/m"
-                            && rao.attributes.amplitude_unit != "kN.m/m")
-                        {
-                            THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                                "Unknown unit '" << rao.attributes.amplitude_unit << "' for Froude-Krylov RAO "
-                                "amplitudes in PRECAL_R's output file. Known units: 'kN/m', 'kN.m/m'.");
-                        }
-                        if (rao.attributes.phase_unit != "deg")
-                        {
-                            THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                                "Unknown unit '" << rao.attributes.phase_unit << "' for Froude-Krylov RAO phases "
-                                "in PRECAL_R's output file. Known units: 'deg'.");
-                        }
-                        // Insert the RAO values for each period.
-                        for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
-                        {
-                            const size_t frequency_idx_in_input_file
-                                = frequencies.at(frequency_idx).first;
-                            modules.values.at(mode_idx).at(frequency_idx).at(psi_idx)
-                                = rao.left_column.at(frequency_idx_in_input_file) * 1e3;
-                            phases.values.at(mode_idx).at(frequency_idx).at(psi_idx)
-                                = rao.right_column.at(frequency_idx_in_input_file) * DEG2RAD;
-                        }
-                        break;
-                    }
-                }
-                if (not(found_rao))
-                {
-                    THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                        "Unable to find rao '" << signal_name << "' for direction '"
-                        << directions.at(psi_idx) << "' in PRECAL_R's output file. "
-                        "Perhaps you didn't set the boolean key 'sim > parRES > expIncWaveFrc' to true "
-                        "in PRECAL_R's input file?");
-                }
-            }
-        }
-
-        froude_krylov_module = modules;
-        froude_krylov_phase = phases;
+        const auto rao = retrieve_module_phase_tables("F_inc_m", "Froude-Krylov", "sim > parRES > expIncWaveFrc");
+        froude_krylov_module = rao.modules;
+        froude_krylov_phase = rao.phases;
     }
     catch (const InvalidInputException& e)
     {
