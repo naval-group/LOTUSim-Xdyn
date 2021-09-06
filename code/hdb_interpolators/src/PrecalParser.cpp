@@ -251,18 +251,11 @@ void PrecalParser::check_unit(const std::string& section_title, const std::strin
     }
 }
 
-ModulePhase PrecalParser::retrieve_module_phase_tables(const std::string& signal_basename, const std::string& pretty_name, const std::string& path_to_boolean_parameter) const
+std::vector<std::pair<size_t, double> > PrecalParser::get_sorted_indexed_frequencies() const
 {
-    ModulePhase ret;
-    // Get the frequencies and directions values for which RAOs will be specified
     const std::vector<double> input_frequencies
         = get_vector_value("Dimensions", "waveFreq", "wave frequencies", "");
     check_unit("Dimensions", "unitWaveFreq", "wave frequencies unit", "rad/s");
-
-    const std::vector<double> input_directions
-        = get_vector_value("Dimensions", "waveDir", "wave directions", "");
-    check_unit("Dimensions", "unitWaveDir", "wave directions unit", "deg");
-
     // Sort frequencies and directions values for which RAOs will be specified
     std::vector<std::pair<size_t, double> > frequencies;
     size_t i = 0;
@@ -275,10 +268,21 @@ ModulePhase PrecalParser::retrieve_module_phase_tables(const std::string& signal
             // the periods should be sorted in ascendant order, so the frequencies should be sorted in decreasing order.
             return left.second >= right.second;
         });
+    return frequencies;
+}
 
+ModulePhase PrecalParser::retrieve_module_phase_tables(const std::string& signal_basename, const std::string& pretty_name, const std::string& path_to_boolean_parameter) const
+{
+    ModulePhase ret;
+    // Get the frequencies and directions values for which RAOs will be specified
+    const std::vector<double> input_directions
+        = get_vector_value("Dimensions", "waveDir", "wave directions", "");
+    check_unit("Dimensions", "unitWaveDir", "wave directions unit", "deg");
     std::list<double> sorted_directions(input_directions.begin(), input_directions.end());
     sorted_directions.sort();
     std::vector<double> directions(sorted_directions.begin(), sorted_directions.end());
+
+    const auto frequencies = get_sorted_indexed_frequencies();
 
     // Insert sorted periods in modules and phases vectors
     for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
@@ -313,7 +317,7 @@ ModulePhase PrecalParser::retrieve_module_phase_tables(const std::string& signal
             for (RAO rao : precal_file.raos)
             {
                 if (rao_is_valid_and_corresponds_to_signal_and_direction(
-                        rao, signal_name, directions.at(psi_idx), input_frequencies.size()))
+                        rao, signal_name, directions.at(psi_idx), frequencies.size()))
                 {
                     found_rao = true;
                     if (rao.attributes.amplitude_unit != "kN/m"

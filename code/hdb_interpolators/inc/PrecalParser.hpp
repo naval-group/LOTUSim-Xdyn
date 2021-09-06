@@ -80,6 +80,7 @@ class PrecalParser : public HydroDBParser
         void init_froude_krylov_tables();
         ModulePhase retrieve_module_phase_tables(const std::string& signal_basename, const std::string& pretty_name, const std::string& path_to_boolean_parameter) const;
         void check_unit(const std::string& section_title, const std::string& vector_key, const std::string& object_name, const std::string& expected_unit) const;
+        std::vector<std::pair<size_t, double> > get_sorted_indexed_frequencies() const;
         PrecalFile precal_file;
         boost::variant<RAOData,std::string> diffraction_module;
         boost::variant<RAOData,std::string> diffraction_phase;
