@@ -12,6 +12,14 @@
 #include "HydroDBParser.hpp"
 #include "PrecalParserHelper.hpp"
 
+
+struct ModulePhase
+{
+    ModulePhase();
+    RAOData modules;
+    RAOData phases;
+};
+
 class PrecalParser : public HydroDBParser
 {
     public:

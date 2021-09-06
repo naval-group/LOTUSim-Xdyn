@@ -10,6 +10,12 @@
 #include <ssc/decode_unit.hpp>
 #define DEG2RAD (PI/180.)
 
+ModulePhase::ModulePhase()
+    : modules()
+    , phases()
+{
+}
+
 PrecalParser PrecalParser::from_string(const std::string& precal_file_contents)
 {
     return PrecalParser(parse_precal_from_string(precal_file_contents));
