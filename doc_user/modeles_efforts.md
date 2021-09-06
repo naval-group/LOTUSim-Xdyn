@@ -2639,5 +2639,8 @@ faciliter leur exploitation.
 
 ### Exemple d'utilisation
 
-Le [tutoriel 10](#tutoriel-10-utilisation-dun-modèle-deffort-distant) détaille l'utilisation d'un modèle distant.
-Le [tutoriel 13](#tutoriel-13-) montre comment exploiter les données issues d'un calcul potentiel depuis un modèle d'effort distant.
+- Le [tutoriel 10](#tutoriel-10-utilisation-dun-modèle-deffort-distant) détaille l'utilisation d'un modèle distant.
+- Le [tutoriel
+  13](#tutoriel-13-utilisation-des-résultats-de-code-potentiel-avec-les-modèles-deffort-distant-grpc)
+  montre comment exploiter les données issues d'un calcul potentiel depuis un
+  modèle d'effort distant.
