@@ -37,8 +37,6 @@ class PrecalParser : public HydroDBParser
                                      const std::string& not_found_message) const;
 
         Eigen::Matrix<double,6,6> get_added_mass() const;
-        void init_diffraction_tables();
-        void init_froude_krylov_tables();
         std::array<std::vector<std::vector<double> >,6 > get_diffraction_module_tables() const;
         std::array<std::vector<std::vector<double> >,6 > get_diffraction_phase_tables() const;
         std::vector<double> get_diffraction_module_periods() const;
@@ -78,6 +76,8 @@ class PrecalParser : public HydroDBParser
     private:
         PrecalParser(const PrecalFile& precal_file);
         std::vector<double> extract_matrix_coeff(const std::string& short_name, const std::string& long_name, const size_t i, const size_t j) const;
+        void init_diffraction_tables();
+        void init_froude_krylov_tables();
         PrecalFile precal_file;
         boost::variant<RAOData,std::string> diffraction_module;
         boost::variant<RAOData,std::string> diffraction_phase;
