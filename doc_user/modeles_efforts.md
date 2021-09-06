@@ -2632,6 +2632,9 @@ Champs    | Description              | Clef HDB | Clef PRECAL_R |
 `forward_speed` | Vitesse à laquelle les calculs ont été réalisés | `[FORWARD_SPEED]` | `shipSpeed`
 `added_mass_coeff` | Coefficients de la matrice de masses ajoutées, par pulsation | `[Added_mass_Radiation_Damping]/[ADDED_MASS_LINE_i]` | Signaux `A_mimj` où i et j sont les numéros de ligne et de colonne (de 1 à 6)
 `radiation_damping_coeff` | Coefficients de la matrice d'amortissements de radiation, par pulsation | `[Added_mass_Radiation_Damping]/[DAMPING_TERM]` | Signaux `B_mimj` où i et j sont les numéros de ligne et de colonne (de 1 à 6)
+`wave_drift_force_tables` | Efforts de dérive sur houle, par pulsation omega et par incidence psi (M[omega][psi]) | `[DRIFT_FORCES_AND_MOMENTS]/[INCIDENCE_DFM_001]` | Signaux `F_drift_mi` où i désigne l'axe (1 pour X, 6 pour N)
+`wave_drift_periods` | Périodes auxquelles sont définies les efforts de dérive sur houle | Première colonne de `[DRIFT_FORCES_AND_MOMENTS]/[INCIDENCE_DFM_001]` | `Dimensions/WAVE FREQUENCIES/waveFreq`
+`wave_drift_psis` | Incidences auxquelles sont définis les efforts de dérive sur houle | Valeur à la fin de chaque ligne `[DRIFT_FORCES_AND_MOMENTS]/[INCIDENCE_DFM_001]    0.0000` | `Dimensions/WAVE DIRECTIONS/waveDir`
 
 
 Dans l'API Python, ces champs utilisent des tableaux Numpy afin de
