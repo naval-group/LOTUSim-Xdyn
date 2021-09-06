@@ -238,33 +238,30 @@ bool rao_is_valid_and_corresponds_to_signal_and_direction(const RAO& rao,
     return false;
 }
 
+void PrecalParser::check_unit(const std::string& section_title, const std::string& vector_key, const std::string& object_name, const std::string& expected_unit) const
+{
+    const std::string actual_unit
+        = get_string_value(section_title, vector_key, object_name, "");
+    if (actual_unit != expected_unit)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                "Unknown unit '" << actual_unit
+                                << "' for " << section_title << ">" <<  vector_key << ">" << object_name << " in PRECAL_R's output file. "
+                                    "Expected " << expected_unit);
+    }
+}
+
 ModulePhase PrecalParser::retrieve_module_phase_tables(const std::string& signal_basename, const std::string& pretty_name, const std::string& path_to_boolean_parameter) const
 {
     ModulePhase ret;
     // Get the frequencies and directions values for which RAOs will be specified
     const std::vector<double> input_frequencies
         = get_vector_value("Dimensions", "waveFreq", "wave frequencies", "");
-    const std::string frequencies_unit
-        = get_string_value("Dimensions", "unitWaveFreq", "wave frequencies unit", "");
-    if (frequencies_unit != "rad/s")
-    {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                "Unknown unit '" << frequencies_unit
-                                << "' for wave frequencies in PRECAL_R's output file. "
-                                    "Known units: 'rad/s'.");
-    }
+    check_unit("Dimensions", "unitWaveFreq", "wave frequencies unit", "rad/s");
 
     const std::vector<double> input_directions
         = get_vector_value("Dimensions", "waveDir", "wave directions", "");
-    const std::string directions_unit
-        = get_string_value("Dimensions", "unitWaveDir", "wave directions unit", "");
-    if (directions_unit != "deg")
-    {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                "Unknown unit '" << directions_unit
-                                << "' for wave directions in PRECAL_R's output file. "
-                                    "Known units: 'deg'.");
-    }
+    check_unit("Dimensions", "unitWaveDir", "wave directions unit", "deg");
 
     // Sort frequencies and directions values for which RAOs will be specified
     std::vector<std::pair<size_t, double> > frequencies;
