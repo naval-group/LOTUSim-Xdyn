@@ -299,34 +299,34 @@ RAO PrecalParser::find_rao(const std::string& signal_name, const std::string& pa
     return RAO();
 }
 
-ModulePhase PrecalParser::retrieve_module_phase_tables(const std::string& signal_basename, const std::string& pretty_name, const std::string& path_to_boolean_parameter) const
+void PrecalParser::fill_periods_directions_and_values(RAOData& rao, const std::vector<std::pair<size_t, double> >& frequencies, const std::vector<double>& directions) const
 {
-    ModulePhase ret;
-    // Get the frequencies and directions values for which RAOs will be specified
-    const auto directions = get_sorted_directions();
-    const auto frequencies = get_sorted_indexed_frequencies();
-
     // Insert sorted periods in modules and phases vectors
     for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
     {
         const double period = 2 * PI / frequencies.at(frequency_idx).second;
-        ret.modules.periods.push_back(period);
-        ret.phases.periods.push_back(period);
+        rao.periods.push_back(period);
     }
 
     // Insert sorted directions in modules and phases vectors (converting them to S.I. units)
     for (size_t psi_idx = 0; psi_idx < directions.size(); ++psi_idx)
     {
         const double psi = directions.at(psi_idx) * DEG2RAD;
-        ret.modules.psi.push_back(psi);
-        ret.phases.psi.push_back(psi);
+        rao.psi.push_back(psi);
     }
-
     // Initialize the RAOs coefficients with 0s
-    ret.modules.values.fill(std::vector<std::vector<double> >(
+    rao.values.fill(std::vector<std::vector<double> >(
         frequencies.size(), std::vector<double>(directions.size(), 0)));
-    ret.phases.values.fill(std::vector<std::vector<double> >(
-        frequencies.size(), std::vector<double>(directions.size(), 0)));
+}
+
+ModulePhase PrecalParser::retrieve_module_phase_tables(const std::string& signal_basename, const std::string& pretty_name, const std::string& path_to_boolean_parameter) const
+{
+    ModulePhase ret;
+    // Get the frequencies and directions values for which RAOs will be specified
+    const auto directions = get_sorted_directions();
+    const auto frequencies = get_sorted_indexed_frequencies();
+    fill_periods_directions_and_values(ret.modules, frequencies, directions);
+    fill_periods_directions_and_values(ret.phases, frequencies, directions);
 
     // Read the RAOs for each mode and direction.
     for (size_t psi_idx = 0; psi_idx < directions.size(); ++psi_idx)
