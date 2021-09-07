@@ -58,6 +58,21 @@ class HDBParser : public HydroDBParser
         std::vector<double> get_froude_krylov_module_psis() const;
         std::vector<double> get_froude_krylov_module_periods() const;
 
+        /**
+         * @brief Get the wave drift forces (by angular frequency a and incidence i M[a][i]), in N/(m².s).
+         */
+        std::array<std::vector<std::vector<double> >,6 > get_wave_drift_tables() const;
+        /**
+         * @brief Get the incidences at which the wave drift forces are expressed (in rad).
+         */
+        std::vector<double> get_wave_drift_psis() const;
+
+        /**
+         * @brief Periods at which the wave drift forces are expressed (in rad).
+         */
+        std::vector<double> get_wave_drift_periods() const;
+
+
     protected:
         HDBParser();
 

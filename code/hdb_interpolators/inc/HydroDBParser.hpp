@@ -53,6 +53,22 @@ class HydroDBParser
          */
         virtual std::vector<double> get_radiation_damping_coeff(const size_t i, const size_t j) const = 0;
 
+
+        /**
+         * @brief Get the wave drift forces (by angular frequency a and incidence i M[a][i]), in N/(m².s).
+         */
+        virtual std::array<std::vector<std::vector<double> >,6 > get_wave_drift_tables() const = 0;
+
+        /**
+         * @brief Get the incidences at which the wave drift forces are expressed (in rad).
+         */
+        virtual std::vector<double> get_wave_drift_psis() const = 0;
+
+        /**
+         * @brief Periods at which the wave drift forces are expressed (in rad).
+         */
+        virtual std::vector<double> get_wave_drift_periods() const = 0;
+
 };
 
 std::shared_ptr<HydroDBParser> parser_factory(const std::string& hdb_filename, const std::string& precal_filename);

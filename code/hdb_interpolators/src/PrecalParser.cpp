@@ -26,9 +26,11 @@ PrecalParser::PrecalParser(const PrecalFile& precal_file_)
     , diffraction_phase()
     , froude_krylov_module()
     , froude_krylov_phase()
+    , wave_drift_tables()
 {
     init_diffraction_tables();
     init_froude_krylov_tables();
+    init_wave_drift_tables();
 }
 
 void convert_matrix_to_xdyn_frame(Eigen::Matrix<double, 6, 6>& Ma);
@@ -367,7 +369,7 @@ RAOData PrecalParser::retrieve_module_tables(const std::string& signal_basename,
             const std::string signal_name = signal_basename + std::to_string(mode_idx + 1);
             const RAO rao = find_rao(signal_name, path_to_boolean_parameter, directions.at(psi_idx), frequencies.size());
             fill_module_values(ret, rao, frequencies, mode_idx, psi_idx);
-            check_units(pretty_name, rao.attributes.amplitude_unit, {"kN/m", "kN.m/m"});
+            check_units(pretty_name, rao.attributes.amplitude_unit, {"kN/m", "kN.m/m", "kN.m/m2", "kN/m2"});
         }
     }
     return ret;
@@ -419,6 +421,18 @@ void PrecalParser::init_froude_krylov_tables()
     {
         froude_krylov_module = e.what();
         froude_krylov_phase = e.what();
+    }
+}
+
+void PrecalParser::init_wave_drift_tables()
+{
+    try
+    {
+        wave_drift_tables = retrieve_module_tables("F_drift_m", "wave drift forces", "Export > expWaveDriftFrc");
+    }
+    catch (const InvalidInputException& e)
+    {
+        wave_drift_tables = e.what();
     }
 }
 
@@ -630,4 +644,43 @@ std::vector<double> PrecalParser::get_added_mass_coeff(const size_t i, const siz
 std::vector<double> PrecalParser::get_radiation_damping_coeff(const size_t i, const size_t j) const
 {
     return extract_matrix_coeff("B", "damping matrix", i, j);
+}
+
+/**
+ * @brief Get the wave drift forces (by angular frequency a and incidence i M[a][i]), in N/(m².s).
+ */
+std::array<std::vector<std::vector<double> >,6 > PrecalParser::get_wave_drift_tables() const
+{
+    if (std::string* err = (std::string*)boost::get<std::string>(&wave_drift_tables))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+    }
+    const RAOData* ret = boost::get<RAOData>(&wave_drift_tables);
+    return ret->values;
+}
+
+/**
+ * @brief Get the incidences at which the wave drift forces are expressed (in rad).
+ */
+std::vector<double> PrecalParser::get_wave_drift_psis() const
+{
+    if (std::string* err = (std::string*)boost::get<std::string>(&wave_drift_tables))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+    }
+    const RAOData* ret = boost::get<RAOData>(&wave_drift_tables);
+    return ret->psi;
+}
+
+/**
+ * @brief Periods at which the wave drift forces are expressed (in rad).
+ */
+std::vector<double> PrecalParser::get_wave_drift_periods() const
+{
+    if (std::string* err = (std::string*)boost::get<std::string>(&wave_drift_tables))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+    }
+    const RAOData* ret = boost::get<RAOData>(&wave_drift_tables);
+    return ret->periods;
 }

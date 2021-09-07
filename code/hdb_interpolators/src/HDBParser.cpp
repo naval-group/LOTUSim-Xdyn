@@ -45,6 +45,7 @@ class HDBParser::Impl
         , total_excitation_forces_phase()
         , froude_krylov_module()
         , froude_krylov_phase()
+        , wave_drift_forces()
         {
         }
 
@@ -61,6 +62,7 @@ class HDBParser::Impl
         , total_excitation_forces_phase(get_total_excitation_forces_phase())
         , froude_krylov_module(get_froude_krylov_module())
         , froude_krylov_phase(get_froude_krylov_phase())
+        , wave_drift_forces(get_wave_drift_forces())
         {
             bool allow_queries_outside_bounds;
             const TimestampedMatrices M_a = get_added_mass_array();
@@ -313,6 +315,11 @@ class HDBParser::Impl
             return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_FKFM_PH_001");
         }
 
+        boost::variant<RAOData,std::string> get_wave_drift_forces() const
+        {
+            return get_rao("DRIFT_FORCES_AND_MOMENTS", "INCIDENCE_DFM_001");
+        }
+
         boost::variant<RAOData,std::string> get_total_excitation_forces_module() const
         {
             return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_EFM_MOD_001");
@@ -380,6 +387,16 @@ class HDBParser::Impl
                 THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
             }
             const RAOData* ret = boost::get<RAOData>(&total_excitation_forces_phase);
+            return ret->values;
+        }
+
+        std::array<std::vector<std::vector<double> >,6 > get_wave_drift_tables() const
+        {
+            if ( std::string* err = (std::string*)boost::get<std::string>(&wave_drift_forces))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+            }
+            const RAOData* ret = boost::get<RAOData>(&wave_drift_forces);
             return ret->values;
         }
 
@@ -503,6 +520,26 @@ class HDBParser::Impl
             return ret->periods;
         }
 
+        std::vector<double> get_wave_drift_psis() const
+        {
+            if ( std::string* err = (std::string*)boost::get<std::string>(&wave_drift_forces))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+            }
+            const RAOData* ret = boost::get<RAOData>(&wave_drift_forces);
+            return ret->psi;
+        }
+
+        std::vector<double> get_wave_drift_periods() const
+        {
+            if ( std::string* err = (std::string*)boost::get<std::string>(&wave_drift_forces))
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, *err);
+            }
+            const RAOData* ret = boost::get<RAOData>(&wave_drift_forces);
+            return ret->periods;
+        }
+
         std::vector<double> get_total_excitation_force_phase_psis() const
         {
             if ( std::string* err = (std::string*)boost::get<std::string>(&total_excitation_forces_phase))
@@ -576,6 +613,7 @@ class HDBParser::Impl
         boost::variant<RAOData,std::string> total_excitation_forces_phase;
         boost::variant<RAOData,std::string> froude_krylov_module;
         boost::variant<RAOData,std::string> froude_krylov_phase;
+        boost::variant<RAOData,std::string> wave_drift_forces;
 };
 
 
@@ -754,4 +792,18 @@ HDBParser HDBParser::from_file(const std::string& filename)
 HDBParser HDBParser::from_string(const std::string& contents)
 {
     return HDBParser(contents);
+}
+
+std::array<std::vector<std::vector<double> >,6 > HDBParser::get_wave_drift_tables() const
+{
+    return pimpl->get_wave_drift_tables();
+}
+std::vector<double> HDBParser::get_wave_drift_psis() const
+{
+    return pimpl->get_wave_drift_psis();
+}
+
+std::vector<double> HDBParser::get_wave_drift_periods() const
+{
+    return pimpl->get_wave_drift_periods();
 }

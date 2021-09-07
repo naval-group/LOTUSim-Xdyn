@@ -241,6 +241,28 @@ def check_radiation_damping_coeff(results):
     assert results['Br_5_5_6(TestShip)'] == '3.191245e+06'
     print("✓ Radiation damping coefficient test passed!")
 
+def check_wave_drift_forces(results):
+    assert results['driftX(0 0)(TestShip)'] == '3.255494e+04', results['driftX(0 0)(TestShip)']
+    assert results['driftX(1 0)(TestShip)'] == '3.173188e+04', results['driftX(1 0)(TestShip)']
+    assert results['driftX(0 1)(TestShip)'] == '3.179152e+04', results['driftX(0 1)(TestShip)']
+    assert results['driftY(0 0)(TestShip)'] == '-6.258965e-03', results['driftY(0 0)(TestShip)']
+    assert results['driftY(1 0)(TestShip)'] == '2.143288e-02', results['driftY(1 0)(TestShip)']
+    assert results['driftY(0 1)(TestShip)'] == '2.331616e+04', results['driftY(0 1)(TestShip)']
+    assert results['driftM(0 0)(TestShip)'] == '-3.839448e+06', results['driftM(0 0)(TestShip)']
+    assert results['driftM(1 0)(TestShip)'] == '-3.850146e+06', results['driftM(1 0)(TestShip)']
+    assert results['driftM(0 1)(TestShip)'] == '-3.555496e+06', results['driftM(0 1)(TestShip)']
+    print("✓ Wave drift forces test passed!")
+
+def check_wave_drift_psis(results):
+    assert results['driftPsi(0)(TestShip)'] == '0.000000e+00', results['driftPsi(0)(TestShip)']
+    assert results['driftPsi(1)(TestShip)'] == '2.617994e-01', results['driftPsi(1)(TestShip)']
+    print("✓ Wave drift incidence test passed!")
+
+def check_wave_drift_periods(results):
+    assert results['driftTp(0)(TestShip)'] == '3.500000e+00', results['driftTp(0)(TestShip)']
+    assert results['driftTp(1)(TestShip)'] == '3.600000e+00', results['driftTp(1)(TestShip)']
+    assert results['driftTp(2)(TestShip)'] == '3.700000e+00', results['driftTp(2)(TestShip)']
+    print("✓ Wave drift periods test passed!")
 
 def check(results):
     """Make sure the results contain all necessary data."""
@@ -261,6 +283,9 @@ def check(results):
     print("✓ Forward speed test passed!")
     check_added_mass_coeff(results)
     check_radiation_damping_coeff(results)
+    check_wave_drift_forces(results)
+    check_wave_drift_psis(results)
+    check_wave_drift_periods(results)
 
 
 with open('hdb_output.csv', newline='') as csvfile:

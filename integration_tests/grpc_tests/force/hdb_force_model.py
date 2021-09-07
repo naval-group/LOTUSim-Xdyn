@@ -239,6 +239,21 @@ class HDBForceModel(force.Model):
         extra_observations['Br_5_5_0']  = self.pot.radiation_damping_coeff[5][5][0]
         extra_observations['Br_5_5_6'] = self.pot.radiation_damping_coeff[5][5][6]
 
+        extra_observations['driftX(0,0)'] = self.pot.wave_drift_force_tables.X[0][0]
+        extra_observations['driftX(1,0)'] = self.pot.wave_drift_force_tables.X[1][0]
+        extra_observations['driftX(0,1)'] = self.pot.wave_drift_force_tables.X[0][1]
+        extra_observations['driftY(0,0)'] = self.pot.wave_drift_force_tables.Y[0][0]
+        extra_observations['driftY(1,0)'] = self.pot.wave_drift_force_tables.Y[1][0]
+        extra_observations['driftY(0,1)'] = self.pot.wave_drift_force_tables.Y[0][1]
+        extra_observations['driftM(0,0)'] = self.pot.wave_drift_force_tables.M[0][0]
+        extra_observations['driftM(1,0)'] = self.pot.wave_drift_force_tables.M[1][0]
+        extra_observations['driftM(0,1)'] = self.pot.wave_drift_force_tables.M[0][1]
+        extra_observations['driftTp(0)'] = self.pot.wave_drift_periods[0]
+        extra_observations['driftTp(1)'] = self.pot.wave_drift_periods[1]
+        extra_observations['driftTp(2)'] = self.pot.wave_drift_periods[2]
+        extra_observations['driftTp(3)'] = self.pot.wave_drift_periods[3]
+        extra_observations['driftPsi(0)'] = self.pot.wave_drift_psis[0]
+        extra_observations['driftPsi(1)'] = self.pot.wave_drift_psis[1]
         return {'Fx': 0,
                 'Fy': 0,
                 'Fz': 0,

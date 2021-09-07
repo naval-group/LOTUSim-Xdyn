@@ -122,6 +122,30 @@ def check_radiation_damping_coeff(results):
     assert results['Br_5_5_6(TestShip)'] == '7.054820e+06', results['Br_5_5_6(TestShip)']
     print("✓ Radiation damping coefficient test passed!")
 
+def check_wave_drift_forces(results):
+    assert results['driftX(0 0)(TestShip)'] == '-8.266760e+03', results['driftX(0 0)(TestShip)']
+    assert results['driftX(1 0)(TestShip)'] == '-4.339860e+03', results['driftX(1 0)(TestShip)']
+    assert results['driftX(0 1)(TestShip)'] == '-2.943940e+04', results['driftX(0 1)(TestShip)']
+    assert results['driftY(0 0)(TestShip)'] == '1.062430e+05', results['driftY(0 0)(TestShip)']
+    assert results['driftY(1 0)(TestShip)'] == '4.128440e+04', results['driftY(1 0)(TestShip)']
+    assert results['driftY(0 1)(TestShip)'] == '1.413530e+00', results['driftY(0 1)(TestShip)']
+    assert results['driftM(0 0)(TestShip)'] == '7.372810e+05', results['driftM(0 0)(TestShip)']
+    assert results['driftM(1 0)(TestShip)'] == '4.886620e+05', results['driftM(1 0)(TestShip)']
+    assert results['driftM(0 1)(TestShip)'] == '1.826240e+06', results['driftM(0 1)(TestShip)']
+    print("✓ Wave drift forces test passed!")
+
+def check_wave_drift_psis(results):
+    assert results['driftPsi(0)(TestShip)'] == '1.570796e+00', results['diffPsi(0)(TestShip)']
+    assert results['driftPsi(1)(TestShip)'] == '3.141593e+00', results['driftPsi(1)(TestShip)']
+    print("✓ Wave drift incidence test passed!")
+
+def check_wave_drift_periods(results):
+    assert results['driftTp(0)(TestShip)'] == '6.283185e+00', results['driftTp(0)(TestShip)']
+    assert results['driftTp(1)(TestShip)'] == '6.981317e+00', results['driftTp(1)(TestShip)']
+    assert results['driftTp(2)(TestShip)'] == '7.853982e+00', results['driftTp(2)(TestShip)']
+    print("✓ Wave drift periods test passed!")
+
+
 
 def check(results):
     """Make sure the results contain all necessary data."""
@@ -142,6 +166,9 @@ def check(results):
     print("✓ Forward speed test passed!")
     check_added_mass_coeff(results)
     check_radiation_damping_coeff(results)
+    check_wave_drift_forces(results)
+    check_wave_drift_psis(results)
+    check_wave_drift_periods(results)
 
 
 with open('precal_r_output.csv', newline='') as csvfile:

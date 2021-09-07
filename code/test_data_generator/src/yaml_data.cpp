@@ -4131,6 +4131,20 @@ std::string test_data::tutorial_13_hdb_force_model()
        + "     - 'Br_0_5_6(TestShip)'\n"
        + "     - 'Br_5_5_0(TestShip)'\n"
        + "     - 'Br_5_5_6(TestShip)'\n"
+       + "     - 'driftX(0,0)(TestShip)'\n"
+       + "     - 'driftX(1,0)(TestShip)'\n"
+       + "     - 'driftX(0,1)(TestShip)'\n"
+       + "     - 'driftY(0,0)(TestShip)'\n"
+       + "     - 'driftY(1,0)(TestShip)'\n"
+       + "     - 'driftY(0,1)(TestShip)'\n"
+       + "     - 'driftM(0,0)(TestShip)'\n"
+       + "     - 'driftM(1,0)(TestShip)'\n"
+       + "     - 'driftM(0,1)(TestShip)'\n"
+       + "     - 'driftTp(0)(TestShip)'\n"
+       + "     - 'driftTp(1)(TestShip)'\n"
+       + "     - 'driftTp(2)(TestShip)'\n"
+       + "     - 'driftPsi(0)(TestShip)'\n"
+       + "     - 'driftPsi(1)(TestShip)'\n"
        ;
 }
 
