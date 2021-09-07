@@ -334,52 +334,34 @@ ModulePhase PrecalParser::retrieve_module_phase_tables(const std::string& signal
         for (size_t mode_idx = 0; mode_idx < 6; ++mode_idx)
         {
             const std::string signal_name = signal_basename + std::to_string(mode_idx + 1);
-            bool found_rao = false;
-
-            for (RAO rao : precal_file.raos)
-            {
-                if (rao_is_valid_and_corresponds_to_signal_and_direction(
-                        rao, signal_name, directions.at(psi_idx), frequencies.size()))
-                {
-                    found_rao = true;
-                    if (rao.attributes.amplitude_unit != "kN/m"
-                        && rao.attributes.amplitude_unit != "kN.m/m")
-                    {
-                        THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                            "Unknown unit '" << rao.attributes.amplitude_unit << "' for " << pretty_name << " RAO "
-                            "amplitudes in PRECAL_R's output file. Known units: 'kN/m', 'kN.m/m'.");
-                    }
-                    // Insert the RAO values for each period.
-                    for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
-                    {
-                        const size_t frequency_idx_in_input_file
-                            = frequencies.at(frequency_idx).first;
-                        ret.modules.values.at(mode_idx).at(frequency_idx).at(psi_idx)
-                            = rao.left_column.at(frequency_idx_in_input_file) * 1e3;
-                    }
-                    if (rao.attributes.phase_unit != "deg")
-                    {
-                        THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                            "Unknown unit '" << rao.attributes.phase_unit << "' for " << pretty_name << " RAO phases "
-                            "in PRECAL_R's output file. Known units: 'deg'.");
-                    }
-                    for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
-                    {
-                        const size_t frequency_idx_in_input_file
-                            = frequencies.at(frequency_idx).first;
-                        ret.phases.values.at(mode_idx).at(frequency_idx).at(psi_idx)
-                            = rao.right_column.at(frequency_idx_in_input_file) * DEG2RAD;
-                    }
-                    break;
-                }
-            }
-            if (not(found_rao))
+            const RAO rao = find_rao(signal_name, path_to_boolean_parameter, directions.at(psi_idx), frequencies.size());
+            if (rao.attributes.amplitude_unit != "kN/m"
+                && rao.attributes.amplitude_unit != "kN.m/m")
             {
                 THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                    "Unable to find RAO '" << signal_name << "' for direction '"
-                    << directions.at(psi_idx) << "' in PRECAL_R's output file. "
-                    "Perhaps you didn't set the boolean key '" << path_to_boolean_parameter << "' to true "
-                    "in PRECAL_R's input file?");
+                    "Unknown unit '" << rao.attributes.amplitude_unit << "' for " << pretty_name << " RAO "
+                    "amplitudes in PRECAL_R's output file. Known units: 'kN/m', 'kN.m/m'.");
+            }
+            // Insert the RAO values for each period.
+            for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
+            {
+                const size_t frequency_idx_in_input_file
+                    = frequencies.at(frequency_idx).first;
+                ret.modules.values.at(mode_idx).at(frequency_idx).at(psi_idx)
+                    = rao.left_column.at(frequency_idx_in_input_file) * 1e3;
+            }
+            if (rao.attributes.phase_unit != "deg")
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                    "Unknown unit '" << rao.attributes.phase_unit << "' for " << pretty_name << " RAO phases "
+                    "in PRECAL_R's output file. Known units: 'deg'.");
+            }
+            for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
+            {
+                const size_t frequency_idx_in_input_file
+                    = frequencies.at(frequency_idx).first;
+                ret.phases.values.at(mode_idx).at(frequency_idx).at(psi_idx)
+                    = rao.right_column.at(frequency_idx_in_input_file) * DEG2RAD;
             }
         }
     }
