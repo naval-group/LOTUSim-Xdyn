@@ -349,12 +349,6 @@ ModulePhase PrecalParser::retrieve_module_phase_tables(const std::string& signal
                             "Unknown unit '" << rao.attributes.amplitude_unit << "' for " << pretty_name << " RAO "
                             "amplitudes in PRECAL_R's output file. Known units: 'kN/m', 'kN.m/m'.");
                     }
-                    if (rao.attributes.phase_unit != "deg")
-                    {
-                        THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                            "Unknown unit '" << rao.attributes.phase_unit << "' for " << pretty_name << " RAO phases "
-                            "in PRECAL_R's output file. Known units: 'deg'.");
-                    }
                     // Insert the RAO values for each period.
                     for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
                     {
@@ -362,6 +356,17 @@ ModulePhase PrecalParser::retrieve_module_phase_tables(const std::string& signal
                             = frequencies.at(frequency_idx).first;
                         ret.modules.values.at(mode_idx).at(frequency_idx).at(psi_idx)
                             = rao.left_column.at(frequency_idx_in_input_file) * 1e3;
+                    }
+                    if (rao.attributes.phase_unit != "deg")
+                    {
+                        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                            "Unknown unit '" << rao.attributes.phase_unit << "' for " << pretty_name << " RAO phases "
+                            "in PRECAL_R's output file. Known units: 'deg'.");
+                    }
+                    for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
+                    {
+                        const size_t frequency_idx_in_input_file
+                            = frequencies.at(frequency_idx).first;
                         ret.phases.values.at(mode_idx).at(frequency_idx).at(psi_idx)
                             = rao.right_column.at(frequency_idx_in_input_file) * DEG2RAD;
                     }
