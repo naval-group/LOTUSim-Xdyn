@@ -341,6 +341,23 @@ void PrecalParser::fill_phase_values(RAOData& ret, const RAO& rao, const std::ve
     }
 }
 
+void check_units(const std::string& pretty_name, const std::string& actual_unit, const std::vector<std::string>& expected_units);
+void check_units(const std::string& pretty_name, const std::string& actual_unit, const std::vector<std::string>& expected_units)
+{
+    std::stringstream ss;
+    for (const auto expected_unit:expected_units)
+    {
+        if (actual_unit == expected_unit)
+        {
+            return;
+        }
+        ss << " " << expected_unit;
+    }
+    THROW(__PRETTY_FUNCTION__, InvalidInputException,
+        "Unknown unit '" << actual_unit << "' for " << pretty_name << " RAO "
+        "in PRECAL_R's output file. Known units:" << ss.str() << ".");
+}
+
 ModulePhase PrecalParser::retrieve_module_phase_tables(const std::string& signal_basename, const std::string& pretty_name, const std::string& path_to_boolean_parameter) const
 {
     ModulePhase ret;
@@ -357,21 +374,10 @@ ModulePhase PrecalParser::retrieve_module_phase_tables(const std::string& signal
         {
             const std::string signal_name = signal_basename + std::to_string(mode_idx + 1);
             const RAO rao = find_rao(signal_name, path_to_boolean_parameter, directions.at(psi_idx), frequencies.size());
+            check_units(pretty_name, rao.attributes.amplitude_unit, {"kN/m", "kN.m/m"});
+            check_units(pretty_name, rao.attributes.phase_unit, {"deg"});
             fill_module_values(ret.modules, rao, frequencies, mode_idx, psi_idx);
             fill_phase_values(ret.phases, rao, frequencies, mode_idx, psi_idx);
-            if (rao.attributes.amplitude_unit != "kN/m"
-                && rao.attributes.amplitude_unit != "kN.m/m")
-            {
-                THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                    "Unknown unit '" << rao.attributes.amplitude_unit << "' for " << pretty_name << " RAO "
-                    "amplitudes in PRECAL_R's output file. Known units: 'kN/m', 'kN.m/m'.");
-            }
-            if (rao.attributes.phase_unit != "deg")
-            {
-                THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                    "Unknown unit '" << rao.attributes.phase_unit << "' for " << pretty_name << " RAO phases "
-                    "in PRECAL_R's output file. Known units: 'deg'.");
-            }
         }
     }
     return ret;
