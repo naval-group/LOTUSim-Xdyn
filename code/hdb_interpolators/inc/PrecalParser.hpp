@@ -82,6 +82,7 @@ class PrecalParser : public HydroDBParser
         void check_unit(const std::string& section_title, const std::string& vector_key, const std::string& object_name, const std::string& expected_unit) const;
         std::vector<std::pair<size_t, double> > get_sorted_indexed_frequencies() const;
         std::vector<double> get_sorted_directions() const;
+        RAO find_rao(const std::string& signal_name, const std::string& path_to_boolean_parameter, const double direction, const size_t nb_of_frequencies) const;
         PrecalFile precal_file;
         boost::variant<RAOData,std::string> diffraction_module;
         boost::variant<RAOData,std::string> diffraction_phase;

@@ -281,6 +281,24 @@ std::vector<double> PrecalParser::get_sorted_directions() const
     return std::vector<double>(sorted_directions.begin(), sorted_directions.end());
 }
 
+RAO PrecalParser::find_rao(const std::string& signal_name, const std::string& path_to_boolean_parameter, const double direction, const size_t nb_of_frequencies) const
+{
+    for (RAO rao : precal_file.raos)
+    {
+        if (rao_is_valid_and_corresponds_to_signal_and_direction(
+                rao, signal_name, direction, nb_of_frequencies))
+        {
+            return rao;
+        }
+    }
+    THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                    "Unable to find RAO '" << signal_name << "' for direction '"
+                    << direction << "' in PRECAL_R's output file. "
+                    "Perhaps you didn't set the boolean key '" << path_to_boolean_parameter << "' to true "
+                    "in PRECAL_R's input file?");
+    return RAO();
+}
+
 ModulePhase PrecalParser::retrieve_module_phase_tables(const std::string& signal_basename, const std::string& pretty_name, const std::string& path_to_boolean_parameter) const
 {
     ModulePhase ret;
