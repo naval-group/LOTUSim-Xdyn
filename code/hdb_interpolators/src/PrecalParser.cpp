@@ -319,6 +319,28 @@ void PrecalParser::fill_periods_directions_and_values(RAOData& rao, const std::v
         frequencies.size(), std::vector<double>(directions.size(), 0)));
 }
 
+void PrecalParser::fill_module_values(RAOData& ret, const RAO& rao, const std::vector<std::pair<size_t, double> >& frequencies, const size_t mode_idx, const size_t psi_idx) const
+{
+    for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
+    {
+        const size_t frequency_idx_in_input_file
+            = frequencies.at(frequency_idx).first;
+        ret.values.at(mode_idx).at(frequency_idx).at(psi_idx)
+            = rao.left_column.at(frequency_idx_in_input_file) * 1e3;
+    }
+}
+
+void PrecalParser::fill_phase_values(RAOData& ret, const RAO& rao, const std::vector<std::pair<size_t, double> >& frequencies, const size_t mode_idx, const size_t psi_idx) const
+{
+    for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
+    {
+        const size_t frequency_idx_in_input_file
+            = frequencies.at(frequency_idx).first;
+        ret.values.at(mode_idx).at(frequency_idx).at(psi_idx)
+            = rao.right_column.at(frequency_idx_in_input_file) * DEG2RAD;
+    }
+}
+
 ModulePhase PrecalParser::retrieve_module_phase_tables(const std::string& signal_basename, const std::string& pretty_name, const std::string& path_to_boolean_parameter) const
 {
     ModulePhase ret;
@@ -335,6 +357,8 @@ ModulePhase PrecalParser::retrieve_module_phase_tables(const std::string& signal
         {
             const std::string signal_name = signal_basename + std::to_string(mode_idx + 1);
             const RAO rao = find_rao(signal_name, path_to_boolean_parameter, directions.at(psi_idx), frequencies.size());
+            fill_module_values(ret.modules, rao, frequencies, mode_idx, psi_idx);
+            fill_phase_values(ret.phases, rao, frequencies, mode_idx, psi_idx);
             if (rao.attributes.amplitude_unit != "kN/m"
                 && rao.attributes.amplitude_unit != "kN.m/m")
             {
@@ -342,26 +366,11 @@ ModulePhase PrecalParser::retrieve_module_phase_tables(const std::string& signal
                     "Unknown unit '" << rao.attributes.amplitude_unit << "' for " << pretty_name << " RAO "
                     "amplitudes in PRECAL_R's output file. Known units: 'kN/m', 'kN.m/m'.");
             }
-            // Insert the RAO values for each period.
-            for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
-            {
-                const size_t frequency_idx_in_input_file
-                    = frequencies.at(frequency_idx).first;
-                ret.modules.values.at(mode_idx).at(frequency_idx).at(psi_idx)
-                    = rao.left_column.at(frequency_idx_in_input_file) * 1e3;
-            }
             if (rao.attributes.phase_unit != "deg")
             {
                 THROW(__PRETTY_FUNCTION__, InvalidInputException,
                     "Unknown unit '" << rao.attributes.phase_unit << "' for " << pretty_name << " RAO phases "
                     "in PRECAL_R's output file. Known units: 'deg'.");
-            }
-            for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
-            {
-                const size_t frequency_idx_in_input_file
-                    = frequencies.at(frequency_idx).first;
-                ret.phases.values.at(mode_idx).at(frequency_idx).at(psi_idx)
-                    = rao.right_column.at(frequency_idx_in_input_file) * DEG2RAD;
             }
         }
     }
