@@ -358,7 +358,7 @@ void check_units(const std::string& pretty_name, const std::string& actual_unit,
         "in PRECAL_R's output file. Known units:" << ss.str() << ".");
 }
 
-RAOData PrecalParser::retrieve_module_tables(const std::string& signal_basename, const std::string& pretty_name, const std::string& path_to_boolean_parameter) const
+RAOData PrecalParser::retrieve_tables(const std::string& signal_basename, const std::string& pretty_name, const std::string& path_to_boolean_parameter, const ModuleOrPhase module_or_phase) const
 {
     RAOData ret;
     // Get the frequencies and directions values for which RAOs will be specified
@@ -370,27 +370,16 @@ RAOData PrecalParser::retrieve_module_tables(const std::string& signal_basename,
         {
             const std::string signal_name = signal_basename + std::to_string(mode_idx + 1);
             const RAO rao = find_rao(signal_name, path_to_boolean_parameter, directions.at(psi_idx), sorted_indexed_frequencies.size());
-            fill_module_values(ret, rao, sorted_indexed_frequencies, mode_idx, psi_idx);
-            check_units(pretty_name, rao.attributes.amplitude_unit, {"kN/m", "kN.m/m", "kN.m/m2", "kN/m2"});
-        }
-    }
-    return ret;
-}
-
-RAOData PrecalParser::retrieve_phase_tables(const std::string& signal_basename, const std::string& pretty_name, const std::string& path_to_boolean_parameter) const
-{
-    RAOData ret;
-    // Get the frequencies and directions values for which RAOs will be specified
-    fill_periods_directions_and_values(ret, sorted_indexed_frequencies, directions);
-    // Read the RAOs for each mode and direction.
-    for (size_t psi_idx = 0; psi_idx < directions.size(); ++psi_idx)
-    {
-        for (size_t mode_idx = 0; mode_idx < 6; ++mode_idx)
-        {
-            const std::string signal_name = signal_basename + std::to_string(mode_idx + 1);
-            const RAO rao = find_rao(signal_name, path_to_boolean_parameter, directions.at(psi_idx), sorted_indexed_frequencies.size());
-            check_units(pretty_name, rao.attributes.phase_unit, {"deg"});
-            fill_phase_values(ret, rao, sorted_indexed_frequencies, mode_idx, psi_idx);
+            if (module_or_phase == ModuleOrPhase::MODULE)
+            {
+                check_units(pretty_name, rao.attributes.amplitude_unit, {"kN/m", "kN.m/m", "kN.m/m2", "kN/m2"});
+                fill_module_values(ret, rao, sorted_indexed_frequencies, mode_idx, psi_idx);
+            }
+            else
+            {
+                check_units(pretty_name, rao.attributes.phase_unit, {"deg"});
+                fill_phase_values(ret, rao, sorted_indexed_frequencies, mode_idx, psi_idx);
+            }
         }
     }
     return ret;
@@ -400,8 +389,8 @@ void PrecalParser::init_diffraction_tables()
 {
     try
     {
-        diffraction_module = retrieve_module_tables("F_dif_m", "diffraction", "Export > expDifWaveFrc");
-        diffraction_phase = retrieve_phase_tables("F_dif_m", "diffraction", "Export > expDifWaveFrc");
+        diffraction_module = retrieve_tables("F_dif_m", "diffraction", "Export > expDifWaveFrc", ModuleOrPhase::MODULE);
+        diffraction_phase = retrieve_tables("F_dif_m", "diffraction", "Export > expDifWaveFrc", ModuleOrPhase::PHASE);
     }
     catch (const InvalidInputException& e)
     {
@@ -414,8 +403,8 @@ void PrecalParser::init_froude_krylov_tables()
 {
     try
     {
-        froude_krylov_module = retrieve_module_tables("F_inc_m", "Froude-Krylov", "sim > parRES > expIncWaveFrc");;
-        froude_krylov_phase = retrieve_phase_tables("F_inc_m", "Froude-Krylov", "sim > parRES > expIncWaveFrc");;
+        froude_krylov_module = retrieve_tables("F_inc_m", "Froude-Krylov", "sim > parRES > expIncWaveFrc", ModuleOrPhase::MODULE);;
+        froude_krylov_phase = retrieve_tables("F_inc_m", "Froude-Krylov", "sim > parRES > expIncWaveFrc", ModuleOrPhase::PHASE);;
     }
     catch (const InvalidInputException& e)
     {
@@ -428,7 +417,7 @@ void PrecalParser::init_wave_drift_tables()
 {
     try
     {
-        wave_drift_tables = retrieve_module_tables("F_drift_m", "wave drift forces", "Export > expWaveDriftFrc");
+        wave_drift_tables = retrieve_tables("F_drift_m", "wave drift forces", "Export > expWaveDriftFrc", ModuleOrPhase::MODULE);
     }
     catch (const InvalidInputException& e)
     {

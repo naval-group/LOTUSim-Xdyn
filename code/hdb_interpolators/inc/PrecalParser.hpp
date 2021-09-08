@@ -86,8 +86,8 @@ class PrecalParser : public HydroDBParser
         void init_diffraction_tables();
         void init_froude_krylov_tables();
         void init_wave_drift_tables();
-        RAOData retrieve_module_tables(const std::string& signal_basename, const std::string& pretty_name, const std::string& path_to_boolean_parameter) const;
-        RAOData retrieve_phase_tables(const std::string& signal_basename, const std::string& pretty_name, const std::string& path_to_boolean_parameter) const;
+        enum class ModuleOrPhase {MODULE, PHASE};
+        RAOData retrieve_tables(const std::string& signal_basename, const std::string& pretty_name, const std::string& path_to_boolean_parameter, const ModuleOrPhase module_or_phase) const;
         void check_unit(const std::string& section_title, const std::string& vector_key, const std::string& object_name, const std::string& expected_unit) const;
         std::vector<std::pair<size_t, double> > get_sorted_indexed_frequencies() const;
         std::vector<double> get_sorted_directions() const;
