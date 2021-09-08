@@ -5,6 +5,7 @@ SET(SRC
         src/h5_tools.cpp
         src/h5_version.cpp
         src/h5_tools.c
+        src/h5_version.c
     )
 
 
@@ -16,14 +17,13 @@ IF(NOT(MSVC))
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
 ENDIF()
 
-CONFIGURE_FILE(src/h5_version.c "${CMAKE_CURRENT_BINARY_DIR}/h5_version.c" @ONLY)
-
 INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${exceptions_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${HDF5_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${get_git_sha_INCLUDE_DIRS})
 
-ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC} ${CMAKE_CURRENT_BINARY_DIR}/h5_version.c)
+ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
 SET(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
 
 ADD_SUBDIRECTORY(unit_tests)

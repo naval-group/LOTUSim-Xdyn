@@ -12,7 +12,7 @@
 
 #include <ssc/check_ssc_version.hpp>
 #include <ssc/text_file_reader.hpp>
-
+#include "get_git_sha.h"
 #include "EmitFMIXml.hpp"
 
 std::string description(const std::string& des);
@@ -22,7 +22,7 @@ std::string description(const std::string& des)
     ss << des << " created during the project 'Bassin Numerique (IRT Jules Verne)'." << std::endl
        << "(c) SIREHNA 2014-2015." << std::endl
        << std::endl
-       << "ID: @GIT_SHA1@" << std::endl
+       << "ID: " << get_git_sha() << std::endl
        << "SHA of the SSC used: " << LONG_SSC_GIT_SHA << std::endl
        << std::endl;
     return ss.str();

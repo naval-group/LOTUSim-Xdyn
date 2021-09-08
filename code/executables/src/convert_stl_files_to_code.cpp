@@ -1,3 +1,4 @@
+#include "get_git_sha.h"
 #include "mesh_manipulations.hpp"
 #include "stl_reader.hpp"
 #include "stl_writer.hpp"
@@ -15,7 +16,7 @@ std::string description()
        << "This is done so as to avoid putting the whole ascii file in a string (unacceptable build time)." << std::endl
        << "(c) SIREHNA 2014-2015." << std::endl
        << std::endl
-       << "ID : @GIT_SHA1@" << std::endl
+       << "ID : " << get_git_sha() << std::endl
        << std::endl;
     return ss.str();
 }

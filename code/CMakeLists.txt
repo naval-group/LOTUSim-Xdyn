@@ -62,6 +62,7 @@ SET(ssc_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/ssc" CACHE PATH "Path to SSC i
 SET(SSC_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/ssc" CACHE PATH "Path to SSC include directory")
 SET(F2C_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ssc/ssc/f2c" CACHE PATH "Path to f2c include directory")
 
+ADD_SUBDIRECTORY(get_git_sha)
 ADD_SUBDIRECTORY(base91x)
 ADD_SUBDIRECTORY(exceptions)
 ADD_SUBDIRECTORY(external_data_structures)
@@ -130,6 +131,7 @@ ADD_LIBRARY(${PROJECT_NAME} ${STATICORSHARED}
     $<TARGET_OBJECTS:solver_object>
 
         $<TARGET_OBJECTS:core>
+        $<TARGET_OBJECTS:get_git_sha>
         $<TARGET_OBJECTS:observers_and_api>
         $<TARGET_OBJECTS:listeners_and_controllers>
         $<TARGET_OBJECTS:force_models>

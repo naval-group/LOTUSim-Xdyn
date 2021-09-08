@@ -44,6 +44,7 @@ INCLUDE_DIRECTORIES(SYSTEM ${base91x_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${eigen_hdf5_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${HDF5_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(SYSTEM ${PROTOBUF_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${get_git_sha_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${exceptions_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${boost_program_options_descriptions_INCLUDE_DIRS})
@@ -99,16 +100,8 @@ ADD_CUSTOM_COMMAND(
            "${PROTOC_PREFIX}${model_exchange_proto}"
       DEPENDS "${model_exchange_proto}")
 
-CONFIGURE_FILE(
-        src/display_command_line_arguments.cpp
-        "${CMAKE_CURRENT_BINARY_DIR}/display_command_line_arguments.cpp" @ONLY)
-
-CONFIGURE_FILE(
-        src/convert_stl_files_to_code.cpp
-        "${CMAKE_CURRENT_BINARY_DIR}/convert_stl_files_to_code.cpp" @ONLY)
-
 ADD_EXECUTABLE(xdyn
-        ${CMAKE_CURRENT_BINARY_DIR}/display_command_line_arguments.cpp
+        src/display_command_line_arguments.cpp
         src/parse_XdynCommandLineArguments.cpp
         src/build_observers_description.cpp
         src/XdynCommandLineArguments.cpp
@@ -170,7 +163,7 @@ ADD_EXECUTABLE(quat2eul src/convert_quaternion_to_euler.cpp
     )
 
 ADD_EXECUTABLE(convert_stl_files_to_code
-        ${CMAKE_CURRENT_BINARY_DIR}/convert_stl_files_to_code.cpp
+        src/convert_stl_files_to_code.cpp
         )
 
 TARGET_LINK_LIBRARIES(convert_stl_files_to_code
@@ -183,7 +176,7 @@ TARGET_LINK_LIBRARIES(convert_stl_files_to_code
 
 ADD_EXECUTABLE(gz
         src/gz.cpp
-        ${CMAKE_CURRENT_BINARY_DIR}/display_command_line_arguments.cpp
+        src/display_command_line_arguments.cpp
         src/parse_XdynCommandLineArguments.cpp
         src/XdynCommandLineArguments.cpp
         src/ErrorReporter.cpp
@@ -218,7 +211,7 @@ TARGET_LINK_LIBRARIES(generate_stl_examples
         )
 
 ADD_EXECUTABLE(xdyn-for-cs
-        ${CMAKE_CURRENT_BINARY_DIR}/display_command_line_arguments.cpp
+        src//display_command_line_arguments.cpp
         src/parse_XdynForCSCommandLineArguments.cpp
         src/build_observers_description.cpp
         src/XdynForCSCommandLineArguments.cpp
@@ -241,7 +234,7 @@ TARGET_LINK_LIBRARIES(xdyn-for-cs
         )
 
 ADD_EXECUTABLE(xdyn-for-me
-        ${CMAKE_CURRENT_BINARY_DIR}/display_command_line_arguments.cpp
+        src/display_command_line_arguments.cpp
         src/parse_XdynForMECommandLineArguments.cpp
         src/build_observers_description.cpp
         src/XdynForMECommandLineArguments.cpp
