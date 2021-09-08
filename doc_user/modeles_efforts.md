@@ -2611,42 +2611,45 @@ class HDBForceModel(force.Model):
         self.results_from_potential_theory = results_from_potential_theory
 ```
 
-On peut ensuite accéder aux champs suivants :
+Les valeurs lues des fichiers HDB et PRECAL_R sont converties en unités du Système International, sans multiple (par exemple des Newtons et non des kilo-Newtons).
 
-Champs    | Description              | Clef HDB | Clef PRECAL_R |
---------- | ------------------------ | -------- | ------------- |
-`Ma`      | Matrice de masse ajoutée à fréquence infinie | `[Added_mass_Radiation_Damping]/[ADDED_MASS_LINE_i]` (uniquement la première ligne, à période minimale) | `added_mass_damping_matrix_inf_freq/total_added_mass_matrix_inf_freq_U1_mu1`
-`diffraction_module_tables` | Module des efforts de diffraction, par pulsation omega et par incidence psi (M[omega][psi]) | `[DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_MOD_i]` | Colonne de gauche des signaux `F_dif_mi` où i désigne le degré de liberté, de 1 à 6
-`diffraction_phase_tables` | Phase des efforts de diffraction, par pulsation omega et par incidence psi (M[omega][psi]) | `[DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_PH_i]` | Colonne de droite des signaux `F_dif_mi` où i désigne le degré de liberté, de 1 à 6
-`diffraction_module_periods` | Périodes auxquelles sont définis les modules des efforts de diffraction | Première colonne de `[DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_MOD_i]` | `Dimensions/WAVE FREQUENCIES/waveFreq`
-`diffraction_phase_periods` | Périodes auxquelles sont définies les phases des efforts de diffraction | Première colonne de `[DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_PH_i]` | `Dimensions/WAVE FREQUENCIES/waveFreq`
-`diffraction_module_psis` | Incidences auxquelles sont définis les modules des efforts de diffraction | `[DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_MOD_i]` | `Dimensions/WAVE DIRECTIONS/waveDir`
-`diffraction_phase_psis` | Incidences auxquelles sont définies les phases des efforts de diffraction | `[DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_PH_i]` | `Dimensions/WAVE DIRECTIONS/waveDir`
-`froude_krylov_module_tables` | Module des efforts de Froude-Krylov, par pulsation omega et par incidence psi (M[omega][psi]) | `[FROUDE-KRYLOV_FORCES_AND_MOMENTS]/[INCIDENCE_FKFM_MOD_i]` | Colonne de gauche des signaux `F_inc_mi` où i désigne le degré de liberté, de 1 à 6
-`froude_krylov_phase_tables` | Phase des efforts de Froude-Krylov, , par pulsation omega et par incidence psi (M[omega][psi]) | `[FROUDE-KRYLOV_FORCES_AND_MOMENTS]/[INCIDENCE_FKFM_PH_i]` | Colonne de droite des signaux `F_inc_mi` où i désigne le degré de liberté, de 1 à 6
-`froude_krylov_module_periods` | Périodes auxquelles sont définis les modules des efforts de Froude-Krylov | Première colonne de chaque ligne de `[FROUDE-KRYLOV_FORCES_AND_MOMENTS]/[INCIDENCE_FKFM_MOD_i]` | `Dimensions/WAVE FREQUENCIES/waveFreq`
-`froude_krylov_phase_periods` | Périodes auxquelles sont définies les phases des efforts de Froude-Krylov | Première colonne de chaque ligne de `[FROUDE-KRYLOV_FORCES_AND_MOMENTS]/[INCIDENCE_FKFM_PH_i]` | `Dimensions/WAVE FREQUENCIES/waveFreq`
-`froude_krylov_module_psis` | Incidences auxquelles sont définis les modules des efforts de Froude-Krylov | `[FROUDE-KRYLOV_FORCES_AND_MOMENTS]/[INCIDENCE_FKFM_MOD_i]` | `Dimensions/WAVE DIRECTIONS/waveDir`
-`froude_krylov_phase_psis` | Incidences auxquelles sont définies les phases des efforts de Froude-Krylov | `[FROUDE-KRYLOV_FORCES_AND_MOMENTS]/[INCIDENCE_FKFM_PH_i]` | `Dimensions/WAVE DIRECTIONS/waveDir`
-`angular_frequencies` | Pulsations auxquelles sont définis les coefficients de la matrice de masses ajoutées et les coefficients d'amortissement de radiation | Première colonne de `[Added_mass_Radiation_Damping]/[ADDED_MASS_LINE_i]` | `Dimensions/WAVE FREQUENCIES/waveFreq`
-`forward_speed` | Vitesse à laquelle les calculs ont été réalisés | `[FORWARD_SPEED]` | `shipSpeed`
-`added_mass_coeff` | Coefficients de la matrice de masses ajoutées, par pulsation | `[Added_mass_Radiation_Damping]/[ADDED_MASS_LINE_i]` | Signaux `A_mimj` où i et j sont les numéros de ligne et de colonne (de 1 à 6)
-`radiation_damping_coeff` | Coefficients de la matrice d'amortissements de radiation, par pulsation | `[Added_mass_Radiation_Damping]/[DAMPING_TERM]` | Signaux `B_mimj` où i et j sont les numéros de ligne et de colonne (de 1 à 6)
-`wave_drift_force_tables` | Efforts de dérive sur houle, par pulsation omega et par incidence psi (M[omega][psi]) | `[DRIFT_FORCES_AND_MOMENTS]/[INCIDENCE_DFM_001]` | Signaux `F_drift_mi` où i désigne l'axe (1 pour X, 6 pour N)
-`wave_drift_periods` | Périodes auxquelles sont définies les efforts de dérive sur houle | Première colonne de `[DRIFT_FORCES_AND_MOMENTS]/[INCIDENCE_DFM_001]` | `Dimensions/WAVE FREQUENCIES/waveFreq`
-`wave_drift_psis` | Incidences auxquelles sont définis les efforts de dérive sur houle | Valeur à la fin de chaque ligne `[DRIFT_FORCES_AND_MOMENTS]/[INCIDENCE_DFM_001]    0.0000` | `Dimensions/WAVE DIRECTIONS/waveDir`
+Les modèles d'effort distants peuvent accéder aux champs suivants :
+
+Champs    | Description              | Clef HDB | Clef PRECAL_R | Unité |
+--------- | ------------------------ | -------- | ------------- | ----- |
+`Ma`      | Matrice de masse ajoutée à fréquence infinie | `[Added_mass_Radiation_Damping]/[ADDED_MASS_LINE_i]` (uniquement la première ligne, à période minimale) | `added_mass_damping_matrix_inf_freq/total_added_mass_matrix_inf_freq_U1_mu1` | kg pour $`1\leq i,j\leq 3`$, kg.m² pour $`4\leq i,j\leq 6`$, kg.m sinon |
+`diffraction_module_tables` | Module des efforts de diffraction, par pulsation omega et par incidence psi (M[omega][psi]) | `[DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_MOD_i]` | Colonne de gauche des signaux `F_dif_mi` où i désigne le degré de liberté, de 1 à 6 | N/m pour i < 4 et N.m/m pour i > 3 |
+`diffraction_phase_tables` | Phase des efforts de diffraction, par pulsation omega et par incidence psi (M[omega][psi]) | `[DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_PH_i]` | Colonne de droite des signaux `F_dif_mi` où i désigne le degré de liberté, de 1 à 6 | rad |
+`diffraction_module_periods` | Périodes auxquelles sont définis les modules des efforts de diffraction | Première colonne de `[DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_MOD_i]` | Déduit de `Dimensions/WAVE FREQUENCIES/waveFreq` | s |
+`diffraction_phase_periods` | Périodes auxquelles sont définies les phases des efforts de diffraction | Première colonne de `[DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_PH_i]` | Déduit de `Dimensions/WAVE FREQUENCIES/waveFreq` | s |
+`diffraction_module_psis` | Incidences auxquelles sont définis les modules des efforts de diffraction | `[DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_MOD_i]` | `Dimensions/WAVE DIRECTIONS/waveDir` | rad |
+`diffraction_phase_psis` | Incidences auxquelles sont définies les phases des efforts de diffraction | `[DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_PH_i]` | `Dimensions/WAVE DIRECTIONS/waveDir` | rad |
+`froude_krylov_module_tables` | Module des efforts de Froude-Krylov, par pulsation omega et par incidence psi (M[omega][psi]) | `[FROUDE-KRYLOV_FORCES_AND_MOMENTS]/[INCIDENCE_FKFM_MOD_i]` | Colonne de gauche des signaux `F_inc_mi` où i désigne le degré de liberté, de 1 à 6 | N/m pour i < 4 et N.m/m pour i > 3 |
+`froude_krylov_phase_tables` | Phase des efforts de Froude-Krylov, , par pulsation omega et par incidence psi (M[omega][psi]) | `[FROUDE-KRYLOV_FORCES_AND_MOMENTS]/[INCIDENCE_FKFM_PH_i]` | Colonne de droite des signaux `F_inc_mi` où i désigne le degré de liberté, de 1 à 6 | rad |
+`froude_krylov_module_periods` | Périodes auxquelles sont définis les modules des efforts de Froude-Krylov | Première colonne de chaque ligne de `[FROUDE-KRYLOV_FORCES_AND_MOMENTS]/[INCIDENCE_FKFM_MOD_i]` | Déduit de `Dimensions/WAVE FREQUENCIES/waveFreq` | s |
+`froude_krylov_phase_periods` | Périodes auxquelles sont définies les phases des efforts de Froude-Krylov | Première colonne de chaque ligne de `[FROUDE-KRYLOV_FORCES_AND_MOMENTS]/[INCIDENCE_FKFM_PH_i]` | Déduit de `Dimensions/WAVE FREQUENCIES/waveFreq` | s |
+`froude_krylov_module_psis` | Incidences auxquelles sont définis les modules des efforts de Froude-Krylov | `[FROUDE-KRYLOV_FORCES_AND_MOMENTS]/[INCIDENCE_FKFM_MOD_i]` | `Dimensions/WAVE DIRECTIONS/waveDir` | rad |
+`froude_krylov_phase_psis` | Incidences auxquelles sont définies les phases des efforts de Froude-Krylov | `[FROUDE-KRYLOV_FORCES_AND_MOMENTS]/[INCIDENCE_FKFM_PH_i]` | `Dimensions/WAVE DIRECTIONS/waveDir` | rad |
+`angular_frequencies` | Pulsations auxquelles sont définis les coefficients de la matrice de masses ajoutées et les coefficients d'amortissement de radiation | Première colonne de `[Added_mass_Radiation_Damping]/[ADDED_MASS_LINE_i]` | `Dimensions/WAVE FREQUENCIES/waveFreq` | rad/s |
+`forward_speed` | Vitesse à laquelle les calculs ont été réalisés | `[FORWARD_SPEED]` | `shipSpeed` | m/s |
+`added_mass_coeff` | Coefficients de la matrice de masses ajoutées, par pulsation | `[Added_mass_Radiation_Damping]/[ADDED_MASS_LINE_i]` | Signaux `A_mimj` où i et j sont les numéros de ligne et de colonne (de 1 à 6) | kg pour $`1\leq i,j\leq 3`$, kg.m² pour $`4\leq i,j\leq 6`$, kg.m sinon |
+`radiation_damping_coeff` | Coefficients de la matrice d'amortissements de radiation, par pulsation | `[Added_mass_Radiation_Damping]/[DAMPING_TERM]` | Signaux `B_mimj` où i et j sont les numéros de ligne et de colonne (de 1 à 6) | kg/s pour $`1\leq i,j\leq 3`$, kg.m²/s pour $`4\leq i,j\leq 6`$, kg.m/s sinon |
+`wave_drift_force_tables` | Efforts de dérive sur houle, par pulsation omega et par incidence psi (M[omega][psi]) | `[DRIFT_FORCES_AND_MOMENTS]/[INCIDENCE_DFM_001]` | Signaux `F_drift_mi` où i désigne l'axe (1 pour X, 6 pour N) | kg/m/s² pour $`1\leq i\leq 3`$, kg/s² pour $`4\leq i\leq 6`$ |
+`wave_drift_periods` | Périodes auxquelles sont définies les efforts de dérive sur houle | Première colonne de `[DRIFT_FORCES_AND_MOMENTS]/[INCIDENCE_DFM_001]` | Déduit de `Dimensions/WAVE FREQUENCIES/waveFreq` | s |
+`wave_drift_psis` | Incidences auxquelles sont définis les efforts de dérive sur houle | Valeur à la fin de chaque ligne `[DRIFT_FORCES_AND_MOMENTS]/[INCIDENCE_DFM_001]    0.0000` | `Dimensions/WAVE DIRECTIONS/waveDir` | rad |
 
 
-Dans l'API Python, ces champs utilisent des tableaux Numpy afin de
-faciliter leur exploitation.
+Dans l'API Python, ces champs sont représentés par des tableaux Numpy afin de
+faciliter leur traitement numérique grâce aux fonctions de la bibliothèque Numpy.
 
 Les matrices des fichiers PRECAL_R et HDB sont supposées exprimées dans un
-repère "Z vers le haut" : elles sont dont systématiquement converties dans le
+repère "Z vers le haut" : elles sont donc systématiquement converties dans le
 repère "BODY" d'xdyn (Z vers le bas).
 
 Si $`M_h=((m_{ij}))_{1\leq i,j\leq 6}`$ désigne une matrice d'un fichier
 PRECAL_R ou HDB et $`M_x`$ est la représentation de cette matrice dans le
-repère BODY d'xdyn, xdyn effectue le calcul suivant :
+repère BODY d'xdyn, xdyn effectue le calcul suivant sur les résultats des
+codes potentiel avant de les fournir aux modèles d'effort :
 
 ```math
 M_x=t(R)M_h R =
@@ -2660,7 +2663,7 @@ M_x=t(R)M_h R =
 \end{array}\right]
 ```
 
-où $`R`$ est la matrice de passage du repère PRECAL_R/AQUA+ vers le repère xdyn :
+où $`R`$ est la matrice de passage du repère PRECAL_R/AQUA+ vers le repère xdyn et a pour expression :
 
 ```math
 R=\left[
