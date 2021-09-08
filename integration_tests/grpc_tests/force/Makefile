@@ -1,7 +1,7 @@
 .PHONY: all clean cosim hdb precal-r sim
 
 DOCKER_IMAGE=xdyn
-DOCKER_WORKING_DIRECTORY=/opt/share
+DOCKER_WORKING_DIRECTORY=/xdyn_demos
 DOCKER_RUN := docker run --rm \
     -u $(shell id -u):$(shell id -g) \
     -v $(shell pwd):${DOCKER_WORKING_DIRECTORY} \
