@@ -2642,6 +2642,11 @@ Champs    | Description              | Clef HDB | Clef PRECAL_R | Unité |
 Dans l'API Python, ces champs sont représentés par des tableaux Numpy afin de
 faciliter leur traitement numérique grâce aux fonctions de la bibliothèque Numpy.
 
+**⚠  Attention** : si les fichiers HDB et PRECAL_R commencent leur numérotation à 1,
+il n'en va pas de même pour le code Python : un indice `i` de 1 dans le tableau
+précédent correspond donc à un indice de `0` dans les tableaux Numpy de l'API
+Python.
+
 Les matrices des fichiers PRECAL_R et HDB sont supposées exprimées dans un
 repère "Z vers le haut" : elles sont donc systématiquement converties dans le
 repère "BODY" d'xdyn (Z vers le bas).
