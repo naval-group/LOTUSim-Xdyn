@@ -65,7 +65,7 @@ class HydroDBParser
         virtual std::vector<double> get_wave_drift_psis() const = 0;
 
         /**
-         * @brief Periods at which the wave drift forces are expressed (in rad).
+         * @brief Periods at which the wave drift forces are expressed (in seconds).
          */
         virtual std::vector<double> get_wave_drift_periods() const = 0;
 
