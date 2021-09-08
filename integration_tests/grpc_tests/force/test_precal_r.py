@@ -10,7 +10,6 @@ def check_added_mass_matrix(results):
     assert results['Ma(1 3)(TestShip)'] == '1.130000e+06', results['Ma(1 3)(TestShip)']
     print("✓ Added mass matrix test passed!")
 
-
 def check_diffraction_module_tables(results):
     """Verify the diffraction module tables."""
     # First line of [INCIDENCE_EFM_MOD_001]   0.000000
@@ -22,7 +21,6 @@ def check_diffraction_module_tables(results):
     assert results['diffY(0 1)(TestShip)'] == '2.050860e-01', results['diffY(0 1)(TestShip)']
     assert results['diffZ(0 1)(TestShip)'] == '1.278260e+06', results['diffZ(0 1)(TestShip)']
     print("✓ Diffraction module table test passed!")
-
 
 def check_diffraction_phase_tables(results):
     """Verify the diffraction phase tables."""
@@ -36,13 +34,11 @@ def check_diffraction_phase_tables(results):
     assert results['diffpZ(0 1)(TestShip)'] == '-2.000946e+00', results['diffpZ(0 1)(TestShip)']
     print("✓ Diffraction phase table test passed!")
 
-
 def check_diffraction_module_periods(results):
     assert results['diffT0(TestShip)'] == '6.283185e+00', results['diffT0(TestShip)']
     assert results['diffT1(TestShip)'] == '6.981317e+00', results['diffT1(TestShip)']
     assert results['diffT2(TestShip)'] == '7.853982e+00', results['diffT2(TestShip)']
     print("✓ Diffraction module periods test passed!")
-
 
 def check_diffraction_phase_periods(results):
     assert results['diffTp0(TestShip)'] == '6.283185e+00', results['diffTp0(TestShip)']
@@ -145,8 +141,6 @@ def check_wave_drift_periods(results):
     assert results['driftTp(2)(TestShip)'] == '7.853982e+00', results['driftTp(2)(TestShip)']
     print("✓ Wave drift periods test passed!")
 
-
-
 def check(results):
     """Make sure the results contain all necessary data."""
     check_added_mass_matrix(results)
@@ -169,7 +163,6 @@ def check(results):
     check_wave_drift_forces(results)
     check_wave_drift_psis(results)
     check_wave_drift_periods(results)
-
 
 with open('precal_r_output.csv', newline='') as csvfile:
     csv_reader = csv.DictReader(csvfile)

@@ -22,7 +22,6 @@ def check_added_mass_matrix(results):
     assert results['Ma(5 5)(TestShip)'] == '3.318626e+09'
     print("✓ Added mass matrix test passed!")
 
-
 def check_diffraction_module_tables(results):
     """Verify the diffraction module tables."""
     # First line of [INCIDENCE_EFM_MOD_001]   0.000000
@@ -68,7 +67,6 @@ def check_diffraction_module_tables(results):
     assert results['diffM(2 1)(TestShip)'] == '2.996725e+07'
     assert results['diffN(2 1)(TestShip)'] == '8.392296e+06'
     print("✓ Diffraction module table test passed!")
-
 
 def check_diffraction_phase_tables(results):
     """Verify the diffraction phase tables."""
@@ -116,13 +114,11 @@ def check_diffraction_phase_tables(results):
     assert results['diffpN(2 1)(TestShip)'] == '6.210995e-01'
     print("✓ Diffraction phase table test passed!")
 
-
 def check_diffraction_module_periods(results):
     assert results['diffT0(TestShip)'] == '3.500000e+00'
     assert results['diffT1(TestShip)'] == '3.600000e+00'
     assert results['diffT2(TestShip)'] == '3.700000e+00'
     print("✓ Diffraction module periods test passed!")
-
 
 def check_diffraction_phase_periods(results):
     assert results['diffTp0(TestShip)'] == '3.500000e+00'
@@ -286,7 +282,6 @@ def check(results):
     check_wave_drift_forces(results)
     check_wave_drift_psis(results)
     check_wave_drift_periods(results)
-
 
 with open('hdb_output.csv', newline='') as csvfile:
     csv_reader = csv.DictReader(csvfile)
