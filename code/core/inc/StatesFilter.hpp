@@ -20,7 +20,9 @@ class StatesFilter
         double get_value(const History& h) const;
 
     private:
-        StatesFilter();
+        StatesFilter() = delete;
+        StatesFilter(const double duration_in_seconds);
+        double duration_in_seconds;
 };
 
 #endif

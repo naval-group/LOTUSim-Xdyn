@@ -44,7 +44,7 @@ TEST_F(StatesFilterTest, should_not_throw_if_yaml_is_valid)
 
 TEST_F(StatesFilterTest, if_duration_is_zero_no_filtering_should_take_place)
 {
-    History h(2);
+    History h(3);
     const double last_value = a.random<double>();
     h.record(0, 1);
     h.record(1, 2);
@@ -53,4 +53,16 @@ TEST_F(StatesFilterTest, if_duration_is_zero_no_filtering_should_take_place)
                              "duration in seconds : 0";
     const auto filter = StatesFilter::build(yaml);
     ASSERT_DOUBLE_EQ(last_value, filter->get_value(h));
+}
+
+TEST_F(StatesFilterTest, should_be_able_to_filter)
+{
+    History h(3);
+    h.record(0, 1);
+    h.record(1, 2);
+    h.record(2, 3);
+    const std::string yaml = "type of filter: moving average\n"
+                             "duration in seconds : 1";
+    const auto filter = StatesFilter::build(yaml);
+    ASSERT_DOUBLE_EQ(2.5, filter->get_value(h));
 }
