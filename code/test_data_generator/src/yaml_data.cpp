@@ -661,6 +661,18 @@ std::string one_ton_rigid_inertia_matrix()
            "            row 6: [0,0,0,0,0,1E3]\n";
 }
 
+std::string no_added_mass();
+std::string no_added_mass()
+{
+    return "        added mass matrix at the center of gravity and projected in the body frame:\n"
+           "            row 1: [0,0,0,0,0,0]\n"
+           "            row 2: [0,0,0,0,0,0]\n"
+           "            row 3: [0,0,0,0,0,0]\n"
+           "            row 4: [0,0,0,0,0,0]\n"
+           "            row 5: [0,0,0,0,0,0]\n"
+           "            row 6: [0,0,0,0,0,0]\n";
+}
+
 std::string test_data::falling_ball_example()
 {
     return rotation_convention()
@@ -686,13 +698,7 @@ std::string test_data::falling_ball_example()
        + "            row 4: [0,0,0,1E6,0,0]\n"
        + "            row 5: [0,0,0,0,1E6,0]\n"
        + "            row 6: [0,0,0,0,0,1E6]\n"
-       + "        added mass matrix at the center of gravity and projected in the body frame:\n"
-       + "            row 1: [0,0,0,0,0,0]\n"
-       + "            row 2: [0,0,0,0,0,0]\n"
-       + "            row 3: [0,0,0,0,0,0]\n"
-       + "            row 4: [0,0,0,0,0,0]\n"
-       + "            row 5: [0,0,0,0,0,0]\n"
-       + "            row 6: [0,0,0,0,0,0]\n"
+       + no_added_mass()
        + "    external forces:\n"
        + "      - model: gravity\n"
        + "output:\n"
@@ -732,13 +738,7 @@ std::string test_data::simserver_test_with_commands_and_delay()
        + "            row 4: [0,0,0,1,0,0]\n"
        + "            row 5: [0,0,0,0,1,0]\n"
        + "            row 6: [0,0,0,0,0,1]\n"
-       + "        added mass matrix at the center of gravity and projected in the body frame:\n"
-       + "            row 1: [0,0,0,0,0,0]\n"
-       + "            row 2: [0,0,0,0,0,0]\n"
-       + "            row 3: [0,0,0,0,0,0]\n"
-       + "            row 4: [0,0,0,0,0,0]\n"
-       + "            row 5: [0,0,0,0,0,0]\n"
-       + "            row 6: [0,0,0,0,0,0]\n"
+       + no_added_mass()
        + "    external forces:\n"
        + "      - model: maneuvering\n"
        + "        name: F1\n"
@@ -779,13 +779,7 @@ std::string test_data::falling_cube()
        + hydrodynamic_calculation_point()
        + centre_of_inertia("cube", 0, 0, 0.5)
        + one_ton_rigid_inertia_matrix()
-       + "        added mass matrix at the center of gravity and projected in the body frame:\n"
-       + "            row 1: [0,0,0,0,0,0]\n"
-       + "            row 2: [0,0,0,0,0,0]\n"
-       + "            row 3: [0,0,0,0,0,0]\n"
-       + "            row 4: [0,0,0,0,0,0]\n"
-       + "            row 5: [0,0,0,0,0,0]\n"
-       + "            row 6: [0,0,0,0,0,0]\n"
+       + no_added_mass()
        + "    external forces:\n"
        + "      - model: gravity\n";
 }
@@ -812,13 +806,7 @@ std::string test_data::rolling_cube()
        + hydrodynamic_calculation_point()
        + centre_of_inertia("cube", 0, 0, 0.5)
        + one_ton_rigid_inertia_matrix()
-       + "        added mass matrix at the center of gravity and projected in the body frame:\n"
-       + "            row 1: [0,0,0,0,0,0]\n"
-       + "            row 2: [0,0,0,0,0,0]\n"
-       + "            row 3: [0,0,0,0,0,0]\n"
-       + "            row 4: [0,0,0,0,0,0]\n"
-       + "            row 5: [0,0,0,0,0,0]\n"
-       + "            row 6: [0,0,0,0,0,0]\n"
+       + no_added_mass()
        + "    external forces:\n"
        + "      - model: gravity\n"
        + "      - model: non-linear hydrostatic (fast)\n";
@@ -846,13 +834,7 @@ std::string test_data::oscillating_cube_example()
        + hydrodynamic_calculation_point()
        + centre_of_inertia("cube", 0, 0, 0)
        + one_ton_rigid_inertia_matrix()
-       + "        added mass matrix at the center of gravity and projected in the body frame:\n"
-       + "            row 1: [0,0,0,0,0,0]\n"
-       + "            row 2: [0,0,0,0,0,0]\n"
-       + "            row 3: [0,0,0,0,0,0]\n"
-       + "            row 4: [0,0,0,0,0,0]\n"
-       + "            row 5: [0,0,0,0,0,0]\n"
-       + "            row 6: [0,0,0,0,0,0]\n"
+       + no_added_mass()
        + "    external forces:\n"
        + "      - model: gravity\n"
        + "      - model: non-linear hydrostatic (fast)\n";
@@ -886,13 +868,7 @@ std::string test_data::new_oscillating_cube_example()
        + "            row 4: [0,0,0,5E2,0,0]\n"
        + "            row 5: [0,0,0,0,5E2,0]\n"
        + "            row 6: [0,0,0,0,0,5E2]\n"
-       + "        added mass matrix at the center of gravity and projected in the body frame:\n"
-       + "            row 1: [0,0,0,0,0,0]\n"
-       + "            row 2: [0,0,0,0,0,0]\n"
-       + "            row 3: [0,0,0,0,0,0]\n"
-       + "            row 4: [0,0,0,0,0,0]\n"
-       + "            row 5: [0,0,0,0,0,0]\n"
-       + "            row 6: [0,0,0,0,0,0]\n"
+       + no_added_mass()
        + "    external forces:\n"
        + "      - model: gravity\n"
        + "      - model: hydrostatic\n";
@@ -921,13 +897,7 @@ std::string test_data::stable_cube_example()
        + hydrodynamic_calculation_point()
        + centre_of_inertia("cube", 0, 0, 0)
        + one_ton_rigid_inertia_matrix()
-       + "        added mass matrix at the center of gravity and projected in the body frame:\n"
-       + "            row 1: [0,0,0,0,0,0]\n"
-       + "            row 2: [0,0,0,0,0,0]\n"
-       + "            row 3: [0,0,0,0,0,0]\n"
-       + "            row 4: [0,0,0,0,0,0]\n"
-       + "            row 5: [0,0,0,0,0,0]\n"
-       + "            row 6: [0,0,0,0,0,0]\n"
+       + no_added_mass()
        + "    external forces:\n"
        + "      - model: gravity\n"
        + "      - model: non-linear hydrostatic (fast)\n";
@@ -970,13 +940,7 @@ std::string test_data::stable_rolling_cube_test()
        + "            row 4: [0,0,0,83.33,0,0]\n"
        + "            row 5: [0,0,0,0,83.33,0]\n"
        + "            row 6: [0,0,0,0,0,83.33]\n"
-       + "        added mass matrix at the center of gravity and projected in the body frame:\n"
-       + "            row 1: [0,0,0,0,0,0]\n"
-       + "            row 2: [0,0,0,0,0,0]\n"
-       + "            row 3: [0,0,0,0,0,0]\n"
-       + "            row 4: [0,0,0,0,0,0]\n"
-       + "            row 5: [0,0,0,0,0,0]\n"
-       + "            row 6: [0,0,0,0,0,0]\n"
+       + no_added_mass()
        + "    external forces:\n"
        + "      - model: gravity\n"
        + "      - model: non-linear hydrostatic (fast)\n"
@@ -1321,13 +1285,7 @@ std::string test_data::cube_in_waves()
            << "            z: {value: 1.418, unit: m}\n"
            << centre_of_inertia("cube", 0, 0, 0.5)
            << one_ton_rigid_inertia_matrix()
-           << "        added mass matrix at the center of gravity and projected in the body frame:\n"
-           << "            row 1: [0,0,0,0,0,0]\n"
-           << "            row 2: [0,0,0,0,0,0]\n"
-           << "            row 3: [0,0,0,0,0,0]\n"
-           << "            row 4: [0,0,0,0,0,0]\n"
-           << "            row 5: [0,0,0,0,0,0]\n"
-           << "            row 6: [0,0,0,0,0,0]\n"
+           << no_added_mass()
            << "    external forces:\n"
            << "      - model: gravity\n"
            << "      - model: non-linear hydrostatic (fast)\n";
@@ -2223,13 +2181,7 @@ std::string test_data::bug_in_exact_hydrostatic()
        << hydrodynamic_calculation_point()
        << centre_of_inertia("cube", 0, 0, 0.5)
        << one_ton_rigid_inertia_matrix()
-       << "        added mass matrix at the center of gravity and projected in the body frame:\n"
-       << "            row 1: [0,0,0,0,0,0]\n"
-       << "            row 2: [0,0,0,0,0,0]\n"
-       << "            row 3: [0,0,0,0,0,0]\n"
-       << "            row 4: [0,0,0,0,0,0]\n"
-       << "            row 5: [0,0,0,0,0,0]\n"
-       << "            row 6: [0,0,0,0,0,0]\n"
+       << no_added_mass()
        << "    external forces:\n"
        << "      - model: gravity\n"
        << "      - model: non-linear hydrostatic (exact)\n";
@@ -2436,13 +2388,7 @@ std::string test_data::L_config()
        << hydrodynamic_calculation_point()
        << centre_of_inertia("L", 0, 0, 0.5)
        << one_ton_rigid_inertia_matrix()
-       << "        added mass matrix at the center of gravity and projected in the body frame:\n"
-       << "            row 1: [0,0,0,0,0,0]\n"
-       << "            row 2: [0,0,0,0,0,0]\n"
-       << "            row 3: [0,0,0,0,0,0]\n"
-       << "            row 4: [0,0,0,0,0,0]\n"
-       << "            row 5: [0,0,0,0,0,0]\n"
-       << "            row 6: [0,0,0,0,0,0]\n"
+       << no_added_mass()
        << "    external forces:\n"
        << "      - model: gravity\n";
     return ss.str();
@@ -2471,13 +2417,7 @@ std::string test_data::GM_cube()
        << hydrodynamic_calculation_point()
        << centre_of_inertia("cube", 0, 0, 0)
        << one_ton_rigid_inertia_matrix()
-       << "        added mass matrix at the center of gravity and projected in the body frame:\n"
-       << "            row 1: [0,0,0,0,0,0]\n"
-       << "            row 2: [0,0,0,0,0,0]\n"
-       << "            row 3: [0,0,0,0,0,0]\n"
-       << "            row 4: [0,0,0,0,0,0]\n"
-       << "            row 5: [0,0,0,0,0,0]\n"
-       << "            row 6: [0,0,0,0,0,0]\n"
+       << no_added_mass()
        << "    external forces:\n"
        << "      - model: gravity\n"
        << "      - model: GM\n"
@@ -2834,13 +2774,7 @@ std::string test_data::test_ship_linear_hydrostatics_without_waves()
        << hydrodynamic_calculation_point()
        << centre_of_inertia("TestShip", 0.258, 0, 0.432)
        << rigid_body_inertia_matrix()
-       << "        added mass matrix at the center of gravity and projected in the body frame:\n"
-       << "            row 1: [0,0,0,0,0,0]\n"
-       << "            row 2: [0,0,0,0,0,0]\n"
-       << "            row 3: [0,0,0,0,0,0]\n"
-       << "            row 4: [0,0,0,0,0,0]\n"
-       << "            row 5: [0,0,0,0,0,0]\n"
-       << "            row 6: [0,0,0,0,0,0]\n"
+       << no_added_mass()
        << "    external forces:\n"
        << "      - model: linear hydrostatics\n"
        << "        z eq: {value: -0.099, unit: m}\n"
@@ -2894,13 +2828,7 @@ std::string test_data::test_ship_linear_hydrostatics_with_waves()
        << hydrodynamic_calculation_point()
        << centre_of_inertia("TestShip", 0.258, 0, 0.432)
        << rigid_body_inertia_matrix()
-       << "        added mass matrix at the center of gravity and projected in the body frame:\n"
-       << "            row 1: [0,0,0,0,0,0]\n"
-       << "            row 2: [0,0,0,0,0,0]\n"
-       << "            row 3: [0,0,0,0,0,0]\n"
-       << "            row 4: [0,0,0,0,0,0]\n"
-       << "            row 5: [0,0,0,0,0,0]\n"
-       << "            row 6: [0,0,0,0,0,0]\n"
+       << no_added_mass()
        << "    external forces:\n"
        << "      - model: linear hydrostatics\n"
        << "        z eq: {value: -0.099, unit: m}\n"
@@ -2936,13 +2864,7 @@ std::string test_data::bug_2963_hs_fast()
        << hydrodynamic_calculation_point()
        << centre_of_inertia("TestShip", 0.258, 0, 0.432)
        << rigid_body_inertia_matrix()
-       << "        added mass matrix at the center of gravity and projected in the body frame:\n"
-       << "            row 1: [0,0,0,0,0,0]\n"
-       << "            row 2: [0,0,0,0,0,0]\n"
-       << "            row 3: [0,0,0,0,0,0]\n"
-       << "            row 4: [0,0,0,0,0,0]\n"
-       << "            row 5: [0,0,0,0,0,0]\n"
-       << "            row 6: [0,0,0,0,0,0]\n"
+       << no_added_mass()
        << "    external forces:\n"
        << "      - model: non-linear hydrostatic (fast)\n";
     return ss.str();
@@ -2964,13 +2886,7 @@ std::string test_data::bug_2963_hs_exact()
        << hydrodynamic_calculation_point()
        << centre_of_inertia("TestShip", 0.258, 0, 0.432)
        << rigid_body_inertia_matrix()
-       << "        added mass matrix at the center of gravity and projected in the body frame:\n"
-       << "            row 1: [0,0,0,0,0,0]\n"
-       << "            row 2: [0,0,0,0,0,0]\n"
-       << "            row 3: [0,0,0,0,0,0]\n"
-       << "            row 4: [0,0,0,0,0,0]\n"
-       << "            row 5: [0,0,0,0,0,0]\n"
-       << "            row 6: [0,0,0,0,0,0]\n"
+       << no_added_mass()
        << "    external forces:\n"
        << "      - model: non-linear hydrostatic (exact)\n";
     return ss.str();
@@ -2992,13 +2908,7 @@ std::string test_data::bug_2963_fk()
        << hydrodynamic_calculation_point()
        << centre_of_inertia("TestShip", 0.258, 0, 0.432)
        << rigid_body_inertia_matrix()
-       << "        added mass matrix at the center of gravity and projected in the body frame:\n"
-       << "            row 1: [0,0,0,0,0,0]\n"
-       << "            row 2: [0,0,0,0,0,0]\n"
-       << "            row 3: [0,0,0,0,0,0]\n"
-       << "            row 4: [0,0,0,0,0,0]\n"
-       << "            row 5: [0,0,0,0,0,0]\n"
-       << "            row 6: [0,0,0,0,0,0]\n"
+       << no_added_mass()
        << "    external forces:\n"
        << "      - model: non-linear Froude-Krylov\n";
     return ss.str();
@@ -3020,13 +2930,7 @@ std::string test_data::bug_2963_diff()
        << hydrodynamic_calculation_point()
        << centre_of_inertia("TestShip", 0.258, 0, 0.432)
        << rigid_body_inertia_matrix()
-       << "        added mass matrix at the center of gravity and projected in the body frame:\n"
-       << "            row 1: [0,0,0,0,0,0]\n"
-       << "            row 2: [0,0,0,0,0,0]\n"
-       << "            row 3: [0,0,0,0,0,0]\n"
-       << "            row 4: [0,0,0,0,0,0]\n"
-       << "            row 5: [0,0,0,0,0,0]\n"
-       << "            row 6: [0,0,0,0,0,0]\n"
+       << no_added_mass()
        << "    external forces:\n"
        << "      - model: diffraction\n"
        << "        hdb: test_ship.hdb\n"
@@ -3054,13 +2958,7 @@ std::string test_data::bug_2963_gm()
        << hydrodynamic_calculation_point()
        << centre_of_inertia("TestShip", 0.258, 0, 0.432)
        << rigid_body_inertia_matrix()
-       << "        added mass matrix at the center of gravity and projected in the body frame:\n"
-       << "            row 1: [0,0,0,0,0,0]\n"
-       << "            row 2: [0,0,0,0,0,0]\n"
-       << "            row 3: [0,0,0,0,0,0]\n"
-       << "            row 4: [0,0,0,0,0,0]\n"
-       << "            row 5: [0,0,0,0,0,0]\n"
-       << "            row 6: [0,0,0,0,0,0]\n"
+       << no_added_mass()
        << "    external forces:\n"
        << "      - model: GM\n"
        << "        name of hydrostatic force model: hydrostatic\n"
@@ -3607,13 +3505,7 @@ std::string test_data::tutorial_09_gRPC_wave_model()
          + "            row 4: [0,0,0,83.33,0,0]\n"
          + "            row 5: [0,0,0,0,83.33,0]\n"
          + "            row 6: [0,0,0,0,0,83.33]\n"
-         + "        added mass matrix at the center of gravity and projected in the body frame:\n"
-         + "            row 1: [0,0,0,0,0,0]\n"
-         + "            row 2: [0,0,0,0,0,0]\n"
-         + "            row 3: [0,0,0,0,0,0]\n"
-         + "            row 4: [0,0,0,0,0,0]\n"
-         + "            row 5: [0,0,0,0,0,0]\n"
-         + "            row 6: [0,0,0,0,0,0]\n"
+         + no_added_mass()
          + "    external forces:\n"
          + "      - model: gravity\n"
          + "      - model: non-linear hydrostatic (fast)\n"
