@@ -8,11 +8,19 @@
 #ifndef STATESFILTER_HPP_
 #define STATESFILTER_HPP_
 
+#include <memory>
 #include <string>
 
-namespace StatesFilter
+class History;
+
+class StatesFilter
 {
-    void build(const std::string& yaml);
-}
+    public:
+        static std::shared_ptr<StatesFilter> build(const std::string& yaml);
+        double get_value(const History& h) const;
+
+    private:
+        StatesFilter();
+};
 
 #endif

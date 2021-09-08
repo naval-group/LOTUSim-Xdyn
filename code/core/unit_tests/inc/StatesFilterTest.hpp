@@ -10,6 +10,7 @@
 #define STATESFILTERTEST_HPP_
 
 #include "gtest/gtest.h"
+#include <ssc/random_data_generator.hpp>
 
 class StatesFilterTest : public ::testing::Test
 {
@@ -18,6 +19,7 @@ class StatesFilterTest : public ::testing::Test
         virtual ~StatesFilterTest();
         virtual void SetUp();
         virtual void TearDown();
+        ssc::random_data_generator::DataGenerator a;
 };
 
 #endif  /* STATESFILTERTEST_HPP_ */
