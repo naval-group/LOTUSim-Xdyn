@@ -2652,7 +2652,7 @@ repère BODY d'xdyn, xdyn effectue le calcul suivant sur les résultats des
 codes potentiel avant de les fournir aux modèles d'effort :
 
 ```math
-M_x=t(R)M_h R =
+M_x=R^T\cdot M_h\cdot R =
 \left[\begin{array}{rrrrrr}
  m_{11} & -m_{12} & -m_{13} &  m_{14} & -m_{15} & -m_{16}\\
 -m_{21} &  m_{22} &  m_{23} & -m_{24} &  m_{25} &  m_{26}\\
@@ -2663,7 +2663,8 @@ M_x=t(R)M_h R =
 \end{array}\right]
 ```
 
-où $`R`$ est la matrice de passage du repère PRECAL_R/AQUA+ vers le repère xdyn et a pour expression :
+où $`R`$ est la matrice de passage du repère PRECAL_R/AQUA+ vers le repère xdyn
+et $`R^T`$ est sa transposée. $`R`$ a pour expression :
 
 ```math
 R=\left[
