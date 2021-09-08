@@ -1,41 +1,45 @@
 .PHONY: all clean cosim hdb precal-r sim
 
+DOCKER_IMAGE=xdyn
+DOCKER_WORKING_DIRECTORY=/opt/share
+DOCKER_RUN := docker run --rm \
+    -u $(shell id -u):$(shell id -g) \
+    -v $(shell pwd):${DOCKER_WORKING_DIRECTORY} \
+    -w ${DOCKER_WORKING_DIRECTORY}
+DOCKER_RUN_BASH:= ${DOCKER_RUN} \
+    --entrypoint /bin/bash \
+    ${DOCKER_IMAGE} -c
+
 all: cosim sim hdb precal-r clean
 
 tutorial_10_gRPC_force_model.yml:
 	@echo "Copying $@ from xdyn's Docker container..."
-	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/xdyn_demos \
-        --entrypoint /bin/bash xdyn \
+	@${DOCKER_RUN_BASH} \
         -c "cp /usr/demos/tutorial_10_gRPC_force_model.yml /xdyn_demos/"
 
 tutorial_10_gRPC_force_model_commands.yml:
 	@echo "Copying $@ from xdyn's Docker container..."
-	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/xdyn_demos \
-        --entrypoint /bin/bash xdyn \
+	@${DOCKER_RUN_BASH} \
         -c "cp /usr/demos/tutorial_10_gRPC_force_model_commands.yml /xdyn_demos/"
 
 tutorial_13_hdb_force_model.yml:
 	@echo "Copying $@ from xdyn's Docker container..."
-	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/xdyn_demos \
-        --entrypoint /bin/bash xdyn \
+	@${DOCKER_RUN_BASH} \
         -c "cp /usr/demos/$@ /xdyn_demos/"
 
 tutorial_13_precal_r_force_model.yml:
 	@echo "Copying $@ from xdyn's Docker container..."
-	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/xdyn_demos \
-        --entrypoint /bin/bash xdyn \
+	@${DOCKER_RUN_BASH} \
         -c "cp /usr/demos/$@ /xdyn_demos/"
 
 ONRT_SIMMAN.raodb.ini:
 	@echo "Copying $@ from xdyn's Docker container..."
-	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/xdyn_demos \
-        --entrypoint /bin/bash xdyn \
+	@${DOCKER_RUN_BASH} \
         -c "cp /usr/demos/$@ /xdyn_demos/"
 
 big.hdb:
 	@echo "Copying $@ from xdyn's Docker container..."
-	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/xdyn_demos \
-        --entrypoint /bin/bash xdyn \
+	@${DOCKER_RUN_BASH} \
         -c "cp /usr/demos/$@ /xdyn_demos/"
 
 precal-r: precal_r_output.csv test_precal_r.py
