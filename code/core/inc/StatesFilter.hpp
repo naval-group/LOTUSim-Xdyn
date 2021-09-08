@@ -13,15 +13,15 @@
 
 class History;
 
-class StatesFilter
+class StateFilter
 {
     public:
-        static std::shared_ptr<StatesFilter> build(const std::string& yaml);
+        static std::shared_ptr<StateFilter> build(const std::string& yaml);
         double get_value(const History& h) const;
 
     private:
-        StatesFilter() = delete;
-        StatesFilter(const double duration_in_seconds);
+        StateFilter() = delete;
+        StateFilter(const double duration_in_seconds);
         double duration_in_seconds;
 };
 
