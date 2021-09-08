@@ -27,6 +27,8 @@ PrecalParser::PrecalParser(const PrecalFile& precal_file_)
     , froude_krylov_module()
     , froude_krylov_phase()
     , wave_drift_tables()
+    , directions(get_sorted_directions())
+    , sorted_indexed_frequencies(get_sorted_indexed_frequencies())
 {
     init_diffraction_tables();
     init_froude_krylov_tables();
@@ -358,17 +360,15 @@ RAOData PrecalParser::retrieve_module_tables(const std::string& signal_basename,
 {
     RAOData ret;
     // Get the frequencies and directions values for which RAOs will be specified
-    const auto directions = get_sorted_directions();
-    const auto frequencies = get_sorted_indexed_frequencies();
-    fill_periods_directions_and_values(ret, frequencies, directions);
+    fill_periods_directions_and_values(ret, sorted_indexed_frequencies, directions);
     // Read the RAOs for each direction.
     for (size_t psi_idx = 0; psi_idx < directions.size(); ++psi_idx)
     {
         for (size_t mode_idx = 0; mode_idx < 6; ++mode_idx)
         {
             const std::string signal_name = signal_basename + std::to_string(mode_idx + 1);
-            const RAO rao = find_rao(signal_name, path_to_boolean_parameter, directions.at(psi_idx), frequencies.size());
-            fill_module_values(ret, rao, frequencies, mode_idx, psi_idx);
+            const RAO rao = find_rao(signal_name, path_to_boolean_parameter, directions.at(psi_idx), sorted_indexed_frequencies.size());
+            fill_module_values(ret, rao, sorted_indexed_frequencies, mode_idx, psi_idx);
             check_units(pretty_name, rao.attributes.amplitude_unit, {"kN/m", "kN.m/m", "kN.m/m2", "kN/m2"});
         }
     }
@@ -379,18 +379,16 @@ RAOData PrecalParser::retrieve_phase_tables(const std::string& signal_basename, 
 {
     RAOData ret;
     // Get the frequencies and directions values for which RAOs will be specified
-    const auto directions = get_sorted_directions();
-    const auto frequencies = get_sorted_indexed_frequencies();
-    fill_periods_directions_and_values(ret, frequencies, directions);
+    fill_periods_directions_and_values(ret, sorted_indexed_frequencies, directions);
     // Read the RAOs for each mode and direction.
     for (size_t psi_idx = 0; psi_idx < directions.size(); ++psi_idx)
     {
         for (size_t mode_idx = 0; mode_idx < 6; ++mode_idx)
         {
             const std::string signal_name = signal_basename + std::to_string(mode_idx + 1);
-            const RAO rao = find_rao(signal_name, path_to_boolean_parameter, directions.at(psi_idx), frequencies.size());
+            const RAO rao = find_rao(signal_name, path_to_boolean_parameter, directions.at(psi_idx), sorted_indexed_frequencies.size());
             check_units(pretty_name, rao.attributes.phase_unit, {"deg"});
-            fill_phase_values(ret, rao, frequencies, mode_idx, psi_idx);
+            fill_phase_values(ret, rao, sorted_indexed_frequencies, mode_idx, psi_idx);
         }
     }
     return ret;

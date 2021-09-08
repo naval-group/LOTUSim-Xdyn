@@ -101,6 +101,8 @@ class PrecalParser : public HydroDBParser
         boost::variant<RAOData,std::string> froude_krylov_module;
         boost::variant<RAOData,std::string> froude_krylov_phase;
         boost::variant<RAOData,std::string> wave_drift_tables;
+        std::vector<double> directions;
+        std::vector<std::pair<size_t, double> > sorted_indexed_frequencies;
 
 };
 
