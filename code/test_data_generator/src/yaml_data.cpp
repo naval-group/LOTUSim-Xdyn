@@ -3502,6 +3502,13 @@ std::string test_data::tutorial_10_gRPC_force_model()
          + "# Fixed frame: NED\n"
          + "bodies: # All bodies have NED as parent frame\n"
          + "  - name: TestShip\n"
+         + "    filtered states:\n"
+         + "      u:\n"
+         + "          type of filter: moving average\n"
+         + "          duration in seconds : 2.3\n"
+         + "      v:\n"
+         + "          type of filter: moving average\n"
+         + "          duration in seconds : 3\n"
          + position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
          + initial_position_of_body_frame(5, 0, 1, 0, 0, 0)
          + initial_velocity("TestShip", 0, 0, 0, 0, 0, 0)

@@ -18,6 +18,7 @@
 
 enum class InterpolationType {PIECEWISE_CONSTANT, LINEAR, SPLINE};
 enum class BlockableState {U, V, W, P, Q, R};
+enum class FilterableState {X, Y, Z, U, V, W, P, Q, R, PHI, THETA, PSI};
 
 template <typename T> struct YamlDOF
 {
@@ -47,6 +48,23 @@ struct YamlBlockedDOF
     std::vector<YamlCSVDOF> from_csv;
 };
 
+struct YamlFilteredStates
+{
+    YamlFilteredStates();
+    std::string x;
+    std::string y;
+    std::string z;
+    std::string u;
+    std::string v;
+    std::string w;
+    std::string p;
+    std::string q;
+    std::string r;
+    std::string phi;
+    std::string theta;
+    std::string psi;
+};
+
 struct YamlBody
 {
     YamlBody();
@@ -58,6 +76,7 @@ struct YamlBody
     YamlDynamics dynamics;
     std::vector<YamlModel> external_forces;
     YamlBlockedDOF blocked_dof;
+    YamlFilteredStates filtered_states;
 };
 
 #endif /* YAMLBODY_HPP_ */

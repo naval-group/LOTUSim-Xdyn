@@ -113,6 +113,10 @@ void operator >> (const YAML::Node& node, YamlBody& b)
         node["initial position of body frame relative to NED"]      >> b.initial_position_of_body_frame_relative_to_NED_projected_in_NED;
         node["initial velocity of body frame relative to NED"]      >> b.initial_velocity_of_body_frame_relative_to_NED_projected_in_body;
         node["dynamics"]                                            >> b.dynamics;
+        if (node.FindValue("filtered states"))
+        {
+            node["filtered states"] >> b.filtered_states;
+        }
     }
     catch (const InvalidInputException& e)
     {
@@ -355,4 +359,34 @@ YamlBlockedDOF parse(const std::string& yaml)
         }
     }
     return ret;
+}
+
+std::string node_to_string(const YAML::Node& node);
+std::string node_to_string(const YAML::Node& node)
+{
+    YAML::Emitter out;
+    out << node;
+    return out.c_str();
+}
+
+#define PARSE_FILTERED_STATE(state) \
+        if (node.FindValue(#state))\
+        {\
+            p.state = node_to_string(node[#state]);\
+        }
+
+void operator >> (const YAML::Node& node, YamlFilteredStates& p)
+{
+    PARSE_FILTERED_STATE(x);
+    PARSE_FILTERED_STATE(y);
+    PARSE_FILTERED_STATE(z);
+    PARSE_FILTERED_STATE(u);
+    PARSE_FILTERED_STATE(v);
+    PARSE_FILTERED_STATE(w);
+    PARSE_FILTERED_STATE(p);
+    PARSE_FILTERED_STATE(q);
+    PARSE_FILTERED_STATE(r);
+    PARSE_FILTERED_STATE(phi);
+    PARSE_FILTERED_STATE(theta);
+    PARSE_FILTERED_STATE(psi);
 }

@@ -498,3 +498,21 @@ TEST_F(SimulatorYamlParserTest, can_parse_controllers_and_commands_for_controlle
     ASSERT_EQ(1, yaml.commands.size());
     ASSERT_EQ("propeller", yaml.commands[0].name);
 }
+
+
+TEST_F(SimulatorYamlParserTest, can_parse_filtered_states)
+{
+    const YamlSimulatorInput yaml = SimulatorYamlParser(test_data::tutorial_10_gRPC_force_model()).parse();
+    ASSERT_TRUE(yaml.bodies.front().filtered_states.x.empty());
+    ASSERT_TRUE(yaml.bodies.front().filtered_states.y.empty());
+    ASSERT_TRUE(yaml.bodies.front().filtered_states.z.empty());
+    ASSERT_EQ("duration in seconds: 2.3\ntype of filter: moving average", yaml.bodies.front().filtered_states.u);
+    ASSERT_EQ("duration in seconds: 3\ntype of filter: moving average", yaml.bodies.front().filtered_states.v);
+    ASSERT_TRUE(yaml.bodies.front().filtered_states.w.empty());
+    ASSERT_TRUE(yaml.bodies.front().filtered_states.p.empty());
+    ASSERT_TRUE(yaml.bodies.front().filtered_states.q.empty());
+    ASSERT_TRUE(yaml.bodies.front().filtered_states.r.empty());
+    ASSERT_TRUE(yaml.bodies.front().filtered_states.phi.empty());
+    ASSERT_TRUE(yaml.bodies.front().filtered_states.theta.empty());
+    ASSERT_TRUE(yaml.bodies.front().filtered_states.psi.empty());
+}
