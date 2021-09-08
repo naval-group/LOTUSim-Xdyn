@@ -22,6 +22,101 @@ external forces:
   - model: non-linear hydrostatic (fast)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+## États filtrés
+
+Certains modèle d'efforts (exemple : résistance à l'avancement) ne sont
+cohérents que s'ils utilisent en entrée des valeurs moyennées ou filtrées (par
+exemple pour la résistance à l'avancement, la vitesse d'avance moyenne, hors
+perturbation de la houle).
+
+La définition de ces filtres est faite à l'aide de la section optionnelle
+`filtered states`, sous-section de chaque `bodies` (donc au même niveau que la
+clef `external forces`) dont voici un exemple complet :
+
+```yaml
+filtered states:
+    x:
+        type of filter: moving average
+        duration in seconds : 23
+    y:
+        type of filter: moving average
+        duration in seconds : 2
+    z:
+        type of filter: moving average
+        duration in seconds : 3
+    u:
+        type of filter: moving average
+        duration in seconds : 4.879
+    v:
+        type of filter: moving average
+        duration in seconds : 5.98
+    w:
+        type of filter: moving average
+        duration in seconds : 78.63
+    p:
+        type of filter: moving average
+        duration in seconds : 12.93
+    q:
+        type of filter: moving average
+        duration in seconds : 6.3
+    r:
+        type of filter: moving average
+        duration in seconds : 63
+    phi:
+        type of filter: moving average
+        duration in seconds : 2.3
+    theta:
+        type of filter: moving average
+        duration in seconds : 3
+    psi:
+        type of filter: moving average
+        duration in seconds : 2.3
+```
+
+Chaque section `x`, `y`, `z`, `u`, `v`, `w`, `p`, `q`, `r`, `phi`, `theta`,
+`psi` est facultative : ainsi, le YAML suivant est valide :
+
+Si un état ne figure pas dans la section `filtered states`, xdyn utilisera ses
+valeurs non-filtrées (durée de la moyenne glissante égale à zéro). Si aucune
+section `filtered states` n'est définie, xdyn utilisera systématiquement les
+états non-filtrés. Par ailleurs, le filtrage d'une variable est définie une
+seule fois : tous les modèles utilisant un état filtré en utiliseront
+exactement la même définition.
+
+Actuellement, seul le filtrage par moyenne glissante est implémenté.
+Le calcul de cette moyenne glissante est fait de la façon suivante :
+
+- si l'historique des valeurs ne contient qu'une seule valeur, on retourne
+  celle-ci
+- on fixe $`T`$ au minimum de la durée d'intégration et de la longueur
+  d'historique disponible
+- si $`T=0`$, on retourne la dernière valeur de l'état (la valeur courante à
+  $`t`$)
+- sinon, on interpole linéairement la valeur de l'état à $`t-T`$, où $`t`$ est
+  l'instant courant
+- on effectue une intégration de l'état par la méthode des trapèzes (cohérente
+  avec l'interpolation linéaire effectuée à l'étape précédente)
+- Le résultat est la valeur de cette intégrale divisée par $`T`$
+
+Pour les angles d'Euler, les filtrages s'effectuent sur les quatre quaternions
+qr, qi, qj et qk puis les quaternions filtrés sont utilisés pour retrouver les
+valeurs des angles. Un filtrage spécifique est appliqué aux quaternions pour
+chaque angle d'Euler.
+
+Les modèles qui utilisent ces états filtrés sont :
+
+- `resistance curve`
+- les modèles d'effort distants (gRPC)
+
+Les états filtrés sont disponibles [en sortie d'xdyn](#Temps-et-états) et dans
+les modèles d'efforts (internes et gRPC) : ils ne sont fournis ni aux
+contrôleurs, ni aux modèles d'environnement et ne sont pas présent dans
+l'interface "model exchange" et "co-simulation". En effet, ces états filtrés
+sont à la main du créateur du modèle xdyn (expert hydrodynamique) et dépendent
+du type de modélisation. On découple donc le filtrage fait pour les besoins des
+modèles hydrodynamiques et celui fait pour les systèmes extérieurs à xdyn.
+Ainsi, si l'on modifie le filtrage lié aux modèles d'effort on ne va pas
+modifier le comportement des contrôleurs et réciproquement.
 
 ## Efforts de gravité
 
@@ -658,9 +753,14 @@ Ce modèle est accessible par la clef [`resistance
 curve`](#r%C3%A9sistance-%C3%A0-lavancement).
 
 Les efforts de résistance à l'avancement sont renseignés en fonction de la
-vitesse d'avance (axe longitudinal uniquement), c'est-à-dire la projection
-suivant l'axe $`x`$ du [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) de la vitesse du navire par rapport au repère
-NED. L'interpolation est faite en utilisant des splines cubiques.
+vitesse d'avance *filtrée* (axe longitudinal uniquement), c'est-à-dire la
+projection suivant l'axe $`x`$ du [repère
+body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) de
+la vitesse du navire par rapport au repère NED. Le filtrage est défini dans la
+section [`filtered states`](#États-filtrés), si elle est renseignée : dans le
+cas contraire, le modèle utilise la vitesse d'avance non-filtrée.
+L'interpolation de la courbe de résistance est faite en utilisant des splines
+cubiques.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: resistance curve
@@ -2683,6 +2783,16 @@ R=\left[
 \end{array}\right]
 ```
 
+### Accès aux états filtrés
+
+xdyn calcul des [états filtrés](#États-filtrés) dont la définition est faite
+dans la section (optionnelle) `filtered states` du fichier YAML d'entrée.  Ces
+valeurs filtrées sont fournies aux modèles d'efforts distants. Si l'on utilise
+le framework Python du dépôt
+[`interfaces`](https://gitlab.com/sirehna_naval_group/sirehna/interfaces/-/blob/1795c55006d11ec46bf25a8cac410be00698a8ba/forces/force.py#L44),
+ces valeurs filtrées sont stockées dans le sixième argument de la méthode
+`grpcforce.Model.force(self, t, states, commands, wave_information,
+filtered_states)`.
 
 ### Exemple d'utilisation
 
@@ -2691,3 +2801,5 @@ R=\left[
   13](#tutoriel-13-utilisation-des-résultats-de-code-potentiel-avec-les-modèles-deffort-distant-grpc)
   montre comment exploiter les données issues d'un calcul potentiel depuis un
   modèle d'effort distant.
+- Le [tutoriel 14](#tutoriel-14-utilisation-des-états-filtrés) donne un exemple
+  d'utilisation des états filtrés.

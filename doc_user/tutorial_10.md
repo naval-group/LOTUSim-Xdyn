@@ -61,12 +61,16 @@ Il s'agit ici d'un modèle d'[oscillateur harmonique amorti](https://en.wikipedi
 
 ```math
 F_x = -k\cdot x - c\cdot u
-F_y = 0
+F_y = c\cdot \overline{v}
 F_z = 0
 M_x = 0
 M_y = 0
 M_z = 0
 ```
+
+L'effort sur l'axe Y est proportionnel à la vitesse filtrée. La définition
+de ce filtrage est faite dans la section `filtered states` du fichier YAML
+d'xdyn.
 
 Dans un fichier Python (nommé `harmonic_oscillator.py` dans cet exemple) on écrit :
 
@@ -90,8 +94,12 @@ class HarmonicOscillator(grpcforce.Model):
         self.k = param['k']
         self.c = param['c']
 
-    def force(self, t, states, _, _):
-        force = {'Fx': -self.k*states.x(0) - self.c*states.u(0), 'Fy': 0, 'Fz': 0, 'Mx': 0, 'My': 0, 'Mz': 0}
+    def force(self, t, states, _, _, filtered_states):
+        # L'index entre parenthèses correspond à la position dans
+        # l'historique des états (en commençant par la valeur la
+        # plus récente) et l'instant correspondant est donné par
+        # states.t(i).
+        force = {'Fx': -self.k*states.x(0) - self.c*states.u(0), 'Fy': self.c*filtered_states.v(0), 'Fz': 0, 'Mx': 0, 'My': 0, 'Mz': 0}
         return {'forces': forces, 'extra outputs': {}}
 
 

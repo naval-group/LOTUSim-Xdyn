@@ -155,14 +155,19 @@ section `bodies[0]/name`), le temps et les états sont accesibles de la façon s
 | `theta`     | Angle de tangage/assiette par rapport au sol (BODY/NED)                                                                                                                                                                                                                 | `theta(TestShip)` | rad |
 | `psi`       | Angle de lacet par rapport au sol (BODY/NED)                                                                                                                                                                                                                            | `psi(TestShip)` | rad |
 
-Par exemple, pour générer un fichier CSV contenant le temps, l'embardée et
-l'assiette pour le navire nommé `TestShip` on utiliserait la section suivante :
+Une [version filtrée](#États-filtrés) de ces états est également disponible, en
+ajoutant le suffixe `_filtered` (par exemple `q_filtered`). Attention : les
+quaternions ne sont pas filtrés (mais les angles d'Euler le sont).
+
+Par exemple, pour générer un fichier CSV contenant le temps, l'embardée
+(filtrée) et l'assiette pour le navire nommé `TestShip` on utiliserait la
+section suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 output:
    - format: csv
      filename: exemple.csv
-     data: [t, y(TestShip), 'theta(TestShip)']
+     data: [t, y_filtered(TestShip), 'theta(TestShip)']
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Observations supplémentaires des modèles d'effort
