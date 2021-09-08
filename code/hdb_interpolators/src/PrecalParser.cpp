@@ -317,7 +317,8 @@ void PrecalParser::fill_periods_directions_and_values(RAOData& rao, const std::v
         frequencies.size(), std::vector<double>(directions.size(), 0)));
 }
 
-void PrecalParser::fill_module_values(RAOData& ret, const RAO& rao, const std::vector<std::pair<size_t, double> >& frequencies, const size_t mode_idx, const size_t psi_idx) const
+void fill_module_values(RAOData& ret, const RAO& rao, const std::vector<std::pair<size_t, double> >& frequencies, const size_t mode_idx, const size_t psi_idx);
+void fill_module_values(RAOData& ret, const RAO& rao, const std::vector<std::pair<size_t, double> >& frequencies, const size_t mode_idx, const size_t psi_idx)
 {
     for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
     {
@@ -328,7 +329,8 @@ void PrecalParser::fill_module_values(RAOData& ret, const RAO& rao, const std::v
     }
 }
 
-void PrecalParser::fill_phase_values(RAOData& ret, const RAO& rao, const std::vector<std::pair<size_t, double> >& frequencies, const size_t mode_idx, const size_t psi_idx) const
+void fill_phase_values(RAOData& ret, const RAO& rao, const std::vector<std::pair<size_t, double> >& frequencies, const size_t mode_idx, const size_t psi_idx);
+void fill_phase_values(RAOData& ret, const RAO& rao, const std::vector<std::pair<size_t, double> >& frequencies, const size_t mode_idx, const size_t psi_idx)
 {
     for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
     {
