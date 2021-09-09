@@ -386,6 +386,9 @@ ResultsFromPotentialTheory* get_results_from_potential_theory(const std::shared_
         pot->set_forward_speed(hydro_db_parser->get_forward_speed());
         pot->set_allocated_added_mass_coeff(get_added_mass_coeff_matrix(hydro_db_parser));
         pot->set_allocated_radiation_damping_coeff(get_radiation_damping_coeff_matrix(hydro_db_parser));
+        copy_from_double_vector(hydro_db_parser->get_wave_drift_periods(), pot->mutable_wave_drift_periods());
+        copy_from_double_vector(hydro_db_parser->get_wave_drift_psis(), pot->mutable_wave_drift_psis());
+        pot->set_allocated_wave_drift_force_tables(to_WrenchMatrices(hydro_db_parser->get_wave_drift_tables()));
     }
     return pot;
 }

@@ -116,6 +116,7 @@ namespace test_data
     std::string tutorial_11_gRPC_controller();
     std::string added_mass_from_precal_file();
     std::string tutorial_13_hdb_force_model();
+    std::string tutorial_13_precal_r_force_model();
 }
 
 #endif /* YAML_DATA_HPP_ */

@@ -6,6 +6,7 @@
  */
 
 #include "yaml_data.hpp"
+#include <boost/algorithm/string.hpp> 
 #include <sstream>
 
 std::string rotation_convention();
@@ -4095,13 +4096,11 @@ std::string test_data::tutorial_13_hdb_force_model()
        + "     - 'FKTp0(TestShip)'\n"
        + "     - 'FKTp1(TestShip)'\n"
        + "     - 'FKTp2(TestShip)'\n"
-       + "     - 'FKTp46(TestShip)'\n"
+       + "     - 'FKTp6(TestShip)'\n"
        + "     - 'FKpsi0(TestShip)'\n"
        + "     - 'FKpsi1(TestShip)'\n"
-       + "     - 'FKpsi2(TestShip)'\n"
        + "     - 'FKppsi0(TestShip)'\n"
        + "     - 'FKppsi1(TestShip)'\n"
-       + "     - 'FKppsi2(TestShip)'\n"
        + "     - 'omega0(TestShip)'\n"
        + "     - 'omega1(TestShip)'\n"
        + "     - 'omega2(TestShip)'\n"
@@ -4125,14 +4124,37 @@ std::string test_data::tutorial_13_hdb_force_model()
        + "     - 'Ma551(TestShip)'\n"
        + "     - 'Ma552(TestShip)'\n"
        + "     - 'Br_0_0_0(TestShip)'\n"
-       + "     - 'Br_0_0_46(TestShip)'\n"
+       + "     - 'Br_0_0_6(TestShip)'\n"
        + "     - 'Br_5_0_0(TestShip)'\n"
-       + "     - 'Br_5_0_46(TestShip)'\n"
+       + "     - 'Br_5_0_6(TestShip)'\n"
        + "     - 'Br_0_5_0(TestShip)'\n"
-       + "     - 'Br_0_5_46(TestShip)'\n"
+       + "     - 'Br_0_5_6(TestShip)'\n"
        + "     - 'Br_5_5_0(TestShip)'\n"
-       + "     - 'Br_5_5_46(TestShip)'\n"
+       + "     - 'Br_5_5_6(TestShip)'\n"
+       + "     - 'driftX(0,0)(TestShip)'\n"
+       + "     - 'driftX(1,0)(TestShip)'\n"
+       + "     - 'driftX(0,1)(TestShip)'\n"
+       + "     - 'driftY(0,0)(TestShip)'\n"
+       + "     - 'driftY(1,0)(TestShip)'\n"
+       + "     - 'driftY(0,1)(TestShip)'\n"
+       + "     - 'driftM(0,0)(TestShip)'\n"
+       + "     - 'driftM(1,0)(TestShip)'\n"
+       + "     - 'driftM(0,1)(TestShip)'\n"
+       + "     - 'driftTp(0)(TestShip)'\n"
+       + "     - 'driftTp(1)(TestShip)'\n"
+       + "     - 'driftTp(2)(TestShip)'\n"
+       + "     - 'driftPsi(0)(TestShip)'\n"
+       + "     - 'driftPsi(1)(TestShip)'\n"
        ;
+}
+
+std::string test_data::tutorial_13_precal_r_force_model()
+{
+    std::string ret(tutorial_13_hdb_force_model());
+    boost::replace_all(ret, "hdb: big.hdb", "precal: ONRT_SIMMAN.raodb.ini");
+    boost::replace_all(ret, "hdb force model", "precal-r force model");
+    boost::replace_all(ret, "filename: hdb_output.csv", "filename: precal_r_output.csv");
+    return ret;
 }
 
 std::string test_data::added_mass_from_precal_file()

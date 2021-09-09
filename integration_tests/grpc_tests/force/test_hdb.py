@@ -22,7 +22,6 @@ def check_added_mass_matrix(results):
     assert results['Ma(5 5)(TestShip)'] == '3.318626e+09'
     print("✓ Added mass matrix test passed!")
 
-
 def check_diffraction_module_tables(results):
     """Verify the diffraction module tables."""
     # First line of [INCIDENCE_EFM_MOD_001]   0.000000
@@ -68,7 +67,6 @@ def check_diffraction_module_tables(results):
     assert results['diffM(2 1)(TestShip)'] == '2.996725e+07'
     assert results['diffN(2 1)(TestShip)'] == '8.392296e+06'
     print("✓ Diffraction module table test passed!")
-
 
 def check_diffraction_phase_tables(results):
     """Verify the diffraction phase tables."""
@@ -116,13 +114,11 @@ def check_diffraction_phase_tables(results):
     assert results['diffpN(2 1)(TestShip)'] == '6.210995e-01'
     print("✓ Diffraction phase table test passed!")
 
-
 def check_diffraction_module_periods(results):
     assert results['diffT0(TestShip)'] == '3.500000e+00'
     assert results['diffT1(TestShip)'] == '3.600000e+00'
     assert results['diffT2(TestShip)'] == '3.700000e+00'
     print("✓ Diffraction module periods test passed!")
-
 
 def check_diffraction_phase_periods(results):
     assert results['diffTp0(TestShip)'] == '3.500000e+00'
@@ -184,19 +180,17 @@ def check_froude_krylov_phase_periods(results):
     assert results['FKTp0(TestShip)'] == '3.500000e+00'
     assert results['FKTp1(TestShip)'] == '3.600000e+00'
     assert results['FKTp2(TestShip)'] == '3.700000e+00'
-    assert results['FKTp46(TestShip)'] == '1.250000e+02'
+    assert results['FKTp6(TestShip)'] == '4.100000e+00'
     print("✓ Froude-Krylov phase periods test passed!")
 
 def check_froude_krylov_module_psis(results):
     assert results['FKpsi0(TestShip)'] == '0.000000e+00'
     assert results['FKpsi1(TestShip)'] == '2.617994e-01'
-    assert results['FKpsi2(TestShip)'] == '5.235988e-01'
     print("✓ Froude-Krylov module incidence test passed!")
 
 def check_froude_krylov_phase_psis(results):
     assert results['FKppsi0(TestShip)'] == '0.000000e+00'
     assert results['FKppsi1(TestShip)'] == '2.617994e-01'
-    assert results['FKppsi2(TestShip)'] == '5.235988e-01'
     print("✓ Froude-Krylov phase incidence test passed!")
 
 def check_angular_frequencies(results):
@@ -233,16 +227,38 @@ def check_added_mass_coeff(results):
     print("✓ Added mass coefficient test passed!")
 
 def check_radiation_damping_coeff(results):
-    assert results['Br_0_0_0(TestShip)']  == '1.670416e-02'
-    assert results['Br_0_0_46(TestShip)'] == '8.995314e+04'
-    assert results['Br_5_0_0(TestShip)']  == '-0.000000e+00'
-    assert results['Br_5_0_46(TestShip)'] == '-0.000000e+00'
-    assert results['Br_0_5_0(TestShip)']  == '-0.000000e+00'
-    assert results['Br_0_5_46(TestShip)'] == '-0.000000e+00'
-    assert results['Br_5_5_0(TestShip)']  == '2.736394e+00'
-    assert results['Br_5_5_46(TestShip)'] == '6.970750e+09'
+    assert results['Br_0_0_0(TestShip)'] == '1.670416e-02'
+    assert results['Br_0_0_6(TestShip)'] == '8.688346e+03'
+    assert results['Br_5_0_0(TestShip)'] == '-0.000000e+00'
+    assert results['Br_5_0_6(TestShip)'] == '-0.000000e+00'
+    assert results['Br_0_5_0(TestShip)'] == '-0.000000e+00'
+    assert results['Br_0_5_6(TestShip)'] == '-0.000000e+00'
+    assert results['Br_5_5_0(TestShip)'] == '2.736394e+00'
+    assert results['Br_5_5_6(TestShip)'] == '3.191245e+06'
     print("✓ Radiation damping coefficient test passed!")
 
+def check_wave_drift_forces(results):
+    assert results['driftX(0 0)(TestShip)'] == '3.255494e+04', results['driftX(0 0)(TestShip)']
+    assert results['driftX(1 0)(TestShip)'] == '3.173188e+04', results['driftX(1 0)(TestShip)']
+    assert results['driftX(0 1)(TestShip)'] == '3.179152e+04', results['driftX(0 1)(TestShip)']
+    assert results['driftY(0 0)(TestShip)'] == '-6.258965e-03', results['driftY(0 0)(TestShip)']
+    assert results['driftY(1 0)(TestShip)'] == '2.143288e-02', results['driftY(1 0)(TestShip)']
+    assert results['driftY(0 1)(TestShip)'] == '2.331616e+04', results['driftY(0 1)(TestShip)']
+    assert results['driftM(0 0)(TestShip)'] == '-3.839448e+06', results['driftM(0 0)(TestShip)']
+    assert results['driftM(1 0)(TestShip)'] == '-3.850146e+06', results['driftM(1 0)(TestShip)']
+    assert results['driftM(0 1)(TestShip)'] == '-3.555496e+06', results['driftM(0 1)(TestShip)']
+    print("✓ Wave drift forces test passed!")
+
+def check_wave_drift_psis(results):
+    assert results['driftPsi(0)(TestShip)'] == '0.000000e+00', results['driftPsi(0)(TestShip)']
+    assert results['driftPsi(1)(TestShip)'] == '2.617994e-01', results['driftPsi(1)(TestShip)']
+    print("✓ Wave drift incidence test passed!")
+
+def check_wave_drift_periods(results):
+    assert results['driftTp(0)(TestShip)'] == '3.500000e+00', results['driftTp(0)(TestShip)']
+    assert results['driftTp(1)(TestShip)'] == '3.600000e+00', results['driftTp(1)(TestShip)']
+    assert results['driftTp(2)(TestShip)'] == '3.700000e+00', results['driftTp(2)(TestShip)']
+    print("✓ Wave drift periods test passed!")
 
 def check(results):
     """Make sure the results contain all necessary data."""
@@ -263,7 +279,9 @@ def check(results):
     print("✓ Forward speed test passed!")
     check_added_mass_coeff(results)
     check_radiation_damping_coeff(results)
-
+    check_wave_drift_forces(results)
+    check_wave_drift_psis(results)
+    check_wave_drift_periods(results)
 
 with open('hdb_output.csv', newline='') as csvfile:
     csv_reader = csv.DictReader(csvfile)
