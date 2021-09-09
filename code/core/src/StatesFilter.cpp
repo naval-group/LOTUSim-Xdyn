@@ -25,7 +25,7 @@ std::shared_ptr<StateFilter> StateFilter::build(const std::string& yaml)
 
 StateFilter::StateFilter(const double duration_in_seconds_) : duration_in_seconds(duration_in_seconds_) {}
 
-double StateFilter::get_value(const History& h) const
+double StateFilter::filter(const History& h) const
 {
     return h.average(duration_in_seconds);
 }
@@ -47,55 +47,55 @@ StatesFilter::StatesFilter(const YamlFilteredStates& input)
 
 double StatesFilter::get_filtered_x(const AbstractStates<History>& history) const
 {
-    return x->get_value(history.x);
+    return x->filter(history.x);
 }
 
 double StatesFilter::get_filtered_y(const AbstractStates<History>& history) const
 {
-    return y->get_value(history.y);
+    return y->filter(history.y);
 }
 
 double StatesFilter::get_filtered_z(const AbstractStates<History>& history) const
 {
-    return z->get_value(history.z);
+    return z->filter(history.z);
 }
 
 double StatesFilter::get_filtered_u(const AbstractStates<History>& history) const
 {
-    return u->get_value(history.u);
+    return u->filter(history.u);
 }
 double StatesFilter::get_filtered_v(const AbstractStates<History>& history) const
 {
-    return v->get_value(history.v);
+    return v->filter(history.v);
 }
 
 double StatesFilter::get_filtered_w(const AbstractStates<History>& history) const
 {
-    return w->get_value(history.w);
+    return w->filter(history.w);
 }
 
 double StatesFilter::get_filtered_p(const AbstractStates<History>& history) const
 {
-    return p->get_value(history.p);
+    return p->filter(history.p);
 }
 
 double StatesFilter::get_filtered_q(const AbstractStates<History>& history) const
 {
-    return q->get_value(history.q);
+    return q->filter(history.q);
 }
 
 double StatesFilter::get_filtered_r(const AbstractStates<History>& history) const
 {
-    return r->get_value(history.r);
+    return r->filter(history.r);
 }
 
 ssc::kinematics::EulerAngles get_filtered_euler_angle(const std::shared_ptr<StateFilter>& filter, const AbstractStates<History>& history, const YamlRotation& rotations);
 ssc::kinematics::EulerAngles get_filtered_euler_angle(const std::shared_ptr<StateFilter>& filter, const AbstractStates<History>& history, const YamlRotation& rotations)
 {
-    const double qr = filter->get_value(history.qr);
-    const double qi = filter->get_value(history.qi);
-    const double qj = filter->get_value(history.qj);
-    const double qk = filter->get_value(history.qk);
+    const double qr = filter->filter(history.qr);
+    const double qi = filter->filter(history.qi);
+    const double qj = filter->filter(history.qj);
+    const double qk = filter->filter(history.qk);
     const ssc::kinematics::RotationMatrix R = Eigen::Quaternion<double>(qr, qi, qj, qk).matrix();
     return  BodyStates::convert(R, rotations);
 }

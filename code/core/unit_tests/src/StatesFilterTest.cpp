@@ -57,7 +57,7 @@ TEST_F(StatesFilterTest, if_duration_is_zero_no_filtering_should_take_place)
     const std::string yaml = "type of filter: moving average\n"
                              "duration in seconds : 0";
     const auto filter = StateFilter::build(yaml);
-    ASSERT_DOUBLE_EQ(last_value, filter->get_value(h));
+    ASSERT_DOUBLE_EQ(last_value, filter->filter(h));
 }
 
 TEST_F(StatesFilterTest, should_be_able_to_filter)
@@ -69,7 +69,7 @@ TEST_F(StatesFilterTest, should_be_able_to_filter)
     const std::string yaml = "type of filter: moving average\n"
                              "duration in seconds : 1";
     const auto filter = StateFilter::build(yaml);
-    ASSERT_DOUBLE_EQ(2.5, filter->get_value(h));
+    ASSERT_DOUBLE_EQ(2.5, filter->filter(h));
 }
 
 

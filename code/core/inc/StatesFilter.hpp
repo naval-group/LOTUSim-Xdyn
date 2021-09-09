@@ -18,7 +18,7 @@ class StateFilter
 {
     public:
         static std::shared_ptr<StateFilter> build(const std::string& yaml);
-        double get_value(const History& h) const;
+        double filter(const History& h) const;
 
     private:
         StateFilter() = delete;
