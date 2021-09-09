@@ -66,7 +66,7 @@ dans le troisième paramètre du constructeur du modèle d'effort. Toutes les
 données sont stockées dans des types Numpy (`ndarray`) afin de simplifier et
 accélérer les traitements numériques.
 
-On peut écrirer ces informations dans les fichiers de sortie d'xdyn à l'aide
+On peut écrire ces informations dans les fichiers de sortie d'xdyn à l'aide
 de la section `output` suivante :
 
 ```python echo=False, results='raw', name='tutorial_13_outputs'
