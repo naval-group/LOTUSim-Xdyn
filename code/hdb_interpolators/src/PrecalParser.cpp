@@ -662,7 +662,7 @@ std::vector<double> PrecalParser::get_wave_drift_psis() const
 }
 
 /**
- * @brief Periods at which the wave drift forces are expressed (in rad).
+ * @brief Periods at which the wave drift forces are expressed (in seconds).
  */
 std::vector<double> PrecalParser::get_wave_drift_periods() const
 {
