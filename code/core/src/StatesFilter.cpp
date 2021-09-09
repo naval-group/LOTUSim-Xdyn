@@ -6,6 +6,21 @@
 #include "StatesFilter.hpp"
 #include "YamlBody.hpp"
 
+class MovingAverage : public StateFilter
+{
+    public:
+        MovingAverage(const double duration_in_seconds_) : duration_in_seconds(duration_in_seconds_)
+        {}
+
+        double filter(const History& h) const
+        {
+            return h.average(duration_in_seconds);
+        }
+
+    private:
+        const double duration_in_seconds;
+};
+
 std::shared_ptr<StateFilter> StateFilter::build(const std::string& yaml)
 {
     std::stringstream stream(yaml);
@@ -14,21 +29,21 @@ std::shared_ptr<StateFilter> StateFilter::build(const std::string& yaml)
     parser.GetNextDocument(node);
     std::string type_of_filter;
     node["type of filter"] >> type_of_filter;
-    if (type_of_filter != "moving average")
+
+    if (type_of_filter == "moving average")
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unknown filter: known state filters are: 'moving average'.");
+        double duration_in_seconds = 0;
+        node["duration in seconds"] >> duration_in_seconds;
+        return std::shared_ptr<StateFilter>(new MovingAverage(duration_in_seconds));
     }
-    double duration_in_seconds = 0;
-    node["duration in seconds"] >> duration_in_seconds;
-    return std::shared_ptr<StateFilter>(new StateFilter(duration_in_seconds));
+    THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unknown filter: known state filters are: 'moving average'.");
+    return std::shared_ptr<StateFilter>(new MovingAverage(0));
 }
 
-StateFilter::StateFilter(const double duration_in_seconds_) : duration_in_seconds(duration_in_seconds_) {}
+StateFilter::StateFilter() {}
 
-double StateFilter::filter(const History& h) const
-{
-    return h.average(duration_in_seconds);
-}
+StateFilter::~StateFilter() {}
+
 
 StatesFilter::StatesFilter(const YamlFilteredStates& input)
     : x(StateFilter::build(input.x))

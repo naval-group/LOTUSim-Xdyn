@@ -18,12 +18,11 @@ class StateFilter
 {
     public:
         static std::shared_ptr<StateFilter> build(const std::string& yaml);
-        double filter(const History& h) const;
+        virtual double filter(const History& h) const = 0;
+        virtual ~StateFilter();
 
-    private:
-        StateFilter() = delete;
-        StateFilter(const double duration_in_seconds);
-        double duration_in_seconds;
+    protected:
+        StateFilter();
 };
 
 struct YamlFilteredStates;
