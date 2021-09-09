@@ -28,6 +28,10 @@ class Mesh;
 typedef TR1(shared_ptr)<Mesh> MeshPtr;
 typedef TR1(shared_ptr)<Eigen::Matrix<double,6,6> > MatrixPtr;
 
+class StatesFilter;
+
+
+
 struct BodyStates : AbstractStates<History>
 {
     BodyStates(const double Tmax=0 //!< Defines how much history we store

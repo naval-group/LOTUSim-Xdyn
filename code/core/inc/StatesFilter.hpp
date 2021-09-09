@@ -64,4 +64,13 @@ class StatesFilter
         std::shared_ptr<StateFilter> psi;
 };
 
+struct FilteredStates : AbstractStates<double>
+{
+    FilteredStates(const StatesFilter& filters, const AbstractStates<History>& states, const YamlRotation& r);
+    double phi;
+    double theta;
+    double psi;
+    FilteredStates() = delete;
+};
+
 #endif

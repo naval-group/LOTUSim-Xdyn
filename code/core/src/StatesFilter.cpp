@@ -6,6 +6,27 @@
 #include "StatesFilter.hpp"
 #include "YamlBody.hpp"
 
+FilteredStates::FilteredStates(const StatesFilter& filters, const AbstractStates<History>& states, const YamlRotation& rot)
+    : AbstractStates<double>()
+    , phi(filters.get_filtered_phi(states, rot))
+    , theta(filters.get_filtered_theta(states, rot))
+    , psi(filters.get_filtered_psi(states, rot))
+{
+    x = filters.get_filtered_x(states);
+    y = filters.get_filtered_y(states);
+    z = filters.get_filtered_z(states);
+    u = filters.get_filtered_u(states);
+    v = filters.get_filtered_v(states);
+    w = filters.get_filtered_w(states);
+    p = filters.get_filtered_p(states);
+    q = filters.get_filtered_q(states);
+    r = filters.get_filtered_r(states);
+    qr = filters.get_filtered_qr(states);
+    qi = filters.get_filtered_qi(states);
+    qj = filters.get_filtered_qj(states);
+    qk = filters.get_filtered_qk(states);
+}
+
 class MovingAverage : public StateFilter
 {
     public:
