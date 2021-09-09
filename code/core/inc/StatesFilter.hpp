@@ -41,6 +41,10 @@ class StatesFilter
         double get_filtered_p(const AbstractStates<History>& history) const;
         double get_filtered_q(const AbstractStates<History>& history) const;
         double get_filtered_r(const AbstractStates<History>& history) const;
+        double get_filtered_qr(const AbstractStates<History>& history) const;
+        double get_filtered_qi(const AbstractStates<History>& history) const;
+        double get_filtered_qj(const AbstractStates<History>& history) const;
+        double get_filtered_qk(const AbstractStates<History>& history) const;
         double get_filtered_phi(const AbstractStates<History>& history, const YamlRotation& rotations) const;
         double get_filtered_theta(const AbstractStates<History>& history, const YamlRotation& rotations) const;
         double get_filtered_psi(const AbstractStates<History>& history, const YamlRotation& rotations) const;

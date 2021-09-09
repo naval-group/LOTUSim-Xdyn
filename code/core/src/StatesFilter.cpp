@@ -108,6 +108,27 @@ double StatesFilter::get_filtered_r(const AbstractStates<History>& history) cons
     return r->filter(history.r);
 }
 
+
+double StatesFilter::get_filtered_qr(const AbstractStates<History>& history) const
+{
+    return history.qr();
+}
+
+double StatesFilter::get_filtered_qi(const AbstractStates<History>& history) const
+{
+    return history.qi();
+}
+
+double StatesFilter::get_filtered_qj(const AbstractStates<History>& history) const
+{
+    return history.qj();
+}
+
+double StatesFilter::get_filtered_qk(const AbstractStates<History>& history) const
+{
+    return history.qk();
+}
+
 ssc::kinematics::EulerAngles get_filtered_euler_angle(const std::shared_ptr<StateFilter>& filter, const AbstractStates<History>& history, const YamlRotation& rotations);
 ssc::kinematics::EulerAngles get_filtered_euler_angle(const std::shared_ptr<StateFilter>& filter, const AbstractStates<History>& history, const YamlRotation& rotations)
 {
