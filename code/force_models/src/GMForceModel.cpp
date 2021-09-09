@@ -101,7 +101,8 @@ BodyStates GMForceModel::get_shifted_states(const BodyStates& states,
 double GMForceModel::get_gz_for_shifted_states(const BodyStates& states, const double t, const EnvironmentAndFrames& env) const
 {
     BodyStates new_states = get_shifted_states(states, t);
-    BodyWithSurfaceForces body_for_gm(new_states, 0, BlockedDOF(""));
+    YamlFilteredStates y;
+    BodyWithSurfaceForces body_for_gm(new_states, 0, BlockedDOF(""), y);
     body_for_gm.reset_history();
     body_for_gm.update(env, new_states.get_current_state_values(0), t);
     const auto hs_force = underlying_hs_force_model->get_force(body_for_gm.get_states(), t, env, {});

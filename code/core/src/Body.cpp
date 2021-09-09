@@ -12,11 +12,19 @@
 #include "YamlBody.hpp"
 #include "NumericalErrorException.hpp"
 
-Body::Body(const size_t i, const BlockedDOF& blocked_states_) : states(), idx(i), blocked_states(blocked_states_)
+Body::Body(const size_t i, const BlockedDOF& blocked_states_, const YamlFilteredStates& filtered_states) 
+    : states()
+    , idx(i)
+    , blocked_states(blocked_states_)
+    , states_filter(filtered_states)
 {
 }
 
-Body::Body(const BodyStates& s, const size_t i, const BlockedDOF& blocked_states_) : states(s), idx(i), blocked_states(blocked_states_)
+Body::Body(const BodyStates& s, const size_t i, const BlockedDOF& blocked_states_, const YamlFilteredStates& filtered_states)
+    : states(s)
+    , idx(i)
+    , blocked_states(blocked_states_)
+    , states_filter(filtered_states)
 {
 }
 

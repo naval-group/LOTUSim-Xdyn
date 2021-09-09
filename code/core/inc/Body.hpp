@@ -10,6 +10,7 @@
 
 #include "BlockedDOF.hpp"
 #include "BodyStates.hpp"
+#include "StatesFilter.hpp"
 #include "StateMacros.hpp"
 #include "State.hpp"
 
@@ -27,8 +28,8 @@ class Body
 {
     public:
         virtual ~Body();
-        Body(const size_t idx, const BlockedDOF& blocked_states);
-        Body(const BodyStates& states, const size_t idx, const BlockedDOF& blocked_states);
+        Body(const size_t idx, const BlockedDOF& blocked_states, const YamlFilteredStates& filtered_states);
+        Body(const BodyStates& states, const size_t idx, const BlockedDOF& blocked_states, const YamlFilteredStates& filtered_states);
 
         BodyStates get_states() const;
 
@@ -84,6 +85,7 @@ class Body
 
         size_t idx; //!< Index of the first state
         BlockedDOF blocked_states;
+        StatesFilter states_filter;
 };
 
 typedef TR1(shared_ptr)<Body> BodyPtr;

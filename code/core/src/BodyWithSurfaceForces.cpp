@@ -10,13 +10,23 @@
 #include "EnvironmentAndFrames.hpp"
 #include "SurfaceElevationInterface.hpp"
 
-BodyWithSurfaceForces::BodyWithSurfaceForces(const size_t i, const BlockedDOF& blocked_states_) : Body(i, blocked_states_)
+BodyWithSurfaceForces::BodyWithSurfaceForces(const size_t i, const BlockedDOF& blocked_states_, const YamlFilteredStates& filtered_states) : Body(i, blocked_states_, filtered_states)
 {
 }
 
-BodyWithSurfaceForces::BodyWithSurfaceForces(const BodyStates& s, const size_t i, const BlockedDOF& blocked_states_) : Body(s, i, blocked_states_)
+BodyWithSurfaceForces::BodyWithSurfaceForces(const BodyStates& s, const size_t i, const BlockedDOF& blocked_states_, const YamlFilteredStates& filtered_states) : Body(s, i, blocked_states_, filtered_states)
 {
 }
+
+
+BodyWithSurfaceForces::BodyWithSurfaceForces(const size_t i, const BlockedDOF& blocked_states_, const StatesFilter& states_filter_) : Body(i, blocked_states_, states_filter_)
+{
+}
+
+BodyWithSurfaceForces::BodyWithSurfaceForces(const BodyStates& s, const size_t i, const BlockedDOF& blocked_states_, const StatesFilter& states_filter_) : Body(s, i, blocked_states_, states_filter_)
+{
+}
+
 
 void BodyWithSurfaceForces::update_intersection_with_free_surface(const EnvironmentAndFrames& env,
                                     const double t)
