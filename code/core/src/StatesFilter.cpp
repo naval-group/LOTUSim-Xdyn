@@ -23,6 +23,10 @@ class MovingAverage : public StateFilter
 
 std::shared_ptr<StateFilter> StateFilter::build(const std::string& yaml)
 {
+    if (yaml.empty())
+    {
+        return std::shared_ptr<StateFilter>(new MovingAverage(0));
+    }
     std::stringstream stream(yaml);
     YAML::Parser parser(stream);
     YAML::Node node;

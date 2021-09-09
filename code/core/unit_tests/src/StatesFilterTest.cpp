@@ -157,3 +157,14 @@ TEST_F(StatesFilterTest, should_be_able_to_filter_all_states)
     ASSERT_NEAR(0, filters.get_filtered_theta(states, rot), eps);
     ASSERT_NEAR(PI/2, filters.get_filtered_psi(states, rot), eps);
 }
+
+TEST_F(StatesFilterTest, no_yaml_means_no_filter)
+{
+    History h(3);
+    const double last_value = a.random<double>();
+    h.record(0, 1);
+    h.record(1, 2);
+    h.record(2, last_value);
+    const auto filter = StateFilter::build("");
+    ASSERT_DOUBLE_EQ(last_value, filter->filter(h));
+}
