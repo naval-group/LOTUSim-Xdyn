@@ -271,3 +271,8 @@ void Body::reset_history()
     states.qj.reset();
     states.qk.reset();
 }
+
+FilteredStates Body::get_filtered_states(const YamlRotation& rot) const
+{
+    return FilteredStates(states_filter, states, rot);
+}
