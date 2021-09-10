@@ -30,6 +30,8 @@ class Body
         virtual ~Body();
         Body(const size_t idx, const BlockedDOF& blocked_states, const YamlFilteredStates& filtered_states);
         Body(const BodyStates& states, const size_t idx, const BlockedDOF& blocked_states, const YamlFilteredStates& filtered_states);
+        Body(const size_t idx, const BlockedDOF& blocked_states, const StatesFilter& states_filter);
+        Body(const BodyStates& states, const size_t idx, const BlockedDOF& blocked_states, const StatesFilter& states_filter);
 
         BodyStates get_states() const;
 
