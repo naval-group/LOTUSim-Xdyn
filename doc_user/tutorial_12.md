@@ -5,7 +5,7 @@ Ce tutoriel explique comment utiliser les fichiers générés par PRECAL_R
 
 ### Préparation : génération des fichiers de sortie PRECAL_R
 
-Le flag 'calcAmasDampCoefInfFreq' doit avoir la valueur `true` dans le fichier
+Le flag `calcAmasDampCoefInfFreq` doit avoir la valueur `true` dans le fichier
 d'entrée de PRECAL_R (elle est à `false` par défaut). Elle est localisée dans
 la section `sim` > `parHYD` > `calcAmasDampCoefInfFreq`. Pour plus de détails,
 on pourra se référer au manuel théorique de PRECAL_R version 18.1.3 (Report No.

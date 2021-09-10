@@ -113,7 +113,7 @@ première valeur de chaque consigne. Ainsi, si l'on ne renseigne qu'une seule
 valeur, elle sera utilisée pour toute la simulation peut importe la valeur de
 temps renseignée.
 
-On peut définir plusieurs liste d'instants différents.
+On peut définir plusieurs listes d'instants différents.
 
 Par exemple :
 
