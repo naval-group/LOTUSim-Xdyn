@@ -20,6 +20,7 @@ class StateFilter
         static std::shared_ptr<StateFilter> build(const std::string& yaml);
         virtual double filter(const History& h) const = 0;
         virtual ~StateFilter();
+        virtual double get_Tmax() const = 0;
 
     protected:
         StateFilter();
@@ -28,10 +29,12 @@ class StateFilter
 struct YamlFilteredStates;
 struct YamlRotation;
 
+
 class StatesFilter
 {
     public:
         StatesFilter(const YamlFilteredStates& input);
+        double get_Tmax() const;
         double get_filtered_x(const AbstractStates<History>& history) const;
         double get_filtered_y(const AbstractStates<History>& history) const;
         double get_filtered_z(const AbstractStates<History>& history) const;

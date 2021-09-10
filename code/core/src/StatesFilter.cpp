@@ -38,6 +38,11 @@ class MovingAverage : public StateFilter
             return h.average(duration_in_seconds);
         }
 
+        double get_Tmax() const
+        {
+            return duration_in_seconds;
+        }
+
     private:
         const double duration_in_seconds;
 };
@@ -61,7 +66,7 @@ std::shared_ptr<StateFilter> StateFilter::build(const std::string& yaml)
         node["duration in seconds"] >> duration_in_seconds;
         return std::shared_ptr<StateFilter>(new MovingAverage(duration_in_seconds));
     }
-    THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unknown filter: known state filters are: 'moving average'.");
+    THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unknown filter '" << type_of_filter << "': known state filters are: 'moving average'.");
     return std::shared_ptr<StateFilter>(new MovingAverage(0));
 }
 
@@ -84,6 +89,22 @@ StatesFilter::StatesFilter(const YamlFilteredStates& input)
     , theta(StateFilter::build(input.theta))
     , psi(StateFilter::build(input.psi))
 {}
+
+double StatesFilter::get_Tmax() const
+{
+    double Tmax = x->get_Tmax();
+    Tmax = std::max(Tmax, y->get_Tmax());
+    Tmax = std::max(Tmax, z->get_Tmax());
+    Tmax = std::max(Tmax, u->get_Tmax());
+    Tmax = std::max(Tmax, v->get_Tmax());
+    Tmax = std::max(Tmax, w->get_Tmax());
+    Tmax = std::max(Tmax, p->get_Tmax());
+    Tmax = std::max(Tmax, q->get_Tmax());
+    Tmax = std::max(Tmax, r->get_Tmax());
+    Tmax = std::max(Tmax, phi->get_Tmax());
+    Tmax = std::max(Tmax, theta->get_Tmax());
+    return std::max(Tmax, psi->get_Tmax());
+}
 
 double StatesFilter::get_filtered_x(const AbstractStates<History>& history) const
 {

@@ -168,3 +168,36 @@ TEST_F(StatesFilterTest, no_yaml_means_no_filter)
     const auto filter = StateFilter::build("");
     ASSERT_DOUBLE_EQ(last_value, filter->filter(h));
 }
+
+TEST_F(StatesFilterTest, can_get_Tmax)
+{
+    const std::string yaml = "type of filter: moving average\n"
+                             "duration in seconds : 3456.654";
+    ASSERT_DOUBLE_EQ(3456.654, StateFilter::build(yaml)->get_Tmax());
+    YamlFilteredStates input;
+    input.x = "type of filter: moving average\n"
+              "duration in seconds : 1";
+    input.y = "type of filter: moving average\n"
+              "duration in seconds : 2";
+    input.z = "type of filter: moving average\n"
+              "duration in seconds : 3";
+    input.u = "type of filter: moving average\n"
+              "duration in seconds : 4";
+    input.v = "type of filter: moving average\n"
+              "duration in seconds : 5";
+    input.w = "type of filter: moving average\n"
+              "duration in seconds : 6";
+    input.p = "type of filter: moving average\n"
+              "duration in seconds : 7";
+    input.q = "type of filter: moving average\n"
+              "duration in seconds : 8";
+    input.r = "type of filter: moving average\n"
+              "duration in seconds : 9";
+    input.phi = "type of filter: moving average\n"
+              "duration in seconds : 1";
+    input.theta = "type of filter: moving average\n"
+              "duration in seconds : 1";
+    input.psi = "type of filter: moving average\n"
+              "duration in seconds : 1";
+    ASSERT_DOUBLE_EQ(9, StatesFilter(input).get_Tmax());
+}
