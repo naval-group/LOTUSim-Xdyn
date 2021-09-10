@@ -67,7 +67,8 @@ void BodyBuilder::change_mesh_ref_frame(BodyStates& states, const VectorOfVector
 
 BodyPtr BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& mesh, const size_t idx, const double t0, const YamlRotation& convention, const double Tmax, const bool has_surface_forces) const
 {
-    BodyStates states(Tmax);
+    const StatesFilter states_filter(input.filtered_states);
+    BodyStates states(std::max(Tmax, states_filter.get_Tmax()));
     states.name = input.name;
     states.G = make_point(input.dynamics.centre_of_inertia);
 
@@ -90,8 +91,8 @@ BodyPtr BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& 
 
     BodyPtr ret;
     const BlockedDOF blocked_states(input.blocked_dof,idx);
-    if (has_surface_forces) ret.reset(new BodyWithSurfaceForces(states,idx,blocked_states,input.filtered_states));
-    else                    ret.reset(new BodyWithoutSurfaceForces(states,idx,blocked_states,input.filtered_states));
+    if (has_surface_forces) ret.reset(new BodyWithSurfaceForces(states,idx,blocked_states, states_filter));
+    else                    ret.reset(new BodyWithoutSurfaceForces(states,idx,blocked_states, states_filter));
     return ret;
 }
 
