@@ -117,6 +117,7 @@ namespace test_data
     std::string added_mass_from_precal_file();
     std::string tutorial_13_hdb_force_model();
     std::string tutorial_13_precal_r_force_model();
+    std::string tutorial_14_filtered_states();
 }
 
 #endif /* YAML_DATA_HPP_ */

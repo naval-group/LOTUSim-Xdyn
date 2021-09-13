@@ -3521,6 +3521,39 @@ std::string test_data::tutorial_10_gRPC_force_model()
          + "        c: 1\n";
 }
 
+std::string test_data::tutorial_14_filtered_states()
+{
+    return rotation_convention()
+         + "\n"
+         + environmental_constants()
+         + "environment models:\n"
+         + "  - model: no waves\n"
+         + "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
+         + "    \n"
+         + "# Fixed frame: NED\n"
+         + "bodies: # All bodies have NED as parent frame\n"
+         + "  - name: TestShip\n"
+         + "    filtered states:\n"
+         + "      z:\n"
+         + "          type of filter: moving average\n"
+         + "          duration in seconds : 5\n"
+         + position_relative_to_mesh(0, 0, 0, 0, 0, 0)
+         + initial_position_of_body_frame(0, 0, 0, 0, 0, 0)
+         + initial_velocity("TestShip", 0, 0, 0, 0, 0, 0)
+         + dynamics()
+         + "    external forces:\n"
+         + "      - model: grpc\n"
+         + "        name: filtered force model\n"
+         + "        url: force-model:9002\n"
+         +  "output:\n"
+         +  "   - format: tsv\n"
+         +  "     filename: output_filtered_force.tsv\n"
+         +  "     data: [t, 'x(TestShip)',  'x_filtered(TestShip)', 'z(TestShip)',  'z_filtered(TestShip)', 'Fx(filtered force model,TestShip,TestShip)']\n"
+         +  "   - format: csv\n"
+         +  "     filename: filtered_states.csv\n"
+         +  "     data: [t, 'x(TestShip)',  'x_filtered(TestShip)', 'z(TestShip)',  'z_filtered(TestShip)']\n";
+}
+
 std::string test_data::tutorial_10_gRPC_force_model_commands()
 {
     return "commands:\n"
