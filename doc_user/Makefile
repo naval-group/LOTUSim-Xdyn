@@ -47,7 +47,14 @@ m4 :=  docker run -t --rm \
 tutorial_11.md: tutorial_11.m4.md
 	$(m4) -I/controller $< > $@
 
-tutorial_14.md: tutorial_14.m4.md
+tuto_execution/filtered_states.csv: ../integration_tests/grpc_tests/force/filtered_states.csv
+	@mkdir -p tuto_execution
+	cp $< $@
+
+../integration_tests/grpc_tests/force/filtered_states.csv:
+	@make -C ../integration_tests/grpc_tests/force/ filtered_states.csv
+
+tutorial_14.md: tutorial_14.m4.md tuto_execution/filtered_states.csv
 	$(m4) -I/controller -I/force $< > $@
 
 interfaces_utilisateur.md: interfaces_utilisateur.m4.md ../interfaces/cosimulation.proto ../interfaces/model_exchange.proto

@@ -3,17 +3,6 @@
 import yaml
 import numpy as np
 import force
-import logging
-
-SERVICE_NAME = "pid-controller"
-
-logging.basicConfig(
-    format='%(asctime)s,%(msecs)d ['
-    + SERVICE_NAME
-    + '] - %(levelname)-4s [%(filename)s:%(lineno)d] %(message)s',
-    datefmt='%d-%m-%Y:%H:%M:%S')
-LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.INFO)
 
 
 class ForceModel(force.Model):
@@ -35,8 +24,6 @@ class ForceModel(force.Model):
         """Force model."""
         Fx = 1 + np.random.uniform(low=-0.01, high=0.01)
         Fz = np.random.uniform(low=-0.01, high=0.01)
-        LOGGER.info(Fx)
-        LOGGER.info(Fz)
         return {'Fx': Fx,
                 'Fy': 0,
                 'Fz': Fz,

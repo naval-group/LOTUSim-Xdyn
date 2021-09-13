@@ -59,3 +59,22 @@ La partie `CURRENT_UID=$(id -u):$(id -g)` sert simplement à ce que les
 éventuels fichiers générés le soient avec les permissions de l'utilisateur
 courant.
 
+Les résultats de la simulation sont visibles dans le fichier `filtered_states.csv`:
+
+```python echo=False, results='raw', name='tutorial_14_plots'
+data = csv('filtered_states.csv')
+xplot = prepare_plot_data(data, x='t', y='x(TestShip)', name='État x non filtré')
+xfilteredplot = prepare_plot_data(data, x='t', y='x_filtered(TestShip)', name='État x filtré')
+gx = cartesian_graph([xplot, xfilteredplot], x='t (s)', y='Cavalement (m)')
+create_layout(graph=gx, title='Position x au cours du temps')
+zplot = prepare_plot_data(data, x='t', y='z(TestShip)', name='État z non filtré')
+zfilteredplot = prepare_plot_data(data, x='t', y='z_filtered(TestShip)', name='État z filtré')
+gz = cartesian_graph([zplot, zfilteredplot], x='t (s)', y='Pillonement (m)')
+create_layout(graph=gz, title='Position z au cours du temps')
+```
+
+On constate que :
+
+- les valeurs `x_filtered` et `x` sont identiques (puisqu'aucun filtrage n'est
+  défini pour ce degré de liberté)
+- le filtrage est bien pris en compte en z
