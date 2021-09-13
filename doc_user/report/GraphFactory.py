@@ -174,13 +174,14 @@ class Image:
         fig.add_subplot(*arg_loc_subplot, **args)
 
         color = ["blue", "green", "red", "cyan", "magenta"]
+        linestyle = ['solid', 'dashed', 'dashdot', 'dotted' ]
         number_of_barplot_drawn = 0
         for id_plot, (data_plot, plot_params) in enumerate(graph.plots):
             if plot_params.grepr == "Cart":
-                self._draw_curve_plot(fig=fig, data_plot=data_plot, plot_params=plot_params, color=color[id_plot])
+                self._draw_curve_plot(fig=fig, data_plot=data_plot, plot_params=plot_params, color=color[id_plot], linestyle=linestyle[id_plot % len(linestyle)])
             elif plot_params.grepr == "Bar":
                 self._draw_bar_plot(fig=fig, data_plot=data_plot, plot_params=plot_params,
-                                    number_of_plotbar=graph.number_of_plotbar, id_plot=number_of_barplot_drawn, color=color[id_plot])
+                                    number_of_plotbar=graph.number_of_plotbar, id_plot=number_of_barplot_drawn, color=color[id_plot], linestyle=linestyle[id_plot % len(linestyle)])
                 number_of_barplot_drawn += 1
             else:
                 raise ValueError("Unknown kind of plot : {}".format(plot_params.grepr))
@@ -214,18 +215,18 @@ class Image:
     def _id_of_graph(self, subplot):
         return subplot[0] * self._layout.layout_size[1] + subplot[1] + 1
 
-    def _draw_curve_plot(self, fig, data_plot, plot_params, color):
+    def _draw_curve_plot(self, fig, data_plot, plot_params, color, linestyle):
         plt.figure(fig.number)
         data = [data_plot.data_source[data_plot.values[name]] for name in plot_params.names]
-        plt.plot(*data, color=color, label=plot_params.name, **self._args_plot(plot_params))
+        plt.plot(*data, color=color, linestyle=linestyle, label=plot_params.name, **self._args_plot(plot_params))
         plt.tick_params(labelsize=5)
 
-    def _draw_bar_plot(self, fig, data_plot, plot_params, number_of_plotbar, id_plot, color):
+    def _draw_bar_plot(self, fig, data_plot, plot_params, number_of_plotbar, id_plot, color, linestyle):
         plt.figure(fig.number)
         bins = data_plot.data_source["x"]
         values = data_plot.data_source["y"]
         bar_width = np.diff(bins) / number_of_plotbar
-        plt.bar(left=bins[:-1] + id_plot * bar_width, height=values, width=bar_width, color=color, label=plot_params.name)
+        plt.bar(left=bins[:-1] + id_plot * bar_width, height=values, width=bar_width, color=color, linestyle=linestyle, label=plot_params.name)
 
     def _args_plot(self, plot_params):
         return {}  # ex : {"color": 'b'}
