@@ -118,6 +118,8 @@ modèles hydrodynamiques et celui fait pour les systèmes extérieurs à xdyn.
 Ainsi, si l'on modifie le filtrage lié aux modèles d'effort on ne va pas
 modifier le comportement des contrôleurs et réciproquement.
 
+Un exemple d'utilisation des états filtrés est présenté au [tutoriel 14](#tutoriel-14-utilisation-des-états-filtrés).
+
 ## Efforts de gravité
 
 ### Description

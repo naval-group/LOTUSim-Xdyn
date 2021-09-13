@@ -29,7 +29,8 @@ concatenated_doc.pmd: \
     tutorial_10.md \
     tutorial_11.md \
     tutorial_12.md \
-    tutorial_13.md
+    tutorial_13.md \
+	tutorial_14.md
 	rm -f concatenated_doc.pmd
 	for f in $^ ; do (cat $$f; echo "") >> concatenated_doc.pmd ; done
 
@@ -37,6 +38,7 @@ m4 :=  docker run -t --rm \
                -v $(shell pwd):/work \
                -v $(shell pwd)/../interfaces:/interfaces \
                -v $(shell pwd)/../integration_tests/grpc_tests/controller:/controller \
+               -v $(shell pwd)/../integration_tests/grpc_tests/force:/force \
                -w /work \
                -u $(shell id -u):$(shell id -g) \
                --entrypoint /usr/bin/m4 \
@@ -44,6 +46,9 @@ m4 :=  docker run -t --rm \
 
 tutorial_11.md: tutorial_11.m4.md
 	$(m4) -I/controller $< > $@
+
+tutorial_14.md: tutorial_14.m4.md
+	$(m4) -I/controller -I/force $< > $@
 
 interfaces_utilisateur.md: interfaces_utilisateur.m4.md ../interfaces/cosimulation.proto ../interfaces/model_exchange.proto
 	$(m4) -I/interfaces $< > $@
