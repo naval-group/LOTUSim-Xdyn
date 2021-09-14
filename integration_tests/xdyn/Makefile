@@ -1,4 +1,4 @@
-.PHONY: all clean invalid_yaml_returns_non_zero_error_code tutorial_12
+.PHONY: all clean invalid_yaml_returns_non_zero_error_code tutorial_12 no_stl
 
 all: invalid_yaml_returns_non_zero_error_code \
 	 tutorial_12
@@ -31,6 +31,23 @@ tutorial_12:
 
 cube.stl:
 	@echo "Copying tutorial files from xdyn's Docker container..."
+	@${DOCKER_RUN} -v $(shell pwd):/xdyn_demos --entrypoint /bin/bash xdyn -c "cp /usr/demos/$@ /xdyn_demos/"
+
+no_stl: test.h5
+	@echo "Testing if STL file is present in HDF5 file (it shouldn't)"
+	@${DOCKER_RUN} hdfgroup/hdf5lib:1.10.6 h5dump -d /inputs/meshes/TestShip/faces -c 1 test.h5; echo $$? >> .commands.result
+	@if grep -q 0 .commands.result; then \
+	echo "Found STL mesh in HDF5 file, despite the flag: test failed!" && exit 1; \
+	else \
+	echo "Did not find STL mesh in HDF5, as expected: test passed."; \
+	fi
+	@rm -f .commands.result
+
+test.h5: tutorial_05_froude_krylov.yml test_ship.stl
+	@${DOCKER_RUN} xdyn tutorial_05_froude_krylov.yml --dt 0.1 --tend 0.1 -o test.h5
+
+test_ship.stl tutorial_05_froude_krylov.yml:
+	@echo "Copying $@ from xdyn's Docker container..."
 	@${DOCKER_RUN} -v $(shell pwd):/xdyn_demos --entrypoint /bin/bash xdyn -c "cp /usr/demos/$@ /xdyn_demos/"
 
 
