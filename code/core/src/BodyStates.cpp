@@ -8,6 +8,7 @@
 #include "BodyStates.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "StateMacros.hpp"
+#include "StatesFilter.hpp"
 #include "SurfaceElevationInterface.hpp"
 #include "YamlBody.hpp"
 #include "yaml2eigen.hpp"
@@ -27,7 +28,48 @@ M(),
 intersector(),
 g_in_mesh_frame(),
 hydrodynamic_forces_calculation_point(),
-convention()
+convention(),
+states_filter(YamlFilteredStates())
+{
+}
+
+BodyStates::BodyStates(const YamlFilteredStates& filtered_states, const double Tmax) : AbstractStates<History>(Tmax),
+name(),
+G(),
+mesh(),
+total_inertia(),
+solid_body_inertia(),
+inverse_of_the_total_inertia(),
+x_relative_to_mesh(),
+y_relative_to_mesh(),
+z_relative_to_mesh(),
+mesh_to_body(),
+M(),
+intersector(),
+g_in_mesh_frame(),
+hydrodynamic_forces_calculation_point(),
+convention(),
+states_filter(filtered_states)
+{
+}
+
+BodyStates::BodyStates(const StatesFilter& states_filter_, const double Tmax) : AbstractStates<History>(Tmax),
+name(),
+G(),
+mesh(),
+total_inertia(),
+solid_body_inertia(),
+inverse_of_the_total_inertia(),
+x_relative_to_mesh(),
+y_relative_to_mesh(),
+z_relative_to_mesh(),
+mesh_to_body(),
+M(),
+intersector(),
+g_in_mesh_frame(),
+hydrodynamic_forces_calculation_point(),
+convention(),
+states_filter(states_filter_)
 {
 }
 
@@ -124,4 +166,9 @@ std::vector<double> BodyStates::get_current_state_values(const size_t idx) const
     s[QJIDX(idx)] = qj();
     s[QKIDX(idx)] = qk();
     return s;
+}
+
+FilteredStates BodyStates::get_filtered_states() const
+{
+    return FilteredStates(states_filter, *this, convention);
 }

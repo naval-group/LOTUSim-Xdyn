@@ -13,7 +13,7 @@
 #include "NumericalErrorException.hpp"
 
 Body::Body(const size_t i, const BlockedDOF& blocked_states_, const YamlFilteredStates& filtered_states)
-    : states()
+    : states(filtered_states)
     , idx(i)
     , blocked_states(blocked_states_)
     , states_filter(filtered_states)
@@ -29,7 +29,7 @@ Body::Body(const BodyStates& s, const size_t i, const BlockedDOF& blocked_states
 }
 
 Body::Body(const size_t i, const BlockedDOF& blocked_states_, const StatesFilter& states_filter_)
-    : states()
+    : states(states_filter_)
     , idx(i)
     , blocked_states(blocked_states_)
     , states_filter(states_filter_)

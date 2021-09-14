@@ -22,19 +22,20 @@
 #include "History.hpp"
 #include "YamlRotation.hpp"
 #include "AbstractStates.hpp"
+#include "StatesFilter.hpp"
 
 
 class Mesh;
 typedef TR1(shared_ptr)<Mesh> MeshPtr;
 typedef TR1(shared_ptr)<Eigen::Matrix<double,6,6> > MatrixPtr;
 
-class StatesFilter;
-
-
-
 struct BodyStates : AbstractStates<History>
 {
     BodyStates(const double Tmax=0 //!< Defines how much history we store
+              );
+    BodyStates(const YamlFilteredStates& filtered_states, const double Tmax=0 //!< Defines how much history we store
+              );
+    BodyStates(const StatesFilter& states_filter, const double Tmax=0 //!< Defines how much history we store
               );
     BodyStates& operator=(const AbstractStates<History>& rhs);
     std::string name;                                              //!< Body's name
@@ -61,6 +62,8 @@ struct BodyStates : AbstractStates<History>
     ssc::kinematics::RotationMatrix get_rot_from_ned_to(const StateType& x, const size_t idx) const;
     YamlRotation convention;  //!< Rotation convention
     std::vector<double> get_current_state_values(const size_t idx) const;
+    FilteredStates get_filtered_states() const;
+    StatesFilter states_filter;
 };
 
 #endif /* BODYSTATES_HPP_ */
