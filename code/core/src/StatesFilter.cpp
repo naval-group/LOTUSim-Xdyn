@@ -11,6 +11,7 @@ FilteredStates::FilteredStates(const StatesFilter& filters, const AbstractStates
     , phi(filters.get_filtered_phi(states, rot))
     , theta(filters.get_filtered_theta(states, rot))
     , psi(filters.get_filtered_psi(states, rot))
+    , rotation_convention(rot)
 {
     x = filters.get_filtered_x(states);
     y = filters.get_filtered_y(states);

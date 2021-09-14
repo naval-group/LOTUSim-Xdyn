@@ -11,6 +11,7 @@
 #include <memory>
 #include <string>
 #include "AbstractStates.hpp"
+#include "YamlRotation.hpp"
 
 class History;
 
@@ -27,8 +28,6 @@ class StateFilter
 };
 
 struct YamlFilteredStates;
-struct YamlRotation;
-
 
 class StatesFilter
 {
@@ -73,6 +72,7 @@ struct FilteredStates : AbstractStates<double>
     double phi;
     double theta;
     double psi;
+    YamlRotation rotation_convention;
     FilteredStates() = delete;
 };
 
