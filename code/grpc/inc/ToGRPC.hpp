@@ -32,6 +32,7 @@ class ToGRPC
         States* from_state(const BodyStates& state, const double max_history_length, const EnvironmentAndFrames& env) const;
         ForceRequest from_force_request(States* states, const std::map<std::string, double >& commands, WaveInformation* wave_information, const std::string& instance_name) const;
         SetForceParameterRequest from_yaml(const std::string& yaml, const std::string body_name, const std::string& instance_name, const std::shared_ptr<HydroDBParser>& hydro_db_parser) const;
+        FilteredStatesAndConvention* from_filtered_states(const FilteredStates& filtered_states) const;
 
     private:
         GRPCForceModel::Input input;

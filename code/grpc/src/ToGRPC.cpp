@@ -363,6 +363,25 @@ FrequencyMatrix* get_radiation_damping_coeff_matrix(const std::shared_ptr<HydroD
     return ret;
 }
 
+FilteredStatesAndConvention* ToGRPC::from_filtered_states(const FilteredStates& filtered_states) const
+{
+    FilteredStatesAndConvention* ret = new FilteredStatesAndConvention();
+    ret->set_x(filtered_states.x);
+    ret->set_y(filtered_states.y);
+    ret->set_z(filtered_states.z);
+    ret->set_u(filtered_states.u);
+    ret->set_v(filtered_states.v);
+    ret->set_w(filtered_states.w);
+    ret->set_p(filtered_states.p);
+    ret->set_q(filtered_states.q);
+    ret->set_r(filtered_states.r);
+    ret->set_phi(filtered_states.phi);
+    ret->set_theta(filtered_states.theta);
+    ret->set_psi(filtered_states.psi);
+    copy_from_string_vector(filtered_states.rotation_convention.convention, ret->mutable_rotations_convention());
+    return ret;
+}
+
 ResultsFromPotentialTheory* get_results_from_potential_theory(const std::shared_ptr<HydroDBParser>& hydro_db_parser);
 ResultsFromPotentialTheory* get_results_from_potential_theory(const std::shared_ptr<HydroDBParser>& hydro_db_parser)
 {
