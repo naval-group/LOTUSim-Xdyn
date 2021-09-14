@@ -281,6 +281,7 @@ double History::average(double T) const
 {
     if (L.empty()) return 0;
     if (L.size()==1) return L.front().second;
+    if (T==0) return L.back().second;
     check_if_average_can_be_retrieved(T);
     T = std::min(T, get_duration());
     const double t = get_current_time() - T;
@@ -288,7 +289,7 @@ double History::average(double T) const
     const double first_value = interpolate_value_in_interval(idx, t);
     const double integral_of_first_interval = trapeze(t, first_value, L.at(idx).first, L.at(idx).second);
     const double integral_from_t_to_now = integrate(idx);
-    return  (T!=0) ? (integral_of_first_interval + integral_from_t_to_now)/T : L.back().second;
+    return  (integral_of_first_interval + integral_from_t_to_now)/T;
 }
 
 std::pair<double,double> History::operator[](const int index) const
