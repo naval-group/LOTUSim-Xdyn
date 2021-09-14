@@ -3546,9 +3546,6 @@ std::string test_data::tutorial_14_filtered_states()
          + "        name: filtered force model\n"
          + "        url: force-model:9002\n"
          +  "output:\n"
-         +  "   - format: tsv\n"
-         +  "     filename: output_filtered_force.tsv\n"
-         +  "     data: [t, 'x(TestShip)',  'x_filtered(TestShip)', 'z(TestShip)',  'z_filtered(TestShip)', 'Fx(filtered force model,TestShip,TestShip)']\n"
          +  "   - format: csv\n"
          +  "     filename: filtered_states.csv\n"
          +  "     data: [t, 'x(TestShip)',  'x_filtered(TestShip)', 'z(TestShip)',  'z_filtered(TestShip)']\n";
