@@ -195,13 +195,14 @@ States* ToGRPC::from_state(const BodyStates& state, const double max_history_len
     return ret;
 }
 
-ForceRequest ToGRPC::from_force_request(States* states, const std::map<std::string, double >& commands, WaveInformation* wave_information, const std::string& instance_name) const
+ForceRequest ToGRPC::from_force_request(States* states, const std::map<std::string, double >& commands, WaveInformation* wave_information, const std::string& instance_name, FilteredStatesAndConvention* filtered_states_and_conventions) const
 {
     ForceRequest request;
     request.set_allocated_wave_information(wave_information);
     request.mutable_commands()->insert(commands.begin(), commands.end());
     request.set_allocated_states(states);
     request.set_instance_name(instance_name);
+    request.set_allocated_filtered_states(filtered_states_and_conventions);
     return request;
 }
 

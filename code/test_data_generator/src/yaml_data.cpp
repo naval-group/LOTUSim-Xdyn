@@ -3548,7 +3548,7 @@ std::string test_data::tutorial_14_filtered_states()
          +  "output:\n"
          +  "   - format: csv\n"
          +  "     filename: filtered_states.csv\n"
-         +  "     data: [t, 'x(TestShip)',  'x_filtered(TestShip)', 'z(TestShip)',  'z_filtered(TestShip)']\n";
+         +  "     data: [t, 'x(TestShip)',  'x_filtered(TestShip)', 'z(TestShip)',  'z_filtered(TestShip)', 'xf(TestShip)', 'x_(TestShip)']\n";
 }
 
 std::string test_data::tutorial_10_gRPC_force_model_commands()

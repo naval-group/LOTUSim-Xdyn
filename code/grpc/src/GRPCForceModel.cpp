@@ -88,7 +88,8 @@ class GRPCForceModel::Impl
             grpc::ClientContext context;
             const auto states = to_grpc.from_state(state, max_history_length, env);
             const auto wave_information = get_wave_information(t, state.x(0), state.y(0), state.z(0), env);
-            const grpc::Status status = stub->force(&context, to_grpc.from_force_request(states, commands, wave_information, instance_name), &response);
+            const auto filtered_states = to_grpc.from_filtered_states(state.get_filtered_states());
+            const grpc::Status status = stub->force(&context, to_grpc.from_force_request(states, commands, wave_information, instance_name, filtered_states), &response);
             throw_if_invalid_status<Input,GRPCForceModel>(input, "force", status);
             extra_observations = std::map<std::string,double>(response.extra_observations().begin(),response.extra_observations().end());
             return from_grpc.to_force(response);
