@@ -31,7 +31,7 @@ class Model(force.Model):
                 'angular_frequencies_for_rao': True,
                 'directions_for_rao': True}
 
-    def force(self, _, __, wave_information):
+    def force(self, _, __, wave_information, ___):
         """Force model."""
 
         return {'Fx': 0.0,

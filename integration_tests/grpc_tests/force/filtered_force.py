@@ -20,7 +20,7 @@ class ForceModel(force.Model):
                 'frame': self.body_name, 'x': 0, 'y': 0, 'z': 0, 'phi': 0,
                 'theta': 0, 'psi': 0, 'required_commands': []}
 
-    def force(self, states, _, __):
+    def force(self, states, _, __, ___):
         """Force model."""
         Fx = 1 + np.random.uniform(low=-0.01, high=0.01)
         Fz = np.random.uniform(low=-0.01, high=0.01)
