@@ -229,7 +229,7 @@ void Body::feed(const StateType& x, Observer& observer, const YamlRotation& c) c
     observer.write(angles.theta, DataAddressing(std::vector<std::string>{"states",states.name,"THETA"},std::string("theta(")+states.name+")"));
     observer.write(angles.psi, DataAddressing(std::vector<std::string>{"states",states.name,"PSI"},std::string("psi(")+states.name+")"));
 
-    const auto filtered_states = get_filtered_states(c, states, x);
+    const auto filtered_states = get_filtered_states(states, x);
     observer.write(filtered_states.x, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"X"},std::string("x_filtered(")+states.name+")"));
     observer.write(filtered_states.y, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"Y"},std::string("y_filtered(")+states.name+")"));
     observer.write(filtered_states.z, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"Z"},std::string("z_filtered(")+states.name+")"));
@@ -286,12 +286,12 @@ void Body::reset_history()
     states.qk.reset();
 }
 
-FilteredStates Body::get_filtered_states(const YamlRotation& rot) const
+FilteredStates Body::get_filtered_states() const
 {
-    return FilteredStates(states_filter, states, rot);
+    return FilteredStates(states_filter, states, states.convention);
 }
 
-FilteredStates Body::get_filtered_states(const YamlRotation& c, AbstractStates<History> state_history, const StateType& x) const
+FilteredStates Body::get_filtered_states(AbstractStates<History> state_history, const StateType& x) const
 {
     const double t = state_history.x.get_current_time();
     state_history.x.record(t, *_X(x,idx));
@@ -307,5 +307,5 @@ FilteredStates Body::get_filtered_states(const YamlRotation& c, AbstractStates<H
     state_history.qi.record(t, *_QI(x,idx));
     state_history.qj.record(t, *_QJ(x,idx));
     state_history.qk.record(t, *_QK(x,idx));
-    return FilteredStates(states_filter, state_history, c);
+    return FilteredStates(states_filter, state_history, states.convention);
 }

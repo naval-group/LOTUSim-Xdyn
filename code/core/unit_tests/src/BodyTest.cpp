@@ -338,35 +338,34 @@ TEST_F(BodyTest, can_compute_euler_angles_from_body_states)
 TEST_F(BodyTest, can_retrieve_filtered_states)
 {
     const auto filtered_body = BodyBuilderTest::build_body_with_filtered_states();
-    const YamlRotation rot("angle", {"z", "y'", "x''"});
     //                                 x y z  u    v    w p q r qr qi qj qk
     filtered_body->update_body_states({1,2,3, 0   ,4.3 ,6,7,8,9,10,11,12,13,1,2,3,44,5,6,7,8,9,3,5,7,13}, 0);
-    ASSERT_DOUBLE_EQ(1, filtered_body->get_filtered_states(rot).x);
-    ASSERT_DOUBLE_EQ(0, filtered_body->get_filtered_states(rot).u);
-    ASSERT_DOUBLE_EQ(4.3, filtered_body->get_filtered_states(rot).v);
+    ASSERT_DOUBLE_EQ(1, filtered_body->get_filtered_states().x);
+    ASSERT_DOUBLE_EQ(0, filtered_body->get_filtered_states().u);
+    ASSERT_DOUBLE_EQ(4.3, filtered_body->get_filtered_states().v);
     //                                 x y z  u    v    w p q r qr qi qj qk
     filtered_body->update_body_states({2,3,4, 0.1 ,3.4 ,6,7,8,9,10,11,12,13,1,2,3,44,5,6,7,8,9,3,5,7,13}, 0.1);
-    ASSERT_DOUBLE_EQ(3, filtered_body->get_filtered_states(rot).y);
-    ASSERT_DOUBLE_EQ(0.05, filtered_body->get_filtered_states(rot).u);
-    ASSERT_DOUBLE_EQ(3.85, filtered_body->get_filtered_states(rot).v);
+    ASSERT_DOUBLE_EQ(3, filtered_body->get_filtered_states().y);
+    ASSERT_DOUBLE_EQ(0.05, filtered_body->get_filtered_states().u);
+    ASSERT_DOUBLE_EQ(3.85, filtered_body->get_filtered_states().v);
     //                                 x y z  u    v    w p q r qr qi qj qk
     filtered_body->update_body_states({3,4,5, 1.2 ,2.1 ,6,7,8,9,10,11,12,13,1,2,3,44,5,6,7,8,9,3,5,7,13}, 1.2);
-    ASSERT_DOUBLE_EQ(5, filtered_body->get_filtered_states(rot).z);
-    ASSERT_DOUBLE_EQ(0.6, filtered_body->get_filtered_states(rot).u);
-    ASSERT_DOUBLE_EQ((0.1*3.85+1.1*2.75)/1.2, filtered_body->get_filtered_states(rot).v);
+    ASSERT_DOUBLE_EQ(5, filtered_body->get_filtered_states().z);
+    ASSERT_DOUBLE_EQ(0.6, filtered_body->get_filtered_states().u);
+    ASSERT_DOUBLE_EQ((0.1*3.85+1.1*2.75)/1.2, filtered_body->get_filtered_states().v);
     //                                 x y z  u    v    w p q r qr qi qj qk
     filtered_body->update_body_states({4,5,6, 2.1 ,1.2 ,6,7,8,9,10,11,12,13,1,2,3,44,5,6,7,8,9,3,5,7,13}, 2.1);
-    ASSERT_DOUBLE_EQ(6, filtered_body->get_filtered_states(rot).w);
-    ASSERT_DOUBLE_EQ(1.05, filtered_body->get_filtered_states(rot).u);
-    ASSERT_DOUBLE_EQ((0.1*3.85+1.1*2.75+0.9*1.65)/2.1, filtered_body->get_filtered_states(rot).v);
+    ASSERT_DOUBLE_EQ(6, filtered_body->get_filtered_states().w);
+    ASSERT_DOUBLE_EQ(1.05, filtered_body->get_filtered_states().u);
+    ASSERT_DOUBLE_EQ((0.1*3.85+1.1*2.75+0.9*1.65)/2.1, filtered_body->get_filtered_states().v);
     //                                 x y z  u    v    w p q r qr qi qj qk
     filtered_body->update_body_states({5,6,7, 3.4 ,0.1 ,6,7,8,9,10,11,12,13,1,2,3,44,5,6,7,8,9,3,5,7,13}, 3.4);
-    ASSERT_DOUBLE_EQ(7, filtered_body->get_filtered_states(rot).p);
-    ASSERT_DOUBLE_EQ((3.4+1.1)/2, filtered_body->get_filtered_states(rot).u);
-    ASSERT_NEAR((2.058181818181+0.9*1.65+1.3*0.65)/3, filtered_body->get_filtered_states(rot).v, 1E-10);
+    ASSERT_DOUBLE_EQ(7, filtered_body->get_filtered_states().p);
+    ASSERT_DOUBLE_EQ((3.4+1.1)/2, filtered_body->get_filtered_states().u);
+    ASSERT_NEAR((2.058181818181+0.9*1.65+1.3*0.65)/3, filtered_body->get_filtered_states().v, 1E-10);
     //                                 x y z  u    v    w p q r qr qi qj qk
     filtered_body->update_body_states({6,7,8, 4.3 ,0   ,6,7,8,9,10,11,12,13,1,2,3,44,5,6,7,8,9,3,5,7,13}, 4.3);
-    ASSERT_DOUBLE_EQ(8, filtered_body->get_filtered_states(rot).q);
-    ASSERT_DOUBLE_EQ((4.3+2)/2, filtered_body->get_filtered_states(rot).u);
-    ASSERT_DOUBLE_EQ((1.28+1.3*0.65+0.9*0.05)/3, filtered_body->get_filtered_states(rot).v);
+    ASSERT_DOUBLE_EQ(8, filtered_body->get_filtered_states().q);
+    ASSERT_DOUBLE_EQ((4.3+2)/2, filtered_body->get_filtered_states().u);
+    ASSERT_DOUBLE_EQ((1.28+1.3*0.65+0.9*0.05)/3, filtered_body->get_filtered_states().v);
 }

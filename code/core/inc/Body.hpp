@@ -73,8 +73,8 @@ class Body
         ssc::kinematics::RotationMatrix get_rot_from_ned_to(const StateType& x) const;
         ssc::kinematics::EulerAngles get_angles(const StateType& all_states, const YamlRotation& c) const;
         std::tuple<double,double,double,double> get_quaternions(const ssc::kinematics::EulerAngles& angle, const YamlRotation& c) const;
-        FilteredStates get_filtered_states(const YamlRotation& c) const;
-        FilteredStates get_filtered_states(const YamlRotation& c, AbstractStates<History> state_history, const StateType& x) const;
+        FilteredStates get_filtered_states() const;
+        FilteredStates get_filtered_states(AbstractStates<History> state_history, const StateType& x) const;
         void feed(const StateType& x, Observer& observer, const YamlRotation& c) const;
         BlockedDOF::Vector get_delta_F(const StateType& dx_dt, const ssc::kinematics::Wrench& sum_of_other_forces) const;
 
