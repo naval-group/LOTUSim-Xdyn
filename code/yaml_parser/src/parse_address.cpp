@@ -10,7 +10,7 @@ boost::regex websocket_url_regex()
     return boost::regex("(ws|wss)://([^/ :]+):?([^/ ]*)(/?[^ #?]*)\\x3f?([^ #]*)#?([^ ]*)");
 }
 
-bool parseWebSocketURL(const std::string& url)
+bool is_a_websocket_url(const std::string& url)
 {
     boost::regex ex = websocket_url_regex();
     boost::cmatch what;

@@ -4,7 +4,7 @@
 #include <string>
 #include "YamlOutput.hpp"
 
-bool parseWebSocketURL(const std::string& url);
+bool is_a_websocket_url(const std::string& url);
 YamlOutput build_YamlOutput_from_WS_URL(const std::string& address);
 
 #endif

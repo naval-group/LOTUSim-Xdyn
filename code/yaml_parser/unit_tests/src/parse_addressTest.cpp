@@ -7,14 +7,14 @@ parse_addressTest::parse_addressTest() : a(ssc::random_data_generator::DataGener
 {
 }
 
-TEST_F(parse_addressTest, can_parse_websocket_url)
+TEST_F(parse_addressTest, regex_we_use_for_checking_websocket_urls_works_properly)
 {
-    ASSERT_TRUE(parseWebSocketURL("wss://www.google.com:443/webhp?gws_rd=ssl#q=cpp"));
-    ASSERT_TRUE(parseWebSocketURL("wss://www.google.com:443"));
-    ASSERT_TRUE(parseWebSocketURL("wss://130.66.124.6:210"));
-    ASSERT_TRUE(parseWebSocketURL("ws://localhost:210"));
-    ASSERT_FALSE(parseWebSocketURL("http://localhost:210"));
-    ASSERT_FALSE(parseWebSocketURL("https://localhost:210"));
+    ASSERT_TRUE(is_a_websocket_url("wss://www.google.com:443/webhp?gws_rd=ssl#q=cpp"));
+    ASSERT_TRUE(is_a_websocket_url("wss://www.google.com:443"));
+    ASSERT_TRUE(is_a_websocket_url("wss://130.66.124.6:210"));
+    ASSERT_TRUE(is_a_websocket_url("ws://localhost:210"));
+    ASSERT_FALSE(is_a_websocket_url("http://localhost:210"));
+    ASSERT_FALSE(is_a_websocket_url("https://localhost:210"));
 }
 
 TEST_F(parse_addressTest, can_create_YamlOuput_from_websocket_url_1)
