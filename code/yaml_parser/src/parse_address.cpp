@@ -21,12 +21,12 @@ bool is_a_websocket_url(const std::string& url)
  * \brief Create a YamlOutput instance from a websocket URL
  * \param url String representing the URL
  * \return YamlOutput
- * \note One uses Boost Regex to parse URL
+ * \note Use Boost Regex to parse URL
  *
  * If we want to parse more complex URL, like this one
  * "https://John:Dow@github.com:80/corporateshark/LUrlParser/?&query=ssl#q=frag";
  *
- * one should take a loot at LUrlParser
+ * we may want to use something like LUrlParser
  * https://github.com/corporateshark/LUrlParser
  * http://130.66.124.6/svn/tools/ThirdParty/LUrlParser
  * \code
