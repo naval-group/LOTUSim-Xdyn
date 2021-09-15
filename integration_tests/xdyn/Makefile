@@ -52,4 +52,4 @@ test_ship.stl tutorial_05_froude_krylov.yml:
 
 
 clean:
-	rm -rf tutorial_01_falling_ball.yml cube.stl
+	rm -rf tutorial_01_falling_ball.yml cube.stl .commands.result ONRT_SIMMAN.raodb.ini tutorial_12_precal_r.yml test_ship.stl
