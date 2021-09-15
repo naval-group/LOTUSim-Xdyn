@@ -109,10 +109,3 @@ std::vector<YamlOutput> build_observers_description(const std::string& yaml)
     auto out = parse_output(yaml);
     return out;
 }
-
-//ListOfObservers get_observers(const std::string& yaml, const XdynCommandLineArguments& input_data)
-//{
-//    auto out = parse_output(yaml);
-//    add_observers_from_cli(yaml, input_data, out);
-//    return ListOfObservers(out);
-//}
