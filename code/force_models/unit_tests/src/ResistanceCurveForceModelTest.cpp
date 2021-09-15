@@ -64,6 +64,8 @@ TEST_F(ResistanceCurveForceModelTest, example)
     ASSERT_EQ("resistance curve",F.model_name());
 //! [ResistanceCurveForceModelTest expected output]
     BodyStates states;
+    states.convention.convention = {"z", "y'", "x''"};
+    states.convention.order_by = "angle";
     states.u.record(0, 0);
     auto force = F.get_force(states, a.random<double>(), env, {});
     ASSERT_DOUBLE_EQ(0, force.X());
@@ -98,6 +100,8 @@ TEST_F(ResistanceCurveForceModelTest, should_issue_a_warning_when_speed_is_lower
     EnvironmentAndFrames env;
     ResistanceCurveForceModel F(ResistanceCurveForceModel::parse(test_data::resistance_curve()), "", env);
     BodyStates states;
+    states.convention.convention = {"z", "y'", "x''"};
+    states.convention.order_by = "angle";
     std::stringstream error;
     // Redirect cerr to our stringstream buffer or any other ostream
     std::streambuf* orig =std::cerr.rdbuf(error.rdbuf());
@@ -115,6 +119,8 @@ TEST_F(ResistanceCurveForceModelTest, should_issue_a_warning_when_speed_is_great
     EnvironmentAndFrames env;
     ResistanceCurveForceModel F(ResistanceCurveForceModel::parse(test_data::resistance_curve()), "", env);
     BodyStates states;
+    states.convention.convention = {"z", "y'", "x''"};
+    states.convention.order_by = "angle";
     std::stringstream error;
     // Redirect cerr to our stringstream buffer or any other ostream
     std::streambuf* orig =std::cerr.rdbuf(error.rdbuf());
@@ -125,4 +131,32 @@ TEST_F(ResistanceCurveForceModelTest, should_issue_a_warning_when_speed_is_great
     ASSERT_FALSE(error.str().empty());
     // Restore cerr's buffer
     std::cerr.rdbuf(orig);
+}
+
+
+TEST_F(ResistanceCurveForceModelTest, with_filtered_states)
+{
+    EnvironmentAndFrames env;
+    ResistanceCurveForceModel F(ResistanceCurveForceModel::parse(test_data::resistance_curve()), "", env);
+    YamlFilteredStates filters;
+    filters.u = "type of filter: moving average\n"
+                "duration in seconds : 9";
+    BodyStates states(filters, 9);
+    states.convention.convention = {"z", "y'", "x''"};
+    states.convention.order_by = "angle";
+    const double knot = 1852.0/3600.0;
+    for (const auto i:{0,1,2,3,4,5,6,7,8,9})
+    {
+        states.u.record((double)i, i*knot);
+    }
+    auto force = F.get_force(states, a.random<double>(), env, {});
+    const double average_speed_over_nine_seconds_in_knots = 4.5;
+    const double interpolated_resistance = average_speed_over_nine_seconds_in_knots*average_speed_over_nine_seconds_in_knots;
+    const double MN = 1E6; // 1 mega Newton
+    ASSERT_DOUBLE_EQ(-interpolated_resistance*MN, force.X());
+    ASSERT_DOUBLE_EQ(0, force.Y());
+    ASSERT_DOUBLE_EQ(0, force.Z());
+    ASSERT_DOUBLE_EQ(0, force.K());
+    ASSERT_DOUBLE_EQ(0, force.M());
+    ASSERT_DOUBLE_EQ(0, force.N());
 }
