@@ -1080,7 +1080,10 @@ std::string test_data::test_ship_waves_test()
        + "    external forces:\n"
        + "      - model: gravity\n"
        + "      - model: non-linear hydrostatic (fast)\n"
-       + "    \n";
+       + "output:\n"
+       + "- format: hdf5\n"
+       + "  filename: test.h5\n"
+       + "  data: [mesh, command line, yaml, python scripts, matlab scripts, spectra, waves]\n";
 }
 
 std::string test_data::waves()
