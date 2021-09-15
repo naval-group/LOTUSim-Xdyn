@@ -14,20 +14,7 @@ bool parseWebSocketURL(const std::string& url)
 {
     boost::regex ex = websocket_url_regex();
     boost::cmatch what;
-    if(regex_match(url.c_str(), what, ex))
-    {
-        std::cout << "protocol: " <<std::string(what[1].first, what[1].second) << std::endl;
-        std::cout << "domain:   " <<std::string(what[2].first, what[2].second) << std::endl;
-        std::cout << "port:     " <<std::string(what[3].first, what[3].second) << std::endl;
-        std::cout << "path:     " <<std::string(what[4].first, what[4].second) << std::endl;
-        std::cout << "query:    " <<std::string(what[5].first, what[5].second) << std::endl;
-        std::cout << "fragment: " <<std::string(what[6].first, what[6].second) << std::endl;
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return regex_match(url.c_str(), what, ex);
 }
 
 /**
