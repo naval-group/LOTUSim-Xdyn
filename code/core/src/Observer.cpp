@@ -10,7 +10,12 @@
 #include "Sim.hpp"
 #include "SurfaceElevationGrid.hpp"
 
-Observer::Observer() : initialized(false), output_everything(true), requested_serializations(), serialize(), initialize()
+Observer::Observer()
+    : initialized(false)
+    , output_everything(true)
+    , requested_serializations()
+    , serialize()
+    , initialize()
 {
 }
 
