@@ -4,15 +4,15 @@
 #include <boost/regex.hpp>
 #include "InvalidInputException.hpp"
 
-boost::regex generateBoostRegexParsingWebSocketUrl();
-boost::regex generateBoostRegexParsingWebSocketUrl()
+boost::regex websocket_url_regex();
+boost::regex websocket_url_regex()
 {
     return boost::regex("(ws|wss)://([^/ :]+):?([^/ ]*)(/?[^ #?]*)\\x3f?([^ #]*)#?([^ ]*)");
 }
 
 bool parseWebSocketURL(const std::string& url)
 {
-    boost::regex ex = generateBoostRegexParsingWebSocketUrl();
+    boost::regex ex = websocket_url_regex();
     boost::cmatch what;
     if(regex_match(url.c_str(), what, ex))
     {
@@ -49,7 +49,7 @@ bool parseWebSocketURL(const std::string& url)
 YamlOutput build_YamlOutput_from_WS_URL(const std::string& url)
 {
     YamlOutput out;
-    const boost::regex ex = generateBoostRegexParsingWebSocketUrl();
+    const boost::regex ex = websocket_url_regex();
     boost::cmatch what;
     if(regex_match(url.c_str(), what, ex))
     {
