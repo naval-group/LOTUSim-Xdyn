@@ -111,12 +111,70 @@ système international.
 
 ## Sorties
 
-xdyn peut générer des fichiers dont le contenu est paramétrable.
+La génération des sorties dans xdyn est paramétrable de deux façons :
 
-### Paramétrage
+- soit directement en ligne de commande en utilisant le flag `-o`
+- soit dans le fichier YAML, section `output`
 
-La spécification des sorties se fait au moyen de la section `output`, à la
-racine du fichier YAML, dont voici un exemple :
+Ces deux modes de fonctionnement peuvent être utilisés de façon conjointe.
+
+
+
+
+### Paramétrage des sorties depuis la ligne de commande
+
+Le flag `-o <format>` permet de générer facilement les sorties, soit dans un fichier,
+soit sur la sortie standard (le terminal) (pour chaîner les traitements grâce
+aux pipe UNIX "`|`").
+
+Lorsque l'utilisateur ne specifie que l'extension (par exemple `-o csv`), les sorties
+sont écrites sur la sortie standard (affichées à l'écran). Lorsqu'un chemin complet
+est donné (par exemple `-o test.csv`) les sorties se font dans un fichier au chemin
+spécifié.
+
+Les valeurs de `<format>` possibles sont :
+
+
+|                      `<format>`                    | Description | Example |
+|----------------------------------------------------|-------------| ------- |
+| `csv` ou `<filename>.csv`            | Format [CSV (comma-separated values)](https://en.wikipedia.org/wiki/Comma-separated_values)     | `-o csv` (écriture sur la sortie standard) ou `-o test.csv` (écriture dans un fichier) |
+| `tsv` ou `<filename>.csv`            | Format [TSV (Tab-Separated Values)](https://en.wikipedia.org/wiki/Tab-separated_values)       | `-o tsv` (écriture sur la sortie standard) ou `-o test.tsv` (écriture dans un fichier) |
+| `json` ou `<filename>.json`          | Format [JSON (JavaScript Object Notation)](https://en.wikipedia.org/wiki/JSON) | `-o json` (écriture sur la sortie standard) ou `-o test.json` (écriture dans un fichier) |
+| `<filename>.hdf5` ou `<filename>.h5` | Format [HDF5 (Hierarchical Data Format)](https://en.wikipedia.org/wiki/Hierarchical_Data_Format) utilisé par exemple par Matlab | Seule l'écrituredans un fichier est possible : `-o test.h5` ou `-o test.hdf5` |
+| `ws <address>`                       | Sérialisation au format JSON sur un websocket. xdyn se connecte alors à l'adresse indiquée pour envoyer ses sorties en cours de simulation. `xdyn` est alors en mode client et non en mode serveur : pour une utilisation en mode serveur voir `xdyn-for-me` et `xdyn-for-cs`. |
+
+Le format CSV a l'allure suivante :
+
+```
+Fx(blocked states ball ball),Fx(fictitious forces ball NED),Fx(fictitious forces ball ball),Fx(gravity ball NED),Fx(gravity ball ball),Fx(sum of forces ball NED),Fx(sum of forces ball ball),Fy(blocked states ball ball),Fy(fictitious forces ball NED),Fy(fictitious forces ball ball),Fy(gravity ball NED),Fy(gravity ball ball),Fy(sum of forces ball NED),Fy(sum of forces ball ball),Fz(blocked states ball ball),Fz(fictitious forces ball NED),Fz(fictitious forces ball ball),Fz(gravity ball NED),Fz(gravity ball ball),Fz(sum of forces ball NED),Fz(sum of forces ball ball),Mx(blocked states ball ball),Mx(fictitious forces ball NED),Mx(fictitious forces ball ball),Mx(gravity ball NED),Mx(gravity ball ball),Mx(sum of forces ball NED),Mx(sum of forces ball ball),My(blocked states ball ball),My(fictitious forces ball NED),My(fictitious forces ball ball),My(gravity ball NED),My(gravity ball ball),My(sum of forces ball NED),My(sum of forces ball ball),Mz(blocked states ball ball),Mz(fictitious forces ball NED),Mz(fictitious forces ball ball),Mz(gravity ball NED),Mz(gravity ball ball),Mz(sum of forces ball NED),Mz(sum of forces ball ball),p(ball),p_filtered(ball),phi(ball),phi_filtered(ball),psi(ball),psi_filtered(ball),q(ball),q_filtered(ball),qi(ball),qj(ball),qk(ball),qr(ball),r(ball),r_filtered(ball),t,theta(ball),theta_filtered(ball),u(ball),u_filtered(ball),v(ball),v_filtered(ball),w(ball),w_filtered(ball),x(ball),x_filtered(ball),y(ball),y_filtered(ball),z(ball),z_filtered(ball)
+0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,9.810000e+06,9.810000e+06,9.810000e+06,9.810000e+06,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,1.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,-0.000000e+00,-0.000000e+00,1.000000e+00,1.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,4.000000e+00,4.000000e+00,8.000000e+00,8.000000e+00,1.200000e+01,1.200000e+01
+0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,9.810000e+06,9.810000e+06,9.810000e+06,9.810000e+06,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,1.000000e+00,0.000000e+00,0.000000e+00,1.000000e+00,-0.000000e+00,-0.000000e+00,1.000000e+00,1.000000e+00,0.000000e+00,0.000000e+00,9.810000e+00,9.810000e+00,5.000000e+00,5.000000e+00,8.000000e+00,8.000000e+00,1.690500e+01,1.690500e+01
+```
+
+Le format TSV est de la forme :
+
+```
+Fx(blocked states,ball,ball) Fx(fictitious forces,ball,NED) Fx(fictitious forces,ball,ball) Fx(gravity,ball,NED) Fx(gravity,ball,ball) Fx(sum of forces,ball,NED) Fx(sum of forces,ball,ball) Fy(blocked states,ball,ball) Fy(fictitious forces,ball,NED) Fy(fictitious forces,ball,ball) Fy(gravity,ball,NED) Fy(gravity,ball,ball) Fy(sum of forces,ball,NED) Fy(sum of forces,ball,ball) Fz(blocked states,ball,ball) Fz(fictitious forces,ball,NED) Fz(fictitious forces,ball,ball) Fz(gravity,ball,NED) Fz(gravity,ball,ball) Fz(sum of forces,ball,NED) Fz(sum of forces,ball,ball) Mx(blocked states,ball,ball) Mx(fictitious forces,ball,NED) Mx(fictitious forces,ball,ball) Mx(gravity,ball,NED) Mx(gravity,ball,ball) Mx(sum of forces,ball,NED) Mx(sum of forces,ball,ball) My(blocked states,ball,ball) My(fictitious forces,ball,NED) My(fictitious forces,ball,ball) My(gravity,ball,NED) My(gravity,ball,ball) My(sum of forces,ball,NED) My(sum of forces,ball,ball) Mz(blocked states,ball,ball) Mz(fictitious forces,ball,NED) Mz(fictitious forces,ball,ball) Mz(gravity,ball,NED) Mz(gravity,ball,ball) Mz(sum of forces,ball,NED) Mz(sum of forces,ball,ball)   p(ball) p_filtered(ball) phi(ball) phi_filtered(ball) psi(ball) psi_filtered(ball)   q(ball) q_filtered(ball)  qi(ball)  qj(ball)  qk(ball)  qr(ball)   r(ball) r_filtered(ball)         t theta(ball) theta_filtered(ball)   u(ball) u_filtered(ball)   v(ball) v_filtered(ball)   w(ball) w_filtered(ball)   x(ball) x_filtered(ball)   y(ball) y_filtered(ball)   z(ball) z_filtered(ball)
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 9.810e+06 9.810e+06 9.810e+06 9.810e+06 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 1.000e+00 0.000e+00 0.000e+00 0.000e+00 -0.000e+00 -0.000e+00 1.000e+00 1.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 4.000e+00 4.000e+00 8.000e+00 8.000e+00 1.200e+01 1.200e+01
+0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 9.810e+06 9.810e+06 9.810e+06 9.810e+06 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 0.000e+00 1.000e+00 0.000e+00 0.000e+00 1.000e+00 -0.000e+00 -0.000e+00 1.000e+00 1.000e+00 0.000e+00 0.000e+00 9.810e+00 9.810e+00 5.000e+00 5.000e+00 8.000e+00 8.000e+00 1.691e+01 1.691e+01
+```
+
+Le format JSON se présente comme suit :
+
+```.json
+{"t":0,"states":{"ball":{"p":0,"p_filtered":0,"phi":0,"phi_filtered":0,"psi":0,"psi_filtered":0,"q":0,"q_filtered":0,"qi":0,"qj":0,"qk":0,"qr":1,"r":0,"r_filtered":0,"theta":-0,"theta_filtered":-0,"u":1,"u_filtered":1,"v":0,"v_filtered":0,"w":0,"w_filtered":0,"x":4,"x_filtered":4,"y":8,"y_filtered":8,"z":12,"z_filtered":12}},"wrenches":{"blocked states,ball,ball":{"Fx":0,"Fy":0,"Fz":0,"Mx":0,"My":0,"Mz":0},"fictitious forces,ball,NED":{"Fx":0,"Fy":0,"Fz":0,"Mx":0,"My":0,"Mz":0},"fictitious forces,ball,ball":{"Fx":0,"Fy":0,"Fz":0,"Mx":0,"My":0,"Mz":0},"gravity,ball,NED":{"Fx":0,"Fy":0,"Fz":9.81e+06,"Mx":0,"My":0,"Mz":0},"gravity,ball,ball":{"Fx":0,"Fy":0,"Fz":9.81e+06,"Mx":0,"My":0,"Mz":0},"sum of forces,ball,NED":{"Fx":0,"Fy":0,"Fz":9.81e+06,"Mx":0,"My":0,"Mz":0},"sum of forces,ball,ball":{"Fx":0,"Fy":0,"Fz":9.81e+06,"Mx":0,"My":0,"Mz":0}}}
+{"t":1,"states":{"ball":{"p":0,"p_filtered":0,"phi":0,"phi_filtered":0,"psi":0,"psi_filtered":0,"q":0,"q_filtered":0,"qi":0,"qj":0,"qk":0,"qr":1,"r":0,"r_filtered":0,"theta":-0,"theta_filtered":-0,"u":1,"u_filtered":1,"v":0,"v_filtered":0,"w":9.81,"w_filtered":9.81,"x":5,"x_filtered":5,"y":8,"y_filtered":8,"z":16.905,"z_filtered":16.905}},"wrenches":{"blocked states,ball,ball":{"Fx":0,"Fy":0,"Fz":0,"Mx":0,"My":0,"Mz":0},"fictitious forces,ball,NED":{"Fx":0,"Fy":0,"Fz":0,"Mx":0,"My":0,"Mz":0},"fictitious forces,ball,ball":{"Fx":0,"Fy":0,"Fz":0,"Mx":0,"My":0,"Mz":0},"gravity,ball,NED":{"Fx":0,"Fy":0,"Fz":9.81e+06,"Mx":0,"My":0,"Mz":0},"gravity,ball,ball":{"Fx":0,"Fy":0,"Fz":9.81e+06,"Mx":0,"My":0,"Mz":0},"sum of forces,ball,NED":{"Fx":0,"Fy":0,"Fz":9.81e+06,"Mx":0,"My":0,"Mz":0},"sum of forces,ball,ball":{"Fx":0,"Fy":0,"Fz":9.81e+06,"Mx":0,"My":0,"Mz":0}}}
+```
+
+Lorsque l'on utilise la ligne de commande, le contenu des sorties n'est pas
+paramétrable et xdyn écrit toutes les sorties disponibles. Pour plus de
+contrôle, on peut utiliser le fichier YAML, dont le contenu est paramétrable.
+
+### Paramétrage des sorties via le fichier YAML
+
+La spécification des sorties dans le fichier YAML se fait au moyen de la
+section `output`, à la racine du fichier YAML, dont voici un exemple :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 output:
@@ -131,10 +189,12 @@ output:
 - `filename` : nom du fichier de sortie
 - `data` : liste des colonnes à écrire (cf. ci-après pour la description complète)
 
-### Temps et états
+### Liste des sorties possibles
+
+#### Temps et états
 
 Si l'on suppose que le nom du corps simulé est `TestShip` (configurable dans le YAML,
-section `bodies[0]/name`), le temps et les états sont accesibles de la façon suivante :
+section `bodies[0]/name`), le temps et les états sont accessibles de la façon suivante :
 
 | Variable    | Description                                       | Nom à utiliser dans la section `output` du YAML | Unité |
 | ----------- | ------------------------------------------------- | ----------------------------------------------- | ----- |
@@ -170,7 +230,7 @@ output:
      data: [t, y_filtered(TestShip), 'theta(TestShip)']
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-### Observations supplémentaires des modèles d'effort
+#### Observations supplémentaires des modèles d'effort
 
 Lorsqu'un modèle d'effort déclare des observations supplémentaires
 (`extra_observations`), celles-ci sont accessibles depuis la section `output`
@@ -207,15 +267,11 @@ output:
      filename: exemple.tsv
      data:
         - 'harmonic_oscillator_time(TestShip)'
-        - 'alpha(centreboard,TestShip)'
-        - 'U(centreboard,TestShip)'
-        - 'GM(TestShip)'
-        - 'GZ(TestShip)'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-### Efforts
+#### Efforts
 
-Les sorties d'effort sont :
+Les sorties d'effort sont spécifiées de la façon suivante :
 
 - `Fx(modèle,corps,repère)` en N
 - `Fy(modèle,corps,repère)` en N 
@@ -227,19 +283,47 @@ Les sorties d'effort sont :
 où `modèle` est le nom du modèle d'effort (renseigné dans la clef `modèle` de
 chaque modèle d'effort), `corps` est le nom du corps sur lequel agit l'effort
 et `repère` est le repère d'expression (qui ne peut être que `NED` ou le nom du
-corps). La somme des efforts appliqués au solide est accesible via les clefs
+corps).
+
+La somme des efforts appliqués au solide est accessible via les clefs
 suivantes :
 
-- `Fx(sum of forces,corps,repère)`
-- `Fy(sum of forces,corps,repère)`
-- `Fz(sum of forces,corps,repère)`
-- `Mx(sum of forces,corps,repère)`
-- `My(sum of forces,corps,repère)`
-- `Mz(sum of forces,corps,repère)`
+- `Fx(sum of forces,corps,repère)`, par exemple `Fx(blocked states,TestShip,NED)` ou `Fx(blocked states,TestShip,TestShip)`
+- `Fy(sum of forces,corps,repère)`, par exemple `Fy(blocked states,TestShip,NED)` ou `Fy(blocked states,TestShip,TestShip)`
+- `Fz(sum of forces,corps,repère)`, par exemple `Fz(blocked states,TestShip,NED)` ou `Fz(blocked states,TestShip,TestShip)`
+- `Mx(sum of forces,corps,repère)`, par exemple `Mx(blocked states,TestShip,NED)` ou `Mx(blocked states,TestShip,TestShip)`
+- `My(sum of forces,corps,repère)`, par exemple `My(blocked states,TestShip,NED)` ou `My(blocked states,TestShip,TestShip)`
+- `Mz(sum of forces,corps,repère)`, par exemple `Mz(blocked states,TestShip,NED)` ou `Mz(blocked states,TestShip,TestShip)`
 
-Par exemple, pour générer un fichier HDF5 contenant l'effort dû à la gravitée
-agissant sur un corps nommé `ball` projeté dans le repère du corps, ainsi que
-la somme des moments autour de l'axe X, on utiliserait la section suivante :
+Une sortie `blocked states` est également disponible (uniquement dans le repère lié au corps). Elle correspond à l'effort
+nécessaire pour maintenir des degrés de liberté en cas de forçage :
+
+- `Fx(blocked states,corps,corps)`, par exemple `Fx(blocked states,TestShip,TestShip)`
+- `Fy(blocked states,corps,corps)`, par exemple `Fy(blocked states,TestShip,TestShip)`
+- `Fz(blocked states,corps,corps)`, par exemple `Fz(blocked states,TestShip,TestShip)`
+- `Mx(blocked states,corps,corps)`, par exemple `Mx(blocked states,TestShip,TestShip)`
+- `My(blocked states,corps,corps)`, par exemple `My(blocked states,TestShip,TestShip)`
+- `Mz(blocked states,corps,corps)`, par exemple `Mz(blocked states,TestShip,TestShip)`
+
+La somme des efforts de Coriolis et des efforts centripètes est notée `fictious
+forces`. Il s'agit des efforts dûs au caractère non-galliléen du repère lié au
+corps (forces d'inertie d'entraînement et de Coriolis). Voir _Guidance And
+Control of Ocean Vehicles_, ISBN 0 471 94113 1, Thor I. Fossen, Hydrodynamic
+Forces And Moments equation (2.125) chapter 2.4.1 page 36 $`C_A(\nu)`$ pour le
+détail du calcul.
+
+- `Fx(fictious forces,corps,repère)`, par exemple `Fx(fictious forces,TestShip,NED)` ou `Fx(fictious forces,TestShip,TestShip)`
+- `Fy(fictious forces,corps,repère)`, par exemple `Fy(fictious forces,TestShip,NED)` ou `Fy(fictious forces,TestShip,TestShip)`
+- `Fz(fictious forces,corps,repère)`, par exemple `Fz(fictious forces,TestShip,NED)` ou `Fz(fictious forces,TestShip,TestShip)`
+- `Mx(fictious forces,corps,repère)`, par exemple `Mx(fictious forces,TestShip,NED)` ou `Mx(fictious forces,TestShip,TestShip)`
+- `My(fictious forces,corps,repère)`, par exemple `My(fictious forces,TestShip,NED)` ou `My(fictious forces,TestShip,TestShip)`
+- `Mz(fictious forces,corps,repère)`, par exemple `Mz(fictious forces,TestShip,NED)` ou `Mz(fictious forces,TestShip,TestShip)`
+
+### Exemple
+
+Pour générer un fichier HDF5 contenant l'effort dû à la gravitée agissant sur
+un corps nommé `ball` projeté dans le repère du corps, ainsi que la somme des
+moments autour de l'axe X, on utiliserait la section suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 output:
@@ -249,7 +333,7 @@ output:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-### Commandes
+#### Commandes
 
 Les commandes des efforts qui en possèdent (propeller+rudder, manoeuvring,
 etc.) peuvent également figurer dans les sorties. La syntaxe est la suivante :
@@ -298,6 +382,50 @@ output:
      filename: propRudd.csv
      data: [t, 'Prop. & rudder(rpm)', 'Prop. & rudder(beta)']
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#### Sorties supplémentaires pour le format HDF5
+
+Lorsque l'on utilise le format HDF5 xdyn permet les sorties supplémentaires
+suivantes :
+
+- `mesh` : le maillage (format STL) est écrit dans le fichier de sortie (dans
+  l'arborescence `/inputs/meshes`)
+- `yaml` : concaténation des fichiers YAML fournis à xdyn (`/inputs/yaml/input`)
+- `command line`: ligne de commande utilisée pour lancer la simulation
+- `matlab scripts`: les scripts Matlab d'exploitation des fichiers HDF5
+  (dans l'aborescence `/scripts/MatLab`)
+- `python scripts`: les scripts Python d'exploitation des fichiers HDF5
+  (dans l'aborescence `/scripts/Python`)
+- `waves`: élévations de surface libre sur la grille définie dans la section
+  `outputs` des modèles de houle. (`/outputs/waves/t`, `/outputs/waves/x`,
+  `/outputs/waves/y` et `/outputs/waves/z`)
+- `spectra`: (arborescence `/outputs/spectra/00/a`,
+  `/outputs/spectra/00/gamma`, `/outputs/spectra/00/k`,
+  `/outputs/spectra/00/omega`, `/outputs/spectra/00/phase`,
+  `/outputs/spectra/01/`, etc. suivant le nombre de spectres)
+
+Par exemple, pour enregistrer le maillage et la ligne de commande (mais pas
+le YAML d'entrée) dans un fichier de sortie au format HDF5 on utilisera :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+output:
+   - format: hdf5
+     filename: test.h5
+     data: [mesh, 'command line']
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ou, de façon équivalente :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+output:
+   - format: hdf5
+     filename: test.h5
+     data:
+       - mesh
+       - command line
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 
 # Interface MatLab
 
