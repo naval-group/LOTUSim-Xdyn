@@ -17,6 +17,36 @@ bool is_a_websocket_url(const std::string& url)
     return regex_match(url.c_str(), what, ex);
 }
 
+WebsocketURLElements::WebsocketURLElements(const std::string url) :
+    protocol(),
+    domain(),
+    port()
+{
+    const boost::regex ex = websocket_url_regex();
+    boost::cmatch what;
+    if(regex_match(url.c_str(), what, ex))
+    {
+        protocol = std::string(what[1].first, what[1].second);
+        domain = std::string(what[2].first, what[2].second);
+        port = std::atoi(std::string(what[3].first, what[3].second).c_str());
+        if ( port <= 0 || port > 65535 )
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Port: " << port << " is not valid. It should be between 0 and 65535");
+        }
+        if (protocol!="ws")
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Only 'ws' is valid. wss is not implemented yet");
+        }
+    }
+    else
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                "Address: " << url << " is not valid. Here are some examples"<<std::endl
+                           << "  ws://localhost:8080"<<std::endl
+                           << "  ws://130.66.124.200:8080");
+    }
+}
+
 /**
  * \brief Create a YamlOutput instance from a websocket URL
  * \param url String representing the URL
@@ -36,31 +66,9 @@ bool is_a_websocket_url(const std::string& url)
 YamlOutput build_YamlOutput_from_WS_URL(const std::string& url)
 {
     YamlOutput out;
-    const boost::regex ex = websocket_url_regex();
-    boost::cmatch what;
-    if(regex_match(url.c_str(), what, ex))
-    {
-        const std::string protocol(what[1].first, what[1].second);
-        const std::string domain(what[2].first, what[2].second);
-        const int port = std::atoi(std::string(what[3].first, what[3].second).c_str());
-        if ( port <= 0 || port > 65535 )
-        {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Port: " << port << " is not valid. It should be between 0 and 65535");
-        }
-        out.port = (short unsigned int)port;
-        if (protocol!="ws")
-        {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Only 'ws' is valid. wss is not implemented yet");
-        }
-        out.format = "ws";
-        out.address = protocol+"://"+domain;
-    }
-    else
-    {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                "Address: " << url << " is not valid. Here are some examples"<<std::endl
-                           << "  ws://localhost:8080"<<std::endl
-                           << "  ws://130.66.124.200:8080");
-    }
+    const WebsocketURLElements url_elements(url);
+    out.port = (short unsigned int)url_elements.port;
+    out.format = "ws";
+    out.address = url_elements.protocol+"://"+url_elements.domain;
     return out;
 }
