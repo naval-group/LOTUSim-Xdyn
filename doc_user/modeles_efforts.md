@@ -737,9 +737,12 @@ On décompose donc la résistance de remorquage en deux composantes :
 
 #### Description
 
-Un moyen simple d'obtenir l'effort de résistance à l'avancement est d'interpoler une courbe de résistance en fonction de la vitesse du solide par rapport au repère NED
-projetée sur l'axe X du [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) (que l'on note $`u`$).
-La courbe de résistance à l'avancement est obtenue au préalable (et non calculée par xdyn) et renseignée dans le fichier YAML.
+Un moyen simple d'obtenir l'effort de résistance à l'avancement est
+d'interpoler une courbe de résistance en fonction de la vitesse du solide par
+rapport au repère NED projetée sur l'axe X du [repère
+body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution)
+(que l'on note $`u`$).  La courbe de résistance à l'avancement est obtenue au
+préalable (et non calculée par xdyn) et renseignée dans le fichier YAML.
 
 Si $`f:u\mapsto R=f(u)`$ désigne la fonction d'interpolation de la courbe de résistance à l'avancement,
 le torseur des efforts, exprimé au [point de calcul hydrodynamique](#rep%C3%A8re-de-calcul-hydrodynamique),
@@ -755,12 +758,12 @@ Ce modèle est accessible par la clef [`resistance
 curve`](#r%C3%A9sistance-%C3%A0-lavancement).
 
 Les efforts de résistance à l'avancement sont renseignés en fonction de la
-vitesse d'avance *filtrée* (axe longitudinal uniquement), c'est-à-dire la
+vitesse d'avance $`u`$ *filtrée* (axe longitudinal uniquement), c'est-à-dire la
 projection suivant l'axe $`x`$ du [repère
 body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) de
 la vitesse du navire par rapport au repère NED. Le filtrage est défini dans la
 section [`filtered states`](#États-filtrés), si elle est renseignée : dans le
-cas contraire, le modèle utilise la vitesse d'avance non-filtrée.
+cas contraire, le modèle utilise la vitesse d'avance $`u`$ non-filtrée.
 L'interpolation de la courbe de résistance est faite en utilisant des splines
 cubiques.
 
