@@ -151,3 +151,8 @@ void Observer::write_yaml_before_simulation(const std::string& )
 {
 
 }
+
+void Observer::write_matlab_script_before_simulation()
+{
+
+}

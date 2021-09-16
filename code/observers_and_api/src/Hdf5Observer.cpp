@@ -147,6 +147,18 @@ void Hdf5Observer::write_yaml_before_simulation(const std::string& yaml)
     }
 }
 
+void Hdf5Observer::write_matlab_script_before_simulation()
+{
+
+    if (should_serialize("matlab scripts"))
+    {
+        exportMatLabScripts(h5File, filename, basename, "/scripts/MatLab");
+        // Should only be serialized at the beginning of the simulation, otherwise xdyn
+        // will attempt to serialize it at each timestep & will fail
+        remove_variable("matlab scripts");
+    }
+}
+
 void Hdf5Observer::write_before_simulation(const MeshPtr mesh, const DataAddressing& address)
 {
     if (mesh->nb_of_static_nodes>0)
