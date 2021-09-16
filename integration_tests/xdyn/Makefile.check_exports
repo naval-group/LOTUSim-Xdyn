@@ -1,0 +1,93 @@
+test_ship_in_waves.yml:
+	@echo "Copying tutorial files from xdyn's Docker container..."
+	@${DOCKER_RUN} -v $(shell pwd):/xdyn_demos --entrypoint /bin/bash xdyn -c "cp /usr/demos/$@ /xdyn_demos/"
+
+extra_hdf5_output_when_required: test_ship_in_waves.yml test_ship.stl
+	@echo "Checking if we can output scripts, meshes, command line, waves, spectra & YAML"
+	@${DOCKER_RUN} xdyn -d --dt 1 --tend 1 test_ship_in_waves.yml
+	@${DOCKER_RUN} hdfgroup/hdf5lib:1.10.6 h5dump \
+		 										-d /inputs/meshes/TestShip/faces\
+												-d /scripts/MatLab/demoMatLab.m\
+												-d /scripts/Python/demoPython.py\
+												-d /inputs/yaml/input\
+												-d /outputs/waves/t\
+												-d /outputs/waves/x\
+												-d /outputs/waves/y\
+												-d /outputs/waves/z\
+												-d /outputs/spectra/00/a\
+												-d /outputs/spectra/00/gamma\
+												-d /outputs/spectra/00/k\
+												-d /outputs/spectra/00/omega\
+												-d /outputs/spectra/00/phase\
+												-c 1 test.h5; echo $$? >> .commands.result
+	@if grep -q 0 .commands.result; then \
+		echo "Found everything in the HDF5 file: test passed!" && rm -f .commands.result; \
+	else \
+	echo "At least one thing was not found: test failed!" && rm -f .commands.result && exit 1; \
+	fi
+
+	@echo "Checking that script, mesh, command line & YAML are not outputted unless specified in the YAML"
+
+no_extra_hdf5_output_when_not_required: test_ship_in_waves.yml test_ship.stl
+	@echo "Checking scripts, meshes, command line, waves, spectra & YAML are *not* outputted by default"
+	@cp test_ship_in_waves.yml test_ship_in_waves.yml.new
+	@sed -i 's/data:.*/data: []/g' test_ship_in_waves.yml.new
+	@${DOCKER_RUN} xdyn -d --dt 1 --tend 1 test_ship_in_waves.yml.new
+	@${DOCKER_RUN} hdfgroup/hdf5lib:1.10.6 h5dump \
+		 										-d /inputs/meshes/TestShip/faces\
+												-c 1 test.h5; echo $$? >> .commands.result
+	@if grep -q 0 .commands.result; then \
+		echo "Found mesh, but it shouldn't be outputted by default: test failed!" && rm -f test_ship_in_waves.yml.new .commands.result && exit 1 \
+	else \
+		echo "Did not find mesh, as expected..." && rm -f .commands.result test_ship_in_waves.yml.new; \
+	fi
+	@${DOCKER_RUN} hdfgroup/hdf5lib:1.10.6 h5dump \
+												-d /scripts/MatLab/demoMatLab.m\
+												-c 1 test.h5; echo $$? >> .commands.result
+	@if grep -q 0 .commands.result; then \
+		echo "Found matlab script, but it shouldn't be outputted by default: test failed!" && rm -f test_ship_in_waves.yml.new .commands.result && exit 1 \
+	else \
+		echo "Did not find matlab script, as expected..." && rm -f .commands.result test_ship_in_waves.yml.new; \
+	fi
+	@${DOCKER_RUN} hdfgroup/hdf5lib:1.10.6 h5dump \
+												-d /scripts/Python/demoPython.py\
+												-c 1 test.h5; echo $$? >> .commands.result
+	@if grep -q 0 .commands.result; then \
+		echo "Found python script, but it shouldn't be outputted by default: test failed!" && rm -f .commands.result test_ship_in_waves.yml.new && exit 1 \
+	else \
+		echo "Did not find python script, as expected..." && rm -f .commands.result test_ship_in_waves.yml.new; \
+	fi
+	@${DOCKER_RUN} hdfgroup/hdf5lib:1.10.6 h5dump \
+												-d /inputs/yaml/input\
+												-c 1 test.h5; echo $$? >> .commands.result
+	@if grep -q 0 .commands.result; then \
+		echo "Found input YAML, but it shouldn't be outputted by default: test failed!" && rm -f .commands.result test_ship_in_waves.yml.new && exit 1 \
+	else \
+		echo "Did not find input YAML, as expected..." && rm -f .commands.result test_ship_in_waves.yml.new; \
+	fi
+	@${DOCKER_RUN} hdfgroup/hdf5lib:1.10.6 h5dump \
+												-d /outputs/waves/t\
+												-d /outputs/waves/x\
+												-d /outputs/waves/y\
+												-d /outputs/waves/z\
+												-c 1 test.h5; echo $$? >> .commands.result
+	@if grep -q 0 .commands.result; then \
+		echo "Found waves, but they shouldn't be outputted by default: test failed!" && rm -f .commands.result test_ship_in_waves.yml.new && exit 1 \
+	else \
+		echo "Did not find waves, as expected..." && rm -f .commands.result test_ship_in_waves.yml.new; \
+	fi
+	@${DOCKER_RUN} hdfgroup/hdf5lib:1.10.6 h5dump \
+												-d /outputs/spectra/00/a\
+												-d /outputs/spectra/00/gamma\
+												-d /outputs/spectra/00/k\
+												-d /outputs/spectra/00/omega\
+												-d /outputs/spectra/00/phase\
+												-c 1 test.h5; echo $$? >> .commands.result
+	@if grep -q 0 .commands.result; then \
+		echo "Found spectra, but they shouldn't be outputted by default: test failed!" && rm -f .commands.result test_ship_in_waves.yml.new && exit 1 \
+	else \
+		echo "Did not find spectra, as expected..." && rm -f .commands.result test_ship_in_waves.yml.new; \
+	fi
+	@echo "Nothing outputted, as expected: test passed!"
+
+
