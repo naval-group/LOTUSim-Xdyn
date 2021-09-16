@@ -16,7 +16,6 @@ YamlOutput create_wave_observer_description(const XdynCommandLineArguments& inpu
     return o;
 }
 
-void add_wave_spectra(ObserverPtr& observer, const Sim& sys);
 void add_wave_spectra(ObserverPtr& observer, const Sim& sys)
 {
     const auto env = sys.get_env();
