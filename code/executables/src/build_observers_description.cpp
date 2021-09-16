@@ -66,8 +66,8 @@ void send_context_to_observer(const ObserverPtr& observer, const Sim& sys, const
     }
 }
 
-void add_main_observer_from_cli(const XdynCommandLineArguments& input_data, std::vector<YamlOutput>& out,const std::string& simulator_input,const Sim& sys);
-void add_main_observer_from_cli(
+void add_observer_from_cli_dash_o_option(const XdynCommandLineArguments& input_data, std::vector<YamlOutput>& out,const std::string& simulator_input,const Sim& sys);
+void add_observer_from_cli_dash_o_option(
         const XdynCommandLineArguments& input_data,
         ListOfObservers& out,
         const std::string& simulator_input,
@@ -93,7 +93,7 @@ void add_observers_from_cli(
 {
     if (not(input_data.output_filename.empty()))
     {
-        add_main_observer_from_cli(input_data, out, simulator_input, sys);
+        add_observer_from_cli_dash_o_option(input_data, out, simulator_input, sys);
     }
     if (not(input_data.wave_output.empty()))
     {
