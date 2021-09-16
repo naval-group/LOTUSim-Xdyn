@@ -174,9 +174,15 @@ void Hdf5Observer::write_python_script_before_simulation()
 
 void Hdf5Observer::write_before_simulation(const MeshPtr mesh, const DataAddressing& address)
 {
-    if (mesh->nb_of_static_nodes>0)
+    if (should_serialize("mesh"))
     {
-        writeMeshToHdf5File(h5File, Hdf5Addressing(address, "inputs").address, mesh->nodes, mesh->facets);
+        if (mesh->nb_of_static_nodes>0)
+        {
+            writeMeshToHdf5File(h5File, Hdf5Addressing(address, "inputs").address, mesh->nodes, mesh->facets);
+        }
+        // Should only be serialized at the beginning of the simulation, otherwise xdyn
+        // will attempt to serialize it at each timestep & will fail
+        remove_variable("mesh");
     }
 }
 
