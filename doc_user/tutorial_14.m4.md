@@ -8,7 +8,7 @@ fichiers de sortie d'xdyn.
 
 ### Configuration d'xdyn
 
-```python echo=False, results='raw', name='tutorial_13_load_yaml'
+```python echo=False, results='raw', name='tutorial_14_load_yaml'
 yaml_data = load_yaml('tutorial_14_filtered_states.yml')
 ```
 
