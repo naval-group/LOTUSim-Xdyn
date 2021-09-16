@@ -79,7 +79,7 @@ Chaque section `x`, `y`, `z`, `u`, `v`, `w`, `p`, `q`, `r`, `phi`, `theta`,
 Si un état ne figure pas dans la section `filtered states`, xdyn utilisera ses
 valeurs non-filtrées (durée de la moyenne glissante égale à zéro). Si aucune
 section `filtered states` n'est définie, xdyn utilisera systématiquement les
-états non-filtrés. Par ailleurs, le filtrage d'une variable est définie une
+états non-filtrés. Par ailleurs, le filtrage d'une variable est défini une
 seule fois : tous les modèles utilisant un état filtré en utiliseront
 exactement la même définition.
 
@@ -762,7 +762,7 @@ vitesse d'avance $`u`$ *filtrée* (axe longitudinal uniquement), c'est-à-dire l
 projection suivant l'axe $`x`$ du [repère
 body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) de
 la vitesse du navire par rapport au repère NED. Le filtrage est défini dans la
-section [`filtered states`](#États-filtrés), si elle est renseignée : dans le
+section [`filtered states`](#états-filtrés), si elle est renseignée : dans le
 cas contraire, le modèle utilise la vitesse d'avance $`u`$ non-filtrée.
 L'interpolation de la courbe de résistance est faite en utilisant des splines
 cubiques.
@@ -2790,7 +2790,7 @@ R=\left[
 
 ### Accès aux états filtrés
 
-xdyn calcul des [états filtrés](#États-filtrés) dont la définition est faite
+xdyn calcule des [états filtrés](#états-filtrés) dont la définition est faite
 dans la section (optionnelle) `filtered states` du fichier YAML d'entrée.  Ces
 valeurs filtrées sont fournies aux modèles d'efforts distants. Si l'on utilise
 le framework Python du dépôt
