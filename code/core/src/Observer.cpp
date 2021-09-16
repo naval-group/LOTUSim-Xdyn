@@ -141,3 +141,8 @@ void Observer::remove_variable(const std::string& variable_to_remove)
 {
     requested_serializations.erase(std::remove_if(requested_serializations.begin(), requested_serializations.end(), [variable_to_remove](const std::string& v){return v == variable_to_remove;}), requested_serializations.end());
 }
+
+void Observer::write_command_line_before_simulation(const std::string& )
+{
+
+}

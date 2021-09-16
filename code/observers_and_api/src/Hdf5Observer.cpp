@@ -125,6 +125,16 @@ void Hdf5Observer::write_before_simulation(const std::vector<FlatDiscreteDirecti
     hdf5WaveSpectrumObserver(h5File,"/outputs/spectra", s);
 }
 
+void Hdf5Observer::write_command_line_before_simulation(const std::string& command_line)
+{
+    if (should_serialize("command line"))
+    {
+        write_before_simulation(command_line, DataAddressing({"command"}, "CLI command"));
+        // Should only be serialized at the beginning of the simulation, otherwise xdyn
+        // will attempt to serialize it at each timestep & will fail
+        remove_variable("command line");
+    }
+}
 
 void Hdf5Observer::write_before_simulation(const MeshPtr mesh, const DataAddressing& address)
 {
