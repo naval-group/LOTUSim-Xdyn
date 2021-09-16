@@ -87,7 +87,8 @@
         "netfwd": "cpp",
         "numbers": "cpp",
         "stop_token": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "alignedvector3": "cpp"
     },
     "python.formatting.provider": "autopep8"
 }
