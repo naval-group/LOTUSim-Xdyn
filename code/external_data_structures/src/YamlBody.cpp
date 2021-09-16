@@ -15,7 +15,8 @@ YamlBody::YamlBody() :
     initial_velocity_of_body_frame_relative_to_NED_projected_in_body(),
     dynamics(),
     external_forces(),
-    blocked_dof()
+    blocked_dof(),
+    filtered_states()
 {
 }
 
@@ -28,3 +29,19 @@ YamlCSVDOF::YamlCSVDOF() :
 YamlBlockedDOF::YamlBlockedDOF() : from_yaml(), from_csv()
 {
 }
+
+
+YamlFilteredStates::YamlFilteredStates()
+    : x("")
+    , y("")
+    , z("")
+    , u("")
+    , v("")
+    , w("")
+    , p("")
+    , q("")
+    , r("")
+    , phi("")
+    , theta("")
+    , psi("")
+{}

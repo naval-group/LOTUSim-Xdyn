@@ -10,6 +10,7 @@
 #include "Sha.hpp"
 #include "YamlSimulatorInput.hpp"
 #include "get_sha.hpp"
+#include "get_git_sha.h"
 
 std::string sha(const std::string& s, const YamlSimulatorInput& i);
 std::string sha(const std::string& s, const YamlSimulatorInput& i)
@@ -22,5 +23,5 @@ std::string sha(const std::string& s, const YamlSimulatorInput& i)
 
 std::string fmi::get_sha(const YamlSimulatorInput& input)
 {
-    return sha("@GIT_SHA1@", input);
+    return sha(get_git_sha(), input);
 }

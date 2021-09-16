@@ -195,13 +195,14 @@ States* ToGRPC::from_state(const BodyStates& state, const double max_history_len
     return ret;
 }
 
-ForceRequest ToGRPC::from_force_request(States* states, const std::map<std::string, double >& commands, WaveInformation* wave_information, const std::string& instance_name) const
+ForceRequest ToGRPC::from_force_request(States* states, const std::map<std::string, double >& commands, WaveInformation* wave_information, const std::string& instance_name, FilteredStatesAndConvention* filtered_states_and_conventions) const
 {
     ForceRequest request;
     request.set_allocated_wave_information(wave_information);
     request.mutable_commands()->insert(commands.begin(), commands.end());
     request.set_allocated_states(states);
     request.set_instance_name(instance_name);
+    request.set_allocated_filtered_states(filtered_states_and_conventions);
     return request;
 }
 
@@ -360,6 +361,25 @@ FrequencyMatrix* get_radiation_damping_coeff_matrix(const std::shared_ptr<HydroD
     copy_from_double_vector(hydro_db_parser->get_radiation_damping_coeff(5,3), ret->mutable_ma_64());
     copy_from_double_vector(hydro_db_parser->get_radiation_damping_coeff(5,4), ret->mutable_ma_65());
     copy_from_double_vector(hydro_db_parser->get_radiation_damping_coeff(5,5), ret->mutable_ma_66());
+    return ret;
+}
+
+FilteredStatesAndConvention* ToGRPC::from_filtered_states(const FilteredStates& filtered_states) const
+{
+    FilteredStatesAndConvention* ret = new FilteredStatesAndConvention();
+    ret->set_x(filtered_states.x);
+    ret->set_y(filtered_states.y);
+    ret->set_z(filtered_states.z);
+    ret->set_u(filtered_states.u);
+    ret->set_v(filtered_states.v);
+    ret->set_w(filtered_states.w);
+    ret->set_p(filtered_states.p);
+    ret->set_q(filtered_states.q);
+    ret->set_r(filtered_states.r);
+    ret->set_phi(filtered_states.phi);
+    ret->set_theta(filtered_states.theta);
+    ret->set_psi(filtered_states.psi);
+    copy_from_string_vector(filtered_states.rotation_convention.convention, ret->mutable_rotations_convention());
     return ret;
 }
 

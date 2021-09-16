@@ -1,0 +1,20 @@
+version: '3'
+services:
+  force-model:
+    image: xdyn-grpc-force:python-test
+    command: filtered_force.py
+    working_dir: /work
+    volumes:
+    - .:/work
+    user: ${CURRENT_UID}
+  xdyn:
+    image: xdyn
+    working_dir: /data
+    entrypoint: ./wait-for-it.sh force-model:9002 -s -t 20 -- xdyn tutorial_14_filtered_states.yml --dt 0.1 --tend 40
+    volumes:
+    - .:/data
+    user: ${CURRENT_UID}
+    depends_on:
+    - force-model
+    environment:
+    - no_proxy

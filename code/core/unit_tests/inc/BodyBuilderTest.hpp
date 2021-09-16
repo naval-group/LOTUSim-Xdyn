@@ -16,6 +16,7 @@ class BodyBuilderTest : public ::testing::Test
 {
     public:
         static BodyPtr build_body(const size_t idx=0);
+        static BodyPtr build_body_with_filtered_states();
 
     protected:
         BodyBuilderTest();

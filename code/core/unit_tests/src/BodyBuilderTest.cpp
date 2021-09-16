@@ -40,6 +40,14 @@ BodyPtr BodyBuilderTest::build_body(size_t idx)
     return builder.build(yaml.bodies.front(), mesh, idx, 0, yaml.rotations, 0);
 }
 
+BodyPtr BodyBuilderTest::build_body_with_filtered_states()
+{
+    const auto yaml = SimulatorYamlParser(test_data::tutorial_10_gRPC_force_model()).parse();
+    const auto mesh = read_stl(test_data::cube());
+    BodyBuilder builder(yaml.rotations);
+    return builder.build(yaml.bodies.front(), mesh, 0, 0, yaml.rotations, 100);
+}
+
 TEST_F(BodyBuilderTest, name_should_be_correct)
 {
     ASSERT_EQ("body 1", body->get_name());

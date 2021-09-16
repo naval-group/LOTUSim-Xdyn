@@ -8,6 +8,7 @@
 #include <ssc/check_ssc_version.hpp>
 
 #include "display_command_line_arguments.hpp"
+#include "get_git_sha.h"
 #include "OptionPrinter.hpp"
 
 std::string description(const std::string& des)
@@ -24,7 +25,7 @@ std::string description(const std::string& des)
        << "for the initial version." << std::endl
        << "(c) 2015-2021 SIREHNA & Naval Group for all subsequent versions." << std::endl
        << std::endl
-       << "ID: @GIT_SHA1@" << std::endl
+       << "ID: " << get_git_sha() << std::endl
        << "SHA of the SSC used: " << LONG_SSC_GIT_SHA << std::endl
        << std::endl;
     return ss.str();

@@ -30,7 +30,7 @@ class HDBForceModel(force.Model):
                 'frame': self.body_name, 'x': 0, 'y': 0, 'z': 0, 'phi': 0,
                 'theta': 0, 'psi': 0, 'required_commands': []}
 
-    def force(self, states, _, __):
+    def force(self, states, _, __, ___):
         """Force model."""
         extra_observations = {}
         extra_observations['Ma(0,0)'] = self.pot.Ma[0][0]

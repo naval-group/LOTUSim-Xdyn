@@ -52,8 +52,8 @@ RUN cd /tmp_build && \
     mkdir -p /testdir && \
     chmod a+rwx /testdir && \
     echo "#!/bin/bash" > /usr/bin/xdyn-weave && \
-    echo "rm -rf /work/tuto_execution" >> /usr/bin/xdyn-weave && \
-    echo "cp -r /usr/demos /work/tuto_execution" >> /usr/bin/xdyn-weave && \
+    echo "mkdir -p /work/tuto_execution" >> /usr/bin/xdyn-weave && \
+    echo "cp -r /usr/demos/* /work/tuto_execution/" >> /usr/bin/xdyn-weave && \
     echo "pweave \$*" >> /usr/bin/xdyn-weave && \
     chmod a+x /usr/bin/xdyn-weave
 ENTRYPOINT ["/usr/bin/xdyn-weave"]

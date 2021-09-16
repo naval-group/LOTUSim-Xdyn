@@ -20,7 +20,7 @@ class HarmonicOscillator(force.Model):
                 'frame': self.body_name, 'x': 0, 'y': 0, 'z': 0, 'phi': 0,
                 'theta': 0, 'psi': 0, 'required_commands': ['omega']}
 
-    def force(self, states, commands, __):
+    def force(self, states, commands, _, __):
         """Force model."""
         omega = commands['omega']
         return {'Fx': omega*(-self.k*states.x[0] - self.c*states.u[0]),

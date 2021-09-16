@@ -22,6 +22,7 @@ void operator >> (const YAML::Node& node, YamlCoordinates& c);
 void operator >> (const YAML::Node& node, YamlSpeed& s);
 void operator >> (const YAML::Node& node, YamlDynamics& d);
 void operator >> (const YAML::Node& node, YamlPoint& p);
+void operator >> (const YAML::Node& node, YamlFilteredStates& p);
 void parse_point_with_name(const YAML::Node& node, YamlPoint& p, const std::string& name);
 void parse_YamlDynamics6x6Matrix(const YAML::Node& node, YamlDynamics6x6Matrix& m, const bool parse_frame, const std::string& frame_name="");
 void operator >> (const YAML::Node& node, YamlEnvironmentalConstants& f);

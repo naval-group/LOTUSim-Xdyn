@@ -7,13 +7,22 @@
 
 #include "BodyWithoutSurfaceForces.hpp"
 
-BodyWithoutSurfaceForces::BodyWithoutSurfaceForces(const size_t i, const BlockedDOF& blocked_states_) : Body(i, blocked_states_)
+BodyWithoutSurfaceForces::BodyWithoutSurfaceForces(const size_t i, const BlockedDOF& blocked_states_, const YamlFilteredStates& filtered_states) : Body(i, blocked_states_, filtered_states)
 {
 }
 
-BodyWithoutSurfaceForces::BodyWithoutSurfaceForces(const BodyStates& s, const size_t i, const BlockedDOF& blocked_states_) : Body(s, i, blocked_states_)
+BodyWithoutSurfaceForces::BodyWithoutSurfaceForces(const BodyStates& s, const size_t i, const BlockedDOF& blocked_states_, const YamlFilteredStates& filtered_states) : Body(s, i, blocked_states_, filtered_states)
 {
 }
+
+BodyWithoutSurfaceForces::BodyWithoutSurfaceForces(const size_t i, const BlockedDOF& blocked_states_, const StatesFilter& states_filter_) : Body(i, blocked_states_, states_filter_)
+{
+}
+
+BodyWithoutSurfaceForces::BodyWithoutSurfaceForces(const BodyStates& s, const size_t i, const BlockedDOF& blocked_states_, const StatesFilter& states_filter_) : Body(s, i, blocked_states_, states_filter_)
+{
+}
+
 
 void BodyWithoutSurfaceForces::update_intersection_with_free_surface(const EnvironmentAndFrames& ,
                                     const double )

@@ -10,6 +10,7 @@
 
 #include "BlockedDOF.hpp"
 #include "BodyStates.hpp"
+#include "StatesFilter.hpp"
 #include "StateMacros.hpp"
 #include "State.hpp"
 
@@ -27,8 +28,10 @@ class Body
 {
     public:
         virtual ~Body();
-        Body(const size_t idx, const BlockedDOF& blocked_states);
-        Body(const BodyStates& states, const size_t idx, const BlockedDOF& blocked_states);
+        Body(const size_t idx, const BlockedDOF& blocked_states, const YamlFilteredStates& filtered_states);
+        Body(const BodyStates& states, const size_t idx, const BlockedDOF& blocked_states, const YamlFilteredStates& filtered_states);
+        Body(const size_t idx, const BlockedDOF& blocked_states, const StatesFilter& states_filter);
+        Body(const BodyStates& states, const size_t idx, const BlockedDOF& blocked_states, const StatesFilter& states_filter);
 
         BodyStates get_states() const;
 
@@ -70,7 +73,8 @@ class Body
         ssc::kinematics::RotationMatrix get_rot_from_ned_to(const StateType& x) const;
         ssc::kinematics::EulerAngles get_angles(const StateType& all_states, const YamlRotation& c) const;
         std::tuple<double,double,double,double> get_quaternions(const ssc::kinematics::EulerAngles& angle, const YamlRotation& c) const;
-
+        FilteredStates get_filtered_states() const;
+        FilteredStates get_filtered_states(AbstractStates<History> state_history, const StateType& x) const;
         void feed(const StateType& x, Observer& observer, const YamlRotation& c) const;
         BlockedDOF::Vector get_delta_F(const StateType& dx_dt, const ssc::kinematics::Wrench& sum_of_other_forces) const;
 
@@ -84,6 +88,7 @@ class Body
 
         size_t idx; //!< Index of the first state
         BlockedDOF blocked_states;
+        StatesFilter states_filter;
 };
 
 typedef TR1(shared_ptr)<Body> BodyPtr;

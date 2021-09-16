@@ -12,13 +12,36 @@
 #include "YamlBody.hpp"
 #include "NumericalErrorException.hpp"
 
-Body::Body(const size_t i, const BlockedDOF& blocked_states_) : states(), idx(i), blocked_states(blocked_states_)
+Body::Body(const size_t i, const BlockedDOF& blocked_states_, const YamlFilteredStates& filtered_states)
+    : states(filtered_states)
+    , idx(i)
+    , blocked_states(blocked_states_)
+    , states_filter(filtered_states)
 {
 }
 
-Body::Body(const BodyStates& s, const size_t i, const BlockedDOF& blocked_states_) : states(s), idx(i), blocked_states(blocked_states_)
+Body::Body(const BodyStates& s, const size_t i, const BlockedDOF& blocked_states_, const YamlFilteredStates& filtered_states)
+    : states(s)
+    , idx(i)
+    , blocked_states(blocked_states_)
+    , states_filter(filtered_states)
 {
 }
+
+Body::Body(const size_t i, const BlockedDOF& blocked_states_, const StatesFilter& states_filter_)
+    : states(states_filter_)
+    , idx(i)
+    , blocked_states(blocked_states_)
+    , states_filter(states_filter_)
+{}
+
+Body::Body(const BodyStates& states_, const size_t i, const BlockedDOF& blocked_states_, const StatesFilter& states_filter_)
+    : states(states_)
+    , idx(i)
+    , blocked_states(blocked_states_)
+    , states_filter(states_filter_)
+{}
+
 
 Body::~Body()
 {
@@ -205,6 +228,20 @@ void Body::feed(const StateType& x, Observer& observer, const YamlRotation& c) c
     observer.write(angles.phi, DataAddressing(std::vector<std::string>{"states",states.name,"PHI"},std::string("phi(")+states.name+")"));
     observer.write(angles.theta, DataAddressing(std::vector<std::string>{"states",states.name,"THETA"},std::string("theta(")+states.name+")"));
     observer.write(angles.psi, DataAddressing(std::vector<std::string>{"states",states.name,"PSI"},std::string("psi(")+states.name+")"));
+
+    const auto filtered_states = get_filtered_states(states, x);
+    observer.write(filtered_states.x, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"X"},std::string("x_filtered(")+states.name+")"));
+    observer.write(filtered_states.y, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"Y"},std::string("y_filtered(")+states.name+")"));
+    observer.write(filtered_states.z, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"Z"},std::string("z_filtered(")+states.name+")"));
+    observer.write(filtered_states.u, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"U"},std::string("u_filtered(")+states.name+")"));
+    observer.write(filtered_states.v, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"V"},std::string("v_filtered(")+states.name+")"));
+    observer.write(filtered_states.w, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"W"},std::string("w_filtered(")+states.name+")"));
+    observer.write(filtered_states.p, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"P"},std::string("p_filtered(")+states.name+")"));
+    observer.write(filtered_states.q, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"Q"},std::string("q_filtered(")+states.name+")"));
+    observer.write(filtered_states.r, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"R"},std::string("r_filtered(")+states.name+")"));
+    observer.write(filtered_states.phi, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"PHI"},std::string("phi_filtered(")+states.name+")"));
+    observer.write(filtered_states.theta, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"THETA"},std::string("theta_filtered(")+states.name+")"));
+    observer.write(filtered_states.psi, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"PSI"},std::string("psi_filtered(")+states.name+")"));
 }
 
 std::string Body::get_name() const
@@ -247,4 +284,28 @@ void Body::reset_history()
     states.qi.reset();
     states.qj.reset();
     states.qk.reset();
+}
+
+FilteredStates Body::get_filtered_states() const
+{
+    return FilteredStates(states_filter, states, states.convention);
+}
+
+FilteredStates Body::get_filtered_states(AbstractStates<History> state_history, const StateType& x) const
+{
+    const double t = state_history.x.get_current_time();
+    state_history.x.record(t, *_X(x,idx));
+    state_history.y.record(t, *_Y(x,idx));
+    state_history.z.record(t, *_Z(x,idx));
+    state_history.u.record(t, *_U(x,idx));
+    state_history.v.record(t, *_V(x,idx));
+    state_history.w.record(t, *_W(x,idx));
+    state_history.p.record(t, *_P(x,idx));
+    state_history.q.record(t, *_Q(x,idx));
+    state_history.r.record(t, *_R(x,idx));
+    state_history.qr.record(t, *_QR(x,idx));
+    state_history.qi.record(t, *_QI(x,idx));
+    state_history.qj.record(t, *_QJ(x,idx));
+    state_history.qk.record(t, *_QK(x,idx));
+    return FilteredStates(states_filter, state_history, states.convention);
 }

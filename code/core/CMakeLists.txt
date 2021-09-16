@@ -25,6 +25,7 @@ set(SRC src/update_kinematics.cpp
         src/BlockedDOF.cpp
         src/State.cpp
         src/Wrench.cpp
+        src/StatesFilter.cpp
         )
 
 # Using C++ 2011

@@ -60,6 +60,7 @@ ResistanceCurveForceModel::Yaml ResistanceCurveForceModel::parse(const std::stri
 Wrench ResistanceCurveForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames&, const std::map<std::string,double>&) const
 {
     ssc::kinematics::Vector6d tau = ssc::kinematics::Vector6d::Zero();
-    tau(0) = -pimpl->get_resistance(states.u());
+    const auto filtered = states.get_filtered_states();
+    tau(0) = -pimpl->get_resistance(filtered.u);
     return Wrench(states.hydrodynamic_forces_calculation_point, body_name, tau);
 }

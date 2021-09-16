@@ -1,4 +1,4 @@
-.PHONY: all clean cosim hdb precal-r sim
+.PHONY: all clean cosim hdb precal-r sim tutorial_14
 
 DOCKER_IMAGE=xdyn
 DOCKER_WORKING_DIRECTORY=/xdyn_demos
@@ -10,17 +10,30 @@ DOCKER_RUN_BASH:= ${DOCKER_RUN} \
     --entrypoint /bin/bash \
     ${DOCKER_IMAGE} -c
 
-all: cosim sim hdb precal-r clean
+all: cosim sim hdb precal-r tutorial_14 clean
+
+tutorial_14: filtered_states.csv
+	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/work -w /work python:3.8-slim-buster python3 test_filtered_states.py
+	@echo "Tutorial 14's output file passed all test assertions!"
+
+filtered_states.csv: docker-compose-filtered-states.yml filtered_force.py tutorial_14_filtered_states.yml
+	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose -f docker-compose-filtered-states.yml rm -f
+	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose -f docker-compose-filtered-states.yml up -t 0 --exit-code-from xdyn --abort-on-container-exit --build --remove-orphans
 
 tutorial_10_gRPC_force_model.yml:
 	@echo "Copying $@ from xdyn's Docker container..."
 	@${DOCKER_RUN_BASH} \
-        -c "cp /usr/demos/tutorial_10_gRPC_force_model.yml /xdyn_demos/"
+        -c "cp /usr/demos/$@ /xdyn_demos/"
+
+tutorial_14_filtered_states.yml:
+	@echo "Copying $@ from xdyn's Docker container..."
+	@${DOCKER_RUN_BASH} \
+        -c "cp /usr/demos/$@ /xdyn_demos/"
 
 tutorial_10_gRPC_force_model_commands.yml:
 	@echo "Copying $@ from xdyn's Docker container..."
 	@${DOCKER_RUN_BASH} \
-        -c "cp /usr/demos/tutorial_10_gRPC_force_model_commands.yml /xdyn_demos/"
+        -c "cp /usr/demos/$@ /xdyn_demos/"
 
 tutorial_13_hdb_force_model.yml:
 	@echo "Copying $@ from xdyn's Docker container..."
@@ -78,5 +91,8 @@ clean:
 		  tutorial_13_precal_r_force_model.yml\
 		  hdb_output.csv\
 		  precal_r_output.csv\
-		  big.hdb
+		  big.hdb\
+		  output_filtered_force.tsv\
+		  tutorial_14_filtered_states.yml\
+		  hash.md5
 
