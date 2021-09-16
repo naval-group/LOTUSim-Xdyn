@@ -79,10 +79,10 @@ void add_observer_from_cli_dash_o_option(
     {
         description.data.push_back("waves");
     }
-    auto CLI_observer = ListOfObservers::parse_observer(description);
-    send_context_to_observer(CLI_observer, sys, simulator_input, input_data);
-    add_wave_spectra(CLI_observer, sys);
-    out.add_observer(CLI_observer);
+    auto observer = ListOfObservers::parse_observer(description);
+    send_context_to_observer(observer, sys, simulator_input, input_data);
+    add_wave_spectra(observer, sys);
+    out.add_observer(observer);
 }
 
 void add_observers_from_cli(
