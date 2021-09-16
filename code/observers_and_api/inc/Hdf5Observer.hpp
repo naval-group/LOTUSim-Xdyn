@@ -29,6 +29,7 @@ class Hdf5Observer : public Observer
         void write_command_line_before_simulation(const std::string& command_line);
         void write_yaml_before_simulation(const std::string& yaml);
         void write_matlab_script_before_simulation();
+        void write_python_script_before_simulation();
     private:
         void flush_after_initialization();
         void flush_after_write();

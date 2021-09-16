@@ -156,3 +156,8 @@ void Observer::write_matlab_script_before_simulation()
 {
 
 }
+
+void Observer::write_python_script_before_simulation()
+{
+
+}
