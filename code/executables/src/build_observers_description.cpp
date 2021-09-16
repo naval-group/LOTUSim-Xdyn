@@ -26,7 +26,7 @@ void add_wave_spectra(ObserverPtr& observer, const Sim& sys)
     }
 }
 
-std::string serialize_command(const XdynCommandLineArguments& inputData);
+
 std::string serialize_command(const XdynCommandLineArguments& inputData)
 {
     std::stringstream s;
