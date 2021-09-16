@@ -118,7 +118,13 @@ void Hdf5Observer::flush_value_during_write()
 
 void Hdf5Observer::write_before_simulation(const std::vector<FlatDiscreteDirectionalWaveSpectrum>& s, const DataAddressing&)
 {
-    hdf5WaveSpectrumObserver(h5File,"/outputs/spectra", s);
+    if (should_serialize("spectra"))
+    {
+        hdf5WaveSpectrumObserver(h5File,"/outputs/spectra", s);
+        // Should only be serialized at the beginning of the simulation, otherwise xdyn
+        // will attempt to serialize it at each timestep & will fail
+        remove_variable("spectra");
+    }
 }
 
 void Hdf5Observer::write_command_line_before_simulation(const std::string& command_line)
