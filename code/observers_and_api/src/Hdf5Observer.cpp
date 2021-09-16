@@ -32,7 +32,6 @@ Hdf5Observer::Hdf5Observer(const std::string& filename_) :
             filename(filename_)
 {
     h5_writeFileDescription(h5File);
-    exportPythonScripts(h5File, filename, basename, "/scripts/Python");
 }
 
 Hdf5Observer::Hdf5Observer(
@@ -49,7 +48,6 @@ Hdf5Observer::Hdf5Observer(
             filename(filename_)
 {
     h5_writeFileDescription(h5File);
-    exportPythonScripts(h5File, filename, basename, "/scripts/Python");
 }
 
 std::function<void()> Hdf5Observer::get_serializer(const double val, const DataAddressing& addressing)
