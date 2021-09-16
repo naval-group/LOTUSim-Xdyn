@@ -73,13 +73,13 @@ void add_observer_from_cli_dash_o_option(
         const std::string& simulator_input,
         const Sim& sys)
 {
-    YamlOutput CLI_observer_description = build_YamlOutput_from_filename(input_data.output_filename);
-    CLI_observer_description.full_output = true;
-    if ((CLI_observer_description.format=="ws") or (CLI_observer_description.format=="hdf5") or (CLI_observer_description.format=="json"))
+    YamlOutput description = build_YamlOutput_from_filename(input_data.output_filename);
+    description.full_output = true;
+    if ((description.format=="ws") or (description.format=="hdf5") or (description.format=="json"))
     {
-        CLI_observer_description.data.push_back("waves");
+        description.data.push_back("waves");
     }
-    auto CLI_observer = ListOfObservers::parse_observer(CLI_observer_description);
+    auto CLI_observer = ListOfObservers::parse_observer(description);
     send_context_to_observer(CLI_observer, sys, simulator_input, input_data);
     add_wave_spectra(CLI_observer, sys);
     out.add_observer(CLI_observer);
