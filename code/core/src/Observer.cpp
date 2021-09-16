@@ -132,6 +132,11 @@ void Observer::write_before_simulation(const MeshPtr, const DataAddressing&)
 void Observer::write_before_simulation(const std::string&, const DataAddressing&)
 {}
 
+bool Observer::should_serialize(const std::string& variable) const
+{
+    return std::find(requested_serializations.begin(), requested_serializations.end(), variable) != requested_serializations.end();
+}
+
 void Observer::remove_variable(const std::string& variable_to_remove)
 {
     requested_serializations.erase(std::remove_if(requested_serializations.begin(), requested_serializations.end(), [variable_to_remove](const std::string& v){return v == variable_to_remove;}), requested_serializations.end());

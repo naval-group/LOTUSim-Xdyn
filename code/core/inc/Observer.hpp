@@ -69,6 +69,7 @@ class Observer
         virtual void flush_value_during_initialization();
 
         void remove_variable(const std::string& variable_to_remove);
+        bool should_serialize(const std::string& variable) const;
 
     private:
         void initialize_serialization_of_requested_variables(const std::vector<std::string>& variables_to_serialize);
