@@ -64,6 +64,8 @@ void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f, co
 {
     int problematic_line = 0;
     status = Status::OK;
+    ss.str("");
+    ss.clear();
     try
     {
         f();
