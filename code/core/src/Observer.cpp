@@ -5,6 +5,8 @@
  *      Author: cady
  */
 
+
+#include <algorithm>
 #include "Observer.hpp"
 #include "InvalidInputException.hpp"
 #include "Sim.hpp"
@@ -129,3 +131,8 @@ void Observer::write_before_simulation(const MeshPtr, const DataAddressing&)
 
 void Observer::write_before_simulation(const std::string&, const DataAddressing&)
 {}
+
+void Observer::remove_variable(const std::string& variable_to_remove)
+{
+    requested_serializations.erase(std::remove_if(requested_serializations.begin(), requested_serializations.end(), [variable_to_remove](const std::string& v){return v == variable_to_remove;}), requested_serializations.end());
+}
