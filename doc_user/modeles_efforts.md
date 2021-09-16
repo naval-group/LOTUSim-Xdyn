@@ -76,6 +76,14 @@ filtered states:
 Chaque section `x`, `y`, `z`, `u`, `v`, `w`, `p`, `q`, `r`, `phi`, `theta`,
 `psi` est facultative : ainsi, le YAML suivant est valide :
 
+```yaml
+filtered states:
+    x:
+        type of filter: moving average
+        duration in seconds : 23
+```
+
+
 Si un état ne figure pas dans la section `filtered states`, xdyn utilisera ses
 valeurs non-filtrées (durée de la moyenne glissante égale à zéro). Si aucune
 section `filtered states` n'est définie, xdyn utilisera systématiquement les
