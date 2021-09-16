@@ -136,6 +136,17 @@ void Hdf5Observer::write_command_line_before_simulation(const std::string& comma
     }
 }
 
+void Hdf5Observer::write_yaml_before_simulation(const std::string& yaml)
+{
+    if (should_serialize("yaml"))
+    {
+        write_before_simulation(yaml, DataAddressing({"yaml","input"}, "YAML input"));
+        // Should only be serialized at the beginning of the simulation, otherwise xdyn
+        // will attempt to serialize it at each timestep & will fail
+        remove_variable("yaml");
+    }
+}
+
 void Hdf5Observer::write_before_simulation(const MeshPtr mesh, const DataAddressing& address)
 {
     if (mesh->nb_of_static_nodes>0)

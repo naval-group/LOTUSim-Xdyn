@@ -146,3 +146,8 @@ void Observer::write_command_line_before_simulation(const std::string& )
 {
 
 }
+
+void Observer::write_yaml_before_simulation(const std::string& )
+{
+
+}

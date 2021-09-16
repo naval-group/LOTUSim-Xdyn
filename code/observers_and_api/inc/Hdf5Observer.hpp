@@ -27,6 +27,7 @@ class Hdf5Observer : public Observer
         void write_before_simulation(const std::string& data, const DataAddressing& address) override;
         void write_before_simulation(const std::vector<FlatDiscreteDirectionalWaveSpectrum>& val, const DataAddressing& address);
         void write_command_line_before_simulation(const std::string& command_line);
+        void write_yaml_before_simulation(const std::string& yaml);
     private:
         void flush_after_initialization();
         void flush_after_write();
