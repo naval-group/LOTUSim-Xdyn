@@ -4,7 +4,7 @@ test_ship_in_waves.yml:
 
 extra_hdf5_output_when_required: test_ship_in_waves.yml test_ship.stl
 	@echo "Checking if we can output scripts, meshes, command line, waves, spectra & YAML"
-	@${DOCKER_RUN} xdyn -d --dt 1 --tend 1 test_ship_in_waves.yml
+	@${DOCKER_RUN} xdyn --dt 1 --tend 1 test_ship_in_waves.yml
 	@${DOCKER_RUN} hdfgroup/hdf5lib:1.10.6 h5dump \
 		 										-d /inputs/meshes/TestShip/faces\
 												-d /scripts/MatLab/demoMatLab.m\
@@ -32,7 +32,7 @@ no_extra_hdf5_output_when_not_required: test_ship_in_waves.yml test_ship.stl
 	@echo "Checking scripts, meshes, command line, waves, spectra & YAML are *not* outputted by default"
 	@cp test_ship_in_waves.yml test_ship_in_waves.yml.new
 	@sed -i 's/data:.*/data: []/g' test_ship_in_waves.yml.new
-	@${DOCKER_RUN} xdyn -d --dt 1 --tend 1 test_ship_in_waves.yml.new
+	@${DOCKER_RUN} xdyn --dt 1 --tend 1 test_ship_in_waves.yml.new
 	@${DOCKER_RUN} hdfgroup/hdf5lib:1.10.6 h5dump \
 		 										-d /inputs/meshes/TestShip/faces\
 												-c 1 test.h5; echo $$? >> .commands.result
