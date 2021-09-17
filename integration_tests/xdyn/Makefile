@@ -43,4 +43,4 @@ test_ship.stl:
 	@${DOCKER_RUN} -v $(shell pwd):/xdyn_demos --entrypoint /bin/bash xdyn -c "cp /usr/demos/$@ /xdyn_demos/"
 
 clean:
-	rm -rf tutorial_01_falling_ball.yml cube.stl .commands.result ONRT_SIMMAN.raodb.ini tutorial_12_precal_r.yml test_ship.stl test_ship_in_waves.yml test_ship_in_waves.yml.new
+	rm -rf tutorial_01_falling_ball.yml cube.stl .commands.result ONRT_SIMMAN.raodb.ini tutorial_12_precal_r.yml test_ship.stl test_ship_in_waves.yml test_ship_in_waves.yml.new falling_ball.csv  falling_ball.h5  falling_ball.json tutorial_05_froude_krylov.yml
