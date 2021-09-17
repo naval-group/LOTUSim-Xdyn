@@ -1,7 +1,10 @@
 .PHONY: all clean invalid_yaml_returns_non_zero_error_code tutorial_12 extra_hdf5_output_when_required no_extra_hdf5_output_when_not_required
 
 all: invalid_yaml_returns_non_zero_error_code \
-	 tutorial_12
+	 tutorial_12\
+	 extra_hdf5_output_when_required\
+	 no_extra_hdf5_output_when_not_required
+
 
 DOCKER_RUN=docker run -t --rm -u $(shell id -u):$(shell id -g) -v $(shell pwd):/work -w /work
 WRONG_ERROR_CODE=echo "Oops, didn't get the error code we were expecting: test failed!" && return 1

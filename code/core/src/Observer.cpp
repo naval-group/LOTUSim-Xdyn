@@ -124,10 +124,14 @@ void Observer::flush_value_during_initialization()
 }
 
 void Observer::write_before_simulation(const std::vector<FlatDiscreteDirectionalWaveSpectrum>& , const DataAddressing& )
-{}
+{
+    remove_variable("spectra");
+}
 
 void Observer::write_before_simulation(const MeshPtr, const DataAddressing&)
-{}
+{
+    remove_variable("mesh");
+}
 
 void Observer::write_before_simulation(const std::string&, const DataAddressing&)
 {}
@@ -144,20 +148,20 @@ void Observer::remove_variable(const std::string& variable_to_remove)
 
 void Observer::write_command_line_before_simulation(const std::string& )
 {
-
+    remove_variable("command line");
 }
 
 void Observer::write_yaml_before_simulation(const std::string& )
 {
-
+    remove_variable("yaml");
 }
 
 void Observer::write_matlab_script_before_simulation()
 {
-
+    remove_variable("matlab scripts");
 }
 
 void Observer::write_python_script_before_simulation()
 {
-
+    remove_variable("python scripts");
 }
