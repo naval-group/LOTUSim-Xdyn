@@ -30,38 +30,61 @@ void flush(std::string& buffer, std::vector<std::string>& tokens)
     buffer = "";
 }
 
-class LineGetter
+class AbstractLineGetter
 {
-  public:
-    virtual ~LineGetter() {}
-    virtual std::string get_next_line() = 0;
-    virtual bool has_more_lines() const = 0;
+    public:
+        virtual ~AbstractLineGetter() {}
+        virtual std::string get_next_line() = 0;
+        virtual bool has_more_lines() const = 0;
 };
 
-class GetLineFromString : public LineGetter
+template <typename T> class LineGetter : public AbstractLineGetter
+{
+  public:
+    LineGetter(const std::string& s) : stream(s)
+    {}
+
+    virtual ~LineGetter() {}
+    std::string get_next_line()
+    {
+        std::string normalized_line;
+        std::string original_line;
+        if (std::getline(stream, original_line))
+        {
+            if ( original_line.size() && original_line[original_line.size()-1] == '\r' )
+            {
+                normalized_line = original_line.substr( 0, original_line.size() - 1 );
+            }
+            else
+            {
+                normalized_line = original_line;
+            }
+        }
+        return normalized_line;
+    }
+    bool has_more_lines() const
+    {
+        return not(stream.eof());
+    }
+
+    protected:
+        T stream;
+};
+
+class GetLineFromString : public LineGetter<std::istringstream>
 {
   public:
     GetLineFromString(const std::string& s)
-        : stream(s)
+        : LineGetter<std::istringstream>(s)
     {
     }
-    std::string get_next_line()
-    {
-        std::string line;
-        std::getline(stream, line);
-        return line;
-    }
-    bool has_more_lines() const { return not(stream.eof()); }
-
-  private:
-    std::istringstream stream;
 };
 
-class GetLineFromFile : public LineGetter
+class GetLineFromFile : public LineGetter<std::ifstream>
 {
   public:
     GetLineFromFile(const std::string& s)
-        : stream(s)
+        : LineGetter<std::ifstream>(s)
     {
         if (not(stream))
         {
@@ -71,22 +94,12 @@ class GetLineFromFile : public LineGetter
                         "it. If all this checks out, perhaps the file is already opened?");
         }
     }
-    std::string get_next_line()
-    {
-        std::string line;
-        std::getline(stream, line);
-        return line;
-    }
-    bool has_more_lines() const { return not(stream.eof()); }
-
-  private:
-    std::ifstream stream;
 };
 
 class Parser
 {
   public:
-    Parser(LineGetter& line_getter_)
+    Parser(AbstractLineGetter& line_getter_)
         : line_getter(line_getter_)
         , current_section()
         , parsed_sections()
@@ -351,7 +364,7 @@ class Parser
         current_vector_value.second.push_back(value);
     }
 
-    LineGetter& line_getter;
+    AbstractLineGetter& line_getter;
     Section current_section;
     std::vector<Section> parsed_sections;
     std::pair<std::string, std::vector<double> > current_vector_value;
@@ -361,8 +374,8 @@ class Parser
     bool started_parsing_raos;
 };
 
-PrecalFile common_precal_parser(LineGetter& line_getter);
-PrecalFile common_precal_parser(LineGetter& line_getter)
+PrecalFile common_precal_parser(AbstractLineGetter& line_getter);
+PrecalFile common_precal_parser(AbstractLineGetter& line_getter)
 {
     Parser parser(line_getter);
     parser.parse();
