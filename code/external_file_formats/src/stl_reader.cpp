@@ -274,6 +274,22 @@ std::string escape_backslashes(const std::string& s)
     return replace('\\', "\\\\", s);
 }
 
+std::ostream& operator<<(std::ostream& out, const StlType& stl_type)
+{
+    switch(stl_type)
+    {
+        case StlType::ASCII:
+            out << "ASCII";
+            break;
+        case StlType::UNKNOWN:
+            out << "UNKNOWN";
+            break;
+        default:
+            out << "UNKNOWN";
+            break;
+    }
+    return out;
+}
 
 StlType identify_stl(const std::string& input)
 {

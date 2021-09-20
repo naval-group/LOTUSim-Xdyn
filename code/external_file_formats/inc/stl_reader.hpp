@@ -3,6 +3,7 @@
 
 #include <string>
 #include <istream>
+#include <ostream>
 #include "GeometricTypes3d.hpp"
 
 /**
@@ -48,5 +49,5 @@ bool is_stl_data_binary(const std::string& input);
 
 enum class StlType {UNKNOWN, ASCII};
 StlType identify_stl(const std::string& input);
-
+std::ostream& operator<<(std::ostream& out, const StlType& race);
 #endif
