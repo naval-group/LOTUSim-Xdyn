@@ -88,7 +88,7 @@ integration tests:
 doc:
    stage: doc
    script:
-     - mkdir -p build_deb11 && cp xdyn.deb build_deb11/.
+     - make debian_11_release_gcc_10 all_docker_images
      - make doc -W build-debian
    dependencies:
      - build:debian11-release

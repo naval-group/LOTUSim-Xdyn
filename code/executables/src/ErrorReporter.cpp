@@ -64,6 +64,10 @@ void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f, co
 {
     int problematic_line = 0;
     status = Status::OK;
+    // May be more efficient than ss.str("") (cf. https://stackoverflow.com/a/20792/1042071)
+    ss.str(std::string());
+    // See https://stackoverflow.com/questions/2848087/how-to-clear-stringstream for why we need ss.clear()
+    ss.clear();
     try
     {
         f();
