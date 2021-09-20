@@ -94,7 +94,7 @@ TEST_F(StlReaderTest, stl_less_than_84_bytes_no_keyword_invalid_binary_size_pars
     // size != 84+50n should be considered invalid.
     for (size_t i = 0 ; i < 84; ++i)
     {
-        ASSERT_EQ(StlType::UNKNOWN, identify_stl(random_string_of_size(i)));
+        ASSERT_THROW(identify_stl(random_string_of_size(i)), MeshException);
     }
 }
 
@@ -132,7 +132,7 @@ TEST_F(StlReaderTest, stl_less_than_84_bytes_without_endsolid_and_invalid_binary
     const std::string garbage = random_string_of_size(25);
     const std::string spaces(a.random<size_t>().between(1,25), ' ');
     const std::string data = random_string_of_size(25) + "solid" +  random_string_of_size(25) + spaces;
-    ASSERT_EQ(StlType::UNKNOWN, identify_stl(data));
+    ASSERT_THROW(identify_stl(data), MeshException);
 }
 
 TEST_F(StlReaderTest, stl_over_84_bytes_without_keywords_and_invalid_binary_size_is_parsed_as_invalid)
@@ -141,7 +141,7 @@ TEST_F(StlReaderTest, stl_over_84_bytes_without_keywords_and_invalid_binary_size
     // invalid.
     for (size_t i = 0 ; i < 200 ; ++i)
     {
-        ASSERT_EQ(StlType::UNKNOWN, identify_stl(random_string_of_size(84+i)));
+        ASSERT_THROW(identify_stl(random_string_of_size(84+10*i)), MeshException);
     }
 }
 
