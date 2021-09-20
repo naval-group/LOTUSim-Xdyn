@@ -227,7 +227,7 @@ section suivante :
 output:
    - format: csv
      filename: exemple.csv
-     data: [t, y_filtered(TestShip), 'theta(TestShip)']
+     data: [t, y_filtered(TestShip), theta(TestShip)]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #### Observations supplémentaires des modèles d'effort
