@@ -275,7 +275,11 @@ std::string escape_backslashes(const std::string& s)
 }
 
 
-StlType identify_stl(const std::string& )
+StlType identify_stl(const std::string& input)
 {
+    if (input.find("solid") != std::string::npos)
+    {
+        return StlType::ASCII;
+    }
     return StlType::UNKNOWN;
 }

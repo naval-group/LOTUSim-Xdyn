@@ -46,7 +46,7 @@ VectorOfVectorOfPoints read_binary_stl(const std::string& input);
 
 bool is_stl_data_binary(const std::string& input);
 
-enum class StlType {UNKNOWN};
+enum class StlType {UNKNOWN, ASCII};
 StlType identify_stl(const std::string& input);
 
 #endif
