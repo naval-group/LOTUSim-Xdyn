@@ -16,7 +16,6 @@ YamlOutput create_wave_observer_description(const XdynCommandLineArguments& inpu
     return o;
 }
 
-void add_wave_spectra(ObserverPtr& observer, const Sim& sys);
 void add_wave_spectra(ObserverPtr& observer, const Sim& sys)
 {
     const auto env = sys.get_env();
@@ -27,7 +26,7 @@ void add_wave_spectra(ObserverPtr& observer, const Sim& sys)
     }
 }
 
-std::string serialize_command(const XdynCommandLineArguments& inputData);
+
 std::string serialize_command(const XdynCommandLineArguments& inputData)
 {
     std::stringstream s;
@@ -52,54 +51,35 @@ std::string serialize_command(const XdynCommandLineArguments& inputData)
     return s.str();
 }
 
-void send_context_to_observer(const ObserverPtr& observer, const Sim& sys, const std::string& yaml_input, const XdynCommandLineArguments& input_data);
-void send_context_to_observer(const ObserverPtr& observer, const Sim& sys, const std::string& yaml_input, const XdynCommandLineArguments& input_data)
-{
-    auto prog_command = serialize_command(input_data);
-    observer->write_before_simulation(prog_command, DataAddressing({"command"}, "CLI command"));
-    observer->write_before_simulation(yaml_input, DataAddressing({"yaml","input"}, "YAML input"));
-    for (const auto& bodies : sys.get_bodies())
-    {
-        const auto& states = bodies->get_states();
-        const auto& name = states.name;
-        const auto& mesh = states.mesh;
-        observer->write_before_simulation(mesh, DataAddressing({"meshes",name}, "mesh("+name+")"));
-    }
-}
-
-void add_main_observer_from_cli(const XdynCommandLineArguments& input_data, std::vector<YamlOutput>& out,const std::string& simulator_input,const Sim& sys);
-void add_main_observer_from_cli(
+void add_observer_from_cli_dash_o_option(const XdynCommandLineArguments& input_data, std::vector<YamlOutput>& out);
+void add_observer_from_cli_dash_o_option(
         const XdynCommandLineArguments& input_data,
-        ListOfObservers& out,
-        const std::string& simulator_input,
-        const Sim& sys)
+        ListOfObservers& out)
 {
-    YamlOutput CLI_observer_description = build_YamlOutput_from_filename(input_data.output_filename);
-    CLI_observer_description.full_output = true;
-    if ((CLI_observer_description.format=="ws") or (CLI_observer_description.format=="hdf5") or (CLI_observer_description.format=="json"))
-    {
-        CLI_observer_description.data.push_back("waves");
-    }
-    auto CLI_observer = ListOfObservers::parse_observer(CLI_observer_description);
-    send_context_to_observer(CLI_observer, sys, simulator_input, input_data);
-    add_wave_spectra(CLI_observer, sys);
-    out.add_observer(CLI_observer);
+    YamlOutput description = build_YamlOutput_from_filename(input_data.output_filename);
+    description.full_output = true;
+    description.data.push_back("waves");
+    description.data.push_back("matlab scripts");
+    description.data.push_back("python scripts");
+    description.data.push_back("spectra");
+    description.data.push_back("mesh");
+    description.data.push_back("yaml");
+    description.data.push_back("command line");
+    auto observer = ListOfObservers::parse_observer(description);
+    out.add_observer(observer);
 }
 
 void add_observers_from_cli(
         const XdynCommandLineArguments& input_data,
-        ListOfObservers& out,
-        const std::string& simulator_input,
-        const Sim& sys)
+        ListOfObservers& out)
 {
     if (not(input_data.output_filename.empty()))
     {
-        add_main_observer_from_cli(input_data, out, simulator_input, sys);
+        add_observer_from_cli_dash_o_option(input_data, out);
     }
     if (not(input_data.wave_output.empty()))
     {
         auto wave_observer = ListOfObservers::parse_observer(create_wave_observer_description(input_data));
-        add_wave_spectra(wave_observer, sys);
         out.add_observer(wave_observer);
     }
 }
@@ -109,10 +89,3 @@ std::vector<YamlOutput> build_observers_description(const std::string& yaml)
     auto out = parse_output(yaml);
     return out;
 }
-
-//ListOfObservers get_observers(const std::string& yaml, const XdynCommandLineArguments& input_data)
-//{
-//    auto out = parse_output(yaml);
-//    add_observers_from_cli(yaml, input_data, out);
-//    return ListOfObservers(out);
-//}

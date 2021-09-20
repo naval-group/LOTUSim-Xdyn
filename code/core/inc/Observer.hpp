@@ -53,6 +53,10 @@ class Observer
         virtual void write_before_simulation(const std::vector<FlatDiscreteDirectionalWaveSpectrum>& val, const DataAddressing& address);
         virtual void write_before_simulation(const MeshPtr mesh, const DataAddressing& address);
         virtual void write_before_simulation(const std::string& data, const DataAddressing& address);
+        virtual void write_command_line_before_simulation(const std::string& command_line);
+        virtual void write_yaml_before_simulation(const std::string& yaml);
+        virtual void write_matlab_script_before_simulation();
+        virtual void write_python_script_before_simulation();
 
     protected:
 
@@ -67,6 +71,9 @@ class Observer
         virtual void flush_after_write() = 0;
         virtual void flush_value_during_write() = 0;
         virtual void flush_value_during_initialization();
+
+        void remove_variable(const std::string& variable_to_remove);
+        bool should_serialize(const std::string& variable) const;
 
     private:
         void initialize_serialization_of_requested_variables(const std::vector<std::string>& variables_to_serialize);

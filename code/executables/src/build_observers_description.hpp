@@ -10,6 +10,8 @@ class XdynCommandLineArguments;
 
 std::vector<YamlOutput> build_observers_description(const std::string& yaml);
 
-void add_observers_from_cli(const XdynCommandLineArguments& input_data, ListOfObservers& out, const std::string& simulator_input, const Sim& sys);
+void add_observers_from_cli(const XdynCommandLineArguments& input_data, ListOfObservers& out);
+void add_wave_spectra(ObserverPtr& observer, const Sim& sys);
+std::string serialize_command(const XdynCommandLineArguments& inputData);
 
 #endif

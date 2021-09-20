@@ -1,7 +1,10 @@
-.PHONY: all clean invalid_yaml_returns_non_zero_error_code tutorial_12
+.PHONY: all clean invalid_yaml_returns_non_zero_error_code tutorial_12 extra_hdf5_output_when_required no_extra_hdf5_output_when_not_required
 
 all: invalid_yaml_returns_non_zero_error_code \
-	 tutorial_12
+	 tutorial_12\
+	 extra_hdf5_output_when_required\
+	 no_extra_hdf5_output_when_not_required
+
 
 DOCKER_RUN=docker run -t --rm -u $(shell id -u):$(shell id -g) -v $(shell pwd):/work -w /work
 WRONG_ERROR_CODE=echo "Oops, didn't get the error code we were expecting: test failed!" && return 1
@@ -15,6 +18,8 @@ invalid_yaml_returns_non_zero_error_code: tutorial_01_falling_ball.yml cube.stl
 	@${DOCKER_RUN} --entrypoint=xdyn-for-cs xdyn --dt 1 -p 9002 tutorial_01_falling_ball.yml && ${WRONG_ERROR_CODE} || ${EXPECTED_ERROR_CODE}
 	@${DOCKER_RUN} --entrypoint=xdyn-for-me xdyn -p 9002 tutorial_01_falling_ball.yml && ${WRONG_ERROR_CODE} || ${EXPECTED_ERROR_CODE}
 	@${DOCKER_RUN} --entrypoint=gz xdyn --dphi=1 --phi_max=1 -s cube.stl tutorial_01_falling_ball.yml && ${WRONG_ERROR_CODE} || ${EXPECTED_ERROR_CODE}
+
+include Makefile.check_exports
 
 tutorial_01_falling_ball.yml:
 	@echo "Copying tutorial files from xdyn's Docker container..."
@@ -33,6 +38,9 @@ cube.stl:
 	@echo "Copying tutorial files from xdyn's Docker container..."
 	@${DOCKER_RUN} -v $(shell pwd):/xdyn_demos --entrypoint /bin/bash xdyn -c "cp /usr/demos/$@ /xdyn_demos/"
 
+test_ship.stl:
+	@echo "Copying $@ from xdyn's Docker container..."
+	@${DOCKER_RUN} -v $(shell pwd):/xdyn_demos --entrypoint /bin/bash xdyn -c "cp /usr/demos/$@ /xdyn_demos/"
 
 clean:
-	rm -rf tutorial_01_falling_ball.yml cube.stl
+	rm -rf tutorial_01_falling_ball.yml cube.stl .commands.result ONRT_SIMMAN.raodb.ini tutorial_12_precal_r.yml test_ship.stl test_ship_in_waves.yml test_ship_in_waves.yml.new

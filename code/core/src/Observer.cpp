@@ -5,12 +5,19 @@
  *      Author: cady
  */
 
+
+#include <algorithm>
 #include "Observer.hpp"
 #include "InvalidInputException.hpp"
 #include "Sim.hpp"
 #include "SurfaceElevationGrid.hpp"
 
-Observer::Observer() : initialized(false), output_everything(true), requested_serializations(), serialize(), initialize()
+Observer::Observer()
+    : initialized(false)
+    , output_everything(true)
+    , requested_serializations()
+    , serialize()
+    , initialize()
 {
 }
 
@@ -117,10 +124,44 @@ void Observer::flush_value_during_initialization()
 }
 
 void Observer::write_before_simulation(const std::vector<FlatDiscreteDirectionalWaveSpectrum>& , const DataAddressing& )
-{}
+{
+    remove_variable("spectra");
+}
 
 void Observer::write_before_simulation(const MeshPtr, const DataAddressing&)
-{}
+{
+    remove_variable("mesh");
+}
 
 void Observer::write_before_simulation(const std::string&, const DataAddressing&)
 {}
+
+bool Observer::should_serialize(const std::string& variable) const
+{
+    return std::find(requested_serializations.begin(), requested_serializations.end(), variable) != requested_serializations.end();
+}
+
+void Observer::remove_variable(const std::string& variable_to_remove)
+{
+    requested_serializations.erase(std::remove_if(requested_serializations.begin(), requested_serializations.end(), [variable_to_remove](const std::string& v){return v == variable_to_remove;}), requested_serializations.end());
+}
+
+void Observer::write_command_line_before_simulation(const std::string& )
+{
+    remove_variable("command line");
+}
+
+void Observer::write_yaml_before_simulation(const std::string& )
+{
+    remove_variable("yaml");
+}
+
+void Observer::write_matlab_script_before_simulation()
+{
+    remove_variable("matlab scripts");
+}
+
+void Observer::write_python_script_before_simulation()
+{
+    remove_variable("python scripts");
+}

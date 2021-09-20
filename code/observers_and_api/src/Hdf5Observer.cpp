@@ -20,36 +20,34 @@ Hdf5Addressing::Hdf5Addressing(
 {
 }
 
-Hdf5Observer::Hdf5Observer(const std::string& filename) :
+Hdf5Observer::Hdf5Observer(const std::string& filename_) :
             Observer(),
-            h5File(H5_Tools::openEmptyHdf5File(filename)),
+            h5File(H5_Tools::openEmptyHdf5File(filename_)),
             basename("outputs"),
             name2address(),
             name2dataset(),
             name2datatype(),
             name2dataspace(),
-            wave_serializer()
+            wave_serializer(),
+            filename(filename_)
 {
     h5_writeFileDescription(h5File);
-    exportMatLabScripts(h5File, filename, basename, "/scripts/MatLab");
-    exportPythonScripts(h5File, filename, basename, "/scripts/Python");
 }
 
 Hdf5Observer::Hdf5Observer(
-        const std::string& filename,
+        const std::string& filename_,
         const std::vector<std::string>& d) :
             Observer(d),
-            h5File(H5_Tools::openEmptyHdf5File(filename)),
+            h5File(H5_Tools::openEmptyHdf5File(filename_)),
             basename("outputs"),
             name2address(),
             name2dataset(),
             name2datatype(),
             name2dataspace(),
-            wave_serializer()
+            wave_serializer(),
+            filename(filename_)
 {
     h5_writeFileDescription(h5File);
-    exportMatLabScripts(h5File, filename, basename, "/scripts/MatLab");
-    exportPythonScripts(h5File, filename, basename, "/scripts/Python");
 }
 
 std::function<void()> Hdf5Observer::get_serializer(const double val, const DataAddressing& addressing)
@@ -120,15 +118,71 @@ void Hdf5Observer::flush_value_during_write()
 
 void Hdf5Observer::write_before_simulation(const std::vector<FlatDiscreteDirectionalWaveSpectrum>& s, const DataAddressing&)
 {
-    hdf5WaveSpectrumObserver(h5File,"/outputs/spectra", s);
+    if (should_serialize("spectra"))
+    {
+        hdf5WaveSpectrumObserver(h5File,"/outputs/spectra", s);
+        // Should only be serialized at the beginning of the simulation, otherwise xdyn
+        // will attempt to serialize it at each timestep & will fail
+        remove_variable("spectra");
+    }
 }
 
+void Hdf5Observer::write_command_line_before_simulation(const std::string& command_line)
+{
+    if (should_serialize("command line"))
+    {
+        write_before_simulation(command_line, DataAddressing({"command"}, "CLI command"));
+        // Should only be serialized at the beginning of the simulation, otherwise xdyn
+        // will attempt to serialize it at each timestep & will fail
+        remove_variable("command line");
+    }
+}
+
+void Hdf5Observer::write_yaml_before_simulation(const std::string& yaml)
+{
+    if (should_serialize("yaml"))
+    {
+        write_before_simulation(yaml, DataAddressing({"yaml","input"}, "YAML input"));
+        // Should only be serialized at the beginning of the simulation, otherwise xdyn
+        // will attempt to serialize it at each timestep & will fail
+        remove_variable("yaml");
+    }
+}
+
+void Hdf5Observer::write_matlab_script_before_simulation()
+{
+
+    if (should_serialize("matlab scripts"))
+    {
+        exportMatLabScripts(h5File, filename, basename, "/scripts/MatLab");
+        // Should only be serialized at the beginning of the simulation, otherwise xdyn
+        // will attempt to serialize it at each timestep & will fail
+        remove_variable("matlab scripts");
+    }
+}
+
+void Hdf5Observer::write_python_script_before_simulation()
+{
+    if (should_serialize("python scripts"))
+    {
+        exportPythonScripts(h5File, filename, basename, "/scripts/Python");
+        // Should only be serialized at the beginning of the simulation, otherwise xdyn
+        // will attempt to serialize it at each timestep & will fail
+        remove_variable("python scripts");
+    }
+}
 
 void Hdf5Observer::write_before_simulation(const MeshPtr mesh, const DataAddressing& address)
 {
-    if (mesh->nb_of_static_nodes>0)
+    if (should_serialize("mesh"))
     {
-        writeMeshToHdf5File(h5File, Hdf5Addressing(address, "inputs").address, mesh->nodes, mesh->facets);
+        if (mesh->nb_of_static_nodes>0)
+        {
+            writeMeshToHdf5File(h5File, Hdf5Addressing(address, "inputs").address, mesh->nodes, mesh->facets);
+        }
+        // Should only be serialized at the beginning of the simulation, otherwise xdyn
+        // will attempt to serialize it at each timestep & will fail
+        remove_variable("mesh");
     }
 }
 

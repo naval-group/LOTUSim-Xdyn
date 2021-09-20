@@ -42,6 +42,25 @@ void solve(const std::string& solver_name, Sim& sys, ssc::solver::Scheduler& sch
     }
 }
 
+void write_before_simulation(ListOfObservers& observers, const Sim& sys, const XdynCommandLineArguments& input_data, const std::string& yaml_input);
+void write_before_simulation(ListOfObservers& observers, const Sim& sys, const XdynCommandLineArguments& input_data, const std::string& yaml_input)
+{
+    const auto obs = observers.get();
+    for (auto o:obs)
+    {
+        add_wave_spectra(o, sys);
+        o->write_command_line_before_simulation(serialize_command(input_data));
+        o->write_matlab_script_before_simulation();
+        o->write_python_script_before_simulation();
+        for (const auto& bodies : sys.get_bodies())
+        {
+            const auto& states = bodies->get_states();
+            o->write_before_simulation(states.mesh, DataAddressing({"meshes",states.name}, "mesh("+states.name+")"));
+        }
+        o->write_yaml_before_simulation(yaml_input);
+    };
+}
+
 void run_simulation(const XdynCommandLineArguments& input_data, ErrorReporter& error_outputter);
 void run_simulation(const XdynCommandLineArguments& input_data, ErrorReporter& error_outputter)
 {
@@ -55,7 +74,8 @@ void run_simulation(const XdynCommandLineArguments& input_data, ErrorReporter& e
         const auto controllers = get_initialized_controllers(input_data.tstart, input.controllers, input.commands, scheduler, &sys);
         auto observers_description = build_observers_description(yaml_input);
         ListOfObservers observers(observers_description);
-        add_observers_from_cli(input_data, observers, yaml_input, sys);
+        add_observers_from_cli(input_data, observers);
+        write_before_simulation(observers, sys, input_data, yaml_input);
         solve(input_data.solver, sys, scheduler, observers, controllers);
     }};
     if (input_data.catch_exceptions)

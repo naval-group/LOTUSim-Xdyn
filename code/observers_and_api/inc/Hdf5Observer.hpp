@@ -26,6 +26,10 @@ class Hdf5Observer : public Observer
         void write_before_simulation(const MeshPtr mesh, const DataAddressing& address) override;
         void write_before_simulation(const std::string& data, const DataAddressing& address) override;
         void write_before_simulation(const std::vector<FlatDiscreteDirectionalWaveSpectrum>& val, const DataAddressing& address);
+        void write_command_line_before_simulation(const std::string& command_line);
+        void write_yaml_before_simulation(const std::string& yaml);
+        void write_matlab_script_before_simulation();
+        void write_python_script_before_simulation();
     private:
         void flush_after_initialization();
         void flush_after_write();
@@ -46,8 +50,8 @@ class Hdf5Observer : public Observer
         std::map<std::string, H5::DataSet> name2dataset;
         std::map<std::string, H5::DataType> name2datatype;
         std::map<std::string, H5::DataSpace> name2dataspace;
-
         TR1(shared_ptr)<Hdf5WaveObserver> wave_serializer;
+        std::string filename;
 };
 
 #endif
