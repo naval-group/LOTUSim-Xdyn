@@ -141,3 +141,12 @@ TEST_F(StlReaderTest, stl_over_84_bytes_without_keywords_and_invalid_binary_size
         ASSERT_EQ(StlType::UNKNOWN, identify_stl(random_string_of_size(84+i)));
     }
 }
+
+TEST_F(StlReaderTest, stl_over_84_bytes_without_keywords_and_valid_binary_size_is_parsed_as_binary)
+{
+    // STL data more than 84 bytes long, without keywords, size == 84+50*1 should be considered
+    // binary.
+    std::vector<char> bytes(84+50, 0);
+    bytes[80] = 1;
+    ASSERT_EQ(StlType::BINARY, identify_stl(std::string(bytes.begin(), bytes.end())));
+}

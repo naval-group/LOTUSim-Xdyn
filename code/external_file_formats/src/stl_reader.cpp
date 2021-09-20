@@ -284,11 +284,30 @@ std::ostream& operator<<(std::ostream& out, const StlType& stl_type)
         case StlType::UNKNOWN:
             out << "UNKNOWN";
             break;
-        default:
-            out << "UNKNOWN";
+        case StlType::BINARY:
+            out << "BINARY";
             break;
     }
     return out;
+}
+
+int get_nb_of_triangles(const std::string& bytes);
+int get_nb_of_triangles(const std::string& bytes)
+{
+    // "Following the header is a 4-byte little-endian unsigned integer indicating the number of
+    // triangular facets in the file" (cf. https://en.wikipedia.org/wiki/STL_(file_format))
+    // Little endian: "A little-endian system [...] stores the least-significant byte at the
+    // smallest address" (cf. https://en.wikipedia.org/wiki/Endianness)
+    if (bytes.size() < 84)
+    {
+        return 0;
+    }
+
+    int nb_of_triangles = bytes[83] ;
+    nb_of_triangles = (nb_of_triangles << 8) + bytes[82];
+    nb_of_triangles = (nb_of_triangles << 8) + bytes[81];
+    nb_of_triangles = (nb_of_triangles << 8) + bytes[80];
+    return nb_of_triangles;
 }
 
 StlType identify_stl(const std::string& input)
@@ -301,6 +320,13 @@ StlType identify_stl(const std::string& input)
             return StlType::ASCII;
         }
         return StlType::UNKNOWN;
+    }
+    const size_t header_size = 80;
+    const size_t nb_of_bytes_for_nb_of_triangles = 4;
+    const size_t expected_binary_stl_size = header_size+nb_of_bytes_for_nb_of_triangles+50*get_nb_of_triangles(input);
+    if (input.size() == expected_binary_stl_size)
+    {
+        return StlType::BINARY;
     }
     return StlType::UNKNOWN;
 }
