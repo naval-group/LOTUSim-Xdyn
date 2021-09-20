@@ -266,7 +266,7 @@ test-debian:
 
 
 docker: debian_11_release_gcc_10
-	./ninja_debian.sh package && cp build_deb11/xdyn.deb . &&  docker build . --tag xdyn
+	cp build_deb11/xdyn.deb . &&  docker build . --tag xdyn
 
 docker_grpc_force_model:
 	make -C interfaces docker-images
