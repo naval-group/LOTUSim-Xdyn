@@ -151,11 +151,30 @@ TEST_F(StlReaderTest, stl_over_84_bytes_without_keywords_and_valid_binary_size_i
     ASSERT_EQ(StlType::BINARY, identify_stl(std::string(bytes.begin(), bytes.end())));
 }
 
-
 TEST_F(StlReaderTest, stl_over_84_bytes_with_keywords_and_invalid_binary_size_is_parsed_as_ascii)
 {
     // STL data more than 84 bytes long, with keywords, size != 84+50*1 should be considered
     // ascii.
     const std::string data = random_string_of_size(125) + "solid" +  random_string_of_size(25) + "endsolid";
     ASSERT_EQ(StlType::ASCII, identify_stl(data));
+}
+
+TEST_F(StlReaderTest, stl_over_84_bytes_with_keywords_and_valid_binary_size_is_parsed_as_ascii)
+{
+    // STL data more than 84 bytes long, with keywords, size == 84+50*1 should be considered
+    // ascii.
+    const std::string data = random_string_of_size(100) + "solid" +  random_string_of_size(21) + "endsolid";
+    ASSERT_EQ(StlType::ASCII, identify_stl(data));
+}
+
+TEST_F(StlReaderTest, should_ignore_solid_and_endsolid_if_within_header)
+{
+    // STL data more than 84 bytes long, with keywords in header, size == 84+50*1 should be considered
+    // binary.
+    std::string data = "solidendsolid" + random_string_of_size(121);
+    data[80] = 1;
+    data[81] = 0;
+    data[82] = 0;
+    data[83] = 0;
+    ASSERT_EQ(StlType::BINARY, identify_stl(data));
 }

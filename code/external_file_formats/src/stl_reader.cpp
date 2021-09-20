@@ -310,21 +310,32 @@ int get_nb_of_triangles(const std::string& bytes)
     return nb_of_triangles;
 }
 
+bool file_size_is_a_valid_binary_stl_file_size(const std::string& input);
+bool file_size_is_a_valid_binary_stl_file_size(const std::string& input)
+{
+    const size_t header_size = 80;
+    const size_t nb_of_bytes_for_nb_of_triangles = 4;
+    const size_t expected_binary_stl_size = header_size+nb_of_bytes_for_nb_of_triangles+50*get_nb_of_triangles(input);
+    return input.size() == expected_binary_stl_size;
+}
+
 StlType identify_stl(const std::string& input)
 {
     const size_t solid_pos = input.find("solid");
+    const size_t endsolid_pos = input.find("endsolid", solid_pos);
     if (solid_pos != std::string::npos)
     {
-        if (input.find("endsolid", solid_pos) != std::string::npos)
+        if (endsolid_pos != std::string::npos)
         {
+            if ((endsolid_pos < 80) && file_size_is_a_valid_binary_stl_file_size(input))
+            {
+                return StlType::BINARY;
+            }
             return StlType::ASCII;
         }
         return StlType::UNKNOWN;
     }
-    const size_t header_size = 80;
-    const size_t nb_of_bytes_for_nb_of_triangles = 4;
-    const size_t expected_binary_stl_size = header_size+nb_of_bytes_for_nb_of_triangles+50*get_nb_of_triangles(input);
-    if (input.size() == expected_binary_stl_size)
+    if (file_size_is_a_valid_binary_stl_file_size(input))
     {
         return StlType::BINARY;
     }
