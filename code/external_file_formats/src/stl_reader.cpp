@@ -293,9 +293,14 @@ std::ostream& operator<<(std::ostream& out, const StlType& stl_type)
 
 StlType identify_stl(const std::string& input)
 {
-    if (input.find("solid") != std::string::npos)
+    const size_t solid_pos = input.find("solid");
+    if (solid_pos != std::string::npos)
     {
-        return StlType::ASCII;
+        if (input.find("endsolid", solid_pos) != std::string::npos)
+        {
+            return StlType::ASCII;
+        }
+        return StlType::UNKNOWN;
     }
     return StlType::UNKNOWN;
 }
