@@ -10,6 +10,7 @@ namespace test_data
     std::string cube();
     std::string big_cube();
     std::string ponton();
+    std::string binary_stl();
 }
 
 #endif
