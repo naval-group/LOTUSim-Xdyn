@@ -150,3 +150,12 @@ TEST_F(StlReaderTest, stl_over_84_bytes_without_keywords_and_valid_binary_size_i
     bytes[80] = 1;
     ASSERT_EQ(StlType::BINARY, identify_stl(std::string(bytes.begin(), bytes.end())));
 }
+
+
+TEST_F(StlReaderTest, stl_over_84_bytes_with_keywords_and_invalid_binary_size_is_parsed_as_ascii)
+{
+    // STL data more than 84 bytes long, with keywords, size != 84+50*1 should be considered
+    // ascii.
+    const std::string data = random_string_of_size(125) + "solid" +  random_string_of_size(25) + "endsolid";
+    ASSERT_EQ(StlType::ASCII, identify_stl(data));
+}
