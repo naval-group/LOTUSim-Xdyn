@@ -178,3 +178,8 @@ TEST_F(StlReaderTest, should_ignore_solid_and_endsolid_if_within_header)
     data[83] = 0;
     ASSERT_EQ(StlType::BINARY, identify_stl(data));
 }
+
+TEST_F(StlReaderTest, should_be_able_to_read_a_binary_cube)
+{
+    const VectorOfVectorOfPoints facets = read_stl(test_data::binary_stl());
+}

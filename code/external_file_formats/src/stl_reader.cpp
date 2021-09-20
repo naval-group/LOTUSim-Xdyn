@@ -333,6 +333,10 @@ StlType identify_stl(const std::string& input)
             }
             return StlType::ASCII;
         }
+        if (file_size_is_a_valid_binary_stl_file_size(input))
+        {
+            return StlType::BINARY;
+        }
         return StlType::UNKNOWN;
     }
     if (file_size_is_a_valid_binary_stl_file_size(input))
