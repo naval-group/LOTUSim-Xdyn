@@ -273,3 +273,9 @@ std::string escape_backslashes(const std::string& s)
 {
     return replace('\\', "\\\\", s);
 }
+
+
+StlType identify_stl(const std::string& )
+{
+    return StlType::UNKNOWN;
+}

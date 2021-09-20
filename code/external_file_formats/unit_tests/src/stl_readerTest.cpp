@@ -84,3 +84,10 @@ TEST_F(StlReaderTest, should_throw_an_exception_if_endsolid_keyword_not_found_be
     const std::string data("solid MYSOLID\nfacet normal 0.4 0.4 0.2\nouterloop\n");
     ASSERT_THROW(read_stl(data), MeshException);
 }
+
+TEST_F(StlReaderTest, stl_less_than_84_bytes_no_keyword_invalid_binary_size_parsed_as_invalid)
+{
+    // STL data less than 84 bytes long, no endsolid (with only white spaces after) or solid,
+    // size != 84+50n should be considered invalid.
+    ASSERT_EQ(StlType::UNKNOWN, identify_stl("some invalid stl"));
+}
