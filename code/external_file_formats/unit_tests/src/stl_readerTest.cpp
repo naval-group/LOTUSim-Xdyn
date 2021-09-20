@@ -114,8 +114,8 @@ std::string StlReaderTest::random_string_of_size(const size_t n)
 
 TEST_F(StlReaderTest, stl_less_than_84_bytes_with_keyword_and_invalid_binary_size_is_parsed_as_ascii)
 {
-    // STL data less than 84 bytes long, with endsolid (with only white spaces after) and solid,
-    // size != 84+50n should be considered ASCII.
+    // STL data less than 84 bytes long, with endsolid and solid, size != 84+50n should be
+    // considered ASCII.
     const std::string garbage = random_string_of_size(25);
     const std::string spaces(a.random<size_t>().between(1,25), ' ');
     const std::string data = random_string_of_size(25) + "solid" +  random_string_of_size(25) + "endsolid" + spaces;
@@ -124,7 +124,7 @@ TEST_F(StlReaderTest, stl_less_than_84_bytes_with_keyword_and_invalid_binary_siz
 
 TEST_F(StlReaderTest, stl_less_than_84_bytes_without_endsolid_and_invalid_binary_size_is_parsed_as_invalid)
 {
-    // STL data less than 84 bytes long, with endsolid (with only white spaces after) and solid,
+    // STL data less than 84 bytes long, with endsolid and solid,
     // size != 84+50n should be considered ASCII.
     const std::string garbage = random_string_of_size(25);
     const std::string spaces(a.random<size_t>().between(1,25), ' ');
