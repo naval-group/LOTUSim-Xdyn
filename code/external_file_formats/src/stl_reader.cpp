@@ -146,53 +146,22 @@ VectorOfVectorOfPoints read_ascii_stl(
     return result;
 }
 
-bool starts_with(const std::string& input, const std::string& pattern, const size_t initialOffset = 0);
-bool starts_with(const std::string& input, const std::string& pattern, const size_t initialOffset)
-{
-    return pattern.size() <= input.size() && input.compare(initialOffset, pattern.size(), pattern) == 0;
-}
-
-bool starts_with_insensitive(const std::string& input, const std::string& pattern, const size_t initialOffset = 0);
-bool starts_with_insensitive(const std::string& input, const std::string& pattern, const size_t initialOffset)
-{
-    std::string patternLower(pattern), patternUpper(pattern);
-    std::transform(patternLower.begin(), patternLower.end(), patternLower.begin(), ::tolower);
-    std::transform(patternUpper.begin(), patternUpper.end(), patternUpper.begin(), ::toupper);
-    return (starts_with(input, patternLower, initialOffset) || starts_with(input, patternUpper, initialOffset));
-}
-
-size_t determine_index_of_first_non_whitespace_characters(const std::string& input);
-size_t determine_index_of_first_non_whitespace_characters(const std::string& input)
-{
-    const std::string whitespace = " \t";
-    return input.find_first_not_of(whitespace);
-}
-
-bool is_stl_data_binary(const std::string& input)
-{
-    const size_t initialOffset = determine_index_of_first_non_whitespace_characters(input);
-    if (starts_with_insensitive(input, "solid ", initialOffset))
-    {
-        return false;
-    }
-    else
-    {
-        return true;
-    }
-}
-
 VectorOfVectorOfPoints read_stl(const std::string& input)
 {
-    if (is_stl_data_binary(input))
+    switch(identify_stl(input))
     {
-        return read_binary_stl(input);
+        case StlType::ASCII:
+        {
+            std::istringstream inputStream(input);
+            ParserState state(inputStream);
+            return read_ascii_stl(inputStream, state);
+        }
+        case StlType::BINARY:
+            return read_binary_stl(input);
+        case StlType::UNKNOWN:
+            THROW(__PRETTY_FUNCTION__, MeshException, "Unable to identify the type of STL file (binary or ASCII)");
     }
-    else
-    {
-        std::istringstream inputStream(input);
-        ParserState state(inputStream);
-        return read_ascii_stl(inputStream, state);
-    }
+    return VectorOfVectorOfPoints();
 }
 
 VectorOfVectorOfPoints read_binary_stl(std::istream& stream) // Shamelessly copied from http://ravehgonen.wordpress.com/tag/stl-file-format/
@@ -239,39 +208,6 @@ VectorOfVectorOfPoints read_binary_stl(const std::string& input)
 {
     std::stringstream ss(input);
     return read_binary_stl(ss);
-}
-
-std::string replace(char c, const std::string& replacement, const std::string& s);
-std::string replace(char c, const std::string& replacement, const std::string& s)
-{
-    std::string result;
-    size_t searchStartPos = 0;
-
-    std::string chars = std::string("\\") + c;
-    size_t pos = s.find_first_of(chars);
-    while (pos != std::string::npos)
-    {
-        result += s.substr(searchStartPos, pos - searchStartPos);
-        if (s[pos] == '\\')
-        {
-            result += std::string("\\") + c;
-            searchStartPos = pos + 2;
-        }
-        else if (s[pos] == c)
-        {
-            result += replacement;
-            searchStartPos = pos + 1;
-        }
-
-        pos = s.find_first_of(chars, searchStartPos);
-    }
-    return result;
-}
-
-std::string escape_backslashes(const std::string& s);
-std::string escape_backslashes(const std::string& s)
-{
-    return replace('\\', "\\\\", s);
 }
 
 std::ostream& operator<<(std::ostream& out, const StlType& stl_type)

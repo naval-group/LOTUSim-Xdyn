@@ -45,8 +45,6 @@ VectorOfVectorOfPoints read_stl(const std::string& input);
 VectorOfVectorOfPoints read_binary_stl(std::istream& stream);
 VectorOfVectorOfPoints read_binary_stl(const std::string& input);
 
-bool is_stl_data_binary(const std::string& input);
-
 enum class StlType {UNKNOWN, ASCII, BINARY};
 StlType identify_stl(const std::string& input);
 std::ostream& operator<<(std::ostream& out, const StlType& race);
