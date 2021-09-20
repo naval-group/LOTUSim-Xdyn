@@ -1,0 +1,9 @@
+issue_199: stable_cube_test.yml
+	@echo "Attempting to simulate with a binary STL..."
+	@${DOCKER_RUN} xdyn --dt 1 --tend 1 $<
+	@echo "Done!"
+
+stable_cube_test.yml:
+	@echo "Copying tutorial files from xdyn's Docker container..."
+	@${DOCKER_RUN} -v $(shell pwd):/xdyn_demos --entrypoint /bin/bash xdyn -c "cp /usr/demos/$@ /xdyn_demos/"
+	@sed -i 's/mesh: cube.stl/mesh: cube_b.stl/g' $@
