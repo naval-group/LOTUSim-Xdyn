@@ -139,7 +139,7 @@ TEST_F(StlReaderTest, stl_over_84_bytes_without_keywords_and_invalid_binary_size
 {
     // STL data more than 84 bytes long, without keywords, size != 84+50n should be considered
     // invalid.
-    for (size_t i = 0 ; i < 2000 ; ++i)
+    for (size_t i = 0 ; i < 200 ; ++i)
     {
         ASSERT_EQ(StlType::UNKNOWN, identify_stl(random_string_of_size(84+i)));
     }
