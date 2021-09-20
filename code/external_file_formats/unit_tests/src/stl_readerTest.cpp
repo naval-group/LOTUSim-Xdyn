@@ -89,5 +89,25 @@ TEST_F(StlReaderTest, stl_less_than_84_bytes_no_keyword_invalid_binary_size_pars
 {
     // STL data less than 84 bytes long, no endsolid (with only white spaces after) or solid,
     // size != 84+50n should be considered invalid.
-    ASSERT_EQ(StlType::UNKNOWN, identify_stl("some invalid stl"));
+    for (size_t i = 0 ; i < 84; ++i)
+    {
+        ASSERT_EQ(StlType::UNKNOWN, identify_stl(random_string_of_size(i)));
+    }
+}
+
+namespace ssc
+{
+    namespace random_data_generator
+    {
+        template <> char TypedScalarDataGenerator<char>::get() const
+        {
+            return random_char();
+        }
+    }
+}
+
+std::string StlReaderTest::random_string_of_size(const size_t n)
+{
+    const std::vector<char> chars = a.random_vector_of<char>().of_size(n);
+    return std::string(chars.begin(), chars.end());
 }
