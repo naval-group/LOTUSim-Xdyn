@@ -89,6 +89,7 @@ doc:
    stage: doc
    script:
      - mkdir -p build_deb11 && cp xdyn.deb build_deb11/.
+     - make docker
      - make doc -W build-debian
    dependencies:
      - build:debian11-release
