@@ -127,7 +127,7 @@ Le flag `-o <format>` permet de générer facilement les sorties, soit dans un f
 soit sur la sortie standard (le terminal) (pour chaîner les traitements grâce
 aux pipe UNIX "`|`").
 
-Lorsque l'utilisateur ne specifie que l'extension (par exemple `-o csv`), les sorties
+Lorsque l'utilisateur ne spécifie que l'extension (par exemple `-o csv`), les sorties
 sont écrites sur la sortie standard (affichées à l'écran). Lorsqu'un chemin complet
 est donné (par exemple `-o test.csv`) les sorties se font dans un fichier au chemin
 spécifié.
