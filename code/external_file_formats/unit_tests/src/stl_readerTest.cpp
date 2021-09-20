@@ -112,7 +112,7 @@ std::string StlReaderTest::random_string_of_size(const size_t n)
     return std::string(chars.begin(), chars.end());
 }
 
-TEST_F(StlReaderTest, stl_less_than_84_bytes_with_keyword_an_invalid_binary_size_is_parsed_as_ascii)
+TEST_F(StlReaderTest, stl_less_than_84_bytes_with_keyword_and_invalid_binary_size_is_parsed_as_ascii)
 {
     // STL data less than 84 bytes long, with endsolid (with only white spaces after) and solid,
     // size != 84+50n should be considered ASCII.
