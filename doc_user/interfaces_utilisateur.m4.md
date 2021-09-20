@@ -288,12 +288,12 @@ corps).
 La somme des efforts appliqués au solide est accessible via les clefs
 suivantes :
 
-- `Fx(sum of forces,corps,repère)`, par exemple `Fx(blocked states,TestShip,NED)` ou `Fx(blocked states,TestShip,TestShip)`
-- `Fy(sum of forces,corps,repère)`, par exemple `Fy(blocked states,TestShip,NED)` ou `Fy(blocked states,TestShip,TestShip)`
-- `Fz(sum of forces,corps,repère)`, par exemple `Fz(blocked states,TestShip,NED)` ou `Fz(blocked states,TestShip,TestShip)`
-- `Mx(sum of forces,corps,repère)`, par exemple `Mx(blocked states,TestShip,NED)` ou `Mx(blocked states,TestShip,TestShip)`
-- `My(sum of forces,corps,repère)`, par exemple `My(blocked states,TestShip,NED)` ou `My(blocked states,TestShip,TestShip)`
-- `Mz(sum of forces,corps,repère)`, par exemple `Mz(blocked states,TestShip,NED)` ou `Mz(blocked states,TestShip,TestShip)`
+- `Fx(sum of forces,corps,repère)`, par exemple `Fx(sum of forces,TestShip,NED)` ou `Fx(sum of forces,TestShip,TestShip)`
+- `Fy(sum of forces,corps,repère)`, par exemple `Fy(sum of forces,TestShip,NED)` ou `Fy(sum of forces,TestShip,TestShip)`
+- `Fz(sum of forces,corps,repère)`, par exemple `Fz(sum of forces,TestShip,NED)` ou `Fz(sum of forces,TestShip,TestShip)`
+- `Mx(sum of forces,corps,repère)`, par exemple `Mx(sum of forces,TestShip,NED)` ou `Mx(sum of forces,TestShip,TestShip)`
+- `My(sum of forces,corps,repère)`, par exemple `My(sum of forces,TestShip,NED)` ou `My(sum of forces,TestShip,TestShip)`
+- `Mz(sum of forces,corps,repère)`, par exemple `Mz(sum of forces,TestShip,NED)` ou `Mz(sum of forces,TestShip,TestShip)`
 
 Une sortie `blocked states` est également disponible (uniquement dans le repère lié au corps). Elle correspond à l'effort
 nécessaire pour maintenir des degrés de liberté en cas de forçage :
@@ -321,7 +321,7 @@ détail du calcul.
 
 ### Exemple
 
-Pour générer un fichier HDF5 contenant l'effort dû à la gravitée agissant sur
+Pour générer un fichier HDF5 contenant l'effort dû à la gravité agissant sur
 un corps nommé `ball` projeté dans le repère du corps, ainsi que la somme des
 moments autour de l'axe X, on utiliserait la section suivante :
 
