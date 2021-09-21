@@ -541,7 +541,7 @@ d'avoir activé la clef `calcAmasDampCoefInfFreq` (section `sim` > `parHYD` >
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 added mass matrix at the center of gravity and projected in the body frame:
-    from PRECAL_R: ONRT_SIMMAN.raodb.ini
+    from raodb: ONRT_SIMMAN.raodb.ini
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Dans le cas où les masses ajoutées proviennent d'un fichier (PRECAL_R ou

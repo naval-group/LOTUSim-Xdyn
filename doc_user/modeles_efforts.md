@@ -471,12 +471,12 @@ ou (pour utiliser un fichier PRECAL_R) :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: linear Froude-Krylov
-  precal: test_ship.ini
+  raodb: test_ship.ini
   mirror for 180 to 360: true
   use encounter period: true
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- `hdb` ou `precal` : chemin vers le fichier de résultats de calcul
+- `hdb` ou `raodb` : chemin vers le fichier de résultats de calcul
   fréquentiels. Le chemin peut être absolu ou relatif : s'il est relatif, c'est
   relativement au dossier d'où est lancé xdyn.
 - `mirror for 180 to 360` : sert à pouvoir ne spécifier que la partie de la RAO
@@ -680,7 +680,7 @@ Les RAOs sont alors présents dans les signaux `F_dif_m[...]` de la section `[RA
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: diffraction
-  precal: test_ship.raodb.ini
+  raodb: test_ship.raodb.ini
   mirror for 180 to 360: true
   use encounter period: true
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2689,7 +2689,7 @@ message ForceResponse
 ### Accès aux résultats des codes potentiels
 
 Il est possible de donner accès aux résultats des codes potentiels (HDB our PRECAL_R) à un modèle d'effort distant.
-Pour ce faire, il faut mettre une clef `hdb` (ou `precal`) dans le section définissant ce modèle. Par exemple :
+Pour ce faire, il faut mettre une clef `hdb` (ou `raodb`) dans le section définissant ce modèle. Par exemple :
 
 ```yaml
 external forces:
@@ -2706,7 +2706,7 @@ external forces:
   - model: grpc
     name: precal force model
     url: force-model:9002
-    precal: test_ship.ini
+    raodb: test_ship.ini
 ```
 
 Le fichier HDB ou PRECAL_R est alors lu par xdyn et son contenu est envoyé au

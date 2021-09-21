@@ -74,25 +74,25 @@ AbstractRaoForceModel::Input AbstractRaoForceModel::parse(const std::string& yam
 
     if (node.FindValue("hdb"))
     {
-        if (node.FindValue("precal"))
+        if (node.FindValue("raodb"))
         {
             THROW(__PRETTY_FUNCTION__, InvalidInputException,
                   "cannot specify both an HDB filename and a PRECAL_R filename "
-                  "(both keys 'hdb' and 'precal' were found in the YAML file).");
+                  "(both keys 'hdb' and 'raodb' were found in the YAML file).");
         }
         node["hdb"] >> ret.hdb_filename;
         node["calculation point in body frame"] >> ret.calculation_point;
     }
-    else if (node.FindValue("precal"))
+    else if (node.FindValue("raodb"))
     {
-        node["precal"] >> ret.precal_filename;
+        node["raodb"] >> ret.precal_filename;
         ret.calculation_point = YamlCoordinates(0, 0, 0);
     }
     else
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException,
               "should specify either an HDB filename or a PRECAL_R filename "
-              "(no 'hdb' or 'precal' keys were found in the YAML file).");
+              "(no 'hdb' or 'raodb' keys were found in the YAML file).");
     }
 
     node["mirror for 180 to 360"]           >> ret.mirror;

@@ -11,7 +11,7 @@ yaml_data['output'][0]['data'] = yaml_data['output'][0]['data'][1:3]
 ```
 
 Pour utiliser un fichier HDB ou PRECAL_R, il faut ajouter la clef (optionnelle)
-`hdb` (ou, respectivement, `precal`) à la section d'effort gRPC:
+`hdb` (ou, respectivement, `raodb`) à la section d'effort gRPC:
 
 ```python echo=False, results='raw', name='tutorial_13_grpc_yaml'
 print_yaml(yaml_data['bodies'][0]['external forces'][0])

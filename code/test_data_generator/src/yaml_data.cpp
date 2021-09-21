@@ -1906,7 +1906,7 @@ std::string test_data::diffraction()
 std::string test_data::diffraction_precalr()
 {
     return "model: diffraction\n"
-           "precal: test_ship.raodb.ini\n"
+           "raodb: test_ship.raodb.ini\n"
            "mirror for 180 to 360: true\n"
            "use encounter period: true\n";
 }
@@ -3987,7 +3987,7 @@ std::string test_data::tutorial_13_hdb_force_model()
 std::string test_data::tutorial_13_precal_r_force_model()
 {
     std::string ret(tutorial_13_hdb_force_model());
-    boost::replace_all(ret, "hdb: big.hdb", "precal: ONRT_SIMMAN.raodb.ini");
+    boost::replace_all(ret, "hdb: big.hdb", "raodb: ONRT_SIMMAN.raodb.ini");
     boost::replace_all(ret, "hdb force model", "precal-r force model");
     boost::replace_all(ret, "filename: hdb_output.csv", "filename: precal_r_output.csv");
     return ret;
@@ -4025,7 +4025,7 @@ std::string test_data::added_mass_from_precal_file()
        << "            z: {value: 0, unit: m}\n"
        << rigid_body_inertia_matrix()
        << "        added mass matrix at the center of gravity and projected in the body frame:\n"
-       << "            from PRECAL_R: ONRT_SIMMAN.raodb.ini\n"
+       << "            from raodb: ONRT_SIMMAN.raodb.ini\n"
        << "    external forces:\n"
        << "      - model: gravity\n"
        << "      - model: non-linear hydrostatic (fast)\n"

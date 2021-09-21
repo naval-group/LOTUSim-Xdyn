@@ -329,7 +329,7 @@ TEST_F(RadiationDampingForceModelTest, cannot_specify_both_hdb_and_precal_r_file
 {
     const std::string invalid_yaml = "model: radiation damping\n"
                                      "hdb: test_ship.hdb\n"
-                                     "precal_r: test_ship.ini\n"
+                                     "raodb: test_ship.ini\n"
                                      "type of quadrature for cos transform: simpson\n"
                                      "type of quadrature for convolution: clenshaw-curtis\n"
                                      "nb of points for retardation function discretization: 50\n"
@@ -349,7 +349,7 @@ TEST_F(RadiationDampingForceModelTest, cannot_specify_both_hdb_and_precal_r_file
 TEST_F(RadiationDampingForceModelTest, should_be_able_to_use_precal_r_files_only)
 {
     const std::string valid_yaml = "model: radiation damping\n"
-                                   "precal_r: test_ship.ini\n"
+                                   "raodb: test_ship.ini\n"
                                    "type of quadrature for cos transform: simpson\n"
                                    "type of quadrature for convolution: clenshaw-curtis\n"
                                    "nb of points for retardation function discretization: 50\n"
@@ -388,7 +388,7 @@ TEST_F(RadiationDampingForceModelTest, need_one_of_precal_r_or_hdb)
 TEST_F(RadiationDampingForceModelTest, precal_r_filename_is_read_properly)
 {
     const std::string valid_yaml = "model: radiation damping\n"
-                                   "precal_r: test_ship.ini\n"
+                                   "raodb: test_ship.ini\n"
                                    "type of quadrature for cos transform: simpson\n"
                                    "type of quadrature for convolution: clenshaw-curtis\n"
                                    "nb of points for retardation function discretization: 50\n"
@@ -408,7 +408,7 @@ TEST_F(RadiationDampingForceModelTest, precal_r_filename_is_read_properly)
 TEST_F(RadiationDampingForceModelTest, can_use_data_from_precal_r)
 {
     const std::string yaml = "model: radiation damping\n"
-                             "precal_r: data.raodb.ini\n"
+                             "raodb: data.raodb.ini\n"
                              "type of quadrature for cos transform: simpson\n"
                              "type of quadrature for convolution: trapezoidal\n"
                              "nb of points for retardation function discretization: 50\n"
