@@ -23,7 +23,8 @@ DiscreteDirectionalWaveSpectrum common(
         const WaveDirectionalSpreading& D, //!< Spatial spectrum
         const double omega_min,            //!< Lower bound of the angular frequency range (in rad/s)
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
-        const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
+        const size_t nfreq,                //!< Number of frequencies in discrete spectrum
+        const size_t ndir,                //!< Number of directions in discrete spectrum
         const bool equal_energy_bins       //!< Choose omegas so that integral of S between two successive omegas is constant
         );
 DiscreteDirectionalWaveSpectrum common(
@@ -31,13 +32,18 @@ DiscreteDirectionalWaveSpectrum common(
         const WaveDirectionalSpreading& D, //!< Spatial spectrum
         const double omega_min,            //!< Lower bound of the angular frequency range (in rad/s)
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
-        const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
+        const size_t nfreq,                //!< Number of frequencies in discrete spectrum
+        const size_t ndir,                //!< Number of directions in discrete spectrum
         const bool equal_energy_bins       //!< Choose omegas so that integral of S between two successive omegas is constant
         )
 {
     DiscreteDirectionalWaveSpectrum ret;
     ret.omega = S.get_angular_frequencies(omega_min, omega_max, nfreq, equal_energy_bins);
-    ret.psi = D.get_directions(nfreq);
+    if (ndir==0)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "ndir == 0");
+    }
+    ret.psi = D.get_directions(ndir);
     ret.Si.reserve(ret.omega.size());
     ret.Dj.reserve(ret.psi.size());
     for (const auto omega:ret.omega) ret.Si.push_back(S(omega));
@@ -50,12 +56,13 @@ DiscreteDirectionalWaveSpectrum discretize(
         const WaveDirectionalSpreading& D, //!< Spatial spectrum
         const double omega_min,            //!< Lower bound of the angular frequency range (in rad/s)
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
-        const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
+        const size_t nfreq,                //!< Number of frequencies in discrete spectrum
+        const size_t ndir,                //!< Number of directions in discrete spectrum
         const Stretching& stretching,      //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
         const bool equal_energy_bins       //!< Choose omegas so the integral of S between two successive omegas is constant
         )
 {
-    DiscreteDirectionalWaveSpectrum ret = common(S, D, omega_min, omega_max, nfreq, equal_energy_bins);
+    DiscreteDirectionalWaveSpectrum ret = common(S, D, omega_min, omega_max, nfreq, ndir, equal_energy_bins);
     ret.k.reserve(ret.omega.size());
     for (const auto omega:ret.omega) ret.k.push_back(S.get_wave_number(omega));
     ret.pdyn_factor = [stretching](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,eta,stretching);};
@@ -74,13 +81,14 @@ DiscreteDirectionalWaveSpectrum discretize(
         const WaveDirectionalSpreading& D, //!< Spatial spectrum
         const double omega_min,            //!< Lower bound of the angular frequency range (in rad/s)
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
-        const size_t nfreq,                //!< Number of frequencies & number of directions in discrete spectrum
+        const size_t nfreq,                //!< Number of frequencies in discrete spectrum
+        const size_t ndir,                 //!< Number of directions in discrete spectrum
         const double h,                    //!< Water depth (in meters)
         const Stretching& stretching,      //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
         const bool equal_energy_bins       //!< Choose omegas so the integral of S between two successive omegas is constant
         )
 {
-    DiscreteDirectionalWaveSpectrum ret = common(S, D, omega_min, omega_max, nfreq, equal_energy_bins);
+    DiscreteDirectionalWaveSpectrum ret = common(S, D, omega_min, omega_max, nfreq, ndir, equal_energy_bins);
     ret.k.reserve(ret.omega.size());
     for (const auto omega:ret.omega) ret.k.push_back(S.get_wave_number(omega,h));
     for (size_t i = 0 ; i < ret.k.size() ; ++i)

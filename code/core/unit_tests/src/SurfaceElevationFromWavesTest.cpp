@@ -37,7 +37,7 @@ void SurfaceElevationFromWavesTest::TearDown()
 {
 }
 
-WaveModelPtr SurfaceElevationFromWavesTest::get_model(const double psi0, const double Hs, const double Tp, const double phase, const double water_depth, const double omega_min, const double omega_max, const size_t nfreq) const
+WaveModelPtr SurfaceElevationFromWavesTest::get_model(const double psi0, const double Hs, const double Tp, const double phase, const double water_depth, const double omega_min, const double omega_max, const size_t nfreq, const size_t ndir) const
 {
     if (Tp==0)
     {
@@ -48,7 +48,7 @@ WaveModelPtr SurfaceElevationFromWavesTest::get_model(const double psi0, const d
     y.h = 0;
     y.delta = 1;
     const Stretching s(y);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, water_depth, s, false);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, ndir, water_depth, s, false);
     return WaveModelPtr(new Airy(A, phase));
 }
 
@@ -57,10 +57,10 @@ WaveModelPtr SurfaceElevationFromWavesTest::get_model(const double Hs, const dou
     const double omega_min = a.random<double>().greater_than(0);
     const double omega_max = a.random<double>().greater_than(omega_min);
     const double psi0 = 0;
-    return get_model(psi0, Hs, Tp, phase, water_depth, omega_min, omega_max, 1);
+    return get_model(psi0, Hs, Tp, phase, water_depth, omega_min, omega_max, 1, 1);
 }
 
-WaveModelPtr SurfaceElevationFromWavesTest::get_model(const size_t nfreq) const
+WaveModelPtr SurfaceElevationFromWavesTest::get_model(const size_t nfreq, const size_t ndir) const
 {
     const double psi0 = PI/4;
     const double Hs = 3;
@@ -72,14 +72,14 @@ WaveModelPtr SurfaceElevationFromWavesTest::get_model(const size_t nfreq) const
     y.h = 0;
     y.delta = 1;
     const Stretching s(y);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, s, false);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, ndir, s, false);
     int random_seed = 0;
     return WaveModelPtr(new Airy(A, random_seed));
 }
 
 WaveModelPtr SurfaceElevationFromWavesTest::get_model() const
 {
-    return get_model(a.random<size_t>().between(2,100));
+    return get_model(a.random<size_t>().between(2,100), a.random<size_t>().between(2,100));
 }
 
 TEST_F(SurfaceElevationFromWavesTest, default_constructor_contains_an_empty_output_wave_mesh)
@@ -167,7 +167,7 @@ TEST_F(SurfaceElevationFromWavesTest, bug_detected_by_FS)
     out.ymax = 100;
     out.ny = 20;
     const auto output_mesh = SurfaceElevationBuilderInterface::make_wave_mesh(out);
-    SurfaceElevationFromWaves wave(get_model(5), std::make_pair(50, 20), output_mesh);
+    SurfaceElevationFromWaves wave(get_model(5, 5), std::make_pair(50, 20), output_mesh);
     SurfaceElevationGrid grid = wave.get_waves_on_mesh_as_a_grid(k, 0);
     ASSERT_EQ(50, grid.x.count());
     ASSERT_EQ(20, grid.y.count());

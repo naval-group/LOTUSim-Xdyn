@@ -63,9 +63,32 @@ TEST_F(environment_parsersTest, default_wave_model)
 //! [environment_parsersTest expected output]
 }
 
+TEST_F(environment_parsersTest, cannot_have_both_n_and_nfreq)
+{
+    const char* yaml = "n: 128\n"
+                       "nfreq: 128\n"
+                       "omega min: {value: 0.1, unit: rad/s}\n"
+                       "omega max: {value: 6, unit: deg/s}\n"
+                       "energy fraction: 0.123\n"
+                       "equal energy bins: true\n";
+    ASSERT_THROW(parse_discretization(yaml), InvalidInputException);
+}
+
+TEST_F(environment_parsersTest, cannot_have_both_n_and_ndir)
+{
+    const char* yaml = "n: 128\n"
+                       "ndir: 128\n"
+                       "omega min: {value: 0.1, unit: rad/s}\n"
+                       "omega max: {value: 6, unit: deg/s}\n"
+                       "energy fraction: 0.123\n"
+                       "equal energy bins: true\n";
+    ASSERT_THROW(parse_discretization(yaml), InvalidInputException);
+}
+
 TEST_F(environment_parsersTest, can_parse_wave_discretization)
 {
-    ASSERT_EQ(128,yaml.discretization.n);
+    ASSERT_EQ(128,yaml.discretization.nfreq);
+    ASSERT_EQ(128,yaml.discretization.ndir);
     ASSERT_DOUBLE_EQ(0.1,yaml.discretization.omega_min);
     ASSERT_DOUBLE_EQ(6./DEG,yaml.discretization.omega_max);
     ASSERT_DOUBLE_EQ(0.123,yaml.discretization.energy_fraction);
@@ -188,7 +211,7 @@ TEST_F(environment_parsersTest, clearer_error_message_if_missing_unit_value)
     }
     catch (const InvalidInputException& e)
     {
-        ASSERT_EQ("Error parsing section wave/spectra: In file /opt/share/code/yaml_parser/src/environment_parsers.cpp, line 121, function void operator>>(const YAML::Node&, YamlStretching&): Error parsing wave stretching parameters ('wave/spectra/stretching' section in the YAML file): In file /opt/share/code/yaml_parser/src/environment_parsers.cpp, line 113, function void operator>>(const YAML::Node&, YamlStretching&): Error parsing wave stretching parameters 'h': was expecting an object with fields 'unit' and 'value', e.g.:\n\th: {unit: 'm', value: 101}\nbut got the following error trying to parse it: yaml-cpp: error at line 0, column 0: bad dereference",e.get_message());
+        ASSERT_EQ("Error parsing section wave/spectra: In file /opt/share/code/yaml_parser/src/environment_parsers.cpp, line 149, function void operator>>(const YAML::Node&, YamlStretching&): Error parsing wave stretching parameters ('wave/spectra/stretching' section in the YAML file): In file /opt/share/code/yaml_parser/src/environment_parsers.cpp, line 141, function void operator>>(const YAML::Node&, YamlStretching&): Error parsing wave stretching parameters 'h': was expecting an object with fields 'unit' and 'value', e.g.:\n\th: {unit: 'm', value: 101}\nbut got the following error trying to parse it: yaml-cpp: error at line 0, column 0: bad dereference",e.get_message());
     }
     ASSERT_THROW(parse_waves(wave_yaml), InvalidInputException);
 }

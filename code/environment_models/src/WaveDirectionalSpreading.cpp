@@ -5,7 +5,7 @@
  *      Author: cady
  */
 #include "WaveDirectionalSpreading.hpp"
-
+#include "InvalidInputException.hpp"
 #include "SumOfWaveDirectionalSpreadings.hpp"
 
 #define _USE_MATH_DEFINE

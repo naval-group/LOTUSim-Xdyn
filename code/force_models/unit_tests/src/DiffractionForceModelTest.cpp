@@ -81,7 +81,7 @@ TR1(shared_ptr)<WaveModel> DiffractionForceModelTest::get_wave_model(const doubl
     ys.h = 0;
     ys.delta = 1;
     const Stretching ss(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega, 2*height), DiracDirectionalSpreading(direction), omega, omega, 1, ss, false);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega, 2*height), DiracDirectionalSpreading(direction), omega, omega, 1, 1, ss, false);
     return TR1(shared_ptr)<WaveModel>(new Airy(A, 0.));
 }
 
