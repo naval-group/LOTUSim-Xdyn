@@ -1120,14 +1120,16 @@ La discrétisation est paramétrée de la façon suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 discretization:
-    n: 128
+    nfreq: 128
+    ndir: 8
     omega min: {value: 0.1, unit: rad/s}
     omega max: {value: 6, unit: rad/s}
     energy fraction: 0.999
     equal energy bins: true
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- `n` : nombre de points (nombre de fréquences ou nombre de directions)
+- `nfreq` : nombre de fréquences
+- `ndir` : nombre de directions
 - `omega min` : pulsation minimale (incluse)
 - `omega max` : pulsation maximale (incluse)
 - `energy fraction` : les produits de spectre de puissance et d'étalement
@@ -1140,6 +1142,11 @@ fraction` de l'énergie totale.
   omegas est constant). Lorsqu'il est à `true`, les pulsations sont discrétisées
   de façon à ce que l'intégrale (par la méthode des trapèzes) du spectre entre
   deux pulsations successives soit constante.
+
+**⚠  Attention** : pour des raisons de compatibilité avec les versions précédentes
+d'xdyn, il est possible d'utiliser la clef `n` à la place de `nfreq` et `ndir` :
+dans ce cas, le nombre de fréquences et le nombre de directions seront égaux à `n`.
+En revanche, on ne peut pas utiliser conjointement `n` et `nfreq` ou `n` et `ndir`.
 
 ### Sorties
 
