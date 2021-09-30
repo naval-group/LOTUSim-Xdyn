@@ -117,3 +117,23 @@ class Tests(unittest.TestCase):
         """Extra observations should be available."""
         assert 'Fz(gravity,ball,ball)' in self.d_dt['extra_observations']
         assert 'My(gravity,ball,ball)' in self.d_dt['extra_observations']
+
+    def test_can_recover_from_error(self):
+        """Check that xdyn does not stay locked in an error state after a failed gRPC."""
+        request = ModelExchangeRequestEuler()
+        request.states.t[:] = [2]  # v, w, p and q are missing
+        request.states.x[:] = [1]
+        request.states.y[:] = [2]
+        request.states.z[:] = [3]
+        request.states.u[:] = [4]
+        request.states.r[:] = [0]
+        request.states.phi[:] = [0]
+        request.states.theta[:] = [0]
+        request.states.psi[:] = [0]
+        with self.assertRaises(grpc._channel._InactiveRpcError):
+            self.xdyn.xdyn_stub.dx_dt_euler_321(request)  # This is expected to fail
+        request.states.v[:] = [5]
+        request.states.w[:] = [6]
+        request.states.p[:] = [0]
+        request.states.q[:] = [0]
+        self.xdyn.xdyn_stub.dx_dt_euler_321(request)  # This should succeed

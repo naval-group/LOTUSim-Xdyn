@@ -66,7 +66,7 @@ class Cosim:
                 'extra_observations': {}}
         for key, vector in res.extra_observations.items():
             ret['extra_observations'][key] = vector.value
-        return ret;
+        return ret
 
 
 EPS = 1E-6
@@ -149,3 +149,24 @@ class Tests(unittest.TestCase):
     def test_response_starts_at_last_time_of_request(self):
         """Check that the first time stamp in the response is the last time stamp of the request."""
         assert self.res['t'][0] == 2
+
+    def test_can_recover_from_error(self):
+        """Check that xdyn does not stay locked in an error state after a failed gRPC."""
+        request = CosimulationRequestEuler()
+        request.Dt = 1.
+        request.states.t[:] = [2]  # v, w, p and q are missing
+        request.states.x[:] = [1]
+        request.states.y[:] = [2]
+        request.states.z[:] = [3]
+        request.states.u[:] = [4]
+        request.states.r[:] = [0]
+        request.states.phi[:] = [0]
+        request.states.theta[:] = [0]
+        request.states.psi[:] = [0]
+        with self.assertRaises(grpc._channel._InactiveRpcError):
+            self.cosim.xdyn_stub.step_euler_321(request)  # This is expected to fail
+        request.states.v[:] = [5]
+        request.states.w[:] = [6]
+        request.states.p[:] = [0]
+        request.states.q[:] = [0]
+        self.cosim.xdyn_stub.step_euler_321(request)  # This should succeed
