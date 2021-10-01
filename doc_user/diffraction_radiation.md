@@ -595,7 +595,7 @@ HDB](#format-hdb)
 périodes. Comme l'indique la [documentation](#impl%C3%A9mentation), les étapes
 suivantes sont réalisées :
 
-- Lecture du [fichier HDB](#format-hdb) ou du [fichier PRECAL_R](#format-precal_r) : son chemin est renseigné dans la clef `hdb` (ou `precalr`, respectivement).
+- Lecture du [fichier HDB](#format-hdb) ou du [fichier PRECAL_R](#format-precal_r) : son chemin est renseigné dans la clef `hdb` (ou `raodb`, respectivement).
 - Interpolation des matrices de fonction d'amortissement : on utilise des
   splines dites "naturelles", c'est-à-dire
   dont la dérivée seconde est nulle aux extrémités ou, ce qui revient au même,
@@ -657,7 +657,7 @@ Voici la même mise en données utilisant un fichier PRECAL_R :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: radiation damping
-  precal_r: test_ship.ini
+  raodb: test_ship.ini
   type of quadrature for cos transform: simpson
   type of quadrature for convolution: clenshaw-curtis
   nb of points for retardation function discretization: 50

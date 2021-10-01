@@ -58,12 +58,12 @@ TEST_F(GRPCForceModelTest, can_parse_hdb)
 
 TEST_F(GRPCForceModelTest, can_parse_precal)
 {
-    const auto input = GRPCForceModel::parse(test_data::gRPC_force_model()+"precal: some_precal.ini\n");
+    const auto input = GRPCForceModel::parse(test_data::gRPC_force_model()+"raodb: some_precal.ini\n");
     ASSERT_EQ("some_precal.ini", input.precal_filename);
 }
 
 TEST_F(GRPCForceModelTest, should_throw_if_both_hdb_and_precal_are_defined_in_any_order)
 {
-    ASSERT_THROW(GRPCForceModel::parse(test_data::gRPC_force_model()+"hdb: some_hdb.hdb\n"+"precal: some_precal.ini\n"), InvalidInputException);
-    ASSERT_THROW(GRPCForceModel::parse(test_data::gRPC_force_model()+"precal: some_precal.ini\n"+"hdb: some_hdb.hdb\n"), InvalidInputException);
+    ASSERT_THROW(GRPCForceModel::parse(test_data::gRPC_force_model()+"hdb: some_hdb.hdb\n"+"raodb: some_precal.ini\n"), InvalidInputException);
+    ASSERT_THROW(GRPCForceModel::parse(test_data::gRPC_force_model()+"raodb: some_precal.ini\n"+"hdb: some_hdb.hdb\n"), InvalidInputException);
 }

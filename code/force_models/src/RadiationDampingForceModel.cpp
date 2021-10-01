@@ -402,21 +402,21 @@ RadiationDampingForceModel::Input RadiationDampingForceModel::parse(const std::s
     YAML::Node node;
     parser.GetNextDocument(node);
     YamlRadiationDamping input;
-    if (node.FindValue("hdb") && node.FindValue("precal_r"))
+    if (node.FindValue("hdb") && node.FindValue("raodb"))
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, "When using the radiation force model, you cannot specify both the 'hdb' and 'precal_r' in the YAML, as xdyn would not know which one to use to retrieve radiation damping coefficients: you should remove either 'hdb' or 'precal_r' from the YAML file.");
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "When using the radiation force model, you cannot specify both the 'hdb' and 'raodb' in the YAML, as xdyn would not know which one to use to retrieve radiation damping coefficients: you should remove either 'hdb' or 'raodb' from the YAML file.");
     }
-    if (!node.FindValue("hdb") && !node.FindValue("precal_r"))
+    if (!node.FindValue("hdb") && !node.FindValue("raodb"))
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, "When using the radiation force model, you must use *either* the 'hdb' key in the YAML file (to read the radiation damping matrix coefficients from an HDB file) *or* 'precal_r' (if you wish to use the outputs of PRECAL_R): xdyn couldn't find either in the YAML file.");
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "When using the radiation force model, you must use *either* the 'hdb' key in the YAML file (to read the radiation damping matrix coefficients from an HDB file) *or* 'raodb' (if you wish to use the outputs of PRECAL_R): xdyn couldn't find either in the YAML file.");
     }
     if (node.FindValue("hdb"))
     {
         node["hdb"] >> input.hdb_filename;
     }
-    if (node.FindValue("precal_r"))
+    if (node.FindValue("raodb"))
     {
-        node["precal_r"] >> input.precal_r_filename;
+        node["raodb"] >> input.precal_r_filename;
     }
     std::string s;
     node["type of quadrature for cos transform"] >> s;
@@ -448,7 +448,7 @@ RadiationDampingForceModel::Input RadiationDampingForceModel::parse(const std::s
         {
             if (input.precal_r_filename.empty())
             {
-                THROW(__PRETTY_FUNCTION__, InvalidInputException, "Neither hdb nor precal_r were defined: you need to define one of the keys 'hdb' or 'precal_r' in the YAML file, with a non-empty string.");
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "Neither hdb nor raodb were defined: you need to define one of the keys 'hdb' or 'raodb' in the YAML file, with a non-empty string.");
             }
             ret.parser = TR1(shared_ptr)<HydroDBParser>(new PrecalParser(PrecalParser::from_file(input.precal_r_filename)));
         }

@@ -65,6 +65,6 @@ bodies: # All bodies have NED as parent frame
         r: {value: 0, unit: rad/s}
     external forces:
       - model: diffraction
-        precal: issue_196_test.raodb.ini
+        raodb: issue_196_test.raodb.ini
         mirror for 180 to 360: true
         use encounter period: true
