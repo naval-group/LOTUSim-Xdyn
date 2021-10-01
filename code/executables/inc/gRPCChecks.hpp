@@ -29,62 +29,52 @@ grpc::Status to_gRPC_status(const ErrorReporter& error_outputter);
                                                       << "' and 't' have the same size in the request's 'States' type."\
                                                       << std::endl);\
 }
+#define CHECK_T_NOT_EMPTY() if (states.t_size() == 0)\
+{\
+    THROW(__PRETTY_FUNCTION__, InvalidInputException, "The state history provided to xdyn is empty ('t' has size 0): we need at least one value for each state to set the initial conditions.");\
+}
+#define CHECK_REQUEST_POINTER() if (!request)\
+{\
+    THROW(__PRETTY_FUNCTION__, InternalErrorException, "'request' is a NULL pointer.");\
+}
 
 template <typename Request> void check_euler_states_size(const Request* request)
 {
-    if (!request)
-    {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "'request' is a NULL pointer.");
-    }
-    else
-    {
-        const auto states = request->states();
-        CHECK_SIZE(x);
-        CHECK_SIZE(y);
-        CHECK_SIZE(z);
-        CHECK_SIZE(u);
-        CHECK_SIZE(v);
-        CHECK_SIZE(w);
-        CHECK_SIZE(p);
-        CHECK_SIZE(q);
-        CHECK_SIZE(r);
-        CHECK_SIZE(phi);
-        CHECK_SIZE(theta);
-        CHECK_SIZE(psi);
-        if (states.t_size() == 0)
-        {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "The state history provided to xdyn is empty ('t' has size 0): we need at least one value for each state to set the initial conditions.");
-        }
-    }
+    CHECK_REQUEST_POINTER()
+    const auto states = request->states();
+    CHECK_SIZE(x);
+    CHECK_SIZE(y);
+    CHECK_SIZE(z);
+    CHECK_SIZE(u);
+    CHECK_SIZE(v);
+    CHECK_SIZE(w);
+    CHECK_SIZE(p);
+    CHECK_SIZE(q);
+    CHECK_SIZE(r);
+    CHECK_SIZE(phi);
+    CHECK_SIZE(theta);
+    CHECK_SIZE(psi);
+    CHECK_T_NOT_EMPTY()
 }
 
 template <typename Request> void check_quaternion_states_size(const Request* request)
 {
-    if (!request)
-    {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "'request' is a NULL pointer.");
-    }
-    else
-    {
-        const auto states = request->states();
-        CHECK_SIZE(x);
-        CHECK_SIZE(y);
-        CHECK_SIZE(z);
-        CHECK_SIZE(u);
-        CHECK_SIZE(v);
-        CHECK_SIZE(w);
-        CHECK_SIZE(p);
-        CHECK_SIZE(q);
-        CHECK_SIZE(r);
-        CHECK_SIZE(qr);
-        CHECK_SIZE(qi);
-        CHECK_SIZE(qj);
-        CHECK_SIZE(qk);
-        if (states.t_size() == 0)
-        {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "The state history provided to xdyn is empty ('t' has size 0): we need at least one value for each state to set the initial conditions.");
-        }
-    }
+    CHECK_REQUEST_POINTER()
+    const auto states = request->states();
+    CHECK_SIZE(x);
+    CHECK_SIZE(y);
+    CHECK_SIZE(z);
+    CHECK_SIZE(u);
+    CHECK_SIZE(v);
+    CHECK_SIZE(w);
+    CHECK_SIZE(p);
+    CHECK_SIZE(q);
+    CHECK_SIZE(r);
+    CHECK_SIZE(qr);
+    CHECK_SIZE(qi);
+    CHECK_SIZE(qj);
+    CHECK_SIZE(qk);
+    CHECK_T_NOT_EMPTY()
 }
 
 #endif
