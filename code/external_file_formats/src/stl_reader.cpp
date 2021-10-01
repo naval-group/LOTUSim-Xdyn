@@ -239,7 +239,7 @@ int get_nb_of_triangles(const std::string& bytes)
         return 0;
     }
 
-    int nb_of_triangles = bytes[83] ;
+    int nb_of_triangles = bytes[83];
     nb_of_triangles = (nb_of_triangles << 8) + bytes[82];
     nb_of_triangles = (nb_of_triangles << 8) + bytes[81];
     nb_of_triangles = (nb_of_triangles << 8) + bytes[80];
