@@ -283,3 +283,4 @@ StlType identify_stl(const std::string& input)
     THROW(__PRETTY_FUNCTION__, MeshException, "Unable to determine if mesh is a binary or an ASCII STL: file did not contain the 'solid' keyword (so it can't be an ASCII STL), and its size is not 84 + 50*n (where n is the number of triangles at bytes 81,82,83,84) so it can't be a binary STL either.")
     return StlType::UNKNOWN;
 }
+
