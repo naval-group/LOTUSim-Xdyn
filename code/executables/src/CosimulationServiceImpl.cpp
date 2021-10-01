@@ -169,12 +169,12 @@ grpc::Status CosimulationServiceImpl::step_quaternion(
     return step(context, request, response);
 }
 
-template <> grpc::Status check_states_size<CosimulationRequestEuler>(ErrorReporter& error, const CosimulationRequestEuler* request)
+template <> void check_states_size<CosimulationRequestEuler>(const CosimulationRequestEuler* request)
 {
-    return check_euler_states_size(error, request);
+    check_euler_states_size(request);
 }
 
-template <> grpc::Status check_states_size<CosimulationRequestQuaternion>(ErrorReporter& error, const CosimulationRequestQuaternion* request)
+template <> void check_states_size<CosimulationRequestQuaternion>(const CosimulationRequestQuaternion* request)
 {
-    return check_quaternion_states_size(error, request);
+    check_quaternion_states_size(request);
 }
