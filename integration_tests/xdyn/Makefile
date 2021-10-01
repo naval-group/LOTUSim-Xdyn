@@ -1,10 +1,11 @@
-.PHONY: all clean invalid_yaml_returns_non_zero_error_code tutorial_12 extra_hdf5_output_when_required no_extra_hdf5_output_when_not_required issue_196
+.PHONY: all clean invalid_yaml_returns_non_zero_error_code tutorial_12 extra_hdf5_output_when_required no_extra_hdf5_output_when_not_required issue_196 issue_199
 
 all: invalid_yaml_returns_non_zero_error_code \
 	 tutorial_12\
 	 extra_hdf5_output_when_required\
 	 no_extra_hdf5_output_when_not_required\
-	 issue_196
+	 issue_196\
+	 issue_199
 
 
 DOCKER_RUN=docker run -t --rm -u $(shell id -u):$(shell id -g) -v $(shell pwd):/work -w /work
@@ -26,6 +27,7 @@ invalid_yaml_returns_non_zero_error_code: tutorial_01_falling_ball.yml cube.stl
 	@${DOCKER_RUN} --entrypoint=gz xdyn --dphi=1 --phi_max=1 -s cube.stl tutorial_01_falling_ball.yml && ${WRONG_ERROR_CODE} || ${EXPECTED_ERROR_CODE}
 
 include Makefile.check_exports
+include Makefile.binary_stl
 
 tutorial_01_falling_ball.yml:
 	@echo "Copying tutorial files from xdyn's Docker container..."
@@ -49,4 +51,16 @@ test_ship.stl:
 	@${DOCKER_RUN} -v $(shell pwd):/xdyn_demos --entrypoint /bin/bash xdyn -c "cp /usr/demos/$@ /xdyn_demos/"
 
 clean:
-	rm -rf tutorial_01_falling_ball.yml cube.stl .commands.result ONRT_SIMMAN.raodb.ini tutorial_12_precal_r.yml test_ship.stl test_ship_in_waves.yml test_ship_in_waves.yml.new falling_ball.csv  falling_ball.h5  falling_ball.json tutorial_05_froude_krylov.yml
+	rm -rf tutorial_01_falling_ball.yml\
+		   cube.stl\
+		   .commands.result\
+		   ONRT_SIMMAN.raodb.ini\
+		   tutorial_12_precal_r.yml\
+		   test_ship.stl\
+		   test_ship_in_waves.yml\
+		   test_ship_in_waves.yml.new\
+		   falling_ball.csv\
+		   falling_ball.h5\
+		   falling_ball.json\
+		   tutorial_05_froude_krylov.yml\
+		   stable_cube_test.yml

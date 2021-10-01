@@ -146,55 +146,38 @@ VectorOfVectorOfPoints read_ascii_stl(
     return result;
 }
 
-bool starts_with(const std::string& input, const std::string& pattern, const size_t initialOffset = 0);
-bool starts_with(const std::string& input, const std::string& pattern, const size_t initialOffset)
-{
-    return pattern.size() <= input.size() && input.compare(initialOffset, pattern.size(), pattern) == 0;
-}
-
-bool starts_with_insensitive(const std::string& input, const std::string& pattern, const size_t initialOffset = 0);
-bool starts_with_insensitive(const std::string& input, const std::string& pattern, const size_t initialOffset)
-{
-    std::string patternLower(pattern), patternUpper(pattern);
-    std::transform(patternLower.begin(), patternLower.end(), patternLower.begin(), ::tolower);
-    std::transform(patternUpper.begin(), patternUpper.end(), patternUpper.begin(), ::toupper);
-    return (starts_with(input, patternLower, initialOffset) || starts_with(input, patternUpper, initialOffset));
-}
-
-size_t determine_index_of_first_non_whitespace_characters(const std::string& input);
-size_t determine_index_of_first_non_whitespace_characters(const std::string& input)
-{
-    const std::string whitespace = " \t";
-    return input.find_first_not_of(whitespace);
-}
-
-bool is_stl_data_binary(const std::string& input)
-{
-    const size_t initialOffset = determine_index_of_first_non_whitespace_characters(input);
-    if (starts_with_insensitive(input, "solid ", initialOffset))
-    {
-        return false;
-    }
-    else
-    {
-        return true;
-    }
-}
-
 VectorOfVectorOfPoints read_stl(const std::string& input)
 {
-    if (is_stl_data_binary(input))
+    switch(identify_stl(input))
     {
-        return read_binary_stl(input);
+        case StlType::ASCII:
+        {
+            std::istringstream inputStream(input);
+            ParserState state(inputStream);
+            return read_ascii_stl(inputStream, state);
+        }
+        case StlType::BINARY:
+            return read_binary_stl(input);
+        case StlType::UNKNOWN:
+            THROW(__PRETTY_FUNCTION__, MeshException, "Unable to identify the type of STL file (binary or ASCII)");
     }
-    else
-    {
-        std::istringstream inputStream(input);
-        ParserState state(inputStream);
-        return read_ascii_stl(inputStream, state);
-    }
+    return VectorOfVectorOfPoints();
 }
 
+/* The specification of binary STL files can be found here:
+ * https://en.wikipedia.org/wiki/STL_(file_format)#Binary_STL
+ *
+ * UINT8[80]    – Header                 -     80 bytes
+ * UINT32       – Number of triangles    -      4 bytes
+ * 
+ * foreach triangle                      - 50 bytes:
+ *     REAL32[3] – Normal vector             - 12 bytes
+ *     REAL32[3] – Vertex 1                  - 12 bytes
+ *     REAL32[3] – Vertex 2                  - 12 bytes
+ *     REAL32[3] – Vertex 3                  - 12 bytes
+ *     UINT16    – Attribute byte count      -  2 bytes
+ * end
+ */
 VectorOfVectorOfPoints read_binary_stl(std::istream& stream) // Shamelessly copied from http://ravehgonen.wordpress.com/tag/stl-file-format/
 {
     char buffer[4] = {0};
@@ -241,35 +224,77 @@ VectorOfVectorOfPoints read_binary_stl(const std::string& input)
     return read_binary_stl(ss);
 }
 
-std::string replace(char c, const std::string& replacement, const std::string& s);
-std::string replace(char c, const std::string& replacement, const std::string& s)
+std::ostream& operator<<(std::ostream& out, const StlType& stl_type)
 {
-    std::string result;
-    size_t searchStartPos = 0;
-
-    std::string chars = std::string("\\") + c;
-    size_t pos = s.find_first_of(chars);
-    while (pos != std::string::npos)
+    switch(stl_type)
     {
-        result += s.substr(searchStartPos, pos - searchStartPos);
-        if (s[pos] == '\\')
-        {
-            result += std::string("\\") + c;
-            searchStartPos = pos + 2;
-        }
-        else if (s[pos] == c)
-        {
-            result += replacement;
-            searchStartPos = pos + 1;
-        }
-
-        pos = s.find_first_of(chars, searchStartPos);
+        case StlType::ASCII:
+            out << "ASCII";
+            break;
+        case StlType::UNKNOWN:
+            out << "UNKNOWN";
+            break;
+        case StlType::BINARY:
+            out << "BINARY";
+            break;
     }
-    return result;
+    return out;
 }
 
-std::string escape_backslashes(const std::string& s);
-std::string escape_backslashes(const std::string& s)
+int get_nb_of_triangles(const std::string& bytes);
+int get_nb_of_triangles(const std::string& bytes)
 {
-    return replace('\\', "\\\\", s);
+    // "Following the header is a 4-byte little-endian unsigned integer indicating the number of
+    // triangular facets in the file" (cf. https://en.wikipedia.org/wiki/STL_(file_format))
+    // Little endian: "A little-endian system [...] stores the least-significant byte at the
+    // smallest address" (cf. https://en.wikipedia.org/wiki/Endianness)
+    if (bytes.size() < 84)
+    {
+        return 0;
+    }
+
+    int nb_of_triangles = bytes[83];
+    nb_of_triangles = (nb_of_triangles << 8) + bytes[82];
+    nb_of_triangles = (nb_of_triangles << 8) + bytes[81];
+    nb_of_triangles = (nb_of_triangles << 8) + bytes[80];
+    return nb_of_triangles;
 }
+
+bool file_size_is_a_valid_binary_stl_file_size(const std::string& input);
+bool file_size_is_a_valid_binary_stl_file_size(const std::string& input)
+{
+    const size_t header_size = 80;
+    const size_t nb_of_bytes_for_nb_of_triangles = 4;
+    const size_t expected_binary_stl_size = header_size+nb_of_bytes_for_nb_of_triangles+50*get_nb_of_triangles(input);
+    return input.size() == expected_binary_stl_size;
+}
+
+StlType identify_stl(const std::string& input)
+{
+    const size_t solid_pos = input.find("solid");
+    const size_t endsolid_pos = input.find("endsolid", solid_pos);
+    if (solid_pos != std::string::npos)
+    {
+        if (endsolid_pos != std::string::npos)
+        {
+            if ((endsolid_pos < 80) && file_size_is_a_valid_binary_stl_file_size(input))
+            {
+                return StlType::BINARY;
+            }
+            return StlType::ASCII;
+        }
+        if (file_size_is_a_valid_binary_stl_file_size(input))
+        {
+            return StlType::BINARY;
+        }
+        THROW(__PRETTY_FUNCTION__, MeshException, "Unable to determine if mesh is a binary or an ASCII STL: file contained the 'solid' keyword, but not 'endsolid' (so it can't be an ASCII STL) and its size is not 84 + 50*n (where n is the number of triangles at bytes 81,82,83,84) so it can't be a binary STL either.")
+        return StlType::UNKNOWN;
+    }
+    if (file_size_is_a_valid_binary_stl_file_size(input))
+    {
+        return StlType::BINARY;
+    }
+    THROW(__PRETTY_FUNCTION__, MeshException, "Unable to determine if mesh is a binary or an ASCII STL: file did not contain the 'solid' keyword (so it can't be an ASCII STL), and its size is not 84 + 50*n (where n is the number of triangles at bytes 81,82,83,84) so it can't be a binary STL either.")
+    return StlType::UNKNOWN;
+}
+

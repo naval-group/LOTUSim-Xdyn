@@ -5,16 +5,19 @@
 
 TEST_F(StlReaderTest, should_be_able_to_detect_ascii_file)
 {
-    ASSERT_FALSE(is_stl_data_binary(test_data::single_facet()));
+    ASSERT_EQ(StlType::ASCII, identify_stl(test_data::single_facet()));
 }
 
 TEST_F(StlReaderTest, should_be_able_to_detect_ascii_file_even_with_starting_spaces)
 {
-    ASSERT_FALSE(is_stl_data_binary("  " + test_data::single_facet()));
-    ASSERT_FALSE(is_stl_data_binary("\t" + test_data::single_facet()));
-    ASSERT_FALSE(is_stl_data_binary("   \t  " + test_data::single_facet()));
-    ASSERT_TRUE(is_stl_data_binary("   \t  dsq"));
-    ASSERT_TRUE(is_stl_data_binary("dummy"));
+    ASSERT_EQ(StlType::ASCII, identify_stl(test_data::single_facet()));
+    ASSERT_EQ(StlType::ASCII, identify_stl("\t" + test_data::three_facets()));
+    ASSERT_EQ(StlType::ASCII, identify_stl("   \t  " + test_data::cube()));
+    ASSERT_EQ(StlType::ASCII, identify_stl(test_data::big_cube()));
+}
+TEST_F(StlReaderTest, should_be_able_to_detect_ascii_file_even_with_starting_spaces2)
+{
+    ASSERT_EQ(StlType::BINARY, identify_stl(test_data::binary_stl()));
 }
 
 TEST_F(StlReaderTest, number_of_facets_should_be_correct_for_a_single_facet_file)
@@ -84,3 +87,103 @@ TEST_F(StlReaderTest, should_throw_an_exception_if_endsolid_keyword_not_found_be
     const std::string data("solid MYSOLID\nfacet normal 0.4 0.4 0.2\nouterloop\n");
     ASSERT_THROW(read_stl(data), MeshException);
 }
+
+TEST_F(StlReaderTest, stl_less_than_84_bytes_no_keyword_invalid_binary_size_parsed_as_invalid)
+{
+    // STL data less than 84 bytes long, no endsolid (with only white spaces after) or solid,
+    // size != 84+50n should be considered invalid.
+    for (size_t i = 0 ; i < 84; ++i)
+    {
+        ASSERT_THROW(identify_stl(random_string_of_size(i)), MeshException);
+    }
+}
+
+namespace ssc
+{
+    namespace random_data_generator
+    {
+        template <> char TypedScalarDataGenerator<char>::get() const
+        {
+            return random_char();
+        }
+    }
+}
+
+std::string StlReaderTest::random_string_of_size(const size_t n)
+{
+    const std::vector<char> chars = a.random_vector_of<char>().of_size(n);
+    return std::string(chars.begin(), chars.end());
+}
+
+TEST_F(StlReaderTest, stl_less_than_84_bytes_with_keyword_and_invalid_binary_size_is_parsed_as_ascii)
+{
+    // STL data less than 84 bytes long, with endsolid and solid, size != 84+50n should be
+    // considered ASCII.
+    const std::string garbage = random_string_of_size(25);
+    const std::string spaces(a.random<size_t>().between(1,25), ' ');
+    const std::string data = random_string_of_size(25) + "solid" +  random_string_of_size(25) + "endsolid" + spaces;
+    ASSERT_EQ(StlType::ASCII, identify_stl(data));
+}
+
+TEST_F(StlReaderTest, stl_less_than_84_bytes_without_endsolid_and_invalid_binary_size_is_parsed_as_invalid)
+{
+    // STL data less than 84 bytes long, with endsolid and solid,
+    // size != 84+50n should be considered ASCII.
+    const std::string garbage = random_string_of_size(25);
+    const std::string spaces(a.random<size_t>().between(1,25), ' ');
+    const std::string data = random_string_of_size(25) + "solid" +  random_string_of_size(25) + spaces;
+    ASSERT_THROW(identify_stl(data), MeshException);
+}
+
+TEST_F(StlReaderTest, stl_over_84_bytes_without_keywords_and_invalid_binary_size_is_parsed_as_invalid)
+{
+    // STL data more than 84 bytes long, without keywords, size != 84+50n should be considered
+    // invalid.
+    for (size_t i = 0 ; i < 200 ; ++i)
+    {
+        ASSERT_THROW(identify_stl(random_string_of_size(84+10*i)), MeshException);
+    }
+}
+
+TEST_F(StlReaderTest, stl_over_84_bytes_without_keywords_and_valid_binary_size_is_parsed_as_binary)
+{
+    // STL data more than 84 bytes long, without keywords, size == 84+50*1 should be considered
+    // binary.
+    std::vector<char> bytes(84+50, 0);
+    bytes[80] = 1;
+    ASSERT_EQ(StlType::BINARY, identify_stl(std::string(bytes.begin(), bytes.end())));
+}
+
+TEST_F(StlReaderTest, stl_over_84_bytes_with_keywords_and_invalid_binary_size_is_parsed_as_ascii)
+{
+    // STL data more than 84 bytes long, with keywords, size != 84+50*1 should be considered
+    // ascii.
+    const std::string data = random_string_of_size(125) + "solid" +  random_string_of_size(25) + "endsolid";
+    ASSERT_EQ(StlType::ASCII, identify_stl(data));
+}
+
+TEST_F(StlReaderTest, stl_over_84_bytes_with_keywords_and_valid_binary_size_is_parsed_as_ascii)
+{
+    // STL data more than 84 bytes long, with keywords, size == 84+50*1 should be considered
+    // ascii.
+    const std::string data = random_string_of_size(100) + "solid" +  random_string_of_size(21) + "endsolid";
+    ASSERT_EQ(StlType::ASCII, identify_stl(data));
+}
+
+TEST_F(StlReaderTest, should_ignore_solid_and_endsolid_if_within_header)
+{
+    // STL data more than 84 bytes long, with keywords in header, size == 84+50*1 should be considered
+    // binary.
+    std::string data = "solidendsolid" + random_string_of_size(121);
+    data[80] = 1;
+    data[81] = 0;
+    data[82] = 0;
+    data[83] = 0;
+    ASSERT_EQ(StlType::BINARY, identify_stl(data));
+}
+
+TEST_F(StlReaderTest, should_be_able_to_read_a_binary_cube)
+{
+    const VectorOfVectorOfPoints facets = read_stl(test_data::binary_stl());
+}
+

@@ -1,3 +1,5 @@
+.PHONY: all_docker_images cmake-debian debian docker cmake-windows windows doc update-submodules
+
 all: update-submodules windows debian debug doc all_docker_images
 
 HEADERS=code/ssc/ssc/check_ssc_version.hpp\
@@ -30,7 +32,6 @@ debian: ${HEADERS} debian_11_release_gcc_10
 debug: ${HEADERS} debian_11_debug_gcc_10
 headers: ${HEADERS}
 
-.PHONY: all_docker_images cmake-debian debian cmake-windows windows doc update-submodules
 
 
 update-submodules:
@@ -264,9 +265,14 @@ test-debian:
 	        rm codecov_bash.sh;\
 	        fi"
 
+docker: xdyn.deb
+	@docker build . --tag xdyn
 
-docker: debian_11_release_gcc_10
-	cp build_deb11/xdyn.deb . &&  docker build . --tag xdyn
+xdyn.deb: build_deb11/xdyn.deb
+	@cp $< $@
+
+build_deb11/xdyn.deb:
+	@echo "Run ./ninja_debian.sh package"
 
 docker_grpc_force_model:
 	make -C interfaces docker-images
