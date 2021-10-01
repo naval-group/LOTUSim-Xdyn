@@ -37,6 +37,7 @@ class ModelExchangeServiceImpl final : public ModelExchange::Service {
                 const Request* request,
                 ModelExchangeResponse* response)
         {
+            error_outputter.reset();
             const grpc::Status precond = check_states_size(error_outputter, request);
             if (not precond.ok())
             {

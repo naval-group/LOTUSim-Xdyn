@@ -33,6 +33,8 @@ class ErrorReporter
         std::string get_message() const;
         Status get_status() const;
 
+        void reset();
+
       private:
           void run_and_report_errors(const std::function<void(void)>& f, const bool dump_yaml, const std::string& yaml_dump);
           std::stringstream ss;

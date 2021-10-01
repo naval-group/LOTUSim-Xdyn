@@ -34,6 +34,7 @@ class CosimulationServiceImpl final : public Cosimulation::Service {
                 const Request* request,
                 CosimulationResponse* response)
         {
+            error_outputter.reset();
             const grpc::Status precond = check_states_size(error_outputter, request);
             if (not precond.ok())
             {
