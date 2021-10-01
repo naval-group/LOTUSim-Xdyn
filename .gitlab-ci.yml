@@ -82,13 +82,22 @@ build:debian11-debug:
 integration tests:
     stage: test
     script:
-     - make debian_11_release_gcc_10 all_docker_images
+     - mkdir -p build_deb11
+     - mv xdyn.deb build_deb11
+     - make all_docker_images
      - make -C integration_tests
+     - mv build_deb11/xdyn.deb .
+    artifacts:
+      when: on_success
+      paths:
+      - xdyn.deb
 
 doc:
    stage: doc
    script:
-     - make debian_11_release_gcc_10 all_docker_images
+     - mkdir -p build_deb11
+     - mv xdyn.deb build_deb11
+     - make all_docker_images
      - make doc -W build-debian
    dependencies:
      - build:debian11-release
