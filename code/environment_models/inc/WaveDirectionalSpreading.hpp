@@ -8,7 +8,6 @@
 #ifndef WAVEDIRECTIONALSPREADING_HPP_
 #define WAVEDIRECTIONALSPREADING_HPP_
 
-#include <cstdlib>
 #include <vector>
 
 class SumOfWaveDirectionalSpreadings;
