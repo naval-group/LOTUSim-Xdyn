@@ -39,6 +39,17 @@ YamlDefaultWaveModel parse_default_wave_model(const std::string& yaml)
     return ret;
 }
 
+YamlDiscretization parse_discretization(const std::string& yaml)
+{
+    YamlDiscretization ret;
+    std::stringstream stream(yaml);
+    YAML::Parser parser(stream);
+    YAML::Node node;
+    parser.GetNextDocument(node);
+    node >> ret;
+    return ret;
+}
+
 YamlWaveModel parse_waves(const std::string& yaml)
 {
     YamlWaveModel ret;
@@ -85,7 +96,24 @@ YamlWaveModel parse_waves(const std::string& yaml)
 
 void operator >> (const YAML::Node& node, YamlDiscretization& g)
 {
-    g.n = try_to_parse_positive_integer(node, "n");
+    if (node.FindValue("n"))
+    {
+        if (node.FindValue("n") && node.FindValue("nfreq"))
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "When parsing the 'discretization' section of the YAML: you cannot specify both 'n' and 'nfreq': either use 'n' and the spectra will have the same number of directions as frequencies, or use 'nfreq' and 'ndir'.");
+        }
+        if (node.FindValue("n") && node.FindValue("ndir"))
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "When parsing the 'discretization' section of the YAML: you cannot specify both 'n' and 'ndir': either use 'n' and the spectra will have the same number of directions as frequencies, or use 'nfreq' and 'ndir'.");
+        }
+        g.nfreq = try_to_parse_positive_integer(node, "n");
+        g.ndir = try_to_parse_positive_integer(node, "n");
+    }
+    else
+    {
+        g.nfreq = try_to_parse_positive_integer(node, "nfreq");
+        g.ndir = try_to_parse_positive_integer(node, "ndir");
+    }
     ssc::yaml_parser::parse_uv(node["omega min"], g.omega_min);
     ssc::yaml_parser::parse_uv(node["omega max"], g.omega_max);
     node["energy fraction"] >> g.energy_fraction;
@@ -121,7 +149,6 @@ void operator >> (const YAML::Node& node, YamlStretching& g)
         THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
     }
 }
-
 
 void get_yaml(const YAML::Node& node, std::string& out)
 {

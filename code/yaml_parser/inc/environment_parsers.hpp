@@ -16,6 +16,7 @@
 #include <boost/optional.hpp>
 YamlDefaultWaveModel parse_default_wave_model(const std::string& yaml);
 YamlWaveModel        parse_waves(const std::string& yaml);
+YamlDiscretization   parse_discretization(const std::string& yaml);
 YamlDiracDirection   parse_wave_dirac_direction(const std::string& yaml);
 YamlDiracSpectrum    parse_wave_dirac_spectrum(const std::string& yaml);
 YamlJonswap          parse_jonswap(const std::string& yaml);

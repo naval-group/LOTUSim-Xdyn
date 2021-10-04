@@ -54,11 +54,12 @@ TR1(shared_ptr)<WaveModel> FroudeKrylovForceModelTest::get_wave_model() const
     const double omega_min = 0.1;
     const double omega_max = 5;
     const size_t nfreq = 10;
+    const size_t ndir = 10;
     YamlStretching ys;
     ys.h = 0;
     ys.delta = 1;
     const Stretching ss(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, ss, false);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, ndir, ss, false);
     int random_seed = 0;
     return TR1(shared_ptr)<WaveModel>(new Airy(A, random_seed));
 }
@@ -121,11 +122,12 @@ TEST_F(FroudeKrylovForceModelTest, validate_formula_against_sos_stab)
     const double omega_min = a.random<double>().greater_than(0);
     const double omega_max = a.random<double>().greater_than(omega_min);
     const size_t nfreq = a.random<size_t>().between(2,100);
+    const size_t ndir = nfreq;
     YamlStretching ys;
     ys.h = 0;
     ys.delta = 1;
     const Stretching ss(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss, false);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ndir, ss, false);
     const Airy wave(A, phi);
 
     const std::vector<double> x{-0.1, 0.1, 0, 0, 0, 0};
@@ -161,11 +163,12 @@ TEST_F(FroudeKrylovForceModelTest, validation_against_sos_stab)
     const double omega_min = a.random<double>().greater_than(0);
     const double omega_max = a.random<double>().greater_than(omega_min);
     const size_t nfreq = a.random<size_t>().between(2,100);
+    const size_t ndir = nfreq;
     YamlStretching ys;
     ys.h = 0;
     ys.delta = 1;
     const Stretching ss(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss, false);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ndir, ss, false);
 
     const EnvironmentAndFrames env = get_environment_and_frames(TR1(shared_ptr)<WaveModel>(new Airy(A, phi)));
 

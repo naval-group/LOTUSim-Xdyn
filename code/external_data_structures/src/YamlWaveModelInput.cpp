@@ -7,7 +7,7 @@
 
 #include "YamlWaveModelInput.hpp"
 
-YamlDiscretization::YamlDiscretization() : n(0), omega_min(0), omega_max(0), energy_fraction(0),equal_energy_bins(false)
+YamlDiscretization::YamlDiscretization() : nfreq(0), ndir(0), omega_min(0), omega_max(0), energy_fraction(0),equal_energy_bins(false)
 {}
 
 YamlSpectra::YamlSpectra():

@@ -227,11 +227,12 @@ TR1(shared_ptr)<WaveModel> RudderForceModelTest::get_wave_model() const
     const double omega_min = a.random<double>().greater_than(0);
     const double omega_max = a.random<double>().greater_than(omega_min);
     const size_t nfreq = a.random<size_t>().between(2,100);
+    const size_t ndir = a.random<size_t>().between(2,100);
     YamlStretching ys;
     ys.h = 0;
     ys.delta = 1;
     const Stretching ss(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ss, false);
+    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ndir, ss, false);
 
     return TR1(shared_ptr)<WaveModel>(new Airy(A, phi));
 }
