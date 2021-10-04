@@ -1147,6 +1147,7 @@ fraction` de l'énergie totale.
 d'xdyn, il est possible d'utiliser la clef `n` à la place de `nfreq` et `ndir` :
 dans ce cas, le nombre de fréquences et le nombre de directions seront égaux à `n`.
 En revanche, on ne peut pas utiliser conjointement `n` et `nfreq` ou `n` et `ndir`.
+Le nombre de raies généré est égal au produit `nfreq × ndir`.
 
 ### Sorties
 
