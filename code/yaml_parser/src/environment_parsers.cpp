@@ -39,7 +39,7 @@ YamlDefaultWaveModel parse_default_wave_model(const std::string& yaml)
     return ret;
 }
 
-YamlDiscretization   parse_discretization(const std::string& yaml)
+YamlDiscretization parse_discretization(const std::string& yaml)
 {
     YamlDiscretization ret;
     std::stringstream stream(yaml);
