@@ -123,7 +123,7 @@ class PIDController(controller.Model):
         integral_term = 0
         derivative_term = 0
 
-        assert states.t < 0, f"Expected t < 0 but got {states.t}"
+        assert states.t < self.t_start, f"Expected t >= {self.t_start} but got {states.t}"
 
         if self.can_use_integrator_and_derivative:
             # Integral term
