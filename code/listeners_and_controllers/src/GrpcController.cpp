@@ -12,7 +12,7 @@ GrpcController* GrpcController::build(const double tstart, const std::string& ya
     const auto command_names = grpc->get_command_names();
     const auto setpoint_names = grpc->get_setpoint_names();
     std::vector<double> setpoints(setpoint_names.size(), 0);
-    ret->add_controller_outputs_to_data_source(0, sys, setpoints);
+    ret->add_controller_outputs_to_data_source(tstart, sys, setpoints);
     return ret;
 }
 
