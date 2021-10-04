@@ -108,9 +108,9 @@ class PIDController(controller.Model):
             Parameters
             ----------
             - states (StatesEuler): latest ship states
-            - dstates_dt (StatesQuaternion): ship states derivative at the
+            - dstates_dt (StatesEuler): ship states derivative at the
                                              previous timestep
-            - setpoints (Dict[str,float]): controller inputs (setpoints)
+            - setpoints (List[float]): controller inputs (setpoints)
 
             Returns
             -------
