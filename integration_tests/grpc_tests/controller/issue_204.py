@@ -49,11 +49,6 @@ class PIDController(controller.Model):
         This will be used by the solver (e.g., xdyn) to set the value of the corresponding variables.
         The names are assumed to be in the same order as the numerical values computed by 'get_commands*'
 
-
-        Parameters
-        ----------
-        -
-
         Returns
         -------
         - commands (List[str]): commands computed by this controller
@@ -65,10 +60,6 @@ class PIDController(controller.Model):
         """Return the name(s) of the controller inputs (setpoints).
 
         These setpoints are given by the simulator
-
-        Parameters
-        ----------
-        -
 
         Returns
         -------
