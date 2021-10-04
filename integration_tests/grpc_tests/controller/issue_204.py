@@ -18,7 +18,7 @@ LOGGER.setLevel(logging.INFO)
 
 
 class PIDController(controller.Model):
-    """Restoring force F proportional to the displacement x."""
+    """Cf. https://en.wikipedia.org/wiki/PID_controller"""
 
     def __init__(self, parameters: str, t0: float):
         """Initialize parameters from gRPC's set_parameters."""
@@ -68,13 +68,11 @@ class PIDController(controller.Model):
 
         Parameters
         ----------
-        - states (StatesQuaternion): latest ship states
-        - dstates_dt (StatesQuaternion): ship states derivative at the previous
-                                         timestep
+        -
 
         Returns
         -------
-        - commands (Dict[str,float]): commands used by xdyn's controlled forces
+        - commands (List[str]): commands used by xdyn's controlled forces
         """
         return [self.setpoint_name]
 
