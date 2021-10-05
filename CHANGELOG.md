@@ -1,6 +1,26 @@
-# v5.0.0 (2021-08-23)
+# v5.0.0 (2021-10-05)
 
+- #53 Xdyn server still stays locked into errors
+- #204 Date of first call to external controller does not correspond to tstart
+- #92 Irregular waves separate number of frequential and directional rays
+- #195 Homogeneisation des cles associees a precal_r dans fichiers yaml
+- #200 Mistake in conversion matrix in doc
+- #199 Bug cannot parse binary stl
+- #52 Fix failed ci'
+- #196 Bug can parse precal_r files with windows end of lines
+- #51 Bump ssc version
+- #138 Rendre l inclusion de maillage optionnelle dans les fichiers hdf5
+- #50 Server modes error message is not reset when handling a new request
+- #100 Ajouter le calcul a chaque instant des moyennes de tous les etats pour utilisation dans les
+- #198 Corriger les typos dans la documentation suite a la relecture de code 118
+- #197 Add hdb precal_r wave drift force data to grpc interface
+- #40 Automatic detection of mesh panels orientation prevents the use of some geometries e g catamarans
+- #41 Default outputting of all forces
+- #46 Bad initialization of states for cs modes
+- #49 Xdyn server stays locked into errors
+- #194 Fire fix build issue on gitlab com
 - #187 Add results from precal_r or hdb to grpc force interface
+- #45 New feature mmg standard maneuvering force model
 - #42 Co simulation json websocket mode returns the time vector for all states
 - #193 Fix failing unit test for debian 9 for holtropmennenforcemodeltest numerical_example_1984
 - #178 Precal r extraction des informations necessaires au calcul des efforts de froude krylov
