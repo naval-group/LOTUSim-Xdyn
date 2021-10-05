@@ -19,9 +19,9 @@
 YamlSimServerInputs from_grpc(grpc::ServerContext* context, const ModelExchangeRequestEuler* request);
 YamlSimServerInputs from_grpc(grpc::ServerContext* context, const ModelExchangeRequestQuaternion* request);
 grpc::Status to_grpc(grpc::ServerContext* context, const YamlState& state_derivatives, ModelExchangeResponse* response);
-template <typename Request> grpc::Status check_states_size(ErrorReporter& error, const Request* request);
-template <> grpc::Status check_states_size<ModelExchangeRequestEuler>(ErrorReporter& error, const ModelExchangeRequestEuler* request);
-template <> grpc::Status check_states_size<ModelExchangeRequestQuaternion>(ErrorReporter& error, const ModelExchangeRequestQuaternion* request);
+template <typename Request> void check_states_size(const Request* request);
+template <> void check_states_size<ModelExchangeRequestEuler>(const ModelExchangeRequestEuler* request);
+template <> void check_states_size<ModelExchangeRequestQuaternion>(const ModelExchangeRequestQuaternion* request);
 /*
  *
  */
@@ -37,15 +37,11 @@ class ModelExchangeServiceImpl final : public ModelExchange::Service {
                 const Request* request,
                 ModelExchangeResponse* response)
         {
-            const grpc::Status precond = check_states_size(error_outputter, request);
-            if (not precond.ok())
-            {
-                return precond;
-            }
             YamlState output;
             grpc::Status run_status;
             const std::function<void()> f = [&context, this, &request, &output, &response, &run_status]()
                 {
+                    check_states_size(request);
                     const YamlSimServerInputs inputs = from_grpc(context, request);
                     output = simserver.handle(inputs);
                     run_status = to_grpc(context, output, response);

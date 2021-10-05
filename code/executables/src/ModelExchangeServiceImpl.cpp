@@ -138,12 +138,12 @@ grpc::Status ModelExchangeServiceImpl::dx_dt_quaternion(
     return dx_dt(context, request, response);
 }
 
-template <> grpc::Status check_states_size<ModelExchangeRequestEuler>(ErrorReporter& error, const ModelExchangeRequestEuler* request)
+template <> void check_states_size<ModelExchangeRequestEuler>(const ModelExchangeRequestEuler* request)
 {
-    return check_euler_states_size(error, request);
+    check_euler_states_size(request);
 }
 
-template <> grpc::Status check_states_size<ModelExchangeRequestQuaternion>(ErrorReporter& error, const ModelExchangeRequestQuaternion* request)
+template <> void check_states_size<ModelExchangeRequestQuaternion>(const ModelExchangeRequestQuaternion* request)
 {
-    return check_quaternion_states_size(error, request);
+    check_quaternion_states_size(request);
 }

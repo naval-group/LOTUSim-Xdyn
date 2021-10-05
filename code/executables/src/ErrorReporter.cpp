@@ -63,11 +63,7 @@ std::string dump(const std::string& yaml, const int problematic_line)
 void ErrorReporter::run_and_report_errors(const std::function<void(void)>& f, const bool dump_yaml, const std::string& yaml_dump)
 {
     int problematic_line = 0;
-    status = Status::OK;
-    // May be more efficient than ss.str("") (cf. https://stackoverflow.com/a/20792/1042071)
-    ss.str(std::string());
-    // See https://stackoverflow.com/questions/2848087/how-to-clear-stringstream for why we need ss.clear()
-    ss.clear();
+    reset();
     try
     {
         f();
@@ -243,4 +239,13 @@ void ErrorReporter::network_error(const std::string& error_message)
 {
     ss << "Network error: " << error_message;
     status = Status::NETWORK_ERROR;
+}
+
+void ErrorReporter::reset()
+{
+    status = Status::OK;
+    // May be more efficient than ss.str("") (cf. https://stackoverflow.com/a/20792/1042071)
+    ss.str(std::string());
+    // See https://stackoverflow.com/questions/2848087/how-to-clear-stringstream for why we need ss.clear()
+    ss.clear();
 }

@@ -15,9 +15,9 @@
 #include "ErrorReporter.hpp"
 #include "gRPCChecks.hpp"
 
-template <typename Request> grpc::Status check_states_size(ErrorReporter& error, const Request* request);
-template <> grpc::Status check_states_size<CosimulationRequestEuler>(ErrorReporter& error, const CosimulationRequestEuler* request);
-template <> grpc::Status check_states_size<CosimulationRequestQuaternion>(ErrorReporter& error, const CosimulationRequestQuaternion* request);
+template <typename Request> void check_states_size(const Request* request);
+template <> void check_states_size<CosimulationRequestEuler>(const CosimulationRequestEuler* request);
+template <> void check_states_size<CosimulationRequestQuaternion>(const CosimulationRequestQuaternion* request);
 YamlSimServerInputs from_grpc(grpc::ServerContext* context, const CosimulationRequestEuler* request);
 YamlSimServerInputs from_grpc(grpc::ServerContext* context, const CosimulationRequestQuaternion* request);
 grpc::Status to_grpc(grpc::ServerContext* context, const std::vector<YamlState>& res, CosimulationResponse* response);
@@ -34,15 +34,11 @@ class CosimulationServiceImpl final : public Cosimulation::Service {
                 const Request* request,
                 CosimulationResponse* response)
         {
-            const grpc::Status precond = check_states_size(error_outputter, request);
-            if (not precond.ok())
-            {
-                return precond;
-            }
             std::vector<YamlState> output;
             grpc::Status run_status;
             const std::function<void()> f = [&context, this, &request, &output, &run_status, &response]()
                 {
+                    check_states_size(request);
                     const YamlSimServerInputs inputs = from_grpc(context, request);
                     output = simserver.handle(inputs);
                     run_status = to_grpc(context, output, response);
