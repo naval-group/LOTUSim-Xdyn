@@ -154,7 +154,7 @@ Compile xdyn (`make windows`), install the xdyn executable, then run:
 ./xdyn <yaml file> [xdyn options]
 ```
 
-All options can be found in [the documentation](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/interfaces_utilisateur.m4.md).
+All options can be found in [the documentation](https://sirehna_naval_group.gitlab.io/sirehna/xdyn/#ligne-de-commande).
 
 For example, to run the first [tutorial](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/tutorial_01.md),
 from the executables/demos folder, you can run:
