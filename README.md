@@ -7,9 +7,9 @@ solving Newton's second law of motion, taking hydrodynamic forces into account.
 It was developed by SIREHNA through both self-funded projects and various collaborative projects, including the IRT Jules Verne's ["Bassin Numérique"
 project](https://www.irt-jules-verne.fr/wp-content/uploads/bassin-numerique.pdf).
 
-(c) 2014-2015, [IRT Jules Verne](https://www.irt-jules-verne.fr/), [SIREHNA](http://www.sirehna.com/), [Naval Group](https://www.naval-group.com/en/), [Bureau Veritas](https://www.bureauveritas.fr/), [Hydrocean](https://marine-offshore.bureauveritas.com/bvsolutions), [STX France](http://chantiers-atlantique.com/en/), [LHEEA](https://lheea.ec-nantes.fr/) for the initial version.
+(c) 2014-2015, [IRT Jules Verne](https://www.irt-jules-verne.fr/), [SIREHNA](https://www.sirehna.com/), [Naval Group](https://www.naval-group.com/en/), [Bureau Veritas](https://www.bureauveritas.fr/), [Hydrocean](https://marine-offshore.bureauveritas.com/bvsolutions), [STX France](https://chantiers-atlantique.com/en/), [LHEEA](https://lheea.ec-nantes.fr/) for the initial version.
 
-(c) 2015-2020 [SIREHNA](http://www.sirehna.com/) & [Naval Group](https://www.naval-group.com/en/) for all subsequent versions.
+(c) 2015-2021 [SIREHNA](https://www.sirehna.com/) & [Naval Group](https://www.naval-group.com/en/) for all subsequent versions.
 
 **Disclaimer**: [External documentation](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/tree/master/doc_user) and [internal documentation](https://sirehna.gitlab-pages.sirehna.com/xdyn/)
 was written for a French project, with
@@ -31,7 +31,7 @@ This does not require installing or downloading anything except Docker itself.
 
 Pre-built binaries of xdyn are also available:
 
-- [for Debian 10](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/jobs/artifacts/master/download?job=build%3Adebian)
+- [for Debian 11](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/jobs/artifacts/master/download?job=build%3Adebian11-release)
 - [for Windows](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/jobs/artifacts/master/download?job=build%3Awindows)
 
 There are many other ways of using xdyn, all of which are described
@@ -154,7 +154,7 @@ Compile xdyn (`make windows`), install the xdyn executable, then run:
 ./xdyn <yaml file> [xdyn options]
 ```
 
-All options can be found in [the documentation](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/interfaces_utilisateur.m4.m).
+All options can be found in [the documentation](https://sirehna_naval_group.gitlab.io/sirehna/xdyn/#ligne-de-commande).
 
 For example, to run the first [tutorial](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/tutorial_01.md),
 from the executables/demos folder, you can run:
@@ -176,7 +176,7 @@ You can then run:
 xdyn <yaml file> [xdyn options]
 ```
 
-All options can be found in [the documentation](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/interfaces_utilisateur.m4.m).
+All options can be found in [the documentation](https://sirehna_naval_group.gitlab.io/sirehna/xdyn/#ligne-de-commande).
 
 For example, to run the first [tutorial](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/tutorial_01.md),
 
@@ -284,13 +284,13 @@ Add additional notes about how to deploy this on a live system.
 
 * [CMake](https://cmake.org/) - Used to compile C++ code for various platforms.
 * [Make](https://www.gnu.org/software/make/) - Used for the one-step build described above.
-* [GCC](http://gcc.gnu.org/) - Compiler used for both the Windows & Linux: Visual Studio is currently **not** supported.
+* [GCC](https://gcc.gnu.org/) - Compiler used for both the Windows & Linux: Visual Studio is currently **not** supported.
 * [Boost](https://www.boost.org/) - For command-line options, regular expressions, filesystem library.
 * [yaml-cpp](https://github.com/jbeder/yaml-cpp) - To parse the input files.
 * [HDF5](https://support.hdfgroup.org/products/hdf5_tools/index.html) - To store the outputs.
-* [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) - For matrix manipulations.
+* [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page) - For matrix manipulations.
 * [Pandoc](https://pandoc.org/) - To generate the documentation.
-* [Pweave](http://mpastell.com/pweave/) - To generate the tutorials.
+* [Pweave](https://mpastell.com/pweave/) - To generate the tutorials.
 * [SSC](https://gitlab.com/sirehna_naval_group/sirehna/ssc) - For websockets, units decoding, interpolations, kinematics, CSV file reading and exception handling.
 
 ## Contributing
@@ -307,7 +307,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-The main contributors to this projects are:
+The main contributors to this project are:
 
 * [Charles-Edouard CADY](https://gitlab.com/CharlesEdouardCady_SIREHNA)
 * [Guillaume JACQUENOT](https://gitlab.com/GuillaumeJacquenot)
