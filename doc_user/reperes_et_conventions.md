@@ -24,10 +24,11 @@ Les axes du repère navire sont les suivants:
 
 ![](images/ShipFrame.svg "Repère navire")
 
-On résout les équations du mouvement (principe fondamental de la dynamique) à
-l'origine de ce repère, c'est-à-dire que tous les torseurs d'effort sont
-déplacés au point (0,0,0) du repère "body". De même, les matrices d'inertie et
-de masse ajoutée sont déplacées au point de résolution.
+On résout les équations du mouvement (principe fondamental de la dynamique) au
+centre de gravité et dans le repère BODY, c'est-à-dire que tous les torseurs
+d'effort sont déplacés au centre de gravité et exprimés dans le repère "body".
+De même, les matrices d'inertie et de masse ajoutée sont déplacées au centre de
+gravité.
 
 ### Repère NED local
 

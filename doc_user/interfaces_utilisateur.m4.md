@@ -282,8 +282,12 @@ Les sorties d'effort sont spécifiées de la façon suivante :
 
 où `modèle` est le nom du modèle d'effort (renseigné dans la clef `modèle` de
 chaque modèle d'effort), `corps` est le nom du corps sur lequel agit l'effort
-et `repère` est le repère d'expression (qui ne peut être que `NED` ou le nom du
-corps).
+et `repère` est le repère d'expression (qui ne peut être que `NED`, le nom du
+corps ou le nom du modèle d'effort (si sa paramétrisation comporte une clef
+`frame`, c'est-à-dire pour `hydrodynamic polar`, `aerodynamic polar`,
+`maneuvering`, `wageningen B-series`, `propeller+rudder`, `Kt(J) & Kq(J)` et
+`grpc`). Les forces et les moments sont toujours exprimés à l'origine du repère
+concerné, y compris pour les repères NED et BODY.
 
 La somme des efforts appliqués au solide est accessible via les clefs
 suivantes :
