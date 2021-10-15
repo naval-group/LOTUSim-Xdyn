@@ -1,3 +1,4 @@
+#include <iomanip>
 #include "PhaseModuleRAOEvaluator.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "InvalidInputException.hpp"
@@ -142,7 +143,8 @@ double PhaseModuleRAOEvaluator::get_interpolation_period(const double wave_angul
         encounter_period = TWOPI/(wave_angular_frequency - Vs.dot(k));
         if (encounter_period > 0 && (encounter_period < rao_interpolator.period_bounds.first || encounter_period > rao_interpolator.period_bounds.second))
         {
-            std::cerr << "WARNING: The encounter period Te=" << abs(encounter_period) << "s is outside of the range [" << rao_interpolator.period_bounds.first << "," << rao_interpolator.period_bounds.second << "]s provided in the HDB file. The response will be interpolated outside the bounds." << std::endl;
+            std::cout << std::setprecision(25);
+            std::cerr << "WARNING: The encounter period Te=" << encounter_period << " s is outside of the range [" << rao_interpolator.period_bounds.first << "," << rao_interpolator.period_bounds.second << "]s provided in the HDB file. The response will be interpolated outside the bounds." << std::endl;
         }
     }
     else
