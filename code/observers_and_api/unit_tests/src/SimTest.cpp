@@ -473,14 +473,18 @@ TEST_F(SimTest, LONG_bug_2845)
     command_listener.set<double>("PropRudd(P/D)", 1);
     command_listener.set<double>("PropRudd(beta)", 0.8);
     auto sys = get_system(yaml,test_ship_stl,0,command_listener);
-    ssc::solver::Scheduler scheduler(0, 0.4, 0.1);
+    ssc::solver::Scheduler scheduler(0, 0.1, 0.1);
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observer);
     const auto m = get_map(observer);
     ASSERT_EQ(3, m.size());
     const auto it = m.find("Mz(PropRudd,TestShip,TestShip)");
     ASSERT_NE(m.end(), it);
-    ASSERT_EQ(5, it->second.size());
-    ASSERT_NEAR(0, it->second.back(), 1E-8);
+    ASSERT_EQ(2, it->second.size());
+    const auto that_Fy = m.find("Fy(PropRudd,TestShip,PropRudd)");
+    ASSERT_NE(m.end(), that_Fy);
+    const double OGx = 0.258; // Position of the center of gravity in the body frame, cf. input YAML
+                              // bodies[0]/dynamics/centre of inertia/x
+    ASSERT_SMALL_RELATIVE_ERROR(that_Fy->second.back()*OGx, it->second.back(), 1E-8);
 }
 
 TEST_F(SimTest, LONG_can_retrieve_maneuvering_force)

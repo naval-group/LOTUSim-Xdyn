@@ -133,12 +133,15 @@ void ForceModel::can_find_internal_frame(const ssc::kinematics::KinematicsPtr& k
 
 void ForceModel::feed(Observer& observer, ssc::kinematics::KinematicsPtr& k, ssc::data_source::DataSource& command_listener, const double t) const
 {
-    // G is the point in which 'latest_force_in_body_frame' is expressed (sum of forces)
+    // G is the point in which 'latest_force_in_body_frame' is expressed (sum of forces, i.e. point
+    // of resolution of Newton's laws of motion)
     // O is the origin of the NED frame
+    // Ob is the origin of the body frame
     // P is the origin of the ForceModel's internal frame
 
     const Wrench tau_in_body_frame_at_G(latest_force_in_body_frame.get_point(), latest_force_in_body_frame.get_frame(), latest_force_in_body_frame.to_vector());
     const Wrench tau_in_ned_frame_at_G = tau_in_body_frame_at_G.change_frame("NED", k);
+    const Wrench tau_in_body_frame_at_Ob = tau_in_body_frame_at_G.transport_to(ssc::kinematics::Point(latest_force_in_body_frame.get_frame()), k);
 
     if (has_internal_frame)
     {
@@ -152,12 +155,12 @@ void ForceModel::feed(Observer& observer, ssc::kinematics::KinematicsPtr& k, ssc
         observer.write(tau_in_internal_frame_at_P.N(),DataAddressing({"efforts",body_name,name,name,"Mz"},std::string("Mz(")+name+","+body_name+","+name+")"));
     }
 
-    observer.write(tau_in_body_frame_at_G.X(),DataAddressing({"efforts",body_name,name,body_name,"Fx"},std::string("Fx(")+name+","+body_name+","+body_name+")"));
-    observer.write(tau_in_body_frame_at_G.Y(),DataAddressing({"efforts",body_name,name,body_name,"Fy"},std::string("Fy(")+name+","+body_name+","+body_name+")"));
-    observer.write(tau_in_body_frame_at_G.Z(),DataAddressing({"efforts",body_name,name,body_name,"Fz"},std::string("Fz(")+name+","+body_name+","+body_name+")"));
-    observer.write(tau_in_body_frame_at_G.K(),DataAddressing({"efforts",body_name,name,body_name,"Mx"},std::string("Mx(")+name+","+body_name+","+body_name+")"));
-    observer.write(tau_in_body_frame_at_G.M(),DataAddressing({"efforts",body_name,name,body_name,"My"},std::string("My(")+name+","+body_name+","+body_name+")"));
-    observer.write(tau_in_body_frame_at_G.N(),DataAddressing({"efforts",body_name,name,body_name,"Mz"},std::string("Mz(")+name+","+body_name+","+body_name+")"));
+    observer.write(tau_in_body_frame_at_Ob.X(),DataAddressing({"efforts",body_name,name,body_name,"Fx"},std::string("Fx(")+name+","+body_name+","+body_name+")"));
+    observer.write(tau_in_body_frame_at_Ob.Y(),DataAddressing({"efforts",body_name,name,body_name,"Fy"},std::string("Fy(")+name+","+body_name+","+body_name+")"));
+    observer.write(tau_in_body_frame_at_Ob.Z(),DataAddressing({"efforts",body_name,name,body_name,"Fz"},std::string("Fz(")+name+","+body_name+","+body_name+")"));
+    observer.write(tau_in_body_frame_at_Ob.K(),DataAddressing({"efforts",body_name,name,body_name,"Mx"},std::string("Mx(")+name+","+body_name+","+body_name+")"));
+    observer.write(tau_in_body_frame_at_Ob.M(),DataAddressing({"efforts",body_name,name,body_name,"My"},std::string("My(")+name+","+body_name+","+body_name+")"));
+    observer.write(tau_in_body_frame_at_Ob.N(),DataAddressing({"efforts",body_name,name,body_name,"Mz"},std::string("Mz(")+name+","+body_name+","+body_name+")"));
 
     observer.write(tau_in_ned_frame_at_G.X(),DataAddressing({"efforts",body_name,name,"NED","Fx"},std::string("Fx(")+name+","+body_name+",NED)"));
     observer.write(tau_in_ned_frame_at_G.Y(),DataAddressing({"efforts",body_name,name,"NED","Fy"},std::string("Fy(")+name+","+body_name+",NED)"));
