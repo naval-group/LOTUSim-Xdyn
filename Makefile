@@ -268,11 +268,20 @@ test-debian:
 docker: xdyn.deb
 	@docker build . --tag xdyn
 
-xdyn.deb: build_deb11/xdyn.deb
-	@cp $< $@
+xdyn.deb: build_deb11_xdyn.deb
+	@cp build_deb11/xdyn.deb $@
 
-build_deb11/xdyn.deb:
-	@echo "Run ./ninja_debian.sh package"
+build_deb11/CMakeCache.txt: BUILD_TYPE = Release
+build_deb11/CMakeCache.txt: BUILD_DIR = build_deb11
+build_deb11/CMakeCache.txt: CPACK_GENERATOR = DEB
+build_deb11/CMakeCache.txt: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-08-17
+build_deb11/CMakeCache.txt: BOOST_ROOT = /opt/boost
+build_deb11/CMakeCache.txt: HDF5_DIR = /usr/local/hdf5/share/cmake
+build_deb11/CMakeCache.txt: ci_env=
+build_deb11/CMakeCache.txt: cmake-debian-target build-debian
+
+build_deb11_xdyn.deb: | build_deb11/CMakeCache.txt
+	@./ninja_debian.sh package; \
 
 docker_grpc_force_model:
 	make -C interfaces docker-images
