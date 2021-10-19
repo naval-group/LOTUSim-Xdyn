@@ -6,7 +6,7 @@
  */
 
 #include "yaml_data.hpp"
-#include <boost/algorithm/string.hpp> 
+#include <boost/algorithm/string.hpp>
 #include <sstream>
 
 std::string rotation_convention();
@@ -2578,7 +2578,16 @@ std::string test_data::bug_2845()
        << "\n"
        << "output:\n"
        << "   - format: map\n"
-       << "     data: ['Fx(Fman,TestShip,TestShip)', 'Fy(PropRudd,TestShip,PropRudd)', 'Mz(PropRudd,TestShip,TestShip)']\n";
+       << "     data: ['Fx(Fman,TestShip,TestShip)',\n"
+       << "            'Fx(PropRudd,TestShip,PropRudd)',\n"
+       << "            'Fy(PropRudd,TestShip,PropRudd)',\n"
+       << "            'Fz(PropRudd,TestShip,PropRudd)',\n"
+       << "            'Mx(PropRudd,TestShip,PropRudd)',\n"
+       << "            'My(PropRudd,TestShip,PropRudd)',\n"
+       << "            'Mz(PropRudd,TestShip,PropRudd)',\n"
+       << "            'Mx(PropRudd,TestShip,TestShip)',\n"
+       << "            'My(PropRudd,TestShip,TestShip)',\n"
+       << "            'Mz(PropRudd,TestShip,TestShip)']\n";
     return ss.str();
 }
 
