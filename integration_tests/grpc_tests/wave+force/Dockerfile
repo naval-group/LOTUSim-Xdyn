@@ -1,4 +1,4 @@
-FROM python:3.10-slim
+FROM python:3.9-slim
 ADD requirements.txt .
 RUN pip3 install -r requirements.txt
 ADD wait-for-it.sh tests.py ./
