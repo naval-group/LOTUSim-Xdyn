@@ -265,7 +265,17 @@ test-debian:
 	        rm codecov_bash.sh;\
 	        fi"
 
-docker: xdyn.deb
+docker-ci: xdyn.deb
+	@docker build . --tag xdyn
+
+docker: BUILD_TYPE = Release
+docker: BUILD_DIR = build_deb11
+docker: CPACK_GENERATOR = DEB
+docker: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-08-17
+docker: BOOST_ROOT = /opt/boost
+docker: HDF5_DIR = /usr/local/hdf5/share/cmake
+docker: ci_env=
+docker: cmake-debian-target build-debian
 	@docker build . --tag xdyn
 
 xdyn.deb: build_deb11/xdyn.deb
@@ -280,7 +290,7 @@ docker_grpc_force_model:
 docker_grpc_waves_model:
 	make -C interfaces/waves/python/server CONTAINER_NAME=xdyn-waves-grpc:python3
 
-all_docker_images: docker docker_grpc_force_model docker_grpc_waves_model
+all_docker_images: docker-ci docker_grpc_force_model docker_grpc_waves_model
 	echo "Built all docker images after having run 'make debian'"
 
 
