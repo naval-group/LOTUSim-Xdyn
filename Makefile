@@ -128,115 +128,105 @@ windows_gccx_posix: BOOST_ROOT=/usr/src/mxe/usr/x86_64-w64-mingw32.static.posix
 windows_gccx_posix: HDF5_DIR=/opt/HDF5_1_8_20/cmake
 windows_gccx_posix: cmake-windows-target build-windows test-windows
 
-DOCKER_RUN_BASH:=docker run $(ci_env) --rm \
-	    -u $(shell id -u):$(shell id -g) \
-	    -v $(shell pwd):/opt/share \
-	    -w /opt/share
-
+DOCKER_AS_ROOT:=docker run -t --rm -w /opt/share -v $(shell pwd):/opt/share
+DOCKER_AS_USER:=$(DOCKER_AS_ROOT) -u $(shell id -u):$(shell id -g)
 
 code/yaml-cpp/CMakeLists.txt: yaml-cpp-CMakeLists.txt
-	${DOCKER_RUN_BASH} \
-	    $(DOCKER_IMAGE) /bin/bash -c \
-	        "rm -rf /opt/share/code/yaml-cpp && \
-	        cp -rf /opt/yaml_cpp /opt/share/code/yaml-cpp && \
-	        cp /opt/share/yaml-cpp-CMakeLists.txt /opt/share/code/yaml-cpp/CMakeLists.txt"
+	$(DOCKER_AS_USER) $(DOCKER_IMAGE) /bin/bash -c \
+	    "rm -rf /opt/share/code/yaml-cpp && \
+	     cp -rf /opt/yaml_cpp /opt/share/code/yaml-cpp && \
+	     cp /opt/share/yaml-cpp-CMakeLists.txt /opt/share/code/yaml-cpp/CMakeLists.txt"
 
 
 cmake-windows-target: code/yaml-cpp/CMakeLists.txt
 	docker pull $(DOCKER_IMAGE) || true
-	${DOCKER_RUN_BASH} \
-	    $(DOCKER_IMAGE) /bin/bash -c \
-	       "cd /opt/share &&\
-	        mkdir -p $(BUILD_DIR) &&\
-	        cd $(BUILD_DIR) &&\
-	        mkdir -p /opt/share/.wine;\
-	        export WINEPREFIX=/opt/share/.wine;\
-	        wine winecfg;\
-	        cmake -Wno-dev\
+	$(DOCKER_AS_USER) $(DOCKER_IMAGE) /bin/bash -c \
+	   "cd /opt/share &&\
+	    mkdir -p $(BUILD_DIR) &&\
+	    cd $(BUILD_DIR) &&\
+	    mkdir -p /opt/share/.wine;\
+	    export WINEPREFIX=/opt/share/.wine;\
+	    wine winecfg;\
+	    cmake -Wno-dev\
 	        -G Ninja \
-	          -DTHIRD_PARTY_DIRECTORY=/opt \
-	          -DBUILD_DOCUMENTATION:BOOL=False \
-	          -DCPACK_GENERATOR=$(CPACK_GENERATOR) \
-	          -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) \
-	          -DCMAKE_INSTALL_PREFIX:PATH=/opt/xdyn \
-	          -DHDF5_DIR=$(HDF5_DIR) \
-	          -DBoost_DEBUG=0 \
-	          -DBOOST_ROOT:PATH=$(BOOST_ROOT) \
-	          -DBOOST_INCLUDEDIR:PATH=$(BOOST_ROOT)/include \
-	          -DBoost_INCLUDE_DIR:PATH=$(BOOST_ROOT)/include \
-	          -DBOOST_LIBRARYDIR:PATH=$(BOOST_ROOT)/lib \
-	          -DBoost_NO_SYSTEM_PATHS:BOOL=OFF \
-	          -DBoost_LIBRARY_DIR_RELEASE:PATH=$(BOOST_ROOT)/lib \
-	          -DBoost_PROGRAM_OPTIONS_LIBRARY:PATH=$(BOOST_ROOT)/lib/libboost_program_options-mt.a \
-	          -DBoost_FILESYSTEM_LIBRARY:PATH=$(BOOST_ROOT)/lib/libboost_filesystem-mt.a \
-	          -DBoost_SYSTEM_LIBRARY:PATH=$(BOOST_ROOT)/lib/libboost_system-mt.a \
-	          -DBoost_REGEX_LIBRARY:PATH=$(BOOST_ROOT)/lib/libboost_regex-mt.a \
-	          -DCMAKE_SYSTEM_VERSION=7 \
+	        -D THIRD_PARTY_DIRECTORY=/opt \
+	        -D BUILD_DOCUMENTATION:BOOL=False \
+	        -D CPACK_GENERATOR=$(CPACK_GENERATOR) \
+	        -D CMAKE_BUILD_TYPE=$(BUILD_TYPE) \
+	        -D CMAKE_INSTALL_PREFIX:PATH=/opt/xdyn \
+	        -D HDF5_DIR=$(HDF5_DIR) \
+	        -D Boost_DEBUG=0 \
+	        -D BOOST_ROOT:PATH=$(BOOST_ROOT) \
+	        -D BOOST_INCLUDEDIR:PATH=$(BOOST_ROOT)/include \
+	        -D Boost_INCLUDE_DIR:PATH=$(BOOST_ROOT)/include \
+	        -D BOOST_LIBRARYDIR:PATH=$(BOOST_ROOT)/lib \
+	        -D Boost_NO_SYSTEM_PATHS:BOOL=OFF \
+	        -D Boost_LIBRARY_DIR_RELEASE:PATH=$(BOOST_ROOT)/lib \
+	        -D Boost_PROGRAM_OPTIONS_LIBRARY:PATH=$(BOOST_ROOT)/lib/libboost_program_options-mt.a \
+	        -D Boost_FILESYSTEM_LIBRARY:PATH=$(BOOST_ROOT)/lib/libboost_filesystem-mt.a \
+	        -D Boost_SYSTEM_LIBRARY:PATH=$(BOOST_ROOT)/lib/libboost_system-mt.a \
+	        -D Boost_REGEX_LIBRARY:PATH=$(BOOST_ROOT)/lib/libboost_regex-mt.a \
+	        -D CMAKE_SYSTEM_VERSION=7 \
 	        /opt/share/code"
 
 build-windows:
-	${DOCKER_RUN_BASH} \
-	    $(DOCKER_IMAGE) /bin/bash -c \
-	       "cd /opt/share &&\
-	        mkdir -p $(BUILD_DIR) &&\
-	        cd $(BUILD_DIR) &&\
-	        mkdir -p /opt/share/.wine;\
-	        export WINEPREFIX=/opt/share/.wine;\
-	        wine winecfg;\
-	        ninja $(NB_OF_PARALLEL_BUILDS) package"
+	$(DOCKER_AS_USER) $(DOCKER_IMAGE) /bin/bash -c \
+	   "cd /opt/share &&\
+	    mkdir -p $(BUILD_DIR) &&\
+	    cd $(BUILD_DIR) &&\
+	    mkdir -p /opt/share/.wine;\
+	    export WINEPREFIX=/opt/share/.wine;\
+	    wine winecfg;\
+	    ninja $(NB_OF_PARALLEL_BUILDS) package"
 
 test-windows:
-	${DOCKER_RUN_BASH} \
-	    $(DOCKER_IMAGE) /bin/bash -c \
-	       "cd $(BUILD_DIR) &&\
-	        mkdir -p /opt/share/.wine;\
-	        export WINEPREFIX=/opt/share/.wine;\
-	        wine winecfg;\
-	        wine ./run_all_tests --gtest_filter=-*ocket*:*ot_throw_if_CSV_file_exists"
+	$(DOCKER_AS_USER) $(DOCKER_IMAGE) /bin/bash -c \
+	   "cd $(BUILD_DIR) &&\
+	    mkdir -p /opt/share/.wine;\
+	    export WINEPREFIX=/opt/share/.wine;\
+	    wine winecfg;\
+	    wine ./run_all_tests --gtest_filter=-*ocket*:*ot_throw_if_CSV_file_exists"
 
 
 cmake-debian-target: SHELL:=/bin/bash
 cmake-debian-target: code/yaml-cpp/CMakeLists.txt
 	docker pull $(DOCKER_IMAGE) || true
-	${DOCKER_RUN_BASH} \
-	    $(DOCKER_IMAGE) /bin/bash -c \
-	       "cd /opt/share &&\
-	        mkdir -p $(BUILD_DIR) &&\
-	        cd $(BUILD_DIR) &&\
-	        cmake -Wno-dev \
-	         -G Ninja \
-	         -DTHIRD_PARTY_DIRECTORY=/opt/ \
-	         -DBUILD_DOCUMENTATION:BOOL=False \
-	         -DCPACK_GENERATOR=$(CPACK_GENERATOR) \
-	         -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) \
-	         -DCMAKE_INSTALL_PREFIX:PATH=/opt/xdyn \
-	         -DHDF5_DIR=$(HDF5_DIR) \
-	         -DBOOST_ROOT:PATH=$(BOOST_ROOT) \
-	        /opt/share/code"
+	$(DOCKER_AS_USER) $(DOCKER_IMAGE) /bin/bash -c \
+	   "cd /opt/share &&\
+	    mkdir -p $(BUILD_DIR) &&\
+	    cd $(BUILD_DIR) &&\
+	    cmake -Wno-dev \
+	     -G Ninja \
+	     -D THIRD_PARTY_DIRECTORY=/opt/ \
+	     -D BUILD_DOCUMENTATION:BOOL=False \
+	     -D CPACK_GENERATOR=$(CPACK_GENERATOR) \
+	     -D CMAKE_BUILD_TYPE=$(BUILD_TYPE) \
+	     -D CMAKE_INSTALL_PREFIX:PATH=/opt/xdyn \
+	     -D HDF5_DIR=$(HDF5_DIR) \
+	     -D BOOST_ROOT:PATH=$(BOOST_ROOT) \
+	    /opt/share/code"
 
 build-debian: SHELL:=/bin/bash
 build-debian:
-	${DOCKER_RUN_BASH} \
-	    $(DOCKER_IMAGE) /bin/bash -c \
-	       "cd /opt/share && \
-	        mkdir -p $(BUILD_DIR) && \
-	        cd $(BUILD_DIR) && \
-	        ninja $(NB_OF_PARALLEL_BUILDS) package"
+	$(DOCKER_AS_USER) $(DOCKER_IMAGE) /bin/bash -c \
+	   "cd /opt/share && \
+	    mkdir -p $(BUILD_DIR) && \
+	    cd $(BUILD_DIR) && \
+	    ninja $(NB_OF_PARALLEL_BUILDS) package"
 
 test-debian: SHELL:=/bin/bash
 test-debian:
-	${DOCKER_RUN_BASH} \
-	    $(DOCKER_IMAGE) /bin/bash -c \
-	       "cp validation/codecov_bash.sh $(BUILD_DIR) && \
-	        cd $(BUILD_DIR) &&\
-	        ./run_all_tests &&\
-	        if [[ $(BUILD_TYPE) == Coverage ]];\
-	        then\
-	        echo Coverage;\
-	        gprof run_all_tests gmon.out > gprof_res.txt 2> gprof_res.err;\
-	        bash codecov_bash.sh && \
-	        rm codecov_bash.sh;\
-	        fi"
+	$(DOCKER_AS_USER) $(DOCKER_IMAGE) /bin/bash -c \
+	   "cp validation/codecov_bash.sh $(BUILD_DIR) && \
+	    cd $(BUILD_DIR) &&\
+	    ./run_all_tests &&\
+	    if [[ $(BUILD_TYPE) == Coverage ]];\
+	    then\
+	    echo Coverage;\
+	    gprof run_all_tests gmon.out > gprof_res.txt 2> gprof_res.err;\
+	    bash codecov_bash.sh && \
+	    rm codecov_bash.sh;\
+	    fi"
 
 docker-ci: xdyn.deb
 	@docker build . --tag xdyn
@@ -283,8 +273,6 @@ clean:
 	rm -rf yaml-cpp
 	@make -C doc_user clean; rm -f doc_user/xdyn.deb doc.html
 
-DOCKER_AS_ROOT=docker run -t --rm -w /work -v $(shell pwd):/work
-DOCKER_AS_USER=$(DOCKER_AS_ROOT) -u $(shell id -u):$(shell id -g)
 GREP=$(DOCKER_AS_USER) --entrypoint /bin/grep bitnami/minideb
 
 lint:
