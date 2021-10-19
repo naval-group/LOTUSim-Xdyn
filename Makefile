@@ -128,12 +128,14 @@ windows_gccx_posix: BOOST_ROOT=/usr/src/mxe/usr/x86_64-w64-mingw32.static.posix
 windows_gccx_posix: HDF5_DIR=/opt/HDF5_1_8_20/cmake
 windows_gccx_posix: cmake-windows-target build-windows test-windows
 
+DOCKER_RUN_BASH:=docker run $(ci_env) --rm \
+	    -u $(shell id -u):$(shell id -g) \
+	    -v $(shell pwd):/opt/share \
+	    -w /opt/share
+
 
 code/yaml-cpp/CMakeLists.txt: yaml-cpp-CMakeLists.txt
-	docker run --rm \
-	    -u $(shell id -u ):$(shell id -g ) \
-	    -v $(shell pwd):/opt/share \
-	    -w /opt/share \
+	${DOCKER_RUN_BASH} \
 	    $(DOCKER_IMAGE) /bin/bash -c \
 	        "rm -rf /opt/share/code/yaml-cpp && \
 	        cp -rf /opt/yaml_cpp /opt/share/code/yaml-cpp && \
@@ -142,10 +144,7 @@ code/yaml-cpp/CMakeLists.txt: yaml-cpp-CMakeLists.txt
 
 cmake-windows-target: code/yaml-cpp/CMakeLists.txt
 	docker pull $(DOCKER_IMAGE) || true
-	docker run --rm \
-	    -u $(shell id -u ):$(shell id -g ) \
-	    -v $(shell pwd):/opt/share \
-	    -w /opt/share \
+	${DOCKER_RUN_BASH} \
 	    $(DOCKER_IMAGE) /bin/bash -c \
 	       "cd /opt/share &&\
 	        mkdir -p $(BUILD_DIR) &&\
@@ -176,10 +175,7 @@ cmake-windows-target: code/yaml-cpp/CMakeLists.txt
 	        /opt/share/code"
 
 build-windows:
-	docker run --rm \
-	    -u $(shell id -u ):$(shell id -g ) \
-	    -v $(shell pwd):/opt/share \
-	    -w /opt/share \
+	${DOCKER_RUN_BASH} \
 	    $(DOCKER_IMAGE) /bin/bash -c \
 	       "cd /opt/share &&\
 	        mkdir -p $(BUILD_DIR) &&\
@@ -190,10 +186,7 @@ build-windows:
 	        ninja $(NB_OF_PARALLEL_BUILDS) package"
 
 test-windows:
-	docker run --rm \
-	    -u $(shell id -u ):$(shell id -g ) \
-	    -v $(shell pwd):/opt/share \
-	    -w /opt/share \
+	${DOCKER_RUN_BASH} \
 	    $(DOCKER_IMAGE) /bin/bash -c \
 	       "cd $(BUILD_DIR) &&\
 	        mkdir -p /opt/share/.wine;\
@@ -205,12 +198,9 @@ test-windows:
 cmake-debian-target: SHELL:=/bin/bash
 cmake-debian-target: code/yaml-cpp/CMakeLists.txt
 	docker pull $(DOCKER_IMAGE) || true
-	docker run --rm \
-	    -u $(shell id -u ):$(shell id -g ) \
-	    -v $(shell pwd):/opt/share \
-	    -w /opt/share \
+	${DOCKER_RUN_BASH} \
 	    $(DOCKER_IMAGE) /bin/bash -c \
-	        "cd /opt/share &&\
+	       "cd /opt/share &&\
 	        mkdir -p $(BUILD_DIR) &&\
 	        cd $(BUILD_DIR) &&\
 	        cmake -Wno-dev \
@@ -226,10 +216,7 @@ cmake-debian-target: code/yaml-cpp/CMakeLists.txt
 
 build-debian: SHELL:=/bin/bash
 build-debian:
-	docker run --rm \
-	    -u $(shell id -u ):$(shell id -g ) \
-	    -v $(shell pwd):/opt/share \
-	    -w /opt/share \
+	${DOCKER_RUN_BASH} \
 	    $(DOCKER_IMAGE) /bin/bash -c \
 	       "cd /opt/share && \
 	        mkdir -p $(BUILD_DIR) && \
@@ -238,10 +225,7 @@ build-debian:
 
 test-debian: SHELL:=/bin/bash
 test-debian:
-	docker run --rm \
-	    -u $(shell id -u ):$(shell id -g ) \
-	    -v $(shell pwd):/opt/share \
-	    -w /opt/share \
+	${DOCKER_RUN_BASH} \
 	    $(DOCKER_IMAGE) /bin/bash -c \
 	       "cp validation/codecov_bash.sh $(BUILD_DIR) && \
 	        cd $(BUILD_DIR) &&\
