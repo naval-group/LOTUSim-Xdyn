@@ -2,7 +2,7 @@
 #
 # The resistance curve force in issue_202.yml is defined at the hydrodynamic
 # forces calculation point in body frame. This point is at the origin of the
-# BODY frame and the centre of inertia is ar (0,0,1). Fy, Fz, Mx, My & Mz
+# BODY frame and the centre of inertia is at (0,0,1). Fy, Fz, Mx, My & Mz
 # should all be 0. Issue 202 was created because My was 1 (that is M = r x F
 # with r the vector between COG and O (that is (0, 0, -1) and F the resistance
 # force (that is (-1, 0, 0)). This meant that the forces were expressed in the
