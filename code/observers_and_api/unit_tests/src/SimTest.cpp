@@ -473,14 +473,28 @@ TEST_F(SimTest, LONG_bug_2845)
     command_listener.set<double>("PropRudd(P/D)", 1);
     command_listener.set<double>("PropRudd(beta)", 0.8);
     auto sys = get_system(yaml,test_ship_stl,0,command_listener);
-    ssc::solver::Scheduler scheduler(0, 0.4, 0.1);
+    ssc::solver::Scheduler scheduler(0, 0.1, 0.1);
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observer);
     const auto m = get_map(observer);
-    ASSERT_EQ(3, m.size());
-    const auto it = m.find("Mz(PropRudd,TestShip,TestShip)");
-    ASSERT_NE(m.end(), it);
-    ASSERT_EQ(5, it->second.size());
-    ASSERT_NEAR(0, it->second.back(), 1E-8);
+    ASSERT_EQ(10, m.size());
+    const auto it_x = m.find("Mx(PropRudd,TestShip,TestShip)"); ASSERT_NE(m.end(), it_x); ASSERT_EQ(2, it_x->second.size());
+    const auto it_y = m.find("My(PropRudd,TestShip,TestShip)"); ASSERT_NE(m.end(), it_y); ASSERT_EQ(2, it_y->second.size());
+    const auto it_z = m.find("Mz(PropRudd,TestShip,TestShip)"); ASSERT_NE(m.end(), it_z); ASSERT_EQ(2, it_z->second.size());
+    const auto that_Fx = m.find("Fx(PropRudd,TestShip,PropRudd)"); ASSERT_NE(m.end(), that_Fx); ASSERT_EQ(2, that_Fx->second.size());
+    const auto that_Fy = m.find("Fy(PropRudd,TestShip,PropRudd)"); ASSERT_NE(m.end(), that_Fy); ASSERT_EQ(2, that_Fy->second.size());
+    const auto that_Fz = m.find("Fz(PropRudd,TestShip,PropRudd)"); ASSERT_NE(m.end(), that_Fz); ASSERT_EQ(2, that_Fz->second.size());
+    const auto that_Mx = m.find("Mx(PropRudd,TestShip,PropRudd)"); ASSERT_NE(m.end(), that_Mx); ASSERT_EQ(2, that_Mx->second.size());
+    const auto that_My = m.find("My(PropRudd,TestShip,PropRudd)"); ASSERT_NE(m.end(), that_My); ASSERT_EQ(2, that_My->second.size());
+    const auto that_Mz = m.find("Mz(PropRudd,TestShip,PropRudd)"); ASSERT_NE(m.end(), that_Mz); ASSERT_EQ(2, that_Mz->second.size());
+    // Check that torques Mx, My, Mz expressed in TestShip frame are correctly evaluated
+    // using the wrench transport equation, using transport vector (OGx, OGy=0, OGz)
+    const double OGx = 0.258; // Position of the center of gravity in the body frame, cf. input YAML
+                              // bodies[0]/dynamics/centre of inertia/x
+    const double OGz = 2.5;
+    ASSERT_SMALL_RELATIVE_ERROR(that_Mx->second.back() - that_Fy->second.back()*OGz, it_x->second.back(), 1E-8);
+    ASSERT_SMALL_RELATIVE_ERROR(that_My->second.back() + that_Fx->second.back()*OGz -that_Fz->second.back()*OGx, it_y->second.back(), 1E-8);
+    ASSERT_SMALL_RELATIVE_ERROR(that_Mz->second.back() + that_Fy->second.back()*OGx, it_z->second.back(), 1E-8);
+    ASSERT_SMALL_RELATIVE_ERROR(that_Mz->second.back(), 0.0, 1E-8);
 }
 
 TEST_F(SimTest, LONG_can_retrieve_maneuvering_force)
@@ -495,7 +509,7 @@ TEST_F(SimTest, LONG_can_retrieve_maneuvering_force)
     ssc::solver::Scheduler scheduler(0, 0.4, 0.1);
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observer);
     const auto m = get_map(observer);
-    ASSERT_EQ(3, m.size());
+    ASSERT_EQ(10, m.size());
     const auto it = m.find("Fx(Fman,TestShip,TestShip)");
     ASSERT_NE(m.end(), it);
     ASSERT_EQ(5, it->second.size());

@@ -1,0 +1,7 @@
+issue_202: issue_202.csv issue_202.py
+	@$(DOCKER_RUN) -v $(shell pwd):/work -w /work --entrypoint /usr/bin/python3 python:3.7 issue_202.py
+
+issue_202.csv: issue_202.yml
+	@echo "Checking forces & torques are outputted in the right frame (issue #202)"
+	@${DOCKER_RUN} xdyn issue_202.yml --dt 1 --tend 2
+	@echo "✓ Output is correct!"
