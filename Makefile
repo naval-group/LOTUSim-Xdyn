@@ -238,6 +238,7 @@ docker: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-08-17
 docker: BOOST_ROOT = /opt/boost
 docker: HDF5_DIR = /usr/local/hdf5/share/cmake
 docker: cmake-debian-target build-debian
+	@cp build_deb11/xdyn.deb .
 	@docker build . --tag xdyn
 
 xdyn.deb: build_deb11/xdyn.deb
