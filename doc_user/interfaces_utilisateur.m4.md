@@ -290,7 +290,7 @@ corps ou le nom du modèle d'effort (si sa paramétrisation comporte une clef
 concerné, y compris pour les repères NED et BODY.
 
 NB : le repère NED est un repère NED local, c'est-à-dire centré au centre de
-gravité du navire mais avec des axes fixed dans le repère terrestre.
+gravité du navire mais avec des axes fixes dans le repère terrestre.
 
 La somme des efforts appliqués au solide est accessible via les clefs
 suivantes :
