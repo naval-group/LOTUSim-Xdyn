@@ -64,7 +64,7 @@ bodies: # All bodies have NED as parent frame
         speed: {unit: m/s, values: [-10.00, 0.00, 10.00]}
         resistance: {unit: N, values: [1, 1, 1]}
 output:
-   - format: csv 
+   - format: csv
      filename: issue_202.csv
      data:
          - Fx(resistance curve,TestShip,TestShip)
@@ -73,3 +73,9 @@ output:
          - Mx(resistance curve,TestShip,TestShip)
          - My(resistance curve,TestShip,TestShip)
          - Mz(resistance curve,TestShip,TestShip)
+         - Fx(sum of forces,TestShip,TestShip)
+         - Fy(sum of forces,TestShip,TestShip)
+         - Fz(sum of forces,TestShip,TestShip)
+         - Mx(sum of forces,TestShip,TestShip)
+         - My(sum of forces,TestShip,TestShip)
+         - Mz(sum of forces,TestShip,TestShip)

@@ -8,6 +8,7 @@
 class Wrench
 {
 public:
+    Wrench(const ssc::kinematics::Wrench& rhs);
     Wrench(const ssc::kinematics::Point& P, const std::string& frame);
     Wrench(const ssc::kinematics::Point& P, const std::string& frame, const ssc::kinematics::Vector6d& v);
     Wrench(const ssc::kinematics::Point& P, const std::string& frame, const Eigen::Vector3d& force, const Eigen::Vector3d& torque);

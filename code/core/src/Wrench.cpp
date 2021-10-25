@@ -11,6 +11,13 @@ Wrench::Wrench(const ssc::kinematics::Point& P, const std::string& frame_):
 {
 }
 
+Wrench::Wrench(const ssc::kinematics::Wrench& rhs) :
+        force(Eigen::Vector3d(rhs.X(), rhs.Y(), rhs.Z())),
+        torque(Eigen::Vector3d(rhs.K(), rhs.M(), rhs.N())),
+        point(rhs.get_point()),
+        frame(rhs.get_frame())
+{}
+
 Wrench::Wrench(const ssc::kinematics::Point& P, const std::string& frame_, const ssc::kinematics::Vector6d& v):
         force(Eigen::Vector3d(v(0),v(1),v(2))),
         torque(Eigen::Vector3d(v(3),v(4),v(5))),

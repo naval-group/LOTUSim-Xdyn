@@ -23,5 +23,10 @@ with open('issue_202.csv', newline='') as csvfile:
             assert abs(float(row['Mx(resistance curve TestShip TestShip)'])) == 0, f"Mx should be equal to 0, but it's not: it's equal to {row['Mx(resistance curve TestShip TestShip)']}"
             assert abs(float(row['My(resistance curve TestShip TestShip)'])) == 0, f"My should be equal to 0, but it's not: it's equal to {row['My(resistance curve TestShip TestShip)']}"
             assert abs(float(row['Mz(resistance curve TestShip TestShip)'])) == 0, f"Mz should be equal to 0, but it's not: it's equal to {row['Mz(resistance curve TestShip TestShip)']}"
+            assert abs(float(row['Fx(sum of forces TestShip TestShip)']) + 1) == 0, f"Fx should be equal to -1 N, but it's not: it's equal to {row['Fx(sum of forces TestShip TestShip)']} N."
+            assert abs(float(row['Fy(sum of forces TestShip TestShip)'])) == 0, f"Fy should be equal to 0, but it's not: it's equal to {row['Fy(sum of forces TestShip TestShip)']}"
+            assert abs(float(row['Mx(sum of forces TestShip TestShip)'])) == 0, f"Mx should be equal to 0, but it's not: it's equal to {row['Mx(sum of forces TestShip TestShip)']}"
+            assert abs(float(row['My(sum of forces TestShip TestShip)'])) < 2E-9, f"My should be almost equal to 0, but it's not: it's equal to {row['My(sum of forces TestShip TestShip)']}"
+            assert abs(float(row['Mz(sum of forces TestShip TestShip)'])) == 0, f"Mz should be equal to 0, but it's not: it's equal to {row['Mz(sum of forces TestShip TestShip)']}"
         read_one_line = True
     assert read_one_line

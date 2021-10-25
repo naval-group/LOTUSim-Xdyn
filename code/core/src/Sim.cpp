@@ -18,6 +18,14 @@
 
 #define SQUARE(x) ((x)*(x))
 
+ssc::kinematics::UnsafeWrench transport_to_origin_of_body_frame(const ssc::kinematics::Wrench& F, ssc::kinematics::KinematicsPtr& k);
+ssc::kinematics::UnsafeWrench transport_to_origin_of_body_frame(const ssc::kinematics::Wrench& F, ssc::kinematics::KinematicsPtr& k)
+{
+    const Wrench F_in_body_frame_at_G(F);
+    const Wrench F_in_body_frame_at_origin = F_in_body_frame_at_G.transport_to(ssc::kinematics::Point(F.get_frame()), k);
+    return ssc::kinematics::UnsafeWrench(F_in_body_frame_at_origin.get_point(), F_in_body_frame_at_origin.get_force(), F_in_body_frame_at_origin.get_torque());
+}
+
 class Sim::Impl
 {
     public:
@@ -40,13 +48,14 @@ class Sim::Impl
 
         void feed_sum_of_forces(Observer& observer, const std::string& body_name)
         {
-            feed_force(observer, sum_of_forces_in_body_frame[body_name], "sum of forces", body_name, body_name);
+            auto sum_forces_body = transport_to_origin_of_body_frame(sum_of_forces_in_body_frame[body_name], env.k);
+            feed_force(observer, sum_forces_body, "sum of forces", body_name, body_name);
             feed_force(observer, sum_of_forces_in_NED_frame[body_name], "sum of forces", body_name, "NED");
         }
-        
         void feed_fictitious_forces(Observer& observer, const std::string& body_name)
         {
-            feed_force(observer, fictitious_forces_in_body_frame[body_name], "fictitious forces", body_name, body_name);
+            auto fictitious_forces_body = transport_to_origin_of_body_frame(fictitious_forces_in_body_frame[body_name], env.k);
+            feed_force(observer, fictitious_forces_body, "fictitious forces", body_name, body_name);
             feed_force(observer, fictitious_forces_in_NED_frame[body_name], "fictitious forces", body_name, "NED");
         }
 

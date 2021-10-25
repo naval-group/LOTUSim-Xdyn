@@ -287,7 +287,8 @@ corps ou le nom du modèle d'effort (si sa paramétrisation comporte une clef
 `frame`, c'est-à-dire pour `hydrodynamic polar`, `aerodynamic polar`,
 `maneuvering`, `wageningen B-series`, `propeller+rudder`, `Kt(J) & Kq(J)` et
 `grpc`). Les forces et les moments sont toujours exprimés à l'origine du repère
-concerné, y compris pour les repères NED et BODY.
+concerné, y compris pour les repères NED local (centré au centre de gravité
+du navire mais avec des axes fixes dans le repère terrestre) et BODY.
 
 La somme des efforts appliqués au solide est accessible via les clefs
 suivantes :
