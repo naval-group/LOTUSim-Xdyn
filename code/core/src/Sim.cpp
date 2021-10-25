@@ -52,7 +52,6 @@ class Sim::Impl
             feed_force(observer, sum_forces_body, "sum of forces", body_name, body_name);
             feed_force(observer, sum_of_forces_in_NED_frame[body_name], "sum of forces", body_name, "NED");
         }
-        
         void feed_fictitious_forces(Observer& observer, const std::string& body_name)
         {
             feed_force(observer, fictitious_forces_in_body_frame[body_name], "fictitious forces", body_name, body_name);
