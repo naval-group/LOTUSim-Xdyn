@@ -54,7 +54,8 @@ class Sim::Impl
         }
         void feed_fictitious_forces(Observer& observer, const std::string& body_name)
         {
-            feed_force(observer, fictitious_forces_in_body_frame[body_name], "fictitious forces", body_name, body_name);
+            auto fictitious_forces_body = transport_to_origin_of_body_frame(fictitious_forces_in_body_frame[body_name], env.k);
+            feed_force(observer, fictitious_forces_body, "fictitious forces", body_name, body_name);
             feed_force(observer, fictitious_forces_in_NED_frame[body_name], "fictitious forces", body_name, "NED");
         }
 
