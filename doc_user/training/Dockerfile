@@ -16,7 +16,7 @@ RUN wget https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_
 
 # make plant UML
 RUN mkdir -p /opt/plantuml/  \
- && wget https://managedway.dl.sourceforge.net/project/plantuml/plantuml.jar -P /opt/plantuml/  \
+ && wget https://github.com/plantuml/plantuml/releases/download/v1.2021.13/plantuml-1.2021.13.jar -O /opt/plantuml/plantuml.jar \
  && echo '#!/bin/bash\n\
     /opt/openjdk-11-slim/bin/java -jar /opt/plantuml/plantuml.jar $@' > /usr/bin/plantuml \
  && chmod a+x /usr/bin/plantuml
