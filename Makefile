@@ -2,6 +2,9 @@
 
 all: update-submodules windows debian debug doc all_docker_images
 
+DOCKER_AS_ROOT:=docker run -t --rm -w /opt/share -v $(shell pwd):/opt/share
+DOCKER_AS_USER:=$(DOCKER_AS_ROOT) -u $(shell id -u):$(shell id -g)
+
 HEADERS=code/ssc/ssc/check_ssc_version.hpp\
         code/ssc/ssc/csv_file_reader.hpp\
         code/ssc/ssc/csv_writer.hpp\
@@ -120,6 +123,18 @@ debian_11_release_gcc_10: BOOST_ROOT = /opt/boost
 debian_11_release_gcc_10: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_11_release_gcc_10: cmake-debian-target build-debian test-debian
 
+debian_11_release_gcc_10_wrapper: BUILD_TYPE = Release
+debian_11_release_gcc_10_wrapper: BUILD_DIR = build_deb11
+debian_11_release_gcc_10_wrapper: CPACK_GENERATOR = DEB
+debian_11_release_gcc_10_wrapper: DOCKER_IMAGE = pybind
+debian_11_release_gcc_10_wrapper: BOOST_ROOT = /opt/boost
+debian_11_release_gcc_10_wrapper: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_11_release_gcc_10_wrapper: cmake-debian-target build-debian test-debian
+	# make -C code/wrapper_python build_docker_build_container
+	mkdir -p code/wrapper_python/build
+	cp -rf build_deb11/lib.linux-x86_64-3.9 code/wrapper_python/build/.
+	make -C code/wrapper_python demo_package
+
 windows_gccx_posix: BUILD_TYPE=Release
 windows_gccx_posix: BUILD_DIR=build_win_posix
 windows_gccx_posix: CPACK_GENERATOR=ZIP
@@ -128,8 +143,6 @@ windows_gccx_posix: BOOST_ROOT=/usr/src/mxe/usr/x86_64-w64-mingw32.static.posix
 windows_gccx_posix: HDF5_DIR=/opt/HDF5_1_8_20/cmake
 windows_gccx_posix: cmake-windows-target build-windows test-windows
 
-DOCKER_AS_ROOT:=docker run -t --rm -w /opt/share -v $(shell pwd):/opt/share
-DOCKER_AS_USER:=$(DOCKER_AS_ROOT) -u $(shell id -u):$(shell id -g)
 
 code/yaml-cpp/CMakeLists.txt: yaml-cpp-CMakeLists.txt
 	$(DOCKER_AS_USER) $(DOCKER_IMAGE) /bin/bash -c \
