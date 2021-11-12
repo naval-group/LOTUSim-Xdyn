@@ -68,6 +68,7 @@ debian_9_release_gcc_6: BUILD_DIR = build_deb9
 debian_9_release_gcc_6: CPACK_GENERATOR = DEB
 debian_9_release_gcc_6: DOCKER_IMAGE = sirehna/base-image-debian9-gcc6-xdyn
 debian_9_release_gcc_6: BOOST_ROOT = /opt/boost
+debian_9_release_gcc_6: BUILD_PYTHON_WRAPPER = False
 debian_9_release_gcc_6: cmake-debian-target build-debian test-debian
 
 debian_10_release_gcc_8: BUILD_TYPE = Release
@@ -76,6 +77,7 @@ debian_10_release_gcc_8: CPACK_GENERATOR = DEB
 debian_10_release_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:2021-04-16
 debian_10_release_gcc_8: BOOST_ROOT = /opt/boost
 debian_10_release_gcc_8: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_10_release_gcc_8: BUILD_PYTHON_WRAPPER = False
 debian_10_release_gcc_8: cmake-debian-target build-debian test-debian
 
 debian_10_coverage_gcc_8: BUILD_TYPE = Coverage
@@ -84,6 +86,7 @@ debian_10_coverage_gcc_8: CPACK_GENERATOR = DEB
 debian_10_coverage_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:2021-04-16
 debian_10_coverage_gcc_8: BOOST_ROOT = /opt/boost
 debian_10_coverage_gcc_8: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_10_coverage_gcc_8: BUILD_PYTHON_WRAPPER = False
 debian_10_coverage_gcc_8: cmake-debian-target build-debian test-debian
 
 debian_10_profile_gcc_8: BUILD_TYPE = Profile
@@ -92,6 +95,7 @@ debian_10_profile_gcc_8: CPACK_GENERATOR = DEB
 debian_10_profile_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:2021-04-16
 debian_10_profile_gcc_8: BOOST_ROOT = /opt/boost
 debian_10_profile_gcc_8: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_10_profile_gcc_8: BUILD_PYTHON_WRAPPER = False
 debian_10_profile_gcc_8: cmake-debian-target build-debian test-debian
 
 debian_10_debug_gcc_8: BUILD_TYPE = Debug
@@ -99,6 +103,7 @@ debian_10_debug_gcc_8: BUILD_DIR = build_deb10_dbg
 debian_10_debug_gcc_8: CPACK_GENERATOR = DEB
 debian_10_debug_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:2021-04-16
 debian_10_debug_gcc_8: BOOST_ROOT = /opt/boost
+debian_10_debug_gcc_8: BUILD_PYTHON_WRAPPER = False
 debian_10_debug_gcc_8: cmake-debian-target build-debian
 
 debian_11_debug_gcc_10: BUILD_TYPE = Debug
@@ -106,6 +111,7 @@ debian_11_debug_gcc_10: BUILD_DIR = build_deb11_dbg
 debian_11_debug_gcc_10: CPACK_GENERATOR = DEB
 debian_11_debug_gcc_10: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-08-17
 debian_11_debug_gcc_10: BOOST_ROOT = /opt/boost
+debian_11_debug_gcc_10: BUILD_PYTHON_WRAPPER = False
 debian_11_debug_gcc_10: cmake-debian-target build-debian
 
 debian_11_profile_gcc_10: BUILD_TYPE = Profile
@@ -113,6 +119,7 @@ debian_11_profile_gcc_10: BUILD_DIR = build_deb11_profile
 debian_11_profile_gcc_10: CPACK_GENERATOR = DEB
 debian_11_profile_gcc_10: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-08-17
 debian_11_profile_gcc_10: BOOST_ROOT = /opt/boost
+debian_11_profile_gcc_10: BUILD_PYTHON_WRAPPER = False
 debian_11_profile_gcc_10: cmake-debian-target build-debian
 
 debian_11_release_gcc_10: BUILD_TYPE = Release
@@ -121,6 +128,7 @@ debian_11_release_gcc_10: CPACK_GENERATOR = DEB
 debian_11_release_gcc_10: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-08-17
 debian_11_release_gcc_10: BOOST_ROOT = /opt/boost
 debian_11_release_gcc_10: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_11_release_gcc_10: BUILD_PYTHON_WRAPPER = False
 debian_11_release_gcc_10: cmake-debian-target build-debian test-debian
 
 debian_11_release_gcc_10_wrapper: BUILD_TYPE = Release
@@ -129,6 +137,7 @@ debian_11_release_gcc_10_wrapper: CPACK_GENERATOR = DEB
 debian_11_release_gcc_10_wrapper: DOCKER_IMAGE = pybind
 debian_11_release_gcc_10_wrapper: BOOST_ROOT = /opt/boost
 debian_11_release_gcc_10_wrapper: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_11_release_gcc_10_wrapper: BUILD_PYTHON_WRAPPER = True
 debian_11_release_gcc_10_wrapper: cmake-debian-target build-debian test-debian
 	# make -C code/wrapper_python build_docker_build_container
 	mkdir -p code/wrapper_python/build
@@ -180,6 +189,7 @@ cmake-windows-target: code/yaml-cpp/CMakeLists.txt
 	        -D Boost_SYSTEM_LIBRARY:PATH=$(BOOST_ROOT)/lib/libboost_system-mt.a \
 	        -D Boost_REGEX_LIBRARY:PATH=$(BOOST_ROOT)/lib/libboost_regex-mt.a \
 	        -D CMAKE_SYSTEM_VERSION=7 \
+	        -D BUILD_PYTHON_WRAPPER:BOOL=$(BUILD_PYTHON_WRAPPER) \
 	        /opt/share/code"
 
 build-windows:
@@ -217,6 +227,7 @@ cmake-debian-target: code/yaml-cpp/CMakeLists.txt
 	     -D CMAKE_INSTALL_PREFIX:PATH=/opt/xdyn \
 	     -D HDF5_DIR=$(HDF5_DIR) \
 	     -D BOOST_ROOT:PATH=$(BOOST_ROOT) \
+	     -D BUILD_PYTHON_WRAPPER:BOOL=$(BUILD_PYTHON_WRAPPER) \
 	    /opt/share/code"
 
 build-debian: SHELL:=/bin/bash
