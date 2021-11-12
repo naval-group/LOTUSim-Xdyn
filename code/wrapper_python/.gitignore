@@ -1,0 +1,5 @@
+core
+dist
+build
+*.egg-info
+*.whl
