@@ -132,7 +132,7 @@ debian_11_release_gcc_10: BUILD_PYTHON_WRAPPER = False
 debian_11_release_gcc_10: cmake-debian-target build-debian test-debian
 
 debian_11_release_gcc_10_wrapper: BUILD_TYPE = Release
-debian_11_release_gcc_10_wrapper: BUILD_DIR = build_deb11
+debian_11_release_gcc_10_wrapper: BUILD_DIR = build_deb11_pywrapper
 debian_11_release_gcc_10_wrapper: CPACK_GENERATOR = DEB
 debian_11_release_gcc_10_wrapper: DOCKER_IMAGE = pybind
 debian_11_release_gcc_10_wrapper: BOOST_ROOT = /opt/boost
