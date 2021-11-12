@@ -15,16 +15,11 @@
 #include "ssc/ssc/kinematics/Point.hpp"
 #include "ssc/ssc/kinematics/Wrench.hpp"
 
-// std::string KtKqForceModel::model_name() {return "Kt(J) & Kq(J)";}
-
-// #include "demo_class.hpp"
-
 #define STRINGIFY(x) #x
 #define MACRO_STRINGIFY(x) STRINGIFY(x)
 
 
 namespace py = pybind11;
-#include <string>
 
 class Animal {
 public:
@@ -98,12 +93,12 @@ PYBIND11_MODULE(example, m) {
 */
 
 
-PYBIND11_MODULE(pyxdyn, m) {
+PYBIND11_MODULE(xdyn, m) {
     m.doc() = R"pbdoc(
         Pybind11 example plugin
         -----------------------
 
-        .. currentmodule:: pyxdyn
+        .. currentmodule:: xdyn
 
         .. autosummary::
            :toctree: _generate

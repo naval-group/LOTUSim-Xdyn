@@ -82,7 +82,7 @@ build:debian11-release-python:
      when: on_success
      paths:
      - xdyn.deb
-     - pyxdyn*.whl
+     - xdyn*.whl
 
 build:debian11-debug:
    stage: build

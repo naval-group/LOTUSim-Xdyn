@@ -15,13 +15,13 @@ class CMakeBuild(build_ext):
 
 
 setup(
-    name="pyxdyn",
+    name="xdyn",
     version="0.0.1",
     author="Sirehna",
     author_email="sirehna@sirehna.com",
     description="A Python wrapper for XDyn",
     long_description="",
-    ext_modules=[CMakeExtension("pyxdyn")],
+    ext_modules=[CMakeExtension("xdyn")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
     extras_require={"test": ["pytest>=6.0"]},

@@ -18,9 +18,9 @@ demo_package_test_build:
 
 demo_package_test_run:
 	$(DOCKER_AS_USER) pybindtest /bin/bash -c \
-	    "python3 -c 'import pyxdyn; \
-		 import pyxdyn.ssc; \
-		 from pyxdyn.ssc.kinematics import Point as SscPoint; \
+	    "python3 -c 'import xdyn; \
+		 import xdyn.ssc; \
+		 from xdyn.ssc.kinematics import Point as SscPoint; \
 		 sscpoint1 = SscPoint(); \
 		 sscpoint2 = SscPoint(\"toto\"); \
 		 sscpoint3 = SscPoint(\"toto\",1,2,3); \
@@ -28,7 +28,7 @@ demo_package_test_run:
 		 print(sscpoint3.v); \
 		 sscpoint4 = SscPoint(\"toto\", [7,8,9]); \
 		 print(sscpoint4.v); \
-		 from pyxdyn.ssc.kinematics import Wrench as SscWrench; \
+		 from xdyn.ssc.kinematics import Wrench as SscWrench; \
 		 sscwrench = SscWrench(); \
 		 print(sscwrench); \
 		 print(\"Uninitialized\"); \
@@ -37,35 +37,35 @@ demo_package_test_run:
 		 print(sscwrench.torque); \
 		 sscwrench.torque = [2,5,6]; \
 		 print(sscwrench.torque); \
-		 print(pyxdyn.add(1, 2)); \
-		 print(pyxdyn.subtract(1, 2)); \
-		 from pyxdyn import EnvironmentAndFrames; \
+		 print(xdyn.add(1, 2)); \
+		 print(xdyn.subtract(1, 2)); \
+		 from xdyn import EnvironmentAndFrames; \
 		 env=EnvironmentAndFrames(); \
 		 print(env);\
 		 print(dir(env));\
 		 env.g=9.81;\
-		 from pyxdyn import BodyStates; \
+		 from xdyn import BodyStates; \
 		 bs = BodyStates(0.0); \
 		 print(bs); \
 		 print(bs.name); \
 		 bs.name=\"gh\"; \
 		 print(bs.name); \
 		 print(dir(bs)); \
-		 from pyxdyn import Wrench; \
+		 from xdyn import Wrench; \
 		 wrench = Wrench(sscwrench); \
 		 print(wrench); \
 		 print(dir(wrench)); \
 		 print(wrench.force); \
 		 print(wrench.torque); \
-		 from pyxdyn import GravityForceModel; \
+		 from xdyn import GravityForceModel; \
 		 gfm = GravityForceModel(\"g\",env); \
 		 print(gfm);\
 		 # res=gfm.get_force(bs,0.0,env, {}); \
 		 # print(res);\
-		 from pyxdyn import call_go; \
-		 from pyxdyn import Dog; \
+		 from xdyn import call_go; \
+		 from xdyn import Dog; \
 		 d=Dog(); result = call_go(d); print(result); \
-		 print(dir(pyxdyn))'"
+		 print(dir(xdyn))'"
 
 clean:
 	@rm -rf build

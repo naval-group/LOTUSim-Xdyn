@@ -141,7 +141,7 @@ debian_11_release_gcc_10_wrapper: BUILD_PYTHON_WRAPPER = True
 debian_11_release_gcc_10_wrapper: cmake-debian-target build-debian test-debian
 	# make -C code/wrapper_python build_docker_build_container
 	mkdir -p code/wrapper_python/build
-	cp -rf build_deb11/lib.linux-x86_64-3.9 code/wrapper_python/build/.
+	cp -rf ${BUILD_DIR}/lib.linux-x86_64-3.9 code/wrapper_python/build/.
 	make -C code/wrapper_python demo_package
 
 windows_gccx_posix: BUILD_TYPE=Release

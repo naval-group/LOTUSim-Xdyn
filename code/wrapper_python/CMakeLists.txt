@@ -5,9 +5,6 @@ set(PYTHON_PACKAGE_NAME pyxdyn)
 
 message(STATUS "PYTHON WRAPPER!")
 if (NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
-    message(STATUS "CMAKE_CURRENT_BINARY_DIR = ${CMAKE_CURRENT_BINARY_DIR}")
-    message(STATUS "CMAKE_BINARY_DIR = ${CMAKE_BINARY_DIR}")
-    # set(CMAKE_LIBRARY_OUTPUT_DIRECTORY /opt/share/pybind/build/lib.linux-x86_64-3.9)
     set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib.linux-x86_64-3.9/)
 endif()
 message(STATUS "CMAKE_LIBRARY_OUTPUT_DIRECTORY = ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
@@ -20,6 +17,8 @@ pybind11_add_module(${PYTHON_PACKAGE_NAME}
     src/demo_class.hpp
     src/main.cpp
     )
+set_target_properties(${PYTHON_PACKAGE_NAME} PROPERTIES OUTPUT_NAME "xdyn")
+
 message(STATUS "ssc_INCLUDE_DIRS ${ssc_INCLUDE_DIRS}")
 target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>)
 target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${ssc_INCLUDE_DIRS}>)
@@ -31,7 +30,6 @@ target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${en
 target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${yaml_parser_INCLUDE_DIRS}>)
 target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${hdb_interpolators_INCLUDE_DIRS}>)
 target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${core_INCLUDE_DIRS}>)
-
 target_include_directories(${PYTHON_PACKAGE_NAME} SYSTEM PRIVATE $<BUILD_INTERFACE:${eigen_INCLUDE_DIRS}>)
 target_include_directories(${PYTHON_PACKAGE_NAME} SYSTEM PRIVATE $<BUILD_INTERFACE:${Boost_INCLUDE_DIRS}>)
 target_include_directories(${PYTHON_PACKAGE_NAME} SYSTEM PRIVATE $<BUILD_INTERFACE:${YAML_CPP_INCLUDE_DIRS}>)
@@ -87,10 +85,10 @@ ELSE()
     TARGET_LINK_LIBRARIES(${PYTHON_PACKAGE_NAME} PUBLIC pthread)
 ENDIF()
 
-target_link_libraries(${PYTHON_PACKAGE_NAME} PRIVATE
-    ${Boost_PROGRAM_OPTIONS_LIBRARY}
-    boost_program_options_descriptions_static
+#target_link_libraries(${PYTHON_PACKAGE_NAME} PRIVATE
+#    ${Boost_PROGRAM_OPTIONS_LIBRARY}
+#     boost_program_options_descriptions_static
 #     ${GRPC_GRPCPP_UNSECURE}
 #     ${PROTOBUF_LIBPROTOBUF}
 #     ${Boost_THREAD_LIBRARY}
-    )
+#   )
