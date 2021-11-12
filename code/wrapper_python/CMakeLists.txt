@@ -1,0 +1,96 @@
+cmake_minimum_required(VERSION 3.4...3.18)
+project(xdyn_python)
+
+set(PYTHON_PACKAGE_NAME pyxdyn)
+
+message(STATUS "PYTHON WRAPPER!")
+if (NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
+    message(STATUS "CMAKE_CURRENT_BINARY_DIR = ${CMAKE_CURRENT_BINARY_DIR}")
+    message(STATUS "CMAKE_BINARY_DIR = ${CMAKE_BINARY_DIR}")
+    # set(CMAKE_LIBRARY_OUTPUT_DIRECTORY /opt/share/pybind/build/lib.linux-x86_64-3.9)
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib.linux-x86_64-3.9/)
+endif()
+message(STATUS "CMAKE_LIBRARY_OUTPUT_DIRECTORY = ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+
+find_package(pybind11 REQUIRED)
+
+pybind11_add_module(${PYTHON_PACKAGE_NAME}
+    src/demo.cpp
+    src/demo.hpp
+    src/demo_class.hpp
+    src/main.cpp
+    )
+message(STATUS "ssc_INCLUDE_DIRS ${ssc_INCLUDE_DIRS}")
+target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>)
+target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${ssc_INCLUDE_DIRS}>)
+target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${exceptions_INCLUDE_DIRS}>)
+target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${external_data_structures_INCLUDE_DIRS}>)
+target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${external_file_formats_INCLUDE_DIRS}>)
+target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${mesh_INCLUDE_DIRS}>)
+target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${environment_models_INCLUDE_DIRS}>)
+target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${yaml_parser_INCLUDE_DIRS}>)
+target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${hdb_interpolators_INCLUDE_DIRS}>)
+target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${core_INCLUDE_DIRS}>)
+
+target_include_directories(${PYTHON_PACKAGE_NAME} SYSTEM PRIVATE $<BUILD_INTERFACE:${eigen_INCLUDE_DIRS}>)
+target_include_directories(${PYTHON_PACKAGE_NAME} SYSTEM PRIVATE $<BUILD_INTERFACE:${Boost_INCLUDE_DIRS}>)
+target_include_directories(${PYTHON_PACKAGE_NAME} SYSTEM PRIVATE $<BUILD_INTERFACE:${YAML_CPP_INCLUDE_DIRS}>)
+
+
+target_link_libraries(${PYTHON_PACKAGE_NAME} PRIVATE
+    $<TARGET_OBJECTS:random_data_generator_object>
+    $<TARGET_OBJECTS:exception_handling_object>
+    $<TARGET_OBJECTS:decode_unit_object>
+    $<TARGET_OBJECTS:yaml_parser_object>
+    $<TARGET_OBJECTS:text_file_reader_object>
+    $<TARGET_OBJECTS:integrate_object>
+    $<TARGET_OBJECTS:numeric_object>
+    $<TARGET_OBJECTS:data_source_object>
+    $<TARGET_OBJECTS:kinematics_object>
+    $<TARGET_OBJECTS:interpolation_object>
+    $<TARGET_OBJECTS:csv_file_reader_object>
+    $<TARGET_OBJECTS:csv_writer_object>
+    $<TARGET_OBJECTS:matrix_and_vector_classes_object>
+    $<TARGET_OBJECTS:functors_for_optimizer_object>
+    $<TARGET_OBJECTS:websocket_object>
+    $<TARGET_OBJECTS:f2c_object>
+    $<TARGET_OBJECTS:json_object>
+    $<TARGET_OBJECTS:solver_object>
+    $<TARGET_OBJECTS:core>
+    $<TARGET_OBJECTS:get_git_sha>
+    # $<TARGET_OBJECTS:observers_and_api>
+    # $<TARGET_OBJECTS:listeners_and_controllers>
+    $<TARGET_OBJECTS:force_models>
+    $<TARGET_OBJECTS:environment_models>
+    $<TARGET_OBJECTS:external_file_formats>
+    $<TARGET_OBJECTS:mesh>
+    $<TARGET_OBJECTS:yaml_parser>
+    # $<TARGET_OBJECTS:fmi_simulator>
+    $<TARGET_OBJECTS:external_data_structures>
+    $<TARGET_OBJECTS:hdb_interpolators>
+    $<TARGET_OBJECTS:interface_hdf5>
+    # $<TARGET_OBJECTS:gz_curves>
+    #$<TARGET_OBJECTS:grpc>
+    )
+
+
+TARGET_LINK_LIBRARIES(${PYTHON_PACKAGE_NAME} PRIVATE yaml-cpp)
+TARGET_LINK_LIBRARIES(${PYTHON_PACKAGE_NAME} PRIVATE gfortran)
+TARGET_LINK_LIBRARIES(${PYTHON_PACKAGE_NAME} PRIVATE ${HDF5_CXX_STATIC_LIBRARY} ${HDF5_C_STATIC_LIBRARY})
+TARGET_LINK_LIBRARIES(${PYTHON_PACKAGE_NAME} PRIVATE ${Boost_FILESYSTEM_LIBRARY})
+TARGET_LINK_LIBRARIES(${PYTHON_PACKAGE_NAME} PRIVATE ${Boost_SYSTEM_LIBRARY})
+TARGET_LINK_LIBRARIES(${PYTHON_PACKAGE_NAME} PRIVATE ${Boost_REGEX_LIBRARY})
+
+IF(WIN32)
+    TARGET_LINK_LIBRARIES(${PYTHON_PACKAGE_NAME} PUBLIC wsock32 ws2_32)
+ELSE()
+    TARGET_LINK_LIBRARIES(${PYTHON_PACKAGE_NAME} PUBLIC pthread)
+ENDIF()
+
+target_link_libraries(${PYTHON_PACKAGE_NAME} PRIVATE
+    ${Boost_PROGRAM_OPTIONS_LIBRARY}
+    boost_program_options_descriptions_static
+#     ${GRPC_GRPCPP_UNSECURE}
+#     ${PROTOBUF_LIBPROTOBUF}
+#     ${Boost_THREAD_LIBRARY}
+    )
