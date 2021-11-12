@@ -222,3 +222,6 @@ IF(BUILD_DOCUMENTATION)
 ENDIF()
 INCLUDE(CMakeCustomTargets)
 INCLUDE(CMakePack)
+
+
+ADD_SUBDIRECTORY(wrapper_python)
