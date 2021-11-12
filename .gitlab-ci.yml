@@ -71,6 +71,19 @@ build:debian11-release:
      paths:
      - xdyn.deb
 
+build:debian11-release-python:
+   stage: build
+   script:
+     - cd code/wrapper_python && make build_docker_build_container && cd ../..
+     - make NB_OF_PARALLEL_BUILDS="-j 1" debian_11_release_gcc_10_wrapper
+     - mv build_deb11/xdyn.deb .
+     - mv code/wrapper_python/*.whl .
+   artifacts:
+     when: on_success
+     paths:
+     - xdyn.deb
+     - pyxdyn*.whl
+
 build:debian11-debug:
    stage: build
    script:
