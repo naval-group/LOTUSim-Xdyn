@@ -87,6 +87,11 @@ demo_package_test_run:
 		 from xdyn import call_go; \
 		 from xdyn import Dog; \
 		 d=Dog(); result = call_go(d); print(result); \
+		 from xdyn.hdbinterpolators import History; \
+		 h1 = History(); \
+		 h2 = History(0.2); \
+		 from xdyn.hdbinterpolators import RAOData; \
+		 raodata = RAOData(); \
 		 print(dir(xdyn))'"
 
 clean:
