@@ -11,6 +11,8 @@
 #include "core/inc/EnvironmentAndFrames.hpp"
 #include "core/inc/ForceModel.hpp"
 #include "core/inc/Wrench.hpp"
+#include "hdb_interpolators/inc/History.hpp"
+#include "hdb_interpolators/inc/TimestampedMatrix.hpp"
 #include "force_models/inc/HydrostaticForceModel.hpp"
 #include "force_models/inc/GravityForceModel.hpp"
 #include "ssc/ssc/kinematics/coriolis_and_centripetal.hpp"
@@ -21,7 +23,6 @@
 #include "ssc/ssc/kinematics/Transform.hpp"
 #include "ssc/ssc/kinematics/Velocity.hpp"
 #include "ssc/ssc/kinematics/Wrench.hpp"
-
 #define STRINGIFY(x) #x
 #define MACRO_STRINGIFY(x) STRINGIFY(x)
 
@@ -252,6 +253,22 @@ PYBIND11_MODULE(xdyn, m) {
         .def("model_name", &HydrostaticForceModel::model_name);
     */
 
+    py::module m_hdb_interpolators = m.def_submodule("hdbinterpolators");
+    py::class_<History>(m_hdb_interpolators, "History")
+        .def(py::init<>())
+        .def(py::init<const double /*Tmax=0*/>())
+        .def("average", &History::average,
+        R"(
+        Returns the average value integrated between t-length and t, t being the current instant.
+        A trapezoidal integration is used.
+        Returns Value at t-tau in history
+        )");
+
+    py::class_<RAOData>(m_hdb_interpolators, "RAOData")
+        .def(py::init<>())
+        .def_readwrite("periods", &RAOData::periods)
+        .def_readwrite("psi", &RAOData::psi)
+        .def_readwrite("values", &RAOData::values);
 
 #ifdef VERSION_INFO
     m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
