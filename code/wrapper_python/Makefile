@@ -18,8 +18,22 @@ demo_package_test_build:
 
 demo_package_test_run:
 	$(DOCKER_AS_USER) pybindtest /bin/bash -c \
-	    "python3 -c 'import xdyn; \
+	    "python3 -c 'import numpy as np; \
+		 import xdyn; \
 		 import xdyn.ssc; \
+		 from xdyn.ssc.kinematics import KinematicTree as SscKinematicTree; \
+		 from xdyn.ssc.kinematics import coriolis_and_centripetal; \
+		 help(coriolis_and_centripetal); \
+		 ssckt = SscKinematicTree(); \
+		 ssckt.add(\"NED\", \"BODY\"); \
+		 ssckt.add(\"BODY\", \"CRANE\"); \
+		 print(ssckt.get_path(\"NED\", \"CRANE\")); \
+		 from xdyn.ssc.kinematics import EulerAngles as SscEulerAngles; \
+		 sscea1 = SscEulerAngles(); \
+		 print(sscea1); \
+		 print(sscea1.phi); \
+		 sscea1.phi=666; \
+		 print(sscea1.phi); \
 		 from xdyn.ssc.kinematics import Point as SscPoint; \
 		 sscpoint1 = SscPoint(); \
 		 sscpoint2 = SscPoint(\"toto\"); \
@@ -37,6 +51,14 @@ demo_package_test_run:
 		 print(sscwrench.torque); \
 		 sscwrench.torque = [2,5,6]; \
 		 print(sscwrench.torque); \
+		 from xdyn.ssc.kinematics import RotationMatrix as SscRotationMatrix; \
+		 from xdyn.ssc.kinematics import Transform as SscTransform; \
+		 ssctransform1 = SscTransform(); \
+		 ssctransform2 = SscTransform(SscPoint(\"frameA\", 1,2,3),\"frameB\"); \
+		 ssctransform3 = SscTransform(SscPoint(\"frame1\",4,5,6),np.array([[1.0,0.0,0.0],[0.0,-1.0,0.0],[0.0,0.0,-1.0]]), \"frameB\"); \
+		 print(ssctransform1.get_from_frame()); \
+		 print(ssctransform2.get_from_frame()); \
+		 print(ssctransform3.get_from_frame()); \
 		 print(xdyn.add(1, 2)); \
 		 print(xdyn.subtract(1, 2)); \
 		 from xdyn import EnvironmentAndFrames; \
