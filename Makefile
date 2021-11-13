@@ -297,6 +297,7 @@ clean:
 	rm -rf build_*
 	rm -rf yaml-cpp
 	@make -C doc_user clean; rm -f doc_user/xdyn.deb doc.html
+	@make -C code/python_wrapper clean
 
 GREP=$(DOCKER_AS_USER) --entrypoint /bin/grep bitnami/minideb
 
