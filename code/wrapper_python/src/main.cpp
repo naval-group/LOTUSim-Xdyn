@@ -17,8 +17,10 @@
 #include "force_models/inc/GravityForceModel.hpp"
 #include "ssc/ssc/kinematics/coriolis_and_centripetal.hpp"
 #include "ssc/ssc/kinematics/EulerAngles.hpp"
+#include "ssc/ssc/kinematics/Kinematics.hpp"
 #include "ssc/ssc/kinematics/KinematicTree.hpp"
 #include "ssc/ssc/kinematics/Point.hpp"
+#include "ssc/ssc/kinematics/PointMatrix.hpp"
 #include "ssc/ssc/kinematics/RotationMatrix.hpp"
 #include "ssc/ssc/kinematics/Transform.hpp"
 #include "ssc/ssc/kinematics/Velocity.hpp"
@@ -103,17 +105,36 @@ PYBIND11_MODULE(example, m) {
 
 PYBIND11_MODULE(xdyn, m) {
     m.doc() = R"pbdoc(
-        Pybind11 example plugin
-        -----------------------
+        xdyn
+        ----
 
         .. currentmodule:: xdyn
 
         .. autosummary::
            :toctree: _generate
-
-           add
-           subtract
     )pbdoc";
+
+
+    m.def("add", &add, R"pbdoc(
+        Add two numbers
+
+        Some other explanation about the add function.
+    )pbdoc");
+
+    m.def("subtract", [](int i, int j) { return i - j; }, R"pbdoc(
+        Subtract two numbers
+
+        Some other explanation about the subtract function.
+    )pbdoc");
+
+    py::class_<Animal, PyAnimal>(m, "Animal")
+        .def(py::init<>())
+        .def("go", &Animal::go);
+
+    py::class_<Dog, Animal>(m, "Dog")
+        .def(py::init<>());
+
+    m.def("call_go", &call_go);
 
     py::module m_ssc = m.def_submodule("ssc");
     py::module m_ssc_kinematics = m_ssc.def_submodule("kinematics");
@@ -136,9 +157,9 @@ PYBIND11_MODULE(xdyn, m) {
     py::class_<ssc::kinematics::EulerAngles>(m_ssc_kinematics, "EulerAngles")
         .def(py::init<>())
         .def(py::init<const double, const double, const double>())
-        .def_readwrite("phi", &ssc::kinematics::EulerAngles::phi)
-        .def_readwrite("theta", &ssc::kinematics::EulerAngles::theta)
-        .def_readwrite("psi", &ssc::kinematics::EulerAngles::psi)
+        .def_readwrite("phi", &ssc::kinematics::EulerAngles::phi, "Phi in radian")
+        .def_readwrite("theta", &ssc::kinematics::EulerAngles::theta, "Theta in radian")
+        .def_readwrite("psi", &ssc::kinematics::EulerAngles::psi, "Psi in radian")
         .def("__repr__",
            [](const ssc::kinematics::EulerAngles &a) {
                std::stringstream ss;
@@ -149,11 +170,22 @@ PYBIND11_MODULE(xdyn, m) {
             }
         );
 
+    py::class_<ssc::kinematics::Kinematics>(m_ssc_kinematics, "Kinematics",
+        "Lazily computes the optimal transform between two reference frames.")
+        .def(py::init<>())
+        .def("add",&ssc::kinematics::Kinematics::add, "Adds a transform between two reference frames")
+        .def("get",&ssc::kinematics::Kinematics::get, "Returns the transform from one frame to another (or throws a KinematicsException).");
+
     py::class_<ssc::kinematics::KinematicTree>(m_ssc_kinematics, "KinematicTree")
         .def(py::init<>())
         .def("add",&ssc::kinematics::KinematicTree::add)
         .def("get_path",&ssc::kinematics::KinematicTree::get_path);
 
+    py::class_<ssc::kinematics::PointMatrix>(m_ssc_kinematics, "PointMatrix")
+        .def(py::init<>())
+        .def(py::init<const std::string& /*frame*/, const size_t /*nb_of_columns*/>())
+        .def(py::init<const ssc::kinematics::Matrix3Xd& /*m*/,const std::string& /*frame*/>())
+        .def_readwrite("m",&ssc::kinematics::PointMatrix::m);
 
     py::class_<ssc::kinematics::RotationMatrix>(m_ssc_kinematics, "RotationMatrix");
 
@@ -167,7 +199,6 @@ PYBIND11_MODULE(xdyn, m) {
         .def("inverse",&ssc::kinematics::Transform::inverse)
         .def("get_point",&ssc::kinematics::Transform::get_point)
         .def("get_rot",&ssc::kinematics::Transform::get_rot);
-
 
     py::class_<ssc::kinematics::Velocity>(m_ssc_kinematics, "Velocity")
         .def(py::init<const ssc::kinematics::Point& /*p*/, const ssc::kinematics::AngularVelocityVector& /*w*/>())
@@ -191,27 +222,6 @@ PYBIND11_MODULE(xdyn, m) {
         in the body frame of the linear velocity of the body with respect to the
         (Gallilean) earth frame.)");
 
-    m.def("add", &add, R"pbdoc(
-        Add two numbers
-
-        Some other explanation about the add function.
-    )pbdoc");
-
-    m.def("subtract", [](int i, int j) { return i - j; }, R"pbdoc(
-        Subtract two numbers
-
-        Some other explanation about the subtract function.
-    )pbdoc");
-
-    py::class_<Animal, PyAnimal>(m, "Animal")
-        .def(py::init<>())
-        .def("go", &Animal::go);
-
-    py::class_<Dog, Animal>(m, "Dog")
-        .def(py::init<>());
-
-    m.def("call_go", &call_go);
-
     py::class_<EnvironmentAndFrames>(m, "EnvironmentAndFrames")
         .def(py::init<>())
         .def_readwrite("rho", &EnvironmentAndFrames::rho)
@@ -222,17 +232,23 @@ PYBIND11_MODULE(xdyn, m) {
 
     py::class_<BodyStates>(m, "BodyStates")
         .def(py::init<const double>())
-        .def_readwrite("name", &BodyStates::name)
+        .def_readwrite("name", &BodyStates::name, "Body's name")
+        .def_readwrite("G", &BodyStates::G, "Position of the ship's centre of gravity")
         .def_readwrite("x_relative_to_mesh", &BodyStates::x_relative_to_mesh)
         .def_readwrite("y_relative_to_mesh", &BodyStates::y_relative_to_mesh)
-        .def_readwrite("z_relative_to_mesh", &BodyStates::z_relative_to_mesh);
+        .def_readwrite("z_relative_to_mesh", &BodyStates::z_relative_to_mesh)
+        .def_readwrite("x", &BodyStates::x);
+
 
     py::class_<Wrench>(m, "Wrench")
         .def(py::init<const ssc::kinematics::Wrench&>())
         .def_readwrite("force", &Wrench::force)
         .def_readwrite("torque", &Wrench::torque);
 
-    py::class_<ForceModel>(m, "ForceModel");
+    py::class_<ForceModel>(m, "ForceModel")
+        .def("get_name", &ForceModel::get_name)
+        .def("get_body_name", &ForceModel::get_body_name);
+
     py::class_<GravityForceModel, ForceModel>(m, "GravityForceModel")
         .def(py::init<const std::string&, const EnvironmentAndFrames&>())
         .def("model_name", &GravityForceModel::model_name)
