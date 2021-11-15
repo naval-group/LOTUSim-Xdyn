@@ -204,10 +204,10 @@ PYBIND11_MODULE(xdyn, m) {
         .def(py::init<const ssc::kinematics::Point& /*p*/, const ssc::kinematics::AngularVelocityVector& /*w*/>())
         .def(py::init<const ssc::kinematics::Point& /*p*/, const ssc::kinematics::TranslationVelocityVector& /*t*/, const ssc::kinematics::AngularVelocityVector& /*w*/>())
         .def("get_rot",&ssc::kinematics::Velocity::get_frame)
-        .def("get_rot",&ssc::kinematics::Velocity::get_point)
-        .def("get_rot",&ssc::kinematics::Velocity::get_angular_velocity)
-        .def("get_rot",&ssc::kinematics::Velocity::get_translation_velocity)
-        .def("get_rot",&ssc::kinematics::Velocity::change_point)
+        .def("get_point",&ssc::kinematics::Velocity::get_point)
+        .def("get_angular_velocity",&ssc::kinematics::Velocity::get_angular_velocity)
+        .def("get_translation_velocity",&ssc::kinematics::Velocity::get_translation_velocity)
+        .def("change_point",&ssc::kinematics::Velocity::change_point)
         ;
 
     m_ssc_kinematics.def("coriolis_and_centripetal", &ssc::kinematics::coriolis_and_centripetal,
