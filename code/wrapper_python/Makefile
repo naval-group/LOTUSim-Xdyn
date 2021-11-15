@@ -17,13 +17,18 @@ demo_package_test_build:
 	docker build . -f Dockerfile_test -t pybindtest
 
 demo_package_test_run:
+	# we dont use help to display of function, since it is blocking docker run, we use render_doc
 	$(DOCKER_AS_USER) pybindtest /bin/bash -c \
 	    "python3 -c 'import numpy as np; \
+		 from pydoc import render_doc; \
 		 import xdyn; \
+		 print(render_doc(xdyn)); \
 		 import xdyn.ssc; \
+		 from xdyn.ssc.kinematics import Kinematics as SscKinematics; \
+		 sscki = SscKinematics(); \
 		 from xdyn.ssc.kinematics import KinematicTree as SscKinematicTree; \
 		 from xdyn.ssc.kinematics import coriolis_and_centripetal; \
-		 help(coriolis_and_centripetal); \
+		 print(render_doc(coriolis_and_centripetal)); \
 		 ssckt = SscKinematicTree(); \
 		 ssckt.add(\"NED\", \"BODY\"); \
 		 ssckt.add(\"BODY\", \"CRANE\"); \
@@ -76,14 +81,11 @@ demo_package_test_run:
 		 from xdyn import Wrench; \
 		 wrench = Wrench(sscwrench); \
 		 print(wrench); \
-		 print(dir(wrench)); \
 		 print(wrench.force); \
 		 print(wrench.torque); \
 		 from xdyn import GravityForceModel; \
 		 gfm = GravityForceModel(\"g\",env); \
 		 print(gfm);\
-		 # res=gfm.get_force(bs,0.0,env, {}); \
-		 # print(res);\
 		 from xdyn import call_go; \
 		 from xdyn import Dog; \
 		 d=Dog(); result = call_go(d); print(result); \
@@ -92,6 +94,9 @@ demo_package_test_run:
 		 h2 = History(0.2); \
 		 from xdyn.hdbinterpolators import RAOData; \
 		 raodata = RAOData(); \
+		 print(raodata.periods); \
+		 print(raodata.psi); \
+		 print(raodata.values); \
 		 print(dir(xdyn))'"
 
 clean:
