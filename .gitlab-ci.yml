@@ -76,7 +76,7 @@ build:debian11-release-python:
    script:
      - cd code/wrapper_python && make build_docker_build_container && cd ../..
      - make NB_OF_PARALLEL_BUILDS="-j 1" debian_11_release_gcc_10_wrapper
-     - mv build_deb11/xdyn.deb .
+     - mv build_deb11_pywrapper/xdyn.deb .
      - mv code/wrapper_python/*.whl .
    artifacts:
      when: on_success
