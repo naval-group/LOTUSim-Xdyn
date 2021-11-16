@@ -8,9 +8,7 @@
 #ifndef YAMLCONTROLLER_HPP_
 #define YAMLCONTROLLER_HPP_
 
-#include <map>
 #include <string>
-#include <vector>
 
 /** \brief Stores the controller parameters used to generate a command for a controlled force
  */
