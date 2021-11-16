@@ -25,7 +25,7 @@ class HydroPolarForceModel : public ForceModel
             boost::optional<std::string> angle_command;
         };
 
-        HydroPolarForceModel(const Input input, const std::string body_name, const EnvironmentAndFrames& env);
+        HydroPolarForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env);
         HydroPolarForceModel() = delete;
         virtual ~HydroPolarForceModel() = default;
 
