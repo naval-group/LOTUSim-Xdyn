@@ -1,7 +1,15 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/eigen.h>
+#include <pybind11/iostream.h>
 #include <pybind11/stl.h>
 #include <Eigen/Dense>
+#include <boost/optional.hpp>
+// `boost::optional` as an example -- can be any `std::optional`-like container
+namespace pybind11 { namespace detail {
+    template <typename T>
+    struct type_caster<boost::optional<T>> : optional_caster<boost::optional<T>> {};
+}}
+
 #include <iostream>
 #include <map>
 #include <string>
@@ -11,11 +19,15 @@
 #include "core/inc/EnvironmentAndFrames.hpp"
 #include "core/inc/ForceModel.hpp"
 #include "core/inc/Wrench.hpp"
-#include "external_data_structures/inc/YamlRotation.hpp"
+#include "external_data_structures/inc/YamlAngle.hpp"
+#include "external_data_structures/inc/YamlController.hpp"
 #include "external_data_structures/inc/YamlCoordinates.hpp"
+#include "external_data_structures/inc/YamlPosition.hpp"
+#include "external_data_structures/inc/YamlRotation.hpp"
 #include "hdb_interpolators/inc/History.hpp"
 #include "hdb_interpolators/inc/TimestampedMatrix.hpp"
 #include "force_models/inc/HydrostaticForceModel.hpp"
+#include "force_models/inc/HydroPolarForceModel.hpp"
 #include "force_models/inc/GravityForceModel.hpp"
 #include "force_models/inc/MMGManeuveringForceModel.hpp"
 #include "ssc/ssc/kinematics/coriolis_and_centripetal.hpp"
@@ -117,6 +129,7 @@ PYBIND11_MODULE(xdyn, m) {
            :toctree: _generate
     )pbdoc";
 
+    py::add_ostream_redirect(m, "ostream_redirect");
 
     m.def("add", &add, R"pbdoc(
         Add two numbers
@@ -259,6 +272,14 @@ PYBIND11_MODULE(xdyn, m) {
         .def("__getitem__", &History::operator[], "Get direct access to a (time, value) tuple of history")
         ;
 
+    py::class_<YamlAngle>(m, "YamlAngle")
+        .def(py::init<>())
+        .def(py::init<const double /*phi*/, const double /*theta*/, const double /*psi*/>())
+        .def_readwrite("phi", &YamlAngle::phi)
+        .def_readwrite("theta", &YamlAngle::theta)
+        .def_readwrite("psi", &YamlAngle::psi)
+        ;
+
     py::class_<YamlCoordinates>(m, "YamlCoordinates")
         .def(py::init<>())
         .def(py::init<const double /*x*/, const double /*y*/, const double /*z*/>())
@@ -274,8 +295,25 @@ PYBIND11_MODULE(xdyn, m) {
         .def_readwrite("order_by", &YamlRotation::order_by, "Order. Use '[\"z\",\"y'\",\"x''\"]\"")
         ;
 
+    py::class_<YamlPosition>(m, "YamlPosition")
+        .def(py::init<>())
+        .def(py::init<const YamlCoordinates& /*c*/, const YamlAngle& /*a*/, const std::string& /*frame*/>())
+        .def_readwrite("coordinates", &YamlPosition::coordinates)
+        .def_readwrite("angle", &YamlPosition::angle)
+        .def_readwrite("frame", &YamlPosition::frame)
+        ;
+    //static YamlPosition Origin(const std::string& frame);
+
+    py::class_<YamlController>(m, "YamlController",
+        "Stores the controller parameters used to generate a command for a controlled force")
+        .def(py::init<>())
+        .def_readwrite("type", &YamlController::type, "Type of the controller (PID, gRPC)")
+        .def_readwrite("dt", &YamlController::dt, "Time step of the discrete system")
+        .def_readwrite("rest_of_the_yaml", &YamlController::rest_of_the_yaml, "All other fields that are spectific to the controller type")
+        ;
+
     py::class_<BodyStates>(m, "BodyStates")
-        .def(py::init<const double>())
+        .def(py::init<const double>(), py::arg("Tmax") = 0.0)
         .def_readwrite("name", &BodyStates::name, "Body's name")
         .def_readwrite("G", &BodyStates::G, "Position of the ship's centre of gravity")
         .def_readwrite("x_relative_to_mesh", &BodyStates::x_relative_to_mesh)
@@ -320,7 +358,7 @@ PYBIND11_MODULE(xdyn, m) {
         .def("get_force", &GravityForceModel::get_force);
         // Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const;
 
-    py::class_<MMGManeuveringForceModel::Input>(m, "MMGManeuveringForceModeInput")
+    py::class_<MMGManeuveringForceModel::Input>(m, "MMGManeuveringForceModelInput")
         .def(py::init<>())
         .def_readwrite("application_point", &MMGManeuveringForceModel::Input::application_point)
         .def_readwrite("Lpp", &MMGManeuveringForceModel::Input::Lpp)
@@ -350,6 +388,27 @@ PYBIND11_MODULE(xdyn, m) {
         .def("get_force", &MMGManeuveringForceModel::get_force)
         ;
 
+    py::class_<HydroPolarForceModel::Input>(m, "HydroPolarForceModelInput")
+        .def(py::init<>())
+        .def_readwrite("name", &HydroPolarForceModel::Input::name)
+        .def_readwrite("internal_frame", &HydroPolarForceModel::Input::internal_frame)
+        .def_readwrite("angle_of_attack", &HydroPolarForceModel::Input::angle_of_attack)
+        .def_readwrite("lift_coefficient", &HydroPolarForceModel::Input::lift_coefficient)
+        .def_readwrite("drag_coefficient", &HydroPolarForceModel::Input::drag_coefficient)
+        .def_readwrite("moment_coefficient", &HydroPolarForceModel::Input::moment_coefficient)
+        .def_readwrite("reference_area", &HydroPolarForceModel::Input::reference_area)
+        .def_readwrite("chord_length", &HydroPolarForceModel::Input::chord_length)
+        .def_readwrite("use_waves_velocity", &HydroPolarForceModel::Input::use_waves_velocity)
+        ;
+
+    py::class_<HydroPolarForceModel, ForceModel>(m, "HydroPolarForceModel")
+        .def(py::init<const HydroPolarForceModel::Input& /*input*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>(),
+             py::call_guard<py::scoped_ostream_redirect, py::scoped_estream_redirect>()
+             )
+        .def("parse", &HydroPolarForceModel::parse)
+        .def("model_name", &HydroPolarForceModel::model_name)
+        .def("get_force", &HydroPolarForceModel::get_force)
+        ;
     // GravityForceModel(const std::string& body_name, const EnvironmentAndFrames& env);
 
     /*
