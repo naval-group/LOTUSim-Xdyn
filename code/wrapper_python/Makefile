@@ -77,6 +77,19 @@ demo_package_test_run:
 		 print(bs.name); \
 		 bs.name=\"gh\"; \
 		 print(bs.name); \
+		 print(bs.x); \
+		 print(bs.y); \
+		 print(bs.z); \
+		 print(bs.x.size()); \
+		 bs.x.record(0.0, 0.0); \
+		 bs.x.record(1.0, 42.0); \
+		 print(bs.x.size()); \
+		 print(bs.x(0.0)); \
+		 print(bs.x[0]); \
+		 bs.y.record(0.0, 1.0); \
+		 print(bs.y.size()); \
+		 bs.z.record(0.0, 10.0); \
+		 print(bs.z.size()); \
 		 print(dir(bs)); \
 		 from xdyn import Wrench; \
 		 wrench = Wrench(sscwrench); \
@@ -89,7 +102,7 @@ demo_package_test_run:
 		 from xdyn import call_go; \
 		 from xdyn import Dog; \
 		 d=Dog(); result = call_go(d); print(result); \
-		 from xdyn.hdbinterpolators import History; \
+		 from xdyn import History; \
 		 h1 = History(); \
 		 h2 = History(0.2); \
 		 from xdyn.hdbinterpolators import RAOData; \
