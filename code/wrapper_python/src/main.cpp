@@ -11,10 +11,13 @@
 #include "core/inc/EnvironmentAndFrames.hpp"
 #include "core/inc/ForceModel.hpp"
 #include "core/inc/Wrench.hpp"
+#include "external_data_structures/inc/YamlRotation.hpp"
+#include "external_data_structures/inc/YamlCoordinates.hpp"
 #include "hdb_interpolators/inc/History.hpp"
 #include "hdb_interpolators/inc/TimestampedMatrix.hpp"
 #include "force_models/inc/HydrostaticForceModel.hpp"
 #include "force_models/inc/GravityForceModel.hpp"
+#include "force_models/inc/MMGManeuveringForceModel.hpp"
 #include "ssc/ssc/kinematics/coriolis_and_centripetal.hpp"
 #include "ssc/ssc/kinematics/EulerAngles.hpp"
 #include "ssc/ssc/kinematics/Kinematics.hpp"
@@ -25,9 +28,9 @@
 #include "ssc/ssc/kinematics/Transform.hpp"
 #include "ssc/ssc/kinematics/Velocity.hpp"
 #include "ssc/ssc/kinematics/Wrench.hpp"
+
 #define STRINGIFY(x) #x
 #define MACRO_STRINGIFY(x) STRINGIFY(x)
-
 
 namespace py = pybind11;
 
@@ -145,10 +148,14 @@ PYBIND11_MODULE(xdyn, m) {
         .def(py::init<const ssc::kinematics::Point&>())
         .def(py::init<const std::string&, const Eigen::Vector3d&>())
         .def(py::init<const std::string&, const double, const double, const double>())
-        .def("get_frame",&ssc::kinematics::Point::get_frame)
+        .def("get_frame", &ssc::kinematics::Point::get_frame)
+        .def("x", static_cast<double (ssc::kinematics::Point::*)() const>(&ssc::kinematics::Point::x), "Get X")
+        .def("y", static_cast<double (ssc::kinematics::Point::*)() const>(&ssc::kinematics::Point::y), "Get Y")
+        .def("z", static_cast<double (ssc::kinematics::Point::*)() const>(&ssc::kinematics::Point::z), "Get Z")
         .def_readwrite("v", &ssc::kinematics::Point::v, py::return_value_policy::reference_internal);
 
-    py::class_<ssc::kinematics::Wrench>(m_ssc_kinematics, "Wrench")
+    py::class_<ssc::kinematics::Wrench>(m_ssc_kinematics, "Wrench",
+        "Stores a force & a torque, projected in a given reference frame.")
         .def(py::init<>())
         .def("get_frame",&ssc::kinematics::Wrench::get_frame)
         .def_readwrite("force", &ssc::kinematics::Wrench::force, py::return_value_policy::reference_internal)
@@ -212,7 +219,7 @@ PYBIND11_MODULE(xdyn, m) {
 
     m_ssc_kinematics.def("coriolis_and_centripetal", &ssc::kinematics::coriolis_and_centripetal,
          R"(
-        These are the forces due to the fact that the equation of Newton\'s
+        These are the forces due to the fact that the equation of Newton's
         second law of motion is written in a non-Gallilean frame: hence its speed
         must be taken into account. The inertia matrix provided is the
         rigid body inertia. It should, in general, not be the added mass matrix or
@@ -227,8 +234,45 @@ PYBIND11_MODULE(xdyn, m) {
         .def_readwrite("rho", &EnvironmentAndFrames::rho)
         .def_readwrite("nu", &EnvironmentAndFrames::nu)
         .def_readwrite("g", &EnvironmentAndFrames::g)
+        .def_readwrite("rot", &EnvironmentAndFrames::rot)
         .def("set_rho_air", &EnvironmentAndFrames::set_rho_air)
         .def("get_rho_air", &EnvironmentAndFrames::get_rho_air);
+
+    py::class_<History>(m, "History")
+        .def(py::init<>())
+        .def(py::init<const double /*Tmax=0*/>())
+        .def("average", &History::average,
+        R"(
+        Returns the average value integrated between t-length and t, t being the current instant.
+        A trapezoidal integration is used.
+        Returns Value at t-tau in history
+        )")
+        .def("record", &History::record, "Adds a value to history")
+        .def("size", &History::size, "Number of points in history")
+        .def("get_Tmax", &History::get_Tmax, "Accessor for Tmax")
+        .def("get_duration", &History::get_duration, "How far back in history can we currently go")
+        .def("reset", &History::reset, "Reset the content of the object")
+        .def("get_values", &History::get_values, "Return values stored")
+        .def("get_dates", &History::get_dates, "Return the list of dates stored")
+        .def("get_current_time", &History::get_current_time, "Return the last record timestamp")
+        .def("__call__", &History::operator(), "Returns the value at t-tau, t being the current instant")
+        .def("__getitem__", &History::operator[], "Get direct access to a (time, value) tuple of history")
+        ;
+
+    py::class_<YamlCoordinates>(m, "YamlCoordinates")
+        .def(py::init<>())
+        .def(py::init<const double /*x*/, const double /*y*/, const double /*z*/>())
+        .def_readwrite("x", &YamlCoordinates::x, "x")
+        .def_readwrite("y", &YamlCoordinates::y, "y")
+        .def_readwrite("z", &YamlCoordinates::z, "z")
+        ;
+
+    py::class_<YamlRotation>(m, "YamlRotation")
+        .def(py::init<>())
+        .def(py::init<const std::string& /*order_by_*/, const std::vector<std::string>& /*convention_*/>())
+        .def_readwrite("convention", &YamlRotation::convention, "Convention. Use \"angle\"")
+        .def_readwrite("order_by", &YamlRotation::order_by, "Order. Use '[\"z\",\"y'\",\"x''\"]\"")
+        ;
 
     py::class_<BodyStates>(m, "BodyStates")
         .def(py::init<const double>())
@@ -237,13 +281,33 @@ PYBIND11_MODULE(xdyn, m) {
         .def_readwrite("x_relative_to_mesh", &BodyStates::x_relative_to_mesh)
         .def_readwrite("y_relative_to_mesh", &BodyStates::y_relative_to_mesh)
         .def_readwrite("z_relative_to_mesh", &BodyStates::z_relative_to_mesh)
-        .def_readwrite("x", &BodyStates::x);
-
+        .def_readwrite("convention", &BodyStates::convention)
+        .def_readwrite("x", &BodyStates::x)
+        .def_readwrite("y", &BodyStates::y)
+        .def_readwrite("z", &BodyStates::z)
+        .def_readwrite("u", &BodyStates::u)
+        .def_readwrite("v", &BodyStates::v)
+        .def_readwrite("w", &BodyStates::w)
+        .def_readwrite("p", &BodyStates::p)
+        .def_readwrite("q", &BodyStates::q)
+        .def_readwrite("r", &BodyStates::r)
+        .def_readwrite("qr", &BodyStates::qr)
+        .def_readwrite("qi", &BodyStates::qi)
+        .def_readwrite("qj", &BodyStates::qj)
+        .def_readwrite("qk", &BodyStates::qk)
+        ;
 
     py::class_<Wrench>(m, "Wrench")
         .def(py::init<const ssc::kinematics::Wrench&>())
         .def_readwrite("force", &Wrench::force)
-        .def_readwrite("torque", &Wrench::torque);
+        .def_readwrite("torque", &Wrench::torque)
+        .def("X", static_cast<double (Wrench::*)() const>(&Wrench::X), "Get X")
+        .def("Y", static_cast<double (Wrench::*)() const>(&Wrench::Y), "Get Y")
+        .def("Z", static_cast<double (Wrench::*)() const>(&Wrench::Z), "Get Z")
+        .def("K", static_cast<double (Wrench::*)() const>(&Wrench::K), "Get K")
+        .def("M", static_cast<double (Wrench::*)() const>(&Wrench::M), "Get M")
+        .def("N", static_cast<double (Wrench::*)() const>(&Wrench::N), "Get N")
+        ;
 
     py::class_<ForceModel>(m, "ForceModel")
         .def("get_name", &ForceModel::get_name)
@@ -256,6 +320,35 @@ PYBIND11_MODULE(xdyn, m) {
         .def("get_force", &GravityForceModel::get_force);
         // Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const;
 
+    py::class_<MMGManeuveringForceModel::Input>(m, "MMGManeuveringForceModeInput")
+        .def(py::init<>())
+        .def_readwrite("application_point", &MMGManeuveringForceModel::Input::application_point)
+        .def_readwrite("Lpp", &MMGManeuveringForceModel::Input::Lpp)
+        .def_readwrite("T", &MMGManeuveringForceModel::Input::T)
+        .def_readwrite("Xvv", &MMGManeuveringForceModel::Input::Xvv)
+        .def_readwrite("Xrr", &MMGManeuveringForceModel::Input::Xrr)
+        .def_readwrite("Xvr", &MMGManeuveringForceModel::Input::Xvr)
+        .def_readwrite("Xvvvv", &MMGManeuveringForceModel::Input::Xvvvv)
+        .def_readwrite("Yv", &MMGManeuveringForceModel::Input::Yv)
+        .def_readwrite("Yr", &MMGManeuveringForceModel::Input::Yr)
+        .def_readwrite("Yvvv", &MMGManeuveringForceModel::Input::Yvvv)
+        .def_readwrite("Yrvv", &MMGManeuveringForceModel::Input::Yrvv)
+        .def_readwrite("Yvrr", &MMGManeuveringForceModel::Input::Yvrr)
+        .def_readwrite("Yrrr", &MMGManeuveringForceModel::Input::Yrrr)
+        .def_readwrite("Nv", &MMGManeuveringForceModel::Input::Nv)
+        .def_readwrite("Nr", &MMGManeuveringForceModel::Input::Nr)
+        .def_readwrite("Nvvv", &MMGManeuveringForceModel::Input::Nvvv)
+        .def_readwrite("Nrvv", &MMGManeuveringForceModel::Input::Nrvv)
+        .def_readwrite("Nvrr", &MMGManeuveringForceModel::Input::Nvrr)
+        .def_readwrite("Nrrr", &MMGManeuveringForceModel::Input::Nrrr)
+    ;
+
+    py::class_<MMGManeuveringForceModel, ForceModel>(m, "MMGManeuveringForceModel")
+        .def(py::init<const MMGManeuveringForceModel::Input& /*input*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>())
+        .def("parse", &MMGManeuveringForceModel::parse)
+        .def("model_name", &MMGManeuveringForceModel::model_name)
+        .def("get_force", &MMGManeuveringForceModel::get_force)
+        ;
 
     // GravityForceModel(const std::string& body_name, const EnvironmentAndFrames& env);
 
@@ -268,17 +361,7 @@ PYBIND11_MODULE(xdyn, m) {
         //.def(py::init<>())
         .def("model_name", &HydrostaticForceModel::model_name);
     */
-
     py::module m_hdb_interpolators = m.def_submodule("hdbinterpolators");
-    py::class_<History>(m_hdb_interpolators, "History")
-        .def(py::init<>())
-        .def(py::init<const double /*Tmax=0*/>())
-        .def("average", &History::average,
-        R"(
-        Returns the average value integrated between t-length and t, t being the current instant.
-        A trapezoidal integration is used.
-        Returns Value at t-tau in history
-        )");
 
     py::class_<RAOData>(m_hdb_interpolators, "RAOData")
         .def(py::init<>())
