@@ -19,6 +19,7 @@ demo_package_test_build:
 demo_package_test_run:
 	$(DOCKER_AS_USER) pybindtest /bin/bash -c "cd unit_tests && python3 test_xdyn.py"
 	$(DOCKER_AS_USER) pybindtest /bin/bash -c "cd unit_tests && python3 test_mng.py"
+	$(DOCKER_AS_USER) pybindtest /bin/bash -c "cd unit_tests && python3 test_hydropolarforcemodel.py"
 
 clean:
 	@rm -rf build
