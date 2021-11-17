@@ -1,8 +1,14 @@
 FROM sirehna/base-image-debian11-gcc10:2021-08-17
+# One requires:
+# - python3:
+# - python3-numpy: Numpy is a dependency for xdyn
+# - python3-pip: Needed to install the wheel
+# - python3-nose: Needed to run unit test
 RUN apt-get update -yq || true \
  && apt-get install --yes --no-install-recommends \
     python3 \
     python3-numpy \
+    python3-nose \
     python3-pip
 ADD xdyn-0.0.1-cp39-cp39-linux_x86_64.whl /
 RUN python3 -m pip install --no-index --find-links / xdyn \
