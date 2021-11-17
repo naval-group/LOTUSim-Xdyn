@@ -1,13 +1,22 @@
 #include <pybind11/pybind11.h>
+#include <pybind11/cast.h>
 #include <pybind11/eigen.h>
 #include <pybind11/iostream.h>
+#include <pybind11/numpy.h>
 #include <pybind11/stl.h>
+#include <pybind11/stl_bind.h>
 #include <Eigen/Dense>
 #include <iostream>
 #include <map>
 #include <string>
+#include <tuple>
 #include <vector>
 #include <boost/optional.hpp>
+
+
+//#include <ssc/macros.hpp>
+//#include TR1INC(memory)
+//PYBIND11_DECLARE_HOLDER_TYPE(T, std::shared_ptr<T>)
 
 // Code to handle boost::optional usage in force_models
 namespace pybind11 { namespace detail {
@@ -19,11 +28,16 @@ namespace pybind11 { namespace detail {
 #include "core/inc/EnvironmentAndFrames.hpp"
 #include "core/inc/ForceModel.hpp"
 #include "core/inc/Wrench.hpp"
+#include "core/inc/StatesFilter.hpp"
 #include "external_data_structures/inc/YamlAngle.hpp"
+#include "external_data_structures/inc/YamlBody.hpp"
 #include "external_data_structures/inc/YamlController.hpp"
 #include "external_data_structures/inc/YamlCoordinates.hpp"
+#include "external_data_structures/inc/YamlDynamics.hpp"
+#include "external_data_structures/inc/YamlPoint.hpp"
 #include "external_data_structures/inc/YamlPosition.hpp"
 #include "external_data_structures/inc/YamlRotation.hpp"
+#include "external_data_structures/inc/YamlSpeed.hpp"
 #include "hdb_interpolators/inc/History.hpp"
 #include "hdb_interpolators/inc/TimestampedMatrix.hpp"
 #include "force_models/inc/HydrostaticForceModel.hpp"
@@ -301,8 +315,8 @@ PYBIND11_MODULE(xdyn, m) {
         .def_readwrite("coordinates", &YamlPosition::coordinates)
         .def_readwrite("angle", &YamlPosition::angle)
         .def_readwrite("frame", &YamlPosition::frame)
+        .def_static("Origin", &YamlPosition::Origin)
         ;
-    //static YamlPosition Origin(const std::string& frame);
 
     py::class_<YamlController>(m, "YamlController",
         "Stores the controller parameters used to generate a command for a controlled force")
@@ -320,6 +334,9 @@ PYBIND11_MODULE(xdyn, m) {
         .def_readwrite("y_relative_to_mesh", &BodyStates::y_relative_to_mesh)
         .def_readwrite("z_relative_to_mesh", &BodyStates::z_relative_to_mesh)
         .def_readwrite("convention", &BodyStates::convention)
+        .def_readwrite("total_inertia", &BodyStates::total_inertia, "TO BE UPDATED - 6x6 matrix corresponding to the sum of the rigid body inertia + added mass expressed in the body frame")
+        .def_readwrite("solid_body_inertia", &BodyStates::solid_body_inertia, "TO BE UPDATED - 6x6 rigid body inertia matrix (i.e. without added mass) in the body frame")
+        .def_readwrite("inverse_of_the_total_inertia", &BodyStates::inverse_of_the_total_inertia, "TO BE UPDATED - ")
         .def_readwrite("x", &BodyStates::x)
         .def_readwrite("y", &BodyStates::y)
         .def_readwrite("z", &BodyStates::z)
@@ -333,6 +350,150 @@ PYBIND11_MODULE(xdyn, m) {
         .def_readwrite("qi", &BodyStates::qi)
         .def_readwrite("qj", &BodyStates::qj)
         .def_readwrite("qk", &BodyStates::qk)
+        .def_readwrite("states_filter", &BodyStates::states_filter)
+        .def("get_angles",static_cast<ssc::kinematics::EulerAngles (BodyStates::*)() const>(&BodyStates::get_angles))
+        .def_static("convert_to_euler_angle",
+            static_cast<ssc::kinematics::EulerAngles (*)(
+                const ssc::kinematics::RotationMatrix&/*R*/, const YamlRotation& /*rotations*/
+            )>(&BodyStates::convert))
+        .def_static("convert_to_quaternion",
+            static_cast<std::tuple<double,double,double,double> (*)(
+                const ssc::kinematics::EulerAngles& /*R*/, const YamlRotation& /*rotations*/
+            )>(&BodyStates::convert))
+        .def("get_rot_from_ned_to_body", &BodyStates::get_rot_from_ned_to_body)
+        .def("get_rot_from_ned_to", &BodyStates::get_rot_from_ned_to)
+        // ssc::kinematics::EulerAngles get_angles(const YamlRotation& c) const;
+        // ssc::kinematics::EulerAngles get_angles(const StateType& all_states, const size_t idx, const YamlRotation& c) const;
+        ;
+
+    py::class_<YamlFilteredStates>(m, "YamlFilteredStates")
+        .def(py::init<>())
+        .def_readwrite("x", &YamlFilteredStates::x)
+        .def_readwrite("y", &YamlFilteredStates::y)
+        .def_readwrite("z", &YamlFilteredStates::z)
+        .def_readwrite("u", &YamlFilteredStates::u)
+        .def_readwrite("v", &YamlFilteredStates::v)
+        .def_readwrite("w", &YamlFilteredStates::w)
+        .def_readwrite("p", &YamlFilteredStates::p)
+        .def_readwrite("q", &YamlFilteredStates::q)
+        .def_readwrite("r", &YamlFilteredStates::r)
+        .def_readwrite("phi", &YamlFilteredStates::phi)
+        .def_readwrite("theta", &YamlFilteredStates::theta)
+        .def_readwrite("psi", &YamlFilteredStates::psi)
+        ;
+
+    py::class_<StatesFilter>(m, "StatesFilter")
+        .def(py::init<const YamlFilteredStates& /*input*/>())
+        .def("get_Tmax", &StatesFilter::get_Tmax)
+        .def("get_filtered_x", &StatesFilter::get_filtered_x)
+        .def("get_filtered_y", &StatesFilter::get_filtered_y)
+        .def("get_filtered_z", &StatesFilter::get_filtered_z)
+        .def("get_filtered_u", &StatesFilter::get_filtered_u)
+        .def("get_filtered_v", &StatesFilter::get_filtered_v)
+        .def("get_filtered_w", &StatesFilter::get_filtered_w)
+        .def("get_filtered_p", &StatesFilter::get_filtered_p)
+        .def("get_filtered_q", &StatesFilter::get_filtered_q)
+        .def("get_filtered_r", &StatesFilter::get_filtered_r)
+        .def("get_filtered_qr", &StatesFilter::get_filtered_qr)
+        .def("get_filtered_qi", &StatesFilter::get_filtered_qi)
+        .def("get_filtered_qj", &StatesFilter::get_filtered_qj)
+        .def("get_filtered_qk", &StatesFilter::get_filtered_qk)
+        .def("get_filtered_phi", &StatesFilter::get_filtered_phi)
+        .def("get_filtered_theta", &StatesFilter::get_filtered_theta)
+        .def("get_filtered_psi", &StatesFilter::get_filtered_psi)
+        ;
+
+    py::class_<YamlSpeed>(m, "YamlSpeed")
+        .def(py::init<>())
+        .def_readwrite("u", &YamlSpeed::u)
+        .def_readwrite("v", &YamlSpeed::v)
+        .def_readwrite("w", &YamlSpeed::w)
+        .def_readwrite("p", &YamlSpeed::p)
+        .def_readwrite("q", &YamlSpeed::q)
+        .def_readwrite("r", &YamlSpeed::r)
+        ;
+
+    py::class_<YamlPoint, YamlCoordinates>(m, "YamlPoint")
+        .def(py::init<>())
+        .def_readwrite("name", &YamlPoint::name)
+        .def_readwrite("frame", &YamlPoint::frame)
+        ;
+
+    py::class_<YamlDynamics>(m, "YamlDynamics")
+        .def(py::init<>())
+        .def_readwrite("centre_of_inertia", &YamlDynamics::centre_of_inertia)
+        .def_readwrite("rigid_body_inertia", &YamlDynamics::rigid_body_inertia)
+        .def_readwrite("added_mass", &YamlDynamics::added_mass)
+        .def_readwrite("hydrodynamic_forces_calculation_point_in_body_frame", &YamlDynamics::hydrodynamic_forces_calculation_point_in_body_frame)
+        ;
+
+    py::enum_<InterpolationType>(m, "InterpolationType", py::arithmetic())
+        .value("PIECEWISE_CONSTANT", InterpolationType::PIECEWISE_CONSTANT)
+        .value("LINEAR", InterpolationType::LINEAR)
+        .value("SPLINE", InterpolationType::SPLINE);
+
+    py::enum_<BlockableState>(m, "BlockableState", py::arithmetic())
+        .value("U", BlockableState::U)
+        .value("V", BlockableState::V)
+        .value("W", BlockableState::W)
+        .value("P", BlockableState::P)
+        .value("Q", BlockableState::Q)
+        .value("R", BlockableState::R)
+        ;
+
+    py::enum_<FilterableState>(m, "FilterableState", py::arithmetic())
+        .value("X", FilterableState::X)
+        .value("Y", FilterableState::Y)
+        .value("Z", FilterableState::Z)
+        .value("U", FilterableState::U)
+        .value("V", FilterableState::V)
+        .value("W", FilterableState::W)
+        .value("P", FilterableState::P)
+        .value("Q", FilterableState::Q)
+        .value("R", FilterableState::R)
+        .value("PHI", FilterableState::PHI)
+        .value("THETA", FilterableState::THETA)
+        .value("PSI", FilterableState::PSI)
+        ;
+
+    py::class_<YamlDOF<std::string> >(m, "YamlCSVString")
+        .def(py::init<>())
+        .def_readwrite("state", &YamlDOF<std::string>::state)
+        .def_readwrite("t", &YamlDOF<std::string>::t)
+        .def_readwrite("value", &YamlDOF<std::string>::value)
+        .def_readwrite("interpolation", &YamlDOF<std::string>::interpolation)
+        ;
+
+    py::class_<YamlDOF<double> >(m, "YamlCSVDouble")
+        .def(py::init<>())
+        .def_readwrite("state", &YamlDOF<double>::state)
+        .def_readwrite("t", &YamlDOF<double>::t)
+        .def_readwrite("value", &YamlDOF<double>::value)
+        .def_readwrite("interpolation", &YamlDOF<double>::interpolation)
+        ;
+
+    py::class_<YamlCSVDOF, YamlDOF<std::string> >(m, "YamlCSVDOF")
+        .def(py::init<>())
+        .def_readwrite("filename", &YamlCSVDOF::filename)
+        ;
+
+    py::class_<YamlBlockedDOF>(m, "YamlBlockedDOF")
+        .def(py::init<>())
+        .def_readwrite("from_yaml", &YamlBlockedDOF::from_yaml)
+        .def_readwrite("from_csv", &YamlBlockedDOF::from_csv)
+        ;
+
+    py::class_<YamlBody>(m, "YamlBody")
+        .def(py::init<>())
+        .def_readwrite("name", &YamlBody::name)
+        .def_readwrite("mesh", &YamlBody::mesh)
+        .def_readwrite("position_of_body_frame_relative_to_mesh", &YamlBody::position_of_body_frame_relative_to_mesh)
+        .def_readwrite("initial_position_of_body_frame_relative_to_NED_projected_in_NED", &YamlBody::initial_position_of_body_frame_relative_to_NED_projected_in_NED)
+        .def_readwrite("initial_velocity_of_body_frame_relative_to_NED_projected_in_body", &YamlBody::initial_velocity_of_body_frame_relative_to_NED_projected_in_body)
+        .def_readwrite("dynamics", &YamlBody::dynamics)
+        .def_readwrite("external_forces", &YamlBody::external_forces)
+        .def_readwrite("blocked_dof", &YamlBody::blocked_dof)
+        .def_readwrite("filtered_states", &YamlBody::filtered_states)
         ;
 
     py::class_<Wrench>(m, "Wrench")
@@ -353,7 +514,7 @@ PYBIND11_MODULE(xdyn, m) {
 
     py::class_<GravityForceModel, ForceModel>(m, "GravityForceModel")
         .def(py::init<const std::string&, const EnvironmentAndFrames&>())
-        .def("model_name", &GravityForceModel::model_name)
+        .def_static("model_name", &GravityForceModel::model_name)
         .def("potential_energy", &GravityForceModel::potential_energy)
         .def("get_force", &GravityForceModel::get_force);
         // Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const;
