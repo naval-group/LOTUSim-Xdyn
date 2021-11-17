@@ -14,6 +14,7 @@ from xdyn import (
     GravityForceModel,
     History,
     Wrench,
+    YamlBody,
     call_go,
 )
 from xdyn.hdbinterpolators import RAOData
@@ -118,6 +119,9 @@ class XDynCallTest(unittest.TestCase):
         print(raodata.periods)
         print(raodata.psi)
         print(raodata.values)
+
+        body = YamlBody()
+        print(body)
         print(dir(xdyn))
 
 
