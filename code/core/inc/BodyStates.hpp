@@ -28,6 +28,7 @@
 class Mesh;
 typedef TR1(shared_ptr)<Mesh> MeshPtr;
 typedef TR1(shared_ptr)<Eigen::Matrix<double,6,6> > MatrixPtr;
+typedef Eigen::Matrix<double,6,6> Matrix66;
 
 struct BodyStates : AbstractStates<History>
 {
@@ -41,9 +42,9 @@ struct BodyStates : AbstractStates<History>
     std::string name;                                              //!< Body's name
     ssc::kinematics::Point G;                                      //!< Position of the ship's centre of gravity
     MeshPtr mesh;                                                  //!< Vertices & edges of the body's mesh
-    MatrixPtr total_inertia;                                       //!< 6x6 matrix corresponding to the sum of the rigid body inertia + added mass expressed in the body frame
-    MatrixPtr solid_body_inertia;                                  //!< 6x6 rigid body inertia matrix (i.e. without added mass) in the body frame
-    MatrixPtr inverse_of_the_total_inertia;
+    Matrix66 total_inertia;                                        //!< 6x6 matrix corresponding to the sum of the rigid body inertia + added mass expressed in the body frame
+    Matrix66 solid_body_inertia;                                   //!< 6x6 rigid body inertia matrix (i.e. without added mass) in the body frame
+    Matrix66 inverse_of_the_total_inertia;
     double x_relative_to_mesh;                                     //!< Position of the body frame relative to the mesh frame, along the x-axis, in meters
     double y_relative_to_mesh;                                     //!< Position of the body frame relative to the mesh frame, along the y-axis, in meters
     double z_relative_to_mesh;                                     //!< Position of the body frame relative to the mesh frame, along the z-axis, in meters
@@ -64,6 +65,13 @@ struct BodyStates : AbstractStates<History>
     std::vector<double> get_current_state_values(const size_t idx) const;
     FilteredStates get_filtered_states() const;
     StatesFilter states_filter;
+
+    /*
+
+    */
+    Matrix66& get_total_inertia() {return total_inertia;}
+    Matrix66& get_solid_body_inertia() {return solid_body_inertia;}
+    Matrix66& get_inverse_of_the_total_inertia() {return inverse_of_the_total_inertia;}
 };
 
 #endif /* BODYSTATES_HPP_ */

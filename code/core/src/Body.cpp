@@ -169,7 +169,7 @@ void Body::calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_for
     // du/dt, dv/dt, dw/dt, dp/dt, dq/dt, dr/dt
     Eigen::Map<Eigen::Matrix<double,6,1> > dXdt(_U(dx_dt,idx));
 
-    dXdt = states.inverse_of_the_total_inertia->operator*(sum_of_forces.to_vector());
+    dXdt = states.inverse_of_the_total_inertia * (sum_of_forces.to_vector());
 
     // dx/dt, dy/dt, dz/dt
     const ssc::kinematics::RotationMatrix& R = env.k->get("NED", states.name).get_rot();
@@ -206,7 +206,7 @@ Eigen::Vector3d Body::get_pqr(const StateType& x) const
 
 BlockedDOF::Vector Body::get_delta_F(const StateType& dx_dt, const ssc::kinematics::Wrench& sum_of_other_forces) const
 {
-    return blocked_states.get_delta_F(dx_dt,*states.total_inertia,sum_of_other_forces);
+    return blocked_states.get_delta_F(dx_dt,states.total_inertia,sum_of_other_forces);
 }
 
 void Body::feed(const StateType& x, Observer& observer, const YamlRotation& c) const

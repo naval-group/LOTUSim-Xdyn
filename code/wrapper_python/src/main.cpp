@@ -14,8 +14,8 @@
 #include <boost/optional.hpp>
 
 
-//#include <ssc/macros.hpp>
-//#include TR1INC(memory)
+#include <ssc/macros.hpp>
+#include TR1INC(memory)
 //PYBIND11_DECLARE_HOLDER_TYPE(T, std::shared_ptr<T>)
 
 // Code to handle boost::optional usage in force_models
@@ -97,6 +97,13 @@ public:
     }
 };
 
+
+struct PyBodyStates: public BodyStates
+{
+    using BodyStates::BodyStates;
+    Eigen::Matrix<double,6,6> &viewMatrix() { return total_inertia; }
+};
+
 class PyForceModel: public ForceModel
 {
 public:
@@ -131,6 +138,9 @@ PYBIND11_MODULE(example, m) {
 }
 */
 
+
+Eigen::Matrix<double,6,6> &viewMatrix(BodyStates &a);
+Eigen::Matrix<double,6,6> &viewMatrix(BodyStates &a) { return a.total_inertia; }
 
 PYBIND11_MODULE(xdyn, m) {
     m.doc() = R"pbdoc(
@@ -334,9 +344,16 @@ PYBIND11_MODULE(xdyn, m) {
         .def_readwrite("y_relative_to_mesh", &BodyStates::y_relative_to_mesh)
         .def_readwrite("z_relative_to_mesh", &BodyStates::z_relative_to_mesh)
         .def_readwrite("convention", &BodyStates::convention)
-        .def_readwrite("total_inertia", &BodyStates::total_inertia, "TO BE UPDATED - 6x6 matrix corresponding to the sum of the rigid body inertia + added mass expressed in the body frame")
-        .def_readwrite("solid_body_inertia", &BodyStates::solid_body_inertia, "TO BE UPDATED - 6x6 rigid body inertia matrix (i.e. without added mass) in the body frame")
+        .def("get_total_inertia",&BodyStates::get_total_inertia, py::return_value_policy::reference_internal)
+        .def("get_solid_body_inertia",&BodyStates::get_solid_body_inertia, py::return_value_policy::reference_internal)
+        .def("get_inverse_of_the_total_inertia",&BodyStates::get_inverse_of_the_total_inertia, py::return_value_policy::reference_internal)
+        // .def("get_total_inertia",[](BodyStates &a) {return viewMatrix(a);}, py::return_value_policy::reference_internal)
+        // .def("get_total_inertia", &BodyStates::viewMatrix, py::return_value_policy::reference_internal)
+        // .def_readwrite("total_inertia", &BodyStates::total_inertia, py::return_value_policy::reference_internal, "TO BE UPDATED - 6x6 matrix corresponding to the sum of the rigid body inertia + added mass expressed in the body frame")
+        .def_readwrite("total_inertia", &BodyStates::total_inertia, "6x6 rigid body inertia matrix (i.e. without added mass) in the body frame")
+        .def_readwrite("solid_body_inertia", &BodyStates::solid_body_inertia, "6x6 rigid body inertia matrix (i.e. without added mass) in the body frame")
         .def_readwrite("inverse_of_the_total_inertia", &BodyStates::inverse_of_the_total_inertia, "TO BE UPDATED - ")
+        // .def("p_solid_body_inertia", [](const BodyStates &self) { return *(self.solid_body_inertia);})
         .def_readwrite("x", &BodyStates::x)
         .def_readwrite("y", &BodyStates::y)
         .def_readwrite("z", &BodyStates::z)
@@ -498,6 +515,10 @@ PYBIND11_MODULE(xdyn, m) {
 
     py::class_<Wrench>(m, "Wrench")
         .def(py::init<const ssc::kinematics::Wrench&>())
+        .def("get_point", &Wrench::get_point)
+        .def("get_frame", &Wrench::get_frame)
+        .def("get_force", &Wrench::get_force)
+        .def("get_torque", &Wrench::get_torque)
         .def_readwrite("force", &Wrench::force)
         .def_readwrite("torque", &Wrench::torque)
         .def("X", static_cast<double (Wrench::*)() const>(&Wrench::X), "Get X")

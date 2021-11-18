@@ -32,7 +32,7 @@ demo_package_test_run:
 
 demo_package_test_run_for_a_specific_file:
 	$(DOCKER_RUN_TEST_BASH) \
-		"cd unit_tests && python3 test_xdyn.py"
+		"cd unit_tests && python3 test_gravityforcemodel.py"
 
 clean:
 	@rm -rf build

@@ -9,6 +9,12 @@ from xdyn import (
     GravityForceModel,
     YamlRotation,
 )
+from xdyn.ssc.kinematics import Point as SscPoint
+from xdyn.ssc.kinematics import Transform as SscTransform
+from xdyn.ssc.kinematics import Kinematics as SscKinematics
+
+# SscKinematics()
+
 
 
 def get_states() -> BodyStates:
@@ -40,24 +46,31 @@ class GravityForceModelTest(unittest.TestCase):
         env = EnvironmentAndFrames()
         env.g = 9.81
         env.rot = YamlRotation("angle", ["z", "y'", "x''"])
+        transform = SscTransform(SscPoint("NED"), body)
+        # print(transform)
         # env.k = ssc::kinematics::KinematicsPtr(new ssc::kinematics::Kinematics())
-        # env.k->add(ssc::kinematics::Transform(ssc::kinematics::Point("NED"), body))
+        # env.k->add()
+        # env.k = SscKinematics()
+        # env.k.add(transform)
         model = GravityForceModel(body, env)
         model_name = model.model_name()
         self.assertEqual("gravity", model_name)
         states = get_states()
-        # states.solid_body_inertia[2,2] = 100
-        # print(states.solid_body_inertia)  # DOES NOT WORK
-        # states.solid_body_inertia->operator()(2,2) = 100
+        print(states.total_inertia)
+        ti = states.get_total_inertia()
+        ti[2,2] = 100
+        ti2 = states.get_total_inertia()
+        print(ti2)
+        print(states.total_inertia)
 
-        # wrench = model.get(states, 0.0, env)
+        wrench = model.get_force(states, 0.0, env, {})
         # self.assertEqual(body, wrench.get_frame())
-        # self.assertEqual(0, wrench.K())
-        # self.assertEqual(0, wrench.M())
-        # self.assertEqual(0, wrench.N())
-        # self.assertEqual(0, wrench.X())
-        # self.assertEqual(0, wrench.Y())
-        # self.assertEqual(981, wrench.Z())
+        self.assertEqual(0, wrench.K())
+        self.assertEqual(0, wrench.M())
+        self.assertEqual(0, wrench.N())
+        self.assertEqual(0, wrench.X())
+        self.assertEqual(0, wrench.Y())
+        # TODO self.assertEqual(981, wrench.Z())
 
 
 

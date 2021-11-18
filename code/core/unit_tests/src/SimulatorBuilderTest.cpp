@@ -49,7 +49,7 @@ TEST_F(SimulatorBuilderTest, can_get_bodies)
     ASSERT_EQ(1, bodies.size());
     ASSERT_EQ(input.bodies.front().name, bodies.front()->get_name());
     const auto states = bodies.front()->get_states();
-    const auto Id = (*states.inverse_of_the_total_inertia)*(*states.total_inertia);
+    const auto Id = states.inverse_of_the_total_inertia * states.total_inertia;
     for (int i = 0 ; i < 6 ; ++i)
     {
         for (int j = 0 ; j < 6 ; ++j)

@@ -185,7 +185,7 @@ ssc::kinematics::UnsafeWrench Sim::sum_of_forces(const StateType& x, const BodyP
     const Eigen::Vector3d uvw = body->get_uvw(x);
     const Eigen::Vector3d pqr = body->get_pqr(x);
     const auto states = body->get_states();
-    pimpl->fictitious_forces_in_body_frame[body->get_name()] = ssc::kinematics::UnsafeWrench(coriolis_and_centripetal(states.G,states.solid_body_inertia.get(),uvw, pqr));
+    pimpl->fictitious_forces_in_body_frame[body->get_name()] = ssc::kinematics::UnsafeWrench(coriolis_and_centripetal(states.G,states.solid_body_inertia,uvw, pqr));
     pimpl->sum_of_forces_in_body_frame[body->get_name()] = pimpl->fictitious_forces_in_body_frame[body->get_name()];
     const auto forces = pimpl->forces[body->get_name()];
     for (auto force:forces)

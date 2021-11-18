@@ -49,7 +49,7 @@ Wrench SimpleHeadingKeepingController::get_force(const BodyStates& states, const
 
     const auto angles = states.get_angles(rotation_convention);
     const double delta_psi = commands.at("psi_co") - angles.psi;
-    const double sigma_zz = states.total_inertia->operator()(2,2);
+    const double sigma_zz = states.total_inertia(2,2);
     const double K_psi = sigma_zz*omega0*omega0;
     const double K_r = 2*ksi*omega0*sigma_zz;
     ret.N() = K_psi*delta_psi - K_r*states.r();

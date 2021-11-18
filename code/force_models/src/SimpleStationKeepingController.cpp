@@ -68,9 +68,9 @@ Wrench SimpleStationKeepingController::get_force(const BodyStates& states, const
     const double delta_x = commands.at("x_co") - states.x();
     const double delta_y = commands.at("y_co") - states.y();
     const double delta_psi = commands.at("psi_co") - angles.psi;
-    const double sigma_xx = states.total_inertia->operator()(0,0);
-    const double sigma_yy = states.total_inertia->operator()(1,1);
-    const double sigma_psipsi = states.total_inertia->operator()(5,5);
+    const double sigma_xx = states.total_inertia(0,0);
+    const double sigma_yy = states.total_inertia(1,1);
+    const double sigma_psipsi = states.total_inertia(5,5);
     const double K_x = sigma_xx*omega_x*omega_x;
     const double K_u = 2*ksi_x*omega_x*sigma_xx;
     const double K_y = sigma_yy*omega_y*omega_y;
