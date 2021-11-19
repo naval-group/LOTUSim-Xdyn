@@ -24,6 +24,7 @@ namespace pybind11 { namespace detail {
     struct type_caster<boost::optional<T>> : optional_caster<boost::optional<T>> {};
 }}
 #include "demo.hpp"
+#include "core/inc/BodyBuilder.hpp"
 #include "core/inc/BodyStates.hpp"
 #include "core/inc/EnvironmentAndFrames.hpp"
 #include "core/inc/ForceModel.hpp"
@@ -39,11 +40,14 @@ namespace pybind11 { namespace detail {
 #include "external_data_structures/inc/YamlRotation.hpp"
 #include "external_data_structures/inc/YamlSpeed.hpp"
 #include "hdb_interpolators/inc/History.hpp"
+#include "hdb_interpolators/inc/PrecalParser.hpp"
 #include "hdb_interpolators/inc/TimestampedMatrix.hpp"
+#include "force_models/inc/ConstantForceModel.hpp"
 #include "force_models/inc/HydrostaticForceModel.hpp"
 #include "force_models/inc/HydroPolarForceModel.hpp"
 #include "force_models/inc/GravityForceModel.hpp"
 #include "force_models/inc/MMGManeuveringForceModel.hpp"
+#include "ssc/ssc/data_source/DataSource.hpp"
 #include "ssc/ssc/kinematics/coriolis_and_centripetal.hpp"
 #include "ssc/ssc/kinematics/EulerAngles.hpp"
 #include "ssc/ssc/kinematics/Kinematics.hpp"
@@ -54,6 +58,7 @@ namespace pybind11 { namespace detail {
 #include "ssc/ssc/kinematics/Transform.hpp"
 #include "ssc/ssc/kinematics/Velocity.hpp"
 #include "ssc/ssc/kinematics/Wrench.hpp"
+#include "test_data_generator/inc/TriMeshTestData.hpp"
 
 #define STRINGIFY(x) #x
 #define MACRO_STRINGIFY(x) STRINGIFY(x)
@@ -177,6 +182,13 @@ PYBIND11_MODULE(xdyn, m) {
     m.def("call_go", &call_go);
 
     py::module m_ssc = m.def_submodule("ssc");
+
+    py::module m_ssc_data_source = m_ssc.def_submodule("datasource");
+
+    py::class_<ssc::data_source::DataSource>(m_ssc_data_source, "DataSource")
+        .def(py::init<>())
+        ;
+
     py::module m_ssc_kinematics = m_ssc.def_submodule("kinematics");
 
     py::class_<ssc::kinematics::Point>(m_ssc_kinematics, "Point")
@@ -194,9 +206,16 @@ PYBIND11_MODULE(xdyn, m) {
     py::class_<ssc::kinematics::Wrench>(m_ssc_kinematics, "Wrench",
         "Stores a force & a torque, projected in a given reference frame.")
         .def(py::init<>())
-        .def("get_frame",&ssc::kinematics::Wrench::get_frame)
+        .def("get_frame",&ssc::kinematics::Wrench::get_frame, "The reference frame in which the Wrench coordinates are expressed")
         .def_readwrite("force", &ssc::kinematics::Wrench::force, py::return_value_policy::reference_internal)
-        .def_readwrite("torque", &ssc::kinematics::Wrench::torque, py::return_value_policy::reference_internal);
+        .def_readwrite("torque", &ssc::kinematics::Wrench::torque, py::return_value_policy::reference_internal)
+        .def("X", static_cast<double (ssc::kinematics::Wrench::*)() const>(&ssc::kinematics::Wrench::X), "Get X")
+        .def("Y", static_cast<double (ssc::kinematics::Wrench::*)() const>(&ssc::kinematics::Wrench::Y), "Get Y")
+        .def("Z", static_cast<double (ssc::kinematics::Wrench::*)() const>(&ssc::kinematics::Wrench::Z), "Get Z")
+        .def("K", static_cast<double (ssc::kinematics::Wrench::*)() const>(&ssc::kinematics::Wrench::K), "Get K")
+        .def("M", static_cast<double (ssc::kinematics::Wrench::*)() const>(&ssc::kinematics::Wrench::M), "Get M")
+        .def("N", static_cast<double (ssc::kinematics::Wrench::*)() const>(&ssc::kinematics::Wrench::N), "Get N")
+        ;
 
     py::class_<ssc::kinematics::EulerAngles>(m_ssc_kinematics, "EulerAngles")
         .def(py::init<>())
@@ -219,6 +238,8 @@ PYBIND11_MODULE(xdyn, m) {
         .def(py::init<>())
         .def("add",&ssc::kinematics::Kinematics::add, "Adds a transform between two reference frames")
         .def("get",&ssc::kinematics::Kinematics::get, "Returns the transform from one frame to another (or throws a KinematicsException).");
+
+    py::class_<ssc::kinematics::KinematicsPtr>(m_ssc_kinematics, "KinematicsPtr");
 
     py::class_<ssc::kinematics::KinematicTree>(m_ssc_kinematics, "KinematicTree")
         .def(py::init<>())
@@ -272,6 +293,12 @@ PYBIND11_MODULE(xdyn, m) {
         .def_readwrite("nu", &EnvironmentAndFrames::nu)
         .def_readwrite("g", &EnvironmentAndFrames::g)
         .def_readwrite("rot", &EnvironmentAndFrames::rot)
+        .def_readwrite("k", &EnvironmentAndFrames::k)
+        .def("k_add",
+           [](const EnvironmentAndFrames &a, const ssc::kinematics::Transform& ssct) {
+               a.k->add(ssct);
+            }
+        )
         .def("set_rho_air", &EnvironmentAndFrames::set_rho_air)
         .def("get_rho_air", &EnvironmentAndFrames::get_rho_air);
 
@@ -336,6 +363,82 @@ PYBIND11_MODULE(xdyn, m) {
         .def_readwrite("rest_of_the_yaml", &YamlController::rest_of_the_yaml, "All other fields that are spectific to the controller type")
         ;
 
+
+    py::class_<BodyPtr>(m, "BodyPtr")
+        .def("get_states",
+           [](const BodyPtr &a) {
+               return a->get_states();
+            }
+        )
+        .def("update",
+           [](const BodyPtr &a, const EnvironmentAndFrames& env, const StateType& x, const double t) {
+               return a->update(env, x, t);
+            }
+        )
+        .def("set_history",
+           [](const BodyPtr &a, const EnvironmentAndFrames& env, const State& states) {
+               return a->set_history(env, states);
+            }
+        )
+        .def("update_kinematics",
+           [](const BodyPtr &a, const StateType& x, const ssc::kinematics::KinematicsPtr& k) {
+               return a->update_kinematics(x, k);
+            }
+        )
+        .def("update_body_states",
+           [](const BodyPtr &a, StateType x, const double t) {
+               return a->update_body_states(x, t);
+            }
+        )
+        .def("force_states",
+           [](const BodyPtr &a, StateType& x, const double t) {
+               return a->force_states(x, t);
+            }
+        )
+
+        ;
+    py::class_<BodyBuilder>(m, "BodyBuilder")
+        .def(py::init<const YamlRotation& /*convention*/>())
+        .def("build" ,
+            static_cast<BodyPtr (BodyBuilder::*)(
+                const YamlBody& /*input*/,
+                const VectorOfVectorOfPoints& /*mesh*/,
+                const size_t /*idx*/,
+                const double /*t0*/,
+                const YamlRotation& /*convention*/,
+                const double /*Tmax*/,
+                const bool /*has_surface_forces = false*/
+            ) const>(&BodyBuilder::build),
+                py::arg("input"),
+                py::arg("mesh"),
+                py::arg("idx"),
+                py::arg("t0"),
+                py::arg("convention"),
+                py::arg("Tmax"),
+                py::arg("has_surface_forces") = false,
+                "Build a 'Body' object from YAML & STL data")
+        .def("build_for_test" ,
+            static_cast<BodyPtr (BodyBuilder::*)(
+                const std::string& /*name*/,
+                const VectorOfVectorOfPoints& /*mesh*/,
+                const size_t /*idx*/,
+                const double /*t0*/,
+                const YamlRotation& /*convention*/,
+                const double /*Tmax*/,
+                const bool /*has_surface_forces = false*/
+            ) const>(&BodyBuilder::build),
+                py::arg("name"),
+                py::arg("mesh"),
+                py::arg("idx"),
+                py::arg("t0"),
+                py::arg("convention"),
+                py::arg("Tmax"),
+                py::arg("has_surface_forces") = false,
+            R"(Only used for testing purposes when we don't want to go
+               through the hassle of defining the inertia matrix & initial
+               positions)")
+        ;
+
     py::class_<BodyStates>(m, "BodyStates")
         .def(py::init<const double>(), py::arg("Tmax") = 0.0)
         .def_readwrite("name", &BodyStates::name, "Body's name")
@@ -344,6 +447,8 @@ PYBIND11_MODULE(xdyn, m) {
         .def_readwrite("y_relative_to_mesh", &BodyStates::y_relative_to_mesh)
         .def_readwrite("z_relative_to_mesh", &BodyStates::z_relative_to_mesh)
         .def_readwrite("convention", &BodyStates::convention)
+        .def("get_current_state_values", &BodyStates::get_current_state_values)
+        .def("get_total_inertia",&BodyStates::get_total_inertia, py::return_value_policy::reference_internal)
         .def("get_total_inertia",&BodyStates::get_total_inertia, py::return_value_policy::reference_internal)
         .def("get_solid_body_inertia",&BodyStates::get_solid_body_inertia, py::return_value_policy::reference_internal)
         .def("get_inverse_of_the_total_inertia",&BodyStates::get_inverse_of_the_total_inertia, py::return_value_policy::reference_internal)
@@ -531,7 +636,41 @@ PYBIND11_MODULE(xdyn, m) {
 
     py::class_<ForceModel>(m, "ForceModel")
         .def("get_name", &ForceModel::get_name)
-        .def("get_body_name", &ForceModel::get_body_name);
+        .def("get_body_name", &ForceModel::get_body_name)
+        .def("__call__",
+            static_cast<ssc::kinematics::Wrench (ForceModel::*)(
+                const BodyStates& /*states*/,
+                const double /*t*/,
+                const EnvironmentAndFrames& /*env*/,
+                ssc::data_source::DataSource& /*command_listener*/)>(&ForceModel::operator()),
+            py::arg("BodyStates"),
+            py::arg("t"),
+            py::arg("env"),
+            py::arg("command_listener") = ssc::data_source::DataSource())
+        ;
+
+    py::class_<ConstantForceModel::Input>(m, "ConstantForceModelInput")
+        .def(py::init<>())
+        .def_readwrite("frame", &ConstantForceModel::Input::frame)
+        .def_readwrite("x", &ConstantForceModel::Input::x)
+        .def_readwrite("y", &ConstantForceModel::Input::y)
+        .def_readwrite("z", &ConstantForceModel::Input::z)
+        .def_readwrite("X", &ConstantForceModel::Input::X)
+        .def_readwrite("Y", &ConstantForceModel::Input::Y)
+        .def_readwrite("Z", &ConstantForceModel::Input::Z)
+        .def_readwrite("K", &ConstantForceModel::Input::K)
+        .def_readwrite("M", &ConstantForceModel::Input::M)
+        .def_readwrite("N", &ConstantForceModel::Input::N)
+        ;
+
+    py::class_<ConstantForceModel, ForceModel>(m, "ConstantForceModel")
+        .def(py::init<const ConstantForceModel::Input& /*input*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>())
+        .def("get_name", &ConstantForceModel::get_name)
+        .def("get_body_name", &ConstantForceModel::get_body_name)
+        .def("get_force", &ConstantForceModel::get_force)
+        .def_static("model_name", &ConstantForceModel::model_name)
+        .def_static("parse", &ConstantForceModel::parse)
+        ;
 
     py::class_<GravityForceModel, ForceModel>(m, "GravityForceModel")
         .def(py::init<const std::string&, const EnvironmentAndFrames&>())
@@ -609,6 +748,26 @@ PYBIND11_MODULE(xdyn, m) {
         .def_readwrite("periods", &RAOData::periods)
         .def_readwrite("psi", &RAOData::psi)
         .def_readwrite("values", &RAOData::values);
+
+    py::module m_data = m.def_submodule("data");
+    m_data.def("one_triangle",&one_triangle);
+    m_data.def("one_triangle_clockwise",&one_triangle_clockwise);
+    m_data.def("degenerated_triangle",&degenerated_triangle);
+    m_data.def("unit_cube",&unit_cube);
+    m_data.def("unit_cube_with_incorrect_orientation",&unit_cube_with_incorrect_orientation);
+    m_data.def("unit_cube_clockwise",&unit_cube_clockwise);
+    m_data.def("two_triangles",&two_triangles);
+    m_data.def("two_triangles_immerged",&two_triangles_immerged);
+    m_data.def("trapezium",&trapezium);
+    m_data.def("n_gone",&n_gone);
+    m_data.def("cube",&cube);
+    m_data.def("tetrahedron",&tetrahedron);
+    m_data.def("tetrahedron_clockwise",&tetrahedron_clockwise);
+    m_data.def("generated_stl",&generated_stl);
+    m_data.def("L",&L);
+    m_data.def("U",&U);
+
+
 
 #ifdef VERSION_INFO
     m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
