@@ -54,10 +54,6 @@ std::vector<double> WaveSpectralDensity::get_angular_frequencies(const double om
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "omega_max (=" << omega_max << ") < omega_min (=" << omega_min);
     }
-    if (omega_max<omega_min)
-    {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, "omega_max (=" << omega_max << ") < omega_min (=" << omega_min);
-    }
     if (n==0)
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "nfreq == 0");
