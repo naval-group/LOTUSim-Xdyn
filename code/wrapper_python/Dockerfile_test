@@ -1,4 +1,4 @@
-FROM sirehna/base-image-debian11-gcc10:2021-08-17
+FROM debian:bullseye-slim
 # One requires:
 # - python3:
 # - python3-numpy: Numpy is a dependency for xdyn
