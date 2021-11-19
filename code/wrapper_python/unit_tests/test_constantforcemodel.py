@@ -34,7 +34,7 @@ def get_input() -> str:
     """
 
 
-def get_env():
+def get_env() -> EnvironmentAndFrames:
     env = EnvironmentAndFrames()
     env.rot = YamlRotation("angle", ["z", "y'", "x''"])
     env.rho = 1024
