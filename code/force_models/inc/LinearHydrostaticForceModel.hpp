@@ -8,9 +8,13 @@
 #ifndef LINEARHYDROSTATICFORCEMODEL_HPP_
 #define LINEARHYDROSTATICFORCEMODEL_HPP_
 
+#include "ForceModel.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include <ssc/kinematics.hpp>
-#include "ForceModel.hpp"
+#include <Eigen/Dense>
+#include <map>
+#include <string>
+#include <vector>
 
 class LinearHydrostaticForceModel : public ForceModel
 {

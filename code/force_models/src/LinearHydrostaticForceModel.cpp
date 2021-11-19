@@ -6,12 +6,8 @@
  */
 
 #include "LinearHydrostaticForceModel.hpp"
-#include "SurfaceElevationInterface.hpp"
-#include "Body.hpp"
-#include "yaml.h"
+#include <ssc/exception_handling.hpp>
 #include <ssc/yaml_parser.hpp>
-
-#include <ssc/kinematics.hpp>
 
 std::string LinearHydrostaticForceModel::model_name() {return "linear hydrostatics";}
 
