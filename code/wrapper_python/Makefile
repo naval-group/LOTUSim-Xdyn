@@ -44,4 +44,5 @@ clean:
 	@rm -f nosetets.xml
 	@rm -rf unit_tests/__pycache__
 	@rm -f unit_tests/*.coverage
+	@rm -f unit_tests/core
 	@rm -f unit_tests/nosetets.xml
