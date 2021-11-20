@@ -13,11 +13,6 @@
 #include <vector>
 #include <boost/optional.hpp>
 
-
-#include <ssc/macros.hpp>
-#include TR1INC(memory)
-//PYBIND11_DECLARE_HOLDER_TYPE(T, std::shared_ptr<T>)
-
 // Code to handle boost::optional usage in force_models
 namespace pybind11 { namespace detail {
     template <typename T>
@@ -395,7 +390,7 @@ PYBIND11_MODULE(xdyn, m) {
 
     py::class_<BodyPtr>(m, "BodyPtr")
         .def("get_states",
-           [](const BodyPtr &a) {
+           [](const BodyPtr &a) -> BodyStates {
                return a->get_states();
             }
         )
@@ -477,13 +472,15 @@ PYBIND11_MODULE(xdyn, m) {
         .def_readwrite("z_relative_to_mesh", &BodyStates::z_relative_to_mesh)
         .def_readwrite("convention", &BodyStates::convention)
         .def("get_current_state_values", &BodyStates::get_current_state_values)
-        // https://github.com/pybind/pybind11/blob/master/tests/test_eigen.cpp
-        .def("get_total_inertia",&BodyStates::get_total_inertia, py::return_value_policy::reference_internal)
-        .def("get_solid_body_inertia",&BodyStates::get_solid_body_inertia, py::return_value_policy::reference_internal)
-        .def("get_inverse_of_the_total_inertia",&BodyStates::get_inverse_of_the_total_inertia, py::return_value_policy::reference_internal)
-        .def_readwrite("total_inertia", &BodyStates::total_inertia, "COPY of 6x6 rigid body inertia matrix (i.e. without added mass) in the body frame")
-        .def_readwrite("solid_body_inertia", &BodyStates::solid_body_inertia, "COPY of 6x6 rigid body inertia matrix (i.e. without added mass) in the body frame")
-        .def_readwrite("inverse_of_the_total_inertia", &BodyStates::inverse_of_the_total_inertia, "COPY of the inverse of the total inertia")
+        .def("get_total_inertia",
+           [](BodyStates &a) {return  Eigen::Ref<Eigen::Matrix<double,6,6> >(a.total_inertia);}, py::return_value_policy::reference_internal)
+        .def("get_solid_body_inertia",
+            [](BodyStates &a) {return  Eigen::Ref<Eigen::Matrix<double,6,6> >(a.solid_body_inertia);}, py::return_value_policy::reference_internal)
+        .def("get_inverse_of_the_total_inertia",
+            [](BodyStates &a) {return  Eigen::Ref<Eigen::Matrix<double,6,6> >(a.inverse_of_the_total_inertia);}, py::return_value_policy::reference_internal)
+        // .def_readwrite("total_inertia", &BodyStates::total_inertia, "COPY of 6x6 rigid body inertia matrix (i.e. without added mass) in the body frame")
+        // .def_readwrite("solid_body_inertia", &BodyStates::solid_body_inertia, "COPY of 6x6 rigid body inertia matrix (i.e. without added mass) in the body frame")
+        // .def_readwrite("inverse_of_the_total_inertia", &BodyStates::inverse_of_the_total_inertia, "COPY of the inverse of the total inertia")
         .def_readwrite("x", &BodyStates::x)
         .def_readwrite("y", &BodyStates::y)
         .def_readwrite("z", &BodyStates::z)
@@ -700,7 +697,6 @@ PYBIND11_MODULE(xdyn, m) {
         .def_static("model_name", &GravityForceModel::model_name)
         .def("potential_energy", &GravityForceModel::potential_energy)
         .def("get_force", &GravityForceModel::get_force);
-        // Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const;
 
     py::class_<MMGManeuveringForceModel::Input>(m, "MMGManeuveringForceModelInput")
         .def(py::init<>())
