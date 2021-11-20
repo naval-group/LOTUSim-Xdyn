@@ -65,13 +65,6 @@ struct BodyStates : AbstractStates<History>
     std::vector<double> get_current_state_values(const size_t idx) const;
     FilteredStates get_filtered_states() const;
     StatesFilter states_filter;
-
-    /*
-
-    */
-    Matrix66& get_total_inertia() {return total_inertia;}
-    Matrix66& get_solid_body_inertia() {return solid_body_inertia;}
-    Matrix66& get_inverse_of_the_total_inertia() {return inverse_of_the_total_inertia;}
 };
 
 #endif /* BODYSTATES_HPP_ */
