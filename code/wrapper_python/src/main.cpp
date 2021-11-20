@@ -103,11 +103,17 @@ public:
 };
 
 
-struct PyBodyStates: public BodyStates
+// Duplicated code from core/unit_tests and executables/src/test_hs.cpp
+BodyPtr get_body(const std::string& name, const VectorOfVectorOfPoints& points);
+BodyPtr get_body(const std::string& name, const VectorOfVectorOfPoints& points)
 {
-    using BodyStates::BodyStates;
-    Eigen::Matrix<double,6,6> &viewMatrix() { return total_inertia; }
-};
+    YamlRotation rot;
+    rot.convention.push_back("z");
+    rot.convention.push_back("y'");
+    rot.convention.push_back("x''");
+    rot.order_by = "angle";
+    return BodyBuilder(rot).build(name, points, 0, 0.0, rot, 0.0, false);
+}
 
 class PyForceModel: public ForceModel
 {
@@ -142,10 +148,6 @@ PYBIND11_MODULE(example, m) {
         .def("getName", &Pet::getName);
 }
 */
-
-
-Eigen::Matrix<double,6,6> &viewMatrix(BodyStates &a);
-Eigen::Matrix<double,6,6> &viewMatrix(BodyStates &a) { return a.total_inertia; }
 
 PYBIND11_MODULE(xdyn, m) {
     m.doc() = R"pbdoc(
@@ -329,6 +331,14 @@ PYBIND11_MODULE(xdyn, m) {
         .def_readwrite("phi", &YamlAngle::phi)
         .def_readwrite("theta", &YamlAngle::theta)
         .def_readwrite("psi", &YamlAngle::psi)
+        .def("__repr__",
+           [](const YamlAngle &a) {
+               std::stringstream ss;
+               ss << "{\"phi\":" << a.phi
+                  << ",\"theta\":" << a.theta
+                  << ",\"psi\":" << a.psi << "}";
+                return ss.str();
+            })
         ;
 
     py::class_<YamlCoordinates>(m, "YamlCoordinates")
@@ -337,6 +347,14 @@ PYBIND11_MODULE(xdyn, m) {
         .def_readwrite("x", &YamlCoordinates::x, "x")
         .def_readwrite("y", &YamlCoordinates::y, "y")
         .def_readwrite("z", &YamlCoordinates::z, "z")
+        .def("__repr__",
+           [](const YamlCoordinates &a) {
+               std::stringstream ss;
+               ss << "{\"x\":" << a.x
+                  << ",\"y\":" << a.y
+                  << ",\"z\":" << a.z << "}";
+                return ss.str();
+            })
         ;
 
     py::class_<YamlRotation>(m, "YamlRotation")
@@ -344,6 +362,17 @@ PYBIND11_MODULE(xdyn, m) {
         .def(py::init<const std::string& /*order_by_*/, const std::vector<std::string>& /*convention_*/>())
         .def_readwrite("convention", &YamlRotation::convention, "Convention. Use \"angle\"")
         .def_readwrite("order_by", &YamlRotation::order_by, "Order. Use '[\"z\",\"y'\",\"x''\"]\"")
+        .def("__repr__",
+           [](const YamlRotation &a) {
+               std::stringstream ss;
+               ss << "{\"order_by\": \"" << a.order_by
+                  << "\" ,\"convention\": [\""
+                  << a.convention[0] << "\",\""
+                  << a.convention[1] << "\",\""
+                  << a.convention[2] << "\"]"
+                  << "}";
+                return ss.str();
+            })
         ;
 
     py::class_<YamlPosition>(m, "YamlPosition")
@@ -448,17 +477,13 @@ PYBIND11_MODULE(xdyn, m) {
         .def_readwrite("z_relative_to_mesh", &BodyStates::z_relative_to_mesh)
         .def_readwrite("convention", &BodyStates::convention)
         .def("get_current_state_values", &BodyStates::get_current_state_values)
-        .def("get_total_inertia",&BodyStates::get_total_inertia, py::return_value_policy::reference_internal)
+        // https://github.com/pybind/pybind11/blob/master/tests/test_eigen.cpp
         .def("get_total_inertia",&BodyStates::get_total_inertia, py::return_value_policy::reference_internal)
         .def("get_solid_body_inertia",&BodyStates::get_solid_body_inertia, py::return_value_policy::reference_internal)
         .def("get_inverse_of_the_total_inertia",&BodyStates::get_inverse_of_the_total_inertia, py::return_value_policy::reference_internal)
-        // .def("get_total_inertia",[](BodyStates &a) {return viewMatrix(a);}, py::return_value_policy::reference_internal)
-        // .def("get_total_inertia", &BodyStates::viewMatrix, py::return_value_policy::reference_internal)
-        // .def_readwrite("total_inertia", &BodyStates::total_inertia, py::return_value_policy::reference_internal, "TO BE UPDATED - 6x6 matrix corresponding to the sum of the rigid body inertia + added mass expressed in the body frame")
-        .def_readwrite("total_inertia", &BodyStates::total_inertia, "6x6 rigid body inertia matrix (i.e. without added mass) in the body frame")
-        .def_readwrite("solid_body_inertia", &BodyStates::solid_body_inertia, "6x6 rigid body inertia matrix (i.e. without added mass) in the body frame")
-        .def_readwrite("inverse_of_the_total_inertia", &BodyStates::inverse_of_the_total_inertia, "TO BE UPDATED - ")
-        // .def("p_solid_body_inertia", [](const BodyStates &self) { return *(self.solid_body_inertia);})
+        .def_readwrite("total_inertia", &BodyStates::total_inertia, "COPY of 6x6 rigid body inertia matrix (i.e. without added mass) in the body frame")
+        .def_readwrite("solid_body_inertia", &BodyStates::solid_body_inertia, "COPY of 6x6 rigid body inertia matrix (i.e. without added mass) in the body frame")
+        .def_readwrite("inverse_of_the_total_inertia", &BodyStates::inverse_of_the_total_inertia, "COPY of the inverse of the total inertia")
         .def_readwrite("x", &BodyStates::x)
         .def_readwrite("y", &BodyStates::y)
         .def_readwrite("z", &BodyStates::z)
@@ -484,8 +509,6 @@ PYBIND11_MODULE(xdyn, m) {
             )>(&BodyStates::convert))
         .def("get_rot_from_ned_to_body", &BodyStates::get_rot_from_ned_to_body)
         .def("get_rot_from_ned_to", &BodyStates::get_rot_from_ned_to)
-        // ssc::kinematics::EulerAngles get_angles(const YamlRotation& c) const;
-        // ssc::kinematics::EulerAngles get_angles(const StateType& all_states, const size_t idx, const YamlRotation& c) const;
         ;
 
     py::class_<YamlFilteredStates>(m, "YamlFilteredStates")
@@ -766,8 +789,10 @@ PYBIND11_MODULE(xdyn, m) {
     m_data.def("generated_stl",&generated_stl);
     m_data.def("L",&L);
     m_data.def("U",&U);
-
-
+    m_data.def("get_body", &get_body,
+        py::arg("name"),
+        py::arg("points") = two_triangles()
+        );
 
 #ifdef VERSION_INFO
     m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
