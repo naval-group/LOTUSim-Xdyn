@@ -7,7 +7,6 @@
 
 #include "EnvironmentAndFrames.hpp"
 #include "GravityForceModel.hpp"
-#include "SurfaceElevationInterface.hpp"
 #include "Body.hpp"
 
 #include <ssc/kinematics.hpp>
