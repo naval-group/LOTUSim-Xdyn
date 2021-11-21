@@ -37,6 +37,8 @@ namespace pybind11 { namespace detail {
 #include "hdb_interpolators/inc/History.hpp"
 #include "hdb_interpolators/inc/PrecalParser.hpp"
 #include "hdb_interpolators/inc/TimestampedMatrix.hpp"
+#include "force_models/inc/AbstractWageningen.hpp"
+#include "force_models/inc/KtKqForceModel.hpp"
 #include "force_models/inc/ConstantForceModel.hpp"
 #include "force_models/inc/HydrostaticForceModel.hpp"
 #include "force_models/inc/HydroPolarForceModel.hpp"
@@ -750,17 +752,38 @@ PYBIND11_MODULE(xdyn, m) {
         .def("model_name", &HydroPolarForceModel::model_name)
         .def("get_force", &HydroPolarForceModel::get_force)
         ;
-    // GravityForceModel(const std::string& body_name, const EnvironmentAndFrames& env);
 
-    /*
-    py::class_<ForceModel, PyForceModel>(m, "ForceModel")
-        .def(py::init<>());
-    */
-    /*
-    py::class_<HydrostaticForceModel, PyForceModel>(m, "HydrostaticForceModel")
-        //.def(py::init<>())
-        .def("model_name", &HydrostaticForceModel::model_name);
-    */
+    py::class_<AbstractWageningen::Yaml>(m, "AbstractWageningenInput")
+        .def_readwrite("name", &AbstractWageningen::Yaml::name)
+        .def_readwrite("position_of_propeller_frame", &AbstractWageningen::Yaml::position_of_propeller_frame)
+        .def_readwrite("wake_coefficient", &AbstractWageningen::Yaml::wake_coefficient)
+        .def_readwrite("relative_rotative_efficiency", &AbstractWageningen::Yaml::relative_rotative_efficiency)
+        .def_readwrite("thrust_deduction_factor", &AbstractWageningen::Yaml::thrust_deduction_factor)
+        .def_readwrite("rotating_clockwise", &AbstractWageningen::Yaml::rotating_clockwise)
+        .def_readwrite("diameter", &AbstractWageningen::Yaml::diameter)
+        ;
+
+    py::class_<AbstractWageningen, ForceModel>(m, "AbstractWageningen")
+    //    .def(py::init<const AbstractWageningen::Yaml& /*input*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>())
+        .def("parse", &AbstractWageningen::parse)
+        .def("advance_ratio", &AbstractWageningen::advance_ratio)
+        // Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const;
+        ;
+
+    py::class_<KtKqForceModel::Yaml, AbstractWageningen::Yaml>(m, "KtKqForceModelInput")
+        .def_readwrite("J", &KtKqForceModel::Yaml::J)
+        .def_readwrite("Kt", &KtKqForceModel::Yaml::Kt)
+        .def_readwrite("Kq", &KtKqForceModel::Yaml::Kq)
+        ;
+
+    py::class_<KtKqForceModel, AbstractWageningen, ForceModel>(m, "KtKqForceModel")
+    //    //.def(py::init<>())
+        .def("model_name", &KtKqForceModel::model_name)
+        .def("parse", &KtKqForceModel::parse)
+    //    .def("get_Kt", &KtKqForceModel::get_Kt)
+    //    .def("get_Kq", &KtKqForceModel::get_Kq)
+    ;
+
     py::module m_hdb_interpolators = m.def_submodule("hdbinterpolators");
 
     py::class_<RAOData>(m_hdb_interpolators, "RAOData")
@@ -770,8 +793,13 @@ PYBIND11_MODULE(xdyn, m) {
         .def_readwrite("values", &RAOData::values);
 
     py::module m_data = m.def_submodule("data");
+    py::module m_data_body = m_data.def_submodule("body");
     py::module m_data_mesh = m_data.def_submodule("mesh");
     py::module m_data_yaml = m_data.def_submodule("yaml");
+    m_data_body.def("get_body", &get_body,
+        py::arg("name"),
+        py::arg("points") = two_triangles()
+        );
     m_data_mesh.def("one_triangle",&one_triangle);
     m_data_mesh.def("one_triangle_clockwise",&one_triangle_clockwise);
     m_data_mesh.def("degenerated_triangle",&degenerated_triangle);
@@ -788,10 +816,6 @@ PYBIND11_MODULE(xdyn, m) {
     m_data_mesh.def("generated_stl",&generated_stl);
     m_data_mesh.def("L",&L);
     m_data_mesh.def("U",&U);
-    m_data_mesh.def("get_body", &get_body,
-        py::arg("name"),
-        py::arg("points") = two_triangles()
-        );
     m_data_yaml.def("bug_2655", &test_data::bug_2655);
     m_data_yaml.def("hydrostatic_test", &test_data::hydrostatic_test);
     m_data_yaml.def("added_mass_from_hdb_file", &test_data::added_mass_from_hdb_file);
