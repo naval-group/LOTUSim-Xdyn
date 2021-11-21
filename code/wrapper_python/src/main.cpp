@@ -777,11 +777,12 @@ PYBIND11_MODULE(xdyn, m) {
         ;
 
     py::class_<KtKqForceModel, AbstractWageningen, ForceModel>(m, "KtKqForceModel")
-    //    //.def(py::init<>())
-        .def("model_name", &KtKqForceModel::model_name)
+        .def(py::init<const KtKqForceModel::Yaml& /*input*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>())
+        .def_static("model_name", &KtKqForceModel::model_name)
+        .def("get_force", &AbstractWageningen::get_force)
         .def("parse", &KtKqForceModel::parse)
-    //    .def("get_Kt", &KtKqForceModel::get_Kt)
-    //    .def("get_Kq", &KtKqForceModel::get_Kq)
+        .def("get_Kt", &KtKqForceModel::get_Kt)
+        .def("get_Kq", &KtKqForceModel::get_Kq)
     ;
 
     py::module m_hdb_interpolators = m.def_submodule("hdbinterpolators");
