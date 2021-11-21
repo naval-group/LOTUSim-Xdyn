@@ -5,7 +5,7 @@ import unittest
 
 import numpy as np
 
-from xdyn import KtKqForceModel
+from xdyn import BodyStates, EnvironmentAndFrames, KtKqForceModel, YamlRotation
 from xdyn.data.yaml import kt_kq
 
 
@@ -13,7 +13,7 @@ class KtKqForceModelTest(unittest.TestCase):
     """Test class for KtKqForceModel"""
 
     def test_can_parse(self):
-        """Check that parse function produces a valid KtKqForceModelInput object"""
+        """Check that parse function produces a valid KtKqForceModeldata object"""
         data = KtKqForceModel.parse(kt_kq())
         self.assertEqual("port side propeller", data.name)
         self.assertEqual(0, data.position_of_propeller_frame.angle.phi)
@@ -93,6 +93,38 @@ class KtKqForceModelTest(unittest.TestCase):
                 ),
             )
         )
+
+    def test_force(self):
+        EPS: float = 1e-6
+        data = KtKqForceModel.parse(kt_kq())
+        env = EnvironmentAndFrames()
+        env.rho = 1024
+        env.rot = YamlRotation("angle", ["z", "y'", "x''"])
+        model = KtKqForceModel(data, "", env)
+        self.assertEqual("Kt(J) & Kq(J)", model.model_name())
+        states = BodyStates()
+        states.u.record(0, 1)
+
+        commands = {"rpm": 5 * (2 * np.pi)}
+        wrench = model.get_force(states, 42.0, env, commands)
+        self.assertAlmostEqual(306063.03332753148, wrench.X(), delta=EPS)
+        self.assertEqual(0.0, wrench.Y())
+        self.assertEqual(0.0, wrench.Z())
+        self.assertEqual(0.0, wrench.M())
+        self.assertEqual(0.0, wrench.N())
+
+    def test_clarify_exception_message_for_Kt_Kq_interpolation_errors(self):
+        data = KtKqForceModel.parse(kt_kq())
+        env = EnvironmentAndFrames()
+        env.rho = 1024
+        env.rot = YamlRotation("angle", ["z", "y'", "x''"])
+        model = KtKqForceModel(data, "", env)
+        self.assertEqual("Kt(J) & Kq(J)", model.model_name())
+        states = BodyStates()
+        states.u.record(0, 1)
+        commands = {"rpm": 2 * np.pi * 0.025}
+        with self.assertRaises(RuntimeError):
+            model.get_force(states, 42.0, env, commands)
 
 
 if __name__ == "__main__":
