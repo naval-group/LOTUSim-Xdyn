@@ -44,6 +44,7 @@ namespace pybind11 { namespace detail {
 #include "force_models/inc/HydroPolarForceModel.hpp"
 #include "force_models/inc/GravityForceModel.hpp"
 #include "force_models/inc/MMGManeuveringForceModel.hpp"
+#include "force_models/inc/WageningenControlledForceModel.hpp"
 #include "ssc/ssc/data_source/DataSource.hpp"
 #include "ssc/ssc/kinematics/coriolis_and_centripetal.hpp"
 #include "ssc/ssc/kinematics/EulerAngles.hpp"
@@ -783,7 +784,21 @@ PYBIND11_MODULE(xdyn, m) {
         .def("parse", &KtKqForceModel::parse)
         .def("get_Kt", &KtKqForceModel::get_Kt)
         .def("get_Kq", &KtKqForceModel::get_Kq)
-    ;
+        ;
+
+    py::class_<WageningenControlledForceModel::Yaml, AbstractWageningen::Yaml>(m, "WageningenControlledForceModelInput")
+        .def_readwrite("number_of_blades", &WageningenControlledForceModel::Yaml::number_of_blades)
+        .def_readwrite("blade_area_ratio", &WageningenControlledForceModel::Yaml::blade_area_ratio)
+        ;
+
+    py::class_<WageningenControlledForceModel, AbstractWageningen, ForceModel>(m, "WageningenControlledForceModel")
+        .def(py::init<const WageningenControlledForceModel::Yaml& /*input*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>())
+        .def_static("model_name", &WageningenControlledForceModel::model_name)
+        .def("get_force", &AbstractWageningen::get_force)
+        .def("parse", &WageningenControlledForceModel::parse)
+        .def("get_Kt", &WageningenControlledForceModel::get_Kt)
+        .def("get_Kq", &WageningenControlledForceModel::get_Kq)
+        ;
 
     py::module m_hdb_interpolators = m.def_submodule("hdbinterpolators");
 
