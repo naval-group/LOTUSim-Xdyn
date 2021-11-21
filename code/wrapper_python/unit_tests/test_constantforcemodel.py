@@ -13,7 +13,7 @@ from xdyn import (
     EnvironmentAndFrames,
     YamlRotation,
 )
-from xdyn.data import two_triangles
+from xdyn.data.mesh import two_triangles
 from xdyn.ssc.kinematics import EulerAngles as SscEulerAngles
 
 

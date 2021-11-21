@@ -6,7 +6,7 @@ import unittest
 import numpy as np
 
 from xdyn import BodyStates, EnvironmentAndFrames, GravityForceModel, YamlRotation
-from xdyn.data import get_body
+from xdyn.data.body import get_body
 from xdyn.ssc.kinematics import Point as SscPoint
 from xdyn.ssc.kinematics import Transform as SscTransform
 
