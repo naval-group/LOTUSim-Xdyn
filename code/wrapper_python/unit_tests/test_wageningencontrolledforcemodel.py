@@ -5,15 +5,25 @@ import unittest
 
 import numpy as np
 
-from xdyn import WageningenControlledForceModel
+from xdyn import EnvironmentAndFrames, WageningenControlledForceModel, YamlRotation
 from xdyn.data.yaml import wageningen
 
 EPS: float = 1e-2
 NB_TRIALS: int = 100
 
 
+def get_env() -> EnvironmentAndFrames:
+    env = EnvironmentAndFrames()
+    env.rho = 1024
+    env.rot = YamlRotation("angle", ["z", "y'", "x''"])
+    return env
+
+
 class WageningenControlledForceModelTest(unittest.TestCase):
     """Test class for WageningenControlledForceModel"""
+
+    def setUp(self) -> None:
+        self.rng = np.random.default_rng(666)
 
     def test_can_parse(self):
         """Check that parse function produces a valid WageningenControlledForceModelInput data object"""
@@ -36,17 +46,28 @@ class WageningenControlledForceModelTest(unittest.TestCase):
         self.assertEqual(0.9, data.wake_coefficient)
         self.assertEqual(2, data.diameter)
 
-    # def test_should_throw_if_blade_area_ratio_is_outside_bounds(self):
-    #    data = WageningenControlledForceModel.parse(wageningen())
-    #    for i in range(NB_TRIALS):
-    #        data.blade_area_ratio = a.random<double>().between(0,0.3)
-    #        ASSERT_THROW(WageningenControlledForceModel w(data, "", get_env()), InvalidInputException)
-    #        data.blade_area_ratio = a.random<double>().between(1.05,10)
-    #        ASSERT_THROW(WageningenControlledForceModel w(data, "", get_env()), InvalidInputException)
-    #        data.blade_area_ratio = a.random<double>().outside(0.3,1.05)
-    #        ASSERT_THROW(WageningenControlledForceModel w(data, "", get_env()), InvalidInputException)
-    #        data.blade_area_ratio = a.random<double>().between(0.3,1.05)
-    #        ASSERT_NO_THROW(WageningenControlledForceModel w(data, "", get_env()))
+    def test_should_throw_if_blade_area_ratio_is_outside_bounds(self):
+        data = WageningenControlledForceModel.parse(wageningen())
+        for _ in range(NB_TRIALS):
+            data.blade_area_ratio = self.rng.uniform(low=0.0, high=0.3)
+            with self.assertRaises(RuntimeError):
+                WageningenControlledForceModel(
+                    data, "", get_env()
+                )  #  InvalidInputException
+            data.blade_area_ratio = self.rng.uniform(low=1.05, high=10)
+            with self.assertRaises(RuntimeError):
+                WageningenControlledForceModel(
+                    data, "", get_env()
+                )  #  InvalidInputException
+
+            data.blade_area_ratio = self.rng.uniform(low=-10, high=0.3)
+            with self.assertRaises(RuntimeError):
+                WageningenControlledForceModel(
+                    data, "", get_env()
+                )  #  InvalidInputException
+
+            data.blade_area_ratio = self.rng.uniform(low=0.3, high=1.05)
+            WageningenControlledForceModel(data, "", get_env())
 
 
 if __name__ == "__main__":
