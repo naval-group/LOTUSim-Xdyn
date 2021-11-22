@@ -5,6 +5,7 @@ import unittest
 from pydoc import render_doc
 
 import numpy as np
+
 import xdyn
 import xdyn.ssc
 from xdyn import (

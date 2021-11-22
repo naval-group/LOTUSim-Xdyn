@@ -7,6 +7,7 @@ import numpy as np
 
 from xdyn import BodyStates, EnvironmentAndFrames, KtKqForceModel, YamlRotation
 from xdyn.data.yaml import kt_kq
+from xdyn.exceptions import NumericalErrorException
 
 
 class KtKqForceModelTest(unittest.TestCase):
@@ -123,8 +124,10 @@ class KtKqForceModelTest(unittest.TestCase):
         states = BodyStates()
         states.u.record(0, 1)
         commands = {"rpm": 2 * np.pi * 0.025}
-        with self.assertRaises(RuntimeError):
+        expected_msg = "Unable to interpolate Kt as a function of J when using model 'Kt(J) & Kq(J)'. Got the following error: Received x0 = 2, but x0 should be within [-1,1] (xmin-x0 = -3 and x0-xmax = 1"
+        with self.assertRaises(NumericalErrorException) as pcm:
             model.get_force(states, 42.0, env, commands)
+        self.assertTrue(expected_msg in str(pcm.exception))
 
 
 if __name__ == "__main__":

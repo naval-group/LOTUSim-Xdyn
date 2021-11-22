@@ -5,6 +5,7 @@ import unittest
 from typing import Optional
 
 import numpy as np
+
 from xdyn import (
     BodyStates,
     EnvironmentAndFrames,
@@ -16,6 +17,7 @@ from xdyn import (
     YamlRotation,
     ostream_redirect,
 )
+from xdyn.exceptions import InvalidInputException
 
 
 def get_input() -> str:
@@ -285,8 +287,11 @@ class HydroPolarForceModelTest(unittest.TestCase):
             0.38250,
             0.96888,
         ]
-        with self.assertRaises(RuntimeError):
+        expected_msg = "Angle of attack, lift coefficient and drag coefficient must all have the same size."
+        with self.assertRaises(InvalidInputException) as pcm:
             HydroPolarForceModel(data, "body", env)
+        self.assertTrue(expected_msg in str(pcm.exception))
+
         # The maximum value for AoA is below 180°
         data.angle_of_attack = [
             0.0,
@@ -321,8 +326,10 @@ class HydroPolarForceModelTest(unittest.TestCase):
             0.96888,
             1.31578,
         ]
-        with self.assertRaises(RuntimeError):
+        expected_msg = "Angle of attack must be provided from either -180° or 0deg (symmetry) to 180deg."
+        with self.assertRaises(InvalidInputException) as pcm:
             HydroPolarForceModel(data, "body", env)
+        self.assertTrue(expected_msg in str(pcm.exception))
 
     def test_should_print_warning_for_polar_input_with_unexpected_bounds(self):
         data = HydroPolarForceModelInput()
@@ -428,8 +435,10 @@ class HydroPolarForceModelTest(unittest.TestCase):
         env = EnvironmentAndFrames()
         env.rho = 1000
         env.rot = YamlRotation("angle", ["z", "y'", "x''"])
-        with self.assertRaises(RuntimeError):  # InvalidInputException
+        expected_msg = "An empty vector was provided for the angle of attack, which must be provided from either -180° or 0deg (symmetry) to 180deg"
+        with self.assertRaises(InvalidInputException) as pcm:
             HydroPolarForceModel(data, "body", env)
+        self.assertTrue(expected_msg in str(pcm.exception))
 
     def test_should_throw_if_wave_model_expected_but_not_defined(self):
         data = HydroPolarForceModelInput()
@@ -479,8 +488,10 @@ class HydroPolarForceModelTest(unittest.TestCase):
         env = EnvironmentAndFrames()
         env.rho = 1000
         env.rot = YamlRotation("angle", ["z", "y'", "x''"])
-        with self.assertRaises(RuntimeError):  # InvalidInputException
+        expected_msg = "In order to take into account the orbital velocity of waves, a wave model must be defined in the 'environment models' section."
+        with self.assertRaises(InvalidInputException) as pcm:
             HydroPolarForceModel(data, "body", env)
+        self.assertTrue(expected_msg in str(pcm.exception))
 
     def test_should_print_warning_and_return_zero_force_if_calculation_point_is_outside_the_water(
         self,

@@ -5,8 +5,14 @@ import unittest
 
 import numpy as np
 
-from xdyn import EnvironmentAndFrames, WageningenControlledForceModel, YamlRotation
+from xdyn import (
+    EnvironmentAndFrames,
+    WageningenControlledForceModel,
+    WageningenControlledForceModelInput,
+    YamlRotation,
+)
 from xdyn.data.yaml import wageningen
+from xdyn.exceptions import InvalidInputException
 
 EPS: float = 1e-2
 NB_TRIALS: int = 100
@@ -48,24 +54,21 @@ class WageningenControlledForceModelTest(unittest.TestCase):
 
     def test_should_throw_if_blade_area_ratio_is_outside_bounds(self):
         data = WageningenControlledForceModel.parse(wageningen())
+        expected_msg = "Invalid number of blade area ratio AE_A0 received: expected 0.3 <= AE_A0 <= 1.05 but got AE_A0=0"
+
+        def check_raises(data: WageningenControlledForceModelInput):
+            data.blade_area_ratio = self.rng.uniform(low=0.0, high=0.3)
+            with self.assertRaises(InvalidInputException) as pcm:
+                WageningenControlledForceModel(data, "", get_env())
+            self.assertTrue(expected_msg in str(pcm.exception))
+
         for _ in range(NB_TRIALS):
             data.blade_area_ratio = self.rng.uniform(low=0.0, high=0.3)
-            with self.assertRaises(RuntimeError):
-                WageningenControlledForceModel(
-                    data, "", get_env()
-                )  #  InvalidInputException
+            check_raises(data)
             data.blade_area_ratio = self.rng.uniform(low=1.05, high=10)
-            with self.assertRaises(RuntimeError):
-                WageningenControlledForceModel(
-                    data, "", get_env()
-                )  #  InvalidInputException
-
+            check_raises(data)
             data.blade_area_ratio = self.rng.uniform(low=-10, high=0.3)
-            with self.assertRaises(RuntimeError):
-                WageningenControlledForceModel(
-                    data, "", get_env()
-                )  #  InvalidInputException
-
+            check_raises(data)
             data.blade_area_ratio = self.rng.uniform(low=0.3, high=1.05)
             WageningenControlledForceModel(data, "", get_env())
 

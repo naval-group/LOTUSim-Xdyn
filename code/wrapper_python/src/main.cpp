@@ -25,6 +25,12 @@ namespace pybind11 { namespace detail {
 #include "core/inc/ForceModel.hpp"
 #include "core/inc/Wrench.hpp"
 #include "core/inc/StatesFilter.hpp"
+#include "exceptions/inc/ConnexionError.hpp"
+#include "exceptions/inc/GRPCError.hpp"
+#include "exceptions/inc/InternalErrorException.hpp"
+#include "exceptions/inc/InvalidInputException.hpp"
+#include "exceptions/inc/MeshException.hpp"
+#include "exceptions/inc/NumericalErrorException.hpp"
 #include "external_data_structures/inc/YamlAngle.hpp"
 #include "external_data_structures/inc/YamlBody.hpp"
 #include "external_data_structures/inc/YamlController.hpp"
@@ -181,6 +187,14 @@ PYBIND11_MODULE(xdyn, m) {
         .def(py::init<>());
 
     m.def("call_go", &call_go);
+
+    py::module m_exceptions = m.def_submodule("exceptions");
+    py::register_exception<ConnexionError>(m_exceptions, "ConnexionError");
+    py::register_exception<GRPCError>(m_exceptions, "GRPCError");
+    py::register_exception<InternalErrorException>(m_exceptions, "InternalErrorException");
+    py::register_exception<InvalidInputException>(m_exceptions, "InvalidInputException");
+    py::register_exception<MeshException>(m_exceptions, "MeshException");
+    py::register_exception<NumericalErrorException>(m_exceptions, "NumericalErrorException");
 
     py::module m_ssc = m.def_submodule("ssc");
 
