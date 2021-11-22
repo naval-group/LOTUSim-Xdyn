@@ -324,7 +324,7 @@ PYBIND11_MODULE(xdyn, m) {
         R"(
         Returns the average value integrated between t-length and t, t being the current instant.
         A trapezoidal integration is used.
-        Returns Value at t-tau in history
+        Returns Value at t-tau in history.
         )")
         .def("record", &History::record, "Adds a value to history")
         .def("size", &History::size, "Number of points in history")
@@ -334,7 +334,7 @@ PYBIND11_MODULE(xdyn, m) {
         .def("get_values", &History::get_values, "Return values stored")
         .def("get_dates", &History::get_dates, "Return the list of dates stored")
         .def("get_current_time", &History::get_current_time, "Return the last record timestamp")
-        .def("__call__", &History::operator(), "Returns the value at t-tau, t being the current instant")
+        .def("__call__", &History::operator(), py::arg("tau") = 0.0, "Returns the value at t-tau, t being the current instant")
         .def("__getitem__", &History::operator[], "Get direct access to a (time, value) tuple of history")
         ;
 
@@ -812,6 +812,8 @@ PYBIND11_MODULE(xdyn, m) {
         .def("parse", &WageningenControlledForceModel::parse)
         .def("get_Kt", &WageningenControlledForceModel::get_Kt)
         .def("get_Kq", &WageningenControlledForceModel::get_Kq)
+        .def("Kt", &WageningenControlledForceModel::Kt, py::arg("Z"),py::arg("AE_A0"),py::arg("P_D"),py::arg("J"))
+        .def("Kq", &WageningenControlledForceModel::Kq, py::arg("Z"),py::arg("AE_A0"),py::arg("P_D"),py::arg("J"))
         ;
 
     py::module m_hdb_interpolators = m.def_submodule("hdbinterpolators");
