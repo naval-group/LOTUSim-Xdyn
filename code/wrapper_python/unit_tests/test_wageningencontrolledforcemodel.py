@@ -54,23 +54,58 @@ class WageningenControlledForceModelTest(unittest.TestCase):
 
     def test_should_throw_if_blade_area_ratio_is_outside_bounds(self):
         data = WageningenControlledForceModel.parse(wageningen())
-        expected_msg = "Invalid number of blade area ratio AE_A0 received: expected 0.3 <= AE_A0 <= 1.05 but got AE_A0=0"
+        env = get_env()
+        expected_msg = "Invalid number of blade area ratio AE_A0 received: expected 0.3 <= AE_A0 <= 1.05 but got AE_A0="
 
         def check_raises(data: WageningenControlledForceModelInput):
-            data.blade_area_ratio = self.rng.uniform(low=0.0, high=0.3)
             with self.assertRaises(InvalidInputException) as pcm:
-                WageningenControlledForceModel(data, "", get_env())
-            self.assertTrue(expected_msg in str(pcm.exception))
+                WageningenControlledForceModel(data, "", env)
+            self.assertTrue(expected_msg in str(pcm.exception), str(pcm.exception))
 
         for _ in range(NB_TRIALS):
             data.blade_area_ratio = self.rng.uniform(low=0.0, high=0.3)
             check_raises(data)
-            data.blade_area_ratio = self.rng.uniform(low=1.05, high=10)
+            data.blade_area_ratio = self.rng.uniform(low=1.06, high=10)
             check_raises(data)
             data.blade_area_ratio = self.rng.uniform(low=-10, high=0.3)
             check_raises(data)
             data.blade_area_ratio = self.rng.uniform(low=0.3, high=1.05)
-            WageningenControlledForceModel(data, "", get_env())
+            WageningenControlledForceModel(data, "", env)
+
+    def test_should_throw_if_number_of_blades_is_outside_bounds(self):
+        expected_msg = "Invalid number of blades Z received: expected 2 <= Z <= 7"
+        data = WageningenControlledForceModel.parse(wageningen())
+        env = get_env()
+
+        def check_raises(data: WageningenControlledForceModelInput):
+            with self.assertRaises(InvalidInputException) as pcm:
+                WageningenControlledForceModel(data, "", env)
+            self.assertTrue(expected_msg in str(pcm.exception), str(pcm.exception))
+
+        def check_no_raises(data: WageningenControlledForceModelInput):
+            WageningenControlledForceModel(data, "", env)
+
+        data.number_of_blades = 0
+        check_raises(data)
+        data.number_of_blades = 1
+        check_raises(data)
+        data.number_of_blades = 8
+        check_raises(data)
+        data.number_of_blades = 2
+        check_no_raises(data)
+        data.number_of_blades = 3
+        check_no_raises(data)
+        data.number_of_blades = 4
+        check_no_raises(data)
+        data.number_of_blades = 5
+        check_no_raises(data)
+        data.number_of_blades = 6
+        check_no_raises(data)
+        data.number_of_blades = 7
+        check_no_raises(data)
+        for _ in range(NB_TRIALS):
+            data.number_of_blades = self.rng.integers(low=8, high=int(1e6))
+            check_raises(data)
 
 
 if __name__ == "__main__":

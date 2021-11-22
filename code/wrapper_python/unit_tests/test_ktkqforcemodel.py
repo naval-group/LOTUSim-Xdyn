@@ -127,7 +127,7 @@ class KtKqForceModelTest(unittest.TestCase):
         expected_msg = "Unable to interpolate Kt as a function of J when using model 'Kt(J) & Kq(J)'. Got the following error: Received x0 = 2, but x0 should be within [-1,1] (xmin-x0 = -3 and x0-xmax = 1"
         with self.assertRaises(NumericalErrorException) as pcm:
             model.get_force(states, 42.0, env, commands)
-        self.assertTrue(expected_msg in str(pcm.exception))
+        self.assertTrue(expected_msg in str(pcm.exception), str(pcm.exception))
 
 
 if __name__ == "__main__":
