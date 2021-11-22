@@ -74,8 +74,6 @@ class XDynCallTest(unittest.TestCase):
         print(ssctransform1.get_from_frame())
         print(ssctransform2.get_from_frame())
         print(ssctransform3.get_from_frame())
-        print(xdyn.add(1, 2))
-        print(xdyn.subtract(1, 2))
 
         env = EnvironmentAndFrames()
         print(env)
