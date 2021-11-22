@@ -32,7 +32,7 @@ demo_package_test_run:
 
 demo_package_test_run_for_a_specific_file:
 	$(DOCKER_RUN_TEST_BASH) \
-		"cd unit_tests && python3 test_gravityforcemodel.py"
+		"cd unit_tests && python3 test_wageningencontrolledforcemodel.py"
 
 clean:
 	@rm -rf build
@@ -41,8 +41,8 @@ clean:
 	@rm -rf *.egg-info
 	@rm -rf *.whl
 	@rm -f *.coverage
-	@rm -f nosetets.xml
+	@rm -f nosetests.xml
 	@rm -rf unit_tests/__pycache__
 	@rm -f unit_tests/*.coverage
 	@rm -f unit_tests/core
-	@rm -f unit_tests/nosetets.xml
+	@rm -f unit_tests/nosetests.xml
