@@ -39,16 +39,20 @@ On commence par définir la discrétisation, avec notamment:
 print_yaml(yaml_data, 'environment models/0/discretization')
 ```
 
-On va donc considérer <% yaml_data['environment models'][0]['discretization']['nfreq'] %> pulsations et
+Dans cet exemple, on va donc considérer <% yaml_data['environment models'][0]['discretization']['nfreq'] %> pulsations et
 <% yaml_data['environment models'][0]['discretization']['ndir'] %> directions.
 Si on utilise un modèle fréquentiel polychromatique couplé à un modèle de dispersion multi-directionnel,
 on aura alors <% yaml_data['environment models'][0]['discretization']['nfreq']*yaml_data['environment models'][0]['discretization']['ndir'] %> points.
+
 Les discrétisations spatiales des spectres monochromatiques et des
-dispersions monodirectionnelles sont réduites à un point.
+dispersions monodirectionnelles n'utilisent pas ces paramètres `nfreq`
+et `ndir`: elles sont réduites à un point.
+
 On spécifie en outre que l'on veut représenter
 <%yaml_data['environment models'][0]['discretization']['energy fraction']*100 %> %
 de l'énergie totale, les autres composantes n'étant pas retenues.
-Le paramètre booléen `equal energy bins`
+
+Enfin, le paramètre booléen `equal energy bins`
 indique si l'on souhaite une discrétisation spectrale
 où chaque raie contient la même énergie.
 
