@@ -89,12 +89,15 @@ Le fichier de résultat est ici `waves.h5`.
 ### Résultats
 
 On obtient un fichier hdf5 qui peut être ouvert avec différents logiciels comme HDFView.
-Dans le groupe "outputs", on trouve un groupe "waves" qui contient quatre jeux de données nommés t, x, y et z.
+Dans le groupe `outputs`, on trouve deux groupes:
 
-- t donne les pas de temps de la simulation
-- x donne les coordonnées selon x des points où l'élévation est calculée. Chaque ligne correspond à un pas de temps.
-- y donne les coordonnées selon y des points où l'élévation est calculée. Chaque ligne correspond à un pas de temps.
-- z donne l'élévation aux points définis par x et y. Chaque tranche correspond à un pas de temps.
+- `spectra` qui contient les données des spectres discrétisés,
+- `waves` qui contient quatre jeux de données nommés `t`, `x`, `y` et `z`:
+
+    - `t` donne les pas de temps de la simulation,
+    - `x` donne les coordonnées selon x des points où l'élévation est calculée. Chaque ligne correspond à un pas de temps,
+    - `y` donne les coordonnées selon y des points où l'élévation est calculée. Chaque ligne correspond à un pas de temps,
+    - `z` donne l'élévation aux points définis par x et y. Chaque tranche correspond à un pas de temps.
 
 La description de ce fichier est faite [dans la documentation des fichiers YAML](#sorties).
 
