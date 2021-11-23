@@ -5,19 +5,11 @@ import unittest
 from typing import Optional
 
 import numpy as np
-
-from xdyn import (
-    BodyStates,
-    EnvironmentAndFrames,
-    HydroPolarForceModel,
-    HydroPolarForceModelInput,
-    YamlAngle,
-    YamlCoordinates,
-    YamlPosition,
-    YamlRotation,
-    ostream_redirect,
-)
+from xdyn import ostream_redirect
+from xdyn.core import BodyStates, EnvironmentAndFrames
+from xdyn.core.io import YamlAngle, YamlCoordinates, YamlPosition, YamlRotation
 from xdyn.exceptions import InvalidInputException
+from xdyn.force import HydroPolarForceModel, HydroPolarForceModelInput
 
 
 def get_input() -> str:

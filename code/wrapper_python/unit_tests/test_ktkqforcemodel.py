@@ -4,10 +4,11 @@ Unit test for KtKqForceModel
 import unittest
 
 import numpy as np
-
-from xdyn import BodyStates, EnvironmentAndFrames, KtKqForceModel, YamlRotation
+from xdyn.core import BodyStates, EnvironmentAndFrames
+from xdyn.core.io import YamlRotation
 from xdyn.data.yaml import kt_kq
 from xdyn.exceptions import NumericalErrorException
+from xdyn.force import KtKqForceModel
 
 
 class KtKqForceModelTest(unittest.TestCase):

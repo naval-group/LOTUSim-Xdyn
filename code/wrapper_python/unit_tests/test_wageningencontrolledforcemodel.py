@@ -4,16 +4,14 @@ Unit test for WageningenControlledForceModel
 import unittest
 
 import numpy as np
-
-from xdyn import (
-    BodyStates,
-    EnvironmentAndFrames,
-    WageningenControlledForceModel,
-    WageningenControlledForceModelInput,
-    YamlRotation,
-)
+from xdyn.core import BodyStates, EnvironmentAndFrames
+from xdyn.core.io import YamlRotation
 from xdyn.data.yaml import wageningen
 from xdyn.exceptions import InvalidInputException
+from xdyn.force import (
+    WageningenControlledForceModel,
+    WageningenControlledForceModelInput,
+)
 
 EPS: float = 1e-2
 NB_TRIALS: int = 100

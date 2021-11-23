@@ -5,20 +5,13 @@ import unittest
 from pydoc import render_doc
 
 import numpy as np
-
 import xdyn
 import xdyn.ssc
-from xdyn import (
-    BodyStates,
-    Dog,
-    EnvironmentAndFrames,
-    GravityForceModel,
-    History,
-    Wrench,
-    YamlBody,
-    call_go,
-)
+from xdyn.core import BodyStates, EnvironmentAndFrames, History, Wrench
+from xdyn.core.io import YamlBody
+from xdyn.force import GravityForceModel
 from xdyn.hdbinterpolators import RAOData
+from xdyn.sandbox import Dog, call_go
 from xdyn.ssc.kinematics import EulerAngles as SscEulerAngles
 from xdyn.ssc.kinematics import Kinematics as SscKinematics
 from xdyn.ssc.kinematics import KinematicTree as SscKinematicTree

@@ -4,16 +4,10 @@ Unit test for ConstantForceModel
 import unittest
 
 import numpy as np
-
-from xdyn import (
-    BodyBuilder,
-    BodyPtr,
-    BodyStates,
-    ConstantForceModel,
-    EnvironmentAndFrames,
-    YamlRotation,
-)
+from xdyn.core import BodyBuilder, BodyPtr, BodyStates, EnvironmentAndFrames
+from xdyn.core.io import YamlRotation
 from xdyn.data.mesh import two_triangles
+from xdyn.force import ConstantForceModel
 from xdyn.ssc.kinematics import EulerAngles as SscEulerAngles
 
 

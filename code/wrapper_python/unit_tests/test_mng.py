@@ -3,12 +3,9 @@ Unit test for MMGManeuveringForceModel
 """
 import unittest
 
-from xdyn import (
-    BodyStates,
-    EnvironmentAndFrames,
-    MMGManeuveringForceModel,
-    YamlRotation,
-)
+from xdyn.core import BodyStates, EnvironmentAndFrames
+from xdyn.core.io import YamlRotation
+from xdyn.force import MMGManeuveringForceModel
 
 
 def get_input() -> str:

@@ -12,10 +12,14 @@ message(STATUS "CMAKE_LIBRARY_OUTPUT_DIRECTORY = ${CMAKE_LIBRARY_OUTPUT_DIRECTOR
 find_package(pybind11 REQUIRED)
 
 pybind11_add_module(${PYTHON_PACKAGE_NAME}
-    src/demo.cpp
-    src/demo.hpp
-    src/demo_class.hpp
     src/main.cpp
+    src/py_sandbox.cpp
+    src/py_ssc.cpp
+    src/py_xdyn_core.cpp
+    src/py_xdyn_data.cpp
+    src/py_xdyn_env.cpp
+    src/py_xdyn_force.cpp
+    src/py_xdyn_hdb.cpp
     )
 set_target_properties(${PYTHON_PACKAGE_NAME} PROPERTIES OUTPUT_NAME "xdyn")
 

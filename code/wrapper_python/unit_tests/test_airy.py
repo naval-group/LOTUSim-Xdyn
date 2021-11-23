@@ -4,8 +4,6 @@ Unit test for Airy
 import unittest
 
 import numpy as np
-
-from xdyn import YamlStretching
 from xdyn.env import (
     Airy,
     DiracDirectionalSpreading,
@@ -14,6 +12,7 @@ from xdyn.env import (
     Stretching,
     discretize,
 )
+from xdyn.env.io import YamlStretching
 
 
 class AiryTest(unittest.TestCase):
