@@ -29,22 +29,29 @@ yaml_data = load_yaml('tutorial_03_waves.yml')
 La section `environment models` est nettement plus fournie que pour les
 tutoriels précédents.
 
-On commence par définir la discrétisation. Actuellement, le nombre de
-pulsations est égal au nombre de directions : il s'agit d'une limitation du code.
+On commence par définir la discrétisation, avec notamment:
+
+- les valeurs minimale et maximale des pulsations,
+- le nombre de pulsations / fréquences utilisé par les modèles de spectres,
+- le nombre de directions utilisé par le modèle d'étalement directionnel.
 
 ```python echo=False, results='raw', name='tutorial_03_print_wave_discretization'
 print_yaml(yaml_data, 'environment models/0/discretization')
 ```
 
-On va donc sommer <% yaml_data['environment models'][0]['discretization']['n'] %> pulsations et
-<% yaml_data['environment models'][0]['discretization']['n'] %> directions,
-soit <% yaml_data['environment models'][0]['discretization']['n']*yaml_data['environment models'][0]['discretization']['n'] %> points.
+On va donc sommer <% yaml_data['environment models'][0]['discretization']['nfreq'] %> pulsations et
+<% yaml_data['environment models'][0]['discretization']['ndir'] %> directions,
+soit <% yaml_data['environment models'][0]['discretization']['nfreq']*yaml_data['environment models'][0]['discretization']['ndir'] %> points.
 Cependant, la discrétisation spatiale des spectres monochromatiques et des
 dispersions monodirectionnelles est réduite à un point.
 On spécifie en outre
 que l'on veut représenter
 <%yaml_data['environment models'][0]['discretization']['energy fraction']*100 %> %
 de l'énergie totale, les autres composantes n'étant pas retenues.
+
+Le paramètre booléen `equal energy bins`
+indique si l'on souhaite une discréatisation spectrale
+où chaque raie contient la même énergie.
 
 Le premier spectre est défini de la façon suivante :
 
