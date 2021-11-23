@@ -10,6 +10,7 @@ all: invalid_yaml_returns_non_zero_error_code \
 
 
 DOCKER_RUN=docker run -t --rm -u $(shell id -u):$(shell id -g) -v $(shell pwd):/work -w /work
+DOCKER_RUN_XDYN_BASH=${DOCKER_RUN} -v $(shell pwd):/xdyn_demos --entrypoint /bin/bash xdyn -c
 WRONG_ERROR_CODE=echo "Oops, didn't get the error code we were expecting: test failed!" && return 1
 EXPECTED_ERROR_CODE=echo "Got the error code we expected for an invalid YAML: success!"
 
@@ -33,11 +34,14 @@ include Makefile.issue_202
 
 tutorial_01_falling_ball.yml:
 	@echo "Copying tutorial files from xdyn's Docker container..."
-	@${DOCKER_RUN} -v $(shell pwd):/xdyn_demos --entrypoint /bin/bash xdyn -c "cp /usr/demos/$@ /xdyn_demos/"
+	@${DOCKER_RUN_XDYN_BASH} "cp /usr/demos/$@ /xdyn_demos/"
 
 tutorial_12:
 	@echo "Copying tutorial files from xdyn's Docker container..."
-	@${DOCKER_RUN} -v $(shell pwd):/xdyn_demos --entrypoint /bin/bash xdyn -c "cp /usr/demos/tutorial_12_precal_r.yml /usr/demos/ONRT_SIMMAN.raodb.ini /usr/demos/test_ship.stl /xdyn_demos/"
+	@${DOCKER_RUN_XDYN_BASH} "cp /usr/demos/tutorial_12_precal_r.yml \
+								 /usr/demos/ONRT_SIMMAN.raodb.ini \
+								 /usr/demos/test_ship.stl \
+								 /xdyn_demos/"
 	@echo "Launching tutorial 12..."
 	@${DOCKER_RUN} xdyn --dt 1 --tend 1 -o tsv tutorial_12_precal_r.yml
 	@echo "All good, cleaning up!"
@@ -46,11 +50,11 @@ tutorial_12:
 
 cube.stl:
 	@echo "Copying tutorial files from xdyn's Docker container..."
-	@${DOCKER_RUN} -v $(shell pwd):/xdyn_demos --entrypoint /bin/bash xdyn -c "cp /usr/demos/$@ /xdyn_demos/"
+	@${DOCKER_RUN_XDYN_BASH} "cp /usr/demos/$@ /xdyn_demos/"
 
 test_ship.stl:
 	@echo "Copying $@ from xdyn's Docker container..."
-	@${DOCKER_RUN} -v $(shell pwd):/xdyn_demos --entrypoint /bin/bash xdyn -c "cp /usr/demos/$@ /xdyn_demos/"
+	@${DOCKER_RUN_XDYN_BASH} "cp /usr/demos/$@ /xdyn_demos/"
 
 clean:
 	rm -rf tutorial_01_falling_ball.yml\
