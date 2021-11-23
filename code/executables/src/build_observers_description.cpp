@@ -10,7 +10,7 @@ YamlOutput create_wave_observer_description(const XdynCommandLineArguments& inpu
 YamlOutput create_wave_observer_description(const XdynCommandLineArguments& input_data)
 {
     YamlOutput o;
-    o.data = {"waves"};
+    o.data = {"waves", "spectra"};
     o.filename = input_data.wave_output;
     o.format = get_format_for_wave_observer(input_data.wave_output);
     return o;
