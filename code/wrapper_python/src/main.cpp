@@ -14,6 +14,7 @@
 #include <boost/optional.hpp>
 
 // Code to handle boost::optional usage in force_models
+// When C++ 17 standard will be used, we will be able to replace this std::optional
 namespace pybind11 { namespace detail {
     template <typename T>
     struct type_caster<boost::optional<T>> : optional_caster<boost::optional<T>> {};
@@ -142,6 +143,20 @@ PYBIND11_MODULE(xdyn, m) {
            :toctree: _generate
     )pbdoc";
 
+    m.def("add",
+        [](int a, boost::optional<int> b) {
+            //boost::optional -> if (!b.is_initialized()) {
+            //C++17 std::optional -> if (!b.has_value()) {
+            if (!b.is_initialized()) {
+                return a;
+            } else {
+                return a + b.get();
+            }
+        },
+        py::arg("a"),
+        py::arg("b") = py::none()
+    );
+
     py::add_ostream_redirect(m, "ostream_redirect");
 
     py::class_<Animal, PyAnimal>(m, "Animal")
@@ -251,8 +266,10 @@ PYBIND11_MODULE(xdyn, m) {
         ;
 
     py::class_<Airy, WaveModel>(m_env, "Airy")
-        .def(py::init<const DiscreteDirectionalWaveSpectrum& /*spectrum*/, const double /*constant_random_phase*/>())
-        .def(py::init<const DiscreteDirectionalWaveSpectrum& /*spectrum*/, const int /*random_number_generator_seed*/>())
+        .def(py::init<const DiscreteDirectionalWaveSpectrum& /*spectrum*/, const double /*constant_random_phase*/>(),
+            py::arg("spectrum"), py::arg("constant_random_phase"))
+        .def(py::init<const DiscreteDirectionalWaveSpectrum& /*spectrum*/, const int /*random_number_generator_seed*/>(),
+            py::arg("spectrum"), py::arg("random_number_generator_seed"))
         .def("evaluate_rao", &Airy::evaluate_rao,
             py::arg("x"),
             py::arg("y"),
@@ -272,6 +289,15 @@ PYBIND11_MODULE(xdyn, m) {
         ;
     py::class_<Stretching>(m_env, "Stretching", "Rescale the z-axis with delta stretching model (used to compute orbital velocities")
         .def(py::init<const YamlStretching& /*input*/>(), "Usually read from YAML")
+        .def(py::init([](double delta, double h) {
+            YamlStretching ys;
+            ys.delta = delta;
+            ys.h = h;
+            return std::unique_ptr<Stretching>(new Stretching(ys));
+            }),
+            py::arg("delta"),
+            py::arg("h")
+            )
         .def("rescaled_z", &Stretching::rescaled_z,
             py::arg("original_z"),
             py::arg("wave_height"),
@@ -295,20 +321,92 @@ PYBIND11_MODULE(xdyn, m) {
 
     py::class_<DiracSpectralDensity, WaveSpectralDensity>(m_env, "DiracSpectralDensity")
         .def(py::init<const double& /*omega0*/, const double /*Hs*/>(), py::arg("omega0"), py::arg("Hs"))
-        .def("__call__",&DiracSpectralDensity::operator(), py::arg("omega"), "Computes the amplitude of the power spectrum at a given angular frequency")
-        .def("get_angular_frequencies",&DiracSpectralDensity::get_angular_frequencies,  "A vector containing only omega0 (in rad/s)")
+        .def("__call__", &DiracSpectralDensity::operator(), py::arg("omega"), "Computes the amplitude of the power spectrum at a given angular frequency")
+        .def("get_angular_frequencies", &DiracSpectralDensity::get_angular_frequencies,  "A vector containing only omega0 (in rad/s)")
         ;
 
 
     py::class_<WaveDirectionalSpreading>(m_env, "WaveDirectionalSpreading")
         ;
 
+    py::class_<DiracDirectionalSpreading, WaveDirectionalSpreading>(m_env, "DiracDirectionalSpreading")
+        .def(py::init<const double /*psi0*/>(), py::arg("psi0"),
+            "Constructor with psi0 Primary wave direction (NED, ""coming from"") in radians")
+        .def("__call__", &DiracDirectionalSpreading::operator(), py::arg("psi"),
+        R"pbdoc(
+        Wave density by direction.
+        Equals one if psi=psi0 & 0 otherwise.
+
+          - psi (float): Primary wave direction in radians.
+        )pbdoc")
+        .def("get_directions", &DiracDirectionalSpreading::get_directions, "Returns a vector containing only psi0")
+        ;
+
+    m_env.def("discretize",
+        [](const WaveSpectralDensity& S,      //!< Frequency spectrum
+           const WaveDirectionalSpreading& D, //!< Spatial spectrum
+           const double omega_min,            //!< Lower bound of the angular frequency range (in rad/s)
+           const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
+           const size_t nfreq,                //!< Number of frequencies in discrete spectrum
+           const size_t ndir,                 //!< Number of directions in discrete spectrum
+           const Stretching& stretching,      //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
+           const bool equal_energy_bins,      //!< Choose omegas so the integral of S between two successive omegas is constant
+           boost::optional<double> h          //!< Water depth (in meters)
+           ){
+            if (h.is_initialized()) {
+                return discretize(
+                    S,                  //!< Frequency spectrum
+                    D,                  //!< Spatial spectrum
+                    omega_min,          //!< Lower bound of the angular frequency range (in rad/s)
+                    omega_max,          //!< Upper bound of the angular frequency range (in rad/s)
+                    (size_t)nfreq,      //!< Number of frequencies in discrete spectrum
+                    (size_t)ndir,       //!< Number of directions in discrete spectrum
+                    h.get(),            //!< Water depth (in meters)
+                    stretching,         //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
+                    equal_energy_bins   //!< Choose omegas so the integral of S between two successive omegas is constant
+                    );
+            } else {
+                return discretize(
+                    S,                  //!< Frequency spectrum
+                    D,                  //!< Spatial spectrum
+                    omega_min,          //!< Lower bound of the angular frequency range (in rad/s)
+                    omega_max,          //!< Upper bound of the angular frequency range (in rad/s)
+                    (size_t)nfreq,      //!< Number of frequencies in discrete spectrum
+                    (size_t)ndir,       //!< Number of directions in discrete spectrum
+                    stretching,         //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
+                    equal_energy_bins   //!< Choose omegas so the integral of S between two successive omegas is constant
+                    );
+            }
+        },
+        py::arg("S"),
+        py::arg("D"),
+        py::arg("omega_min"),
+        py::arg("omega_max"),
+        py::arg("nfreq"),
+        py::arg("ndir"),
+        py::arg("stretching"),
+        py::arg("equal_energy_bins"),
+        py::arg("h") = py::none(),
+        R"pbdoc(
+        Discretize a wave spectrum
+
+        - S (WaveSpectralDensity) : Frequency spectrum
+        - D (WaveDirectionalSpreading) : Spatial spectrum
+        - omega_min (float) : Lower bound of the angular frequency range (in rad/s)
+        - omega_max (float) : Upper bound of the angular frequency range (in rad/s)
+        - nfreq (int) : Number of frequencies in discrete spectrum
+        - ndir (int) : Number of directions in discrete spectrum
+        - stretching (Stretching) : Dilate z-axis to properly compute orbital velocities (delta-stretching)
+        - equal_energy_bins (bool) : Choose omegas so the integral of S between two successive omegas is constant
+        - h (Optional[float]) : Water depth (in meters). If None, or not provided, infinite depth will be considered
+        )pbdoc")
+        ;
 
     py::module m_ssc = m.def_submodule("ssc");
+    py::module m_ssc_random = m_ssc.def_submodule("random");
+    py::module m_ssc_datasource = m_ssc.def_submodule("datasource");
 
-    py::module m_ssc_data_source = m_ssc.def_submodule("datasource");
-
-    py::class_<ssc::data_source::DataSource>(m_ssc_data_source, "DataSource")
+    py::class_<ssc::data_source::DataSource>(m_ssc_datasource, "DataSource")
         .def(py::init<>())
         ;
 
