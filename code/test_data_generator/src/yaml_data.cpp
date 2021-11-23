@@ -1129,7 +1129,11 @@ std::string test_data::waves()
        + "            nx: 5\n"
        + "            ymin: {value: 1, unit: m}\n"
        + "            ymax: {value: 2, unit: m}\n"
-       + "            ny: 2\n";
+       + "            ny: 2\n"
+       + "output:\n"
+       + "   - format: hdf5\n"
+       + "     filename: waves.h5\n"
+       + "     data: [command line, yaml, spectra, waves]\n";
 }
 
 std::string test_data::simple_waves()
