@@ -478,7 +478,7 @@ void py_add_module_xdyn_env(py::module& m)
         .def_static("parse", &WindMeanVelocityProfile::parse)
         ;
 
-    py::class_<LogWindVelocityProfile::Input>(m_env, "LogWindVelocityProfileInput")
+    py::class_<LogWindVelocityProfile::Input, WindMeanVelocityProfile::Input>(m_env, "LogWindVelocityProfileInput")
         .def(py::init<>())
         .def_readwrite("z0", &LogWindVelocityProfile::Input::z0)
         .def_readwrite("z_ref", &LogWindVelocityProfile::Input::z_ref)
@@ -490,7 +490,7 @@ void py_add_module_xdyn_env(py::module& m)
         .def_static("parse", &LogWindVelocityProfile::parse)
         ;
 
-    py::class_<PowerLawWindVelocityProfile::Input>(m_env, "PowerLawWindVelocityProfileInput")
+    py::class_<PowerLawWindVelocityProfile::Input, WindMeanVelocityProfile::Input>(m_env, "PowerLawWindVelocityProfileInput")
         .def(py::init<>())
         .def(py::init<const WindMeanVelocityProfile::Input& /*parent*/>())
         .def_readwrite("alpha", &PowerLawWindVelocityProfile::Input::alpha)
@@ -502,7 +502,6 @@ void py_add_module_xdyn_env(py::module& m)
         .def_static("model_name", &PowerLawWindVelocityProfile::model_name)
         .def_static("parse", &PowerLawWindVelocityProfile::parse)
         ;
-
 
     py::class_<UniformWindVelocityProfile, WindMeanVelocityProfile>(m_env, "UniformWindVelocityProfile")
         .def(py::init<const WindMeanVelocityProfile::Input& /*input*/>())
