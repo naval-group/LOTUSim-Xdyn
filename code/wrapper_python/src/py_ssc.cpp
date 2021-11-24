@@ -11,20 +11,65 @@
 #include "ssc/ssc/kinematics/Transform.hpp"
 #include "ssc/ssc/kinematics/Velocity.hpp"
 #include "ssc/ssc/kinematics/Wrench.hpp"
+#include "ssc/ssc/random_data_generator/DataGenerator.hpp"
 #include <sstream>
 
 namespace py = pybind11;
+namespace rdg = ssc::random_data_generator;
 
-void py_add_module_ssc(py::module& m)
+template<typename T>
+void declare_typed_scalar_data_generator(py::module &m_ssc_random, const std::string &typestr);
+template<typename T>
+void declare_typed_scalar_data_generator(py::module &m_ssc_random, const std::string &typestr) {
+    const std::string pyclass_name = std::string("TypedScalarDataGenerator") + typestr;
+    py::class_<rdg::TypedScalarDataGenerator<T>,
+               rdg::DataGenerator>(m_ssc_random, pyclass_name.c_str())
+        .def(py::init<const rdg::DataGenerator& /*rhs*/>())
+        .def("__call__", &rdg::TypedScalarDataGenerator<T>::operator())
+        .def("greater_than", &rdg::TypedScalarDataGenerator<T>::greater_than)
+        .def("between", &rdg::TypedScalarDataGenerator<T>::between)
+        .def("no", &rdg::TypedScalarDataGenerator<T>::no)
+        .def("but", &rdg::TypedScalarDataGenerator<T>::but)
+        .def("outside", &rdg::TypedScalarDataGenerator<T>::outside)
+        .def("but_not",
+            static_cast<rdg::TypedScalarDataGenerator<T>&
+                (rdg::TypedScalarDataGenerator<T>::*)()>(&rdg::TypedScalarDataGenerator<T>::but_not))
+        .def("but_not",
+            static_cast<rdg::TypedScalarDataGenerator<T>&
+                (rdg::TypedScalarDataGenerator<T>::*)(const T& t)>(&rdg::TypedScalarDataGenerator<T>::but_not))
+        ;
+}
+
+void py_add_module_ssc_random(py::module& m_ssc);
+void py_add_module_ssc_random(py::module& m_ssc)
 {
-    py::module m_ssc = m.def_submodule("ssc");
     py::module m_ssc_random = m_ssc.def_submodule("random");
-    py::module m_ssc_datasource = m_ssc.def_submodule("datasource");
+    py::class_<rdg::DataGenerator>(m_ssc_random, "DataGenerator")
+        .def(py::init<const size_t& /*seed*/>())
+        .def("random_double",
+            static_cast<rdg::TypedScalarDataGenerator<double>
+                (rdg::DataGenerator::*)() const>(&rdg::DataGenerator::random<double>))
+        .def("random_int",
+            static_cast<rdg::TypedScalarDataGenerator<int>
+                (rdg::DataGenerator::*)() const>(&rdg::DataGenerator::random<int>))
+        ;
 
+    declare_typed_scalar_data_generator<double>(m_ssc_random, "Double");
+    declare_typed_scalar_data_generator<int>(m_ssc_random, "Int");
+}
+
+void py_add_module_ssc_datasource(py::module& m_ssc);
+void py_add_module_ssc_datasource(py::module& m_ssc)
+{
+    py::module m_ssc_datasource = m_ssc.def_submodule("datasource");
     py::class_<ssc::data_source::DataSource>(m_ssc_datasource, "DataSource")
         .def(py::init<>())
         ;
+}
 
+void py_add_module_ssc_kinematics(py::module& m_ssc);
+void py_add_module_ssc_kinematics(py::module& m_ssc)
+{
     py::module m_ssc_kinematics = m_ssc.def_submodule("kinematics");
 
     py::class_<ssc::kinematics::Point>(m_ssc_kinematics, "Point")
@@ -146,4 +191,12 @@ void py_add_module_ssc(py::module& m)
         the acceleration but they are proportional to the derivative of the projection
         in the body frame of the linear velocity of the body with respect to the
         (Gallilean) earth frame.)");
+}
+
+void py_add_module_ssc(py::module& m)
+{
+    py::module m_ssc = m.def_submodule("ssc");
+    py_add_module_ssc_datasource(m_ssc);
+    py_add_module_ssc_kinematics(m_ssc);
+    py_add_module_ssc_random(m_ssc);
 }
