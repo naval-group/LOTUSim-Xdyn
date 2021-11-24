@@ -463,6 +463,7 @@ void py_add_module_xdyn_env(py::module& m)
         .def(py::init<int>(), "Constructor argument is a dummy in order to be able to call DefaultWindModel(DefaultWindModel::parse(...)) from parser")
         .def_static("model_name", &DefaultWindModel::model_name)
         .def_static("parse", &DefaultWindModel::parse)
+        .def("get_wind", &DefaultWindModel::get_wind, py::arg("position"), py::arg("t"))
         ;
 
     py::class_<WindMeanVelocityProfile::Input>(m_env, "WindMeanVelocityProfileInput")
