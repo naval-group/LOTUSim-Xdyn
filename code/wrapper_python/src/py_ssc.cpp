@@ -215,6 +215,7 @@ void py_add_module_ssc_kinematics(py::module& m_ssc)
         ;
 
     m_ssc_kinematics.def("coriolis_and_centripetal", &ssc::kinematics::coriolis_and_centripetal,
+        py::arg("P"), py::arg("M"), py::arg("v"), py::arg("omega"),
          R"(
         These are the forces due to the fact that the equation of Newton's
         second law of motion is written in a non-Gallilean frame: hence its speed
