@@ -90,7 +90,6 @@ void py_add_module_xdyn_hdb(py::module&m)
         .def("get_wave_drift_periods", &PrecalParser::get_wave_drift_periods, "Periods at which the wave drift forces are expressed (in seconds).")
         ;
 
-
     py::class_<RaoInterpolator>(m_hdb_interpolators, "RaoInterpolator")
         .def(py::init<const HydroDBParser& /*data*/,
                       const std::vector<double>& /*omega*/,
@@ -149,4 +148,51 @@ void py_add_module_xdyn_hdb(py::module&m)
         .def("get_rao_calculation_point", &RaoInterpolator::get_rao_calculation_point)
         .def("using_encounter_period", &RaoInterpolator::using_encounter_period, "Return boolean")
         ;
+
+
+
+    /* Code below expose internal function / class that be should be kept private*/
+    /* Maybe inside a submodule named _internal ?*/
+    m_hdb_interpolators.def("parse_precal_from_string", &parse_precal_from_string, py::arg("input"));
+    m_hdb_interpolators.def("parse_precal_from_file", &parse_precal_from_file, py::arg("filename"));
+    m_hdb_interpolators.def("parse_rao_attributes", &parse_rao_attributes, py::arg("input"));
+
+    py::class_<Section>(m_hdb_interpolators, "Section")
+        .def(py::init<>())
+        .def_readwrite("title", &Section::title)
+        .def_readwrite("scalar_values", &Section::scalar_values)
+        .def_readwrite("string_values", &Section::string_values)
+        .def_readwrite("vector_values", &Section::vector_values)
+        ;
+
+    py::class_<RAO>(m_hdb_interpolators, "RAO")
+        .def(py::init<>())
+        .def_readwrite("title_line", &RAO::title_line)
+        .def_readwrite("attributes", &RAO::attributes)
+        .def_readwrite("left_column", &RAO::left_column)
+        .def_readwrite("right_column", &RAO::right_column)
+        ;
+
+    py::class_<PrecalFile>(m_hdb_interpolators, "PrecalFile")
+        .def(py::init<>())
+        .def_readwrite("sections", &PrecalFile::sections)
+        .def_readwrite("raos", &PrecalFile::raos)
+        ;
+
+    py::class_<RAOAttributes>(m_hdb_interpolators, "RAOAttributes")
+        .def(py::init<>())
+        .def_readwrite("name", &RAOAttributes::name)
+        .def_readwrite("position", &RAOAttributes::position)
+        .def_readwrite("h", &RAOAttributes::h)
+        .def_readwrite("h_unit", &RAOAttributes::h_unit)
+        .def_readwrite("phi_a", &RAOAttributes::phi_a) // Roll amplitude
+        .def_readwrite("phi_a_unit", &RAOAttributes::phi_a_unit)
+        .def_readwrite("U", &RAOAttributes::U) // Speed
+        .def_readwrite("U_unit", &RAOAttributes::U_unit)
+        .def_readwrite("mu", &RAOAttributes::mu) // Waves direction
+        .def_readwrite("mu_unit", &RAOAttributes::mu_unit)
+        .def_readwrite("amplitude_unit", &RAOAttributes::amplitude_unit)
+        .def_readwrite("phase_unit", &RAOAttributes::phase_unit)
+        ;
+
 }
