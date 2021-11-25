@@ -40,6 +40,18 @@ void declare_typed_scalar_data_generator(py::module &m_ssc_random, const std::st
         ;
 }
 
+template<typename T>
+void declare_typed_vector_data_generator(py::module &m_ssc_random, const std::string &typestr);
+template<typename T>
+void declare_typed_vector_data_generator(py::module &m_ssc_random, const std::string &typestr) {
+    const std::string pyclass_name = std::string("TypedVectorDataGenerator") + typestr;
+    py::class_<rdg::TypedVectorDataGenerator<T>,
+               rdg::DataGenerator>(m_ssc_random, pyclass_name.c_str())
+        .def(py::init<const rdg::DataGenerator& /*rhs*/>())
+        .def("of_size", &rdg::TypedVectorDataGenerator<T>::of_size)
+        ;
+}
+
 void py_add_module_ssc_random(py::module& m_ssc);
 void py_add_module_ssc_random(py::module& m_ssc)
 {
@@ -52,10 +64,27 @@ void py_add_module_ssc_random(py::module& m_ssc)
         .def("random_int",
             static_cast<rdg::TypedScalarDataGenerator<int>
                 (rdg::DataGenerator::*)() const>(&rdg::DataGenerator::random<int>))
+        .def("random_size_t",
+            static_cast<rdg::TypedScalarDataGenerator<size_t>
+                (rdg::DataGenerator::*)() const>(&rdg::DataGenerator::random<size_t>))
+        .def("random_vector_of_double",
+            static_cast<rdg::TypedVectorDataGenerator<double>
+                (rdg::DataGenerator::*)() const>(&rdg::DataGenerator::random_vector_of<double>))
+        .def("random_vector_of_int",
+            static_cast<rdg::TypedVectorDataGenerator<int>
+                (rdg::DataGenerator::*)() const>(&rdg::DataGenerator::random_vector_of<int>))
+        .def("random_vector_of_size_t",
+            static_cast<rdg::TypedVectorDataGenerator<size_t>
+                (rdg::DataGenerator::*)() const>(&rdg::DataGenerator::random_vector_of<size_t>))
         ;
 
     declare_typed_scalar_data_generator<double>(m_ssc_random, "Double");
     declare_typed_scalar_data_generator<int>(m_ssc_random, "Int");
+    declare_typed_scalar_data_generator<size_t>(m_ssc_random, "SizeT");
+
+    declare_typed_vector_data_generator<double>(m_ssc_random, "Double");
+    declare_typed_vector_data_generator<int>(m_ssc_random, "Int");
+    declare_typed_vector_data_generator<size_t>(m_ssc_random, "SizeT");
 }
 
 void py_add_module_ssc_datasource(py::module& m_ssc);
