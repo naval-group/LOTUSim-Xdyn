@@ -480,11 +480,35 @@ void py_add_module_xdyn_env(py::module& m)
         Utility function used by the discretize function. This is where the stretching is taken into account.
         Finite and infinite depth are considered: Use None or skip h declaration to consider infinite depth.
 
+        Input:
+
         - `k` (float): Wave number (in 1/m)
         - `z` (float): z-position in the NED frame (in meters)
         - `eta` (float): Wave elevation at (x,y) in the NED frame (in meters) for stretching
         - `stretching` (Stretching): Dilate z-axis to properly compute orbital velocities (delta-stretching)
         - `h` (Optional[float]): Water depth (in meters). If None, or not provided, infinite depth will be considered
+        )pbdoc")
+        ;
+
+    m_env.def("find_integration_bound_yielding_target_area", &find_integration_bound_yielding_target_area,
+        py::arg("target_area"),
+        py::arg("xs"),
+        py::arg("ys"),
+        py::arg("as"),
+        R"pbdoc(
+        Finds the abscissa at which the area curve has a given value.
+        This is not a simple linear interpolation because integrating half
+        of an interval does not necessarily give half the area.
+
+        Input:
+
+        - `target_area`
+        - `xs` Abscissae at which the area curve is defined.
+        - `ys` Positive values of the function at each `xs`.
+        - `as` Area curve.
+
+        Return
+            Abscissa at which the integral has the given value.
         )pbdoc")
         ;
 
