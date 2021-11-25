@@ -30,11 +30,13 @@ void py_add_module_xdyn_hdb(py::module&m)
         .def("get_diffraction_module", &HDBParser::get_diffraction_module)
         .def("get_diffraction_phase", &HDBParser::get_diffraction_phase)
         .def("get_added_mass",
+            static_cast<Eigen::Matrix<double,6,6> (HDBParser::*)() const>(&HDBParser::get_added_mass))
+        .def("get_added_mass",
             static_cast<Eigen::Matrix<double,6,6> (HDBParser::*)(const double Tp) const>(&HDBParser::get_added_mass),
             py::arg("Tp"), "Period at which to interpolate the added mass")
-        //.def        virtual std::vector<double> get_angular_frequencies", &
-        //.def        virtual std::vector<double> get_added_mass_coeff(const size_t i, const size_t j) const;
-        //.def        virtual std::vector<double> get_radiation_damping_coeff(const size_t i, const size_t j) const;
+        .def("get_angular_frequencies", &HDBParser::get_angular_frequencies)
+        .def("get_added_mass_coeff", &HDBParser::get_added_mass_coeff, py::arg("i"), py::arg("j"))
+        .def("get_radiation_damping_coeff", &HDBParser::get_radiation_damping_coeff, py::arg("i"), py::arg("j"))
         .def("get_diffraction_module_tables", &HDBParser::get_diffraction_module_tables)
         .def("get_diffraction_phase_tables", &HDBParser::get_diffraction_phase_tables)
         .def("get_froude_krylov_module_tables", &HDBParser::get_froude_krylov_module_tables)
