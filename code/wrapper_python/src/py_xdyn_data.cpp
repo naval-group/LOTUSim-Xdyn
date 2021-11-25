@@ -3,6 +3,7 @@
 #include "test_data_generator/inc/TriMeshTestData.hpp"
 #include "test_data_generator/inc/hdb_data.hpp"
 #include "test_data_generator/inc/yaml_data.hpp"
+#include "test_data_generator/inc/precal_test_data.hpp"
 #include "core/inc/Body.hpp"
 #include "core/inc/BodyBuilder.hpp"
 #include <string>
@@ -174,6 +175,26 @@ void py_add_module_xdyn_data_test(py::module& m)
     m.def("bug_3238_hdb", &test_data::bug_3238_hdb);
     m.def("hdb_issue_184", &test_data::hdb_issue_184);
     m.def("big_hdb", &test_data::big_hdb);
+
+    py::module m_precal = m.def_submodule("precal");
+    m_precal.def("precal", &test_data::precal);
+    m_precal.def("glossary_of_terms", &glossary_of_terms);
+    m_precal.def("general", &general);
+    m_precal.def("constants", &constants);
+    m_precal.def("simulation", &simulation);
+    m_precal.def("exports", &exports);
+    m_precal.def("ship_particulars", &ship_particulars);
+    m_precal.def("mass_properties", &mass_properties);
+    m_precal.def("mass_matrix", &mass_matrix);
+    m_precal.def("restoring_matrix", &restoring_matrix);
+    m_precal.def("natural_periods_and_frequencies", &natural_periods_and_frequencies);
+    m_precal.def("added_mass_damping_matrix_inf_freq", &added_mass_damping_matrix_inf_freq);
+    m_precal.def("hull_properties", &hull_properties);
+    m_precal.def("roll_damping", &roll_damping);
+    m_precal.def("labels", &labels);
+    m_precal.def("dimensions", &dimensions);
+    m_precal.def("signals", &signals);
+    m_precal.def("raos", &raos);
 }
 
 void py_add_module_xdyn_data(py::module& m)
