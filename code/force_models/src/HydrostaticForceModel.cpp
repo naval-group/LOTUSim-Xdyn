@@ -1,5 +1,5 @@
 /*
- * DampingForceModel.cpp
+ * HydrostaticForceModel.cpp
  *
  *  Created on: Oct 17, 2014
  *      Author: cady
