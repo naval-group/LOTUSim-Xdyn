@@ -27,8 +27,8 @@
 
 namespace py = pybind11;
 
-void py_add_module_xdyn_env_io(py::module& m);
-void py_add_module_xdyn_env_io(py::module& m)
+void py_add_module_xdyn_env_wave_io(py::module& m);
+void py_add_module_xdyn_env_wave_io(py::module& m)
 {
     py::class_<YamlWaveOutput>(m, "YamlWaveOutput")
         .def(py::init<>())
@@ -119,11 +119,11 @@ void py_add_module_xdyn_env_io(py::module& m)
         ;
 }
 
-void py_add_module_xdyn_env(py::module& m)
+void py_add_module_xdyn_env_wave(py::module& m_env);
+void py_add_module_xdyn_env_wave(py::module& m_env)
 {
-    py::module m_env = m.def_submodule("env");
     py::module m_env_io = m_env.def_submodule("io");
-    py_add_module_xdyn_env_io(m_env_io);
+    py_add_module_xdyn_env_wave_io(m_env_io);
 
     py::class_<DiscreteDirectionalWaveSpectrum>(m_env, "DiscreteDirectionalWaveSpectrum")
         .def(py::init<>())
@@ -573,13 +573,18 @@ void py_add_module_xdyn_env(py::module& m)
         and x[i] will give a constant value, for each i between 1 and n-1.
         )pbdoc")
         ;
+}
+
+void py_add_module_xdyn_env_wind(py::module& m_env);
+void py_add_module_xdyn_env_wind(py::module& m_env)
+{
 
     py::class_<YamlModel>(m_env, "YamlModel")
-        .def(py::init<>())
-        .def_readwrite("model", &YamlModel::model)
-        .def_readwrite("yaml", &YamlModel::yaml)
-        .def_readwrite("index_of_first_line_in_global_yaml", &YamlModel::index_of_first_line_in_global_yaml)
-        ;
+            .def(py::init<>())
+            .def_readwrite("model", &YamlModel::model)
+            .def_readwrite("yaml", &YamlModel::yaml)
+            .def_readwrite("index_of_first_line_in_global_yaml", &YamlModel::index_of_first_line_in_global_yaml)
+            ;
 
     py::class_<WindModel>(m_env, "WindModel")
         // .def(py::init<>())
@@ -638,3 +643,12 @@ void py_add_module_xdyn_env(py::module& m)
         ;
 }
 
+
+void py_add_module_xdyn_env(py::module& m)
+{
+    py::module m_env = m.def_submodule("env");
+    py::module m_env_wave = m_env.def_submodule("wave");
+    py::module m_env_wind = m_env.def_submodule("wind");
+    py_add_module_xdyn_env_wave(m_env_wave);
+    py_add_module_xdyn_env_wind(m_env_wind);
+}

@@ -4,7 +4,7 @@ Unit test for JonswapSpectrum
 import unittest
 
 import numpy as np
-from xdyn.env import JonswapSpectrum
+from xdyn.env.wave import JonswapSpectrum
 from xdyn.exceptions import InvalidInputException
 from xdyn.ssc.random import DataGenerator
 

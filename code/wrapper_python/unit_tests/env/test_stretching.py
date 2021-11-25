@@ -3,18 +3,14 @@ Unit test for Stretching
 """
 import unittest
 
-from xdyn.env import Stretching
-from xdyn.env.io import YamlStretching
+from xdyn.env.wave import Stretching
 
 
 class StretchingTest(unittest.TestCase):
     """Test class for Stretching"""
 
     def test_example(self):
-        yaml = YamlStretching()
-        yaml.delta = 0.4
-        yaml.h = 123
-        stretching = Stretching(yaml)
+        stretching = Stretching(delta=0.4, h=123)
         self.assertEqual(124, stretching.rescaled_z(124, -10))
         self.assertEqual(124, stretching.rescaled_z(124, 10))
         self.assertEqual(124, stretching.rescaled_z(124, 0))

@@ -4,8 +4,7 @@ Unit test for BretschneiderSpectrum
 import unittest
 
 import numpy as np
-
-from xdyn.env import BretschneiderSpectrum
+from xdyn.env.wave import BretschneiderSpectrum
 from xdyn.exceptions import InvalidInputException
 from xdyn.ssc.random import DataGenerator
 

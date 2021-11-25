@@ -6,8 +6,7 @@ import unittest
 from typing import List
 
 import numpy as np
-
-from xdyn.env import (
+from xdyn.env.wave import (
     Cos2sDirectionalSpreading,
     DiracDirectionalSpreading,
     DiracSpectralDensity,

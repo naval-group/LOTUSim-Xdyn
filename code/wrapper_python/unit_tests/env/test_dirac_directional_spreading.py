@@ -3,7 +3,7 @@ Unit test for DiracDirectionalSpreading
 """
 import unittest
 
-from xdyn.env import DiracDirectionalSpreading
+from xdyn.env.wave import DiracDirectionalSpreading
 from xdyn.ssc.random import DataGenerator
 
 NB_TRIALS: int = 10

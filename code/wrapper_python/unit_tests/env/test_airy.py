@@ -4,7 +4,7 @@ Unit test for Airy
 import unittest
 
 import numpy as np
-from xdyn.env import (
+from xdyn.env.wave import (
     Airy,
     DiracDirectionalSpreading,
     DiracSpectralDensity,
@@ -12,7 +12,6 @@ from xdyn.env import (
     Stretching,
     discretize,
 )
-from xdyn.env.io import YamlStretching
 
 
 class AiryTest(unittest.TestCase):
@@ -30,10 +29,7 @@ class AiryTest(unittest.TestCase):
         omega_max = self.rng.uniform(low=omega_min, high=2e6)
         nfreq = self.rng.integers(low=2, high=100)
         ndir = self.rng.integers(low=2, high=100)
-        ys = YamlStretching()
-        ys.delta = 1
-        ys.h = 0
-        s = Stretching(ys)
+        s = Stretching(delta=1, h=0)
         A = discretize(
             DiracSpectralDensity(omega0, Hs),
             DiracDirectionalSpreading(psi0),

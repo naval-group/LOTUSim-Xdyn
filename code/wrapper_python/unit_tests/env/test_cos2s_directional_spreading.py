@@ -4,7 +4,7 @@ Unit test for Cos2sDirectionalSpreading
 import unittest
 
 import numpy as np
-from xdyn.env import Cos2sDirectionalSpreading
+from xdyn.env.wave import Cos2sDirectionalSpreading
 from xdyn.exceptions import InvalidInputException
 
 NB_TRIALS: int = 10

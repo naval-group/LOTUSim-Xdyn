@@ -4,8 +4,7 @@ Unit test for PiersonMoskowitzSpectrum
 import unittest
 
 import numpy as np
-
-from xdyn.env import JonswapSpectrum, PiersonMoskowitzSpectrum
+from xdyn.env.wave import JonswapSpectrum, PiersonMoskowitzSpectrum
 from xdyn.exceptions import InvalidInputException
 from xdyn.ssc.random import DataGenerator
 

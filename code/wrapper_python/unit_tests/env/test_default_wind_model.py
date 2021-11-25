@@ -4,7 +4,7 @@ Unit test for DefaultWindModel
 import unittest
 
 import numpy as np
-from xdyn.env import DefaultWindModel
+from xdyn.env.wind import DefaultWindModel
 
 
 class DefaultWindModelTest(unittest.TestCase):

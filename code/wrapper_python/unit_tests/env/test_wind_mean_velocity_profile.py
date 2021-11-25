@@ -4,7 +4,7 @@ Unit test for WindMeanVelocityProfile, UniformWindVelocityProfile
 import unittest
 
 import numpy as np
-from xdyn.env import (
+from xdyn.env.wind import (
     LogWindVelocityProfile,
     LogWindVelocityProfileInput,
     PowerLawWindVelocityProfile,

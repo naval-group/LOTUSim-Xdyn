@@ -3,7 +3,7 @@ Unit test for DiracSpectralDensityTest
 """
 import unittest
 
-from xdyn.env import DiracSpectralDensity
+from xdyn.env.wave import DiracSpectralDensity
 from xdyn.exceptions import InvalidInputException
 from xdyn.ssc.random import DataGenerator
 
