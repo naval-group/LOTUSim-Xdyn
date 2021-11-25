@@ -11,7 +11,7 @@ namespace py = pybind11;
 
 void py_add_module_xdyn_hdb(py::module&m)
 {
-    py::module m_hdb_interpolators = m.def_submodule("hdbinterpolators");
+    py::module m_hdb_interpolators = m.def_submodule("hdb");
 
     py::class_<RAOData>(m_hdb_interpolators, "RAOData")
         .def(py::init<>())

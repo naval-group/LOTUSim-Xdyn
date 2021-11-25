@@ -10,7 +10,7 @@ import xdyn.ssc
 from xdyn.core import BodyStates, EnvironmentAndFrames, History, Wrench
 from xdyn.core.io import YamlBody
 from xdyn.force import GravityForceModel
-from xdyn.hdbinterpolators import RAOData
+from xdyn.hdb import RAOData
 from xdyn.sandbox import Dog, call_go
 from xdyn.ssc.kinematics import EulerAngles as SscEulerAngles
 from xdyn.ssc.kinematics import Kinematics as SscKinematics

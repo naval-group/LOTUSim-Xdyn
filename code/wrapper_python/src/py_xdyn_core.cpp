@@ -18,6 +18,8 @@
 #include "external_data_structures/inc/YamlDynamics.hpp"
 #include "external_data_structures/inc/YamlPoint.hpp"
 #include "external_data_structures/inc/YamlPosition.hpp"
+#include "external_data_structures/inc/YamlRAO.hpp"
+#include "external_data_structures/inc/YamlRadiationDamping.hpp"
 #include "external_data_structures/inc/YamlRotation.hpp"
 #include "external_data_structures/inc/YamlSpeed.hpp"
 #include "external_data_structures/inc/YamlWaveOutput.hpp"
@@ -161,6 +163,46 @@ void py_add_module_xdyn_core_io(py::module& m)
         .def_readwrite("phi", &YamlFilteredStates::phi)
         .def_readwrite("theta", &YamlFilteredStates::theta)
         .def_readwrite("psi", &YamlFilteredStates::psi)
+        ;
+
+    py::enum_<YamlRAO::TypeOfRao>(m, "TypeOfRao", py::arithmetic())
+        .value("DIFFRACTION_RAO", YamlRAO::TypeOfRao::DIFFRACTION_RAO)
+        .value("FROUDE_KRYLOV_RAO", YamlRAO::TypeOfRao::FROUDE_KRYLOV_RAO);
+
+    py::class_<YamlRAO>(m, "YamlRAO")
+        .def(py::init<>())
+        .def_readwrite("hdb_filename", &YamlRAO::hdb_filename)
+        .def_readwrite("precal_filename", &YamlRAO::precal_filename)
+        .def_readwrite("calculation_point", &YamlRAO::calculation_point)
+        .def_readwrite("mirror", &YamlRAO::mirror)
+        .def_readwrite("use_encounter_period", &YamlRAO::use_encounter_period)
+        .def_readwrite("type_of_rao", &YamlRAO::type_of_rao)
+        ;
+
+    py::enum_<TypeOfQuadrature>(m, "TypeOfQuadrature", py::arithmetic())
+        .value("RECTANGLE", TypeOfQuadrature::RECTANGLE)
+        .value("TRAPEZOIDAL", TypeOfQuadrature::TRAPEZOIDAL)
+        .value("SIMPSON", TypeOfQuadrature::SIMPSON)
+        .value("GAUSS_KRONROD", TypeOfQuadrature::GAUSS_KRONROD)
+        .value("BURCHER", TypeOfQuadrature::BURCHER)
+        .value("CLENSHAW_CURTIS", TypeOfQuadrature::CLENSHAW_CURTIS)
+        .value("FILON", TypeOfQuadrature::FILON)
+        ;
+
+    py::class_<YamlRadiationDamping>(m, "YamlRadiationDamping")
+        .def_readwrite("hdb_filename", &YamlRadiationDamping::hdb_filename)
+        .def_readwrite("precal_r_filename", &YamlRadiationDamping::precal_r_filename)
+        .def_readwrite("type_of_quadrature_for_cos_transform", &YamlRadiationDamping::type_of_quadrature_for_cos_transform)
+        .def_readwrite("type_of_quadrature_for_convolution", &YamlRadiationDamping::type_of_quadrature_for_convolution)
+        .def_readwrite("nb_of_points_for_retardation_function_discretization", &YamlRadiationDamping::nb_of_points_for_retardation_function_discretization)
+        .def_readwrite("omega_min", &YamlRadiationDamping::omega_min)
+        .def_readwrite("omega_max", &YamlRadiationDamping::omega_max)
+        .def_readwrite("tau_min", &YamlRadiationDamping::tau_min)
+        .def_readwrite("tau_max", &YamlRadiationDamping::tau_max)
+        .def_readwrite("output_Br_and_K", &YamlRadiationDamping::output_Br_and_K)
+        .def_readwrite("calculation_point_in_body_frame", &YamlRadiationDamping::calculation_point_in_body_frame)
+        .def_readwrite("remove_constant_speed", &YamlRadiationDamping::remove_constant_speed)
+        .def_readwrite("forward_speed_correction", &YamlRadiationDamping::forward_speed_correction)
         ;
 }
 
