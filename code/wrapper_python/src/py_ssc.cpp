@@ -49,6 +49,11 @@ void declare_typed_vector_data_generator(py::module &m_ssc_random, const std::st
                rdg::DataGenerator>(m_ssc_random, pyclass_name.c_str())
         .def(py::init<const rdg::DataGenerator& /*rhs*/>())
         .def("of_size", &rdg::TypedVectorDataGenerator<T>::of_size)
+        .def("__call__", &rdg::TypedVectorDataGenerator<T>::get_impl)
+        .def("greater_than", &rdg::TypedVectorDataGenerator<T>::greater_than)
+        .def("but", &rdg::TypedVectorDataGenerator<T>::but)
+        .def("between", &rdg::TypedVectorDataGenerator<T>::between)
+        .def("no", &rdg::TypedVectorDataGenerator<T>::no)
         ;
 }
 
