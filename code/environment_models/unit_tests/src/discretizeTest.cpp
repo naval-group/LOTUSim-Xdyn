@@ -204,7 +204,7 @@ TEST_F(discretizeTest, should_throw_if_ndir_is_zero)
     const JonswapSpectrum S(Hs, Tp, gamma);
     const DiracDirectionalSpreading D(PI/4);
     const double omega_min = a.random<double>().greater_than(0);
-    const double omega_max = a.random<double>().greater_than(0);
+    const double omega_max = a.random<double>().greater_than(omega_min);
     const size_t ndir = 0;
     const size_t nfreq = a.random<size_t>().between(2,1000);
     YamlStretching y;
