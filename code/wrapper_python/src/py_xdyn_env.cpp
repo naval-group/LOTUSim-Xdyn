@@ -435,15 +435,118 @@ void py_add_module_xdyn_env(py::module& m)
         R"pbdoc(
         Discretize a wave spectrum
 
-        - S (WaveSpectralDensity) : Frequency spectrum
-        - D (WaveDirectionalSpreading) : Spatial spectrum
-        - omega_min (float) : Lower bound of the angular frequency range (in rad/s)
-        - omega_max (float) : Upper bound of the angular frequency range (in rad/s)
-        - nfreq (int) : Number of frequencies in discrete spectrum
-        - ndir (int) : Number of directions in discrete spectrum
-        - stretching (Stretching) : Dilate z-axis to properly compute orbital velocities (delta-stretching)
-        - equal_energy_bins (bool) : Choose omegas so the integral of S between two successive omegas is constant
-        - h (Optional[float]) : Water depth (in meters). If None, or not provided, infinite depth will be considered
+        - `S` (WaveSpectralDensity) : Frequency spectrum
+        - `D` (WaveDirectionalSpreading) : Spatial spectrum
+        - `omega_min` (float) : Lower bound of the angular frequency range (in rad/s)
+        - `omega_max` (float) : Upper bound of the angular frequency range (in rad/s)
+        - `nfreq` (int) : Number of frequencies in discrete spectrum
+        - `ndir` (int) : Number of directions in discrete spectrum
+        - `stretching` (Stretching) : Dilate z-axis to properly compute orbital velocities (delta-stretching)
+        - `equal_energy_bins` (bool) : Choose omegas so the integral of S between two successive omegas is constant
+        - `h (Optional[float]) : Water depth (in meters). If None, or not provided, infinite depth will be considered
+        )pbdoc")
+        ;
+
+    m_env.def("dynamic_pressure_factor",
+        [](const double k,               //!< Wave number (in 1/m)
+           const double z,               //!< z-position in the NED frame (in meters)
+           const double eta,             //!< Wave elevation at (x,y) in the NED frame (in meters) for stretching
+           const Stretching& stretching, //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
+           boost::optional<double> h     //!< Water depth (in meters)
+           ){
+            if (h.is_initialized()) {
+                return dynamic_pressure_factor(
+                    k,         //!< Wave number (in 1/m)
+                    z,         //!< z-position in the NED frame (in meters)
+                    h.get(),   //!< Average water depth (in meters)
+                    eta,       //!< Wave elevation at (x,y) in the NED frame (in meters) for stretching
+                    stretching //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
+                    );
+            } else {
+                return dynamic_pressure_factor(
+                    k,         //!< Wave number (in 1/m)
+                    z,         //!< z-position in the NED frame (in meters)
+                    eta,       //!< Wave elevation at (x,y) in the NED frame (in meters) for stretching
+                    stretching //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
+                    );
+            }
+        },
+        py::arg("k"),
+        py::arg("z"),
+        py::arg("eta"),
+        py::arg("stretching"),
+        py::arg("h") = py::none(),
+        R"pbdoc(
+        Utility function used by the discretize function. This is where the stretching is taken into account.
+        Finite and infinite depth are considered: Use None or skip h declaration to consider infinite depth.
+
+        - `k` (float): Wave number (in 1/m)
+        - `z` (float): z-position in the NED frame (in meters)
+        - `eta` (float): Wave elevation at (x,y) in the NED frame (in meters) for stretching
+        - `stretching` (Stretching): Dilate z-axis to properly compute orbital velocities (delta-stretching)
+        - `h` (Optional[float]): Water depth (in meters). If None, or not provided, infinite depth will be considered
+        )pbdoc")
+        ;
+
+    m_env.def("area_curve", &area_curve, py::arg("xs"), py::arg("ys"),
+        R"pbdoc(
+        Calculates the cumulative integral using trapezoidal quadrature.
+
+        - `xs` Vector of strictly increasing abscissae.
+        - `ys` Positive values of the function at each `xs`.
+
+        Return
+            For each x, integral of ys from xmin to x.
+        )pbdoc")
+        ;
+
+    m_env.def("flatten", &flatten, py::arg("spectrum"),
+        R"pbdoc(
+        Discretize a wave spectrum
+
+        - spectrum (DiscreteDirectionalWaveSpectrum): Spectrum to flatten
+
+        Returns a FlatDiscreteDirectionalWaveSpectrum
+        )pbdoc")
+        ;
+
+
+    m_env.def("filter_spectrum", &filter, py::arg("spectrum"), py::arg("ratio"),
+        // Renamed function filter to filter_spectrum to avoid any conflict with python
+        // wrapper function
+        R"pbdoc(
+        Only select the most important spectrum components & create single vector.
+
+        Output spectrum represents at least `ratio * Energy`
+        No need to loop on all frequencies & all directions: we only select
+        the most important ones (i.e. those representing a given ratio of the total
+        energy in the spectrum).
+
+        - spectrum (FlatDiscreteDirectionalWaveSpectrum): Spectrum to filter
+        - ratio (float): Ratio between 0 & 1: where should we cut off the spectra?
+
+        Returns FlatDiscreteDirectionalWaveSpectrum A flat spectrum
+        (i.e. one where the freq & direct. loops have been unrolled)
+        )pbdoc")
+        ;
+
+    m_env.def("equal_area_abscissae", &equal_area_abscissae, py::arg("xs"), py::arg("ys"),
+        R"pbdoc(
+        Calculates consecutive intervals where a function has constant area.
+
+        Input:
+
+        - `xs` Vector of strictly increasing abscissae
+        - `ys` Positive values of the function at each `xs`.
+
+        Returns
+
+        - `x` a vector of abscissae between xmin and xmax (x[0] == xs[0] and
+           x[n-1] == xs[n-1] where n denotes the number of values in `xs` and `ys`).
+
+        If `f` denotes a function such that ys[i] = f(xs[i]), this function
+        returns a list of increasing `x`-values such that integrating f between x[i-1]
+        and x[i] will give a constant value, for each i between 1 and n-1.
         )pbdoc")
         ;
 
