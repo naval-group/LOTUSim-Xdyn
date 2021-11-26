@@ -328,6 +328,8 @@ void py_add_module_xdyn_core(py::module& m0)
 
     py::class_<BodyStates>(m, "BodyStates")
         .def(py::init<const double>(), py::arg("Tmax") = 0.0)
+        .def(py::init<const YamlFilteredStates& /*filtered_states*/, const double /*Tmax*/>(), py::arg("filtered_states"), py::arg("Tmax") = 0.0)
+        .def(py::init<const StatesFilter& /*states_filter*/, const double /*Tmax*/>(), py::arg("states_filter"), py::arg("Tmax") = 0.0)
         .def_readwrite("name", &BodyStates::name, "Body's name")
         .def_readwrite("G", &BodyStates::G, "Position of the ship's centre of gravity")
         .def_readwrite("x_relative_to_mesh", &BodyStates::x_relative_to_mesh)
