@@ -183,13 +183,16 @@ void py_add_module_ssc_kinematics(py::module& m_ssc)
     py::class_<ssc::kinematics::KinematicTree>(m_ssc_kinematics, "KinematicTree")
         .def(py::init<>())
         .def("add",&ssc::kinematics::KinematicTree::add)
-        .def("get_path",&ssc::kinematics::KinematicTree::get_path);
+        .def("get_path",&ssc::kinematics::KinematicTree::get_path)
+        ;
 
     py::class_<ssc::kinematics::PointMatrix>(m_ssc_kinematics, "PointMatrix")
         .def(py::init<>())
         .def(py::init<const std::string& /*frame*/, const size_t /*nb_of_columns*/>())
         .def(py::init<const ssc::kinematics::Matrix3Xd& /*m*/,const std::string& /*frame*/>())
-        .def_readwrite("m",&ssc::kinematics::PointMatrix::m);
+        .def_readwrite("m",&ssc::kinematics::PointMatrix::m)
+        .def("get_frame", &ssc::kinematics::PointMatrix::get_frame)
+        ;
 
     py::class_<ssc::kinematics::RotationMatrix>(m_ssc_kinematics, "RotationMatrix");
 
