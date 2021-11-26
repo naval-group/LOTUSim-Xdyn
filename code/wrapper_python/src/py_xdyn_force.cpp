@@ -183,7 +183,13 @@ void py_add_module_xdyn_force(py::module& m0)
         .def("parse", &WageningenControlledForceModel::parse)
         .def("get_Kt", &WageningenControlledForceModel::get_Kt)
         .def("get_Kq", &WageningenControlledForceModel::get_Kq)
-        .def("Kt", &WageningenControlledForceModel::Kt, py::arg("Z"),py::arg("AE_A0"),py::arg("P_D"),py::arg("J"))
-        .def("Kq", &WageningenControlledForceModel::Kq, py::arg("Z"),py::arg("AE_A0"),py::arg("P_D"),py::arg("J"))
+        .def("Kt", &WageningenControlledForceModel::Kt, py::arg("Z"),py::arg("AE_A0"),py::arg("P_D"),py::arg("J"),
+            py::call_guard<py::scoped_ostream_redirect,
+                           py::scoped_estream_redirect>()
+            )
+        .def("Kq", &WageningenControlledForceModel::Kq, py::arg("Z"),py::arg("AE_A0"),py::arg("P_D"),py::arg("J"),
+            py::call_guard<py::scoped_ostream_redirect,
+                           py::scoped_estream_redirect>()
+            )
         ;
 }
