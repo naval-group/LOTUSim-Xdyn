@@ -442,7 +442,7 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         py::arg("nfreq"),
         py::arg("ndir"),
         py::arg("stretching"),
-        py::arg("equal_energy_bins"),
+        py::arg("equal_energy_bins") = false,
         py::arg("h") = py::none(),
         R"pbdoc(
         Discretize a wave spectrum
@@ -454,8 +454,8 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         - `nfreq` (int) : Number of frequencies in discrete spectrum
         - `ndir` (int) : Number of directions in discrete spectrum
         - `stretching` (Stretching) : Dilate z-axis to properly compute orbital velocities (delta-stretching)
-        - `equal_energy_bins` (bool) : Choose omegas so the integral of S between two successive omegas is constant
-        - `h (Optional[float]) : Water depth (in meters). If None, or not provided, infinite depth will be considered
+        - `equal_energy_bins` (Optional[bool]) : Choose omegas so the integral of S between two successive omegas is constant. Default is False
+        - `h` (Optional[float]) : Water depth (in meters). If None, or not provided, infinite depth will be considered
         )pbdoc")
         ;
 
