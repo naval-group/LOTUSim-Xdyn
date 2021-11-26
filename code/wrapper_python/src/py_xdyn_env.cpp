@@ -243,8 +243,8 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             ys.h = h;
             return std::unique_ptr<Stretching>(new Stretching(ys));
             }),
-            py::arg("delta"),
-            py::arg("h")
+            py::arg("delta") = 0.0,
+            py::arg("h") = 0.0
             )
         .def("rescaled_z", &Stretching::rescaled_z,
             py::arg("original_z"),
@@ -253,6 +253,13 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             - `original_z`: z value we wish to rescale (in meters)
             - `wave_height`: Wave height (in meters), z being oriented downwards
             )pbdoc")
+        //.def("__repr__",
+        //   [](const Stretching &a) {
+        //       std::stringstream ss;
+        //       ss << "{\"delta\":" << a.delta
+        //          << ",\"h\":" << a.delta << "}";
+        //        return ss.str();
+        //    })
         ;
 
     py::class_<WaveSpectralDensity>(m_env, "WaveSpectralDensity")
@@ -267,34 +274,35 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             "Compute wave number, in finite depth")
         ;
 
-    //py::class_<SumOfWaveSpectralDensities, WaveSpectralDensity>(m_env, "SumOfWaveSpectralDensities")
-    //    .def(py::init<>())
-    //    .def(py::init<const SumOfWaveSpectralDensities& /*s*/>(), py::arg("s"))
-    //    .def(py::init<const SumOfWaveSpectralDensities& /*s1*/, const SumOfWaveSpectralDensities& /*s2*/>(), py::arg("s1"), py::arg("s2"))
-    //    // .def(py::init<const std::vector<SumOfWaveSpectralDensities>& /*s*/>(), py::arg("ws"))
-    //    .def("__call__", &SumOfWaveSpectralDensities::operator(), py::arg("omega"),
-    //        R"pbdoc(
-    //        Wave density by wave number.
+    py::class_<SumOfWaveSpectralDensities, WaveSpectralDensity>(m_env, "SumOfWaveSpectralDensities")
+        .def(py::init<>())
+        .def(py::init<const WaveSpectralDensity& /*s*/>(), py::arg("s"))
+        .def(py::init<const WaveSpectralDensity& /*s1*/, const SumOfWaveSpectralDensities& /*s2*/>(), py::arg("s1"), py::arg("s2"))
+        // .def(py::init<const std::vector<WaveSpectralDensity>& /*ws*/>(), py::arg("ws"))
+        .def("__call__", &SumOfWaveSpectralDensities::operator(), py::arg("omega"),
+            R"pbdoc(
+            Wave density by wave number.
 
-    //        - omega (float): Angular frequency (omega = 2 * pi * f) in rad/s
-    //        )pbdoc")
-    //    .def("get_angular_frequencies", &SumOfWaveSpectralDensities::get_angular_frequencies,
-    //        py::arg("omega_min"),
-    //        py::arg("omega_max"),
-    //        py::arg("n"),
-    //        py::arg("equal_energy_bins"),
-    //        R"pbdoc(
-    //        Returns n angular frequencies between omega_min (included) and omega_max (also included)
+            - `omega` (float): Angular frequency (omega = 2 * pi * f) in rad/s
+            )pbdoc")
+        .def("get_angular_frequencies", &SumOfWaveSpectralDensities::get_angular_frequencies,
+            py::arg("omega_min"),
+            py::arg("omega_max"),
+            py::arg("n"),
+            py::arg("equal_energy_bins"),
+            R"pbdoc(
+            Returns n angular frequencies between omega_min (included) and omega_max (also included)
 
-    //        - omega_min (float): Minimum angular frequency (in rad/s)
-    //        - omega_max (float): Maximum angular frequency (in rad/s)
-    //        - n (int): Number of angular frequencies to return
-    //        - equal_energy_bins (bool): Choose omegas so the integral of S between two successive omegas is constant
-    //        )pbdoc")
-    //    ;
+            - `omega_min` (float): Minimum angular frequency (in rad/s)
+            - `omega_max` (float): Maximum angular frequency (in rad/s)
+            - `n` (int): Number of angular frequencies to return
+            - `equal_energy_bins` (bool): Choose omegas so the integral of S between two successive omegas is constant
+            )pbdoc")
+        ;
 
     py::class_<DiracSpectralDensity, WaveSpectralDensity>(m_env, "DiracSpectralDensity")
         .def(py::init<const double& /*omega0*/, const double /*Hs*/>(), py::arg("omega0"), py::arg("Hs"))
+        .def(py::self + py::self)
         .def("__call__", &DiracSpectralDensity::operator(), py::arg("omega"), "Computes the amplitude of the power spectrum at a given angular frequency")
         .def("get_angular_frequencies", &DiracSpectralDensity::get_angular_frequencies,  "A vector containing only omega0 (in rad/s)")
         ;
@@ -326,6 +334,7 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             - `Tp` (float) Mean wave period (in seconds)
             - `gamma` (float) Non-dimensional peak shape parameter
             )pbdoc")
+        .def(py::self + py::self)
         .def("__call__", &JonswapSpectrum::operator(), py::arg("omega"),
             R"pbdoc(
             Computes the amplitude of the power spectrum at a given angular frequency
@@ -351,22 +360,23 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         //     )
         ;
 
-    //py::class_<SumOfWaveDirectionalSpreadings, WaveDirectionalSpreading>(m_env, "SumOfWaveDirectionalSpreadings")
-    //    .def(py::init<const WaveDirectionalSpreading& /*s*/>(), py::arg("s"))
-    //    .def(py::init<const WaveDirectionalSpreading& /*s1*/, const WaveDirectionalSpreading& /*s2*/>(), py::arg("s1"), py::arg("s2"))
-    //    // .def(py::init<const std::vector<WaveDirectionalSpreading>& /*s*/>(), py::arg("s"))
-    //    .def("__call__", &SumOfWaveDirectionalSpreadings::operator(), py::arg("psi"),
-    //        R"pbdoc(
-    //        Wave density by direction.
+    py::class_<SumOfWaveDirectionalSpreadings, WaveDirectionalSpreading>(m_env, "SumOfWaveDirectionalSpreadings")
+        .def(py::init<const WaveDirectionalSpreading& /*s*/>(), py::arg("s"))
+        .def(py::init<const WaveDirectionalSpreading& /*s1*/, const WaveDirectionalSpreading& /*s2*/>(), py::arg("s1"), py::arg("s2"))
+        // .def(py::init<const std::vector<WaveDirectionalSpreading>& /*s*/>(), py::arg("s"))
+        .def("__call__", &SumOfWaveDirectionalSpreadings::operator(), py::arg("psi"),
+            R"pbdoc(
+            Wave density by direction.
 
-    //        - psi (float): Primary wave direction in radians.
-    //        )pbdoc")
-    //    .def("get_directions", &SumOfWaveDirectionalSpreadings::get_directions, py::arg("n"))
-    //    ;
+            - `psi` (float): Primary wave direction in radians.
+            )pbdoc")
+        .def("get_directions", &SumOfWaveDirectionalSpreadings::get_directions, py::arg("n"))
+        ;
 
     py::class_<DiracDirectionalSpreading, WaveDirectionalSpreading>(m_env, "DiracDirectionalSpreading")
         .def(py::init<const double /*psi0*/>(), py::arg("psi0"),
             "Constructor with psi0 Primary wave direction (NED, ""coming from"") in radians")
+        .def(py::self + py::self)
         .def("__call__", &DiracDirectionalSpreading::operator(), py::arg("psi"),
             R"pbdoc(
             Wave density by direction.
@@ -379,6 +389,7 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
 
     py::class_<Cos2sDirectionalSpreading, WaveDirectionalSpreading>(m_env, "Cos2sDirectionalSpreading")
         .def(py::init<const double /*psi0*/, const double /*s*/>(), py::arg("psi0"), py::arg("s"))
+        .def(py::self + py::self)
         .def("__call__", &Cos2sDirectionalSpreading::operator(), py::arg("psi"),
         R"pbdoc(
         Wave density by direction.
