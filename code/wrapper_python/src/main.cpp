@@ -22,9 +22,6 @@ PYBIND11_MODULE(xdyn, m) {
         .. autosummary::
            :toctree: _generate
     )pbdoc";
-
-    py::add_ostream_redirect(m, "ostream_redirect");
-
     py_add_module_sandbox(m);
     py_add_module_ssc(m);
     py_add_module_xdyn_core(m);
