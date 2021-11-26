@@ -1,6 +1,10 @@
 """
 Unit test for WageningenControlledForceModel
 """
+import io
+import re
+import unittest
+from contextlib import redirect_stderr
 import unittest
 
 import numpy as np
@@ -123,28 +127,28 @@ class WageningenControlledForceModelTest(unittest.TestCase):
         env = get_env()
         model = WageningenControlledForceModel(data, "", env)
         self.assertEqual("wageningen B-series", model.model_name())
-        almostEqual = lambda x, y, delta=EPS: self.assertAlmostEqual(x, y, delta=delta)
+        almost_equal = lambda x, y, delta=EPS: self.assertAlmostEqual(x, y, delta=delta)
         # B6-65 (cf. The Wageningen Propeller Series, 1992, Gert Kuiper, Marin publication 92-001 page 128
-        almostEqual(0.603363, model.Kt(Z=6, AE_A0=0.65, P_D=1.4, J=0))
-        almostEqual(0.544592015, model.Kt(Z=6, AE_A0=0.65, P_D=1.4, J=0.3))
-        almostEqual(0.569237985, model.Kt(Z=6, AE_A0=0.65, P_D=1.4, J=0.2))
-        almostEqual(0.588950654, model.Kt(Z=6, AE_A0=0.65, P_D=1.4, J=0.1))
-        almostEqual(0.161314404, model.Kt(Z=6, AE_A0=0.65, P_D=1.4, J=1.2))
-        almostEqual(0.10751365, model.Kt(Z=6, AE_A0=0.65, P_D=1.4, J=1.3))
-        almostEqual(0.05281524, model.Kt(Z=6, AE_A0=0.65, P_D=1.4, J=1.4))
+        almost_equal(0.603363, model.Kt(Z=6, AE_A0=0.65, P_D=1.4, J=0))
+        almost_equal(0.544592015, model.Kt(Z=6, AE_A0=0.65, P_D=1.4, J=0.3))
+        almost_equal(0.569237985, model.Kt(Z=6, AE_A0=0.65, P_D=1.4, J=0.2))
+        almost_equal(0.588950654, model.Kt(Z=6, AE_A0=0.65, P_D=1.4, J=0.1))
+        almost_equal(0.161314404, model.Kt(Z=6, AE_A0=0.65, P_D=1.4, J=1.2))
+        almost_equal(0.10751365, model.Kt(Z=6, AE_A0=0.65, P_D=1.4, J=1.3))
+        almost_equal(0.05281524, model.Kt(Z=6, AE_A0=0.65, P_D=1.4, J=1.4))
         # B2-30 (cf. The Wageningen Propeller Series, 1992, Gert Kuiper, Marin publication 92-001 page 111
-        almostEqual(0.242745716, model.Kt(Z=2, AE_A0=0.30, P_D=0.7, J=0))
-        almostEqual(0.21922492, model.Kt(Z=2, AE_A0=0.30, P_D=0.7, J=0.1))
-        almostEqual(0.193313888, model.Kt(Z=2, AE_A0=0.30, P_D=0.7, J=0.2))
-        almostEqual(0.165272939, model.Kt(Z=2, AE_A0=0.30, P_D=0.7, J=0.3))
-        almostEqual(0.13535988, model.Kt(Z=2, AE_A0=0.30, P_D=0.7, J=0.4))
-        almostEqual(0.103833149, model.Kt(Z=2, AE_A0=0.30, P_D=0.7, J=0.5))
-        almostEqual(0.070951181, model.Kt(Z=2, AE_A0=0.30, P_D=0.7, J=0.6))
+        almost_equal(0.242745716, model.Kt(Z=2, AE_A0=0.30, P_D=0.7, J=0))
+        almost_equal(0.21922492, model.Kt(Z=2, AE_A0=0.30, P_D=0.7, J=0.1))
+        almost_equal(0.193313888, model.Kt(Z=2, AE_A0=0.30, P_D=0.7, J=0.2))
+        almost_equal(0.165272939, model.Kt(Z=2, AE_A0=0.30, P_D=0.7, J=0.3))
+        almost_equal(0.13535988, model.Kt(Z=2, AE_A0=0.30, P_D=0.7, J=0.4))
+        almost_equal(0.103833149, model.Kt(Z=2, AE_A0=0.30, P_D=0.7, J=0.5))
+        almost_equal(0.070951181, model.Kt(Z=2, AE_A0=0.30, P_D=0.7, J=0.6))
         # B3-40
-        almostEqual(0.188195882, model.Kt(Z=3, AE_A0=0.4, P_D=0.5, J=0.0))
-        almostEqual(0.163443634, model.Kt(Z=3, AE_A0=0.4, P_D=0.5, J=0.1))
-        almostEqual(0.135394546, model.Kt(Z=3, AE_A0=0.4, P_D=0.5, J=0.2))
-        almostEqual(0.104372086, model.Kt(Z=3, AE_A0=0.4, P_D=0.5, J=0.3))
+        almost_equal(0.188195882, model.Kt(Z=3, AE_A0=0.4, P_D=0.5, J=0.0))
+        almost_equal(0.163443634, model.Kt(Z=3, AE_A0=0.4, P_D=0.5, J=0.1))
+        almost_equal(0.135394546, model.Kt(Z=3, AE_A0=0.4, P_D=0.5, J=0.2))
+        almost_equal(0.104372086, model.Kt(Z=3, AE_A0=0.4, P_D=0.5, J=0.3))
 
     def test_KQ(self):
         data = WageningenControlledForceModel.parse(wageningen())
@@ -257,7 +261,11 @@ class WageningenControlledForceModelTest(unittest.TestCase):
         states = BodyStates()
         states.u.record(0, 1)
         commands = {"rpm": 0, "P/D": 0.5}
-        wrench = model.get_force(states, self.rng.uniform(), env, commands)
+        buf = io.StringIO()
+        with redirect_stderr(buf):
+            wrench = model.get_force(states, self.rng.uniform(), env, commands)
+        expected_regex = "Warning: Wageningen model used outside of its domain. Maybe n is too small\? Invalid advance ratio J: expected 0 <= J <= 1.5 but got J=inf. Saturating at 1.5 to continue simulation."
+        self.assertTrue(re.search(expected_regex, buf.getvalue()), buf.getvalue())
         self.assertAlmostEqual(0, wrench.X(), delta=EPS)
         self.assertAlmostEqual(0, wrench.Y(), delta=EPS)
         self.assertAlmostEqual(0, wrench.Z(), delta=EPS)
@@ -273,7 +281,12 @@ class WageningenControlledForceModelTest(unittest.TestCase):
         states = BodyStates()
         states.u.record(0, 1)
         commands = {"rpm": 1e-16, "P/D": 0.5}
-        wrench = model.get_force(states, self.rng.uniform(), env, commands)
+        buf = io.StringIO()
+        with redirect_stderr(buf):
+            wrench = model.get_force(states, self.rng.uniform(), env, commands)
+        expected_regex = "Warning: Wageningen model used outside of its domain. Maybe n is too small\? Invalid advance ratio J: expected 0 <= J <= 1.5 but got J=.*. Saturating at 1.5 to continue simulation."
+        self.assertTrue(re.search(expected_regex, buf.getvalue()), buf.getvalue())
+
         self.assertAlmostEqual(0, wrench.X(), delta=EPS)
         self.assertAlmostEqual(0, wrench.Y(), delta=EPS)
         self.assertAlmostEqual(0, wrench.Z(), delta=EPS)
