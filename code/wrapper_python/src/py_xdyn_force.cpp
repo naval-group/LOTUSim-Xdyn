@@ -8,6 +8,7 @@
 #include "force_models/inc/HydroPolarForceModel.hpp"
 #include "force_models/inc/GravityForceModel.hpp"
 #include "force_models/inc/MMGManeuveringForceModel.hpp"
+#include "force_models/inc/ResistanceCurveForceModel.hpp"
 #include "force_models/inc/WageningenControlledForceModel.hpp"
 #include "ssc/ssc/data_source/DataSource.hpp"
 #include "ssc/ssc/kinematics/Wrench.hpp"
@@ -61,7 +62,24 @@ void py_add_module_xdyn_force(py::module& m0)
         .def(py::init<const std::string&, const EnvironmentAndFrames&>())
         .def_static("model_name", &GravityForceModel::model_name)
         .def("potential_energy", &GravityForceModel::potential_energy)
-        .def("get_force", &GravityForceModel::get_force);
+        .def("get_force", &GravityForceModel::get_force)
+        ;
+
+    py::class_<ResistanceCurveForceModel::Yaml>(m, "ResistanceCurveForceModelInput")
+        .def(py::init<>())
+        .def_readwrite("Va", &ResistanceCurveForceModel::Yaml::Va)
+        .def_readwrite("R", &ResistanceCurveForceModel::Yaml::R)
+        ;
+
+    py::class_<ResistanceCurveForceModel, ForceModel>(m, "ResistanceCurveForceModel", "Resistance curve given by interpolation table")
+        .def(py::init<const ResistanceCurveForceModel::Yaml& /*data*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>())
+        .def_static("model_name", &ResistanceCurveForceModel::model_name)
+        .def_static("parse", &ResistanceCurveForceModel::parse)
+        .def("get_force", &ResistanceCurveForceModel::get_force,
+            py::call_guard<py::scoped_ostream_redirect,
+                           py::scoped_estream_redirect>()
+            )
+        ;
 
     py::class_<MMGManeuveringForceModel::Input>(m, "MMGManeuveringForceModelInput")
         .def(py::init<>())
@@ -112,7 +130,10 @@ void py_add_module_xdyn_force(py::module& m0)
              )
         .def("parse", &HydroPolarForceModel::parse)
         .def("model_name", &HydroPolarForceModel::model_name)
-        .def("get_force", &HydroPolarForceModel::get_force)
+        .def("get_force", &HydroPolarForceModel::get_force,
+            py::call_guard<py::scoped_ostream_redirect,
+                           py::scoped_estream_redirect>()
+            )
         ;
 
     py::class_<AbstractWageningen::Yaml>(m, "AbstractWageningenInput")
@@ -155,7 +176,10 @@ void py_add_module_xdyn_force(py::module& m0)
     py::class_<WageningenControlledForceModel, AbstractWageningen, ForceModel>(m, "WageningenControlledForceModel")
         .def(py::init<const WageningenControlledForceModel::Yaml& /*input*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>())
         .def_static("model_name", &WageningenControlledForceModel::model_name)
-        .def("get_force", &AbstractWageningen::get_force)
+        .def("get_force", &AbstractWageningen::get_force,
+            py::call_guard<py::scoped_ostream_redirect,
+                           py::scoped_estream_redirect>()
+            )
         .def("parse", &WageningenControlledForceModel::parse)
         .def("get_Kt", &WageningenControlledForceModel::get_Kt)
         .def("get_Kq", &WageningenControlledForceModel::get_Kq)
