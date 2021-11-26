@@ -172,12 +172,12 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             Computes the orbital velocity at given points.
             Velocities of the fluid at given points & instant, in m/s
 
-            - g: gravity (in m/s^2),
-            - x: x-positions in the NED frame (in meters),
-            - y: y-positions in the NED frame (in meters),
-            - z: z-positions in the NED frame (in meters),
-            - t: Current time instant (in seconds),
-            - eta: Wave heights at x,y,t (in meters),
+            - `g`: gravity (in m/s^2),
+            - `x`: x-positions in the NED frame (in meters),
+            - `y`: y-positions in the NED frame (in meters),
+            - `z`: z-positions in the NED frame (in meters),
+            - `t`: Current time instant (in seconds),
+            - `eta`: Wave heights at x,y,t (in meters),
             )pbdoc")
         .def("get_dynamic_pressure", &WaveModel::get_dynamic_pressure,
             py::arg("rho"),
@@ -191,13 +191,13 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             Computes the dynamic pressure at a given point.
             Pressure (in Pa) induced by the waves, at given points in the fluid
 
-            - rho: water density (in kg/m^3),
-            - g: gravity (in m/s^2),
-            - x: x-positions in the NED frame (in meters),
-            - y: y-positions in the NED frame (in meters),
-            - z: z-positions in the NED frame (in meters),
-            - eta: Wave heights at x,y,t (in meters),
-            - t: Current time instant (in seconds),
+            - `rho`: water density (in kg/m^3),
+            - `g`: gravity (in m/s^2),
+            - `x`: x-positions in the NED frame (in meters),
+            - `y`: y-positions in the NED frame (in meters),
+            - `z`: z-positions in the NED frame (in meters),
+            - `eta`: Wave heights at x,y,t (in meters),
+            - `t`: Current time instant (in seconds),
             )pbdoc")
         .def("get_omegas", &WaveModel::get_omegas,
             R"pbdoc(
@@ -228,11 +228,11 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             Calculate radiation forces using first order force RAO.
             Force (or torque), depending on the RAO.
 
-            - x: x-position of the RAO's calculation point in the NED frame (in meters)
-            - y: y-position of the RAO's calculation point in the NED frame (in meters)
-            - t: Current time instant (in seconds)
-            - t: Module of the RAO
-            - t: Phase of the RAO
+            - `x`: x-position of the RAO's calculation point in the NED frame (in meters)
+            - `y`: y-position of the RAO's calculation point in the NED frame (in meters)
+            - `t`: Current time instant (in seconds)
+            - `rao_module`: Module of the RAO
+            - `rao_phase`: Phase of the RAO
             )pbdoc")
         ;
     py::class_<Stretching>(m_env, "Stretching", "Rescale the z-axis with delta stretching model (used to compute orbital velocities")
@@ -250,8 +250,8 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             py::arg("original_z"),
             py::arg("wave_height"),
             R"pbdoc(
-            - original_z: z value we wish to rescale (in meters)
-            - wave_height: Wave height (in meters), z being oriented downwards
+            - `original_z`: z value we wish to rescale (in meters)
+            - `wave_height`: Wave height (in meters), z being oriented downwards
             )pbdoc")
         ;
 
@@ -304,16 +304,17 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             R"pbdoc(
             BretschneiderSpectrum only constructor
 
-            - Hs Significant wave height (in meters)
-            - Tp Mean wave period (in seconds)
+            - `Hs` Significant wave height (in meters)
+            - `Tp` Mean wave period (in seconds)
             )pbdoc")
+        .def(py::self + py::self)
         .def("__call__", &BretschneiderSpectrum::operator(), py::arg("omega"),
             R"pbdoc(
             Computes the amplitude of the power spectrum at a given angular frequency
 
             Returns Amplitude of the power spectrum (in m^2 s)
 
-            - omega Angular frequency (2\pi f) in rad/s of the significant wave height
+            - `omega` (float) Angular frequency (2\pi f) in rad/s of the significant wave height
             )pbdoc")
         ;
 
@@ -321,9 +322,9 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         .def(py::init<const double& /*Hs*/, const double /*Tp*/, const double /*gamma*/>(),
             py::arg("Hs"), py::arg("Tp"), py::arg("omega"),
             R"pbdoc(
-            - Hs (float) Significant wave height (in meters)
-            - Tp (float) Mean wave period (in seconds)
-            - gamma (float) Non-dimensional peak shape parameter
+            - `Hs` (float) Significant wave height (in meters)
+            - `Tp` (float) Mean wave period (in seconds)
+            - `gamma` (float) Non-dimensional peak shape parameter
             )pbdoc")
         .def("__call__", &JonswapSpectrum::operator(), py::arg("omega"),
             R"pbdoc(
@@ -331,15 +332,15 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
 
             Returns Amplitude of the power spectrum (in m^2 s)
 
-            - omega Angular frequency (2\pi f) in rad/s of the significant wave height
+            - `omega` (float) Angular frequency (2\pi f) in rad/s of the significant wave height
             )pbdoc");
 
     py::class_<PiersonMoskowitzSpectrum, JonswapSpectrum, WaveSpectralDensity>(m_env, "PiersonMoskowitzSpectrum")
         .def(py::init<const double& /*Hs*/, const double /*Tp*/>(),
             py::arg("Hs"), py::arg("Tp"),
             R"pbdoc(
-            - Hs (float) Significant wave height (in meters)
-            - Tp (float) Mean wave period (in seconds)
+            - `Hs` (float) Significant wave height (in meters)
+            - `Tp` (float) Mean wave period (in seconds)
             )pbdoc")
         ;
 
@@ -371,7 +372,7 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             Wave density by direction.
             Equals one if psi=psi0 & 0 otherwise.
 
-            - psi (float): Primary wave direction in radians.
+            - `psi` (float): Primary wave direction in radians.
             )pbdoc")
         .def("get_directions", &DiracDirectionalSpreading::get_directions, "Returns a vector containing only psi0")
         ;
@@ -383,7 +384,7 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         Wave density by direction.
         Equals one if psi=psi0 & 0 otherwise.
 
-          - psi (float): Primary wave direction in radians.
+        - `psi` (float): Primary wave direction in radians.
         )pbdoc")
         ;
 
