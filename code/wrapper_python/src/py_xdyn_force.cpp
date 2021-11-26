@@ -9,6 +9,7 @@
 #include "force_models/inc/GravityForceModel.hpp"
 #include "force_models/inc/MMGManeuveringForceModel.hpp"
 #include "force_models/inc/ResistanceCurveForceModel.hpp"
+#include "force_models/inc/SimpleHeadingKeepingController.hpp"
 #include "force_models/inc/WageningenControlledForceModel.hpp"
 #include "ssc/ssc/data_source/DataSource.hpp"
 #include "ssc/ssc/kinematics/Wrench.hpp"
@@ -191,5 +192,18 @@ void py_add_module_xdyn_force(py::module& m0)
             py::call_guard<py::scoped_ostream_redirect,
                            py::scoped_estream_redirect>()
             )
+        ;
+
+    py::class_<SimpleHeadingKeepingController::Yaml>(m, "SimpleHeadingKeepingControllerInput")
+        .def_readwrite("name", &SimpleHeadingKeepingController::Yaml::name)
+        .def_readwrite("ksi", &SimpleHeadingKeepingController::Yaml::ksi)
+        .def_readwrite("Tp", &SimpleHeadingKeepingController::Yaml::Tp)
+        ;
+
+    py::class_<SimpleHeadingKeepingController, ForceModel>(m, "SimpleHeadingKeepingController")
+        .def(py::init<const SimpleHeadingKeepingController::Yaml& /*input*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>())
+        .def_static("model_name", &SimpleHeadingKeepingController::model_name)
+        .def("get_force", &SimpleHeadingKeepingController::get_force)
+        .def_static("parse", &SimpleHeadingKeepingController::parse)
         ;
 }
