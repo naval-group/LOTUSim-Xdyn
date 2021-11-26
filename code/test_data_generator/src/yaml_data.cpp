@@ -42,6 +42,18 @@ std::string discretization()
            "       energy fraction: 0.999\n";
 }
 
+std::string discretization_with_ndir_nfreq();
+std::string discretization_with_ndir_nfreq()
+{
+    return "    discretization:\n"
+           "       ndir: 128\n"
+           "       nfreq: 128\n"
+           "       omega min: {value: 0.1, unit: rad/s}\n"
+           "       omega max: {value: 6, unit: rad/s}\n"
+           "       energy fraction: 0.999\n"
+           "       equal energy bins: false\n";
+}
+
 std::string stretching();
 std::string stretching()
 {
@@ -1096,11 +1108,7 @@ std::string test_data::waves()
        + "    nu: {value: 1.18e-6, unit: m^2/s}\n"
        + "environment models:\n"
        + "  - model: waves\n"
-       + "    discretization:\n"
-       + "       n: 128\n"
-       + "       omega min: {value: 0.1, unit: rad/s}\n"
-       + "       omega max: {value: 6, unit: rad/s}\n"
-       + "       energy fraction: 0.999\n"
+       + discretization_with_ndir_nfreq()
        + airy_depth_100()
        + stretching()
        + directional_spreading()
@@ -1129,7 +1137,11 @@ std::string test_data::waves()
        + "            nx: 5\n"
        + "            ymin: {value: 1, unit: m}\n"
        + "            ymax: {value: 2, unit: m}\n"
-       + "            ny: 2\n";
+       + "            ny: 2\n"
+       + "output:\n"
+       + "   - format: hdf5\n"
+       + "     filename: waves.h5\n"
+       + "     data: [command line, yaml, spectra, waves]\n";
 }
 
 std::string test_data::simple_waves()

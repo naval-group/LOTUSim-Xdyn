@@ -29,22 +29,32 @@ yaml_data = load_yaml('tutorial_03_waves.yml')
 La section `environment models` est nettement plus fournie que pour les
 tutoriels précédents.
 
-On commence par définir la discrétisation. Actuellement, le nombre de
-pulsations est égal au nombre de directions : il s'agit d'une limitation du code.
+On commence par définir la discrétisation, avec notamment:
+
+- les valeurs minimale et maximale des pulsations,
+- le nombre de pulsations / fréquences utilisé par les modèles de spectres,
+- le nombre de directions utilisé par le modèle d'étalement directionnel.
 
 ```python echo=False, results='raw', name='tutorial_03_print_wave_discretization'
 print_yaml(yaml_data, 'environment models/0/discretization')
 ```
 
-On va donc sommer <% yaml_data['environment models'][0]['discretization']['n'] %> pulsations et
-<% yaml_data['environment models'][0]['discretization']['n'] %> directions,
-soit <% yaml_data['environment models'][0]['discretization']['n']*yaml_data['environment models'][0]['discretization']['n'] %> points.
-Cependant, la discrétisation spatiale des spectres monochromatiques et des
-dispersions monodirectionnelles est réduite à un point.
-On spécifie en outre
-que l'on veut représenter
+Dans cet exemple, on va donc considérer <% yaml_data['environment models'][0]['discretization']['nfreq'] %> pulsations et
+<% yaml_data['environment models'][0]['discretization']['ndir'] %> directions.
+Si on utilise un modèle fréquentiel polychromatique couplé à un modèle de dispersion multi-directionnel,
+on aura alors <% yaml_data['environment models'][0]['discretization']['nfreq']*yaml_data['environment models'][0]['discretization']['ndir'] %> points.
+
+Les discrétisations spatiales des spectres monochromatiques et des
+dispersions monodirectionnelles n'utilisent pas ces paramètres `nfreq`
+et `ndir`: elles sont réduites à un point.
+
+On spécifie en outre que l'on veut représenter
 <%yaml_data['environment models'][0]['discretization']['energy fraction']*100 %> %
 de l'énergie totale, les autres composantes n'étant pas retenues.
+
+Enfin, le paramètre booléen `equal energy bins`
+indique si l'on souhaite une discrétisation spectrale
+où chaque raie contient la même énergie.
 
 Le premier spectre est défini de la façon suivante :
 
@@ -66,7 +76,6 @@ print_yaml(yaml_data, 'environment models/0/output')
 
 En définitive, l'environnement est défini de la façon suivante :
 
-
 ```python echo=False, results='raw', name='tutorial_03_print_environment_yaml'
 print_yaml(yaml_data, 'environment models')
 ```
@@ -82,21 +91,25 @@ print_yaml_file('tutorial_03_waves.yml')
 La simulation peut maintenant être lancée comme suit :
 
 ```python echo=False, results='raw', name='tutorial_03_launch_simulation'
-execCommand('xdyn tutorial_03_waves.yml --dt 1 --tend 1 -w tutorial_03_results.h5')
+execCommand('xdyn tutorial_03_waves.yml --dt 1 --tend 1')
 ```
 
-Le fichier de résultat est ici `tutorial_03_results.h5`.
+Le fichier de résultat est ici `waves.h5`.
 
 ### Résultats
 
 On obtient un fichier hdf5 qui peut être ouvert avec différents logiciels comme HDFView.
-Dans le groupe "outputs", on trouve un groupe "waves" qui contient quatre jeux de données nommés t, x, y et z.
+Dans le groupe `outputs`, on trouve deux groupes:
 
-- t donne les pas de temps de la simulation
-- x donne les coordonnées selon x des points où l'élévation est calculée. Chaque ligne correspond à un pas de temps.
-- y donne les coordonnées selon y des points où l'élévation est calculée. Chaque ligne correspond à un pas de temps.
-- z donne l'élévation aux points définis par x et y. Chaque tranche correspond à un pas de temps.
+- `spectra` qui contient les données des spectres discrétisés,
+- `waves` qui contient quatre jeux de données nommés `t`, `x`, `y` et `z`:
+
+    - `t` donne les pas de temps de la simulation,
+    - `x` donne les coordonnées selon x des points où l'élévation est calculée. Chaque ligne correspond à un pas de temps,
+    - `y` donne les coordonnées selon y des points où l'élévation est calculée. Chaque ligne correspond à un pas de temps,
+    - `z` donne l'élévation aux points définis par x et y. Chaque tranche correspond à un pas de temps.
 
 La description de ce fichier est faite [dans la documentation des fichiers YAML](#sorties).
 
-On peut obtenir les élévations dans n'importe quel repère de xdyn (NED ou lié à un solide). Si le repère est lié à un solide on obtient des coordonnées x et y changeantes au cours du temps.
+On peut obtenir les élévations dans n'importe quel repère de xdyn (NED ou lié à un solide).
+Si le repère est lié à un solide, on obtient des coordonnées x et y changeantes au cours du temps.
