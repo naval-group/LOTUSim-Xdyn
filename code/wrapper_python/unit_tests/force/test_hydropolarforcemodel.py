@@ -1,11 +1,13 @@
 """
 Unit test for HydroPolarForceModel
 """
+import io
+import re
 import unittest
+from contextlib import redirect_stderr
 from typing import Optional
 
 import numpy as np
-from xdyn import ostream_redirect
 from xdyn.core import BodyStates, EnvironmentAndFrames
 from xdyn.core.io import YamlAngle, YamlCoordinates, YamlPosition, YamlRotation
 from xdyn.exceptions import InvalidInputException
@@ -380,37 +382,106 @@ class HydroPolarForceModelTest(unittest.TestCase):
             1.34483,
             1.34483,
         ]
-        with ostream_redirect(stdout=False, stderr=False):
+        buf = io.StringIO()
+        with redirect_stderr(buf):
             HydroPolarForceModel(data, "body", env)
-        print(ostream_redirect)
-        # ASSERT_FALSE(debug.str().empty())
+        expected_regex = "WARNING: In hydrodynamic polar force model 'test', you provided a maximum angle of attack higher than 180deg. All values over 180deg will be ignored"
+        self.assertTrue(re.search(expected_regex, buf.getvalue()), buf.getvalue())
 
-    ##    # Reset the stderr stringstream
-    ##    debug.str("")
-    ##    debug.clear()
-    ##    ASSERT_TRUE(debug.str().empty())
-    ##
-    #        # The minimum value for AoA is between -180° and 0°
-    #        data.angle_of_attack = [-np.pi/2,0.,0.12217305,0.15707963,0.20943951,0.48869219,1.04719755,1.57079633,2.0943951,2.61799388, np.pi]
-    #        data.lift_coefficient = [0.00000,0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,-0.11207]
-    #        data.drag_coefficient = [0.03448,0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483]
-    #        HydroPolarForceModel(data, "body", env)
-    #        # ASSERT_FALSE(debug.str().empty())
-    ##
-    ##    # Reset the stderr stringstream
-    ##    debug.str("")
-    ##    debug.clear()
-    ##    ASSERT_TRUE(debug.str().empty())
-    ##
-    #        # The minimum value for AWA is under -180°
-    #        data.angle_of_attack = [-3*np.pi/2,-np.pi/2,0.,0.12217305,0.15707963,0.20943951,0.48869219,1.04719755,1.57079633,2.0943951,2.61799388, np.pi]
-    #        data.lift_coefficient = [0.00000,0.00000,0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,-0.11207]
-    #        data.drag_coefficient = [0.03448,0.03448,0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483]
-    #        HydroPolarForceModel(data, "body", env)
-    ##    ASSERT_FALSE(debug.str().empty())
-    ##
-    ##    # Restore cerr's buffer
-    ##    std::cerr.rdbuf(orig)
+        # The minimum value for AoA is between -180° and 0°
+        data.angle_of_attack = [
+            -np.pi / 2,
+            0.0,
+            0.12217305,
+            0.15707963,
+            0.20943951,
+            0.48869219,
+            1.04719755,
+            1.57079633,
+            2.0943951,
+            2.61799388,
+            np.pi,
+        ]
+        data.lift_coefficient = [
+            0.00000,
+            0.00000,
+            0.94828,
+            1.13793,
+            1.25000,
+            1.42681,
+            1.38319,
+            1.26724,
+            0.93103,
+            0.38793,
+            -0.11207,
+        ]
+        data.drag_coefficient = [
+            0.03448,
+            0.03448,
+            0.01724,
+            0.01466,
+            0.01466,
+            0.02586,
+            0.11302,
+            0.38250,
+            0.96888,
+            1.31578,
+            1.34483,
+        ]
+        buf = io.StringIO()
+        with redirect_stderr(buf):
+            HydroPolarForceModel(data, "body", env)
+        expected_msg = "WARNING: In hydrodynamic polar force model 'test', you provided a minimum angle of attack between -180deg and 0deg. Symmetry will be assumed and values under 0deg will be ignored."
+        self.assertTrue(expected_msg in buf.getvalue(), buf.getvalue())
+
+        # The minimum value for AWA is under -180°
+        data.angle_of_attack = [
+            -3 * np.pi / 2,
+            -np.pi / 2,
+            0.0,
+            0.12217305,
+            0.15707963,
+            0.20943951,
+            0.48869219,
+            1.04719755,
+            1.57079633,
+            2.0943951,
+            2.61799388,
+            np.pi,
+        ]
+        data.lift_coefficient = [
+            0.00000,
+            0.00000,
+            0.00000,
+            0.94828,
+            1.13793,
+            1.25000,
+            1.42681,
+            1.38319,
+            1.26724,
+            0.93103,
+            0.38793,
+            -0.11207,
+        ]
+        data.drag_coefficient = [
+            0.03448,
+            0.03448,
+            0.03448,
+            0.01724,
+            0.01466,
+            0.01466,
+            0.02586,
+            0.11302,
+            0.38250,
+            0.96888,
+            1.31578,
+            1.34483,
+        ]
+        buf = io.StringIO()
+        with redirect_stderr(buf):
+            HydroPolarForceModel(data, "body", env)
+        expected_msg = "WARNING: In hydrodynamic polar force model 'test', you provided a minimum angle of attack lower than -180deg. All values under -180deg will be ignored."
+        self.assertTrue(expected_msg in buf.getvalue(), buf.getvalue())
 
     def test_should_throw_if_empty_angle_vector(self):
         data = HydroPolarForceModelInput()
@@ -537,25 +608,17 @@ class HydroPolarForceModelTest(unittest.TestCase):
         env.rot = YamlRotation("angle", ["z", "y'", "x''"])
         force_model = HydroPolarForceModel(data, "body", env)
         states = get_states(10, 0)
-        #
-        #    std::stringstream debug
-        #    # Redirect cerr to our stringstream buffer or any other ostream
-        #    std::streambuf* orig = std::cerr.rdbuf(debug.rdbuf())
-        #    ASSERT_TRUE(debug.str().empty())
-        #
-        wrench = force_model.get_force(states, 0, env, {})
-        # ASSERT_FALSE(debug.str().empty())
+        buf = io.StringIO()
+        with redirect_stderr(buf):
+            wrench = force_model.get_force(states, 0, env, {})
+        expected_msg = "WARNING: In hydrodynamic polar force model 'test', the calculation point seems to be outside of the water (z = 5). In consequence, no force is being applied by this model."
+        self.assertTrue(expected_msg in buf.getvalue(), buf.getvalue())
         self.assertAlmostEqual(wrench.X(), 0.0, delta=1e-12)
         self.assertAlmostEqual(wrench.Y(), 0.0, delta=1e-12)
         self.assertAlmostEqual(wrench.Z(), 0.0, delta=1e-12)
         self.assertAlmostEqual(wrench.K(), 0.0, delta=1e-12)
         self.assertAlmostEqual(wrench.M(), 0.0, delta=1e-12)
         self.assertAlmostEqual(wrench.N(), 0.0, delta=1e-12)
-
-
-#
-#    # Restore cerr's buffer
-#    std::cerr.rdbuf(orig)
 
 
 if __name__ == "__main__":
