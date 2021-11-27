@@ -10,6 +10,7 @@
 #include "force_models/inc/MMGManeuveringForceModel.hpp"
 #include "force_models/inc/ResistanceCurveForceModel.hpp"
 #include "force_models/inc/SimpleHeadingKeepingController.hpp"
+#include "force_models/inc/SimpleStationKeepingController.hpp"
 #include "force_models/inc/WageningenControlledForceModel.hpp"
 #include "ssc/ssc/data_source/DataSource.hpp"
 #include "ssc/ssc/kinematics/Wrench.hpp"
@@ -205,5 +206,22 @@ void py_add_module_xdyn_force(py::module& m0)
         .def_static("model_name", &SimpleHeadingKeepingController::model_name)
         .def("get_force", &SimpleHeadingKeepingController::get_force)
         .def_static("parse", &SimpleHeadingKeepingController::parse)
+        ;
+
+    py::class_<SimpleStationKeepingController::Yaml>(m, "SimpleStationKeepingControllerInput")
+        .def_readwrite("name", &SimpleStationKeepingController::Yaml::name)
+        .def_readwrite("ksi_x", &SimpleStationKeepingController::Yaml::ksi_x)
+        .def_readwrite("T_x", &SimpleStationKeepingController::Yaml::T_x)
+        .def_readwrite("ksi_y", &SimpleStationKeepingController::Yaml::ksi_y)
+        .def_readwrite("T_y", &SimpleStationKeepingController::Yaml::T_y)
+        .def_readwrite("ksi_psi", &SimpleStationKeepingController::Yaml::ksi_psi)
+        .def_readwrite("T_psi", &SimpleStationKeepingController::Yaml::T_psi)
+        ;
+
+    py::class_<SimpleStationKeepingController, ForceModel>(m, "SimpleStationKeepingController")
+        .def(py::init<const SimpleStationKeepingController::Yaml& /*input*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>())
+        .def_static("model_name", &SimpleStationKeepingController::model_name)
+        .def("get_force", &SimpleStationKeepingController::get_force)
+        .def_static("parse", &SimpleStationKeepingController::parse)
         ;
 }
