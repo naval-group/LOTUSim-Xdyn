@@ -2,12 +2,15 @@
 #include "py_pybind_additions.hpp"
 #include "core/inc/ForceModel.hpp"
 #include "force_models/inc/AbstractWageningen.hpp"
+#include "force_models/inc/DampingForceModel.hpp"
 #include "force_models/inc/KtKqForceModel.hpp"
 #include "force_models/inc/ConstantForceModel.hpp"
 #include "force_models/inc/HydrostaticForceModel.hpp"
 #include "force_models/inc/HydroPolarForceModel.hpp"
 #include "force_models/inc/GravityForceModel.hpp"
+#include "force_models/inc/LinearDampingForceModel.hpp"
 #include "force_models/inc/MMGManeuveringForceModel.hpp"
+#include "force_models/inc/QuadraticDampingForceModel.hpp"
 #include "force_models/inc/ResistanceCurveForceModel.hpp"
 #include "force_models/inc/SimpleHeadingKeepingController.hpp"
 #include "force_models/inc/SimpleStationKeepingController.hpp"
@@ -81,6 +84,24 @@ void py_add_module_xdyn_force(py::module& m0)
             py::call_guard<py::scoped_ostream_redirect,
                            py::scoped_estream_redirect>()
             )
+        ;
+
+    py::class_<DampingForceModel, ForceModel>(m, "DampingForceModel")
+        //.def(py::init<const std::string& /*name*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>())
+        //.def("get_force", &DampingForceModel::get_force)
+        ;
+
+    py::class_<LinearDampingForceModel, DampingForceModel, ForceModel>(m, "LinearDampingForceModel")
+        .def(py::init<const LinearDampingForceModel::Input& /*data*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>())
+        .def_static("parse", &LinearDampingForceModel::parse)
+        .def_static("model_name", &LinearDampingForceModel::model_name)
+        .def("get_force", &LinearDampingForceModel::get_force)
+        ;
+
+    py::class_<QuadraticDampingForceModel, DampingForceModel, ForceModel>(m, "QuadraticDampingForceModel")
+        .def(py::init<const QuadraticDampingForceModel::Input& /*data*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>())
+        .def_static("parse", &QuadraticDampingForceModel::parse)
+        .def_static("model_name", &QuadraticDampingForceModel::model_name)
         ;
 
     py::class_<MMGManeuveringForceModel::Input>(m, "MMGManeuveringForceModelInput")
