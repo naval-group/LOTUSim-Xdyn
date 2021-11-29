@@ -11,6 +11,7 @@
 #include "force_models/inc/LinearDampingForceModel.hpp"
 #include "force_models/inc/MMGManeuveringForceModel.hpp"
 #include "force_models/inc/QuadraticDampingForceModel.hpp"
+#include "force_models/inc/RadiationDampingForceModel.hpp"
 #include "force_models/inc/ResistanceCurveForceModel.hpp"
 #include "force_models/inc/SimpleHeadingKeepingController.hpp"
 #include "force_models/inc/SimpleStationKeepingController.hpp"
@@ -214,6 +215,25 @@ void py_add_module_xdyn_force(py::module& m0)
             py::call_guard<py::scoped_ostream_redirect,
                            py::scoped_estream_redirect>()
             )
+        ;
+
+    py::class_<RadiationDampingForceModel::Input>(m, "RadiationDampingForceModelInput")
+        .def(py::init<>())
+        .def_readwrite("yaml", &RadiationDampingForceModel::Input::yaml)
+        // TR1(shared_ptr)<HydroDBParser> parser;
+        ;
+
+    py::class_<RadiationDampingForceModel, ForceModel>(m, "RadiationDampingForceModel")
+        .def(py::init<const RadiationDampingForceModel::Input& /*input*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>())
+        .def_static("model_name", &RadiationDampingForceModel::model_name)
+        .def("get_force", &RadiationDampingForceModel::get_force,
+            py::arg("states"),
+            py::arg("t"),
+            py::arg("env"),
+            py::arg("commands")
+            )
+        .def("get_Tmax", &RadiationDampingForceModel::get_Tmax)
+        .def_static("parse", &RadiationDampingForceModel::parse, py::arg("yaml"), py::arg("parse_hdb")=true)
         ;
 
     py::class_<SimpleHeadingKeepingController::Yaml>(m, "SimpleHeadingKeepingControllerInput")
