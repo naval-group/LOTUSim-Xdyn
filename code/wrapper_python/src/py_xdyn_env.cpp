@@ -213,6 +213,8 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         .def("get_spectrum", &WaveModel::get_spectrum)
         ;
 
+    py::class_<WaveModelPtr>(m_env, "WaveModelPtr");
+
     py::class_<Airy, WaveModel>(m_env, "Airy")
         .def(py::init<const DiscreteDirectionalWaveSpectrum& /*spectrum*/, const double /*constant_random_phase*/>(),
             py::arg("spectrum"), py::arg("constant_random_phase"))
