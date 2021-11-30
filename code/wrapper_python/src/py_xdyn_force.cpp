@@ -2,7 +2,9 @@
 #include "py_pybind_additions.hpp"
 #include "core/inc/ForceModel.hpp"
 #include "force_models/inc/AbstractWageningen.hpp"
+#include "force_models/inc/AbstractRaoForceModel.hpp"
 #include "force_models/inc/DampingForceModel.hpp"
+#include "force_models/inc/DiffractionForceModel.hpp"
 #include "force_models/inc/KtKqForceModel.hpp"
 #include "force_models/inc/ConstantForceModel.hpp"
 #include "force_models/inc/HydrostaticForceModel.hpp"
@@ -264,5 +266,42 @@ void py_add_module_xdyn_force(py::module& m0)
         .def_static("model_name", &SimpleStationKeepingController::model_name)
         .def("get_force", &SimpleStationKeepingController::get_force)
         .def_static("parse", &SimpleStationKeepingController::parse)
+        ;
+
+    py::class_<AbstractRaoForceModel, ForceModel>(m, "AbstractRaoForceModel", "Abstracts the commonalities between linear Froude-Krylov & diffraction force models")
+        .def(py::init<const YamlRAO& /*data*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>(),
+            py::arg("data"),
+            py::arg("body_name"),
+            py::arg("env")
+        )
+        .def(py::init<const YamlRAO& /*data*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/, const std::string& /*hdb_file_contents*/>(),
+            py::arg("data"),
+            py::arg("body_name"),
+            py::arg("env"),
+            py::arg("hdb_file_contents")
+        )
+        .def("get_force", &AbstractRaoForceModel::get_force,
+            py::arg("states"),
+            py::arg("t"),
+            py::arg("env"),
+            py::arg("commands")
+            )
+        .def_static("parse", &AbstractRaoForceModel::parse, py::arg("yaml"), py::arg("type_of_rao"))
+        ;
+
+    py::class_<DiffractionForceModel, AbstractRaoForceModel, ForceModel>(m, "DiffractionForceModel", "Diffraction forces")
+        .def(py::init<const YamlRAO& /*data*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>(),
+            py::arg("data"),
+            py::arg("body_name"),
+            py::arg("env")
+        )
+        .def(py::init<const YamlRAO& /*data*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/, const std::string& /*hdb_file_contents*/>(),
+            py::arg("data"),
+            py::arg("body_name"),
+            py::arg("env"),
+            py::arg("hdb_file_contents")
+        )
+        .def_static("parse", &DiffractionForceModel::parse, py::arg("yaml"))
+        .def_static("model_name", &DiffractionForceModel::model_name)
         ;
 }
