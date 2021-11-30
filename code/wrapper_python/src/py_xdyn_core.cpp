@@ -5,6 +5,10 @@
 #include "core/inc/EnvironmentAndFrames.hpp"
 #include "core/inc/Wrench.hpp"
 #include "core/inc/StatesFilter.hpp"
+#include "core/inc/SurfaceElevationInterface.hpp"
+#include "core/inc/SurfaceElevationFromWaves.hpp"
+#include "environment_models/inc/Airy.hpp"
+#include "environment_models/inc/DiscreteDirectionalWaveSpectrum.hpp"
 #include "exceptions/inc/ConnexionError.hpp"
 #include "exceptions/inc/GRPCError.hpp"
 #include "exceptions/inc/InternalErrorException.hpp"
@@ -24,6 +28,7 @@
 #include "external_data_structures/inc/YamlSpeed.hpp"
 #include "external_data_structures/inc/YamlWaveOutput.hpp"
 #include "external_data_structures/inc/YamlWaveModelInput.hpp"
+
 namespace py = pybind11;
 
 void py_add_module_xdyn_exceptions(py::module& m);
@@ -231,7 +236,38 @@ void py_add_module_xdyn_core(py::module& m0)
             }
         )
         .def("set_rho_air", &EnvironmentAndFrames::set_rho_air)
-        .def("get_rho_air", &EnvironmentAndFrames::get_rho_air);
+        .def("get_rho_air", &EnvironmentAndFrames::get_rho_air)
+        .def("set_w_from_discrete_directional_wave_spectrum",
+           [](EnvironmentAndFrames &a, const DiscreteDirectionalWaveSpectrum& dsp, const int random_number_generator_seed)
+           {
+               a.w = SurfaceElevationPtr(new SurfaceElevationFromWaves(WaveModelPtr(new Airy(dsp, random_number_generator_seed))));
+           },
+            py::arg("dsp"),
+            py::arg("random_number_generator_seed") = 0
+        )
+        .def("set_w_from_discrete_directional_wave_spectrum",
+           [](EnvironmentAndFrames &a, const DiscreteDirectionalWaveSpectrum& dsp, const double constant_random_phase)
+           {
+               a.w = SurfaceElevationPtr(new SurfaceElevationFromWaves(WaveModelPtr(new Airy(dsp, constant_random_phase))));
+           },
+            py::arg("dsp"),
+            py::arg("constant_random_phase") = 0.0
+        )
+        .def("set_w_from_wave_model",
+            [](EnvironmentAndFrames &a, const WaveModelPtr& wave_model)
+            {
+               a.w = SurfaceElevationPtr(new SurfaceElevationFromWaves(wave_model));
+            },
+            py::arg("wave_model")
+        )
+        //.def("set_w_from_wave_model",
+        //    [](EnvironmentAndFrames &a, WaveModel& wave_model)
+        //    {
+        //        a.w = SurfaceElevationPtr(new SurfaceElevationFromWaves(WaveModelPtr(&wave_model)));
+        //    },
+        //    py::arg("wave_model"), py::keep_alive<1, 2>()
+        //)
+        ;
 
     py::class_<History>(m, "History")
         .def(py::init<>())
@@ -465,5 +501,164 @@ void py_add_module_xdyn_core(py::module& m0)
         .def("K", static_cast<double (Wrench::*)() const>(&Wrench::K), "Get K")
         .def("M", static_cast<double (Wrench::*)() const>(&Wrench::M), "Get M")
         .def("N", static_cast<double (Wrench::*)() const>(&Wrench::N), "Get N")
+        ;
+
+    py::class_<SurfaceElevationPtr>(m, "SurfaceElevationPtr")
+        ;
+
+    py::class_<SurfaceElevationInterface>(m, "SurfaceElevationInterface")
+        //.def(py::init<const ssc::kinematics::PointMatrixPtr& /*output_mesh*/,
+        //              const std::pair<std::size_t,std::size_t>& /*output_mesh_size*/>(),
+        //              py::arg("output_mesh"),
+        //              py::arg("output_mesh_size") = std::make_pair((std::size_t)0,(std::size_t)0)
+        //              )
+
+        .def("update_surface_elevation", &SurfaceElevationInterface::update_surface_elevation,
+            py::arg("M"),
+            py::arg("k"),
+            py::arg("t"),
+            R"pbdoc(
+            Computes surface elevation for each point on mesh.
+            Updates the absolute surface elevation & the relative wave height.
+
+            Input:
+
+            - `M` (ssc.kinematics.PointMatrixPtr) Points for which to compute the relative wave height
+            - `k`(ssc.kinematics.KinematicsPtr) Object used to compute the transforms to the NED frame
+            - `t` (float) Current instant (in seconds)
+            )pbdoc")
+        .def("get_relative_wave_height", &SurfaceElevationInterface::get_relative_wave_height,
+            R"pbdoc(
+            Returns the relative wave height computed by update_surface_elevation
+
+            zwave - z for each point in mesh.
+            )pbdoc")
+        .def("get_surface_elevation", &SurfaceElevationInterface::get_surface_elevation,
+            R"pbdoc(
+            Returns the absolute wave height (z coordinate in NED frame) computed by update_surface_elevation
+
+            zwave for each point (x,y) in mesh.
+            )pbdoc")
+        .def("get_output_mesh_size", &SurfaceElevationInterface::get_output_mesh_size,
+            R"pbdoc(
+            Returns the pair of number of points describing the surface elevation mesh
+            )pbdoc")
+        .def("get_and_check_orbital_velocity", &SurfaceElevationInterface::get_and_check_orbital_velocity,
+            R"pbdoc(
+            Computes the orbital velocity at given points.
+
+            Velocity of the fluid at given points & instant, in m/s
+
+            Input:
+
+            - `g` (float) gravity (in m/s^2)
+            - `x` (List[float]) x-positions in the NED frame (in meters)
+            - `y` (List[float]) y-positions in the NED frame (in meters)
+            - `z` (List[float]) z-positions in the NED frame (in meters)
+            - `t` (float) Current time instant (in seconds)
+            - `eta` (List[float]) Wave elevations at (x,y) in the NED frame (in meters)
+            )pbdoc")
+        ;
+//
+//        virtual std::vector<std::vector<double> > get_wave_directions_for_each_model() const;
+//        virtual std::vector<std::vector<double> > get_wave_angular_frequency_for_each_model() const;
+//
+//        /**  \brief Computes the dynamic pressure at given points.
+//          *  \details The input point matrix P can be projected into any reference
+//          *           frame: this method will request a transform from a
+//          *           Kinematics object to express it in the NED frame.
+//          *  \returns Pdyn (in Pascal)
+//          *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_example
+//          */
+//        std::vector<double> get_dynamic_pressure(
+//            const double rho,                        //!< Water density (in kg/m^3)
+//            const double g,                          //!< Gravity (in m/s^2)
+//            const ssc::kinematics::PointMatrix& P,   //!< Positions of points P, relative to the centre of the NED frame, but projected in any frame
+//            const ssc::kinematics::KinematicsPtr& k, //!< Object used to compute the transforms to the NED frame
+//            const std::vector<double>& eta,          //!< Wave elevation at P in the NED frame (in meters)
+//            const double t                           //!< Current instant (in seconds)
+//            ) const;
+//        std::vector<double> get_and_check_dynamic_pressure(
+//            const double rho,               //!< water density (in kg/m^3)
+//            const double g,                 //!< gravity (in m/s^2)
+//            const std::vector<double> &x,   //!< x-positions in the NED frame (in meters)
+//            const std::vector<double> &y,   //!< y-positions in the NED frame (in meters)
+//            const std::vector<double> &z,   //!< z-positions in the NED frame (in meters)
+//            const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
+//            const double t                  //!< Current time instant (in seconds)
+//            ) const;
+//
+//        /**  \brief Computes the wave heights at the points given in the 'output' section of the YAML file.
+//          *  \returns Vector of coordinates on the free surface (in the NED frame),
+//          *           the z coordinate being the wave height (in meters), for each
+//          *           point in output_mesh
+//          *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest method_example
+//          */
+//        ssc::kinematics::PointMatrix get_waves_on_mesh(
+//                const ssc::kinematics::KinematicsPtr& k, //!< Object used to compute the transforms to the NED frame
+//                const double t                           //!< Current instant (in seconds)
+//                ) const;
+//
+//        /**  \brief Computes the wave heights at the points given in the 'output' section of the YAML file.
+//          *  \returns a structure containing vector \a x, vector \a y and
+//          *           matrix \a z where
+//          *           \li \a x gives the X-variation of the mesh
+//          *           \li \a y gives the Y-variation of the mesh
+//          *           \li \a z gives the associated free surface elevation in
+//          *           the NED frame.
+//          */
+//        SurfaceElevationGrid get_waves_on_mesh_as_a_grid(
+//                const ssc::kinematics::KinematicsPtr& k,    //!< Object used to compute the transforms to the NED frame
+//                const double t                              //!< Current instant (in seconds)
+//                ) const;
+//
+//        /**  \brief Computes the wave heights on a mesh. Used by get_waves_on_mesh
+//          *  \returns Vector of coordinates on the free surface (in the NED frame),
+//          *           the z coordinate being the wave height (in meters), for each
+//          *           point in P
+//          *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest method_example
+//          */
+//        ssc::kinematics::PointMatrix get_points_on_free_surface(
+//                const double t,                               //!< Current instant (in seconds)
+//                const ssc::kinematics::PointMatrixPtr& Mned   //!< Output mesh in NED frame
+//                ) const;
+//
+//        /**  \brief Computes the surface elevation at given points.
+//          *  \returns Surface elevations of a list of points at a given instant, in meters.
+//          *  \returns zwave - z
+//          */
+//        std::vector<double> get_and_check_wave_height(const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+//                                            const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+//                                            const double t                //!< Current instant (in seconds)
+//                                           ) const;
+//
+//        virtual void serialize_wave_spectra_before_simulation(ObserverPtr& observer) const;
+//
+//        virtual std::vector<FlatDiscreteDirectionalWaveSpectrum> get_flat_directional_spectra(const double x, const double y, const double t) const = 0;
+//        virtual std::vector<DiscreteDirectionalWaveSpectrum> get_directional_spectra(const double x, const double y, const double t) const = 0;
+//        /**  \brief If the wave output mesh is not defined in NED, use Kinematics to update its x-y coordinates
+//          */
+
+
+   py::class_<SurfaceElevationFromWaves, SurfaceElevationInterface>(m, "SurfaceElevationFromWaves")
+        .def(py::init<
+                const std::vector<WaveModelPtr>& /*models*/,
+                const std::pair<std::size_t,std::size_t> /*output_mesh_size*/,
+                const ssc::kinematics::PointMatrixPtr& /*output_mesh*/
+                >(),
+                py::arg("models"),
+                py::arg("output_mesh_size") = std::make_pair((std::size_t)0,(std::size_t)0),
+                py::arg("output_mesh") = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix("NED", 0)))
+        .def(py::init<
+                const WaveModelPtr& /*model*/,
+                const std::pair<std::size_t,std::size_t> /*output_mesh_size*/,
+                const ssc::kinematics::PointMatrixPtr& /*output_mesh*/
+                >(),
+                py::arg("model"),
+                py::arg("output_mesh_size") = std::make_pair((std::size_t)0,(std::size_t)0),
+                py::arg("output_mesh") = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix("NED", 0)))
+        .def("get_wave_directions_for_each_model", &SurfaceElevationFromWaves::get_wave_directions_for_each_model)
+        .def("get_wave_angular_frequency_for_each_model", &SurfaceElevationFromWaves::get_wave_angular_frequency_for_each_model)
+        .def("get_models", &SurfaceElevationFromWaves::get_models)
         ;
 }
