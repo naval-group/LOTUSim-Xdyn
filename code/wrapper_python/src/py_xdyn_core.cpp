@@ -44,7 +44,8 @@ void py_add_module_xdyn_core_io(py::module& m)
 
     py::class_<YamlAngle>(m, "YamlAngle")
         .def(py::init<>())
-        .def(py::init<const double /*phi*/, const double /*theta*/, const double /*psi*/>())
+        .def(py::init<const double /*phi*/, const double /*theta*/, const double /*psi*/>(),
+            py::arg("phi"), py::arg("theta"), py::arg("psi"))
         .def_readwrite("phi", &YamlAngle::phi)
         .def_readwrite("theta", &YamlAngle::theta)
         .def_readwrite("psi", &YamlAngle::psi)
@@ -60,7 +61,8 @@ void py_add_module_xdyn_core_io(py::module& m)
 
     py::class_<YamlCoordinates>(m, "YamlCoordinates")
         .def(py::init<>())
-        .def(py::init<const double /*x*/, const double /*y*/, const double /*z*/>())
+        .def(py::init<const double /*x*/, const double /*y*/, const double /*z*/>(),
+            py::arg("x"), py::arg("y"), py::arg("z"))
         .def_readwrite("x", &YamlCoordinates::x, "x")
         .def_readwrite("y", &YamlCoordinates::y, "y")
         .def_readwrite("z", &YamlCoordinates::z, "z")
@@ -76,7 +78,8 @@ void py_add_module_xdyn_core_io(py::module& m)
 
     py::class_<YamlRotation>(m, "YamlRotation")
         .def(py::init<>())
-        .def(py::init<const std::string& /*order_by_*/, const std::vector<std::string>& /*convention_*/>())
+        .def(py::init<const std::string& /*order_by_*/, const std::vector<std::string>& /*convention_*/>(),
+            py::arg("order_by"), py::arg("convention"))
         .def_readwrite("convention", &YamlRotation::convention, "Convention. Use \"angle\"")
         .def_readwrite("order_by", &YamlRotation::order_by, "Order. Use '[\"z\",\"y'\",\"x''\"]\"")
         .def("__repr__",
@@ -94,7 +97,8 @@ void py_add_module_xdyn_core_io(py::module& m)
 
     py::class_<YamlPosition>(m, "YamlPosition")
         .def(py::init<>())
-        .def(py::init<const YamlCoordinates& /*c*/, const YamlAngle& /*a*/, const std::string& /*frame*/>())
+        .def(py::init<const YamlCoordinates& /*c*/, const YamlAngle& /*a*/, const std::string& /*frame*/>(),
+            py::arg("coordinates"), py::arg("angle"), py::arg("frame"))
         .def_readwrite("coordinates", &YamlPosition::coordinates)
         .def_readwrite("angle", &YamlPosition::angle)
         .def_readwrite("frame", &YamlPosition::frame)
@@ -231,7 +235,7 @@ void py_add_module_xdyn_core(py::module& m0)
 
     py::class_<History>(m, "History")
         .def(py::init<>())
-        .def(py::init<const double /*Tmax=0*/>())
+        .def(py::init<const double /*Tmax=0*/>(), py::arg("Tmax")=0.0)
         .def("average", &History::average,
         R"(
         Returns the average value integrated between t-length and t, t being the current instant.
@@ -282,11 +286,11 @@ void py_add_module_xdyn_core(py::module& m0)
                return a->force_states(x, t);
             }
         )
-
         ;
+
     py::class_<BodyBuilder>(m, "BodyBuilder")
-        .def(py::init<const YamlRotation& /*convention*/>())
-        .def("build" ,
+        .def(py::init<const YamlRotation& /*convention*/>(), py::arg("convention"))
+        .def("build",
             static_cast<BodyPtr (BodyBuilder::*)(
                 const YamlBody& /*input*/,
                 const VectorOfVectorOfPoints& /*mesh*/,
