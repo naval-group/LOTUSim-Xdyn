@@ -55,7 +55,6 @@ void py_add_module_xdyn_data_mesh(py::module& m)
 void py_add_module_xdyn_data_yaml(py::module& m);
 void py_add_module_xdyn_data_yaml(py::module& m)
 {
-
     m.def("bug_2655", &test_data::bug_2655);
     m.def("hydrostatic_test", &test_data::hydrostatic_test);
     m.def("added_mass_from_hdb_file", &test_data::added_mass_from_hdb_file);
