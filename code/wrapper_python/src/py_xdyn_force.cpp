@@ -15,11 +15,14 @@
 #include "force_models/inc/QuadraticDampingForceModel.hpp"
 #include "force_models/inc/RadiationDampingForceModel.hpp"
 #include "force_models/inc/ResistanceCurveForceModel.hpp"
+#include "force_models/inc/RudderForceModel.hpp"
 #include "force_models/inc/SimpleHeadingKeepingController.hpp"
 #include "force_models/inc/SimpleStationKeepingController.hpp"
 #include "force_models/inc/WageningenControlledForceModel.hpp"
 #include "ssc/ssc/data_source/DataSource.hpp"
+#include "ssc/ssc/kinematics/Point.hpp"
 #include "ssc/ssc/kinematics/Wrench.hpp"
+
 #include <string>
 
 namespace py = pybind11;
@@ -218,6 +221,237 @@ void py_add_module_xdyn_force(py::module& m0)
                            py::scoped_estream_redirect>()
             )
         ;
+
+    py::class_<RudderForceModel::Yaml, WageningenControlledForceModel::Yaml, AbstractWageningen::Yaml>(m, "RudderForceModelInput")
+        .def(py::init<>())
+        .def(py::init<const WageningenControlledForceModel::Yaml& /*yaml*/>())
+        .def_readwrite("Ar", &RudderForceModel::Yaml::Ar) //!< Rudder area (in m^2) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
+        .def_readwrite("b", &RudderForceModel::Yaml::b)   //!< Rudder height (in m) (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 76 fig. 1.2.4)
+        .def_readwrite("effective_aspect_ratio_factor", &RudderForceModel::Yaml::effective_aspect_ratio_factor) //!< Non-dimensional (cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 § b)
+        .def_readwrite("lift_coeff", &RudderForceModel::Yaml::lift_coeff) //!< Non-dimensional: lift is multiplied by it (for tuning)
+        .def_readwrite("drag_coeff", &RudderForceModel::Yaml::drag_coeff) //!< Non-dimensional: drag is multiplied by it (for tuning)
+        .def_readwrite("position_of_the_rudder_frame_in_the_body_frame", &RudderForceModel::Yaml::position_of_the_rudder_frame_in_the_body_frame)
+        ;
+
+    py::class_<RudderForceModel, ForceModel>(m, "RudderForceModel")
+        .def(py::init<const RudderForceModel::Yaml& /*input*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>(),
+            py::arg("input"),
+            py::arg("env"),
+            py::arg("commands")
+            )
+        .def("get_force", &RudderForceModel::get_force)
+        .def("get_rudder_force", &RudderForceModel::get_rudder_force)
+        .def("get_ship_speed", &RudderForceModel::get_ship_speed)
+        .def_static("parse", &RudderForceModel::parse)
+        .def_static("model_name", &RudderForceModel::model_name)
+        ;
+
+    py::class_<RudderForceModel::InOutWake<double>>(m, "RudderForceModelInOutWake")
+        .def(py::init<>())
+        .def_readwrite("in_wake", &RudderForceModel::InOutWake<double>::in_wake)
+        .def_readwrite("outside_wake", &RudderForceModel::InOutWake<double>::outside_wake)
+        ;
+
+    py::class_<RudderForceModel::InOutWake<ssc::kinematics::Point>>(m, "RudderForceModelInOutWakeSscPoint")
+        .def(py::init<>())
+        .def_readwrite("in_wake", &RudderForceModel::InOutWake<ssc::kinematics::Point>::in_wake)
+        .def_readwrite("outside_wake", &RudderForceModel::InOutWake<ssc::kinematics::Point>::outside_wake)
+        ;
+
+    py::class_<RudderForceModel::InOutWake<ssc::kinematics::Vector6d>>(m, "RudderForceModelInOutWakeSscVector6d")
+        .def(py::init<>())
+        .def_readwrite("in_wake", &RudderForceModel::InOutWake<ssc::kinematics::Vector6d>::in_wake)
+        .def_readwrite("outside_wake", &RudderForceModel::InOutWake<ssc::kinematics::Vector6d>::outside_wake)
+        ;
+
+    py::class_<RudderForceModel::RudderModel>(m, "RudderModel")
+        .def(py::init<const RudderForceModel::Yaml& /*parameters*/, const double /*rho*/, const double /*nu*/>(),
+            py::arg("parameters"),
+            py::arg("rho"),
+            py::arg("nu")
+        )
+        .def("get_Ar", &RudderForceModel::RudderModel::get_Ar,
+            py::arg("CTh"),
+            R"(Calculates the rudder area (in or outside wake)
+
+               - `CTh` (float) Thrust loading coefficient, Cf. "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
+
+               Return
+               InOutWake<double> : Rudder area (in m^2)
+               )")
+        .def("get_angle_of_attack", &RudderForceModel::RudderModel::get_angle_of_attack,
+            py::arg("rudder_angle"),
+            py::arg("fluid_angle"),
+            R"(Calculates the angle between the propeller's wake & the rudder
+               When positive, the wake is coming towards the rudder's port side
+
+               Input:
+               - `rudder_angle` (float) Rudder angle (in radian): positive if rudder on port side
+               - `fluid_angle` (float) Angle of the fluid in the ship's reference frame (0 if the fluid is propagating along -X, positive if fluid is coming from starboard)
+
+               Return
+               Angle of attack (in radian)
+               )")
+        .def("get_lift", &RudderForceModel::RudderModel::get_lift,
+            py::arg("Vs"),
+            py::arg("Cl"),
+            py::arg("alpha"),
+            py::arg("area"),
+            R"(Calculates the norm of the lift force acting on the rudder
+
+               Input:
+
+               - `Vs` (float) Norm of the speed of the ship relative to the fluid
+               - `Cl` (float) Rudder lift coefficient (non-dimensional)
+               - `alpha` (float) Angle between the propeller's wake & the rudder (in radian)
+               - `area` (float) Rudder area (in or outside wake) in m^2
+
+               Return
+               float: Lift force (in Newton)
+               )")
+        .def("get_drag", &RudderForceModel::RudderModel::get_drag,
+            py::arg("Vs"),
+            py::arg("Cl"),
+            py::arg("alpha"),
+            py::arg("area"),
+            R"(Calculates the norm of the drag force acting on the rudder
+
+               Input:
+
+               - `Vs` (float) Norm of the speed of the ship relative to the fluid
+               - `Cl` (float) Rudder lift coefficient (non-dimensional)
+               - `alpha` (float) Angle between the propeller's wake & the rudder (in radian)
+               - `area` (float) Rudder area (in or outside wake) in m^2
+
+               Return
+               float: Drag force (in Newton)
+               )")
+        .def("get_Cd", &RudderForceModel::RudderModel::get_Cd,
+            py::arg("Vs"),
+            py::arg("Cl"),
+            R"(Calculates the drag coefficient (non-dimensional)
+
+               Input:
+
+               - `Vs` (float) Norm of the speed of the ship relative to the fluid
+               - `Cl` (float) Rudder lift coefficient (non-dimensional)
+
+               Return
+               float: Drag coeffcient
+               )")
+        .def("get_Cl", &RudderForceModel::RudderModel::get_Cl,
+            py::arg("alpha_wake"),
+            R"(Calculates the lift coefficient (non-dimensional)
+
+               Soeding formula, "Maneuvering Technical Manual", J. Brix, Seehafen Verlag, p. 97 eq 1.2.48 & p. 77 eq. 1.2.8
+
+               Input:
+
+               - `alpha_wake` (float) Angle of rudder wrt the fluid (in radian)
+
+               Return
+               float: Lift coeffcient
+               )")
+        .def("get_wrench",
+            static_cast<RudderForceModel::InOutWake<ssc::kinematics::Vector6d> (RudderForceModel::RudderModel::*)(
+                const double /*rudder_angle*/, //!< Rudder angle (in radian): positive if rudder on port side
+                const RudderForceModel::InOutWake<double>& /*fluid_angle*/,  //!< Angle of the fluid in the ship's reference frame (0 if the fluid is propagating along -X, positive if fluid is coming from starboard)
+                const RudderForceModel::InOutWake<ssc::kinematics::Point>& /*Vs*/,  //!< Norm of the speed of the ship relative to the fluid (in m/s)
+                const RudderForceModel::InOutWake<double>& /*area*/ //!< Rudder area (in or outside wake) in m^2
+                ) const>(&RudderForceModel::RudderModel::get_wrench),
+            py::arg("rudder_angle"),
+            py::arg("fluid_angle"),
+            py::arg("Vs"),
+            py::arg("area"),
+            R"(Wrench created by the rudder on the ship
+
+               Input:
+
+               - `rudder_angle` (float) Rudder angle (in radian): positive if rudder on port side
+               - `fluid_angle` (InOutWake) Angle of the fluid in the ship's reference frame (0 if the fluid is propagating along -X, positive if fluid is coming from starboard)
+               - `Vs` (InOutWakeSscPoint) Norm of the speed of the ship relative to the fluid (in m/s)
+               - `area` (InOutWake)Rudder area (in or outside wake) in m^2
+
+               Return
+                InOutWakeSscVector6d: wrench
+               )")
+
+        .def("get_wrench",
+            static_cast<ssc::kinematics::Vector6d (RudderForceModel::RudderModel::*)(
+                const double /*rudder_angle*/, //!< Rudder angle (in radian): positive if rudder on port side
+                const double /*fluid_angle*/,  //!< Angle of the fluid in the ship's reference frame (0 if the fluid is propagating along -X, positive if fluid is coming from starboard)
+                const double /*Vs*/,           //!< Norm of the speed of the ship relative to the fluid (in m/s)
+                const double /*area*/          //!< Rudder area (in or outside wake) in m^2
+                ) const>(&RudderForceModel::RudderModel::get_wrench),
+            py::arg("rudder_angle"),
+            py::arg("fluid_angle"),
+            py::arg("Vs"),
+            py::arg("area"),
+            R"(Wrench created by the rudder on the ship
+               Expressed in the rudder's reference frame
+
+               Input:
+
+               - `rudder_angle` (float) Rudder angle (in radian): positive if rudder on port side
+               - `fluid_angle` (float) Angle of the fluid in the ship's reference frame (0 if the fluid is propagating along -X, positive if fluid is coming from starboard)
+               - `Vs` (float) Norm of the speed of the ship relative to the fluid (in m/s)
+               - `area` (float) Rudder area (in or outside wake) in m^2
+
+               Return
+                ssc::kinematics::Vector6d: wrench
+               )")
+        .def("get_force", &RudderForceModel::RudderModel::get_force,
+            py::arg("lift"),
+            py::arg("drag"),
+            py::arg("angle"),
+            R"(Wrench created by the rudder on the ship
+               Expressed in the rudder's reference frame
+
+               Input:
+
+               - `lift` (float) Norm of the lift (in N)
+               - `drag` (float) Norm of the drag (in N)
+               - `angle` (float) Angle between the fluid & the rudder (in radian)
+
+               Return
+                ssc::kinematics::Vector6d: wrench
+               )")
+        .def("get_vs", &RudderForceModel::RudderModel::get_vs,
+            py::arg("CTh"),
+            py::arg("Va"),
+            py::arg("v"),
+            py::arg("T"),
+            R"(Calculates speed inside & outside wake
+
+               Ship speed relative to the fluid, in m/s
+
+               Input:
+
+               - `CTh` (float) Thrust loading coefficient, Cf. "Manoeuvring Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
+               - `Va` (float) Projection of the ship speed (relative to the current) on the X-axis of the ship's reference frame (m/s)
+               - `v` (float) Projection of the ship speed (relative to the current) on the X-axis of the ship's reference frame (m/s)
+               - `T` (float) Propeller thrust (in N)
+
+               Return
+                InOutWakeSscPoint:
+               )")
+        .def("get_fluid_angle", &RudderForceModel::RudderModel::get_fluid_angle,
+            py::arg("Vs"),
+            R"(Calculates the angle of incidence of the fluid, inside & outside wake
+
+               Ship speed relative to the fluid, in m/s
+
+               Input:
+
+               - `Vs` (InOutWakeSscPoint) Ship speed relative to the fluid, inside & outside wake
+
+               Return
+                InOutWake: Angle in radian
+               )")
+        .def("get_D", &RudderForceModel::RudderModel::get_D)
+        ;
+
+
 
     py::class_<RadiationDampingForceModel::Input>(m, "RadiationDampingForceModelInput")
         .def(py::init<>())
