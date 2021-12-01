@@ -12,6 +12,19 @@
 #include "ssc/ssc/kinematics/Velocity.hpp"
 #include "ssc/ssc/kinematics/Wrench.hpp"
 #include "ssc/ssc/random_data_generator/DataGenerator.hpp"
+#include "ssc/ssc/integrate/Burcher.hpp"
+#include "ssc/ssc/integrate/ClenshawCurtisCosine.hpp"
+#include "ssc/ssc/integrate/ClenshawCurtis.hpp"
+#include "ssc/ssc/integrate/ClenshawCurtisSine.hpp"
+#include "ssc/ssc/integrate/Cumulate.hpp"
+#include "ssc/ssc/integrate/Filon.hpp"
+#include "ssc/ssc/integrate/GaussKronrod.hpp"
+#include "ssc/ssc/integrate/IntegratorException.hpp"
+#include "ssc/ssc/integrate/Integrator.hpp"
+#include "ssc/ssc/integrate/QuadPack.hpp"
+#include "ssc/ssc/integrate/Rectangle.hpp"
+#include "ssc/ssc/integrate/Simpson.hpp"
+#include "ssc/ssc/integrate/TrapezoidalIntegration.hpp"
 #include <sstream>
 
 namespace py = pybind11;
@@ -62,7 +75,7 @@ void py_add_module_ssc_random(py::module& m_ssc)
 {
     py::module m_ssc_random = m_ssc.def_submodule("random");
     py::class_<rdg::DataGenerator>(m_ssc_random, "DataGenerator")
-        .def(py::init<const size_t& /*seed*/>())
+        .def(py::init<const size_t& /*seed*/>(), py::arg("seed")=666)
         .def("random_double",
             static_cast<rdg::TypedScalarDataGenerator<double>
                 (rdg::DataGenerator::*)() const>(&rdg::DataGenerator::random<double>))
@@ -72,6 +85,9 @@ void py_add_module_ssc_random(py::module& m_ssc)
         .def("random_size_t",
             static_cast<rdg::TypedScalarDataGenerator<size_t>
                 (rdg::DataGenerator::*)() const>(&rdg::DataGenerator::random<size_t>))
+        .def("random_string",
+            static_cast<rdg::TypedScalarDataGenerator<std::string>
+                (rdg::DataGenerator::*)() const>(&rdg::DataGenerator::random<std::string>))
         .def("random_vector_of_double",
             static_cast<rdg::TypedVectorDataGenerator<double>
                 (rdg::DataGenerator::*)() const>(&rdg::DataGenerator::random_vector_of<double>))
@@ -81,15 +97,20 @@ void py_add_module_ssc_random(py::module& m_ssc)
         .def("random_vector_of_size_t",
             static_cast<rdg::TypedVectorDataGenerator<size_t>
                 (rdg::DataGenerator::*)() const>(&rdg::DataGenerator::random_vector_of<size_t>))
+        .def("random_vector_of_string",
+            static_cast<rdg::TypedVectorDataGenerator<std::string>
+                (rdg::DataGenerator::*)() const>(&rdg::DataGenerator::random_vector_of<std::string>))
         ;
 
     declare_typed_scalar_data_generator<double>(m_ssc_random, "Double");
     declare_typed_scalar_data_generator<int>(m_ssc_random, "Int");
     declare_typed_scalar_data_generator<size_t>(m_ssc_random, "SizeT");
+    declare_typed_scalar_data_generator<std::string>(m_ssc_random, "String");
 
     declare_typed_vector_data_generator<double>(m_ssc_random, "Double");
     declare_typed_vector_data_generator<int>(m_ssc_random, "Int");
     declare_typed_vector_data_generator<size_t>(m_ssc_random, "SizeT");
+    declare_typed_vector_data_generator<std::string>(m_ssc_random, "String");
 }
 
 void py_add_module_ssc_datasource(py::module& m_ssc);
