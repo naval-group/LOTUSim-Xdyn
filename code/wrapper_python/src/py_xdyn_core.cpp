@@ -1,7 +1,10 @@
 #include "py_xdyn_core.hpp"
 #include "py_pybind_additions.hpp"
+#include "core/inc/BlockedDOF.hpp"
+#include "core/inc/Body.hpp"
 #include "core/inc/BodyBuilder.hpp"
 #include "core/inc/BodyStates.hpp"
+#include "core/inc/BodyWithoutSurfaceForces.hpp"
 #include "core/inc/EnvironmentAndFrames.hpp"
 #include "core/inc/Wrench.hpp"
 #include "core/inc/StatesFilter.hpp"
@@ -288,6 +291,40 @@ void py_add_module_xdyn_core(py::module& m0)
         .def("get_current_time", &History::get_current_time, "Return the last record timestamp")
         .def("__call__", &History::operator(), py::arg("tau") = 0.0, "Returns the value at t-tau, t being the current instant")
         .def("__getitem__", &History::operator[], "Get direct access to a (time, value) tuple of history")
+        ;
+
+    py::class_<BlockedDOF>(m, "BlockedDOF")
+        .def(py::init<const YamlBlockedDOF& /*input*/, const size_t /*body_idx=0*/>(), py::arg("input"), py::arg("body_idx")=0)
+        .def(py::init<const std::string& /*input*/, const size_t /*body_idx=0*/>(), py::arg("input"), py::arg("body_idx")=0)
+        .def("force_states", &BlockedDOF::force_states)
+        .def("force_state_derivatives", &BlockedDOF::force_state_derivatives)
+        .def("get_delta_F", &BlockedDOF::get_delta_F)
+        ;
+
+    py::class_<Body>(m, "Body")
+        ;
+    py::class_<BodyWithoutSurfaceForces, Body>(m, "BodyWithoutSurfaceForces")
+        .def(py::init<const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const YamlFilteredStates& /*filtered_states*/>(),
+            py::arg("idx"),
+            py::arg("blocked_states"),
+            py::arg("filtered_states"))
+        .def(py::init<const BodyStates& /*states*/, const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const YamlFilteredStates& /*filtered_states*/>(),
+            py::arg("states"),
+            py::arg("idx"),
+            py::arg("blocked_states"),
+            py::arg("filtered_states"))
+        .def(py::init<const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const StatesFilter& /*filtered_states*/>(),
+            py::arg("idx"),
+            py::arg("blocked_states"),
+            py::arg("filtered_states"))
+        .def(py::init<const BodyStates& /*states*/, const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const StatesFilter& /*filtered_states*/>(),
+            py::arg("states"),
+            py::arg("idx"),
+            py::arg("blocked_states"),
+            py::arg("filtered_states"))
+        .def("update_intersection_with_free_surface", &BodyWithoutSurfaceForces::update_intersection_with_free_surface,
+            py::arg("env"),
+            py::arg("t"))
         ;
 
 
