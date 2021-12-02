@@ -1,3 +1,12 @@
+# v5.0.1 (2021-12-02)
+
+- #212 Hdf5 output no longer exports discretised spectra
+- #54 Fix broken training documentation generation
+- #209 Fix body ned force export that is located at the center of gravity of the body and not the
+- #202 Error in the frame for efforts
+- #206 Update broken links in main readme md
+
+
 # v5.0.0 (2021-10-05)
 
 - #53 Xdyn server still stays locked into errors
