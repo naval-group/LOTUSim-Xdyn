@@ -235,8 +235,8 @@ void py_add_module_xdyn_core(py::module& m0)
         .def_readwrite("rot", &EnvironmentAndFrames::rot)
         .def_readwrite("k", &EnvironmentAndFrames::k)
         .def("k_add",
-           [](const EnvironmentAndFrames &a, const ssc::kinematics::Transform& ssct) {
-               a.k->add(ssct);
+            [](const EnvironmentAndFrames &a, const ssc::kinematics::Transform& ssct) {
+                a.k->add(ssct);
             }
         )
         .def("set_rho_air", &EnvironmentAndFrames::set_rho_air)
@@ -249,24 +249,21 @@ void py_add_module_xdyn_core(py::module& m0)
             "Set wind model from a uniform wind velocity profile"
         )
         .def("set_w_from_discrete_directional_wave_spectrum",
-           [](EnvironmentAndFrames &a, const DiscreteDirectionalWaveSpectrum& dsp, const int random_number_generator_seed)
-           {
-               a.w = SurfaceElevationPtr(new SurfaceElevationFromWaves(WaveModelPtr(new Airy(dsp, random_number_generator_seed))));
-           },
+            [](EnvironmentAndFrames &a, const DiscreteDirectionalWaveSpectrum& dsp, const int random_number_generator_seed) {
+                a.w = SurfaceElevationPtr(new SurfaceElevationFromWaves(WaveModelPtr(new Airy(dsp, random_number_generator_seed))));
+            },
             py::arg("dsp"),
             py::arg("random_number_generator_seed") = 0
         )
         .def("set_w_from_discrete_directional_wave_spectrum",
-           [](EnvironmentAndFrames &a, const DiscreteDirectionalWaveSpectrum& dsp, const double constant_random_phase)
-           {
-               a.w = SurfaceElevationPtr(new SurfaceElevationFromWaves(WaveModelPtr(new Airy(dsp, constant_random_phase))));
-           },
+            [](EnvironmentAndFrames &a, const DiscreteDirectionalWaveSpectrum& dsp, const double constant_random_phase) {
+                a.w = SurfaceElevationPtr(new SurfaceElevationFromWaves(WaveModelPtr(new Airy(dsp, constant_random_phase))));
+            },
             py::arg("dsp"),
             py::arg("constant_random_phase") = 0.0
         )
         .def("set_w_from_wave_model",
-            [](EnvironmentAndFrames &a, const WaveModelPtr& wave_model)
-            {
+            [](EnvironmentAndFrames &a, const WaveModelPtr& wave_model) {
                a.w = SurfaceElevationPtr(new SurfaceElevationFromWaves(wave_model));
             },
             py::arg("wave_model")
