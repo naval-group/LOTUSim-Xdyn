@@ -12,6 +12,7 @@
 #include "core/inc/SurfaceElevationFromWaves.hpp"
 #include "environment_models/inc/Airy.hpp"
 #include "environment_models/inc/DiscreteDirectionalWaveSpectrum.hpp"
+#include "environment_models/inc/UniformWindVelocityProfile.hpp"
 #include "exceptions/inc/ConnexionError.hpp"
 #include "exceptions/inc/GRPCError.hpp"
 #include "exceptions/inc/InternalErrorException.hpp"
@@ -240,6 +241,13 @@ void py_add_module_xdyn_core(py::module& m0)
         )
         .def("set_rho_air", &EnvironmentAndFrames::set_rho_air)
         .def("get_rho_air", &EnvironmentAndFrames::get_rho_air)
+        .def("set_wind_model",
+            [](EnvironmentAndFrames &a, const UniformWindVelocityProfile::Input& wind_data) {
+                a.wind.reset(new UniformWindVelocityProfile(wind_data));
+            },
+            py::arg("wind_data"),
+            "Set wind model from a uniform wind velocity profile"
+        )
         .def("set_w_from_discrete_directional_wave_spectrum",
            [](EnvironmentAndFrames &a, const DiscreteDirectionalWaveSpectrum& dsp, const int random_number_generator_seed)
            {
