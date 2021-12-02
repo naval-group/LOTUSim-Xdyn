@@ -302,7 +302,63 @@ void py_add_module_xdyn_core(py::module& m0)
         ;
 
     py::class_<Body>(m, "Body")
+        //.def(py::init<const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const YamlFilteredStates& /*filtered_states*/>(),
+        //    py::arg("idx"), py::arg("blocked_states"), py::arg("filtered_states"))
+        //.def(py::init<const BodyStates& /*states*/, const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const YamlFilteredStates& /*filtered_states*/>(),
+        //    py::arg("states"), py::arg("idx"), py::arg("blocked_states"), py::arg("filtered_states"))
+        //.def(py::init<const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const StatesFilter& /*states_filter*/>(),
+        //    py::arg("idx"), py::arg("blocked_states"), py::arg("states_filter"))
+        //.def(py::init<const BodyStates& /*states*/, const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const StatesFilter& /*states_filter*/>(),
+        //    py::arg("states"), py::arg("idx"), py::arg("blocked_states"), py::arg("states_filter"))
+        .def("get_states",&Body::get_states)
+        .def("get_origin",&Body::get_origin, py::arg("x"))
+        .def("get_position_of_body_relative_to_mesh",&Body::get_position_of_body_relative_to_mesh)
+        .def("get_transform_from_mesh_to_body",&Body::get_transform_from_mesh_to_body)
+        .def("get_transform_from_ned_to_body",&Body::get_transform_from_ned_to_body, py::arg("x"))
+        .def("get_transform_from_ned_to_local_ned",&Body::get_transform_from_ned_to_local_ned, py::arg("x"))
+        .def("update",&Body::update, py::arg("env"), py::arg("x"), py::arg("t"))
+        .def("set_history",&Body::set_history, py::arg("env"), py::arg("states"))
+        .def("update_kinematics",&Body::update_kinematics, py::arg("x"), py::arg("k"))
+        .def("update_body_states",&Body::update_body_states, py::arg("x"), py::arg("t"))
+        .def("update_body_sforce_statestates",&Body::force_states, py::arg("x"), py::arg("t"))
+        .def("block_states_if_necessary",&Body::block_states_if_necessary, py::arg("x"), py::arg("t"))
+        .def("update_projection_of_z_in_mesh_frame",&Body::update_projection_of_z_in_mesh_frame, py::arg("g"), py::arg("k"),
+            "Update down vector (expressed in body's mesh frame), taking the new coordinates into account")
+        .def("calculate_state_derivatives",&Body::calculate_state_derivatives,
+            py::arg("sum_of_forces"),
+            py::arg("x"),
+            py::arg("dx_dt"),
+            py::arg("t"),
+            py::arg("env"))
+        .def("get_uvw",&Body::get_uvw, py::arg("x"))
+        .def("get_pqr",&Body::get_pqr, py::arg("x"))
+        .def("get_name",&Body::get_name)
+        .def("get_rot_from_ned_to",&Body::get_rot_from_ned_to,
+                py::arg("x")
+            )
+        .def("get_angles",&Body::get_angles,
+                py::arg("all_states"),
+                py::arg("convention")
+            )
+        .def("get_quaternions",&Body::get_quaternions,
+                py::arg("angle"),
+                py::arg("convention")
+            )
+        .def("get_filtered_states", static_cast<FilteredStates (Body::*)() const>(&Body::get_filtered_states))
+        .def("get_filtered_states",
+            static_cast<FilteredStates (Body::*)(
+                AbstractStates<History> /*state_history*/,
+                const StateType& /*x*/
+            ) const>(&Body::get_filtered_states),
+                py::arg("state_history"),
+                py::arg("x")
+            )
+        .def("feed", &Body::feed, py::arg("x"), py::arg("observer"), py::arg("convention"))
+        .def("get_delta_F", &Body::get_delta_F, py::arg("dx_dt"), py::arg("sum_of_other_forces"))
+        .def("set_states_history", &Body::set_states_history, py::arg("states"))
+        .def("reset_history", &Body::reset_history)
         ;
+
     py::class_<BodyWithoutSurfaceForces, Body>(m, "BodyWithoutSurfaceForces")
         .def(py::init<const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const YamlFilteredStates& /*filtered_states*/>(),
             py::arg("idx"),
