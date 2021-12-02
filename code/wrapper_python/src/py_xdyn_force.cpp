@@ -3,6 +3,7 @@
 #include "core/inc/ForceModel.hpp"
 #include "force_models/inc/AbstractWageningen.hpp"
 #include "force_models/inc/AbstractRaoForceModel.hpp"
+#include "force_models/inc/AeroPolarForceModel.hpp"
 #include "force_models/inc/DampingForceModel.hpp"
 #include "force_models/inc/DiffractionForceModel.hpp"
 #include "force_models/inc/KtKqForceModel.hpp"
@@ -162,6 +163,33 @@ void py_add_module_xdyn_force(py::module& m0)
         .def("get_force", &HydroPolarForceModel::get_force,
             py::call_guard<py::scoped_ostream_redirect,
                            py::scoped_estream_redirect>()
+            )
+        ;
+
+    py::class_<AeroPolarForceModel::Input>(m, "AeroPolarForceModelInput")
+        .def(py::init<>())
+        .def_readwrite("name", &AeroPolarForceModel::Input::name)
+        .def_readwrite("calculation_point_in_body_frame", &AeroPolarForceModel::Input::calculation_point_in_body_frame)
+        .def_readwrite("apparent_wind_angle", &AeroPolarForceModel::Input::apparent_wind_angle)
+        .def_readwrite("lift_coefficient", &AeroPolarForceModel::Input::lift_coefficient)
+        .def_readwrite("drag_coefficient", &AeroPolarForceModel::Input::drag_coefficient)
+        .def_readwrite("reference_area", &AeroPolarForceModel::Input::reference_area)
+        ;
+
+    py::class_<AeroPolarForceModel, ForceModel>(m, "AeroPolarForceModel")
+        .def(py::init<const AeroPolarForceModel::Input& /*input*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>(),
+            py::arg("input"),
+            py::arg("body_name"),
+            py::arg("env"),
+            py::call_guard<py::scoped_ostream_redirect, py::scoped_estream_redirect>()
+            )
+        .def("parse", &AeroPolarForceModel::parse)
+        .def("model_name", &AeroPolarForceModel::model_name)
+        .def("get_force", &AeroPolarForceModel::get_force,
+            py::arg("states"),
+            py::arg("t"),
+            py::arg("env"),
+            py::arg("commands") = std::map<std::string,double>()
             )
         ;
 
