@@ -43,6 +43,7 @@ def get_env() -> EnvironmentAndFrames:
 
 
 def get_environment_and_frames(A, phi: float) -> EnvironmentAndFrames:
+    # See how to use a wave model instead of (A, phi)
     env = EnvironmentAndFrames()
     env.g = 9.81
     env.rho = 1024
@@ -87,7 +88,6 @@ class RudderForceModelTest(unittest.TestCase):
         Tp = 5
         omega0 = 2 * np.pi / Tp
         psi = 0
-        t = 0
         omega_min = self.rng.random_double().greater_than(0)()
         omega_max = self.rng.random_double().greater_than(omega_min)()
         nfreq = self.random_int_between(2, 100)
@@ -173,9 +173,6 @@ class RudderForceModelTest(unittest.TestCase):
         parameters.b = 99
         parameters.effective_aspect_ratio_factor = 2.3
         riw = RudderModel(parameters, 1024, 0.75)
-        drag = 10
-        lift = 200
-        angle = -np.pi / 3
         area = 1.467
         v = riw.get_wrench(3, 4, 0.5, area)
         self.assertEqual(-2021.4412785509464, v[0])
@@ -226,19 +223,14 @@ class RudderForceModelTest(unittest.TestCase):
         )
         V = RudderForceModelInOutWakeSscPoint()
         V.in_wake.v = [1, 2, self.random_double()]
-        # V.in_wake[0] = 1
-        # V.in_wake[1] = 2
-        # V.in_wake[2] = self.random_double()
         V.outside_wake.v = [-4, -4, self.random_double()]
-        # V.outside_wake[0] = -4
-        # V.outside_wake[1] = -4
-        # V.outside_wake[2] = self.random_double()
         vs = riw.get_fluid_angle(V)
         self.assertEqual(1.1071487177940904, vs.in_wake)
         self.assertEqual(-3 * np.pi / 4, vs.outside_wake)
 
-    def disabled_test_ship_speed_relative_to_the_fluid(self):
-        A, phi, wave_model = self.get_wave_model()
+    def _disabled_test_ship_speed_relative_to_the_fluid(self):
+        # This test is disabled as in the C++ code
+        A, phi, _ = self.get_wave_model()
         env = get_environment_and_frames(A, phi)
         parameters = self.random_rudder_force_model_input()
         parameters.number_of_blades = 3
@@ -286,11 +278,12 @@ class RudderForceModelTest(unittest.TestCase):
         self.assertEqual(-2, w.position_of_the_rudder_frame_in_the_body_frame.y)
         self.assertEqual(2, w.position_of_the_rudder_frame_in_the_body_frame.z)
 
-    def to_be_contiined_test_force_and_torque(self):
-        # TODO
-        A, phi, wave_model = self.get_wave_model()
+    def test_force_and_torque(self):
+        A, phi, _ = self.get_wave_model()
         env = get_environment_and_frames(A, phi)
-        model = RudderForceModel(RudderForceModel.parse(rudder()), self.random_string(), env)
+        model = RudderForceModel(
+            RudderForceModel.parse(rudder()), self.random_string(), env
+        )
         self.assertEqual(type(model), RudderForceModel)
         self.assertEqual("propeller+rudder", model.model_name())
         states = BodyStates()
@@ -303,7 +296,6 @@ class RudderForceModelTest(unittest.TestCase):
         b = BodyWithoutSurfaceForces(states, 0, BlockedDOF(""), YamlFilteredStates())
         b.update_kinematics(s, env.k)
         commands = {"rpm": 200, "P/D": 1.2, "beta": np.pi / 6}
-
         F = model.get_force(states, t, env, commands)
         self.assertEqual(2208573.9553180891, F.X())
         self.assertEqual(777997.67996840423, F.Y())
