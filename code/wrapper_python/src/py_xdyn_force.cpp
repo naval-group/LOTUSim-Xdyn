@@ -8,6 +8,7 @@
 #include "force_models/inc/DiffractionForceModel.hpp"
 #include "force_models/inc/KtKqForceModel.hpp"
 #include "force_models/inc/ConstantForceModel.hpp"
+#include "force_models/inc/HoltropMennenForceModel.hpp"
 #include "force_models/inc/HydrostaticForceModel.hpp"
 #include "force_models/inc/HydroPolarForceModel.hpp"
 #include "force_models/inc/GravityForceModel.hpp"
@@ -248,6 +249,76 @@ void py_add_module_xdyn_force(py::module& m0)
             py::call_guard<py::scoped_ostream_redirect,
                            py::scoped_estream_redirect>()
             )
+        ;
+
+    py::class_<HoltropMennenForceModel::Input>(m, "HoltropMennenForceModelInput")
+        .def(py::init<>())
+        .def_readwrite("Lwl", &HoltropMennenForceModel::Input::Lwl)
+        .def_readwrite("Lpp", &HoltropMennenForceModel::Input::Lpp)
+        .def_readwrite("B", &HoltropMennenForceModel::Input::B)
+        .def_readwrite("Ta", &HoltropMennenForceModel::Input::Ta)
+        .def_readwrite("Tf", &HoltropMennenForceModel::Input::Tf)
+        .def_readwrite("Vol", &HoltropMennenForceModel::Input::Vol)
+        .def_readwrite("lcb", &HoltropMennenForceModel::Input::lcb)
+        .def_readwrite("S", &HoltropMennenForceModel::Input::S)
+        .def_readwrite("Abt", &HoltropMennenForceModel::Input::Abt)
+        .def_readwrite("hb", &HoltropMennenForceModel::Input::hb)
+        .def_readwrite("Cm", &HoltropMennenForceModel::Input::Cm)
+        .def_readwrite("Cwp", &HoltropMennenForceModel::Input::Cwp)
+        .def_readwrite("iE", &HoltropMennenForceModel::Input::iE) // WARNING: iE must be in degrees
+        .def_readwrite("At", &HoltropMennenForceModel::Input::At)
+        .def_readwrite("Sapp", &HoltropMennenForceModel::Input::Sapp)
+        .def_readwrite("Cstern", &HoltropMennenForceModel::Input::Cstern)
+        .def_readwrite("hull_form_coeff", &HoltropMennenForceModel::Input::hull_form_coeff)
+        .def_readwrite("app_form_coeff", &HoltropMennenForceModel::Input::app_form_coeff)
+        .def_readwrite("apply_on_ship_speed_direction", &HoltropMennenForceModel::Input::apply_on_ship_speed_direction)
+        ;
+
+    py::class_<HoltropMennenForceModel::DerivedData>(m, "HoltropMennenForceModelDerivedData")
+        .def(py::init<const HoltropMennenForceModel::Input& /*input*/>())
+        .def_readwrite("c17", &HoltropMennenForceModel::DerivedData::c17)
+        .def_readwrite("c15", &HoltropMennenForceModel::DerivedData::c15)
+        .def_readwrite("c7", &HoltropMennenForceModel::DerivedData::c7)
+        .def_readwrite("c4", &HoltropMennenForceModel::DerivedData::c4)
+        .def_readwrite("T", &HoltropMennenForceModel::DerivedData::T)
+        .def_readwrite("Pb", &HoltropMennenForceModel::DerivedData::Pb)
+        .def_readwrite("c14", &HoltropMennenForceModel::DerivedData::c14)
+        .def_readwrite("c5", &HoltropMennenForceModel::DerivedData::c5)
+        .def_readwrite("m3", &HoltropMennenForceModel::DerivedData::m3)
+        .def_readwrite("Cb", &HoltropMennenForceModel::DerivedData::Cb)
+        .def_readwrite("Cp", &HoltropMennenForceModel::DerivedData::Cp)
+        .def_readwrite("c3", &HoltropMennenForceModel::DerivedData::c3)
+        .def_readwrite("c2", &HoltropMennenForceModel::DerivedData::c2)
+        .def_readwrite("Ca", &HoltropMennenForceModel::DerivedData::Ca)
+        .def_readwrite("S", &HoltropMennenForceModel::DerivedData::S)
+        .def_readwrite("c16", &HoltropMennenForceModel::DerivedData::c16)
+        .def_readwrite("Lr", &HoltropMennenForceModel::DerivedData::Lr)
+        .def_readwrite("Lambda", &HoltropMennenForceModel::DerivedData::lambda) // Capitalize first letter to avoid conflict with python reserved keyword lambda
+        .def_readwrite("iE", &HoltropMennenForceModel::DerivedData::iE)
+        .def_readwrite("c1", &HoltropMennenForceModel::DerivedData::c1)
+        .def_readwrite("m1", &HoltropMennenForceModel::DerivedData::m1)
+        .def_readwrite("hull_form_coeff", &HoltropMennenForceModel::DerivedData::hull_form_coeff)
+        ;
+
+    py::class_<HoltropMennenForceModel, ForceModel>(m, "HoltropMennenForceModel")
+        .def(py::init<const HoltropMennenForceModel::Input& /*input*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>(),
+            py::arg("input"),
+            py::arg("body_name"),
+            py::arg("env"))
+        .def("get_force", &HoltropMennenForceModel::get_force,
+            py::arg("states"),
+            py::arg("t"),
+            py::arg("env"),
+            py::arg("commands") = std::map<std::string,double>()
+            )
+        .def_static("parse", &HoltropMennenForceModel::parse)
+        .def_static("model_name", &HoltropMennenForceModel::model_name)
+        .def("Rf", &HoltropMennenForceModel::Rf, py::arg("states"), py::arg("env"),"Frictional resistance over the hull")
+        .def("Rapp", &HoltropMennenForceModel::Rapp, py::arg("states"), py::arg("env"), "Frictional resistance over the appendages")
+        .def("Rw", &HoltropMennenForceModel::Rw, py::arg("states"), py::arg("env"), "Wave-making resistance")
+        .def("Rb", &HoltropMennenForceModel::Rb, py::arg("states"), py::arg("env"), "Bulbous bow influence")
+        .def("Rtr", &HoltropMennenForceModel::Rtr, py::arg("states"), py::arg("env"), "Immersed transom stern influence")
+        .def("Ra", &HoltropMennenForceModel::Ra, py::arg("states"), py::arg("env"),"Correlation term between model and full scale")
         ;
 
     py::class_<RudderForceModel::Yaml, WageningenControlledForceModel::Yaml, AbstractWageningen::Yaml>(m, "RudderForceModelInput")
