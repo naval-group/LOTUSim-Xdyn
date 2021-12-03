@@ -516,6 +516,24 @@ void py_add_module_xdyn_core(py::module& m0)
         // .def_readwrite("total_inertia", &BodyStates::total_inertia, "COPY of 6x6 rigid body inertia matrix (i.e. without added mass) in the body frame")
         // .def_readwrite("solid_body_inertia", &BodyStates::solid_body_inertia, "COPY of 6x6 rigid body inertia matrix (i.e. without added mass) in the body frame")
         // .def_readwrite("inverse_of_the_total_inertia", &BodyStates::inverse_of_the_total_inertia, "COPY of the inverse of the total inertia")
+        .def("update_intersection_with_free_surface",
+            [](BodyStates &a,
+               const std::vector<double>& relative_immersions,
+               const std::vector<double>& absolute_wave_elevations
+               ) {a.intersector->update_intersection_with_free_surface(
+                relative_immersions, //!< the relative immersion of each static vertex of the mesh
+                absolute_wave_elevations  //!< z coordinate in NED frame of each point in mesh
+                );},
+            py::arg("relative_immersions"),
+            py::arg("absolute_wave_elevations"),
+            R"pbdoc(
+            Update the intersection of the mesh with free surface
+
+            The intersection requires new Vertices/Edges/Facets stored as dynamic data in the end of container members
+
+            - `relative_immersions`: the relative immersion of each static vertex of the mesh
+            - `absolute_wave_elevations`: z coordinate in NED frame of each point in mesh
+            )pbdoc")
         .def_readwrite("x", &BodyStates::x)
         .def_readwrite("y", &BodyStates::y)
         .def_readwrite("z", &BodyStates::z)
