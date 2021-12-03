@@ -11,7 +11,6 @@ from xdyn.force import (
     HoltropMennenForceModelDerivedData,
     HoltropMennenForceModelInput,
 )
-from xdyn.ssc.random import DataGenerator
 
 
 def get_env() -> EnvironmentAndFrames:
@@ -132,14 +131,7 @@ class HoltropMennenForceModelTest(unittest.TestCase):
     """Test class for HoltropMennenForceModel"""
 
     def setUp(self) -> None:
-        self.rng = DataGenerator(666)
         self.env = get_env()
-
-    def random_double_between(self, low: float = 0.0, high: float = 1.0) -> float:
-        return self.rng.random_double().between(low, high)()
-
-    def random_int_between(self, low: int = 0, high: int = 1) -> int:
-        return self.rng.random_size_t().between(low, high)()
 
     def test_can_parse(self):
         data = HoltropMennenForceModel.parse(get_yaml_input_with_optional())
@@ -180,11 +172,18 @@ class HoltropMennenForceModelTest(unittest.TestCase):
 
     def test_numerical_example_1982(self):
         """
-        Example from Holtrop & Mennen's original 1982 paper (tolerance is based on the precision given in the paper)
+        Example from Holtrop & Mennen's original 1982 paper
+        (tolerance is based on the precision given in the paper)
+
         Note:
-        Holtrop & Mennen's original 1982 method was revised by Holtrop in 1984. A number of formulae changed, in particular for the friction and wave components of the force.
-        In consequence, some of the checks in this test have rather large margins because the values in the 1982 paper used the early version of the model, but the 1984 version is used in xdyn.
-        All the values that have large margins in this test are properly tested with the 1984 test.
+        Holtrop & Mennen's original 1982 method was revised by Holtrop in 1984.
+        A number of formulae changed, in particular for the friction and wave
+        components of the force.
+        In consequence, some of the checks in this test have rather large margins
+        because the values in the 1982 paper used the early version of the model,
+        but the 1984 version is used in xdyn.
+        All the values that have large margins in this test are properly tested
+        with the 1984 test.
         """
         data = get_Holtrop_Mennen_1982_input()
         derived_data = HoltropMennenForceModelDerivedData(data)
@@ -260,10 +259,11 @@ class HoltropMennenForceModelTest(unittest.TestCase):
         R = [662000, 715000, 756000, 807000, 864000, 925000]
         for i in range(len(speed_kts)):
             states = get_steady_forward_speed_states(speed_kts[i] * 1852 / 3600)
-            assert_equal(force_model.Rw(states, self.env), Rw[i], delta=1000)
-            assert_equal(force_model.Rapp(states, self.env), Rapp[i], delta=1000)
-            assert_equal(force_model.Rtr(states, self.env), Rtr[i], delta=1000)
-            assert_equal(-force_model(states, 0, self.env).X(), R[i], delta=R[i] / 100)
+            assert_equal(+force_model.Rw(states, self.env), Rw[i], delta=1000)
+            assert_equal(+force_model.Rapp(states, self.env), Rapp[i], delta=1000)
+            assert_equal(+force_model.Rtr(states, self.env), Rtr[i], delta=1000)
+            wrench = force_model(states, 0, self.env)
+            assert_equal(-wrench.X(), R[i], delta=abs(R[i] / 100))
 
 
 if __name__ == "__main__":
