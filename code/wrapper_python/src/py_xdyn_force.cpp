@@ -13,6 +13,7 @@
 #include "force_models/inc/HydroPolarForceModel.hpp"
 #include "force_models/inc/GravityForceModel.hpp"
 #include "force_models/inc/LinearDampingForceModel.hpp"
+#include "force_models/inc/LinearHydrostaticForceModel.hpp"
 #include "force_models/inc/LinearFroudeKrylovForceModel.hpp"
 #include "force_models/inc/MMGManeuveringForceModel.hpp"
 #include "force_models/inc/QuadraticDampingForceModel.hpp"
@@ -653,5 +654,38 @@ void py_add_module_xdyn_force(py::module& m0)
         )
         .def_static("parse", &LinearFroudeKrylovForceModel::parse, py::arg("yaml"))
         .def_static("model_name", &LinearFroudeKrylovForceModel::model_name)
+        ;
+
+    py::class_<LinearHydrostaticForceModel::Input>(m, "LinearHydrostaticForceModelInput")
+        .def(py::init<>())
+        .def_readwrite("z_eq", &LinearHydrostaticForceModel::Input::z_eq)
+        .def_readwrite("theta_eq", &LinearHydrostaticForceModel::Input::theta_eq)
+        .def_readwrite("phi_eq", &LinearHydrostaticForceModel::Input::phi_eq)
+        .def_readwrite("K1", &LinearHydrostaticForceModel::Input::K1)
+        .def_readwrite("K2", &LinearHydrostaticForceModel::Input::K2)
+        .def_readwrite("K3", &LinearHydrostaticForceModel::Input::K3)
+        .def_readwrite("x1", &LinearHydrostaticForceModel::Input::x1)
+        .def_readwrite("y1", &LinearHydrostaticForceModel::Input::y1)
+        .def_readwrite("x2", &LinearHydrostaticForceModel::Input::x2)
+        .def_readwrite("y2", &LinearHydrostaticForceModel::Input::y2)
+        .def_readwrite("x3", &LinearHydrostaticForceModel::Input::x3)
+        .def_readwrite("y3", &LinearHydrostaticForceModel::Input::y3)
+        .def_readwrite("x4", &LinearHydrostaticForceModel::Input::x4)
+        .def_readwrite("y4", &LinearHydrostaticForceModel::Input::y4)
+        ;
+
+    py::class_<LinearHydrostaticForceModel, ForceModel>(m, "LinearHydrostaticForceModel")
+        .def(py::init<const LinearHydrostaticForceModel::Input& /*input*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>(),
+            py::arg("input"),
+            py::arg("body_name"),
+            py::arg("env")
+        )
+        .def_static("model_name", &LinearHydrostaticForceModel::model_name)
+        .def_static("parse", &LinearHydrostaticForceModel::parse)
+        .def("get_force", &LinearHydrostaticForceModel::get_force,
+            py::arg("states"),
+            py::arg("t"),
+            py::arg("env"),
+            py::arg("commands") = std::map<std::string,double>())
         ;
 }
