@@ -215,7 +215,12 @@ void py_add_module_ssc_kinematics(py::module& m_ssc)
         .def("get_frame", &ssc::kinematics::PointMatrix::get_frame)
         ;
 
-    py::class_<ssc::kinematics::PointMatrixPtr>(m_ssc_kinematics, "PointMatrixPtr");
+    py::class_<ssc::kinematics::PointMatrixPtr>(m_ssc_kinematics, "PointMatrixPtr")
+        .def(py::init([]() {
+            return ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix());
+            })
+        )
+        ;
 
     py::class_<ssc::kinematics::RotationMatrix>(m_ssc_kinematics, "RotationMatrix");
 
