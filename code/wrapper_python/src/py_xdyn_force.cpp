@@ -1,11 +1,15 @@
 #include "py_xdyn_force.hpp"
 #include "py_pybind_additions.hpp"
 #include "core/inc/ForceModel.hpp"
+#include "core/inc/ImmersedSurfaceForceModel.hpp"
+#include "external_data_structures/inc/GeometricTypes3d.hpp"
 #include "force_models/inc/AbstractWageningen.hpp"
 #include "force_models/inc/AbstractRaoForceModel.hpp"
 #include "force_models/inc/AeroPolarForceModel.hpp"
 #include "force_models/inc/DampingForceModel.hpp"
 #include "force_models/inc/DiffractionForceModel.hpp"
+#include "force_models/inc/ExactHydrostaticForceModel.hpp"
+#include "force_models/inc/FastHydrostaticForceModel.hpp"
 #include "force_models/inc/KtKqForceModel.hpp"
 #include "force_models/inc/ConstantForceModel.hpp"
 #include "force_models/inc/HoltropMennenForceModel.hpp"
@@ -720,4 +724,54 @@ void py_add_module_xdyn_force(py::module& m0)
             py::arg("env"),
             py::arg("commands") = std::map<std::string,double>())
         ;
+
+    py::class_<SurfaceForceModel::DF>(m, "SurfaceForceModelDF")
+        .def(py::init<const EPoint& /*dF_*/, const EPoint& /*C_*/>(), py::arg("dF"), py::arg("C"))
+        ;
+
+    py::class_<SurfaceForceModel, ForceModel>(m, "SurfaceForceModel")
+        // .def(py::init<const std::string& /*name*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>(),
+        //     py::arg("name"),
+        //     py::arg("body_name"),
+        //     py::arg("env")
+        // )
+        .def("get_force", &SurfaceForceModel::get_force,
+            py::arg("states"),
+            py::arg("t"),
+            py::arg("env"),
+            py::arg("commands") = std::map<std::string,double>())
+        .def("potential_energy", &SurfaceForceModel::potential_energy,
+            py::arg("states"),
+            py::arg("x"),
+            py::arg("env"),
+            "Compute potential energy of the hydrostatic force model")
+        .def("is_a_surface_force_model", &SurfaceForceModel::is_a_surface_force_model)
+        ;
+
+    py::class_<ImmersedSurfaceForceModel, SurfaceForceModel, ForceModel>(m, "ImmersedSurfaceForceModel")
+        // .def(py::init<const std::string& /*name*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>(),
+        //     py::arg("name"),
+        //     py::arg("body_name"),
+        //     py::arg("env")
+        // )
+        ;
+
+    py::class_<FastHydrostaticForceModel, ImmersedSurfaceForceModel, SurfaceForceModel, ForceModel>(m, "FastHydrostaticForceModel")
+        .def(py::init<const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>(),
+            py::arg("body_name"),
+            py::arg("env")
+        )
+        .def("get_name", &FastHydrostaticForceModel::get_name)
+        .def_static("model_name", &FastHydrostaticForceModel::model_name)
+        ;
+
+    py::class_<ExactHydrostaticForceModel, FastHydrostaticForceModel, ImmersedSurfaceForceModel, SurfaceForceModel, ForceModel>(m, "ExactHydrostaticForceModel",
+        "Same as FastHydrostaticForceModel but with the exact application point")
+        .def(py::init<const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>(),
+            py::arg("body_name"),
+            py::arg("env")
+        )
+        .def_static("model_name", &ExactHydrostaticForceModel::model_name)
+        ;
+
 }
