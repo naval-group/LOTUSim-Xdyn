@@ -93,7 +93,7 @@ class MMGManeuveringForceModelTest(unittest.TestCase):
             MMGManeuveringForceModel.parse(get_input()), "body", env
         )
         states = get_states()
-        wrench = force_model.get_force(states, 0, env, {})
+        wrench = force_model.get_force(states, 0, env)
         self.assertEqual(wrench.X(), 35918728522.330902)
         self.assertEqual(wrench.Y(), 2003246596640.8945)
         self.assertEqual(wrench.Z(), 0)
