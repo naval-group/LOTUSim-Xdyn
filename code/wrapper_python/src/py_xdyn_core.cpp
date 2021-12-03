@@ -5,7 +5,9 @@
 #include "core/inc/BodyBuilder.hpp"
 #include "core/inc/BodyStates.hpp"
 #include "core/inc/BodyWithoutSurfaceForces.hpp"
+#include "core/inc/BodyWithSurfaceForces.hpp"
 #include "core/inc/EnvironmentAndFrames.hpp"
+#include "core/inc/DefaultSurfaceElevation.hpp"
 #include "core/inc/Wrench.hpp"
 #include "core/inc/StatesFilter.hpp"
 #include "core/inc/SurfaceElevationInterface.hpp"
@@ -248,6 +250,13 @@ void py_add_module_xdyn_core(py::module& m0)
             py::arg("wind_data"),
             "Set wind model from a uniform wind velocity profile"
         )
+        .def("set_w_as_default_surface_elevation",
+            [](EnvironmentAndFrames &a, const double wave_height, const ssc::kinematics::PointMatrixPtr& mesh) {
+                a.w = SurfaceElevationPtr(new DefaultSurfaceElevation(wave_height, mesh));
+            },
+            py::arg("wave_height") = 0.0,
+            py::arg("mesh") = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix("NED", 0))
+        )
         .def("set_w_from_discrete_directional_wave_spectrum",
             [](EnvironmentAndFrames &a, const DiscreteDirectionalWaveSpectrum& dsp, const int random_number_generator_seed) {
                 a.w = SurfaceElevationPtr(new SurfaceElevationFromWaves(WaveModelPtr(new Airy(dsp, random_number_generator_seed))));
@@ -366,28 +375,51 @@ void py_add_module_xdyn_core(py::module& m0)
 
     py::class_<BodyWithoutSurfaceForces, Body>(m, "BodyWithoutSurfaceForces")
         .def(py::init<const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const YamlFilteredStates& /*filtered_states*/>(),
-            py::arg("idx"),
-            py::arg("blocked_states"),
-            py::arg("filtered_states"))
+            py::arg("idx") = 0,
+            py::arg("blocked_states") /*= BlockedDOF("")*/,
+            py::arg("filtered_states") /*= YamlFilteredStates()*/)
         .def(py::init<const BodyStates& /*states*/, const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const YamlFilteredStates& /*filtered_states*/>(),
             py::arg("states"),
-            py::arg("idx"),
-            py::arg("blocked_states"),
-            py::arg("filtered_states"))
+            py::arg("idx") = 0,
+            py::arg("blocked_states") /*= BlockedDOF("")*/,
+            py::arg("filtered_states") /*= YamlFilteredStates()*/)
         .def(py::init<const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const StatesFilter& /*filtered_states*/>(),
-            py::arg("idx"),
-            py::arg("blocked_states"),
-            py::arg("filtered_states"))
+            py::arg("idx") = 0,
+            py::arg("blocked_states") /*= BlockedDOF("")*/,
+            py::arg("filtered_states") /*= StatesFilter(YamlFilteredStates())*/)
         .def(py::init<const BodyStates& /*states*/, const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const StatesFilter& /*filtered_states*/>(),
             py::arg("states"),
-            py::arg("idx"),
-            py::arg("blocked_states"),
-            py::arg("filtered_states"))
+            py::arg("idx") = 0,
+            py::arg("blocked_states") /*= BlockedDOF("")*/,
+            py::arg("filtered_states") /*= StatesFilter(YamlFilteredStates())*/)
         .def("update_intersection_with_free_surface", &BodyWithoutSurfaceForces::update_intersection_with_free_surface,
             py::arg("env"),
             py::arg("t"))
         ;
 
+    py::class_<BodyWithSurfaceForces, Body>(m, "BodyWithSurfaceForces")
+        .def(py::init<const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const YamlFilteredStates& /*filtered_states*/>(),
+            py::arg("idx") = 0,
+            py::arg("blocked_states") /*= BlockedDOF("")*/,
+            py::arg("filtered_states") /*= YamlFilteredStates()*/)
+        .def(py::init<const BodyStates& /*states*/, const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const YamlFilteredStates& /*filtered_states*/>(),
+            py::arg("states"),
+            py::arg("idx") = 0,
+            py::arg("blocked_states") /*= BlockedDOF("")*/,
+            py::arg("filtered_states") /*= YamlFilteredStates()*/)
+        .def(py::init<const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const StatesFilter& /*filtered_states*/>(),
+            py::arg("idx") = 0,
+            py::arg("blocked_states") /*= BlockedDOF("")*/,
+            py::arg("filtered_states") /*= StatesFilter(YamlFilteredStates())*/)
+        .def(py::init<const BodyStates& /*states*/, const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const StatesFilter& /*filtered_states*/>(),
+            py::arg("states"),
+            py::arg("idx") = 0,
+            py::arg("blocked_states") /*= BlockedDOF("")*/,
+            py::arg("filtered_states") /*= StatesFilter(YamlFilteredStates())*/)
+        .def("update_intersection_with_free_surface", &BodyWithSurfaceForces::update_intersection_with_free_surface,
+            py::arg("env"),
+            py::arg("t"))
+        ;
 
     py::class_<BodyPtr>(m, "BodyPtr")
         .def("get_states",
