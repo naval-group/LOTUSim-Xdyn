@@ -217,22 +217,22 @@ class HydroPolarForceModelTest(unittest.TestCase):
         states = BodyStates()
         # u=10, v=0 -> AoA=0°
         states = get_states(10, 0)
-        wrench = force_model.get_force(states, 0, env, {})
+        wrench = force_model.get_force(states, 0, env)
         self.assertLess(wrench.X(), 0.0)
         self.assertAlmostEqual(wrench.Y(), 0.0, delta=1e-9)
         # u=0, v=10 -> AoA=-90°
         states = get_states(0, 10)
-        wrench = force_model.get_force(states, 0, env, {})
+        wrench = force_model.get_force(states, 0, env)
         self.assertGreater(wrench.X(), 0.0)
         self.assertLess(wrench.Y(), 0.0)
         # u=0, v=-10 -> AoA=90°
         states = get_states(0, -10)
-        wrench = force_model.get_force(states, 0, env, {})
+        wrench = force_model.get_force(states, 0, env)
         self.assertGreater(wrench.X(), 0.0)
         self.assertGreater(wrench.Y(), 0.0)
         # u=-10, v=0 -> AoA=+/-180°
         states = get_states(-10, 0)
-        wrench = force_model.get_force(states, 0, env, {})
+        wrench = force_model.get_force(states, 0, env)
         self.assertGreater(wrench.X(), 0)
         self.assertAlmostEqual(wrench.Y(), 0.0, delta=1e-9)
 
@@ -610,7 +610,7 @@ class HydroPolarForceModelTest(unittest.TestCase):
         states = get_states(10, 0)
         buf = io.StringIO()
         with redirect_stderr(buf):
-            wrench = force_model.get_force(states, 0, env, {})
+            wrench = force_model.get_force(states, 0, env)
         expected_msg = "WARNING: In hydrodynamic polar force model 'test', the calculation point seems to be outside of the water (z = 5). In consequence, no force is being applied by this model."
         self.assertTrue(expected_msg in buf.getvalue(), buf.getvalue())
         self.assertAlmostEqual(wrench.X(), 0.0, delta=1e-12)
