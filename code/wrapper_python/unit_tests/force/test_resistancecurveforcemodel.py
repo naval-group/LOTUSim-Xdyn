@@ -74,7 +74,7 @@ class ResistanceCurveForceModelTest(unittest.TestCase):
         self.assertEqual("resistance curve", model.model_name())
         states = get_states()
         states.u.record(0, 0)
-        force = model.get_force(states, self.rng.random_double()(), env, {})
+        force = model.get_force(states, self.rng.random_double()(), env)
         self.assertEqual(0, force.X())
         self.assertEqual(0, force.Y())
         self.assertEqual(0, force.Z())
@@ -83,7 +83,7 @@ class ResistanceCurveForceModelTest(unittest.TestCase):
         self.assertEqual(0, force.N())
 
         states.u.record(1, 1852 / 3600)
-        force = model.get_force(states, self.rng.random_double()(), env, {})
+        force = model.get_force(states, self.rng.random_double()(), env)
         self.assertAlmostEqual(-1e6, force.X(), delta=EPS)
         self.assertEqual(0, force.Y())
         self.assertEqual(0, force.Z())
@@ -92,7 +92,7 @@ class ResistanceCurveForceModelTest(unittest.TestCase):
         self.assertEqual(0, force.N())
 
         states.u.record(2, 1852 / 3600 * 15)
-        force = model.get_force(states, self.rng.random_double()(), env, {})
+        force = model.get_force(states, self.rng.random_double()(), env)
         self.assertAlmostEqual(-225e6, force.X(), delta=EPS)
         self.assertEqual(0, force.Y())
         self.assertEqual(0, force.Z())
@@ -107,7 +107,7 @@ class ResistanceCurveForceModelTest(unittest.TestCase):
         states.u.record(0, -1)
         buf = io.StringIO()
         with redirect_stderr(buf):
-            model.get_force(states, self.rng.random_double()(), env, {})
+            model.get_force(states, self.rng.random_double()(), env)
         expected_regex = "Warning: resistance curve is tabulated from .* m/s, but received Va = .* m/s"
         self.assertTrue(re.search(expected_regex, buf.getvalue()), buf.getvalue())
 
@@ -118,7 +118,7 @@ class ResistanceCurveForceModelTest(unittest.TestCase):
         states.u.record(0, 20*1852/3600 + 1E-10)
         buf = io.StringIO()
         with redirect_stderr(buf):
-            model.get_force(states, self.rng.random_double()(), env, {})
+            model.get_force(states, self.rng.random_double()(), env)
         expected_regex = "Warning: resistance curve is tabulated up to .* m/s, but received Va = .* m/s"
         self.assertTrue(re.search(expected_regex, buf.getvalue()), buf.getvalue())
 
@@ -134,7 +134,7 @@ class ResistanceCurveForceModelTest(unittest.TestCase):
         knot = 1852.0 / 3600.0
         for i in range(10):
             states.u.record(i, i * knot)
-        force = model.get_force(states, self.rng.random_double()(), env, {})
+        force = model.get_force(states, self.rng.random_double()(), env)
         average_speed_over_nine_seconds_in_knots = 4.5
         interpolated_resistance = average_speed_over_nine_seconds_in_knots**2
         MN = 1e6  # 1 mega Newton
