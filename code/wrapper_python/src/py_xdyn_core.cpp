@@ -376,13 +376,13 @@ void py_add_module_xdyn_core(py::module& m0)
     py::class_<BodyWithoutSurfaceForces, Body>(m, "BodyWithoutSurfaceForces")
         .def(py::init<const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const YamlFilteredStates& /*filtered_states*/>(),
             py::arg("idx") = 0,
-            py::arg("blocked_states") /*= BlockedDOF("")*/,
-            py::arg("filtered_states") /*= YamlFilteredStates()*/)
+            py::arg("blocked_states") = BlockedDOF(""),
+            py::arg("filtered_states") = YamlFilteredStates())
         .def(py::init<const BodyStates& /*states*/, const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const YamlFilteredStates& /*filtered_states*/>(),
             py::arg("states"),
             py::arg("idx") = 0,
-            py::arg("blocked_states") /*= BlockedDOF("")*/,
-            py::arg("filtered_states") /*= YamlFilteredStates()*/)
+            py::arg("blocked_states") = BlockedDOF(""),
+            py::arg("filtered_states") = YamlFilteredStates())
         .def(py::init<const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const StatesFilter& /*filtered_states*/>(),
             py::arg("idx") = 0,
             py::arg("blocked_states") /*= BlockedDOF("")*/,
@@ -400,17 +400,17 @@ void py_add_module_xdyn_core(py::module& m0)
     py::class_<BodyWithSurfaceForces, Body>(m, "BodyWithSurfaceForces")
         .def(py::init<const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const YamlFilteredStates& /*filtered_states*/>(),
             py::arg("idx") = 0,
-            py::arg("blocked_states") /*= BlockedDOF("")*/,
-            py::arg("filtered_states") /*= YamlFilteredStates()*/)
+            py::arg("blocked_states") = BlockedDOF(""),
+            py::arg("filtered_states") = YamlFilteredStates())
         .def(py::init<const BodyStates& /*states*/, const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const YamlFilteredStates& /*filtered_states*/>(),
             py::arg("states"),
             py::arg("idx") = 0,
-            py::arg("blocked_states") /*= BlockedDOF("")*/,
-            py::arg("filtered_states") /*= YamlFilteredStates()*/)
+            py::arg("blocked_states") = BlockedDOF(""),
+            py::arg("filtered_states") = YamlFilteredStates())
         .def(py::init<const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const StatesFilter& /*filtered_states*/>(),
             py::arg("idx") = 0,
             py::arg("blocked_states") /*= BlockedDOF("")*/,
-            py::arg("filtered_states") /*= StatesFilter(YamlFilteredStates())*/)
+            py::arg("filtered_states") /*= StatesFilter(YamlFilteredStates())*/) // Does not work with runtiem error ImportError: arg(): could not convert default argument into a Python object (type not registered yet?).
         .def(py::init<const BodyStates& /*states*/, const size_t /*idx*/, const BlockedDOF& /*blocked_states*/, const StatesFilter& /*filtered_states*/>(),
             py::arg("states"),
             py::arg("idx") = 0,
