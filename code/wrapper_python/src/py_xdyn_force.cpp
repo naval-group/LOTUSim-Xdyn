@@ -13,6 +13,7 @@
 #include "force_models/inc/HydroPolarForceModel.hpp"
 #include "force_models/inc/GravityForceModel.hpp"
 #include "force_models/inc/LinearDampingForceModel.hpp"
+#include "force_models/inc/LinearFroudeKrylovForceModel.hpp"
 #include "force_models/inc/MMGManeuveringForceModel.hpp"
 #include "force_models/inc/QuadraticDampingForceModel.hpp"
 #include "force_models/inc/RadiationDampingForceModel.hpp"
@@ -617,7 +618,7 @@ void py_add_module_xdyn_force(py::module& m0)
             py::arg("states"),
             py::arg("t"),
             py::arg("env"),
-            py::arg("commands")
+            py::arg("commands") = std::map<std::string,double>()
             )
         .def_static("parse", &AbstractRaoForceModel::parse, py::arg("yaml"), py::arg("type_of_rao"))
         ;
@@ -636,5 +637,21 @@ void py_add_module_xdyn_force(py::module& m0)
         )
         .def_static("parse", &DiffractionForceModel::parse, py::arg("yaml"))
         .def_static("model_name", &DiffractionForceModel::model_name)
+        ;
+
+    py::class_<LinearFroudeKrylovForceModel, AbstractRaoForceModel, ForceModel>(m, "LinearFroudeKrylovForceModel")
+        .def(py::init<const YamlRAO& /*data*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>(),
+            py::arg("data"),
+            py::arg("body_name"),
+            py::arg("env")
+        )
+        .def(py::init<const YamlRAO& /*data*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/, const std::string& /*hdb_file_contents*/>(),
+            py::arg("data"),
+            py::arg("body_name"),
+            py::arg("env"),
+            py::arg("hdb_file_contents")
+        )
+        .def_static("parse", &LinearFroudeKrylovForceModel::parse, py::arg("yaml"))
+        .def_static("model_name", &LinearFroudeKrylovForceModel::model_name)
         ;
 }
