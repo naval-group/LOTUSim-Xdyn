@@ -147,7 +147,7 @@ class DiffractionForceModelTest(unittest.TestCase):
 
         # U=0, wave direction=0° -> encounter period = wave period = 64s, incidence = 0°
         states = get_states_with_forward_speed(0.0)
-        F = force_model.get_force(states, 0.0, env, {})
+        F = force_model.get_force(states, 0.0, env)
         assert_equal = lambda x, y, delta: self.assertAlmostEqual(x, y, delta=delta)
         assert_equal(F.X(), 3.378373e3 * np.sin(-2.088816), 10)
         assert_equal(F.Y(), 0, 10)
@@ -158,7 +158,7 @@ class DiffractionForceModelTest(unittest.TestCase):
 
         # U=48.763, wave direction=0°, wave period = 64s -> encounter period = 125s, incidence = 0°
         states = get_states_with_forward_speed(48.762833661758)
-        F = force_model.get_force(states, 0.0, env, {})
+        F = force_model.get_force(states, 0.0, env)
         assert_equal(F.X(), 9.472648e2 * np.sin(-2.189364), 10)
         assert_equal(F.Y(), 0, 10)
         assert_equal(F.Z(), -8.336677e4 * np.sin(-1.596137), 10)
@@ -168,7 +168,7 @@ class DiffractionForceModelTest(unittest.TestCase):
 
         # U=-1498.86, wave direction=0°, wave period = 64s -> encounter period = 4s, incidence = 0°
         states = get_states_with_forward_speed(-1498.8575920622336)
-        F = force_model.get_force(states, 0.0, env, {})
+        F = force_model.get_force(states, 0.0, env)
         assert_equal(F.X(), 5.084407e4 * np.sin(1.135123), 20)
         assert_equal(F.Y(), 0, 10)
         assert_equal(F.Z(), -3.997774e5 * np.sin(8.389206e-1), 200)
@@ -183,7 +183,7 @@ class DiffractionForceModelTest(unittest.TestCase):
 
         # U=0, wave direction=-30° -> encounter period = wave period = 64s, incidence = 30°
         states = get_states_with_forward_speed(0.0)
-        F = force_model.get_force(states, 0.0, env, {})
+        F = force_model.get_force(states, 0.0, env)
         assert_equal(F.X(), 3.275670e3 * np.sin(-2.028876), 10)
         assert_equal(F.Y(), -3.409648e4 * np.sin(3.130008), 30)
         assert_equal(F.Z(), -3.283568e5 * np.sin(-1.636047), 20)
@@ -193,7 +193,7 @@ class DiffractionForceModelTest(unittest.TestCase):
 
         # U=56.31, wave direction=-30°, wave period = 64s -> encounter period = 125s, incidence = 30°
         states = get_states_with_forward_speed(56.306470282129844)
-        F = force_model.get_force(states, 0.0, env, {})
+        F = force_model.get_force(states, 0.0, env)
         assert_equal(F.X(), 9.067188e2 * np.sin(-2.123063), 10)
         assert_equal(F.Y(), -8.953133e3 * np.sin(3.138567), 10)
         assert_equal(F.Z(), -8.339660e4 * np.sin(-1.595086), 10)
@@ -203,7 +203,7 @@ class DiffractionForceModelTest(unittest.TestCase):
 
         # U=-1730.73, wave direction=-30°, wave period = 64s -> encounter period = 4s, incidence = 30°
         states = get_states_with_forward_speed(-1730.7316685080896)
-        F = force_model.get_force(states, 0.0, env, {})
+        F = force_model.get_force(states, 0.0, env)
         assert_equal(F.X(), 8.567009e4 * np.sin(-2.077326), 30)
         assert_equal(F.Y(), -3.284304e5 * np.sin(5.459499e-1), 200)
         assert_equal(F.Z(), -5.820626e5 * np.sin(-1.525810), 20)
@@ -237,7 +237,7 @@ class DiffractionForceModelTest(unittest.TestCase):
 
         # U=0, wave direction=-180° -> encounter period = wave period = 10.47198s (frequency = 0.6 rad/s => third line), incidence = 180°
         states = get_states_with_forward_speed(0.0)
-        F = force_model.get_force(states, 0.0, env, {})
+        F = force_model.get_force(states, 0.0, env)
         assert_equal = lambda x, y, delta: self.assertAlmostEqual(x, y, delta=delta)
         assert_equal(
             F.X(),
@@ -272,7 +272,7 @@ class DiffractionForceModelTest(unittest.TestCase):
 
         # U=-5.45, wave direction=-180°, wave period = 10.47198s -> encounter frequency = 0.4 rad/s => first line, incidence = 180°
         states = get_states_with_forward_speed(-5.45)
-        F = force_model.get_force(states, 0.0, env, {})
+        F = force_model.get_force(states, 0.0, env)
 
         assert_equal(
             F.X(),
@@ -307,7 +307,7 @@ class DiffractionForceModelTest(unittest.TestCase):
 
         # U=10.9, wave direction=-180°, wave period = 10.47198s -> encounter frequency = 1 rad/s => seventh line, incidence = 180°
         states = get_states_with_forward_speed(10.9)
-        F = force_model.get_force(states, 0.0, env, {})
+        F = force_model.get_force(states, 0.0, env)
         assert_equal(
             F.X(),
             0.248856e03 * 1e3 * np.sin(-(-146.170074) * np.pi / 180.0),
@@ -344,7 +344,7 @@ class DiffractionForceModelTest(unittest.TestCase):
 
         # U=0, wave direction=-90° -> encounter period = wave period = 10.47198s (frequency = 0.6 rad/s => third line), incidence = 90°
         states = get_states_with_forward_speed(0.0)
-        F = force_model.get_force(states, 0.0, env, {})
+        F = force_model.get_force(states, 0.0, env)
         # 0.114735E+03     164.462891
         assert_equal(
             F.X(),
@@ -380,7 +380,7 @@ class DiffractionForceModelTest(unittest.TestCase):
         # U=10, wave direction=-90° -> encounter period = wave period = 15.70796s (frequency = 0.4 rad/s => first line), incidence = 90°
         env = get_waves_env(15.70796, -90.0 * np.pi / 180)
         states = get_states_with_forward_speed(10)
-        F = force_model.get_force(states, 0.0, env, {})
+        F = force_model.get_force(states, 0.0, env)
         assert_equal(
             F.X(),
             0.517219e02 * 1e3 * np.sin(-(-175.715546) * np.pi / 180.0),
@@ -415,7 +415,7 @@ class DiffractionForceModelTest(unittest.TestCase):
         # U=-10, wave direction=-90° -> encounter period = wave period = 6.28319s (frequency = 1 rad/s => seventh line), incidence = 90°
         env = get_waves_env(6.28319, -90.0 * np.pi / 180)
         states = get_states_with_forward_speed(-12.586)
-        F = force_model.get_force(states, 0.0, env, {})
+        F = force_model.get_force(states, 0.0, env)
         assert_equal(
             F.X(),
             0.175932e03 * 1e3 * np.sin(-(163.390305) * np.pi / 180.0),
