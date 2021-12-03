@@ -1,19 +1,14 @@
 """
-Unit test for FastHydrostaticForceModel
+Unit test for FastHydrostaticForceModel and ExactHydrostaticForceModel
 """
 import unittest
 from typing import List
-import numpy as np
 
-from xdyn.core import (
-    BlockedDOF,
-    BodyBuilder,
-    BodyPtr,
-    BodyWithSurfaceForces,
-    EnvironmentAndFrames,
-)
-from xdyn.core.io import YamlFilteredStates, YamlRotation
-from xdyn.force import FastHydrostaticForceModel
+import numpy as np
+from xdyn.core import BodyBuilder, BodyPtr, BodyWithSurfaceForces, EnvironmentAndFrames
+from xdyn.core.io import YamlRotation
+from xdyn.data.mesh import unit_cube
+from xdyn.force import ExactHydrostaticForceModel, FastHydrostaticForceModel
 from xdyn.ssc.kinematics import Point as SscPoint
 from xdyn.ssc.kinematics import Transform as SscTransform
 
@@ -61,7 +56,7 @@ class HydrostaticForceModelTest(unittest.TestCase):
         points = get_points()
         states = get_body(BODY, points).get_states()
         states.G = SscPoint("NED", 0, 2, 2.0 / 3.0)
-        body = BodyWithSurfaceForces(states, 0, BlockedDOF(""), YamlFilteredStates())
+        body = BodyWithSurfaceForces(states)
         F = FastHydrostaticForceModel(BODY, env)
         self.assertEqual("non-linear hydrostatic (fast)", F.model_name())
         t = 42
@@ -75,6 +70,26 @@ class HydrostaticForceModelTest(unittest.TestCase):
         self.assertEqual(0, Fhs.K())
         self.assertEqual(0, Fhs.M())
         self.assertEqual(0, Fhs.N())
+
+    def test_potential_energy_half_immersed_cube_fast(self):
+        env = get_environment_and_frames()
+        states = get_body(BODY, unit_cube()).get_states()
+        x = [0] * 13
+        dz = [0.5] * 4 + [-0.5] * 4
+        F = FastHydrostaticForceModel(BODY, env)
+        states.update_intersection_with_free_surface(dz, dz)
+        Ep = F.potential_energy(states, x, env)
+        self.assertEqual(-1024 * 0.5 * 9.81 * 0.25, Ep)
+
+    def test_potential_energy_half_immersed_cube_exact(self):
+        env = get_environment_and_frames()
+        states = get_body(BODY, unit_cube()).get_states()
+        x = [0] * 13
+        dz = [0.5] * 4 + [-0.5] * 4
+        states.update_intersection_with_free_surface(dz, dz)
+        F = ExactHydrostaticForceModel(BODY, env)
+        Ep = F.potential_energy(states, x, env)
+        self.assertEqual(-1024 * 0.5 * 9.81 * 0.25, Ep)
 
 
 if __name__ == "__main__":
