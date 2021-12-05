@@ -259,10 +259,114 @@ void py_add_module_ssc_kinematics(py::module& m_ssc)
         (Gallilean) earth frame.)");
 }
 
+
+void py_add_module_ssc_integrate(py::module& m_ssc);
+void py_add_module_ssc_integrate(py::module& m_ssc)
+{
+    py::module m_ssc_integrate = m_ssc.def_submodule("integrate");
+
+    py::register_exception<IntegratorException>(m_ssc_integrate, "IntegratorException");
+
+    py::class_<ssc::integrate::Integrator>(m_ssc_integrate, "Integrator")
+        //.def(py::init<>())
+        //.def(py::init<const Function&>(), py::arg("f"), "Callable[[float], float]")
+        .def("integrate_f", &ssc::integrate::Integrator::integrate_f,
+            py::arg("a"),
+            py::arg("b"),
+            py::arg("eps") =1e-6)
+        .def("integrate", &ssc::integrate::Integrator::integrate,
+            py::arg("f"),
+            py::arg("a"),
+            py::arg("b"),
+            py::arg("eps") =1e-6)
+        ;
+
+    py::class_<ssc::integrate::Rectangle, ssc::integrate::Integrator>(m_ssc_integrate, "Rectangle")
+        .def(py::init<>())
+        .def(py::init<const Function&>(), py::arg("f"))
+        ;
+
+    py::class_<ssc::integrate::TrapezoidalIntegration, ssc::integrate::Integrator>(m_ssc_integrate, "TrapezoidalIntegration")
+        .def(py::init<>())
+        .def(py::init<const Function&>(), py::arg("f"))
+        .def("integrate_n_steps", &ssc::integrate::TrapezoidalIntegration::integrate_n_steps,
+            py::arg("a"),
+            py::arg("b"),
+            py::arg("n"))
+        ;
+
+    py::class_<ssc::integrate::QuadPack, ssc::integrate::Integrator>(m_ssc_integrate, "QuadPack")
+        .def("op", &ssc::integrate::QuadPack::op)
+        ;
+
+    py::class_<ssc::integrate::Filon, ssc::integrate::QuadPack, ssc::integrate::Integrator>(m_ssc_integrate, "Filon")
+        .def(py::init<>())
+        .def(py::init<const Function&>(), py::arg("f"))
+        .def(py::init<const Function&, const double>(), py::arg("f"), py::arg("tau"))
+        .def("compute_for", &ssc::integrate::Filon::compute_for,
+            py::arg("tau"),
+            py::arg("a"),
+            py::arg("b"),
+            py::arg("eps"))
+        ;
+
+    py::class_<ssc::integrate::GaussKronrod, ssc::integrate::QuadPack, ssc::integrate::Integrator>(m_ssc_integrate, "GaussKronrod")
+        .def(py::init<>())
+        .def(py::init<const Function&>(), py::arg("f"))
+        ;
+
+    py::class_<ssc::integrate::ClenshawCurtis, ssc::integrate::QuadPack, ssc::integrate::Integrator>(m_ssc_integrate, "ClenshawCurtis")
+        //.def(py::init<const double>())
+        //.def(py::init<const Function&, const double>(), py::arg("f"), py::arg("tau"))
+        .def("compute_for", &ssc::integrate::ClenshawCurtis::compute_for,
+            py::arg("tau"),
+            py::arg("a"),
+            py::arg("b"),
+            py::arg("eps"))
+        ;
+
+    py::class_<ssc::integrate::ClenshawCurtisCosine, ssc::integrate::ClenshawCurtis, ssc::integrate::QuadPack, ssc::integrate::Integrator>(m_ssc_integrate, "ClenshawCurtisCosine")
+        .def(py::init<const double>())
+        .def(py::init<const Function&, const double>(), py::arg("f"), py::arg("tau"))
+        ;
+
+    py::class_<ssc::integrate::Cumulate>(m_ssc_integrate, "Cumulate")
+        .def(py::init<>())
+        .def("add", &ssc::integrate::Cumulate::add,
+            py::arg("x"),
+            py::arg("y"))
+        .def("integrate", &ssc::integrate::Cumulate::integrate,
+            py::arg("a"),
+            py::arg("b"))
+        ;
+
+    py::class_<ssc::integrate::Burcher, ssc::integrate::Integrator>(m_ssc_integrate, "Burcher")
+        .def(py::init<>())
+        .def(py::init<const Function&>(), py::arg("f"), "Callable[[float], float]")
+        .def(py::init<const Function&, const double>(), py::arg("f"), py::arg("tau"), "Callable[[float], float]")
+        .def("integrate_n_steps", &ssc::integrate::Burcher::integrate_n_steps,
+            py::arg("f"),
+            py::arg("a"),
+            py::arg("b"),
+            py::arg("n"))
+        .def("compute_for", &ssc::integrate::Burcher::compute_for,
+            py::arg("tau"),
+            py::arg("a"),
+            py::arg("b"),
+            py::arg("eps"))
+        ;
+
+    py::class_<ssc::integrate::Simpson, ssc::integrate::Integrator>(m_ssc_integrate, "Simpson")
+        .def(py::init<>())
+        .def(py::init<const Function&>(), py::arg("f"), "Callable[[float], float]")
+        ;
+}
+
 void py_add_module_ssc(py::module& m)
 {
     py::module m_ssc = m.def_submodule("ssc");
     py_add_module_ssc_datasource(m_ssc);
     py_add_module_ssc_kinematics(m_ssc);
+    py_add_module_ssc_integrate(m_ssc);
     py_add_module_ssc_random(m_ssc);
 }
