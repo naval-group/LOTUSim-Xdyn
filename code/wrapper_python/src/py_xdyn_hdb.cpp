@@ -4,6 +4,7 @@
 #include "hdb_interpolators/inc/HydroDBParser.hpp"
 #include "hdb_interpolators/inc/HDBParser.hpp"
 #include "hdb_interpolators/inc/PrecalParser.hpp"
+#include "hdb_interpolators/inc/RadiationDampingBuilder.hpp"
 #include "hdb_interpolators/inc/RaoInterpolator.hpp"
 #include "hdb_interpolators/inc/TimestampedMatrix.hpp"
 
@@ -195,4 +196,154 @@ void py_add_module_xdyn_hdb(py::module&m)
         .def_readwrite("phase_unit", &RAOAttributes::phase_unit)
         ;
 
+    py::class_<RadiationDampingBuilder>(m_hdb_interpolators, "RadiationDampingBuilder")
+        .def(py::init<const TypeOfQuadrature&, const TypeOfQuadrature&>(),
+            py::arg("type_of_quadrature_for_convolution"),
+            py::arg("type_of_quadrature_for_cos_transform"),
+            R"(RadiationDampingBuilder
+
+            Inputs:
+
+            - `type_of_quadrature_for_convolution` (TypeOfQuadrature)
+            - `type_of_quadrature_for_cos_transform` (TypeOfQuadrature)
+             )")
+        .def("build_interpolator", &RadiationDampingBuilder::build_interpolator,
+            py::arg("x"),
+            py::arg("y"),
+            "Build a continuous function from discrete (x,y) points (using interpolation type defined in constructor")
+        .def("build_retardation_function", &RadiationDampingBuilder::build_retardation_function,
+            py::arg("Br"),
+            py::arg("taus"),
+            py::arg("eps"),
+            py::arg("omega_min"),
+            py::arg("omega_ma"),
+            R"(Use radiation damping function to compute retardation function
+
+            Radiation damping can come, eg. from the build_interpolator method. This method evaluates the
+            integral \f$K(\tau) := \frac{2}{\pi} int_{\omega_{\mbox{min}}}^{\omega_{\mbox{max}}} B_r(\omega)\cos(\omega\cdot \tau)d\tau\f$
+            for n different values of \f$\tau\f$ between \f$\frac{2\pi}{\omega{\mbox{max}}} and \frac{2\pi}{\omega{\mbox{min}}}\f$.
+            It then uses "build_interpolator" to build a function (lambda).
+
+            Inputs:
+
+            - `Br` (Callable[[float], float]): Radiation damping function
+            - `taus` (List[float])
+            - `eps` (float): When to truncate (0 for no truncation)
+            - `omega_min` (float)
+            - `omega_max` (float)
+            )")
+        .def("convolution", &RadiationDampingBuilder::convolution,
+            py::arg("h"),
+            py::arg("f"),
+            py::arg("Tmin"),
+            py::arg("Tmax"),
+            R"(Computes the convolution of a function with state history, over a certain time
+
+            Returns \f$\int_0^T h(t-\tau)*f(\tau) d\tau\f$
+
+            Inputs:
+
+            - `h` (Callable[[float], float]): State reverse history
+            - `t` (Callable[[float], float]): Function to convolute with
+            - `Tmin` (float): Beginning of the convolution (because retardation function may not be defined for T=0)
+            - `Tmax` (float): End of the convolution
+            )")
+        .def("build_regular_intervals", &RadiationDampingBuilder::build_regular_intervals,
+            py::arg("first"),
+            py::arg("last"),
+            py::arg("n"),
+            R"(Build a vector of n regularly incremented doubles from xmin to xmax. First value is xmin last is xmax.
+
+            Inputs:
+
+            - `first` (float): First value in vector
+            - `last` (float): Last value in vector
+            - `n` (int): Number of values to return
+            )")
+        .def("build_exponential_intervals", &RadiationDampingBuilder::build_exponential_intervals,
+            py::arg("first"),
+            py::arg("last"),
+            py::arg("n"),
+            R"(Build a vector of n exponentially incremented doubles from xmin to xmax.
+
+            First value is xmin last is xmax. Spacing is small near xmin and large near xmax
+
+            Inputs:
+
+            - `first` (float): First value in vector
+            - `last` (float): Last value in vector
+            - `n` (int): Number of values to return
+
+            Return: List[float]
+            )")
+        .def("build_exponential_intervals_reversed", &RadiationDampingBuilder::build_exponential_intervals_reversed,
+            py::arg("first"),
+            py::arg("last"),
+            py::arg("n"),
+            R"(Build a vector of n exponentially incremented doubles from xmin to xmax.
+
+            First value is xmin last is xmax. Spacing is large near xmin and small near xmax
+
+            Inputs:
+
+            - `first` (float): First value in vector
+            - `last` (float): Last value in vector
+            - `n` (int): Number of values to return
+
+            Return: List[float]
+            )")
+        .def("find_integration_bound", &RadiationDampingBuilder::find_integration_bound,
+            py::arg("f"),
+            py::arg("omega_min"),
+            py::arg("omega_max"),
+            py::arg("eps"),
+            R"(Find bound representing a significant amount of the integral
+
+            Uses TOMS Algorithm 748 to compute the minimum bound \f$\omega_0\f$ such that
+            \f$int_{\omega_{\mbox{min}}}^{\omega_0} f(\omega) d\omega = (1-eps) int_{\omega_{\mbox{min}}}^{\omega_{\mbox{max}}}\f$
+
+            Inputs:
+
+             - `f` (Callable[[float], float]): Function to integrate
+             - `omega_min` (float): Lower bound of the integration (returned omega is necessarily greater than omega_min)
+             - `omega_max` (float): Upper bound of the integration (returned omega is necessarily lower than omega_min)
+             - `eps` (float): Integration error (compared to full integration from omega_min up to omega_max)
+
+            Returns: float = Upper integration bound
+
+            )")
+        .def("find_r_bound", &RadiationDampingBuilder::find_r_bound,
+            py::arg("f"),
+            py::arg("omega_min"),
+            py::arg("omega_max"),
+            py::arg("eps"),
+            R"(Find r bound
+
+            Inputs:
+
+             - `f` (Callable[[float], float]): Function to integrate
+             - `omega_min` (float): Lower bound of the integration (returned omega is necessarily greater than omega_min)
+             - `omega_max` (float): Upper bound of the integration (returned omega is necessarily lower than omega_min)
+             - `eps` (float): Integration error (compared to full integration from omega_min up to omega_max)
+
+            Returns: float = Upper integration bound
+
+            )")
+        .def("cos_transform", &RadiationDampingBuilder::cos_transform,
+            py::arg("Br"),
+            py::arg("omega_min"),
+            py::arg("omega_max"),
+            py::arg("tau"),
+            R"(Cos transform
+
+            Inputs:
+
+             - `Br` (Callable[[float], float]): Function to integrate
+             - `omega_min` (float): Lower bound of the integration (returned omega is necessarily greater than omega_min)
+             - `omega_max` (float): Upper bound of the integration (returned omega is necessarily lower than omega_min)
+             - `tau` (float):
+
+            Returns: float
+            )")
+        ;
 }
