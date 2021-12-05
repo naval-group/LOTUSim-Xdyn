@@ -205,6 +205,7 @@ void py_add_module_xdyn_core_io(py::module& m)
         ;
 
     py::class_<YamlRadiationDamping>(m, "YamlRadiationDamping")
+        .def(py::init<>())
         .def_readwrite("hdb_filename", &YamlRadiationDamping::hdb_filename)
         .def_readwrite("precal_r_filename", &YamlRadiationDamping::precal_r_filename)
         .def_readwrite("type_of_quadrature_for_cos_transform", &YamlRadiationDamping::type_of_quadrature_for_cos_transform)
