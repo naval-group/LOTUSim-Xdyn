@@ -1,5 +1,6 @@
 #include "py_xdyn_hdb.hpp"
 #include "py_pybind_additions.hpp"
+#include "force_models/unit_tests/inc/HDBParserForTests.hpp"
 #include "hdb_interpolators/inc/History.hpp"
 #include "hdb_interpolators/inc/HydroDBParser.hpp"
 #include "hdb_interpolators/inc/HDBParser.hpp"
@@ -9,6 +10,75 @@
 #include "hdb_interpolators/inc/TimestampedMatrix.hpp"
 
 namespace py = pybind11;
+
+
+HDBParserForTests::HDBParserForTests(const std::vector<double>& omega_, const std::vector<double>& Ma_, const std::vector<double>& Br_, const bool only_diagonal_terms_)
+: omega(omega_)
+, Ma(Ma_), Br(Br_), only_diagonal_terms(only_diagonal_terms_)
+{
+}
+
+std::vector<double> HDBParserForTests::get_angular_frequencies() const
+{
+    return omega;
+}
+
+std::vector<double> HDBParserForTests::get_radiation_damping_coeff(const size_t i, const size_t j) const
+{
+    if (only_diagonal_terms)
+    {
+        if (i == j)
+        {
+            return Br;
+        }
+    }
+    else
+    {
+        std::vector<double> ret;
+        ret.reserve(Br.size());
+        for (const auto br:Br)
+        {
+            ret.push_back((double)(10*(i+1)+(j+1))*br);
+        }
+        return ret;
+    }
+    return std::vector<double>(Br.size(),0);
+}
+
+std::vector<double> HDBParserForTests::get_added_mass_coeff(const size_t i, const size_t j) const
+{
+    if (only_diagonal_terms)
+    {
+        if (i == j)
+        {
+            return Ma;
+        }
+    }
+    else
+    {
+        std::vector<double> ret;
+        ret.reserve(Ma.size());
+        for (const auto ma:Ma)
+        {
+            ret.push_back((double)(10*(i+1)+(j+1))*ma);
+        }
+        return ret;
+    }
+    return std::vector<double>(Ma.size(),0);
+}
+
+Eigen::Matrix<double, 6, 6> HDBParserForTests::get_added_mass() const
+{
+    Eigen::Matrix<double, 6, 6> ret;
+    for (size_t i = 0 ; i < 6 ; i++)
+    {
+        for(size_t j = 0 ; j < 6 ; j++)
+        {
+            ret(i, j) = get_added_mass_coeff(i, j).back();
+        }
+    }
+    return ret;
+}
 
 void py_add_module_xdyn_hdb(py::module&m)
 {
@@ -345,5 +415,17 @@ void py_add_module_xdyn_hdb(py::module&m)
 
             Returns: float
             )")
+        ;
+
+    py::class_<HDBParserForTests, HDBParser>(m_hdb_interpolators, "HDBParserForTests")
+        .def(py::init<const std::vector<double>& /*omega*/, const std::vector<double>& /*Ma*/, const std::vector<double>& /*Br*/, const bool /*only_diagonal_terms_*/>(),
+            py::arg("omega"),
+            py::arg("Ma"),
+            py::arg("Br"),
+            py::arg("only_diagonal_terms")=false)
+        .def("get_angular_frequencies", &HDBParserForTests::get_angular_frequencies)
+        .def("get_radiation_damping_coeff", &HDBParserForTests::get_radiation_damping_coeff)
+        .def("get_added_mass_coeff", &HDBParserForTests::get_added_mass_coeff)
+        .def("get_added_mass", &HDBParserForTests::get_added_mass)
         ;
 }
