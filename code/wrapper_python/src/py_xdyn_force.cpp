@@ -27,11 +27,14 @@
 #include "force_models/inc/SimpleHeadingKeepingController.hpp"
 #include "force_models/inc/SimpleStationKeepingController.hpp"
 #include "force_models/inc/WageningenControlledForceModel.hpp"
+#include "force_models/unit_tests/inc/HDBParserForTests.hpp"
+#include "hdb_interpolators/inc/HDBParser.hpp"
 #include "ssc/ssc/data_source/DataSource.hpp"
 #include "ssc/ssc/kinematics/Point.hpp"
 #include "ssc/ssc/kinematics/Wrench.hpp"
-
+#include "ssc/ssc/macros/tr1_macros.hpp"
 #include <string>
+#include TR1INC(memory)
 
 namespace py = pybind11;
 
@@ -593,8 +596,20 @@ void py_add_module_xdyn_force(py::module& m0)
     py::class_<RadiationDampingForceModel::Input>(m, "RadiationDampingForceModelInput")
         .def(py::init<>())
         .def_readwrite("yaml", &RadiationDampingForceModel::Input::yaml)
-        // TR1(shared_ptr)<HydroDBParser> parser;
-        ;
+        .def("set_hdb_parser_for_tests",
+            [] (RadiationDampingForceModel::Input &a,
+                const std::vector<double>& omega,
+                const std::vector<double>& Ma,
+                const std::vector<double>& Br,
+                const bool only_diagonal_terms)
+            {
+                a.parser.reset(new HDBParserForTests(omega, Ma, Br, only_diagonal_terms));
+            },
+            py::arg("omega"),
+            py::arg("Ma"),
+            py::arg("Br"),
+            py::arg("only_diagonal_terms")
+        );
 
     py::class_<RadiationDampingForceModel, ForceModel>(m, "RadiationDampingForceModel")
         .def(py::init<const RadiationDampingForceModel::Input& /*input*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>())
