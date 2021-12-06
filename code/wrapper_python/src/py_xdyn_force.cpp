@@ -612,7 +612,12 @@ void py_add_module_xdyn_force(py::module& m0)
         );
 
     py::class_<RadiationDampingForceModel, ForceModel>(m, "RadiationDampingForceModel")
-        .def(py::init<const RadiationDampingForceModel::Input& /*input*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>())
+        .def(py::init<const RadiationDampingForceModel::Input& /*input*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>(),
+            py::arg("input"),
+            py::arg("body_name"),
+            py::arg("env"),
+            py::call_guard<py::scoped_ostream_redirect, py::scoped_estream_redirect>()
+            )
         .def_static("model_name", &RadiationDampingForceModel::model_name)
         .def("get_force", &RadiationDampingForceModel::get_force,
             py::arg("states"),
