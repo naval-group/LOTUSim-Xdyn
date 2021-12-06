@@ -1,11 +1,14 @@
 """
 Unit test for RadiationDampingForceModel
 """
+import io
 import os
 import unittest
+from contextlib import redirect_stderr
 from typing import Callable
 
 import numpy as np
+
 from xdyn.core import BodyStates, EnvironmentAndFrames
 from xdyn.core.io import TypeOfQuadrature, YamlRadiationDamping
 from xdyn.data.test import analytical_Br, analytical_K, bug_3210
@@ -227,10 +230,26 @@ class RadiationDampingForceModelTest(unittest.TestCase):
         self.assertAlmostEqual(Frad1.N(), Frad2.N(), delta=EPS)
 
     def test_should_print_debugging_information_if_required_by_yaml_data(self):
-        pass
+        data = RadiationDampingForceModelInput()
+        data.yaml = get_yaml_data(show_debug=True)
+        data.set_hdb_parser_for_tests(*get_hdb_data(data.yaml))
+        env = EnvironmentAndFrames()
+        buf = io.StringIO()
+        with redirect_stderr(buf):
+            RadiationDampingForceModel(data, "", env)
+        expected_regex = "Debugging information for damping functions Br"
+        self.assertTrue(expected_regex in buf.getvalue(), buf.getvalue())
 
     def test_should_not_print_debugging_information_if_not_required_by_yaml_data(self):
-        pass
+        data = RadiationDampingForceModelInput()
+        data.yaml = get_yaml_data(show_debug=False)
+        data.set_hdb_parser_for_tests(*get_hdb_data(data.yaml))
+        env = EnvironmentAndFrames()
+        buf = io.StringIO()
+        with redirect_stderr(buf):
+            RadiationDampingForceModel(data, "", env)
+        expected_regex = "Debugging information for damping functions Br"
+        self.assertFalse(expected_regex in buf.getvalue(), buf.getvalue())
 
     def test_force_model_knows_history_length(self):
         data = RadiationDampingForceModelInput()
