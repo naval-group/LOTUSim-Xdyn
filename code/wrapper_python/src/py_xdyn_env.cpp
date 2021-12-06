@@ -18,6 +18,7 @@
 #include "environment_models/inc/UniformWindVelocityProfile.hpp"
 #include "environment_models/inc/WaveDirectionalSpreading.hpp"
 #include "environment_models/inc/WaveModel.hpp"
+#include "environment_models/inc/WaveNumberFunctor.hpp"
 #include "environment_models/inc/WaveSpectralDensity.hpp"
 #include "environment_models/inc/WindModel.hpp"
 #include "environment_models/inc/WindMeanVelocityProfile.hpp"
@@ -124,6 +125,22 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
 {
     py::module m_env_io = m_env.def_submodule("io");
     py_add_module_xdyn_env_wave_io(m_env_io);
+
+    py::class_<WaveNumberFunctor>(m_env, "WaveNumberFunctor")
+        .def(py::init<const double, const double>(),
+            py::arg("h"),
+            py::arg("omega"),
+            R"(This is the functor used to solve the dispersion relation to compute
+               the wave number.
+
+               Provides the values of the function & its first & second derivatives.
+               The function is \f$k\mapsto g\cdot k\cdot \tanh{kh} - \omega^2$\f
+
+               - `h` (float): Water depth (in meters)
+               - `omega` (float): Angular frequency (in rad/s)
+            )")
+        .def("__call__", &WaveNumberFunctor::operator())
+        ;
 
     py::class_<DiscreteDirectionalWaveSpectrum>(m_env, "DiscreteDirectionalWaveSpectrum")
         .def(py::init<>())
