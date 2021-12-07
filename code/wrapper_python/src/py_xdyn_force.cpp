@@ -20,6 +20,7 @@
 #include "force_models/inc/LinearHydrostaticForceModel.hpp"
 #include "force_models/inc/LinearFroudeKrylovForceModel.hpp"
 #include "force_models/inc/MMGManeuveringForceModel.hpp"
+#include "force_models/inc/ManeuveringForceModel.hpp"
 #include "force_models/inc/QuadraticDampingForceModel.hpp"
 #include "force_models/inc/RadiationDampingForceModel.hpp"
 #include "force_models/inc/ResistanceCurveForceModel.hpp"
@@ -794,4 +795,27 @@ void py_add_module_xdyn_force(py::module& m0)
         .def_static("model_name", &ExactHydrostaticForceModel::model_name)
         ;
 
+    py::class_<ManeuveringForceModel::Yaml>(m, "ManeuveringForceModelInput")
+        .def(py::init<>())
+        .def_readwrite("name", &ManeuveringForceModel::Yaml::name)
+        .def_readwrite("frame_of_reference", &ManeuveringForceModel::Yaml::frame_of_reference)
+        .def_readwrite("commands", &ManeuveringForceModel::Yaml::commands)
+        .def_readwrite("var2expr", &ManeuveringForceModel::Yaml::var2expr)
+        ;
+
+    py::class_<ManeuveringForceModel, ForceModel>(m, "ManeuveringForceModel", "Maneuvering force model")
+        .def(py::init<const ManeuveringForceModel::Yaml& /*data*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>(),
+            py::arg("data"),
+            py::arg("body_name"),
+            py::arg("env")
+        )
+        .def_static("model_name", &ManeuveringForceModel::model_name)
+        .def_static("parse", &ManeuveringForceModel::parse)
+        .def("get_Tmax", &ManeuveringForceModel::get_Tmax)
+        .def("get_force", &ManeuveringForceModel::get_force,
+            py::arg("states"),
+            py::arg("t"),
+            py::arg("env"),
+            py::arg("commands"))
+        ;
 }
