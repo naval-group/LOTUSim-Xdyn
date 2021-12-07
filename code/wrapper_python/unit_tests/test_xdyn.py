@@ -11,7 +11,6 @@ from xdyn.core import BodyStates, EnvironmentAndFrames, History, Wrench
 from xdyn.core.io import YamlBody
 from xdyn.force import GravityForceModel
 from xdyn.hdb import RAOData
-from xdyn.sandbox import Dog, call_go
 from xdyn.ssc.kinematics import EulerAngles as SscEulerAngles
 from xdyn.ssc.kinematics import Kinematics as SscKinematics
 from xdyn.ssc.kinematics import KinematicTree as SscKinematicTree
@@ -22,7 +21,7 @@ from xdyn.ssc.kinematics import coriolis_and_centripetal
 
 
 class XDynCallTest(unittest.TestCase):
-    """Test class for MMGManeuveringForceModel"""
+    """Test class for XDyn"""
 
     def test_can_parse(self):
         print(render_doc(xdyn))
@@ -99,10 +98,6 @@ class XDynCallTest(unittest.TestCase):
 
         gfm = GravityForceModel("g", env)
         print(gfm)
-
-        d = Dog()
-        result = call_go(d)
-        print(result)
 
         h1 = History()
         h2 = History(0.2)
