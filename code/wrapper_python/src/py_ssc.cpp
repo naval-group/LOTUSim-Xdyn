@@ -119,6 +119,7 @@ void py_add_module_ssc_datasource(py::module& m_ssc)
     py::module m_ssc_datasource = m_ssc.def_submodule("datasource");
     py::class_<ssc::data_source::DataSource>(m_ssc_datasource, "DataSource")
         .def(py::init<>())
+        .def("set_float", &ssc::data_source::DataSource::set<double>)
         ;
 }
 
