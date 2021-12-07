@@ -134,15 +134,34 @@ debian_11_release_gcc_10: cmake-debian-target build-debian test-debian
 debian_11_release_gcc_10_wrapper: BUILD_TYPE = Release
 debian_11_release_gcc_10_wrapper: BUILD_DIR = build_deb11_pywrapper
 debian_11_release_gcc_10_wrapper: CPACK_GENERATOR = DEB
-debian_11_release_gcc_10_wrapper: DOCKER_IMAGE = xdyn-python-build
+debian_11_release_gcc_10_wrapper: DOCKER_IMAGE = xdyn-python-deb11-build
 debian_11_release_gcc_10_wrapper: BOOST_ROOT = /opt/boost
 debian_11_release_gcc_10_wrapper: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_11_release_gcc_10_wrapper: BUILD_PYTHON_WRAPPER = True
 debian_11_release_gcc_10_wrapper: cmake-debian-target build-debian test-debian
-	# make -C code/wrapper_python build_docker_build_container
+	# make -C code/wrapper_python debian_11_build_docker_build_container
+	rm -rf code/wrapper_python/build
+	rm -rf code/wrapper_python/dist
+	rm -rf code/wrapper_python/*.whl
 	mkdir -p code/wrapper_python/build
 	cp -rf ${BUILD_DIR}/lib.linux-x86_64-3.9 code/wrapper_python/build/.
-	make -C code/wrapper_python demo_package
+	make -C code/wrapper_python debian_11_demo_package
+
+debian_10_release_gcc_8_wrapper: BUILD_TYPE = Release
+debian_10_release_gcc_8_wrapper: BUILD_DIR = build_deb10_pywrapper
+debian_10_release_gcc_8_wrapper: CPACK_GENERATOR = DEB
+debian_10_release_gcc_8_wrapper: DOCKER_IMAGE = xdyn-python-deb10-build
+debian_10_release_gcc_8_wrapper: BOOST_ROOT = /opt/boost
+debian_10_release_gcc_8_wrapper: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_10_release_gcc_8_wrapper: BUILD_PYTHON_WRAPPER = True
+debian_10_release_gcc_8_wrapper: cmake-debian-target build-debian test-debian
+	# make -C code/wrapper_python debian_10_build_docker_build_container
+	rm -rf code/wrapper_python/build
+	rm -rf code/wrapper_python/dist
+	rm -rf code/wrapper_python/*.whl
+	mkdir -p code/wrapper_python/build
+	cp -rf ${BUILD_DIR}/lib.linux-x86_64-3.7 code/wrapper_python/build/.
+	make -C code/wrapper_python debian_10_demo_package
 
 windows_gccx_posix: BUILD_TYPE=Release
 windows_gccx_posix: BUILD_DIR=build_win_posix

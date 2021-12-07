@@ -3,13 +3,18 @@ project(xdyn_python)
 
 set(PYTHON_PACKAGE_NAME pyxdyn)
 
+find_package(Python REQUIRED COMPONENTS Interpreter Development)
+find_package(pybind11 REQUIRED)
+
+message(STATUS "Python_VERSION ${Python_VERSION}")
+message(STATUS "Python_VERSION_MAJOR ${Python_VERSION_MAJOR}")
+message(STATUS "Python_VERSION_MINOR ${Python_VERSION_MINOR}")
+
 message(STATUS "PYTHON WRAPPER!")
 if (NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib.linux-x86_64-3.9/)
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib.linux-x86_64-${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/)
 endif()
 message(STATUS "CMAKE_LIBRARY_OUTPUT_DIRECTORY = ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
-
-find_package(pybind11 REQUIRED)
 
 pybind11_add_module(${PYTHON_PACKAGE_NAME}
     src/main.cpp
@@ -22,8 +27,10 @@ pybind11_add_module(${PYTHON_PACKAGE_NAME}
     src/py_xdyn_hdb.cpp
     )
 set_target_properties(${PYTHON_PACKAGE_NAME} PROPERTIES OUTPUT_NAME "xdyn")
+set_target_properties(${PYTHON_PACKAGE_NAME} PROPERTIES SUFFIX ".cpython-${Python_VERSION_MAJOR}${Python_VERSION_MINOR}m-x86_64-linux-gnu.so")
 
 message(STATUS "ssc_INCLUDE_DIRS ${ssc_INCLUDE_DIRS}")
+target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE ${Python_INCLUDE_DIRS})
 target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>)
 target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${ssc_INCLUDE_DIRS}>)
 target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${exceptions_INCLUDE_DIRS}>)

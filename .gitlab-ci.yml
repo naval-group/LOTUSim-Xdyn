@@ -74,7 +74,7 @@ build:debian11-release:
 build:debian11-release-python:
    stage: build
    script:
-     - cd code/wrapper_python && make build_docker_build_container && cd ../..
+     - cd code/wrapper_python && make debian_11_build_docker_build_container && cd ../..
      - make NB_OF_PARALLEL_BUILDS="-j 1" debian_11_release_gcc_10_wrapper
      - mv build_deb11_pywrapper/xdyn.deb .
      - mv code/wrapper_python/*.whl .

@@ -2,19 +2,41 @@
 # - builds the xdyn wheel from xdyn python shared library
 # - tests the generated wheel in a fresh docker container
 
-DOCKER_IMAGE_BUILD=xdyn-python-build
-DOCKER_IMAGE_TEST=xdyn-python-test
-DIR := $(notdir $(shell pwd))
-DOCKER_AS_ROOT:=docker run -t --rm -w /opt/share/${DIR} -v $(shell pwd)/..:/opt/share
-DOCKER_AS_USER:=$(DOCKER_AS_ROOT) -u $(shell id -u):$(shell id -g)
-DOCKER_RUN_BUILD_BASH:= $(DOCKER_AS_USER) $(DOCKER_IMAGE_BUILD) /bin/bash -c
-DOCKER_RUN_TEST_BASH:= $(DOCKER_AS_USER) $(DOCKER_IMAGE_TEST) /bin/bash -c
-
 help:
 	echo "Run higher target to build wheel! It can not be built directly from this Makefile"
 
+debian_10_build_docker_build_container: DOCKER_IMAGE_BUILD=xdyn-python-deb10-build
+debian_10_build_docker_build_container: DOCKER_IMAGE_TEST=xdyn-python-deb10-test
+debian_10_build_docker_build_container: DOCKER_FILE_BUILD=Dockerfile_deb10_pybind
+debian_10_build_docker_build_container: DOCKER_FILE_TEST=Dockerfile_deb10_test
+debian_10_build_docker_build_container: build_docker_build_container
+
+debian_11_build_docker_build_container: DOCKER_IMAGE_BUILD=xdyn-python-deb11-build
+debian_11_build_docker_build_container: DOCKER_IMAGE_TEST=xdyn-python-deb11-test
+debian_11_build_docker_build_container: DOCKER_FILE_BUILD=Dockerfile_deb11_pybind
+debian_11_build_docker_build_container: DOCKER_FILE_TEST=Dockerfile_deb11_test
+debian_11_build_docker_build_container: build_docker_build_container
+
+debian_10_demo_package: DOCKER_IMAGE_BUILD=xdyn-python-deb10-build
+debian_10_demo_package: DOCKER_IMAGE_TEST=xdyn-python-deb10-test
+debian_10_demo_package: DOCKER_FILE_BUILD=Dockerfile_deb10_pybind
+debian_10_demo_package: DOCKER_FILE_TEST=Dockerfile_deb10_test
+debian_10_demo_package: demo_package
+
+debian_11_demo_package: DOCKER_IMAGE_BUILD=xdyn-python-deb11-build
+debian_11_demo_package: DOCKER_IMAGE_TEST=xdyn-python-deb11-test
+debian_11_demo_package: DOCKER_FILE_BUILD=Dockerfile_deb11_pybind
+debian_11_demo_package: DOCKER_FILE_TEST=Dockerfile_deb11_test
+debian_11_demo_package: demo_package
+
+DIR := $(notdir $(shell pwd))
+DOCKER_AS_ROOT:=docker run -t --rm -w /opt/share/${DIR} -v $(shell pwd)/..:/opt/share
+DOCKER_AS_USER:=$(DOCKER_AS_ROOT) -u $(shell id -u):$(shell id -g)
+DOCKER_RUN_BUILD_BASH=$(DOCKER_AS_USER) $(DOCKER_IMAGE_BUILD) /bin/bash -c
+DOCKER_RUN_TEST_BASH=$(DOCKER_AS_USER) $(DOCKER_IMAGE_TEST) /bin/bash -c
+
 build_docker_build_container:
-	docker build . -f Dockerfile_pybind -t ${DOCKER_IMAGE_BUILD}
+	docker build . -f ${DOCKER_FILE_BUILD} -t ${DOCKER_IMAGE_BUILD}
 
 demo_package: demo_package_build demo_package_test_build demo_package_test_run
 
@@ -24,7 +46,7 @@ demo_package_build:
 		mv dist/*.whl ."
 
 demo_package_test_build:
-	docker build . -f Dockerfile_test -t $(DOCKER_IMAGE_TEST)
+	docker build . -f ${DOCKER_FILE_TEST} -t $(DOCKER_IMAGE_TEST)
 
 demo_package_test_run:
 	$(DOCKER_RUN_TEST_BASH) \
@@ -32,7 +54,7 @@ demo_package_test_run:
 
 demo_package_test_run_for_a_specific_file:
 	$(DOCKER_RUN_TEST_BASH) \
-		"cd unit_tests && python3 test_wageningencontrolledforcemodel.py"
+		"cd unit_tests/force && python3 test_maneuveringforcemodel.py"
 
 clean:
 	@rm -rf build
