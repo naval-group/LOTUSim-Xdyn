@@ -1,12 +1,13 @@
 """
 Unit test for DiffractionForceModel
 """
+import io
 import os
 import unittest
+from contextlib import redirect_stderr
 from textwrap import dedent
 
 import numpy as np
-
 from xdyn.core import BodyStates, EnvironmentAndFrames
 from xdyn.core.io import YamlCoordinates, YamlRAO, YamlRotation
 from xdyn.data.test import bug_3210
@@ -272,8 +273,9 @@ class DiffractionForceModelTest(unittest.TestCase):
 
         # U=-5.45, wave direction=-180°, wave period = 10.47198s -> encounter frequency = 0.4 rad/s => first line, incidence = 180°
         states = get_states_with_forward_speed(-5.45)
-        F = force_model.get_force(states, 0.0, env)
-
+        buf = io.StringIO()
+        with redirect_stderr(buf):
+            F = force_model.get_force(states, 0.0, env)
         assert_equal(
             F.X(),
             0.138050e03 * 1e3 * np.sin(-(90.317017) * np.pi / 180.0),
