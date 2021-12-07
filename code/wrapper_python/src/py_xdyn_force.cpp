@@ -676,7 +676,9 @@ void py_add_module_xdyn_force(py::module& m0)
             py::arg("states"),
             py::arg("t"),
             py::arg("env"),
-            py::arg("commands") = std::map<std::string,double>()
+            py::arg("commands") = std::map<std::string,double>(),
+            py::call_guard<py::scoped_ostream_redirect,
+                           py::scoped_estream_redirect>()
             )
         .def_static("parse", &AbstractRaoForceModel::parse, py::arg("yaml"), py::arg("type_of_rao"))
         ;
@@ -685,13 +687,17 @@ void py_add_module_xdyn_force(py::module& m0)
         .def(py::init<const YamlRAO& /*data*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>(),
             py::arg("data"),
             py::arg("body_name"),
-            py::arg("env")
+            py::arg("env"),
+            py::call_guard<py::scoped_ostream_redirect,
+                           py::scoped_estream_redirect>()
         )
         .def(py::init<const YamlRAO& /*data*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/, const std::string& /*hdb_file_contents*/>(),
             py::arg("data"),
             py::arg("body_name"),
             py::arg("env"),
-            py::arg("hdb_file_contents")
+            py::arg("hdb_file_contents"),
+            py::call_guard<py::scoped_ostream_redirect,
+                           py::scoped_estream_redirect>()
         )
         .def_static("parse", &DiffractionForceModel::parse, py::arg("yaml"))
         .def_static("model_name", &DiffractionForceModel::model_name)
@@ -701,13 +707,17 @@ void py_add_module_xdyn_force(py::module& m0)
         .def(py::init<const YamlRAO& /*data*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>(),
             py::arg("data"),
             py::arg("body_name"),
-            py::arg("env")
+            py::arg("env"),
+            py::call_guard<py::scoped_ostream_redirect,
+                           py::scoped_estream_redirect>()
         )
         .def(py::init<const YamlRAO& /*data*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/, const std::string& /*hdb_file_contents*/>(),
             py::arg("data"),
             py::arg("body_name"),
             py::arg("env"),
-            py::arg("hdb_file_contents")
+            py::arg("hdb_file_contents"),
+            py::call_guard<py::scoped_ostream_redirect,
+                           py::scoped_estream_redirect>()
         )
         .def_static("parse", &LinearFroudeKrylovForceModel::parse, py::arg("yaml"))
         .def_static("model_name", &LinearFroudeKrylovForceModel::model_name)
