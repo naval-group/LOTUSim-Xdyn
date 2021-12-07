@@ -10,9 +10,6 @@ from xdyn.env.wind import DefaultWindModel
 class DefaultWindModelTest(unittest.TestCase):
     """Test class for DefaultWindModel"""
 
-    def setUp(self) -> None:
-        self.rng = np.random.default_rng(666)
-
     def test_returns_no_wind(self):
         wind_model = DefaultWindModel(0)
         position = np.random.uniform(size=3)
