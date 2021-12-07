@@ -13,6 +13,7 @@ from xdyn.env.wind import (
     WindMeanVelocityProfileInput,
 )
 from xdyn.exceptions import InvalidInputException
+from xdyn.ssc.random import DataGenerator
 
 
 def get_data() -> str:
@@ -27,7 +28,7 @@ class UniformWindVelocityProfileTest(unittest.TestCase):
     """Test class for UniformWindVelocityProfile"""
 
     def setUp(self) -> None:
-        self.rng = np.random.default_rng(666)
+        self.rng = DataGenerator(666)
 
     def test_can_parse(self):
         """Check that parse function produces a valid UniformWindVelocityProfiledata object"""
@@ -41,8 +42,8 @@ class UniformWindVelocityProfileTest(unittest.TestCase):
         data.velocity = 10
         data.direction = 135 * np.pi / 180
         wind_model = UniformWindVelocityProfile(data)
-        position = self.rng.uniform(size=3)
-        time = self.rng.uniform()
+        position = self.rng.random_vector_of_double().of_size(3)()
+        time = self.rng.random_double()()
         wind_vector = wind_model.get_wind(position, time)
         self.assertEqual(data.velocity * np.cos(data.direction), wind_vector[0])
         self.assertEqual(data.velocity * np.sin(data.direction), wind_vector[1])
@@ -68,9 +69,9 @@ class UniformWindVelocityProfileTest(unittest.TestCase):
         data.alpha = 0.11
         data.z_ref = 10
         wind_model = PowerLawWindVelocityProfile(data)
-        position = self.rng.uniform(size=3)
-        position[2] = -position[2]
-        time = self.rng.uniform()
+        position = self.rng.random_vector_of_double().of_size(3)()
+        position[2] = -abs(position[2])
+        time = self.rng.random_double()()
         wind_vector = wind_model.get_wind(position, time)
         wind_velocity = data.velocity * np.power(-position[2] / data.z_ref, data.alpha)
         self.assertEqual(wind_velocity * np.cos(data.direction), wind_vector[0])
@@ -108,9 +109,9 @@ class UniformWindVelocityProfileTest(unittest.TestCase):
         data.z0 = 0.005
         data.z_ref = 10
         wind_model = LogWindVelocityProfile(data)
-        position = self.rng.uniform(size=3)
+        position = self.rng.random_vector_of_double().of_size(3)()
         position[2] = -position[2]
-        time = self.rng.uniform()
+        time = self.rng.random_double()()
         wind_vector = wind_model.get_wind(position, time)
         wind_velocity = (
             data.velocity
