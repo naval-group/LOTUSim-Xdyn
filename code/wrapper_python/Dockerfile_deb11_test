@@ -10,6 +10,6 @@ RUN apt-get update -yq || true \
     python3-numpy \
     python3-nose \
     python3-pip
-ADD xdyn-*-linux_x86_64.whl /
+ADD xdyn-*-cp39-cp39-linux_x86_64.whl /
 RUN python3 -m pip install --no-index --find-links / xdyn \
  && python3 -c 'import xdyn; print(dir(xdyn))'
