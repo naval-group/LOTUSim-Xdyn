@@ -83,7 +83,7 @@ build:debian11-release:
      paths:
      - xdyn.deb
 
-build:debian11-release-python:
+build:debian11-release-python-3.9:
    stage: build
    script:
      - make NB_OF_PARALLEL_BUILDS="-j 1" debian_11_release_gcc_10_wrapper
@@ -93,6 +93,26 @@ build:debian11-release-python:
      when: on_success
      paths:
      - xdyn.deb
+     - xdyn*.whl
+
+build:debian11-release-python-3.8:
+   stage: build
+   script:
+     - make NB_OF_PARALLEL_BUILDS="-j 1" debian_11_release_gcc_10_wrapper_py308
+     - mv code/wrapper_python/*.whl .
+   artifacts:
+     when: on_success
+     paths:
+     - xdyn*.whl
+
+build:debian11-release-python-3.10:
+   stage: build
+   script:
+     - make NB_OF_PARALLEL_BUILDS="-j 1" debian_11_release_gcc_10_wrapper_py310
+     - mv code/wrapper_python/*.whl .
+   artifacts:
+     when: on_success
+     paths:
      - xdyn*.whl
 
 build:debian11-debug:
