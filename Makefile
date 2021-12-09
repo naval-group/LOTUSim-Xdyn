@@ -142,6 +142,18 @@ debian_11_release_gcc_10_wrapper: PYTHON_VERSION=3.9
 debian_11_release_gcc_10_wrapper: PYTHON_TEST_TARGET=debian_11_demo_package
 debian_11_release_gcc_10_wrapper: build-docker-python-image cmake-debian-target build-debian test-debian package-test-debian-python
 
+debian_11_release_gcc_10_wrapper_py308: BUILD_TYPE = Release
+debian_11_release_gcc_10_wrapper_py308: BUILD_DIR = build_deb11_pywrapper
+debian_11_release_gcc_10_wrapper_py308: CPACK_GENERATOR = DEB
+debian_11_release_gcc_10_wrapper_py308: DOCKER_IMAGE = xdyn-python-deb11-py308-build
+debian_11_release_gcc_10_wrapper_py308: BOOST_ROOT = /opt/boost
+debian_11_release_gcc_10_wrapper_py308: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_11_release_gcc_10_wrapper_py308: BUILD_PYTHON_WRAPPER = True
+debian_11_release_gcc_10_wrapper_py308: PYTHON_VERSION=3.8
+debian_11_release_gcc_10_wrapper_py308: PYTHON_TEST_TARGET=debian_11_py308_demo_package
+debian_11_release_gcc_10_wrapper_py308: ADDITIONAL_CMAKE_PARAMETERS = "-DPython_EXECUTABLE=/usr/local/bin/python3"
+debian_11_release_gcc_10_wrapper_py308: build-docker-python-image cmake-debian-target build-debian test-debian package-test-debian-python
+
 debian_11_release_gcc_10_wrapper_py310: BUILD_TYPE = Release
 debian_11_release_gcc_10_wrapper_py310: BUILD_DIR = build_deb11_pywrapper
 debian_11_release_gcc_10_wrapper_py310: CPACK_GENERATOR = DEB
@@ -151,7 +163,7 @@ debian_11_release_gcc_10_wrapper_py310: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_11_release_gcc_10_wrapper_py310: BUILD_PYTHON_WRAPPER = True
 debian_11_release_gcc_10_wrapper_py310: PYTHON_VERSION=3.10
 debian_11_release_gcc_10_wrapper_py310: PYTHON_TEST_TARGET=debian_11_py310_demo_package
-debian_11_release_gcc_10_wrapper_py310: ADDITIONAL_CMAKE_PARAMETERS = "-DPython_EXECUTABLE=/usr/local/bin/python3.10"
+debian_11_release_gcc_10_wrapper_py310: ADDITIONAL_CMAKE_PARAMETERS = "-DPython_EXECUTABLE=/usr/local/bin/python3"
 debian_11_release_gcc_10_wrapper_py310: build-docker-python-image cmake-debian-target build-debian test-debian package-test-debian-python
 
 debian_10_release_gcc_8_wrapper: BUILD_TYPE = Release
