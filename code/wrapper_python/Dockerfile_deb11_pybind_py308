@@ -1,0 +1,31 @@
+FROM sirehna/base-image-debian11-gcc10:2021-08-17
+RUN apt-get update -yq || true \
+ && apt-get install --yes --no-install-recommends \
+    build-essential \
+    zlib1g-dev \
+    libncurses5-dev \
+    libgdbm-dev \
+    libnss3-dev \
+    libssl-dev \
+    libreadline-dev \
+    libffi-dev \
+    libsqlite3-dev \
+    wget \
+    libbz2-dev \
+ && wget https://www.python.org/ftp/python/3.8.9/Python-3.8.9.tgz -O python.tgz \
+ && mkdir -p python_src \
+ && tar -xzf python.tgz --strip 1 -C python_src \
+ && cd python_src \
+ && ./configure --enable-optimizations \
+ && make altinstall \
+ && cd .. \
+ && rm -rf python_src \
+ && rm -f python.tgz \
+ && python3.8 --version \
+ && which python3.8 \
+ && ln -s /usr/local/bin/python3.8 /usr/local/bin/python3 \
+ && which python3
+RUN python3 -m pip install -U pip \
+ && python3 -m pip install \
+    wheel \
+    pybind11[global]==2.8.1
