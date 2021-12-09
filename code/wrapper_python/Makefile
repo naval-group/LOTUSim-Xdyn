@@ -80,7 +80,7 @@ clean:
 	@rm -f unit_tests/*.coverage
 	@rm -f unit_tests/core
 	@rm -f unit_tests/nosetests.xml
-	@find . -type d -name __pycache__ -exec rm -rf {} \;
+	@find . -type d -name __pycache__ -exec rm -rf {} \; || true
 
 
 .PHONY=xdyn-python-deb11-build
