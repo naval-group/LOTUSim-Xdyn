@@ -17,6 +17,12 @@ debian_11_build_docker_build_container: DOCKER_FILE_BUILD=Dockerfile_deb11_pybin
 debian_11_build_docker_build_container: DOCKER_FILE_TEST=Dockerfile_deb11_test
 debian_11_build_docker_build_container: build_docker_build_container
 
+debian_11_py308_build_docker_build_container: DOCKER_IMAGE_BUILD=xdyn-python-deb11-py308-build
+debian_11_py308_build_docker_build_container: DOCKER_IMAGE_TEST=xdyn-python-deb11-py308-test
+debian_11_py308_build_docker_build_container: DOCKER_FILE_BUILD=Dockerfile_deb11_pybind_py308
+debian_11_py308_build_docker_build_container: DOCKER_FILE_TEST=Dockerfile_deb11_test_py308
+debian_11_py308_build_docker_build_container: build_docker_build_container
+
 debian_11_py310_build_docker_build_container: DOCKER_IMAGE_BUILD=xdyn-python-deb11-py310-build
 debian_11_py310_build_docker_build_container: DOCKER_IMAGE_TEST=xdyn-python-deb11-py310-test
 debian_11_py310_build_docker_build_container: DOCKER_FILE_BUILD=Dockerfile_deb11_pybind_py310
@@ -34,6 +40,12 @@ debian_11_demo_package: DOCKER_IMAGE_TEST=xdyn-python-deb11-test
 debian_11_demo_package: DOCKER_FILE_BUILD=Dockerfile_deb11_pybind
 debian_11_demo_package: DOCKER_FILE_TEST=Dockerfile_deb11_test
 debian_11_demo_package: demo_package
+
+debian_11_py308_demo_package: DOCKER_IMAGE_BUILD=xdyn-python-deb11-py308-build
+debian_11_py308_demo_package: DOCKER_IMAGE_TEST=xdyn-python-deb11-py308-test
+debian_11_py308_demo_package: DOCKER_FILE_BUILD=Dockerfile_deb11_pybind_py308
+debian_11_py308_demo_package: DOCKER_FILE_TEST=Dockerfile_deb11_test_py308
+debian_11_py308_demo_package: demo_package
 
 debian_11_py310_demo_package: DOCKER_IMAGE_BUILD=xdyn-python-deb11-py310-build
 debian_11_py310_demo_package: DOCKER_IMAGE_TEST=xdyn-python-deb11-py310-test
@@ -89,6 +101,10 @@ xdyn-python-deb10-build: Dockerfile_deb10_pybind
 
 .PHONY=xdyn-python-deb11-build
 xdyn-python-deb11-build: Dockerfile_deb11_pybind
+	docker build . -f $^ -t $@
+
+.PHONY=xdyn-python-deb11-py308-build
+xdyn-python-deb11-py308-build: Dockerfile_deb11_pybind_py308
 	docker build . -f $^ -t $@
 
 .PHONY=xdyn-python-deb11-py310-build
