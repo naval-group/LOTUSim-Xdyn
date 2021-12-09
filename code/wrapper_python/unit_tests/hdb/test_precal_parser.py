@@ -7,7 +7,7 @@ import unittest
 import numpy as np
 from xdyn.data.test.precal import (added_mass_damping_matrix_inf_freq, general,
                                    precal, raos, ship_particulars)
-from xdyn.hdb import (PrecalParser, parse_precal_from_file,
+from xdyn.hdb import (PrecalFile, PrecalParser, parse_precal_from_file,
                       parse_precal_from_string, parse_rao_attributes)
 
 
@@ -15,52 +15,61 @@ class PrecalParserTest(unittest.TestCase):
     """Test class for PrecalParser"""
     def test_can_parse_empty_section(self):
         data = parse_precal_from_string("[some section]")
+        section = data.sections[0]
         self.assertEqual(1, len(data.sections))
-        self.assertEqual("some section", data.sections[0].title)
+        self.assertEqual("some section", section.title)
 
     def test_can_parse_general_section(self):
         data = parse_precal_from_string(general())
+        section = data.sections[0]
         self.assertEqual(1, len(data.sections))
-        self.assertEqual("General", data.sections[0].title)
-        self.assertEqual("NOT SPECIFIED", data.sections[0].string_values["userName"])
-        self.assertEqual("NOT SPECIFIED", data.sections[0].string_values["projectNumber"])
-        self.assertEqual("DTMB_5415_without_fins", data.sections[0].string_values["projectName"])
-        self.assertEqual("NOT SPECIFIED", data.sections[0].string_values["caseName"])
-        self.assertEqual("PRECAL - version 18.1.3", data.sections[0].string_values["sourceName"])
-        self.assertEqual("2021-07-13", data.sections[0].string_values["date"])
-        self.assertEqual("12:22:18", data.sections[0].string_values["time"])
-        self.assertEqual("Windows", data.sections[0].string_values["OS"])
-        self.assertEqual(-2, data.sections[0].scalar_values["numOmpThreads"])
-        self.assertEqual(4, data.sections[0].scalar_values["NrOmpThreads"])
-        self.assertEqual("18.1.3", data.sections[0].string_values["VersionNumber"])
-        self.assertEqual("Tue Dec 10 10:07:44 2019", data.sections[0].string_values["CreationDate"])
-        self.assertEqual(1800, data.sections[0].scalar_values["IfortVersion"])
+        self.assertEqual("General", section.title)
+        self.assertEqual("NOT SPECIFIED", section.string_values["userName"])
+        self.assertEqual("NOT SPECIFIED", section.string_values["projectNumber"])
+        self.assertEqual("DTMB_5415_without_fins", section.string_values["projectName"])
+        self.assertEqual("NOT SPECIFIED", section.string_values["caseName"])
+        self.assertEqual("PRECAL - version 18.1.3", section.string_values["sourceName"])
+        self.assertEqual("2021-07-13", section.string_values["date"])
+        self.assertEqual("12:22:18", section.string_values["time"])
+        self.assertEqual("Windows", section.string_values["OS"])
+        self.assertEqual(-2, section.scalar_values["numOmpThreads"])
+        self.assertEqual(4, section.scalar_values["NrOmpThreads"])
+        self.assertEqual("18.1.3", section.string_values["VersionNumber"])
+        self.assertEqual("Tue Dec 10 10:07:44 2019", section.string_values["CreationDate"])
+        self.assertEqual(1800, section.scalar_values["IfortVersion"])
 
     def test_can_parse_vectors(self):
         data = parse_precal_from_string(
-            "[Particulars-ship]\n"
-            "COB              = {1.519,0.000,0.066}  (ship center of buoyancy w.r.t. aft "
-            "perpendicular - centerline - keel line, calculated from geometry)\n")
-        self.assertEqual(3, len(data.sections[0].vector_values["COB"]))
-        self.assertEqual(1.519, data.sections[0].vector_values["COB"][0])
-        self.assertEqual(0.000, data.sections[0].vector_values["COB"][1])
-        self.assertEqual(0.066, data.sections[0].vector_values["COB"][2])
+        """
+        [Particulars-ship]
+        COB              = {1.519,0.000,0.066}  (ship center of buoyancy w.r.t. aft
+        perpendicular - centerline - keel line, calculated from geometry)
+        """)
+        self.assertEqual(type(data), PrecalFile)
+        section = data.sections[0]
+        self.assertEqual(1, len(data.sections))
+        self.assertEqual("Particulars-ship", section.title)
+        self.assertEqual(3, len(section.vector_values["COB"]))
+        self.assertEqual(1.519, section.vector_values["COB"][0])
+        self.assertEqual(0.000, section.vector_values["COB"][1])
+        self.assertEqual(0.066, section.vector_values["COB"][2])
 
     def test_can_parse_ship_particulars(self):
         data = parse_precal_from_string(ship_particulars())
-        self.assertEqual(3, len(data.sections[0].vector_values["COB"]))
-        self.assertEqual(70.217, data.sections[0].vector_values["COB"][0])
-        self.assertEqual(0.000, data.sections[0].vector_values["COB"][1])
-        self.assertEqual(3.659, data.sections[0].vector_values["COB"][2])
-        self.assertEqual(6.150, data.sections[0].scalar_values["T_mean"])
-        self.assertEqual(7.510, data.sections[0].vector_values["COG"][2])
+        section = data.sections[0]
+        self.assertEqual(3, len(section.vector_values["COB"]))
+        self.assertEqual(70.217, section.vector_values["COB"][0])
+        self.assertEqual(0.000, section.vector_values["COB"][1])
+        self.assertEqual(3.659, section.vector_values["COB"][2])
+        self.assertEqual(6.150, section.scalar_values["T_mean"])
+        self.assertEqual(7.510, section.vector_values["COG"][2])
 
     def test_can_parse_rao_titles(self):
-        data = parse_precal_from_string(raos())
+        data_raos = parse_precal_from_string(raos()).raos
         self.assertEqual("Signal 1: surge motion at (70.015,0.000,7.510), h=-1.000m, phi_a=0.500deg, U=0.000kn, mu=180.000deg (amplitude unit = m/m, phase unit = deg)",
-            data.raos[0].title_line)
+            data_raos[0].title_line)
         self.assertEqual("Signal 5: pitch motion at (70.015,0.000,7.510), h=-1.000m, phi_a=0.500deg, U=20.000kn, mu=90.000deg (amplitude unit = deg/m, phase unit = deg)",
-            data.raos[29].title_line)
+            data_raos[29].title_line)
 
     def test_can_parse_rao_attributes(self):
         rao_attributes = parse_rao_attributes(
@@ -80,72 +89,73 @@ class PrecalParserTest(unittest.TestCase):
         self.assertEqual("deg", rao_attributes.phase_unit)
 
     def test_full_rao_parse_test(self):
-        data = parse_precal_from_string(raos())
-
+        data_raos = parse_precal_from_string(raos()).raos
         # Amplitudes and phases - Signal 4: roll motion, U=20.000kn, mu=90.000deg
-        self.assertEqual("heave motion", data.raos[15].attributes.name)
-        self.assertTrue(np.allclose([70.015, 0.000, 7.510], data.raos[15].attributes.position))
-        self.assertEqual(-1, data.raos[15].attributes.h)
-        self.assertEqual("m", data.raos[15].attributes.h_unit)
-        self.assertEqual(0.5, data.raos[15].attributes.phi_a)
-        self.assertEqual("deg", data.raos[15].attributes.phi_a_unit)
-        self.assertEqual(12, data.raos[15].attributes.U)
-        self.assertEqual("kn", data.raos[15].attributes.U_unit)
-        self.assertEqual(90, data.raos[15].attributes.mu)
-        self.assertEqual("deg", data.raos[15].attributes.mu_unit)
-        self.assertEqual("m/m", data.raos[15].attributes.amplitude_unit)
-        self.assertEqual("deg", data.raos[15].attributes.phase_unit)
-        self.assertEqual(0.100835E+01, data.raos[15].left_column[1])
-        self.assertEqual(0.105814E+01, data.raos[15].left_column[6])
-        self.assertEqual(-0.081168, data.raos[15].right_column[1])
-        self.assertEqual(-15.504014, data.raos[15].right_column[6])
+        self.assertEqual("heave motion", data_raos[15].attributes.name)
+        self.assertTrue(np.allclose([70.015, 0.000, 7.510], data_raos[15].attributes.position))
+        self.assertEqual(-1, data_raos[15].attributes.h)
+        self.assertEqual("m", data_raos[15].attributes.h_unit)
+        self.assertEqual(0.5, data_raos[15].attributes.phi_a)
+        self.assertEqual("deg", data_raos[15].attributes.phi_a_unit)
+        self.assertEqual(12, data_raos[15].attributes.U)
+        self.assertEqual("kn", data_raos[15].attributes.U_unit)
+        self.assertEqual(90, data_raos[15].attributes.mu)
+        self.assertEqual("deg", data_raos[15].attributes.mu_unit)
+        self.assertEqual("m/m", data_raos[15].attributes.amplitude_unit)
+        self.assertEqual("deg", data_raos[15].attributes.phase_unit)
+        self.assertEqual(0.100835E+01, data_raos[15].left_column[1])
+        self.assertEqual(0.105814E+01, data_raos[15].left_column[6])
+        self.assertEqual(-0.081168, data_raos[15].right_column[1])
+        self.assertEqual(-15.504014, data_raos[15].right_column[6])
 
         # No phases - Signal 10: F_drift_m1_c4, U=20.000kn, mu=180.000deg
-        self.assertEqual("kN/m2", data.raos[38].attributes.amplitude_unit)
-        self.assertEqual(-0.655426E+01, data.raos[38].left_column[0])
-        self.assertEqual(-0.690853E+02, data.raos[38].left_column[4])
-        self.assertEqual("N.A.", data.raos[38].attributes.phase_unit)
-        self.assertEqual(0, data.raos[38].right_column[0])
-        self.assertEqual(0, data.raos[38].right_column[4])
+        self.assertEqual("kN/m2", data_raos[38].attributes.amplitude_unit)
+        self.assertEqual(-0.655426E+01, data_raos[38].left_column[0])
+        self.assertEqual(-0.690853E+02, data_raos[38].left_column[4])
+        self.assertEqual("N.A.", data_raos[38].attributes.phase_unit)
+        self.assertEqual(0, data_raos[38].right_column[0])
+        self.assertEqual(0, data_raos[38].right_column[4])
 
     def test_can_parse_from_file(self):
         filename = "data.ini"
         with open(filename, "w", encoding="utf-8") as fid:
             fid.write(precal())
         data = parse_precal_from_file(filename)
-        self.assertEqual("heave motion", data.raos[15].attributes.name)
+        raos_15 = data.raos[15]
+        self.assertEqual("heave motion", raos_15.attributes.name)
         os.remove(filename)
 
     def test_can_parse_added_mass_multi_line_vector(self):
         data = parse_precal_from_string(added_mass_damping_matrix_inf_freq())
+        section = data.sections[0]
         self.assertEqual(1, len( data.sections))
-        self.assertTrue("total_added_mass_matrix_inf_freq_U1_mu1" in data.sections[0].vector_values)
+        self.assertTrue("total_added_mass_matrix_inf_freq_U1_mu1" in section.vector_values)
         self.assertEqual(36,
-            len(data.sections[0].vector_values["total_added_mass_matrix_inf_freq_U1_mu1"]))
+            len(section.vector_values["total_added_mass_matrix_inf_freq_U1_mu1"]))
         self.assertEqual(0.110E+06,
-            data.sections[0].vector_values["total_added_mass_matrix_inf_freq_U1_mu1"][0])
+            section.vector_values["total_added_mass_matrix_inf_freq_U1_mu1"][0])
         self.assertEqual(-0.888E-01,
-            data.sections[0].vector_values["total_added_mass_matrix_inf_freq_U1_mu1"][1])
+            section.vector_values["total_added_mass_matrix_inf_freq_U1_mu1"][1])
         self.assertEqual(0.612E+01,
-            data.sections[0].vector_values["total_added_mass_matrix_inf_freq_U1_mu1"][5])
+            section.vector_values["total_added_mass_matrix_inf_freq_U1_mu1"][5])
 
-        self.assertTrue("total_added_mass_matrix_inf_freq_U1_mu2" in data.sections[0].vector_values)
+        self.assertTrue("total_added_mass_matrix_inf_freq_U1_mu2" in section.vector_values)
         self.assertEqual(36,
-            len(data.sections[0].vector_values["total_added_mass_matrix_inf_freq_U1_mu2"]))
+            len(section.vector_values["total_added_mass_matrix_inf_freq_U1_mu2"]))
         self.assertEqual(0.174E+02,
-            data.sections[0].vector_values["total_added_mass_matrix_inf_freq_U1_mu2"][29])
+            section.vector_values["total_added_mass_matrix_inf_freq_U1_mu2"][29])
 
-        self.assertTrue("total_added_mass_matrix_inf_freq_U2_mu1" in data.sections[0].vector_values)
+        self.assertTrue("total_added_mass_matrix_inf_freq_U2_mu1" in section.vector_values)
         self.assertEqual(36,
-            len(data.sections[0].vector_values["total_added_mass_matrix_inf_freq_U2_mu1"]))
+            len(section.vector_values["total_added_mass_matrix_inf_freq_U2_mu1"]))
         self.assertEqual(0.570E+01,
-            data.sections[0].vector_values["total_added_mass_matrix_inf_freq_U2_mu1"][5])
+            section.vector_values["total_added_mass_matrix_inf_freq_U2_mu1"][5])
 
-        self.assertTrue("total_added_mass_matrix_inf_freq_U2_mu2" in data.sections[0].vector_values)
+        self.assertTrue("total_added_mass_matrix_inf_freq_U2_mu2" in section.vector_values)
         self.assertEqual(36,
-                len(data.sections[0].vector_values["total_added_mass_matrix_inf_freq_U2_mu2"]))
+                len(section.vector_values["total_added_mass_matrix_inf_freq_U2_mu2"]))
         self.assertEqual(-0.119E+03,
-            data.sections[0].vector_values["total_added_mass_matrix_inf_freq_U2_mu2"][29])
+            section.vector_values["total_added_mass_matrix_inf_freq_U2_mu2"][29])
 
     def test_can_parse_added_mass_matrix(self):
         """
