@@ -83,6 +83,10 @@ clean:
 	@find . -type d -name __pycache__ -exec rm -rf {} \; || true
 
 
+.PHONY=xdyn-python-deb10-build
+xdyn-python-deb10-build: Dockerfile_deb10_pybind
+	docker build . -f $^ -t $@
+
 .PHONY=xdyn-python-deb11-build
 xdyn-python-deb11-build: Dockerfile_deb11_pybind
 	docker build . -f $^ -t $@
