@@ -81,3 +81,12 @@ clean:
 	@rm -f unit_tests/core
 	@rm -f unit_tests/nosetests.xml
 	@find . -type d -name __pycache__ -exec rm -rf {} \;
+
+
+.PHONY=xdyn-python-deb11-build
+xdyn-python-deb11-build: Dockerfile_deb11_pybind
+	docker build . -f $^ -t $@
+
+.PHONY=xdyn-python-deb11-py310-build
+xdyn-python-deb11-py310-build: Dockerfile_deb11_pybind_py310
+	docker build . -f $^ -t $@
