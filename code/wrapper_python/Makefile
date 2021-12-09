@@ -13,20 +13,20 @@ debian_10_build_docker_build_container: build_docker_build_container
 
 debian_11_build_docker_build_container: DOCKER_IMAGE_BUILD=xdyn-python-deb11-build
 debian_11_build_docker_build_container: DOCKER_IMAGE_TEST=xdyn-python-deb11-test
-debian_11_build_docker_build_container: DOCKER_FILE_BUILD=Dockerfile_deb11_pybind
-debian_11_build_docker_build_container: DOCKER_FILE_TEST=Dockerfile_deb11_test
+debian_11_build_docker_build_container: DOCKER_FILE_BUILD=Dockerfile_deb11_py309_pybind
+debian_11_build_docker_build_container: DOCKER_FILE_TEST=Dockerfile_deb11_py309_test
 debian_11_build_docker_build_container: build_docker_build_container
 
 debian_11_py308_build_docker_build_container: DOCKER_IMAGE_BUILD=xdyn-python-deb11-py308-build
 debian_11_py308_build_docker_build_container: DOCKER_IMAGE_TEST=xdyn-python-deb11-py308-test
-debian_11_py308_build_docker_build_container: DOCKER_FILE_BUILD=Dockerfile_deb11_pybind_py308
-debian_11_py308_build_docker_build_container: DOCKER_FILE_TEST=Dockerfile_deb11_test_py308
+debian_11_py308_build_docker_build_container: DOCKER_FILE_BUILD=Dockerfile_deb11_py308_pybind
+debian_11_py308_build_docker_build_container: DOCKER_FILE_TEST=Dockerfile_deb11_py308_test
 debian_11_py308_build_docker_build_container: build_docker_build_container
 
 debian_11_py310_build_docker_build_container: DOCKER_IMAGE_BUILD=xdyn-python-deb11-py310-build
 debian_11_py310_build_docker_build_container: DOCKER_IMAGE_TEST=xdyn-python-deb11-py310-test
-debian_11_py310_build_docker_build_container: DOCKER_FILE_BUILD=Dockerfile_deb11_pybind_py310
-debian_11_py310_build_docker_build_container: DOCKER_FILE_TEST=Dockerfile_deb11_test_py310
+debian_11_py310_build_docker_build_container: DOCKER_FILE_BUILD=Dockerfile_deb11_py310_pybind
+debian_11_py310_build_docker_build_container: DOCKER_FILE_TEST=Dockerfile_deb11_py310_test
 debian_11_py310_build_docker_build_container: build_docker_build_container
 
 debian_10_demo_package: DOCKER_IMAGE_BUILD=xdyn-python-deb10-build
@@ -37,20 +37,20 @@ debian_10_demo_package: demo_package
 
 debian_11_demo_package: DOCKER_IMAGE_BUILD=xdyn-python-deb11-build
 debian_11_demo_package: DOCKER_IMAGE_TEST=xdyn-python-deb11-test
-debian_11_demo_package: DOCKER_FILE_BUILD=Dockerfile_deb11_pybind
-debian_11_demo_package: DOCKER_FILE_TEST=Dockerfile_deb11_test
+debian_11_demo_package: DOCKER_FILE_BUILD=Dockerfile_deb11_py309_pybind
+debian_11_demo_package: DOCKER_FILE_TEST=Dockerfile_deb11_py309_test
 debian_11_demo_package: demo_package
 
 debian_11_py308_demo_package: DOCKER_IMAGE_BUILD=xdyn-python-deb11-py308-build
 debian_11_py308_demo_package: DOCKER_IMAGE_TEST=xdyn-python-deb11-py308-test
-debian_11_py308_demo_package: DOCKER_FILE_BUILD=Dockerfile_deb11_pybind_py308
-debian_11_py308_demo_package: DOCKER_FILE_TEST=Dockerfile_deb11_test_py308
+debian_11_py308_demo_package: DOCKER_FILE_BUILD=Dockerfile_deb11_py308_pybind
+debian_11_py308_demo_package: DOCKER_FILE_TEST=Dockerfile_deb11_py308_test
 debian_11_py308_demo_package: demo_package
 
 debian_11_py310_demo_package: DOCKER_IMAGE_BUILD=xdyn-python-deb11-py310-build
 debian_11_py310_demo_package: DOCKER_IMAGE_TEST=xdyn-python-deb11-py310-test
-debian_11_py310_demo_package: DOCKER_FILE_BUILD=Dockerfile_deb11_pybind_py310
-debian_11_py310_demo_package: DOCKER_FILE_TEST=Dockerfile_deb11_test_py310
+debian_11_py310_demo_package: DOCKER_FILE_BUILD=Dockerfile_deb11_py310_pybind
+debian_11_py310_demo_package: DOCKER_FILE_TEST=Dockerfile_deb11_py310_test
 debian_11_py310_demo_package: demo_package
 
 DIR := $(notdir $(shell pwd))
@@ -100,13 +100,13 @@ xdyn-python-deb10-build: Dockerfile_deb10_pybind
 	docker build . -f $^ -t $@
 
 .PHONY=xdyn-python-deb11-build
-xdyn-python-deb11-build: Dockerfile_deb11_pybind
+xdyn-python-deb11-build: Dockerfile_deb11_py309_pybind
 	docker build . -f $^ -t $@
 
 .PHONY=xdyn-python-deb11-py308-build
-xdyn-python-deb11-py308-build: Dockerfile_deb11_pybind_py308
+xdyn-python-deb11-py308-build: Dockerfile_deb11_py308_pybind
 	docker build . -f $^ -t $@
 
 .PHONY=xdyn-python-deb11-py310-build
-xdyn-python-deb11-py310-build: Dockerfile_deb11_pybind_py310
+xdyn-python-deb11-py310-build: Dockerfile_deb11_py310_pybind
 	docker build . -f $^ -t $@
