@@ -41,6 +41,12 @@ debian_11_demo_package: DOCKER_FILE_BUILD=Dockerfile_deb11_py309_pybind
 debian_11_demo_package: DOCKER_FILE_TEST=Dockerfile_deb11_py309_test
 debian_11_demo_package: demo_package
 
+debian_11_py307_demo_package: DOCKER_IMAGE_BUILD=xdyn-python-deb11-py307-build
+debian_11_py307_demo_package: DOCKER_IMAGE_TEST=xdyn-python-deb11-py307-test
+debian_11_py307_demo_package: DOCKER_FILE_BUILD=Dockerfile_deb11_py3yz_pybind
+debian_11_py307_demo_package: DOCKER_FILE_TEST=Dockerfile_deb11_py3yz_test
+debian_11_py307_demo_package: demo_package
+
 debian_11_py308_demo_package: DOCKER_IMAGE_BUILD=xdyn-python-deb11-py308-build
 debian_11_py308_demo_package: DOCKER_IMAGE_TEST=xdyn-python-deb11-py308-test
 debian_11_py308_demo_package: DOCKER_FILE_BUILD=Dockerfile_deb11_py308_pybind
@@ -63,9 +69,9 @@ DOCKER_RUN_TEST_BASH=$(DOCKER_AS_USER) $(DOCKER_IMAGE_TEST) /bin/bash -c
 build_docker_build_container:
 	docker build . -f ${DOCKER_FILE_BUILD} -t ${DOCKER_IMAGE_BUILD}
 
-demo_package: demo_package_build demo_package_test_build demo_package_test_run
+demo_package: demo_package_build_wheel demo_package_test_build demo_package_test_run
 
-demo_package_build:
+demo_package_build_wheel:
 	$(DOCKER_RUN_BUILD_BASH) \
 	    "${PYTHON} setup.py bdist_wheel &&\
 		mv dist/*.whl ."
@@ -103,6 +109,14 @@ xdyn-python-deb10-build: Dockerfile_deb10_pybind
 xdyn-python-deb11-build: Dockerfile_deb11_py309_pybind
 	docker build . -f $^ -t $@
 
+.PHONY=xdyn-python-deb11-py307-build
+xdyn-python-deb11-py307-build:
+	docker build . \
+		--build-arg PYTHON_MAJOR_VERSION=3 \
+		--build-arg PYTHON_MINOR_VERSION=7 \
+		--build-arg PYTHON_PATCH_VERSION=12 \
+		-f Dockerfile_deb11_py3yz_pybind -t $@
+
 .PHONY=xdyn-python-deb11-py308-build
 xdyn-python-deb11-py308-build: Dockerfile_deb11_py308_pybind
 	docker build . -f $^ -t $@
@@ -110,3 +124,11 @@ xdyn-python-deb11-py308-build: Dockerfile_deb11_py308_pybind
 .PHONY=xdyn-python-deb11-py310-build
 xdyn-python-deb11-py310-build: Dockerfile_deb11_py310_pybind
 	docker build . -f $^ -t $@
+
+.PHONY=xdyn-python-deb11-py307-test
+xdyn-python-deb11-py307-test:
+	docker build . \
+		--build-arg PYTHON_MAJOR_VERSION=3 \
+		--build-arg PYTHON_MINOR_VERSION=7 \
+		--build-arg PYTHON_PATCH_VERSION=12 \
+		-f Dockerfile_deb11_py3yz_pytest -t $@
