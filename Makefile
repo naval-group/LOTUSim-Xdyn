@@ -187,7 +187,7 @@ debian_10_release_gcc_8_wrapper: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_10_release_gcc_8_wrapper: BUILD_PYTHON_WRAPPER = True
 debian_10_release_gcc_8_wrapper: PYTHON_VERSION=3.7
 debian_10_release_gcc_8_wrapper: PYTHON_TEST_TARGET=debian_10_demo_package
-debian_10_release_gcc_8_wrapper: build-docker-python-image cmake-debian-target build-debian test-debian package-test-debian-python
+debian_10_release_gcc_8_wrapper: build-docker-python-image cmake-debian-target build-debian test-debian package-test-debian-python-specific-deb10-gcc8
 
 build-docker-python-image:
 	make -C code/wrapper_python ${DOCKER_IMAGE}
@@ -198,6 +198,12 @@ package-test-debian-python:
 	# @rm -rf code/wrapper_python/*.whl
 	@mkdir -p code/wrapper_python/build
 	cp -rf ${BUILD_DIR}/lib.linux-x86_64-${PYTHON_VERSION} code/wrapper_python/build/.
+	make -C code/wrapper_python ${PYTHON_TEST_TARGET}
+
+package-test-debian-python-specific-deb10-gcc8:
+	@mkdir -p code/wrapper_python/build/lib.linux-x86_64-${PYTHON_VERSION}
+	cp -rf ${BUILD_DIR}/lib.linux-x86_64-${PYTHON_VERSION}/xdyn.so \
+		code/wrapper_python/build/lib.linux-x86_64-${PYTHON_VERSION}/xdyn.cpython-37m-x86_64-linux-gnu.so
 	make -C code/wrapper_python ${PYTHON_TEST_TARGET}
 
 windows_gccx_posix: BUILD_TYPE=Release
