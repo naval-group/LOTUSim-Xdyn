@@ -27,7 +27,8 @@ pybind11_add_module(${PYTHON_PACKAGE_NAME}
     src/py_xdyn_hdb.cpp
     )
 set_target_properties(${PYTHON_PACKAGE_NAME} PROPERTIES OUTPUT_NAME "xdyn")
-set_target_properties(${PYTHON_PACKAGE_NAME} PROPERTIES SUFFIX ".cpython-${Python_VERSION_MAJOR}${Python_VERSION_MINOR}-x86_64-linux-gnu.so")
+
+# set_target_properties(${PYTHON_PACKAGE_NAME} PROPERTIES SUFFIX ".cpython-${Python_VERSION_MAJOR}${Python_VERSION_MINOR}-x86_64-linux-gnu.so")
 
 message(STATUS "ssc_INCLUDE_DIRS ${ssc_INCLUDE_DIRS}")
 target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE ${Python_INCLUDE_DIRS})
