@@ -201,6 +201,9 @@ package-test-debian-python:
 	make -C code/wrapper_python ${PYTHON_TEST_TARGET}
 
 package-test-debian-python-specific-deb10-gcc8:
+	# @rm -rf code/wrapper_python/build
+	# @rm -rf code/wrapper_python/dist
+	# @rm -rf code/wrapper_python/*.whl
 	@mkdir -p code/wrapper_python/build/lib.linux-x86_64-${PYTHON_VERSION}
 	cp -rf ${BUILD_DIR}/lib.linux-x86_64-${PYTHON_VERSION}/xdyn.so \
 		code/wrapper_python/build/lib.linux-x86_64-${PYTHON_VERSION}/xdyn.cpython-37m-x86_64-linux-gnu.so
