@@ -1,0 +1,14 @@
+ARG PYTHON_MAJOR_VERSION=3
+ARG PYTHON_MINOR_VERSION=7
+ARG PYTHON_PATCH_VERSION=12
+FROM python:${PYTHON_MAJOR_VERSION}.${PYTHON_MINOR_VERSION}.${PYTHON_PATCH_VERSION}-slim-bullseye
+# One requires:
+# - python3:
+# - python3-numpy: Numpy is a dependency for xdyn
+# - python3-pip: Needed to install the wheel
+RUN python3 -m pip install -U pip \
+ && python3 -m pip install \
+    numpy
+ADD xdyn*${PYTHON_MAJOR_VERSION}${PYTHON_MINOR_VERSION}*-linux_x86_64.whl /
+RUN python3 -m pip install --no-index --find-links / xdyn \
+ && python3 -c 'import xdyn; print(dir(xdyn))'
