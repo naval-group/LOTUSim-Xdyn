@@ -1,4 +1,33 @@
 FROM sirehna/base-image-debian11-gcc10:2021-08-17
+
+RUN apt-get install -y \
+    build-essential \
+    autoconf \
+    libtool \
+    pkg-config \
+    git
+
+ARG GIT_GRPC_TAG=v1.30.2
+# ARG GIT_GRPC_TAG=v1.42.0
+RUN git clone --recurse-submodules -b ${GIT_GRPC_TAG} https://github.com/grpc/grpc grpc_src \
+ && cd grpc_src \
+ && mkdir -p cmake/build \
+ && cd cmake/build \
+ && cmake \
+      -D gRPC_INSTALL:BOOL=ON \
+      -D CMAKE_INSTALL_PREFIX=/opt/grpc \
+      -D CMAKE_BUILD_TYPE=Release \
+      -D gRPC_BUILD_TESTS:BOOL=OFF \
+      -D BUILD_SHARED_LIBS:BOOL=OFF \
+      -D CMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON \
+      -D CMAKE_C_FLAGS="-fPIC" \
+      -D CMAKE_CXX_FLAGS="-fPIC" \
+      -D CMAKE_VERBOSE_MAKEFILE:BOOL=OFF \
+      ../.. \
+ && make install \
+ && cd ../.. \
+ && rm -rf grpc_src
+
 ARG PYTHON_MAJOR_VERSION=3
 ARG PYTHON_MINOR_VERSION=7
 ARG PYTHON_PATCH_VERSION=12
