@@ -141,6 +141,23 @@ xdyn-python-deb11-py308-test:
 		--build-arg PYTHON_PATCH_VERSION=12 \
 		-f Dockerfile_deb11_py3yz_test -t $@
 
+
+.PHONY=xdyn-python-deb11-py309-build
+xdyn-python-deb11-py309-build:
+	docker build . \
+		--build-arg PYTHON_MAJOR_VERSION=3 \
+		--build-arg PYTHON_MINOR_VERSION=9 \
+		--build-arg PYTHON_PATCH_VERSION=9 \
+		-f Dockerfile_deb11_py3yz_pybind -t $@
+
+.PHONY=xdyn-python-deb11-py309-test
+xdyn-python-deb11-py309-test:
+	docker build . \
+		--build-arg PYTHON_MAJOR_VERSION=3 \
+		--build-arg PYTHON_MINOR_VERSION=9 \
+		--build-arg PYTHON_PATCH_VERSION=9 \
+		-f Dockerfile_deb11_py3yz_test -t $@
+
 .PHONY=xdyn-python-deb11-py310-build
 xdyn-python-deb11-py310-build:
 	docker build . \
