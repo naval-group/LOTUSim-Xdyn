@@ -134,7 +134,7 @@ debian_11_release_gcc_10: cmake-debian-target build-debian test-debian
 debian_11_release_gcc_10_wrapper: BUILD_TYPE = Release
 debian_11_release_gcc_10_wrapper: BUILD_DIR = build_deb11_pywrapper
 debian_11_release_gcc_10_wrapper: CPACK_GENERATOR = DEB
-debian_11_release_gcc_10_wrapper: DOCKER_IMAGE = xdyn-python-deb11-build
+debian_11_release_gcc_10_wrapper: DOCKER_IMAGE = xdyn-python-deb11-py309-build
 debian_11_release_gcc_10_wrapper: BOOST_ROOT = /opt/boost
 debian_11_release_gcc_10_wrapper: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_11_release_gcc_10_wrapper: BUILD_PYTHON_WRAPPER = True
