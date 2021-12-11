@@ -1,6 +1,7 @@
 #include "py_sandbox.hpp"
 #include "py_ssc.hpp"
 #include "py_xdyn_core.hpp"
+#include "py_xdyn_exe.hpp"
 #include "py_xdyn_data.hpp"
 #include "py_xdyn_env.hpp"
 #include "py_xdyn_hdb.hpp"
@@ -23,6 +24,7 @@ PYBIND11_MODULE(xdyn, m) {
            :toctree: _generate
     )pbdoc";
     py_add_module_sandbox(m);
+    py_add_module_xdyn_exe(m);
     py_add_module_ssc(m);
     py_add_module_xdyn_core(m);
     py_add_module_xdyn_data(m);

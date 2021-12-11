@@ -21,10 +21,14 @@ pybind11_add_module(${PYTHON_PACKAGE_NAME}
     src/py_sandbox.cpp
     src/py_ssc.cpp
     src/py_xdyn_core.cpp
+    src/py_xdyn_exe.cpp
     src/py_xdyn_data.cpp
     src/py_xdyn_env.cpp
     src/py_xdyn_force.cpp
     src/py_xdyn_hdb.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../executables/src/XdynCommandLineArguments.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../executables/src/ErrorReporter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../executables/src/build_observers_description.cpp
     )
 set_target_properties(${PYTHON_PACKAGE_NAME} PROPERTIES OUTPUT_NAME "xdyn")
 
@@ -42,10 +46,14 @@ target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${en
 target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${yaml_parser_INCLUDE_DIRS}>)
 target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${hdb_interpolators_INCLUDE_DIRS}>)
 target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${core_INCLUDE_DIRS}>)
+target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${interface_hdf5_INCLUDE_DIRS}>)
+target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../executables/inc)
+target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../listeners_and_controllers/inc)
+target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../observers_and_api/inc)
 target_include_directories(${PYTHON_PACKAGE_NAME} SYSTEM PRIVATE $<BUILD_INTERFACE:${eigen_INCLUDE_DIRS}>)
 target_include_directories(${PYTHON_PACKAGE_NAME} SYSTEM PRIVATE $<BUILD_INTERFACE:${Boost_INCLUDE_DIRS}>)
 target_include_directories(${PYTHON_PACKAGE_NAME} SYSTEM PRIVATE $<BUILD_INTERFACE:${YAML_CPP_INCLUDE_DIRS}>)
-
+target_include_directories(${PYTHON_PACKAGE_NAME} SYSTEM PRIVATE ${HDF5_INCLUDE_DIR})
 
 target_link_libraries(${PYTHON_PACKAGE_NAME} PRIVATE
     $<TARGET_OBJECTS:random_data_generator_object>
@@ -68,22 +76,21 @@ target_link_libraries(${PYTHON_PACKAGE_NAME} PRIVATE
     $<TARGET_OBJECTS:solver_object>
     $<TARGET_OBJECTS:core>
     $<TARGET_OBJECTS:get_git_sha>
-    # $<TARGET_OBJECTS:observers_and_api>
-    # $<TARGET_OBJECTS:listeners_and_controllers>
+    $<TARGET_OBJECTS:observers_and_api>
+    $<TARGET_OBJECTS:listeners_and_controllers>
     $<TARGET_OBJECTS:force_models>
     $<TARGET_OBJECTS:environment_models>
     $<TARGET_OBJECTS:external_file_formats>
     $<TARGET_OBJECTS:mesh>
     $<TARGET_OBJECTS:yaml_parser>
-    # $<TARGET_OBJECTS:fmi_simulator>
+    $<TARGET_OBJECTS:fmi_simulator>
     $<TARGET_OBJECTS:external_data_structures>
     $<TARGET_OBJECTS:hdb_interpolators>
     $<TARGET_OBJECTS:interface_hdf5>
-    # $<TARGET_OBJECTS:gz_curves>
-    #$<TARGET_OBJECTS:grpc>
+    $<TARGET_OBJECTS:gz_curves>
+    $<TARGET_OBJECTS:grpc>
     $<TARGET_OBJECTS:test_data_generator>
     )
-
 
 TARGET_LINK_LIBRARIES(${PYTHON_PACKAGE_NAME} PRIVATE yaml-cpp)
 TARGET_LINK_LIBRARIES(${PYTHON_PACKAGE_NAME} PRIVATE gfortran)
@@ -98,10 +105,12 @@ ELSE()
     TARGET_LINK_LIBRARIES(${PYTHON_PACKAGE_NAME} PUBLIC pthread)
 ENDIF()
 
-#target_link_libraries(${PYTHON_PACKAGE_NAME} PRIVATE
+target_link_libraries(${PYTHON_PACKAGE_NAME} PRIVATE
 #    ${Boost_PROGRAM_OPTIONS_LIBRARY}
 #     boost_program_options_descriptions_static
-#     ${GRPC_GRPCPP_UNSECURE}
-#     ${PROTOBUF_LIBPROTOBUF}
-#     ${Boost_THREAD_LIBRARY}
-#   )
+     ${GRPC_GRPCPP_UNSECURE}
+     ${PROTOBUF_LIBPROTOBUF}
+     ${Boost_THREAD_LIBRARY}
+   )
+message(STATUS "GRPC_GRPCPP_UNSECURE: ${GRPC_GRPCPP_UNSECURE}")
+message(STATUS "PROTOBUF_LIBPROTOBUF: ${PROTOBUF_LIBPROTOBUF}")
