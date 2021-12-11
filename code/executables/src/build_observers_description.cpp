@@ -51,7 +51,7 @@ std::string serialize_command(const XdynCommandLineArguments& inputData)
     return s.str();
 }
 
-void add_observer_from_cli_dash_o_option(const XdynCommandLineArguments& input_data, std::vector<YamlOutput>& out);
+void add_observer_from_cli_dash_o_option(const XdynCommandLineArguments& input_data, ListOfObservers& out);
 void add_observer_from_cli_dash_o_option(
         const XdynCommandLineArguments& input_data,
         ListOfObservers& out)
