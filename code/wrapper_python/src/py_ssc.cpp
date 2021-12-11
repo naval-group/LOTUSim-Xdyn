@@ -25,6 +25,9 @@
 #include "ssc/ssc/integrate/Rectangle.hpp"
 #include "ssc/ssc/integrate/Simpson.hpp"
 #include "ssc/ssc/integrate/TrapezoidalIntegration.hpp"
+#include "ssc/ssc/solver/ContinuousSystem.hpp"
+#include "ssc/ssc/solver/Scheduler.hpp"
+#include "ssc/ssc/solver/steppers.hpp"
 #include <sstream>
 
 namespace py = pybind11;
@@ -363,6 +366,24 @@ void py_add_module_ssc_integrate(py::module& m_ssc)
         ;
 }
 
+
+
+void py_add_module_ssc_solver(py::module& m_ssc);
+void py_add_module_ssc_solver(py::module& m_ssc)
+{
+    py::module m_ssc_solver = m_ssc.def_submodule("solver");
+
+    py::class_<ssc::solver::Scheduler>(m_ssc_solver, "Scheduler")
+        .def(py::init<const double /*tstart*/, const double /*tend_*/, const double /*dt*/>(),
+            py::arg("tstart"),
+            py::arg("tend"),
+            py::arg("dt"))
+        ;
+    py::class_<ssc::solver::EulerStepper>(m_ssc_solver, "EulerStepper");
+    py::class_<ssc::solver::RK4Stepper>(m_ssc_solver, "RK4Stepper");
+    py::class_<ssc::solver::RKCK>(m_ssc_solver, "RKCK");
+}
+
 void py_add_module_ssc(py::module& m)
 {
     py::module m_ssc = m.def_submodule("ssc");
@@ -370,4 +391,5 @@ void py_add_module_ssc(py::module& m)
     py_add_module_ssc_kinematics(m_ssc);
     py_add_module_ssc_integrate(m_ssc);
     py_add_module_ssc_random(m_ssc);
+    py_add_module_ssc_solver(m_ssc);
 }
