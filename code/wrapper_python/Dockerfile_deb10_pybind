@@ -1,4 +1,4 @@
-FROM sirehna/base-image-debian10-gcc8-xdyn:2021-04-16
+FROM sirehna/base-image-debian10-gcc8-xdyn:2021-12-12
 RUN apt-get update -yq || true \
  && apt-get install --yes --no-install-recommends \
     cmake \
