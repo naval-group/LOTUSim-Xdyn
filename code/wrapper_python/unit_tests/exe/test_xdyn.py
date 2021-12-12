@@ -3,7 +3,6 @@ Unit test for XDyn
 """
 import os
 import unittest
-from json import load
 
 from xdyn import ErrorReporter, XdynCommandLineArguments, run
 from xdyn.data.yaml import falling_ball_example
