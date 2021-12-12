@@ -109,7 +109,7 @@ debian_10_debug_gcc_8: cmake-debian-target build-debian
 debian_11_debug_gcc_10: BUILD_TYPE = Debug
 debian_11_debug_gcc_10: BUILD_DIR = build_deb11_dbg
 debian_11_debug_gcc_10: CPACK_GENERATOR = DEB
-debian_11_debug_gcc_10: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-08-17
+debian_11_debug_gcc_10: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-12-12
 debian_11_debug_gcc_10: BOOST_ROOT = /opt/boost
 debian_11_debug_gcc_10: BUILD_PYTHON_WRAPPER = False
 debian_11_debug_gcc_10: cmake-debian-target build-debian
@@ -117,7 +117,7 @@ debian_11_debug_gcc_10: cmake-debian-target build-debian
 debian_11_profile_gcc_10: BUILD_TYPE = Profile
 debian_11_profile_gcc_10: BUILD_DIR = build_deb11_profile
 debian_11_profile_gcc_10: CPACK_GENERATOR = DEB
-debian_11_profile_gcc_10: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-08-17
+debian_11_profile_gcc_10: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-12-12
 debian_11_profile_gcc_10: BOOST_ROOT = /opt/boost
 debian_11_profile_gcc_10: BUILD_PYTHON_WRAPPER = False
 debian_11_profile_gcc_10: cmake-debian-target build-debian
@@ -125,7 +125,7 @@ debian_11_profile_gcc_10: cmake-debian-target build-debian
 debian_11_release_gcc_10: BUILD_TYPE = Release
 debian_11_release_gcc_10: BUILD_DIR = build_deb11
 debian_11_release_gcc_10: CPACK_GENERATOR = DEB
-debian_11_release_gcc_10: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-08-17
+debian_11_release_gcc_10: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-12-12
 debian_11_release_gcc_10: BOOST_ROOT = /opt/boost
 debian_11_release_gcc_10: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_11_release_gcc_10: BUILD_PYTHON_WRAPPER = False
