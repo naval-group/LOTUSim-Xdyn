@@ -32,11 +32,11 @@ DOCKER_AS_USER:=$(DOCKER_AS_ROOT) -u $(shell id -u):$(shell id -g)
 DOCKER_RUN_BUILD_BASH=$(DOCKER_AS_USER) $(DOCKER_IMAGE_BUILD) /bin/bash -c
 DOCKER_RUN_TEST_BASH=$(DOCKER_AS_USER) $(DOCKER_IMAGE_TEST) /bin/bash -c
 
-demo_package: \
-	${DOCKER_IMAGE_BUILD} \
-	${DOCKER_IMAGE_TEST} \
-	demo_package_build_wheel \
-	demo_package_test_run
+demo_package:
+	make ${DOCKER_IMAGE_BUILD}
+	make DOCKER_IMAGE_BUILD=${DOCKER_IMAGE_BUILD} demo_package_build_wheel
+	make ${DOCKER_IMAGE_TEST}
+	make DOCKER_IMAGE_TEST=${DOCKER_IMAGE_TEST} demo_package_test_run
 
 demo_package_build_wheel:
 	$(DOCKER_RUN_BUILD_BASH) \
@@ -48,7 +48,7 @@ demo_package_test_run:
 
 demo_package_test_run_for_a_specific_file:
 	$(DOCKER_RUN_TEST_BASH) \
-		"cd unit_tests/force && ${PYTHON} test_maneuveringforcemodel.py"
+		"cd unit_tests/exe && ${PYTHON} test_xdyn.py"
 
 clean:
 	@rm -rf build
@@ -70,70 +70,82 @@ xdyn-python-deb10-build: Dockerfile_deb10_pybind
 	docker build . -f $^ -t $@
 
 .PHONY=xdyn-python-deb11-build
-xdyn-python-deb11-build: Dockerfile_deb11_py309_pybind
-	docker build . -f $^ -t $@
+xdyn-python-deb11-build:
+	docker build \
+		--build-arg PYTHON_MAJOR_VERSION=3 \
+		--build-arg PYTHON_MINOR_VERSION=9 \
+		--build-arg PYTHON_PATCH_VERSION=9 \
+		-f Dockerfile_deb11_py3yz_pybind \
+		-t $@ .
 
 .PHONY=xdyn-python-deb11-py307-build
 xdyn-python-deb11-py307-build:
-	docker build . \
+	docker build \
 		--build-arg PYTHON_MAJOR_VERSION=3 \
 		--build-arg PYTHON_MINOR_VERSION=7 \
 		--build-arg PYTHON_PATCH_VERSION=12 \
-		-f Dockerfile_deb11_py3yz_pybind -t $@
+		-f Dockerfile_deb11_py3yz_pybind \
+		-t $@ .
 
 .PHONY=xdyn-python-deb11-py307-test
 xdyn-python-deb11-py307-test:
-	docker build . \
+	docker build \
 		--build-arg PYTHON_MAJOR_VERSION=3 \
 		--build-arg PYTHON_MINOR_VERSION=7 \
 		--build-arg PYTHON_PATCH_VERSION=12 \
-		-f Dockerfile_deb11_py3yz_test -t $@
+		-f Dockerfile_deb11_py3yz_test \
+		-t $@ .
 
 .PHONY=xdyn-python-deb11-py308-build
 xdyn-python-deb11-py308-build:
-	docker build . \
+	docker build \
 		--build-arg PYTHON_MAJOR_VERSION=3 \
 		--build-arg PYTHON_MINOR_VERSION=8 \
 		--build-arg PYTHON_PATCH_VERSION=12 \
-		-f Dockerfile_deb11_py3yz_pybind -t $@
+		-f Dockerfile_deb11_py3yz_pybind \
+		-t $@ .
 
 .PHONY=xdyn-python-deb11-py308-test
 xdyn-python-deb11-py308-test:
-	docker build . \
+	docker build \
 		--build-arg PYTHON_MAJOR_VERSION=3 \
 		--build-arg PYTHON_MINOR_VERSION=8 \
 		--build-arg PYTHON_PATCH_VERSION=12 \
-		-f Dockerfile_deb11_py3yz_test -t $@
-
+		-f Dockerfile_deb11_py3yz_test \
+		-t $@ .
 
 .PHONY=xdyn-python-deb11-py309-build
 xdyn-python-deb11-py309-build:
-	docker build . \
+	docker build \
 		--build-arg PYTHON_MAJOR_VERSION=3 \
 		--build-arg PYTHON_MINOR_VERSION=9 \
 		--build-arg PYTHON_PATCH_VERSION=9 \
-		-f Dockerfile_deb11_py3yz_pybind -t $@
+		-f Dockerfile_deb11_py3yz_pybind \
+		-t $@ .
 
 .PHONY=xdyn-python-deb11-py309-test
 xdyn-python-deb11-py309-test:
-	docker build . \
+	docker build \
 		--build-arg PYTHON_MAJOR_VERSION=3 \
 		--build-arg PYTHON_MINOR_VERSION=9 \
 		--build-arg PYTHON_PATCH_VERSION=9 \
-		-f Dockerfile_deb11_py3yz_test -t $@
+		-f Dockerfile_deb11_py3yz_test \
+		-t $@ .
 
 .PHONY=xdyn-python-deb11-py310-build
 xdyn-python-deb11-py310-build:
-	docker build . \
+	docker build \
 		--build-arg PYTHON_MAJOR_VERSION=3 \
 		--build-arg PYTHON_MINOR_VERSION=10 \
 		--build-arg PYTHON_PATCH_VERSION=1 \
-		-f Dockerfile_deb11_py3yz_pybind -t $@
+		-f Dockerfile_deb11_py3yz_pybind \
+		-t $@ .
 
 .PHONY=xdyn-python-deb11-py310-test
 xdyn-python-deb11-py310-test:
-	docker build . \
+	docker build \
 		--build-arg PYTHON_MAJOR_VERSION=3 \
 		--build-arg PYTHON_MINOR_VERSION=10 \
 		--build-arg PYTHON_PATCH_VERSION=1 \
-		-f Dockerfile_deb11_py3yz_test -t $@
+		-f Dockerfile_deb11_py3yz_test \
+		-t $@ .
