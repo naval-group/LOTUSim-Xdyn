@@ -178,6 +178,18 @@ debian_11_release_gcc_10_wrapper_py310: PYTHON_TEST_TARGET=debian_11_py310_demo_
 debian_11_release_gcc_10_wrapper_py310: ADDITIONAL_CMAKE_PARAMETERS = "-DPython_EXECUTABLE=/usr/local/bin/python3"
 debian_11_release_gcc_10_wrapper_py310: build-docker-python-image cmake-debian-target build-debian test-debian package-test-debian-python
 
+debian_11_release_gcc_10_wrapper_python_all:
+	@echo "Create Python3 wheels for Python 3.7, 3.8, 3.9 and 3.10"
+	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.*
+	make debian_11_release_gcc_10_wrapper_py307
+	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.*
+	make debian_11_release_gcc_10_wrapper_py308
+	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.*
+	make debian_11_release_gcc_10_wrapper
+	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.*
+	make debian_11_release_gcc_10_wrapper_py310
+	ls code/wrapper_python/*.whl
+
 debian_10_release_gcc_8_wrapper: BUILD_TYPE = Release
 debian_10_release_gcc_8_wrapper: BUILD_DIR = build_deb10_pywrapper
 debian_10_release_gcc_8_wrapper: CPACK_GENERATOR = DEB
