@@ -180,13 +180,13 @@ debian_11_release_gcc_10_wrapper_py310: build-docker-python-image cmake-debian-t
 
 debian_11_release_gcc_10_wrapper_python_all:
 	@echo "Create Python3 wheels for Python 3.7, 3.8, 3.9 and 3.10"
-	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.*
+	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.7
 	make debian_11_release_gcc_10_wrapper_py307
-	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.*
+	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.8
 	make debian_11_release_gcc_10_wrapper_py308
-	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.*
+	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.9
 	make debian_11_release_gcc_10_wrapper
-	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.*
+	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.10
 	make debian_11_release_gcc_10_wrapper_py310
 	ls code/wrapper_python/*.whl
 	make -C code/wrapper_python test_additional_platforms_depending_on_debian
