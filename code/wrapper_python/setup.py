@@ -1,5 +1,6 @@
 # This setup.py creates a wheel file from the Python XDyn library built with CMake
 import os
+
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
 
@@ -14,9 +15,11 @@ class CMakeBuild(build_ext):
     pass
 
 
+version = os.environ.get("GIT_VERSION", "0.0.0")
+
 setup(
     name="xdyn",
-    version="0.0.1",
+    version=version,
     author="Sirehna",
     author_email="sirehna@sirehna.com",
     description="A Python wrapper for XDyn",
