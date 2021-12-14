@@ -49,7 +49,7 @@ package:
 
 package_build_wheel:
 	$(eval GIT_VERSION := $(shell $(DOCKER_AS_USER) -v $(shell pwd)/../..:/all $(DOCKER_IMAGE_BUILD) \
-		/bin/bash -c "cd /all && git describe --abbrev=0 --tag | cut -f2 -dv"))
+		/bin/bash -c "cd /all && git describe --abbrev=0 --tag --always | cut -f2 -dv"))
 	$(DOCKER_RUN_BUILD_BASH) \
 	    "GIT_VERSION=\"${GIT_VERSION}\" ${PYTHON} setup.py bdist_wheel &&\
 		mv dist/*.whl ."
