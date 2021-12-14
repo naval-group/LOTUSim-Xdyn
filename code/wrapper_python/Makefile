@@ -5,25 +5,25 @@
 help:
 	echo "Run higher target to build wheel! It can not be built directly from this Makefile"
 
-debian_10_demo_package: DOCKER_IMAGE_BUILD=xdyn-python-deb10-build
-debian_10_demo_package: DOCKER_IMAGE_TEST=xdyn-python-deb10-test
-debian_10_demo_package: demo_package
+debian_10_package: DOCKER_IMAGE_BUILD=xdyn-python-deb10-build
+debian_10_package: DOCKER_IMAGE_TEST=xdyn-python-deb10-test
+debian_10_package: package
 
-debian_11_py309_demo_package: DOCKER_IMAGE_BUILD=xdyn-python-deb11-py309-build
-debian_11_py309_demo_package: DOCKER_IMAGE_TEST=xdyn-python-deb11-py309-test
-debian_11_py309_demo_package: demo_package
+debian_11_py309_package: DOCKER_IMAGE_BUILD=xdyn-python-deb11-py309-build
+debian_11_py309_package: DOCKER_IMAGE_TEST=xdyn-python-deb11-py309-test
+debian_11_py309_package: package
 
-debian_11_py307_demo_package: DOCKER_IMAGE_BUILD=xdyn-python-deb11-py307-build
-debian_11_py307_demo_package: DOCKER_IMAGE_TEST=xdyn-python-deb11-py307-test
-debian_11_py307_demo_package: demo_package
+debian_11_py307_package: DOCKER_IMAGE_BUILD=xdyn-python-deb11-py307-build
+debian_11_py307_package: DOCKER_IMAGE_TEST=xdyn-python-deb11-py307-test
+debian_11_py307_package: package
 
-debian_11_py308_demo_package: DOCKER_IMAGE_BUILD=xdyn-python-deb11-py308-build
-debian_11_py308_demo_package: DOCKER_IMAGE_TEST=xdyn-python-deb11-py308-test
-debian_11_py308_demo_package: demo_package
+debian_11_py308_package: DOCKER_IMAGE_BUILD=xdyn-python-deb11-py308-build
+debian_11_py308_package: DOCKER_IMAGE_TEST=xdyn-python-deb11-py308-test
+debian_11_py308_package: package
 
-debian_11_py310_demo_package: DOCKER_IMAGE_BUILD=xdyn-python-deb11-py310-build
-debian_11_py310_demo_package: DOCKER_IMAGE_TEST=xdyn-python-deb11-py310-test
-debian_11_py310_demo_package: demo_package
+debian_11_py310_package: DOCKER_IMAGE_BUILD=xdyn-python-deb11-py310-build
+debian_11_py310_package: DOCKER_IMAGE_TEST=xdyn-python-deb11-py310-test
+debian_11_py310_package: package
 
 DIR := $(notdir $(shell pwd))
 PYTHON=python3
@@ -32,23 +32,23 @@ DOCKER_AS_USER:=$(DOCKER_AS_ROOT) -u $(shell id -u):$(shell id -g)
 DOCKER_RUN_BUILD_BASH=$(DOCKER_AS_USER) $(DOCKER_IMAGE_BUILD) /bin/bash -c
 DOCKER_RUN_TEST_BASH=$(DOCKER_AS_USER) $(DOCKER_IMAGE_TEST) /bin/bash -c
 
-demo_package:
+package:
 	make ${DOCKER_IMAGE_BUILD}
-	make DOCKER_IMAGE_BUILD=${DOCKER_IMAGE_BUILD} demo_package_build_wheel
+	make DOCKER_IMAGE_BUILD=${DOCKER_IMAGE_BUILD} package_build_wheel
 	make ${DOCKER_IMAGE_TEST}
-	make DOCKER_IMAGE_TEST=${DOCKER_IMAGE_TEST} demo_package_test_run
+	make DOCKER_IMAGE_TEST=${DOCKER_IMAGE_TEST} package_test_run
 
-demo_package_build_wheel:
+package_build_wheel:
 	$(eval GIT_VERSION := $(shell $(DOCKER_AS_USER) -v $(shell pwd)/../..:/all $(DOCKER_IMAGE_BUILD) \
 		/bin/bash -c "cd /all && git describe --abbrev=0 --tag | cut -f2 -dv"))
 	$(DOCKER_RUN_BUILD_BASH) \
 	    "GIT_VERSION=\"${GIT_VERSION}\" ${PYTHON} setup.py bdist_wheel &&\
 		mv dist/*.whl ."
 
-demo_package_test_run:
+package_test_run:
 	$(DOCKER_RUN_TEST_BASH) "${PYTHON} -m unit_tests"
 
-demo_package_test_run_for_a_specific_file:
+package_test_run_for_a_specific_file:
 	$(DOCKER_RUN_TEST_BASH) \
 		"cd unit_tests/exe && ${PYTHON} test_xdyn.py"
 
