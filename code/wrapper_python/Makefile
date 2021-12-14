@@ -25,12 +25,21 @@ debian_11_py310_package: DOCKER_IMAGE_BUILD=xdyn-python-deb11-py310-build
 debian_11_py310_package: DOCKER_IMAGE_TEST=xdyn-python-deb11-py310-test
 debian_11_py310_package: package
 
+ubuntu2004_py308_package: DOCKER_IMAGE_TEST=xdyn-python-ubuntu2004-py308-test
+ubuntu2004_py308_package: test_only
+
+test_additional_platforms_depending_on_debian: ubuntu2004_py308_package
+
 DIR := $(notdir $(shell pwd))
 PYTHON=python3
 DOCKER_AS_ROOT:=docker run -t --rm -w /opt/share/${DIR} -v $(shell pwd)/..:/opt/share
 DOCKER_AS_USER:=$(DOCKER_AS_ROOT) -u $(shell id -u):$(shell id -g)
 DOCKER_RUN_BUILD_BASH=$(DOCKER_AS_USER) $(DOCKER_IMAGE_BUILD) /bin/bash -c
 DOCKER_RUN_TEST_BASH=$(DOCKER_AS_USER) $(DOCKER_IMAGE_TEST) /bin/bash -c
+
+test_only:
+	make ${DOCKER_IMAGE_TEST}
+	make DOCKER_IMAGE_TEST=${DOCKER_IMAGE_TEST} package_test_run
 
 package:
 	make ${DOCKER_IMAGE_BUILD}
@@ -150,4 +159,11 @@ xdyn-python-deb11-py310-test:
 		--build-arg PYTHON_MINOR_VERSION=10 \
 		--build-arg PYTHON_PATCH_VERSION=1 \
 		-f Dockerfile_deb11_py3yz_test \
+		-t $@ .
+
+
+.PHONY=xdyn-python-ubuntu2004-py308-test
+xdyn-python-ubuntu2004-py308-test:
+	docker build \
+		-f Dockerfile_ubuntu2004_py3_test \
 		-t $@ .
