@@ -7,8 +7,6 @@
 #include "executables/src/build_observers_description.hpp"
 #include "observers_and_api/inc/simulator_api.hpp"
 
-//#include <google/protobuf/stubs/common.h>
-
 #include "ssc/ssc/text_file_reader.hpp"
 #include "ssc/ssc/solver/solve.hpp"
 #include "ssc/ssc/solver/steppers.hpp"
