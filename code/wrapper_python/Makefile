@@ -39,8 +39,10 @@ demo_package:
 	make DOCKER_IMAGE_TEST=${DOCKER_IMAGE_TEST} demo_package_test_run
 
 demo_package_build_wheel:
+	$(eval GIT_VERSION := $(shell $(DOCKER_AS_USER) -v $(shell pwd)/../..:/all $(DOCKER_IMAGE_BUILD) \
+		/bin/bash -c "cd /all && git describe --abbrev=0 --tag | cut -f2 -dv"))
 	$(DOCKER_RUN_BUILD_BASH) \
-	    "${PYTHON} setup.py bdist_wheel &&\
+	    "GIT_VERSION=\"${GIT_VERSION}\" ${PYTHON} setup.py bdist_wheel &&\
 		mv dist/*.whl ."
 
 demo_package_test_run:
