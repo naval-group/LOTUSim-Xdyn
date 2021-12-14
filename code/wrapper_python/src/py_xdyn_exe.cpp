@@ -141,5 +141,8 @@ void py_add_module_xdyn_exe(py::module& m)
         .def("empty" , &XdynCommandLineArguments::empty)
         ;
 
-    m.def("run" , &run, "Run a XDyn simulation from Python");
+    m.def("run" , &run,
+        py::arg("input_data"),
+        py::arg("error_outputter"),
+        "Run a XDyn simulation from Python");
 }
