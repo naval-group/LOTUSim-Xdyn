@@ -8,9 +8,6 @@
 #include "py_xdyn_force.hpp"
 #include "py_pybind_additions.hpp"
 
-#define STRINGIFY(x) #x
-#define MACRO_STRINGIFY(x) STRINGIFY(x)
-
 namespace py = pybind11;
 
 PYBIND11_MODULE(xdyn, m) {
@@ -33,7 +30,7 @@ PYBIND11_MODULE(xdyn, m) {
     py_add_module_xdyn_force(m);
 
 #ifdef GIT_VERSION
-    m.attr("__version__") = MACRO_STRINGIFY(GIT_VERSION);
+    m.attr("__version__") = GIT_VERSION;
 #else
     m.attr("__version__") = "dev";
 #endif
