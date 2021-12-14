@@ -34,6 +34,8 @@ set_target_properties(${PYTHON_PACKAGE_NAME} PROPERTIES OUTPUT_NAME "xdyn")
 
 # set_target_properties(${PYTHON_PACKAGE_NAME} PROPERTIES SUFFIX ".cpython-${Python_VERSION_MAJOR}${Python_VERSION_MINOR}-x86_64-linux-gnu.so")
 
+target_compile_definitions(${PYTHON_PACKAGE_NAME} PRIVATE GIT_VERSION="${GIT_VERSION_MAJOR}.${GIT_VERSION_MINOR}.${GIT_VERSION_PATCH}")
+
 message(STATUS "ssc_INCLUDE_DIRS ${ssc_INCLUDE_DIRS}")
 target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE ${Python_INCLUDE_DIRS})
 target_include_directories(${PYTHON_PACKAGE_NAME} PRIVATE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>)

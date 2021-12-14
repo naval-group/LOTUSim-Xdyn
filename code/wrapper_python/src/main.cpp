@@ -32,8 +32,8 @@ PYBIND11_MODULE(xdyn, m) {
     py_add_module_xdyn_hdb(m);
     py_add_module_xdyn_force(m);
 
-#ifdef VERSION_INFO
-    m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
+#ifdef GIT_VERSION
+    m.attr("__version__") = MACRO_STRINGIFY(GIT_VERSION);
 #else
     m.attr("__version__") = "dev";
 #endif
