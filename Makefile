@@ -189,6 +189,13 @@ debian_11_release_gcc_10_wrapper_python_all:
 	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.*
 	make debian_11_release_gcc_10_wrapper_py310
 	ls code/wrapper_python/*.whl
+	make -C code/wrapper_python test_additional_platforms_depending_on_debian
+	@echo "Success for :"
+	@echo " - Linux x86-64 Debian 11 with Python 3.7"
+	@echo " - Linux x86-64 Debian 11 with Python 3.8"
+	@echo " - Linux x86-64 Debian 11 with Python 3.9 (default Python version)"
+	@echo " - Linux x86-64 Debian 11 with Python 3.10"
+	@echo " - Linux x86-64 Ubuntu 20.04 with Python 3.8, using the Debian 11 generated wheel"
 
 debian_10_release_gcc_8_wrapper: BUILD_TYPE = Release
 debian_10_release_gcc_8_wrapper: BUILD_DIR = build_deb10_pywrapper
