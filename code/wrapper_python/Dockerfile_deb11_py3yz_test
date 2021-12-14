@@ -11,4 +11,4 @@ RUN python3 -m pip install -U pip \
     numpy
 ADD xdyn*${PYTHON_MAJOR_VERSION}${PYTHON_MINOR_VERSION}*-linux_x86_64.whl /
 RUN python3 -m pip install --no-index --find-links / xdyn \
- && python3 -c 'import xdyn; print(dir(xdyn))'
+ && python3 -c 'import xdyn; print(dir(xdyn)); print(xdyn.__version__)'
