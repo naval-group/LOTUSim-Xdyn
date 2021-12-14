@@ -9,9 +9,9 @@ debian_10_demo_package: DOCKER_IMAGE_BUILD=xdyn-python-deb10-build
 debian_10_demo_package: DOCKER_IMAGE_TEST=xdyn-python-deb10-test
 debian_10_demo_package: demo_package
 
-debian_11_demo_package: DOCKER_IMAGE_BUILD=xdyn-python-deb11-py309-build
-debian_11_demo_package: DOCKER_IMAGE_TEST=xdyn-python-deb11-py309-test
-debian_11_demo_package: demo_package
+debian_11_py309_demo_package: DOCKER_IMAGE_BUILD=xdyn-python-deb11-py309-build
+debian_11_py309_demo_package: DOCKER_IMAGE_TEST=xdyn-python-deb11-py309-test
+debian_11_py309_demo_package: demo_package
 
 debian_11_py307_demo_package: DOCKER_IMAGE_BUILD=xdyn-python-deb11-py307-build
 debian_11_py307_demo_package: DOCKER_IMAGE_TEST=xdyn-python-deb11-py307-test

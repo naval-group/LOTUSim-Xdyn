@@ -139,7 +139,7 @@ debian_11_release_gcc_10_wrapper: BOOST_ROOT = /opt/boost
 debian_11_release_gcc_10_wrapper: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_11_release_gcc_10_wrapper: BUILD_PYTHON_WRAPPER = True
 debian_11_release_gcc_10_wrapper: PYTHON_VERSION=3.9
-debian_11_release_gcc_10_wrapper: PYTHON_TEST_TARGET=debian_11_demo_package
+debian_11_release_gcc_10_wrapper: PYTHON_TEST_TARGET=debian_11_py309_demo_package
 debian_11_release_gcc_10_wrapper: build-docker-python-image cmake-debian-target build-debian test-debian package-test-debian-python
 
 debian_11_release_gcc_10_wrapper_py307: BUILD_TYPE = Release
