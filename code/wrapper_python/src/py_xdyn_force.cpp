@@ -125,7 +125,7 @@ void py_add_module_xdyn_force(py::module& m0)
             )
         ;
 
-    py::class_<DampingForceModel, ForceModel>(m, "DampingForceModel")
+    py::class_<DampingForceModel, ForceModel>(m, "DampingForceModel", "Abstract damping force model")
         //.def(py::init<const std::string& /*name*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>())
         //.def("get_force", &DampingForceModel::get_force)
         ;
