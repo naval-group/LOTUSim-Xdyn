@@ -1,4 +1,3 @@
-#include "py_sandbox.hpp"
 #include "py_ssc.hpp"
 #include "py_xdyn_core.hpp"
 #include "py_xdyn_exe.hpp"
@@ -20,7 +19,6 @@ PYBIND11_MODULE(xdyn, m) {
         .. autosummary::
            :toctree: _generate
     )pbdoc";
-    py_add_module_sandbox(m);
     py_add_module_xdyn_exe(m);
     py_add_module_ssc(m);
     py_add_module_xdyn_core(m);

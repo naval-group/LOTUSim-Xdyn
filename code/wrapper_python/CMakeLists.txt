@@ -23,7 +23,6 @@ message(STATUS "CMAKE_LIBRARY_OUTPUT_DIRECTORY = ${CMAKE_LIBRARY_OUTPUT_DIRECTOR
 
 pybind11_add_module(${PYTHON_PACKAGE_NAME}
     src/main.cpp
-    src/py_sandbox.cpp
     src/py_ssc.cpp
     src/py_xdyn_core.cpp
     src/py_xdyn_exe.cpp
