@@ -30,6 +30,9 @@ ubuntu2004_py308_package: test_only
 
 test_additional_platforms_depending_on_debian: ubuntu2004_py308_package
 
+doc: debian_11_py309_package
+	@make -C doc
+
 DIR := $(notdir $(shell pwd))
 PYTHON=python3
 DOCKER_AS_ROOT:=docker run -t --rm -w /opt/share/${DIR} -v $(shell pwd)/..:/opt/share
