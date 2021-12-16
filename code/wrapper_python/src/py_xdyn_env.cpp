@@ -73,7 +73,7 @@ void py_add_module_xdyn_env_wave_io(py::module& m)
     py::class_<YamlWaveModel>(m, "YamlWaveModel")
         .def(py::init<>())
         .def_readwrite("discretization", &YamlWaveModel::discretization, "Spectral discretization parameters")
-        .def_readwrite("spectra", &YamlWaveModel::spectra,"Wave spectra to generate")
+        .def_readwrite("spectra", &YamlWaveModel::spectra, "Wave spectra to generate")
         .def_readwrite("output", &YamlWaveModel::output, "Defines what wave data is outputted during the simulation & how it is generated")
         ;
 
@@ -136,6 +136,8 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
                Provides the values of the function & its first & second derivatives.
                The function is \f$k\mapsto g\cdot k\cdot \tanh{kh} - \omega^2$\f
 
+               Input:
+
                - `h` (float): Water depth (in meters)
                - `omega` (float): Angular frequency (in rad/s)
             )")
@@ -145,22 +147,29 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
     py::class_<DiscreteDirectionalWaveSpectrum>(m_env, "DiscreteDirectionalWaveSpectrum")
         .def(py::init<>())
         .def_readwrite("Si", &DiscreteDirectionalWaveSpectrum::Si, "Discretized spectral density (in s m^2/rad)")
-        .def_readwrite("Dj", &DiscreteDirectionalWaveSpectrum::Dj,"Spatial spreading (in 1/rad)")
-        .def_readwrite("omega", &DiscreteDirectionalWaveSpectrum::omega,"Angular frequencies the spectrum was discretized at (in rad/s)")
-        .def_readwrite("psi", &DiscreteDirectionalWaveSpectrum::psi,"Directions between 0 & 2pi the spatial spreading was discretized at (in rad)")
-        .def_readwrite("k", &DiscreteDirectionalWaveSpectrum::k,"Discretized wave number (for each frequency) in rad/m")
-        .def_readwrite("phase", &DiscreteDirectionalWaveSpectrum::phase,"Random phases, for each (frequency, direction) couple (but time invariant) in radian phases *phase[i_freq][i_dir]*")
+        .def_readwrite("Dj", &DiscreteDirectionalWaveSpectrum::Dj, "Spatial spreading (in 1/rad)")
+        .def_readwrite("omega", &DiscreteDirectionalWaveSpectrum::omega, "Angular frequencies the spectrum was discretized at (in rad/s)")
+        .def_readwrite("psi", &DiscreteDirectionalWaveSpectrum::psi, "Directions between 0 & 2pi the spatial spreading was discretized at (in rad)")
+        .def_readwrite("k", &DiscreteDirectionalWaveSpectrum::k, "Discretized wave number (for each frequency) in rad/m")
+        .def_readwrite("phase", &DiscreteDirectionalWaveSpectrum::phase, "Random phases, for each (frequency, direction) couple (but time invariant) in radian phases *phase[i_freq][i_dir]*")
         ;
 
     py::class_<FlatDiscreteDirectionalWaveSpectrum>(m_env, "FlatDiscreteDirectionalWaveSpectrum")
         .def(py::init<>())
-        .def_readwrite("a", &FlatDiscreteDirectionalWaveSpectrum::a, "Amplitude (in m².s), for each angular frequency omega, and direction")
-        .def_readwrite("omega", &FlatDiscreteDirectionalWaveSpectrum::omega, "Angular frequencies the spectrum was discretized at (in rad/s), for each angular frequency omega, and direction")
-        .def_readwrite("psi", &FlatDiscreteDirectionalWaveSpectrum::psi, "Directions between 0 & 2pi the spatial spreading was discretized at (in rad)")
-        .def_readwrite("cos_psi", &FlatDiscreteDirectionalWaveSpectrum::cos_psi, "Cosinus directions between 0 & 2pi the spatial spreading was discretized at (so we do not compute it each time), for each angular frequency omega, and direction")
-        .def_readwrite("sin_psi", &FlatDiscreteDirectionalWaveSpectrum::sin_psi, "Sinus directions between 0 & 2pi the spatial spreading was discretized at (so we do not compute it each time), for each angular frequency omega, and direction")
-        .def_readwrite("k", &FlatDiscreteDirectionalWaveSpectrum::k, "Discretized wave number (for each frequency) in rad/m, for each angular frequency omega, i.e. same size as omega")
-        .def_readwrite("phase", &FlatDiscreteDirectionalWaveSpectrum::phase, "Random phases, for each (frequency, direction) couple (but time invariant) in radian, for each angular frequency omega, and direction")
+        .def_readwrite("a", &FlatDiscreteDirectionalWaveSpectrum::a,
+            "Amplitude (in m².s), for each angular frequency omega, and direction")
+        .def_readwrite("omega", &FlatDiscreteDirectionalWaveSpectrum::omega,
+            "Angular frequencies the spectrum was discretized at (in rad/s), for each angular frequency omega, and direction")
+        .def_readwrite("psi", &FlatDiscreteDirectionalWaveSpectrum::psi,
+            "Directions between 0 & 2pi the spatial spreading was discretized at (in rad)")
+        .def_readwrite("cos_psi", &FlatDiscreteDirectionalWaveSpectrum::cos_psi,
+            "Cosinus directions between 0 & 2pi the spatial spreading was discretized at (so we do not compute it each time), for each angular frequency omega, and direction")
+        .def_readwrite("sin_psi", &FlatDiscreteDirectionalWaveSpectrum::sin_psi,
+            "Sinus directions between 0 & 2pi the spatial spreading was discretized at (so we do not compute it each time), for each angular frequency omega, and direction")
+        .def_readwrite("k", &FlatDiscreteDirectionalWaveSpectrum::k,
+            "Discretized wave number (for each frequency) in rad/m, for each angular frequency omega, i.e. same size as omega")
+        .def_readwrite("phase", &FlatDiscreteDirectionalWaveSpectrum::phase,
+            "Random phases, for each (frequency, direction) couple (but time invariant) in radian, for each angular frequency omega, and direction")
         ;
 
     py::class_<WaveModel>(m_env, "WaveModel")
@@ -174,9 +183,11 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             Computes the surface elevations at given points.
             Elevations of a list of points at a given instant, in meters.
 
-            - x: x-positions in the NED frame (in meters),
-            - y: y-positions in the NED frame (in meters),
-            - t: Current time instant (in seconds),
+            Input:
+
+            - `x`: x-positions in the NED frame (in meters),
+            - `y`: y-positions in the NED frame (in meters),
+            - `t`: Current time instant (in seconds),
             )pbdoc")
         .def("get_orbital_velocity", &WaveModel::get_orbital_velocity,
             py::arg("g"),
@@ -189,12 +200,14 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             Computes the orbital velocity at given points.
             Velocities of the fluid at given points & instant, in m/s
 
+            Input:
+
             - `g`: gravity (in m/s^2),
             - `x`: x-positions in the NED frame (in meters),
             - `y`: y-positions in the NED frame (in meters),
             - `z`: z-positions in the NED frame (in meters),
             - `t`: Current time instant (in seconds),
-            - `eta`: Wave heights at x,y,t (in meters),
+            - `eta`: Wave heights at `x`, `y`, `t` (in meters),
             )pbdoc")
         .def("get_dynamic_pressure", &WaveModel::get_dynamic_pressure,
             py::arg("rho"),
@@ -207,6 +220,8 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             R"pbdoc(
             Computes the dynamic pressure at a given point.
             Pressure (in Pa) induced by the waves, at given points in the fluid
+
+            Input:
 
             - `rho`: water density (in kg/m^3),
             - `g`: gravity (in m/s^2),
@@ -247,6 +262,8 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             Calculate radiation forces using first order force RAO.
             Force (or torque), depending on the RAO.
 
+            Input:
+
             - `x`: x-position of the RAO's calculation point in the NED frame (in meters)
             - `y`: y-position of the RAO's calculation point in the NED frame (in meters)
             - `t`: Current time instant (in seconds)
@@ -269,6 +286,9 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             py::arg("original_z"),
             py::arg("wave_height"),
             R"pbdoc(
+
+            Input:
+
             - `original_z`: z value we wish to rescale (in meters)
             - `wave_height`: Wave height (in meters), z being oriented downwards
             )pbdoc")
@@ -310,7 +330,9 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             py::arg("n"),
             py::arg("equal_energy_bins"),
             R"pbdoc(
-            Returns n angular frequencies between omega_min (included) and omega_max (also included)
+            Returns `n` angular frequencies between omega_min (included) and omega_max (also included)
+
+            Input:
 
             - `omega_min` (float): Minimum angular frequency (in rad/s)
             - `omega_max` (float): Maximum angular frequency (in rad/s)
@@ -331,6 +353,8 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             R"pbdoc(
             BretschneiderSpectrum only constructor
 
+            Input:
+
             - `Hs` Significant wave height (in meters)
             - `Tp` Mean wave period (in seconds)
             )pbdoc")
@@ -341,6 +365,8 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
 
             Returns Amplitude of the power spectrum (in m^2 s)
 
+            Input:
+
             - `omega` (float) Angular frequency (2\pi f) in rad/s of the significant wave height
             )pbdoc")
         ;
@@ -349,6 +375,9 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         .def(py::init<const double& /*Hs*/, const double /*Tp*/, const double /*gamma*/>(),
             py::arg("Hs"), py::arg("Tp"), py::arg("omega"),
             R"pbdoc(
+
+            Input:
+
             - `Hs` (float) Significant wave height (in meters)
             - `Tp` (float) Mean wave period (in seconds)
             - `gamma` (float) Non-dimensional peak shape parameter
@@ -360,6 +389,8 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
 
             Returns Amplitude of the power spectrum (in m^2 s)
 
+            Input:
+
             - `omega` (float) Angular frequency (2\pi f) in rad/s of the significant wave height
             )pbdoc");
 
@@ -367,6 +398,8 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         .def(py::init<const double& /*Hs*/, const double /*Tp*/>(),
             py::arg("Hs"), py::arg("Tp"),
             R"pbdoc(
+            Input:
+
             - `Hs` (float) Significant wave height (in meters)
             - `Tp` (float) Mean wave period (in seconds)
             )pbdoc")
@@ -387,6 +420,8 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             R"pbdoc(
             Wave density by direction.
 
+            Input:
+
             - `psi` (float): Primary wave direction in radians.
             )pbdoc")
         .def("get_directions", &SumOfWaveDirectionalSpreadings::get_directions, py::arg("n"))
@@ -397,12 +432,14 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             "Constructor with psi0 Primary wave direction (NED, ""coming from"") in radians")
         .def(py::self + py::self)
         .def("__call__", &DiracDirectionalSpreading::operator(), py::arg("psi"),
-            R"pbdoc(
-            Wave density by direction.
-            Equals one if psi=psi0 & 0 otherwise.
+        R"pbdoc(
+        Wave density by direction.
+        Equals one if psi=psi0 & 0 otherwise.
 
-            - `psi` (float): Primary wave direction in radians.
-            )pbdoc")
+        Input:
+
+        - `psi` (float): Primary wave direction in radians.
+        )pbdoc")
         .def("get_directions", &DiracDirectionalSpreading::get_directions, "Returns a vector containing only psi0")
         ;
 
@@ -413,6 +450,8 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         R"pbdoc(
         Wave density by direction.
         Equals one if psi=psi0 & 0 otherwise.
+
+        Input:
 
         - `psi` (float): Primary wave direction in radians.
         )pbdoc")
@@ -465,6 +504,8 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         py::arg("h") = py::none(),
         R"pbdoc(
         Discretize a wave spectrum
+
+        Input:
 
         - `S` (WaveSpectralDensity) : Frequency spectrum
         - `D` (WaveDirectionalSpreading) : Spatial spectrum
@@ -547,6 +588,8 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         R"pbdoc(
         Calculates the cumulative integral using trapezoidal quadrature.
 
+        Input:
+
         - `xs` Vector of strictly increasing abscissae.
         - `ys` Positive values of the function at each `xs`.
 
@@ -559,7 +602,9 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         R"pbdoc(
         Discretize a wave spectrum
 
-        - spectrum (DiscreteDirectionalWaveSpectrum): Spectrum to flatten
+        Input:
+
+        - `spectrum` (DiscreteDirectionalWaveSpectrum): Spectrum to flatten
 
         Returns a FlatDiscreteDirectionalWaveSpectrum
         )pbdoc")
@@ -577,8 +622,8 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         the most important ones (i.e. those representing a given ratio of the total
         energy in the spectrum).
 
-        - spectrum (FlatDiscreteDirectionalWaveSpectrum): Spectrum to filter
-        - ratio (float): Ratio between 0 & 1: where should we cut off the spectra?
+        - `spectrum` (FlatDiscreteDirectionalWaveSpectrum): Spectrum to filter
+        - `ratio` (float): Ratio between 0 & 1: where should we cut off the spectra?
 
         Returns FlatDiscreteDirectionalWaveSpectrum A flat spectrum
         (i.e. one where the freq & direct. loops have been unrolled)
@@ -606,16 +651,23 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         ;
 }
 
+void py_add_module_xdyn_env_wind_io(py::module& m);
+void py_add_module_xdyn_env_wind_io(py::module& m)
+{
+    py::class_<YamlModel>(m, "YamlModel")
+        .def(py::init<>())
+        .def_readwrite("model", &YamlModel::model)
+        .def_readwrite("yaml", &YamlModel::yaml)
+        .def_readwrite("index_of_first_line_in_global_yaml", &YamlModel::index_of_first_line_in_global_yaml)
+        ;
+}
+
 void py_add_module_xdyn_env_wind(py::module& m_env);
 void py_add_module_xdyn_env_wind(py::module& m_env)
 {
 
-    py::class_<YamlModel>(m_env, "YamlModel")
-            .def(py::init<>())
-            .def_readwrite("model", &YamlModel::model)
-            .def_readwrite("yaml", &YamlModel::yaml)
-            .def_readwrite("index_of_first_line_in_global_yaml", &YamlModel::index_of_first_line_in_global_yaml)
-            ;
+    py::module m_env_io = m_env.def_submodule("io");
+    py_add_module_xdyn_env_wind_io(m_env_io);
 
     py::class_<WindModel>(m_env, "WindModel")
         // .def(py::init<>())
