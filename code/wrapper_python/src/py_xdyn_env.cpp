@@ -626,7 +626,10 @@ void py_add_module_xdyn_env_wind(py::module& m_env)
         .def(py::init<int>(), "Constructor argument is a dummy in order to be able to call DefaultWindModel(DefaultWindModel::parse(...)) from parser")
         .def_static("model_name", &DefaultWindModel::model_name)
         .def_static("parse", &DefaultWindModel::parse)
-        .def("get_wind", &DefaultWindModel::get_wind, py::arg("position"), py::arg("t"))
+        .def("get_wind", &DefaultWindModel::get_wind,
+            py::arg("position"),
+            py::arg("t")
+            )
         ;
 
     py::class_<WindMeanVelocityProfile::Input>(m_env, "WindMeanVelocityProfileInput")
@@ -635,10 +638,12 @@ void py_add_module_xdyn_env_wind(py::module& m_env)
         .def_readwrite("direction", &WindMeanVelocityProfile::Input::direction)
         ;
 
-
     py::class_<WindMeanVelocityProfile, WindModel>(m_env, "WindMeanVelocityProfile")
         // .def(py::init<const WindMeanVelocityProfile::Input& /*input*/>())
-        .def("get_wind", &WindMeanVelocityProfile::get_wind)
+        .def("get_wind", &WindMeanVelocityProfile::get_wind,
+            py::arg("position"),
+            py::arg("t") = 0.0
+            )
         .def_static("parse", &WindMeanVelocityProfile::parse)
         ;
 
@@ -673,7 +678,6 @@ void py_add_module_xdyn_env_wind(py::module& m_env)
         .def_static("parse", &UniformWindVelocityProfile::parse)
         ;
 }
-
 
 void py_add_module_xdyn_env(py::module& m)
 {
