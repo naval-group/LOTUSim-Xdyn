@@ -527,14 +527,14 @@ void py_add_module_xdyn_core(py::module& m0)
                 );},
             py::arg("relative_immersions"),
             py::arg("absolute_wave_elevations"),
-            R"pbdoc(
+            R"(
             Update the intersection of the mesh with free surface
 
             The intersection requires new Vertices/Edges/Facets stored as dynamic data in the end of container members
 
             - `relative_immersions`: the relative immersion of each static vertex of the mesh
             - `absolute_wave_elevations`: z coordinate in NED frame of each point in mesh
-            )pbdoc")
+            )")
         .def_readwrite("x", &BodyStates::x)
         .def_readwrite("y", &BodyStates::y)
         .def_readwrite("z", &BodyStates::z)
@@ -666,34 +666,34 @@ void py_add_module_xdyn_core(py::module& m0)
             py::arg("M"),
             py::arg("k"),
             py::arg("t"),
-            R"pbdoc(
+            R"(
             Computes surface elevation for each point on mesh.
-            Updates the absolute surface elevation & the relative wave height.
+            Updates the absolute surface elevation and the relative wave height.
 
             Input:
 
             - `M` (ssc.kinematics.PointMatrixPtr) Points for which to compute the relative wave height
-            - `k`(ssc.kinematics.KinematicsPtr) Object used to compute the transforms to the NED frame
+            - `k` (ssc.kinematics.KinematicsPtr) Object used to compute the transforms to the NED frame
             - `t` (float) Current instant (in seconds)
-            )pbdoc")
+            )")
         .def("get_relative_wave_height", &SurfaceElevationInterface::get_relative_wave_height,
-            R"pbdoc(
-            Returns the relative wave height computed by update_surface_elevation
+            R"(
+            Returns the relative wave height computed by `update_surface_elevation`
 
             zwave - z for each point in mesh.
-            )pbdoc")
+            )")
         .def("get_surface_elevation", &SurfaceElevationInterface::get_surface_elevation,
-            R"pbdoc(
-            Returns the absolute wave height (z coordinate in NED frame) computed by update_surface_elevation
+            R"(
+            Returns the absolute wave height (z coordinate in NED frame) computed by `update_surface_elevation`
 
             zwave for each point (x,y) in mesh.
-            )pbdoc")
+            )")
         .def("get_output_mesh_size", &SurfaceElevationInterface::get_output_mesh_size,
-            R"pbdoc(
+            R"(
             Returns the pair of number of points describing the surface elevation mesh
-            )pbdoc")
+            )")
         .def("get_and_check_orbital_velocity", &SurfaceElevationInterface::get_and_check_orbital_velocity,
-            R"pbdoc(
+            R"(
             Computes the orbital velocity at given points.
 
             Velocity of the fluid at given points & instant, in m/s
@@ -706,7 +706,7 @@ void py_add_module_xdyn_core(py::module& m0)
             - `z` (List[float]) z-positions in the NED frame (in meters)
             - `t` (float) Current time instant (in seconds)
             - `eta` (List[float]) Wave elevations at (x,y) in the NED frame (in meters)
-            )pbdoc")
+            )")
         ;
 //
 //        virtual std::vector<std::vector<double> > get_wave_directions_for_each_model() const;
