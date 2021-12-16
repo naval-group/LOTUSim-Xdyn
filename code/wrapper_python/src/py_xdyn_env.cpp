@@ -665,7 +665,6 @@ void py_add_module_xdyn_env_wind_io(py::module& m)
 void py_add_module_xdyn_env_wind(py::module& m_env);
 void py_add_module_xdyn_env_wind(py::module& m_env)
 {
-
     py::module m_env_io = m_env.def_submodule("io");
     py_add_module_xdyn_env_wind_io(m_env_io);
 
