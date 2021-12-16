@@ -732,9 +732,9 @@ void py_add_module_xdyn_env_wind(py::module& m_env)
 
 void py_add_module_xdyn_env(py::module& m)
 {
-    py::module m_env = m.def_submodule("env");
-    py::module m_env_wave = m_env.def_submodule("wave");
-    py::module m_env_wind = m_env.def_submodule("wind");
+    py::module m_env = m.def_submodule("env", "Environment models");
+    py::module m_env_wave = m_env.def_submodule("wave", "Wave environment");
     py_add_module_xdyn_env_wave(m_env_wave);
+    py::module m_env_wind = m_env.def_submodule("wind", "Wind environment");
     py_add_module_xdyn_env_wind(m_env_wind);
 }
