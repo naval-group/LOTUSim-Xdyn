@@ -42,7 +42,7 @@ def get_body(name: str) -> BodyPtr:
 
 
 def get_states(
-    body_name: str, phi: float, theta: float, psi: float, env: EnvironmentAndFrames
+    env: EnvironmentAndFrames, body_name: str, phi: float, theta: float, psi: float
 ) -> BodyStates:
     """Create a body state variable with one record"""
     body = get_body(body_name)
@@ -119,7 +119,7 @@ class ConstantForceModelTest(unittest.TestCase):
         theta = 0
         psi = 45 * np.pi / 180.0
         body_name = "Anthineas"
-        states = get_states(body_name, phi, theta, psi, env)
+        states = get_states(env, body_name, phi, theta, psi)
         force_model = ConstantForceModel(data, body_name, env)
         wrench = force_model(states, 0.0, env)
         self.assertAlmostEqual(
@@ -137,7 +137,7 @@ class ConstantForceModelTest(unittest.TestCase):
         theta = 0
         psi = 30 * np.pi / 180.0
         body_name = "Anthineas"
-        states = get_states(body_name, phi, theta, psi, env)
+        states = get_states(env, body_name, phi, theta, psi)
         force_model = ConstantForceModel(data, body_name, env)
         wrench = force_model(states, 0.0, env)
         self.assertAlmostEqual(
