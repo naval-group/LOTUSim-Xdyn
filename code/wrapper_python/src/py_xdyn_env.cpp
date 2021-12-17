@@ -179,7 +179,7 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             py::arg("x"),
             py::arg("y"),
             py::arg("t"),
-            R"pbdoc(
+            R"(
             Computes the surface elevations at given points.
             Elevations of a list of points at a given instant, in meters.
 
@@ -188,7 +188,7 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             - `x`: x-positions in the NED frame (in meters),
             - `y`: y-positions in the NED frame (in meters),
             - `t`: Current time instant (in seconds),
-            )pbdoc")
+            )")
         .def("get_orbital_velocity", &WaveModel::get_orbital_velocity,
             py::arg("g"),
             py::arg("x"),
@@ -196,7 +196,7 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             py::arg("z"),
             py::arg("t"),
             py::arg("eta"),
-            R"pbdoc(
+            R"(
             Computes the orbital velocity at given points.
             Velocities of the fluid at given points & instant, in m/s
 
@@ -208,7 +208,7 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             - `z`: z-positions in the NED frame (in meters),
             - `t`: Current time instant (in seconds),
             - `eta`: Wave heights at `x`, `y`, `t` (in meters),
-            )pbdoc")
+            )")
         .def("get_dynamic_pressure", &WaveModel::get_dynamic_pressure,
             py::arg("rho"),
             py::arg("g"),
@@ -217,7 +217,7 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             py::arg("z"),
             py::arg("eta"),
             py::arg("t"),
-            R"pbdoc(
+            R"(
             Computes the dynamic pressure at a given point.
             Pressure (in Pa) induced by the waves, at given points in the fluid
 
@@ -230,17 +230,17 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             - `z`: z-positions in the NED frame (in meters),
             - `eta`: Wave heights at x,y,t (in meters),
             - `t`: Current time instant (in seconds),
-            )pbdoc")
+            )")
         .def("get_omegas", &WaveModel::get_omegas,
-            R"pbdoc(
+            R"(
             List of angular frequencies for which the spectra will be calculated.
             Needed by the RAOs (RadiationForceModel)
-            )pbdoc")
+            )")
         .def("get_psis", &WaveModel::get_psis,
-            R"pbdoc(
+            R"(
             List of incidences for which the spectra will be calculated.
             Needed by the RAOs (RadiationForceModel)
-            )pbdoc")
+            )")
         .def("get_flat_spectrum", &WaveModel::get_flat_spectrum)
         .def("get_spectrum", &WaveModel::get_spectrum)
         ;
@@ -258,7 +258,7 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             py::arg("t"),
             py::arg("rao_module"),
             py::arg("rao_phase"),
-            R"pbdoc(
+            R"(
             Calculate radiation forces using first order force RAO.
             Force (or torque), depending on the RAO.
 
@@ -269,7 +269,7 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             - `t`: Current time instant (in seconds)
             - `rao_module`: Module of the RAO
             - `rao_phase`: Phase of the RAO
-            )pbdoc")
+            )")
         ;
     py::class_<Stretching>(m_env, "Stretching", "Rescale the z-axis with delta stretching model (used to compute orbital velocities")
         .def(py::init<const YamlStretching& /*input*/>(), "Usually read from YAML")
@@ -285,13 +285,13 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         .def("rescaled_z", &Stretching::rescaled_z,
             py::arg("original_z"),
             py::arg("wave_height"),
-            R"pbdoc(
+            R"(
 
             Input:
 
             - `original_z`: z value we wish to rescale (in meters)
             - `wave_height`: Wave height (in meters), z being oriented downwards
-            )pbdoc")
+            )")
         //.def("__repr__",
         //   [](const Stretching &a) {
         //       std::stringstream ss;
@@ -319,17 +319,17 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         .def(py::init<const WaveSpectralDensity& /*s1*/, const SumOfWaveSpectralDensities& /*s2*/>(), py::arg("s1"), py::arg("s2"))
         // .def(py::init<const std::vector<WaveSpectralDensity>& /*ws*/>(), py::arg("ws"))
         .def("__call__", &SumOfWaveSpectralDensities::operator(), py::arg("omega"),
-            R"pbdoc(
+            R"(
             Wave density by wave number.
 
             - `omega` (float): Angular frequency (omega = 2 * pi * f) in rad/s
-            )pbdoc")
+            )")
         .def("get_angular_frequencies", &SumOfWaveSpectralDensities::get_angular_frequencies,
             py::arg("omega_min"),
             py::arg("omega_max"),
             py::arg("n"),
             py::arg("equal_energy_bins"),
-            R"pbdoc(
+            R"(
             Returns `n` angular frequencies between omega_min (included) and omega_max (also included)
 
             Input:
@@ -338,7 +338,7 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             - `omega_max` (float): Maximum angular frequency (in rad/s)
             - `n` (int): Number of angular frequencies to return
             - `equal_energy_bins` (bool): Choose omegas so the integral of S between two successive omegas is constant
-            )pbdoc")
+            )")
         ;
 
     py::class_<DiracSpectralDensity, WaveSpectralDensity>(m_env, "DiracSpectralDensity")
@@ -350,17 +350,17 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
 
     py::class_<BretschneiderSpectrum, WaveSpectralDensity>(m_env, "BretschneiderSpectrum")
         .def(py::init<const double& /*Hs*/, const double /*Tp*/>(), py::arg("Hs"), py::arg("Tp"),
-            R"pbdoc(
+            R"(
             BretschneiderSpectrum only constructor
 
             Input:
 
             - `Hs` Significant wave height (in meters)
             - `Tp` Mean wave period (in seconds)
-            )pbdoc")
+            )")
         .def(py::self + py::self)
         .def("__call__", &BretschneiderSpectrum::operator(), py::arg("omega"),
-            R"pbdoc(
+            R"(
             Computes the amplitude of the power spectrum at a given angular frequency
 
             Returns Amplitude of the power spectrum (in m^2 s)
@@ -368,23 +368,23 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             Input:
 
             - `omega` (float) Angular frequency (2\pi f) in rad/s of the significant wave height
-            )pbdoc")
+            )")
         ;
 
     py::class_<JonswapSpectrum, WaveSpectralDensity>(m_env, "JonswapSpectrum")
         .def(py::init<const double& /*Hs*/, const double /*Tp*/, const double /*gamma*/>(),
             py::arg("Hs"), py::arg("Tp"), py::arg("omega"),
-            R"pbdoc(
+            R"(
 
             Input:
 
             - `Hs` (float) Significant wave height (in meters)
             - `Tp` (float) Mean wave period (in seconds)
             - `gamma` (float) Non-dimensional peak shape parameter
-            )pbdoc")
+            )")
         .def(py::self + py::self)
         .def("__call__", &JonswapSpectrum::operator(), py::arg("omega"),
-            R"pbdoc(
+            R"(
             Computes the amplitude of the power spectrum at a given angular frequency
 
             Returns Amplitude of the power spectrum (in m^2 s)
@@ -392,17 +392,17 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             Input:
 
             - `omega` (float) Angular frequency (2\pi f) in rad/s of the significant wave height
-            )pbdoc");
+            )");
 
     py::class_<PiersonMoskowitzSpectrum, JonswapSpectrum, WaveSpectralDensity>(m_env, "PiersonMoskowitzSpectrum")
         .def(py::init<const double& /*Hs*/, const double /*Tp*/>(),
             py::arg("Hs"), py::arg("Tp"),
-            R"pbdoc(
+            R"(
             Input:
 
             - `Hs` (float) Significant wave height (in meters)
             - `Tp` (float) Mean wave period (in seconds)
-            )pbdoc")
+            )")
         ;
 
     py::class_<WaveDirectionalSpreading>(m_env, "WaveDirectionalSpreading")
@@ -417,13 +417,13 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         .def(py::init<const WaveDirectionalSpreading& /*s1*/, const WaveDirectionalSpreading& /*s2*/>(), py::arg("s1"), py::arg("s2"))
         // .def(py::init<const std::vector<WaveDirectionalSpreading>& /*s*/>(), py::arg("s"))
         .def("__call__", &SumOfWaveDirectionalSpreadings::operator(), py::arg("psi"),
-            R"pbdoc(
+            R"(
             Wave density by direction.
 
             Input:
 
             - `psi` (float): Primary wave direction in radians.
-            )pbdoc")
+            )")
         .def("get_directions", &SumOfWaveDirectionalSpreadings::get_directions, py::arg("n"))
         ;
 
@@ -432,14 +432,14 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             "Constructor with psi0 Primary wave direction (NED, ""coming from"") in radians")
         .def(py::self + py::self)
         .def("__call__", &DiracDirectionalSpreading::operator(), py::arg("psi"),
-        R"pbdoc(
+        R"(
         Wave density by direction.
         Equals one if psi=psi0 & 0 otherwise.
 
         Input:
 
         - `psi` (float): Primary wave direction in radians.
-        )pbdoc")
+        )")
         .def("get_directions", &DiracDirectionalSpreading::get_directions, "Returns a vector containing only psi0")
         ;
 
@@ -447,14 +447,14 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         .def(py::init<const double /*psi0*/, const double /*s*/>(), py::arg("psi0"), py::arg("s"))
         .def(py::self + py::self)
         .def("__call__", &Cos2sDirectionalSpreading::operator(), py::arg("psi"),
-        R"pbdoc(
+        R"(
         Wave density by direction.
         Equals one if psi=psi0 & 0 otherwise.
 
         Input:
 
         - `psi` (float): Primary wave direction in radians.
-        )pbdoc")
+        )")
         ;
 
     m_env.def("discretize",
@@ -502,7 +502,7 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         py::arg("stretching"),
         py::arg("equal_energy_bins") = false,
         py::arg("h") = py::none(),
-        R"pbdoc(
+        R"(
         Discretize a wave spectrum
 
         Input:
@@ -516,7 +516,7 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         - `stretching` (Stretching) : Dilate z-axis to properly compute orbital velocities (delta-stretching)
         - `equal_energy_bins` (Optional[bool]) : Choose omegas so the integral of S between two successive omegas is constant. Default is False
         - `h` (Optional[float]) : Water depth (in meters). If None, or not provided, infinite depth will be considered
-        )pbdoc")
+        )")
         ;
 
     m_env.def("dynamic_pressure_factor",
@@ -548,7 +548,7 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         py::arg("eta"),
         py::arg("stretching"),
         py::arg("h") = py::none(),
-        R"pbdoc(
+        R"(
         Utility function used by the discretize function. This is where the stretching is taken into account.
         Finite and infinite depth are considered: Use None or skip h declaration to consider infinite depth.
 
@@ -559,7 +559,7 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         - `eta` (float): Wave elevation at (x,y) in the NED frame (in meters) for stretching
         - `stretching` (Stretching): Dilate z-axis to properly compute orbital velocities (delta-stretching)
         - `h` (Optional[float]): Water depth (in meters). If None, or not provided, infinite depth will be considered
-        )pbdoc")
+        )")
         ;
 
     m_env.def("find_integration_bound_yielding_target_area", &find_integration_bound_yielding_target_area,
@@ -567,7 +567,7 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         py::arg("xs"),
         py::arg("ys"),
         py::arg("as"),
-        R"pbdoc(
+        R"(
         Finds the abscissa at which the area curve has a given value.
         This is not a simple linear interpolation because integrating half
         of an interval does not necessarily give half the area.
@@ -581,11 +581,11 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
 
         Return
             Abscissa at which the integral has the given value.
-        )pbdoc")
+        )")
         ;
 
     m_env.def("area_curve", &area_curve, py::arg("xs"), py::arg("ys"),
-        R"pbdoc(
+        R"(
         Calculates the cumulative integral using trapezoidal quadrature.
 
         Input:
@@ -595,11 +595,11 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
 
         Return
             For each x, integral of ys from xmin to x.
-        )pbdoc")
+        )")
         ;
 
     m_env.def("flatten", &flatten, py::arg("spectrum"),
-        R"pbdoc(
+        R"(
         Discretize a wave spectrum
 
         Input:
@@ -607,14 +607,14 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         - `spectrum` (DiscreteDirectionalWaveSpectrum): Spectrum to flatten
 
         Returns a FlatDiscreteDirectionalWaveSpectrum
-        )pbdoc")
+        )")
         ;
 
 
     m_env.def("filter_spectrum", &filter, py::arg("spectrum"), py::arg("ratio"),
         // Renamed function filter to filter_spectrum to avoid any conflict with python
         // wrapper function
-        R"pbdoc(
+        R"(
         Only select the most important spectrum components & create single vector.
 
         Output spectrum represents at least `ratio * Energy`
@@ -627,11 +627,11 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
 
         Returns FlatDiscreteDirectionalWaveSpectrum A flat spectrum
         (i.e. one where the freq & direct. loops have been unrolled)
-        )pbdoc")
+        )")
         ;
 
     m_env.def("equal_area_abscissae", &equal_area_abscissae, py::arg("xs"), py::arg("ys"),
-        R"pbdoc(
+        R"(
         Calculates consecutive intervals where a function has constant area.
 
         Input:
@@ -647,7 +647,7 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         If `f` denotes a function such that ys[i] = f(xs[i]), this function
         returns a list of increasing `x`-values such that integrating f between x[i-1]
         and x[i] will give a constant value, for each i between 1 and n-1.
-        )pbdoc")
+        )")
         ;
 }
 
