@@ -1,6 +1,7 @@
 FROM debian:bullseye-slim
 RUN apt-get update -yq \
  && apt-get install --yes --no-install-recommends \
+    git \
     make \
     python3 \
     python3-sphinx \
