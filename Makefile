@@ -140,7 +140,7 @@ debian_11_release_gcc_10_wrapper: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_11_release_gcc_10_wrapper: BUILD_PYTHON_WRAPPER = True
 debian_11_release_gcc_10_wrapper: PYTHON_VERSION=3.9
 debian_11_release_gcc_10_wrapper: PYTHON_TEST_TARGET=debian_11_py309_package
-debian_11_release_gcc_10_wrapper: build-docker-python-image cmake-debian-target build-debian test-debian package-debian-python
+debian_11_release_gcc_10_wrapper: build-docker-python-image cmake-debian-target build-debian test-debian package-debian-python-with-doc
 
 debian_11_release_gcc_10_wrapper_py307: BUILD_TYPE = Release
 debian_11_release_gcc_10_wrapper_py307: BUILD_DIR = build_deb11_pywrapper
@@ -215,6 +215,14 @@ package-debian-python:
 	@mkdir -p code/wrapper_python/build
 	cp -rf ${BUILD_DIR}/lib.linux-x86_64-${PYTHON_VERSION} code/wrapper_python/build/.
 	make -C code/wrapper_python ${PYTHON_TEST_TARGET}
+
+package-debian-python-with-doc:
+	@echo "Create the xdyn wheel file and generate the HTML sphinx associated documenation"
+	@mkdir -p code/wrapper_python/build
+	cp -rf ${BUILD_DIR}/lib.linux-x86_64-${PYTHON_VERSION} code/wrapper_python/build/.
+	make -C code/wrapper_python ${PYTHON_TEST_TARGET}
+	make -C code/wrapper_python doc
+	@echo "xdyn python documentation is located in code/wrapper_python/doc/src/build/html"
 
 package-debian-python-specific-deb10-gcc8:
 	@mkdir -p code/wrapper_python/build/lib.linux-x86_64-${PYTHON_VERSION}
