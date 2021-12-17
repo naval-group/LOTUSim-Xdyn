@@ -140,7 +140,7 @@ debian_11_release_gcc_10_wrapper: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_11_release_gcc_10_wrapper: BUILD_PYTHON_WRAPPER = True
 debian_11_release_gcc_10_wrapper: PYTHON_VERSION=3.9
 debian_11_release_gcc_10_wrapper: PYTHON_TEST_TARGET=debian_11_py309_package
-debian_11_release_gcc_10_wrapper: build-docker-python-image cmake-debian-target build-debian test-debian package-test-debian-python
+debian_11_release_gcc_10_wrapper: build-docker-python-image cmake-debian-target build-debian test-debian package-debian-python
 
 debian_11_release_gcc_10_wrapper_py307: BUILD_TYPE = Release
 debian_11_release_gcc_10_wrapper_py307: BUILD_DIR = build_deb11_pywrapper
@@ -152,7 +152,7 @@ debian_11_release_gcc_10_wrapper_py307: BUILD_PYTHON_WRAPPER = True
 debian_11_release_gcc_10_wrapper_py307: PYTHON_VERSION=3.7
 debian_11_release_gcc_10_wrapper_py307: PYTHON_TEST_TARGET=debian_11_py307_package
 debian_11_release_gcc_10_wrapper_py307: ADDITIONAL_CMAKE_PARAMETERS = "-DPython_EXECUTABLE=/usr/local/bin/python3"
-debian_11_release_gcc_10_wrapper_py307: build-docker-python-image cmake-debian-target build-debian test-debian package-test-debian-python
+debian_11_release_gcc_10_wrapper_py307: build-docker-python-image cmake-debian-target build-debian test-debian package-debian-python
 
 debian_11_release_gcc_10_wrapper_py308: BUILD_TYPE = Release
 debian_11_release_gcc_10_wrapper_py308: BUILD_DIR = build_deb11_pywrapper
@@ -164,7 +164,7 @@ debian_11_release_gcc_10_wrapper_py308: BUILD_PYTHON_WRAPPER = True
 debian_11_release_gcc_10_wrapper_py308: PYTHON_VERSION=3.8
 debian_11_release_gcc_10_wrapper_py308: PYTHON_TEST_TARGET=debian_11_py308_package
 debian_11_release_gcc_10_wrapper_py308: ADDITIONAL_CMAKE_PARAMETERS = "-DPython_EXECUTABLE=/usr/local/bin/python3"
-debian_11_release_gcc_10_wrapper_py308: build-docker-python-image cmake-debian-target build-debian test-debian package-test-debian-python
+debian_11_release_gcc_10_wrapper_py308: build-docker-python-image cmake-debian-target build-debian test-debian package-debian-python
 
 debian_11_release_gcc_10_wrapper_py310: BUILD_TYPE = Release
 debian_11_release_gcc_10_wrapper_py310: BUILD_DIR = build_deb11_pywrapper
@@ -176,7 +176,7 @@ debian_11_release_gcc_10_wrapper_py310: BUILD_PYTHON_WRAPPER = True
 debian_11_release_gcc_10_wrapper_py310: PYTHON_VERSION=3.10
 debian_11_release_gcc_10_wrapper_py310: PYTHON_TEST_TARGET=debian_11_py310_package
 debian_11_release_gcc_10_wrapper_py310: ADDITIONAL_CMAKE_PARAMETERS = "-DPython_EXECUTABLE=/usr/local/bin/python3"
-debian_11_release_gcc_10_wrapper_py310: build-docker-python-image cmake-debian-target build-debian test-debian package-test-debian-python
+debian_11_release_gcc_10_wrapper_py310: build-docker-python-image cmake-debian-target build-debian test-debian package-debian-python
 
 debian_11_release_gcc_10_wrapper_python_all:
 	@echo "Create Python3 wheels for Python 3.7, 3.8, 3.9 and 3.10"
@@ -206,17 +206,17 @@ debian_10_release_gcc_8_wrapper: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_10_release_gcc_8_wrapper: BUILD_PYTHON_WRAPPER = True
 debian_10_release_gcc_8_wrapper: PYTHON_VERSION=3.7
 debian_10_release_gcc_8_wrapper: PYTHON_TEST_TARGET=debian_10_package
-debian_10_release_gcc_8_wrapper: build-docker-python-image cmake-debian-target build-debian test-debian package-test-debian-python-specific-deb10-gcc8
+debian_10_release_gcc_8_wrapper: build-docker-python-image cmake-debian-target build-debian test-debian package-debian-python-specific-deb10-gcc8
 
 build-docker-python-image:
 	make -C code/wrapper_python ${DOCKER_IMAGE}
 
-package-test-debian-python:
+package-debian-python:
 	@mkdir -p code/wrapper_python/build
 	cp -rf ${BUILD_DIR}/lib.linux-x86_64-${PYTHON_VERSION} code/wrapper_python/build/.
 	make -C code/wrapper_python ${PYTHON_TEST_TARGET}
 
-package-test-debian-python-specific-deb10-gcc8:
+package-debian-python-specific-deb10-gcc8:
 	@mkdir -p code/wrapper_python/build/lib.linux-x86_64-${PYTHON_VERSION}
 	cp -rf ${BUILD_DIR}/lib.linux-x86_64-${PYTHON_VERSION}/xdyn.so \
 		code/wrapper_python/build/lib.linux-x86_64-${PYTHON_VERSION}/xdyn.cpython-37m-x86_64-linux-gnu.so
