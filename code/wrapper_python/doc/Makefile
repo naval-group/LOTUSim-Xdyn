@@ -3,7 +3,6 @@ DIR := $(notdir $(shell pwd))
 DOCKER_AS_ROOT:=docker run -t --rm -w /opt/share/${DIR} -v $(shell pwd)/..:/opt/share
 DOCKER_AS_USER:=$(DOCKER_AS_ROOT) -u $(shell id -u):$(shell id -g)
 DOCKER_RUN_BUILD_BASH=$(DOCKER_AS_USER) $(DOCKER_IMAGE_BUILD) /bin/bash -c
-XDYN_VERSION=5.0.1
 
 all: \
 	build_docker_images \
@@ -11,18 +10,21 @@ all: \
 	build
 
 build_docker_images:
-	cp ../xdyn-${XDYN_VERSION}-cp39-cp39-linux_x86_64.whl .
+	cp ../xdyn-*-cp39-cp39-linux_x86_64.whl .
 	docker build . -t $(DOCKER_IMAGE_BUILD)
 
 init:
+	$(eval GIT_VERSION := $(shell $(DOCKER_AS_USER) -v $(shell pwd)/../../..:/all $(DOCKER_IMAGE_BUILD) \
+		/bin/bash -c "cd /all && git describe --abbrev=0 --tag --always | cut -f2 -dv"))
+	@echo "GIT_VERSION = ${GIT_VERSION}"
 	rm -rf src
 	mkdir -p src
 	${DOCKER_RUN_BUILD_BASH} "sphinx-quickstart \
 		--quiet \
 		--project xdyn \
 		--author Sirehna \
-		-v ${XDYN_VERSION} \
-		-r ${XDYN_VERSION} \
+		-v ${GIT_VERSION} \
+		-r ${GIT_VERSION} \
 		-l en \
 		--sep \
 		--use-make-mode \
