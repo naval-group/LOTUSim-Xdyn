@@ -10,7 +10,7 @@
 namespace py = pybind11;
 
 PYBIND11_MODULE(xdyn, m) {
-    m.doc() = R"pbdoc(
+    m.doc() = R"(
         xdyn
         ----
 
@@ -18,7 +18,7 @@ PYBIND11_MODULE(xdyn, m) {
 
         .. autosummary::
            :toctree: _generate
-    )pbdoc";
+    )";
     py_add_module_xdyn_exe(m);
     py_add_module_ssc(m);
     py_add_module_xdyn_core(m);
