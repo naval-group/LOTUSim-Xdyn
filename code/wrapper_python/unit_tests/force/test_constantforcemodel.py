@@ -112,6 +112,25 @@ class ConstantForceModelTest(unittest.TestCase):
         data = ConstantForceModel.parse(get_input())
         self.assertEqual(+300e3, data.N)
 
+    def test_ship_at_0_deg(self):
+        data = ConstantForceModel.parse(get_input())
+        env = get_env()
+        body_name = "Anthineas"
+        states = get_states(env, body_name, 0, 0, 0)
+        force_model = ConstantForceModel(data, body_name, env)
+        wrench = force_model(states, 0.0, env)
+        self.assertAlmostEqual(10e3, wrench.X())
+        self.assertAlmostEqual(20e3, wrench.Y())
+        self.assertAlmostEqual(30e3, wrench.Z())
+        pos_x_force = 0.5 - 0.1
+        pos_y_force = -0.2 - 2.04
+        pos_z_force = -440.0 - 6.28
+        pos_force = [pos_x_force, pos_y_force, pos_z_force]
+        offset = np.cross(pos_force, [10e3, 20e3, 30e3])
+        self.assertAlmostEqual(100e3 + offset[0], wrench.K())
+        self.assertAlmostEqual(200e3 + offset[1], wrench.M())
+        self.assertAlmostEqual(300e3 + offset[2], wrench.N())
+
     def test_ship_at_45_deg(self):
         data = ConstantForceModel.parse(get_input())
         env = get_env()
