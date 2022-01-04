@@ -156,6 +156,27 @@ ConstantForceModel ConstantForceModelTest::get_constant_force(EnvironmentAndFram
     return ConstantForceModel(input, "Anthineas", env);
 }
 
+TEST_F(ConstantForceModelTest, ship_at_0_deg)
+{
+    EnvironmentAndFrames env = get_env();
+    const double phi = 0;
+    const double theta = 0;
+    const double psi = 0;
+    auto states = get_states(phi, theta, psi, env);
+    const auto W = get_constant_force(env)(states, a.random<double>(), env);
+    ASSERT_DOUBLE_EQ(10e3, W.X());
+    ASSERT_DOUBLE_EQ(20e3, W.Y());
+    ASSERT_DOUBLE_EQ(30e3, W.Z());
+    const double pos_x_force = 0.5 - 0.1;
+    const double pos_y_force = -0.2 - 2.04;
+    const double pos_z_force = -440.0 - 6.28;
+    const Eigen::Vector3d pos_force(pos_x_force, pos_y_force, pos_z_force);
+    const Eigen::Vector3d offset = pos_force.cross(W.force);
+    ASSERT_DOUBLE_EQ(100e3 + offset(0), W.K());
+    ASSERT_DOUBLE_EQ(200e3 + offset(1), W.M());
+    ASSERT_DOUBLE_EQ(300e3 + offset(2), W.N());
+}
+
 TEST_F(ConstantForceModelTest, ship_at_45_deg)
 {
     EnvironmentAndFrames env = get_env();
