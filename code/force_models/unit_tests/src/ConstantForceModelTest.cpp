@@ -167,10 +167,6 @@ Eigen::Matrix3d ctm_z(double angle_deg)
     return ctm;
 }
 
-template<typename T>
-void wrench_checks(const T& W, const std::string& frame_name, const Eigen::Vector3d& force, const Eigen::Vector3d& torque);
-
-
 // Template function to check output from ConstantForceModel, where T is either `Wrench` or `ssc::kinematics::Wrench`
 template<typename T>
 void wrench_checks(const T& W, const std::string& frame_name, const Eigen::Vector3d& force, const Eigen::Vector3d& torque)
