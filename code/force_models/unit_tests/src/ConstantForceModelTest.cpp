@@ -156,6 +156,26 @@ ConstantForceModel ConstantForceModelTest::get_constant_force(EnvironmentAndFram
     return ConstantForceModel(input, "Anthineas", env);
 }
 
+Eigen::Matrix3d ctm_x(double angle);
+Eigen::Matrix3d ctm_x(double angle)
+{
+    Eigen::Matrix3d ctm;
+    ctm.row(0) << 1.0, 0.0, 0.0;
+    ctm.row(1) << 0.0, +std::cos(angle), +std::sin(angle);
+    ctm.row(2) << 0.0, -std::sin(angle), +std::cos(angle);
+    return ctm;
+}
+
+Eigen::Matrix3d ctm_y(double angle);
+Eigen::Matrix3d ctm_y(double angle)
+{
+    Eigen::Matrix3d ctm;
+    ctm.row(0) << +std::cos(angle), 0.0, -std::sin(angle);
+    ctm.row(1) << 0.0, 1.0, 0.0;
+    ctm.row(2) << +std::sin(angle), 0.0, +std::cos(angle);
+    return ctm;
+}
+
 Eigen::Matrix3d ctm_z(double angle);
 Eigen::Matrix3d ctm_z(double angle)
 {
@@ -170,7 +190,7 @@ Eigen::Matrix3d ctm_z(double angle)
 template<typename T>
 void wrench_checks(const T& W, const std::string& frame_name, const Eigen::Vector3d& force, const Eigen::Vector3d& torque)
 {
-    const double eps = 1e-8;
+    const double eps = 1e-7;
     ASSERT_NEAR(force(0), W.X(), eps);
     ASSERT_NEAR(force(1), W.Y(), eps);
     ASSERT_NEAR(force(2), W.Z(), eps);
@@ -231,5 +251,24 @@ TEST_F(ConstantForceModelTest, should_evaluate_correctly_wrench_in_ship_frame_wi
         auto states = get_states(phi, theta, psi, env);
         const auto W = get_constant_force(env)(states, a.random<double>(), env);
         wrench_checks(W, "Anthineas", ctm_z(psi) * force, ctm_z(psi) * torque_ship_ned);
+    }
+}
+
+TEST_F(ConstantForceModelTest, should_evaluate_correctly_wrench_in_ship_frame_with_random_phi_theta_psi)
+{
+    EnvironmentAndFrames env = get_env();
+    const Eigen::Vector3d pos_force(+0.5 - 0.1, -0.2 - 2.04, -440.0 - 6.28);
+    const Eigen::Vector3d force(10e3, 20e3, 30e3);
+    const Eigen::Vector3d torque(100e3, 200e3, 300e3);
+    const Eigen::Vector3d torque_ship_ned = torque + pos_force.cross(force);
+    for (size_t i = 0 ; i < 100 ; ++i)
+    {
+        const double phi = a.random<double>().between(-PI, PI);
+        const double theta = a.random<double>().between(-PI/2 + 0.1, +PI/2 - 0.1);
+        const double psi = a.random<double>().between(-PI, PI);
+        auto states = get_states(phi, theta, psi, env);
+        const auto W = get_constant_force(env)(states, a.random<double>(), env);
+        const auto ctm = ctm_x(phi) * ctm_y(theta) * ctm_z(psi);
+        wrench_checks(W, "Anthineas", ctm * force, ctm * torque_ship_ned);
     }
 }
