@@ -69,8 +69,8 @@ class Airy(waves.AbstractWaveModel):
             `waves propagating to`: direction, in degrees,  the waves are
                                     propagating to. 0 for waves coming from the
                                     South and propagating to the North, 90 deg
-                                    for waves coming from the East and
-                                    propagating to the West.
+                                    for waves coming from the West and
+                                    propagating to the East.
             `Hs`: significant wave height in meters, used in the JONSWAP
                   spectrum.
             `Tp`: peak wave period, in seconds, used in the JONSWAP spectrum.
