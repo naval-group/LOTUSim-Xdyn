@@ -188,9 +188,9 @@ TEST_F(ConstantForceModelTest, should_be_able_to_call_get_force)
 {
     // Whatever the ship state is calling `get_force` should return the same wrench in `constant frame`
     EnvironmentAndFrames env = get_env();
-    const double phi = a.random<double>();
-    const double theta = a.random<double>();
-    const double psi = a.random<double>();
+    const double phi = a.random<double>().between(-PI, PI);
+    const double theta = a.random<double>().between(-PI, PI);
+    const double psi = a.random<double>().between(-PI, PI);
     auto states = get_states(phi, theta, psi, env);
     const auto W = get_constant_force(env).get_force(states, a.random<double>(), env, {});
     const Eigen::Vector3d force(10e3, 20e3, 30e3);
