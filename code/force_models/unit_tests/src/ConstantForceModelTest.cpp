@@ -167,8 +167,13 @@ Eigen::Matrix3d ctm_z(double angle_deg)
     return ctm;
 }
 
-void wrench_checks(const ssc::kinematics::Wrench& W, const Eigen::Vector3d& force, const Eigen::Vector3d& torque);
-void wrench_checks(const ssc::kinematics::Wrench& W, const Eigen::Vector3d& force, const Eigen::Vector3d& torque)
+template<typename T>
+void wrench_checks(const T& W, const std::string& frame_name, const Eigen::Vector3d& force, const Eigen::Vector3d& torque);
+
+
+// Template function to check output from ConstantForceModel, where T is either `Wrench` or `ssc::kinematics::Wrench`
+template<typename T>
+void wrench_checks(const T& W, const std::string& frame_name, const Eigen::Vector3d& force, const Eigen::Vector3d& torque)
 {
     ASSERT_DOUBLE_EQ(force(0), W.X());
     ASSERT_DOUBLE_EQ(force(1), W.Y());
@@ -176,11 +181,25 @@ void wrench_checks(const ssc::kinematics::Wrench& W, const Eigen::Vector3d& forc
     ASSERT_DOUBLE_EQ(torque(0), W.K());
     ASSERT_DOUBLE_EQ(torque(1), W.M());
     ASSERT_DOUBLE_EQ(torque(2), W.N());
-    ASSERT_EQ("Anthineas", W.get_frame());
-    ASSERT_EQ("Anthineas", W.get_point().get_frame());
+    ASSERT_EQ(frame_name, W.get_frame());
+    ASSERT_EQ(frame_name, W.get_point().get_frame());
     ASSERT_DOUBLE_EQ(0.0, W.get_point().x());
     ASSERT_DOUBLE_EQ(0.0, W.get_point().y());
     ASSERT_DOUBLE_EQ(0.0, W.get_point().z());
+}
+
+TEST_F(ConstantForceModelTest, should_be_able_to_call_get_force)
+{
+    // Whatever the ship state is calling `get_force` should return the same wrench in `constant frame`
+    EnvironmentAndFrames env = get_env();
+    const double phi = a.random<double>();
+    const double theta = a.random<double>();
+    const double psi = a.random<double>();
+    auto states = get_states(phi, theta, psi, env);
+    const auto W = get_constant_force(env).get_force(states, a.random<double>(), env, {});
+    const Eigen::Vector3d force(10e3, 20e3, 30e3);
+    const Eigen::Vector3d torque(100e3, 200e3, 300e3);
+    wrench_checks(W, "constant force", force, torque);
 }
 
 TEST_F(ConstantForceModelTest, ship_at_0_deg)
@@ -195,7 +214,7 @@ TEST_F(ConstantForceModelTest, ship_at_0_deg)
     const Eigen::Vector3d force(10e3, 20e3, 30e3);
     const Eigen::Vector3d torque(100e3, 200e3, 300e3);
     const Eigen::Vector3d torque_ship_ned = torque + pos_force.cross(force);
-    wrench_checks(W, force, torque_ship_ned);
+    wrench_checks(W, "Anthineas", force, torque_ship_ned);
 }
 
 TEST_F(ConstantForceModelTest, ship_at_45_deg)
@@ -211,7 +230,7 @@ TEST_F(ConstantForceModelTest, ship_at_45_deg)
     const Eigen::Vector3d torque(100e3, 200e3, 300e3);
     const Eigen::Vector3d torque_ship_ned = torque + pos_force.cross(force);
     // ned2body conversion with ctm_z(45deg)
-    wrench_checks(W, ctm_z(45) * force, ctm_z(45) * torque_ship_ned);
+    wrench_checks(W, "Anthineas", ctm_z(45) * force, ctm_z(45) * torque_ship_ned);
 }
 
 TEST_F(ConstantForceModelTest, ship_at_30_deg)
@@ -227,5 +246,5 @@ TEST_F(ConstantForceModelTest, ship_at_30_deg)
     const Eigen::Vector3d torque(100e3, 200e3, 300e3);
     const Eigen::Vector3d torque_ship_ned = torque + pos_force.cross(force);
     // ned2body conversion with ctm_z(30deg)
-    wrench_checks(W, ctm_z(30) * force, ctm_z(30) * torque_ship_ned);
+    wrench_checks(W, "Anthineas", ctm_z(30) * force, ctm_z(30) * torque_ship_ned);
 }
