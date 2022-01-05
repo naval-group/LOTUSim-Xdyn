@@ -144,16 +144,6 @@ Wrench Wrench::add(const Wrench& other, const ssc::kinematics::KinematicsPtr& k)
     return ret;
 }
 
-ssc::kinematics::Point operator*(const ssc::kinematics::Point& P, const ssc::kinematics::Transform& T);
-ssc::kinematics::Point operator*(const ssc::kinematics::Point& P, const ssc::kinematics::Transform& T)
-{
-    if (P.get_frame() != T.get_from_frame())
-    {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, std::string("Frames don't match: transform goes from ") + T.get_from_frame() + " to " + T.get_to_frame() + ", but point lies in " + P.get_frame());
-    }
-    return ssc::kinematics::Point(T.get_to_frame(), T.inverse().get_point().v + T.get_rot().inverse()*P.v);
-}
-
 Eigen::Vector3d Wrench::get_BA(const ssc::kinematics::Point& B, const ssc::kinematics::KinematicsPtr& k) const
 {
     Eigen::Vector3d B_coord;
@@ -163,7 +153,9 @@ Eigen::Vector3d Wrench::get_BA(const ssc::kinematics::Point& B, const ssc::kinem
     }
     else
     {
-        auto B_in_force_frame = B*k->get(B.get_frame(),frame);
+        auto t = k->get(frame, B.get_frame());
+        t.swap();
+        const auto B_in_force_frame = t * B;
         B_coord = B_in_force_frame.v;
     }
     Eigen::Vector3d A_coord;
@@ -173,7 +165,9 @@ Eigen::Vector3d Wrench::get_BA(const ssc::kinematics::Point& B, const ssc::kinem
     }
     else
     {
-        auto A_in_force_frame = point*k->get(point.get_frame(),frame);
+        auto t = k->get(frame, point.get_frame());
+        t.swap();
+        const auto A_in_force_frame = t * point;
         A_coord = A_in_force_frame.v;
     }
     return A_coord - B_coord;
