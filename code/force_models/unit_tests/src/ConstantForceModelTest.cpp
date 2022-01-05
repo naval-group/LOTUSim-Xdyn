@@ -185,9 +185,17 @@ TEST_F(ConstantForceModelTest, ship_at_45_deg)
     const double psi = 45 * DEG;
     auto states = get_states(phi, theta, psi, env);
     const auto W = get_constant_force(env)(states, a.random<double>(), env);
-    ASSERT_DOUBLE_EQ(10e3*std::sqrt(2)/2 + 20e3*sqrt(2)/2, (double)W.X());
-    ASSERT_DOUBLE_EQ(-10e3*sqrt(2)/2+20e3*std::sqrt(2)/2, (double)W.Y());
-    ASSERT_DOUBLE_EQ(30e3, (double)W.Z());
+    ASSERT_DOUBLE_EQ(+10e3 * std::sqrt(2)/2 + 20e3 * std::sqrt(2)/2, W.X());
+    ASSERT_DOUBLE_EQ(-10e3 * std::sqrt(2)/2 + 20e3 * std::sqrt(2)/2, W.Y());
+    ASSERT_DOUBLE_EQ(+30e3, W.Z());
+    const Eigen::Vector3d pos_force(+0.5 - 0.1, -0.2 - 2.04, -440.0 - 6.28);
+    const Eigen::Vector3d force(10e3, 20e3, 30e3);
+    const Eigen::Vector3d torque(100e3, 200e3, 300e3);
+    const Eigen::Vector3d torque_ship_ned = torque + pos_force.cross(force);
+    // ned2body conversion with ctm_z(45deg)
+    ASSERT_DOUBLE_EQ(+std::sqrt(2)/2 * (+torque_ship_ned(0)+torque_ship_ned(1)), W.K());
+    ASSERT_DOUBLE_EQ(+std::sqrt(2)/2 * (-torque_ship_ned(0)+torque_ship_ned(1)), W.M());
+    ASSERT_DOUBLE_EQ(torque_ship_ned(2), W.N());
 }
 
 TEST_F(ConstantForceModelTest, ship_at_30_deg)
@@ -198,7 +206,15 @@ TEST_F(ConstantForceModelTest, ship_at_30_deg)
     const double psi = 30 * DEG;
     auto states = get_states(phi, theta, psi, env);
     const auto W = get_constant_force(env)(states, a.random<double>(), env);
-    ASSERT_DOUBLE_EQ(10e3*std::sqrt(3)/2 + 20e3*sqrt(1)/2, (double)W.X());
-    ASSERT_DOUBLE_EQ(-10e3*sqrt(1)/2+20e3*std::sqrt(3)/2, (double)W.Y());
-    ASSERT_DOUBLE_EQ(30e3, (double)W.Z());
+    ASSERT_DOUBLE_EQ(+10e3 * std::sqrt(3)/2 + 20e3 * 0.5, W.X());
+    ASSERT_DOUBLE_EQ(-10e3 * 0.5 + 20e3 * std::sqrt(3)/2, W.Y());
+    ASSERT_DOUBLE_EQ(+30e3, W.Z());
+    const Eigen::Vector3d pos_force(+0.5 - 0.1, -0.2 - 2.04, -440.0 - 6.28);
+    const Eigen::Vector3d force(10e3, 20e3, 30e3);
+    const Eigen::Vector3d torque(100e3, 200e3, 300e3);
+    const Eigen::Vector3d torque_ship_ned = torque + pos_force.cross(force);
+    // ned2body conversion with ctm_z(30deg)
+    ASSERT_DOUBLE_EQ(+std::sqrt(3)/2 * torque_ship_ned(0) + 0.5 * torque_ship_ned(1), W.K());
+    ASSERT_DOUBLE_EQ(-0.5 * torque_ship_ned(0) + std::sqrt(3)/2 * torque_ship_ned(1), W.M());
+    ASSERT_DOUBLE_EQ(torque_ship_ned(2), W.N());
 }
