@@ -153,7 +153,6 @@ void py_add_module_ssc_kinematics(py::module& m_ssc)
                 return ss.str();
             })
         ;
-        ;
 
     py::class_<ssc::kinematics::Wrench>(m_ssc_kinematics, "Wrench",
         "Stores a force & a torque, projected in a given reference frame.")
