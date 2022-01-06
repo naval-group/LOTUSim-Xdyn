@@ -9,9 +9,9 @@ project](https://www.irt-jules-verne.fr/wp-content/uploads/bassin-numerique.pdf)
 
 (c) 2014-2015, [IRT Jules Verne](https://www.irt-jules-verne.fr/), [SIREHNA](https://www.sirehna.com/), [Naval Group](https://www.naval-group.com/en/), [Bureau Veritas](https://www.bureauveritas.fr/), [Hydrocean](https://marine-offshore.bureauveritas.com/bvsolutions), [STX France](https://chantiers-atlantique.com/en/), [LHEEA](https://lheea.ec-nantes.fr/) for the initial version.
 
-(c) 2015-2021 [SIREHNA](https://www.sirehna.com/) & [Naval Group](https://www.naval-group.com/en/) for all subsequent versions.
+(c) 2015-2022 [SIREHNA](https://www.sirehna.com/) & [Naval Group](https://www.naval-group.com/en/) for all subsequent versions.
 
-**Disclaimer**: [External documentation](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/tree/master/doc_user) and [internal documentation](https://sirehna.gitlab-pages.sirehna.com/xdyn/)
+**Disclaimer**: [External documentation](https://sirehna_naval_group.gitlab.io/sirehna/xdyn/) and [internal documentation](https://sirehna.gitlab-pages.sirehna.com/xdyn/)
 was written for a French project, with
 French participants, therefore it is in French. It will be translated
 eventually. Also, please note that it is still a work-in-progress and, as such,
