@@ -45,8 +45,12 @@ class UniformWindVelocityProfileTest(unittest.TestCase):
         position = self.rng.random_vector_of_double().of_size(3)()
         time = self.rng.random_double()()
         wind_vector = wind_model.get_wind(position, time)
-        self.assertEqual(data.velocity * np.cos(data.direction), wind_vector[0])
-        self.assertEqual(data.velocity * np.sin(data.direction), wind_vector[1])
+        self.assertAlmostEqual(
+            data.velocity * np.cos(data.direction), wind_vector[0], delta=1e-14
+        )
+        self.assertAlmostEqual(
+            data.velocity * np.sin(data.direction), wind_vector[1], delta=1e-14
+        )
         self.assertEqual(0.0, wind_vector[2])
 
     def test_can_parse_PowerLawWindVelocityProfile_data(self):
@@ -74,8 +78,12 @@ class UniformWindVelocityProfileTest(unittest.TestCase):
         time = self.rng.random_double()()
         wind_vector = wind_model.get_wind(position, time)
         wind_velocity = data.velocity * np.power(-position[2] / data.z_ref, data.alpha)
-        self.assertEqual(wind_velocity * np.cos(data.direction), wind_vector[0])
-        self.assertEqual(wind_velocity * np.sin(data.direction), wind_vector[1])
+        self.assertAlmostEqual(
+            wind_velocity * np.cos(data.direction), wind_vector[0], delta=1e-14
+        )
+        self.assertAlmostEqual(
+            wind_velocity * np.sin(data.direction), wind_vector[1], delta=1e-14
+        )
         self.assertEqual(0.0, wind_vector[2])
 
     def test_PowerLawWindVelocityProfile_constructor_should_throw_if_invalid_data(self):
@@ -118,8 +126,12 @@ class UniformWindVelocityProfileTest(unittest.TestCase):
             * np.log(-position[2] / data.z0)
             / np.log(data.z_ref / data.z0)
         )
-        self.assertEqual(wind_velocity * np.cos(data.direction), wind_vector[0])
-        self.assertEqual(wind_velocity * np.sin(data.direction), wind_vector[1])
+        self.assertAlmostEqual(
+            wind_velocity * np.cos(data.direction), wind_vector[0], delta=1e-14
+        )
+        self.assertAlmostEqual(
+            wind_velocity * np.sin(data.direction), wind_vector[1], delta=1e-14
+        )
         self.assertEqual(0.0, wind_vector[2])
 
     def test_LogWindVelocityProfile_constructor_should_throw_if_invalid_data(self):
