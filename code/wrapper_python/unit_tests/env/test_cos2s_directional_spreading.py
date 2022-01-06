@@ -28,7 +28,7 @@ class Cos2sDirectionalSpreadingTest(unittest.TestCase):
         G(Pi/5, Pi/6, 1);
         G(Pi/5, Pi/6, 2);
         """
-        EPS = 1e-15
+        EPS = 1e-14
         assert_equal = lambda x, y: self.assertAlmostEqual(x, y, delta=EPS)
         g_1 = Cos2sDirectionalSpreading(pi / 4.0, 3)
         g_2 = Cos2sDirectionalSpreading(pi / 4.0, 4)
