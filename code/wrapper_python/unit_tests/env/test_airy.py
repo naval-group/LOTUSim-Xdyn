@@ -545,13 +545,13 @@ class AiryTest(unittest.TestCase):
         self.assertEqual(1, len(s.sin_psi))
         self.assertEqual(1, len(s.k))
         self.assertEqual(1, len(s.phase))
-        self.assertAlmostEqual(Hs / 2.0, s.a[0], 1e-10)
-        self.assertAlmostEqual(omega0, s.omega[0], 1e-10)
-        self.assertAlmostEqual(psi, s.psi[0], 1e-10)
-        self.assertAlmostEqual(np.cos(psi), s.cos_psi[0], 1e-10)
-        self.assertAlmostEqual(np.sin(psi), s.sin_psi[0], 1e-10)
-        self.assertAlmostEqual(omega0 * omega0 / 9.81, s.k[0], 1e-10)
-        self.assertAlmostEqual(0.0, s.phase[0], 1e-10)
+        self.assertAlmostEqual(Hs / 2.0, s.a[0], delta=1e-10)
+        self.assertAlmostEqual(omega0, s.omega[0], delta=1e-10)
+        self.assertAlmostEqual(psi, s.psi[0], delta=1e-10)
+        self.assertAlmostEqual(np.cos(psi), s.cos_psi[0], delta=1e-10)
+        self.assertAlmostEqual(np.sin(psi), s.sin_psi[0], delta=1e-10)
+        self.assertAlmostEqual(omega0 * omega0 / 9.81, s.k[0], delta=1e-10)
+        self.assertAlmostEqual(0.0, s.phase[0], delta=1e-10)
 
     def test_orbital_velocities_and_dynamic_pressure_should_decrease_with_depth_in_finite_depth(
         self,
