@@ -27,7 +27,6 @@
 
 class Mesh;
 typedef TR1(shared_ptr)<Mesh> MeshPtr;
-typedef TR1(shared_ptr)<Eigen::Matrix<double,6,6> > MatrixPtr;
 typedef Eigen::Matrix<double,6,6> Matrix66;
 
 struct BodyStates : AbstractStates<History>
