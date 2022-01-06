@@ -268,7 +268,7 @@ TEST_F(ConstantForceModelTest, should_evaluate_correctly_wrench_in_ship_frame_wi
         const double psi = a.random<double>().between(-PI, PI);
         auto states = get_states(phi, theta, psi, env);
         const auto W = get_constant_force(env)(states, a.random<double>(), env);
-        const auto ctm = ctm_x(phi) * ctm_y(theta) * ctm_z(psi);
+        const Eigen::Matrix3d ctm = ctm_x(phi) * ctm_y(theta) * ctm_z(psi);
         wrench_checks(W, "Anthineas", ctm * force, ctm * torque_ship_ned);
     }
 }
