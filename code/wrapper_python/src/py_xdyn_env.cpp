@@ -223,13 +223,13 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
 
             Input:
 
-            - `rho`: water density (in kg/m^3),
-            - `g`: gravity (in m/s^2),
-            - `x`: x-positions in the NED frame (in meters),
-            - `y`: y-positions in the NED frame (in meters),
-            - `z`: z-positions in the NED frame (in meters),
-            - `eta`: Wave heights at x,y,t (in meters),
-            - `t`: Current time instant (in seconds),
+            - `rho` (float): water density (in $kg.m^3$),
+            - `g` (float): gravity (in $`m/s^2`$),
+            - `x` (List[float]): x-positions in the NED frame (in meters),
+            - `y` (List[float]): y-positions in the NED frame (in meters),
+            - `z` (List[float]): z-positions in the NED frame (in meters),
+            - `eta` (List[float]): Wave heights at x,y,t (in meters),
+            - `t` (float): Current time instant (in seconds),
             )")
         .def("get_omegas", &WaveModel::get_omegas,
             R"(
@@ -264,11 +264,11 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
 
             Input:
 
-            - `x`: x-position of the RAO's calculation point in the NED frame (in meters)
-            - `y`: y-position of the RAO's calculation point in the NED frame (in meters)
-            - `t`: Current time instant (in seconds)
-            - `rao_module`: Module of the RAO
-            - `rao_phase`: Phase of the RAO
+            - `x` (float): x-position of the RAO's calculation point in the NED frame (in meters)
+            - `y` (float): y-position of the RAO's calculation point in the NED frame (in meters)
+            - `t` (float): Current time instant (in seconds)
+            - `rao_module` (List[float]): Module of the RAO
+            - `rao_phase` (List[float]): Phase of the RAO
             )")
         ;
     py::class_<Stretching>(m_env, "Stretching", "Rescale the z-axis with delta stretching model (used to compute orbital velocities")
@@ -289,8 +289,8 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
 
             Input:
 
-            - `original_z`: z value we wish to rescale (in meters)
-            - `wave_height`: Wave height (in meters), z being oriented downwards
+            - `original_z` (float): z value we wish to rescale (in meters)
+            - `wave_height` (float): Wave height (in meters), z being oriented downwards
             )")
         //.def("__repr__",
         //   [](const Stretching &a) {
@@ -355,8 +355,8 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
 
             Input:
 
-            - `Hs` Significant wave height (in meters)
-            - `Tp` Mean wave period (in seconds)
+            - `Hs` (float): Significant wave height (in meters)
+            - `Tp` (float): Mean wave period (in seconds)
             )")
         .def(py::self + py::self)
         .def("__call__", &BretschneiderSpectrum::operator(), py::arg("omega"),
@@ -367,7 +367,7 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
 
             Input:
 
-            - `omega` (float) Angular frequency (2\pi f) in rad/s of the significant wave height
+            - `omega` (float): Angular frequency (2\pi f) in rad/s of the significant wave height
             )")
         ;
 
@@ -378,20 +378,20 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
 
             Input:
 
-            - `Hs` (float) Significant wave height (in meters)
-            - `Tp` (float) Mean wave period (in seconds)
-            - `gamma` (float) Non-dimensional peak shape parameter
+            - `Hs` (float): Significant wave height (in meters)
+            - `Tp` (float): Mean wave period (in seconds)
+            - `gamma` (float): Non-dimensional peak shape parameter
             )")
         .def(py::self + py::self)
         .def("__call__", &JonswapSpectrum::operator(), py::arg("omega"),
             R"(
             Computes the amplitude of the power spectrum at a given angular frequency
 
-            Returns Amplitude of the power spectrum (in m^2 s)
+            Returns Amplitude of the power spectrum (in $m^2.s$)
 
             Input:
 
-            - `omega` (float) Angular frequency (2\pi f) in rad/s of the significant wave height
+            - `omega` (float): Angular frequency (2\pi f) in rad/s of the significant wave height
             )");
 
     py::class_<PiersonMoskowitzSpectrum, JonswapSpectrum, WaveSpectralDensity>(m_env, "PiersonMoskowitzSpectrum")
@@ -400,8 +400,8 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             R"(
             Input:
 
-            - `Hs` (float) Significant wave height (in meters)
-            - `Tp` (float) Mean wave period (in seconds)
+            - `Hs` (float): Significant wave height (in meters)
+            - `Tp` (float): Mean wave period (in seconds)
             )")
         ;
 
