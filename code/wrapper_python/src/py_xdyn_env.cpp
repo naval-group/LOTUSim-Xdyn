@@ -185,9 +185,9 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
 
             Input:
 
-            - `x`: x-positions in the NED frame (in meters),
-            - `y`: y-positions in the NED frame (in meters),
-            - `t`: Current time instant (in seconds),
+            - `x` (List[float]): x-positions in the NED frame (in meters),
+            - `y` (List[float]): y-positions in the NED frame (in meters),
+            - `t` (float): Current time instant (in seconds),
             )")
         .def("get_orbital_velocity", &WaveModel::get_orbital_velocity,
             py::arg("g"),
@@ -202,12 +202,12 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
 
             Input:
 
-            - `g`: gravity (in m/s^2),
-            - `x`: x-positions in the NED frame (in meters),
-            - `y`: y-positions in the NED frame (in meters),
-            - `z`: z-positions in the NED frame (in meters),
-            - `t`: Current time instant (in seconds),
-            - `eta`: Wave heights at `x`, `y`, `t` (in meters),
+            - `g` (float): gravity (in m/s^2),
+            - `x` (List[float]): x-positions in the NED frame (in meters),
+            - `y` (List[float]): y-positions in the NED frame (in meters),
+            - `z` (List[float]): z-positions in the NED frame (in meters),
+            - `t` (float): Current time instant (in seconds),
+            - `eta` (List[float]): Wave heights at `x`, `y`, `t` (in meters),
             )")
         .def("get_dynamic_pressure", &WaveModel::get_dynamic_pressure,
             py::arg("rho"),
