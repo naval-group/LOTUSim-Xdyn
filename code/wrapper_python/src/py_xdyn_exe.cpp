@@ -111,35 +111,35 @@ void py_add_module_xdyn_exe(py::module& m)
 
     py::class_<ErrorReporter>(m, "ErrorReporter")
         .def(py::init<>())
-        .def("invalid_request" , &ErrorReporter::invalid_request, py::arg("function"), py::arg("line"))
-        .def("empty_history" , &ErrorReporter::empty_history)
-        .def("invalid_state_size" , &ErrorReporter::invalid_state_size, py::arg("state_name"), py::arg("state_size"), py::arg("t_size"))
-        .def("simulation_error" , &ErrorReporter::simulation_error, py::arg("error_message"))
-        .def("invalid_command_line" , &ErrorReporter::invalid_command_line, py::arg("error_message"))
-        .def("invalid_input" , &ErrorReporter::invalid_input, py::arg("error_message"))
-        .def("internal_error" , &ErrorReporter::internal_error, py::arg("error_message"))
-        .def("network_error" , &ErrorReporter::network_error, py::arg("error_message"))
-        .def("run_and_report_errors_with_yaml_dump" , &ErrorReporter::run_and_report_errors_with_yaml_dump, py::arg("f"), py::arg("yaml_dump"))
-        .def("run_and_report_errors_without_yaml_dump" , &ErrorReporter::run_and_report_errors_without_yaml_dump, py::arg("f"))
-        .def("contains_errors" , &ErrorReporter::contains_errors)
-        .def("get_message" , &ErrorReporter::get_message)
-        .def("get_status" , &ErrorReporter::get_status)
-        .def("reset" , &ErrorReporter::reset)
+        .def("invalid_request", &ErrorReporter::invalid_request, py::arg("function"), py::arg("line"))
+        .def("empty_history", &ErrorReporter::empty_history)
+        .def("invalid_state_size", &ErrorReporter::invalid_state_size, py::arg("state_name"), py::arg("state_size"), py::arg("t_size"))
+        .def("simulation_error", &ErrorReporter::simulation_error, py::arg("error_message"))
+        .def("invalid_command_line", &ErrorReporter::invalid_command_line, py::arg("error_message"))
+        .def("invalid_input", &ErrorReporter::invalid_input, py::arg("error_message"))
+        .def("internal_error", &ErrorReporter::internal_error, py::arg("error_message"))
+        .def("network_error", &ErrorReporter::network_error, py::arg("error_message"))
+        .def("run_and_report_errors_with_yaml_dump", &ErrorReporter::run_and_report_errors_with_yaml_dump, py::arg("f"), py::arg("yaml_dump"))
+        .def("run_and_report_errors_without_yaml_dump", &ErrorReporter::run_and_report_errors_without_yaml_dump, py::arg("f"))
+        .def("contains_errors", &ErrorReporter::contains_errors)
+        .def("get_message", &ErrorReporter::get_message)
+        .def("get_status", &ErrorReporter::get_status)
+        .def("reset", &ErrorReporter::reset)
         ;
 
     py::class_<XdynCommandLineArguments>(m, "XdynCommandLineArguments")
         .def(py::init<>())
-        .def_readwrite("yaml_filenames",&XdynCommandLineArguments::yaml_filenames)
+        .def_readwrite("yaml_filenames",&XdynCommandLineArguments::yaml_filenames, "List of YAML filenames to use")
         .def_readwrite("solver", &XdynCommandLineArguments::solver, "Solver name")
         .def_readwrite("wave_output", &XdynCommandLineArguments::wave_output, "Wave output")
         .def_readwrite("initial_timestep"  , &XdynCommandLineArguments::initial_timestep, "Initial timestep")
         .def_readwrite("tstart", &XdynCommandLineArguments::tstart, "Start time")
         .def_readwrite("tend", &XdynCommandLineArguments::tend, "End time")
-        .def_readwrite("catch_exceptions" , &XdynCommandLineArguments::catch_exceptions)
-        .def("empty" , &XdynCommandLineArguments::empty)
+        .def_readwrite("catch_exceptions", &XdynCommandLineArguments::catch_exceptions)
+        .def("empty", &XdynCommandLineArguments::empty)
         ;
 
-    m.def("run" , &run,
+    m.def("run", &run,
         py::arg("input_data"),
         py::arg("error_outputter"),
         "Run a XDyn simulation from Python");
