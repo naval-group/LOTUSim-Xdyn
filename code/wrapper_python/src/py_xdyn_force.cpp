@@ -248,7 +248,8 @@ void py_add_module_xdyn_force(py::module& m0)
         .def_readwrite("apparent_wind_angle", &AeroPolarForceModel::Input::apparent_wind_angle)
         .def_readwrite("lift_coefficient", &AeroPolarForceModel::Input::lift_coefficient)
         .def_readwrite("drag_coefficient", &AeroPolarForceModel::Input::drag_coefficient)
-        .def_readwrite("reference_area", &AeroPolarForceModel::Input::reference_area)
+        .def_readwrite("reference_area", &AeroPolarForceModel::Input::reference_area,
+            "Reference area (in square metres) of the wing, for lift and drag normalization.")
         ;
 
     py::class_<AeroPolarForceModel, ForceModel>(m, "AeroPolarForceModel",
