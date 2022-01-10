@@ -93,8 +93,8 @@ void py_add_module_xdyn_hdb(py::module&m)
     py::class_<HydroDBParser>(m_hdb_interpolators, "HydroDBParser");
 
     py::class_<HDBParser, HydroDBParser>(m_hdb_interpolators, "HDBParser")
-        .def_static("from_file", &HDBParser::from_file)
-        .def_static("from_string", &HDBParser::from_string)
+        .def_static("from_file", &HDBParser::from_file, py::arg("filename"))
+        .def_static("from_string", &HDBParser::from_string, py::arg("file_content"))
         .def("get_forward_speed", &HDBParser::get_forward_speed, "Speed at which the radiation damping matrices were calculated. Used to determine if we can apply a forward-speed correction")
         .def("get_added_mass_array", &HDBParser::get_added_mass_array)
         .def("get_radiation_damping_array", &HDBParser::get_radiation_damping_array)
