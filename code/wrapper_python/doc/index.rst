@@ -7,6 +7,7 @@ Welcome to xdyn's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   xdyn
    api
 
 Indices and tables
