@@ -34,11 +34,12 @@ init:
 		--ext-todo \
 		--extensions=sphinx.ext.autosummary \
 		--extensions=sphinx_autopackagesummary \
+		--extensions=myst_parser \
 		src"
 	@echo "" >> src/source/conf.py
 	@echo "autosummary_generate = True" >> src/source/conf.py
 	@echo "autoclass_content = \"class\"" >> src/source/conf.py
-	cp index.rst api.rst xdyn.rst src/source/.
+	cp index.rst api.rst xdyn.rst test.md src/source/.
 	mkdir -p src/source/_templates/autosummary
 	cp autosummary/* src/source/_templates/autosummary/.
 
