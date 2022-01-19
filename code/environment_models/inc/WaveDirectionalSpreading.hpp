@@ -40,8 +40,8 @@ class WaveDirectionalSpreading
           *  \brief Wave density by direction.
           *  \details Its integral should evaluate to one (because it is a probability density)
           *           The angle convention is "coming from" & the angles are expressed in the
-          *           NED frame: 0° corresponds to waves coming from the North & 90° to waves
-          *           coming from the East.
+          *           NED frame: 0° corresponds to waves coming from the South and propagating to the North
+          *           & 90° corresponds to waves coming from the West and propagating the East.
           *  \returns Density (between 0 and 1, no unit)
           *  \snippet environment_models/unit_tests/src/WaveDirectionalSpreadingTest.cpp WaveDirectionalSpreadingTest method_example
           */
