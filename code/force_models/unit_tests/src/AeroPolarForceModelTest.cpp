@@ -19,7 +19,8 @@ TEST_F(AeroPolarForceModelTest, can_parse)
           "reference area: {value: 1000, unit: m^2}\n" <<
           "AWA: {unit: deg, values: [0,7,9,12,28,60,90,120,150,180]}\n" <<
           "lift coefficient: [0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,-0.11207]\n" <<
-          "drag coefficient: [0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483]";
+          "drag coefficient: [0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483]\n" <<
+          "angle command: beta";
     const AeroPolarForceModel::Input input = AeroPolarForceModel::parse(ss.str());
     ASSERT_EQ(input.name, "test");
     ASSERT_DOUBLE_EQ(input.reference_area, 1000);
@@ -38,6 +39,8 @@ TEST_F(AeroPolarForceModelTest, can_parse)
         ASSERT_DOUBLE_EQ(input.lift_coefficient.at(i), Cl.at(i));
         ASSERT_DOUBLE_EQ(input.drag_coefficient.at(i), Cd.at(i));
     }
+    ASSERT_TRUE(input.angle_command);
+    ASSERT_EQ(input.angle_command.get(), "beta");
 }
 
 BodyStates get_states(const double forward_speed = 0.)
@@ -79,7 +82,7 @@ TEST_F(AeroPolarForceModelTest, several_values)
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
     const double eps = 1E-10;
     ASSERT_NEAR(80689.800000000003, force_model.get_force(states, 0, env, {}).X(), eps);
-    //ASSERT_NEAR(-6724.2000000000098, force_model.get_force(states, 0, env, {}).Y(), eps); // This test fails for some reason
+    ASSERT_NEAR(6724.2000000000098, force_model.get_force(states, 0, env, {}).Y(), eps); // This test fails for some reason
     wind_input.direction = 45*M_PI/180;
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
     ASSERT_NEAR(78937.416185313908, force_model.get_force(states, 0, env, {}).X(), eps);
@@ -250,4 +253,41 @@ TEST_F(AeroPolarForceModelTest, should_print_warning_for_polar_input_with_unexpe
 
     // Restore cerr's buffer
     std::cerr.rdbuf(orig);
+}
+
+TEST_F(AeroPolarForceModelTest, angle_can_be_controlled)
+{
+    AeroPolarForceModel::Input input;
+    input.name = "test";
+    input.calculation_point_in_body_frame = YamlCoordinates(0,0,0);
+    input.reference_area = 1000;
+    input.apparent_wind_angle = {0.,0.12217305,0.15707963,0.20943951,0.48869219,1.04719755,1.57079633,2.0943951,2.61799388,M_PI};
+    input.lift_coefficient = {0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,-0.11207};
+    input.drag_coefficient = {0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483};
+    input.angle_command = "beta";
+    EnvironmentAndFrames env;
+    const AeroPolarForceModel force_model(input, "body", env);
+    const BodyStates states = get_states();
+    env.set_rho_air(1.2);
+    UniformWindVelocityProfile::Input wind_input;
+    wind_input.velocity = 10;
+
+    wind_input.direction = 0;
+    env.wind.reset(new UniformWindVelocityProfile(wind_input));
+    const double eps = 1E-10;
+    ASSERT_NEAR(80689.800000000003, force_model.get_force(states, 0, env, {{"beta", 0}}).X(), eps);
+    ASSERT_NEAR(6724.2000000000098, force_model.get_force(states, 0, env, {{"beta", 0}}).Y(), eps);
+
+    ASSERT_THROW(force_model.get_force(states, 0, env, {}), std::out_of_range);
+
+    wind_input.direction = 90*M_PI/180;
+    std::cout << "wind_input.direction: " << wind_input.direction << std::endl;
+    env.wind.reset(new UniformWindVelocityProfile(wind_input));
+    ASSERT_NEAR(-6724.2000000000098, force_model.get_force(states, 0, env, {{"beta", 90*M_PI/180}}).X(), eps);
+    ASSERT_NEAR(80689.800000000003, force_model.get_force(states, 0, env, {{"beta", 90*M_PI/180}}).Y(), eps);
+
+    wind_input.direction = -90*M_PI/180;
+    env.wind.reset(new UniformWindVelocityProfile(wind_input));
+    ASSERT_NEAR(-6724.2000000000098, force_model.get_force(states, 0, env, {{"beta", -90*M_PI/180}}).X(), eps);
+    ASSERT_NEAR(-80689.800000000003, force_model.get_force(states, 0, env, {{"beta", -90*M_PI/180}}).Y(), eps);
 }
