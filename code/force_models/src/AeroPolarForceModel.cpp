@@ -12,20 +12,8 @@ std::string AeroPolarForceModel::model_name()
     return "aerodynamic polar";
 }
 
-std::vector<std::string> make_commands(boost::optional<std::string> command)
-{
-    if (command)
-    {
-        return {command.get()};
-    }
-    else
-    {
-        return {};
-    }
-}
-
 AeroPolarForceModel::AeroPolarForceModel(const Input input, const std::string body_name_, const EnvironmentAndFrames& env):
-        ForceModel(input.name, make_commands(input.angle_command), body_name_, env),
+        ForceModel(input.name, make_optional_commands(input.angle_command), body_name_, env),
         Cl(),
         Cd(),
         reference_area(input.reference_area),

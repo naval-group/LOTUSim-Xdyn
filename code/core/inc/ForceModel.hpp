@@ -135,4 +135,6 @@ class ForceModel
         ssc::kinematics::Wrench latest_force_in_body_frame;
 };
 
+std::vector<std::string> make_optional_commands(boost::optional<std::string> command);
+
 #endif /* FORCEMODEL_HPP_ */
