@@ -13,7 +13,7 @@ std::string HydroPolarForceModel::model_name()
 }
 
 HydroPolarForceModel::HydroPolarForceModel(const Input input, const std::string body_name_, const EnvironmentAndFrames& env):
-        ForceModel(input.name, {}, input.internal_frame, body_name_, env),
+        ForceModel(input.name, make_optional_commands(input.angle_command), input.internal_frame, body_name_, env),
         Cl(),
         Cd(),
         Cm(),
@@ -21,6 +21,7 @@ HydroPolarForceModel::HydroPolarForceModel(const Input input, const std::string 
         chord_length(input.chord_length),
         symmetry(),
         use_waves_velocity(input.use_waves_velocity),
+        angle_command(input.angle_command),
         relative_velocity(new double(0)),
         angle_of_attack(new double(0))
 {
@@ -98,6 +99,7 @@ HydroPolarForceModel::Input HydroPolarForceModel::parse(const std::string& yaml)
     }
     node["position of calculation frame"] >> ret.internal_frame;
     node["take waves orbital velocity into account"] >> ret.use_waves_velocity;
+    parse_optional(node, "angle command", ret.angle_command);
     return ret;
 }
 
@@ -124,8 +126,14 @@ Wrench HydroPolarForceModel::get_force(const BodyStates& states, const double t,
         }
         water_height = wave_height.at(0);
     }
-    const double alpha = -atan2(Vp(1), Vp(0));
+    const double beta = -atan2(Vp(1), Vp(0)); // Incident angle of the flow, in [-pi,pi]
     const double U = sqrt(pow(Vp(0), 2) + pow(Vp(1), 2)); // Apparent flow velocity projected in the (x,y) plane of the internal frame
+    double alpha = beta; // Angle of attack
+    if (angle_command)
+    {
+        alpha += commands.at(angle_command.get());
+    }
+    alpha = remainder(alpha, 2*M_PI); // Putting alpha in [-pi,pi]
     Wrench ret(ssc::kinematics::Point(name,0,0,0), name);
     if (P_NED(2) > water_height)
     {
@@ -136,15 +144,15 @@ Wrench HydroPolarForceModel::get_force(const BodyStates& states, const double t,
         const double alpha_prime = (symmetry && alpha<0) ? -alpha : alpha;
         const double lift = 0.5*Cl->f(alpha_prime)*env.rho*pow(U, 2)*reference_area;
         const double drag = 0.5*Cd->f(alpha_prime)*env.rho*pow(U, 2)*reference_area;
-        if (alpha>=0)
+        if (beta>=0)
         {
-            ret.X() = -drag*cos(alpha) + lift*sin(alpha);
-            ret.Y() =  drag*sin(alpha) + lift*cos(alpha);
+            ret.X() = -drag*cos(beta) + lift*sin(beta);
+            ret.Y() =  drag*sin(beta) + lift*cos(beta);
         }
         else
         {
-            ret.X() = -drag*cos(alpha) - lift*sin(alpha);
-            ret.Y() =  drag*sin(alpha) - lift*cos(alpha);
+            ret.X() = -drag*cos(beta) - lift*sin(beta);
+            ret.Y() =  drag*sin(beta) - lift*cos(beta);
         }
         if (Cm)
         {
@@ -158,7 +166,7 @@ Wrench HydroPolarForceModel::get_force(const BodyStates& states, const double t,
                 normalization_cubic_length = pow(reference_area, 1.5);
             }
             const double moment = 0.5*Cm->f(alpha_prime)*env.rho*pow(U, 2)*normalization_cubic_length;
-            if (alpha>=0)
+            if (beta>=0)
             {
                 ret.N() = moment;
             }
