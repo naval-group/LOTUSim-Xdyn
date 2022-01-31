@@ -59,7 +59,8 @@ TEST_F(HydroPolarForceModelTest, can_parse_optional_output)
     std::stringstream ss;
     ss << "\n" <<
           "moment coefficient: [0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483]\n" <<
-          "chord length: {value: 5, unit: m}";
+          "chord length: {value: 5, unit: m}\n" <<
+          "angle command: beta";
     const HydroPolarForceModel::Input input = HydroPolarForceModel::parse(get_yaml_input()+ss.str());
     ASSERT_TRUE(input.moment_coefficient.is_initialized());
     ASSERT_TRUE(input.chord_length.is_initialized());
@@ -69,6 +70,8 @@ TEST_F(HydroPolarForceModelTest, can_parse_optional_output)
     {
         ASSERT_DOUBLE_EQ(input.moment_coefficient.get().at(i), Cm.at(i));
     }
+    ASSERT_TRUE(input.angle_command);
+    ASSERT_EQ(input.angle_command.get(), "beta");
 }
 
 BodyStates get_states(const double u = 0., const double v = 0.)
@@ -271,4 +274,44 @@ TEST_F(HydroPolarForceModelTest, should_print_warning_and_return_zero_force_if_c
 
     // Restore cerr's buffer
     std::cerr.rdbuf(orig);
+}
+
+TEST_F(HydroPolarForceModelTest, angle_can_be_controlled)
+{
+    HydroPolarForceModel::Input input;
+    input.name = "test";
+    // Internal frame is placed under water, 5m under the body frame's origin
+    input.internal_frame = YamlPosition(YamlCoordinates(0,0,5), YamlAngle(0,0,0), "body");
+    input.reference_area = 100;
+    input.angle_of_attack = {0.,0.12217305,0.15707963,0.20943951,0.48869219,1.04719755,1.57079633,2.0943951,2.61799388,M_PI};
+    input.lift_coefficient = {0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,0.};
+    input.drag_coefficient = {0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483};
+    input.use_waves_velocity = false;
+    input.angle_command = "beta";
+    EnvironmentAndFrames env;
+    env.rho = 1000;
+    env.rot = YamlRotation("angle", {"z","y'","x''"});
+    const HydroPolarForceModel force_model(input, "body", env);
+    BodyStates states;
+    const double eps = 1E-10;
+    // u=10, v=0, beta=0 -> AoA=0°
+    states = get_states(10, 0);
+    auto F = force_model.get_force(states, 0, env, {{"beta", 0}});
+    ASSERT_NEAR(F.X(), -172399.99999999997, eps);
+    ASSERT_NEAR(F.Y(), 0., eps);
+    // u=0, v=10, beta=90  -> AoA=0°
+    states = get_states(0, 10);
+    F = force_model.get_force(states, 0, env, {{"beta", M_PI/2}});
+    ASSERT_NEAR(F.X(), 0., eps);
+    ASSERT_NEAR(F.Y(), -172399.99999999997, eps);
+    // u=0, v=-10, beta=-90  -> AoA=0°
+    states = get_states(0, -10);
+    F = force_model.get_force(states, 0, env, {{"beta", -M_PI/2}});
+    ASSERT_NEAR(F.X(), 0., eps);
+    ASSERT_NEAR(F.Y(), 172399.99999999997, eps);
+    // u=-10, v=0, beta=180  -> AoA=0°
+    states = get_states(-10, 0);
+    F = force_model.get_force(states, 0, env, {{"beta", M_PI}});
+    ASSERT_NEAR(F.X(), 172399.99999999997, eps);
+    ASSERT_NEAR(F.Y(), 0., eps);
 }
