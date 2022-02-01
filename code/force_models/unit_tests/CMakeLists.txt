@@ -30,6 +30,7 @@ FILE(GLOB SRC src/QuadraticDampingForceModelTest.cpp
               src/HydroPolarForceModelTest.cpp
               src/LinearFroudeKrylovForceModelTest.cpp
               src/MMGManeuveringForceModelTest.cpp
+              src/LinearStiffnessForceModelTest.cpp
               )
 # ------8<---------------------------------------------->8-----
 
