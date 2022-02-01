@@ -9,7 +9,8 @@ std::string LinearStiffnessForceModel::model_name() {return "linear stiffness";}
 
 LinearStiffnessForceModel::LinearStiffnessForceModel(const Input input, const std::string& body_name, const EnvironmentAndFrames& env) :
         ForceModel(input.name, {}, body_name, env),
-        K(input.K)
+        K(input.K),
+        equilibrium_position(input.equilibrium_position)
 {
 }
 
@@ -17,12 +18,25 @@ Wrench LinearStiffnessForceModel::get_force(const BodyStates& states, const doub
 {
     Eigen::Matrix<double, 6, 1> X;
     ssc::kinematics::EulerAngles angles = states.get_angles();
-    X <<states.x(),
-        states.y(),
-        states.z(),
-        angles.phi,
-        angles.theta,
-        angles.psi;
+    if (equilibrium_position)
+    {
+        X <<states.x() - equilibrium_position.get().coordinates.x,
+            states.y() - equilibrium_position.get().coordinates.y,
+            states.z() - equilibrium_position.get().coordinates.z,
+            angles.phi - equilibrium_position.get().angle.phi,
+            angles.theta - equilibrium_position.get().angle.theta,
+            angles.psi - equilibrium_position.get().angle.psi;
+    }
+    else
+    {
+        X <<states.x(),
+            states.y(),
+            states.z(),
+            angles.phi,
+            angles.theta,
+            angles.psi;
+    }
+    
     return Wrench(ssc::kinematics::Point(body_name,0,0,0), body_name, -K*X);
 }
 
@@ -49,5 +63,6 @@ LinearStiffnessForceModel::Input LinearStiffnessForceModel::parse(const std::str
     for (size_t j = 0 ; j < 6 ; ++j) ret.K(3,(int)j) = M.row_4[j];
     for (size_t j = 0 ; j < 6 ; ++j) ret.K(4,(int)j) = M.row_5[j];
     for (size_t j = 0 ; j < 6 ; ++j) ret.K(5,(int)j) = M.row_6[j];
+    parse_optional(node, "equilibrium position", ret.equilibrium_position);
     return ret;
 }
