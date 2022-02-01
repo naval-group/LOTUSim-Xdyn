@@ -60,6 +60,35 @@ TEST_F(LinearStiffnessForceModelTest, can_parse)
     ASSERT_DOUBLE_EQ(151., K(5,5));
 }
 
+TEST_F(LinearStiffnessForceModelTest, can_parse_optional)
+{
+    const std::string yaml = "        name: test\n"
+                             "        stiffness matrix:\n"
+                             "            row 1: [  2,   3,   5,   7,  11,  13]\n"
+                             "            row 2: [ 17,  19,  23,  29,  31,  37]\n"
+                             "            row 3: [ 41,  43,  47,  53,  59,  61]\n"
+                             "            row 4: [ 67,  71,  73,  79,  83,  89]\n"
+                             "            row 5: [ 97, 101, 103, 107, 109, 113]\n"
+                             "            row 6: [127, 131, 137, 139, 149, 151]\n"
+                             "        equilibrium position:\n"
+                             "            frame: body\n"
+                             "            x: {value: 1, unit: m}\n"
+                             "            y: {value: 2, unit: m}\n"
+                             "            z: {value: 3, unit: m}\n"
+                             "            phi: {value: 4, unit: rad}\n"
+                             "            theta: {value: 5, unit: rad}\n"
+                             "            psi: {value: 6, unit: rad}\n";
+    const LinearStiffnessForceModel::Input input = LinearStiffnessForceModel::parse(yaml);
+    ASSERT_TRUE(input.equilibrium_position);
+    ASSERT_EQ(input.equilibrium_position.get().frame, "body");
+    ASSERT_DOUBLE_EQ(input.equilibrium_position.get().coordinates.x, 1);
+    ASSERT_DOUBLE_EQ(input.equilibrium_position.get().coordinates.y, 2);
+    ASSERT_DOUBLE_EQ(input.equilibrium_position.get().coordinates.z, 3);
+    ASSERT_DOUBLE_EQ(input.equilibrium_position.get().angle.phi, 4);
+    ASSERT_DOUBLE_EQ(input.equilibrium_position.get().angle.theta, 5);
+    ASSERT_DOUBLE_EQ(input.equilibrium_position.get().angle.psi, 6);
+}
+
 BodyStates get_position_states(const double x, const double y, const double z, const double phi, const double theta, const double psi)
 {
     BodyStates states(0);
@@ -115,6 +144,49 @@ TEST_F(LinearStiffnessForceModelTest, example)
             const int k = j+3;
             ASSERT_NEAR(K(j,0)*x + K(j,1)*y + K(j,2)*z + K(j,3)*phi + K(j,4)*theta + K(j,5)*psi, -f.force[j],  EPS)<<" row: "<<i << ", col:"<<j;
             ASSERT_NEAR(K(k,0)*x + K(k,1)*y + K(k,2)*z + K(k,3)*phi + K(k,4)*theta + K(k,5)*psi, -f.torque[j], EPS)<<" row: "<<i << ", col:"<<k;
+        }
+    }
+}
+
+TEST_F(LinearStiffnessForceModelTest, example_with_equilibrium_input)
+{
+    const double EPS = 1e-9;
+    double x,y,z,phi,theta,psi;
+    EnvironmentAndFrames env;
+    BodyStates states;
+    LinearStiffnessForceModel::Input input;
+    input.name = "test";
+    input.K <<  2,   3,   5,   7,  11,  13,
+                17,  19,  23,  29,  31,  37,
+                41,  43,  47,  53,  59,  61,
+                67,  71,  73,  79,  83,  89,
+                97, 101, 103, 107, 109, 113,
+                127, 131, 137, 139, 149, 151;
+    const double x0 = 1;
+    const double y0 = 2;
+    const double z0 = 3;
+    const double phi0 = M_PI/10.;
+    const double theta0 = M_PI/8.;
+    const double psi0 = M_PI/12.;
+    input.equilibrium_position = YamlPosition(YamlCoordinates(x0,y0,z0), YamlAngle(phi0,theta0,psi0), "body");
+    const Eigen::Matrix<double,6,6>& K = input.K;
+    LinearStiffnessForceModel F(input, "body", env);
+    for (size_t i=0;i<10;++i)
+    {
+        x = a.random<double>().between(-10.0,+10.0);
+        y = a.random<double>().between(-10.0,+10.0);
+        z = a.random<double>().between(-10.0,+10.0);
+        phi = a.random<double>().between(-M_PI/3,M_PI/3); // Restricting the range of angles to avoid gimbal lock
+        theta = a.random<double>().between(-M_PI/3,M_PI/3);
+        psi = a.random<double>().between(-M_PI/3,M_PI/3);
+        states = get_position_states(x,y,z,phi,theta,psi);
+        const Wrench f = F.get_force(states, a.random<double>(), env, {});
+        ASSERT_EQ("body", f.get_frame());
+        for (int j=0;j<3;++j)
+        {
+            const int k = j+3;
+            ASSERT_NEAR(K(j,0)*(x-x0) + K(j,1)*(y-y0) + K(j,2)*(z-z0) + K(j,3)*(phi-phi0) + K(j,4)*(theta-theta0) + K(j,5)*(psi-psi0), -f.force[j],  EPS)<<" row: "<<i << ", col:"<<j;
+            ASSERT_NEAR(K(k,0)*(x-x0) + K(k,1)*(y-y0) + K(k,2)*(z-z0) + K(k,3)*(phi-phi0) + K(k,4)*(theta-theta0) + K(k,5)*(psi-psi0), -f.torque[j], EPS)<<" row: "<<i << ", col:"<<k;
         }
     }
 }
