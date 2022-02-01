@@ -392,6 +392,58 @@ Un exemple de simulation de solide soumis aux efforts hydrostatiques
 Introduction à la mécanique des fluides - CVG 2516, Statique des Fluides, Ioan
 NISTOR
 
+## Modèle de raideur linéaire
+
+### Description
+
+Plusieurs efforts peuvent être modélisés sous la forme d'une raideur linéaire, notamment l'effort 
+hydrostatique pour de faibles mouvements ou certains types d'ancrages. Un effort de raideur linéaire
+s'exprime comme le produit d'une matrice de raideur $`K`$ avec le vecteur position :
+
+```math
+\vec{F} =
+K (X - X_{eq})
+=
+K \left[\begin{array}{c}
+x - x_{eq} \\
+y - y_{eq} \\
+z - z_{eq} \\
+\phi - \phi_{eq} \\
+\theta - \theta_{eq} \\
+\psi - \psi_{eq}
+\end{array}\right]
+````
+
+Où le $`X`$ est le vecteur position instantané et $`X_{eq}`$ est la position à l'équilibre.
+
+### Paramétrage
+
+Le modèle de raideur linéaire peut être paramétré de la façon suivante :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: linear stiffness
+  name: mooring
+  stiffness matrix:
+      row 1: [ 3e4, 0,   0, 0, 0, 0]
+      row 2: [ 0,   3e4, 0, 0, 0, 0]
+      row 3: [ 0,   0,   0, 0, 0, 0]
+      row 4: [ 0,   0,   0, 0, 0, 0]
+      row 5: [ 0,   0,   0, 0, 0, 0]
+      row 6: [ 0,   0,   0, 0, 0, 0]
+  equilibrium position:
+      frame: body
+      x: {value: 1, unit: m}
+      y: {value: 2, unit: m}
+      z: {value: 3, unit: m}
+      phi: {value: 4, unit: rad}
+      theta: {value: 5, unit: rad}
+      psi: {value: 6, unit: rad}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+La partie `equilibrium position` est optionelle, et permet de spécifier la position d'équilibre $`X_{eq}`$. En son absence, la position d'équilibre est supposée être à zéro (pour toutes les valeurs).
+
+**Note :** Le repère de référence pour la position d'équilibre est toujours le corps considéré. Sa valeur dans le fichier d'entrée n'est pas utilisée, mais elle doit être présente (`frame: body` dans l'exemple).
+
 ## Efforts de Froude-Krylov
 
 ### Description
