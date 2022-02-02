@@ -442,7 +442,7 @@ Le modèle de raideur linéaire peut être paramétré de la façon suivante :
 
 La partie `equilibrium position` est optionelle, et permet de spécifier la position d'équilibre $`X_{eq}`$. En son absence, la position d'équilibre est supposée être à zéro (pour toutes les valeurs).
 
-**Note :** Le repère de référence pour la position d'équilibre est toujours le corps considéré. Sa valeur dans le fichier d'entrée n'est pas utilisée, mais elle doit être présente (`frame: body` dans l'exemple).
+**Note :** Le repère de référence pour la position d'équilibre est toujours le corps considéré. En raison d'une limitation technique actuelle du parseur YAML d'xdyn, le repère de référence doit toujours être renseigné, mais sa valeur sera ignorée (xdyn utilisera toujours le repère lié au corps, quelle que soit la valeur de la clef `frame`).
 
 ## Efforts de Froude-Krylov
 
