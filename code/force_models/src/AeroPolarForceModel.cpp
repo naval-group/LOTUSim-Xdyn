@@ -82,7 +82,7 @@ Wrench AeroPolarForceModel::get_force(const BodyStates& states, const double t, 
     const Eigen::Vector3d wind_in_NED = env.wind->get_wind(application_point_in_NED, t);
     const Eigen::Vector3d true_wind_in_body_frame = rotation.transpose()*wind_in_NED;
     const Eigen::Vector3d W = true_wind_in_body_frame - Vp; // Apparent wind in body frame
-    const double U = sqrt(pow(W(0), 2) + pow(W(1), 2)); // Apparent wind speed projected in the body horizontal plane
+    const double U = sqrt(W(0)*W(0) + W(1)*W(1)); // Apparent wind speed projected in the body horizontal plane
     double beta = atan2(-W(1), -W(0)); // Incident angle of the flow, in [-pi,pi]
     double alpha = beta; // Angle of attack
     if (angle_command)

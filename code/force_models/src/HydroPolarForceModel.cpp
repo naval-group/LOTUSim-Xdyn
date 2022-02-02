@@ -127,7 +127,7 @@ Wrench HydroPolarForceModel::get_force(const BodyStates& states, const double t,
         water_height = wave_height.at(0);
     }
     const double beta = -atan2(Vp(1), Vp(0)); // Incident angle of the flow, in [-pi,pi]
-    const double U = sqrt(pow(Vp(0), 2) + pow(Vp(1), 2)); // Apparent flow velocity projected in the (x,y) plane of the internal frame
+    const double U = sqrt(Vp(0)*Vp(0) + Vp(1)*Vp(1)); // Apparent flow velocity projected in the (x,y) plane of the internal frame
     double alpha = beta; // Angle of attack
     if (angle_command)
     {
