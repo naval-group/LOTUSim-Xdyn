@@ -1159,7 +1159,9 @@ L'angle d'attaque $`\alpha`$ et la vitesse de l'écoulement relatif $`U = |\vec{
 
 ![](images/angle_of_attack.svg)
 
-L'angle d'attaque $`\alpha`$, défini entre -180° et 180°, est formé entre la vitesse relative projetée dans le plan $`\vec{V}`$ et l'axe longitudinal $`\vec{x_i}`$ du repère local.
+L'angle d'attaque $`\alpha`$, défini entre -180° et 180°, est constitué de l'angle entre la vitesse relative projetée dans le plan $`\vec{V}`$ et l'axe longitudinal $`\vec{x_i}`$ du repère local, auquel vient éventuellement s'ajouter l'angle de commande (optionnel, nul si non spécifié).
+
+L'intérêt de la commande par rapport à la position du repère local est que la commande est dynamique et peut être changée au cours de la simulation, alors que le repère local est fixé.
 
 Il est à noter que les coefficients $`C_l`$, $`C_d`$ et $`C_m`$ sont généralement très dépendants du régime d'écoulement. xdyn n'effectue aucune vérification du nombre de Reynolds, il appartient à l'utilisateur de s'assurer que les polaires de coefficients sont pertinentes au regards des conditions de l'écoulement. La vitesse de l'écoulement $`U`$ et l'angle d'attaque $`\alpha`$ sont disponibles en sortie du modèle d'effort, sous les noms respectifs `U(model_name,body_name)` et `alpha(model_name,body_name)`.
 
