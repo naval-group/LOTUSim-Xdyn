@@ -206,12 +206,5 @@ std::vector<std::string> ForceModel::get_command_names() const
 
 std::vector<std::string> make_optional_commands(boost::optional<std::string> command)
 {
-    if (command)
-    {
-        return {command.get()};
-    }
-    else
-    {
-        return {};
-    }
+    return command ? std::vector<std::string>({command.get()}) : std::vector<std::string>();
 }
