@@ -294,7 +294,6 @@ TEST_F(HydroPolarForceModelTest, angle_can_be_controlled)
     const HydroPolarForceModel force_model(input, "body", env);
     BodyStates states;
     const double eps = 1E-10;
-    const double eps2 = 1;
     // u=10, v=0, beta=0 -> AoA=0°
     states = get_states(10, 0);
     auto F = force_model.get_force(states, 0, env, {{"beta", 0}});
@@ -303,18 +302,18 @@ TEST_F(HydroPolarForceModelTest, angle_can_be_controlled)
     // u=10, v=0, beta=30° -> AoA=30°
     states = get_states(10, 0);
     F = force_model.get_force(states, 0, env, {{"beta", M_PI/6}});
-    ASSERT_NEAR(F.X(), -141863, eps2);
-    ASSERT_NEAR(F.Y(), 7168844.2065911861, eps2);
+    ASSERT_NEAR(F.X(), -141862.59529221783, eps);
+    ASSERT_NEAR(F.Y(), 7168844.2065911861, eps);
     // u=10, v=0, beta=45° -> AoA=45°
     states = get_states(10, 0);
     F = force_model.get_force(states, 0, env, {{"beta", M_PI/4}});
-    ASSERT_NEAR(F.X(), -292676, eps2);
-    ASSERT_NEAR(F.Y(), 7159116.1098209573, eps2);
+    ASSERT_NEAR(F.X(), -292675.63145633071, eps);
+    ASSERT_NEAR(F.Y(), 7159116.1098209573, eps);
     // u=10, v=0, beta=60° -> AoA=60°
     states = get_states(10, 0);
     F = force_model.get_force(states, 0, env, {{"beta", M_PI/3}});
-    ASSERT_NEAR(F.X(), -565100, eps2);
-    ASSERT_NEAR(F.Y(), 6.91595e+06, eps2);
+    ASSERT_NEAR(F.X(), -565100.00156966201, eps);
+    ASSERT_NEAR(F.Y(), 6915949.99887837, eps);
 
     // u=0, v=10, beta=90  -> AoA=0°
     states = get_states(0, 10);
