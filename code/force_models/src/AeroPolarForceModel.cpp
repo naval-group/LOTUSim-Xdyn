@@ -13,7 +13,7 @@ std::string AeroPolarForceModel::model_name()
 }
 
 AeroPolarForceModel::AeroPolarForceModel(const Input input, const std::string body_name_, const EnvironmentAndFrames& env):
-        ForceModel(input.name, make_optional_commands(input.angle_command), body_name_, env),
+        ForceModel(input.name, input.angle_command ? std::vector<std::string>({input.angle_command.get()}) : std::vector<std::string>(), body_name_, env),
         Cl(),
         Cd(),
         reference_area(input.reference_area),

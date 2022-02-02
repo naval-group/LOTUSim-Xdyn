@@ -13,7 +13,7 @@ std::string HydroPolarForceModel::model_name()
 }
 
 HydroPolarForceModel::HydroPolarForceModel(const Input input, const std::string body_name_, const EnvironmentAndFrames& env):
-        ForceModel(input.name, make_optional_commands(input.angle_command), input.internal_frame, body_name_, env),
+        ForceModel(input.name, input.angle_command ? std::vector<std::string>({input.angle_command.get()}) : std::vector<std::string>(), input.internal_frame, body_name_, env),
         Cl(),
         Cd(),
         Cm(),
