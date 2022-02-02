@@ -24,6 +24,7 @@ HydroPolarForceModel::HydroPolarForceModel(const Input input, const std::string 
         angle_command(input.angle_command),
         relative_velocity(new double(0)),
         angle_of_attack(new double(0))
+        // relative_velocity & angle_of_attack need to be stored for outputting, but because ForceModel::get_force(...) is const, it can't modify normal variables. That's why they're hidden behind pointers, to break constness
 {
     if (input.lift_coefficient.size()==0)
     {
