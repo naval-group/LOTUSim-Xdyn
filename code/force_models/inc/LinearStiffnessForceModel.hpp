@@ -14,8 +14,8 @@ class LinearStiffnessForceModel : public ForceModel
             Eigen::Matrix<double,6,6> K;
             boost::optional<YamlPosition> equilibrium_position;
         };
-        
-        LinearStiffnessForceModel(const Input input, const std::string& body_name, const EnvironmentAndFrames& env);
+
+        LinearStiffnessForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env);
         LinearStiffnessForceModel() = delete;
         static Input parse(const std::string& yaml);
         static std::string model_name();
