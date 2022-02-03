@@ -39,7 +39,7 @@ init:
 	@echo "" >> src/source/conf.py
 	@echo "autosummary_generate = True" >> src/source/conf.py
 	@echo "autoclass_content = \"class\"" >> src/source/conf.py
-	cp index.rst api.rst xdyn.rst test.md src/source/.
+	cp index.rst api.rst xdyn.rst src/source/.
 	mkdir -p src/source/_templates/autosummary
 	cp autosummary/* src/source/_templates/autosummary/.
 

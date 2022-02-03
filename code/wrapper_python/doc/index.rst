@@ -9,7 +9,6 @@ Welcome to xdyn's documentation!
 
    xdyn
    api
-   test.md
 
 Indices and tables
 ==================
