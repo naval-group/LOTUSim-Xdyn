@@ -242,6 +242,7 @@ void py_add_module_xdyn_force(py::module& m0)
         .def_readwrite("reference_area", &HydroPolarForceModel::Input::reference_area)
         .def_readwrite("chord_length", &HydroPolarForceModel::Input::chord_length)
         .def_readwrite("use_waves_velocity", &HydroPolarForceModel::Input::use_waves_velocity)
+        .def_readwrite("angle_command", &HydroPolarForceModel::Input::angle_command)
         ;
 
     py::class_<HydroPolarForceModel, ForceModel>(m, "HydroPolarForceModel",
