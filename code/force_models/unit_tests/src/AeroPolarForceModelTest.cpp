@@ -58,7 +58,7 @@ BodyStates get_states(const double forward_speed = 0.)
     states.qr.record(0, 1);
     states.qi.record(0, 0);
     states.qj.record(0, 0);
-    states.qr.record(0, 0);
+    states.qk.record(0, 0);
     return states;
 }
 
