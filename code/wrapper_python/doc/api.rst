@@ -16,3 +16,4 @@ API Reference
    xdyn.env.wind.io
    xdyn.hdb
    xdyn.core
+   xdyn.core.io
