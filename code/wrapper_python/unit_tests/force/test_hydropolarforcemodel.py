@@ -40,6 +40,7 @@ def get_input_full() -> str:
         + """
     moment coefficient: [0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483]
     chord length: {value: 5, unit: m}
+    angle command: beta
     """
     )
 
@@ -147,6 +148,7 @@ class HydroPolarForceModelTest(unittest.TestCase):
         )
         self.assertIsNotNone(data.chord_length)
         self.assertEqual(data.chord_length, 5.0)
+        self.assertEqual(data.angle_command, "beta")
         self.assertTrue(
             np.allclose(
                 data.moment_coefficient,
@@ -613,12 +615,66 @@ class HydroPolarForceModelTest(unittest.TestCase):
             wrench = force_model.get_force(states, 0, env)
         expected_msg = "WARNING: In hydrodynamic polar force model 'test', the calculation point seems to be outside of the water (z = 5). In consequence, no force is being applied by this model."
         self.assertTrue(expected_msg in buf.getvalue(), buf.getvalue())
-        self.assertAlmostEqual(wrench.X(), 0.0, delta=1e-12)
-        self.assertAlmostEqual(wrench.Y(), 0.0, delta=1e-12)
-        self.assertAlmostEqual(wrench.Z(), 0.0, delta=1e-12)
-        self.assertAlmostEqual(wrench.K(), 0.0, delta=1e-12)
-        self.assertAlmostEqual(wrench.M(), 0.0, delta=1e-12)
-        self.assertAlmostEqual(wrench.N(), 0.0, delta=1e-12)
+        assert_is_almost_zero = lambda x: self.assertAlmostEqual(x, 0.0, delta=1e-12)
+        assert_is_almost_zero(wrench.X())
+        assert_is_almost_zero(wrench.Y())
+        assert_is_almost_zero(wrench.Z())
+        assert_is_almost_zero(wrench.K())
+        assert_is_almost_zero(wrench.M())
+        assert_is_almost_zero(wrench.N())
+
+    def test_angle_can_be_controlled(self):
+        data = HydroPolarForceModelInput()
+        data.name = "test"
+        # Internal frame is placed under water, 5m under the body frame's origin
+        data.internal_frame = YamlPosition(YamlCoordinates(0,0,5), YamlAngle(0,0,0), "body")
+        data.reference_area = 100
+        data.angle_of_attack = [0.,0.12217305,0.15707963,0.20943951,0.48869219,1.04719755,1.57079633,2.0943951,2.61799388,np.pi]
+        data.lift_coefficient = [0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,0.]
+        data.drag_coefficient = [0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483]
+        data.use_waves_velocity = False
+        data.angle_command = "beta"
+        env = EnvironmentAndFrames()
+        env.rho = 1000
+        env.rot = YamlRotation("angle", ["z", "y'", "x''"])
+        force_model = HydroPolarForceModel(data, "body", env)
+        assert_equal = lambda x, y: self.assertAlmostEqual(x, y, delta=1e-10)
+        # u=10, v=0, beta=0 -> AoA=0°
+        states = get_states(10, 0)
+        wrench = force_model.get_force(states, 0, env, {"beta": 0})
+        assert_equal(wrench.X(), -172399.99999999997)
+        assert_equal(wrench.Y(), 0.)
+        # u=10, v=0, beta=30° -> AoA=30°
+        states = get_states(10, 0)
+        wrench = force_model.get_force(states, 0, env, {"beta": np.pi / 6})
+        assert_equal(wrench.X(), -141862.59529221783)
+        assert_equal(wrench.Y(), 7168844.2065911861)
+        # u=10, v=0, beta=45° -> AoA=45°
+        states = get_states(10, 0)
+        wrench = force_model.get_force(states, 0, env, {"beta": np.pi / 4})
+        assert_equal(wrench.X(), -292675.63145633071)
+        assert_equal(wrench.Y(), 7159116.1098209573)
+        # u=10, v=0, beta=60° -> AoA=60°
+        states = get_states(10, 0)
+        wrench = force_model.get_force(states, 0, env, {"beta": np.pi / 3})
+        assert_equal(wrench.X(), -565100.00156966201)
+        assert_equal(wrench.Y(), 6915949.99887837)
+
+        # u=0, v=10, beta=90  -> AoA=0°
+        states = get_states(0, 10)
+        wrench = force_model.get_force(states, 0, env, {"beta": np.pi / 2})
+        assert_equal(wrench.X(), 0.)
+        assert_equal(wrench.Y(), -172399.99999999997)
+        # u=0, v=-10, beta=-90  -> AoA=0°
+        states = get_states(0, -10)
+        wrench = force_model.get_force(states, 0, env, {"beta": -np.pi / 2})
+        assert_equal(wrench.X(), 0.)
+        assert_equal(wrench.Y(), 172399.99999999997)
+        # u=-10, v=0, beta=180  -> AoA=0°
+        states = get_states(-10, 0)
+        wrench = force_model.get_force(states, 0, env, {"beta": np.pi})
+        assert_equal(wrench.X(), 172399.99999999997)
+        assert_equal(wrench.Y(), 0.)
 
 
 if __name__ == "__main__":
