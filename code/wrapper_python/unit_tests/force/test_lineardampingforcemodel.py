@@ -23,14 +23,6 @@ def get_env() -> EnvironmentAndFrames:
     return env
 
 
-def get_states0(name: str) -> BodyStates:
-    """Create a body state variable with one record"""
-    states = BodyStates(0)
-    states.name = name
-    states.convention = YamlRotation("angle", ["z", "y'", "x''"])
-    return states
-
-
 def get_states(body_name: str) -> BodyStates:
     """Create a body state variable with one record"""
     body = get_body(body_name)
