@@ -19,6 +19,7 @@
 #include "force_models/inc/LinearDampingForceModel.hpp"
 #include "force_models/inc/LinearHydrostaticForceModel.hpp"
 #include "force_models/inc/LinearFroudeKrylovForceModel.hpp"
+#include "force_models/inc/LinearStiffnessForceModel.hpp"
 #include "force_models/inc/MMGManeuveringForceModel.hpp"
 #include "force_models/inc/ManeuveringForceModel.hpp"
 #include "force_models/inc/QuadraticDampingForceModel.hpp"
@@ -162,6 +163,30 @@ void py_add_module_xdyn_force(py::module& m0)
         .def_static("parse", &QuadraticDampingForceModel::parse, py::arg("yaml"))
         .def_static("model_name", &QuadraticDampingForceModel::model_name,
             "Returns model name \"quadratic damping\"")
+        ;
+
+    py::class_<LinearStiffnessForceModel::Input>(m, "LinearStiffnessForceModelInput")
+        .def(py::init<>())
+        .def_readwrite("name", &LinearStiffnessForceModel::Input::name)
+        .def_readwrite("K", &LinearStiffnessForceModel::Input::K)
+        .def_readwrite("equilibrium_position", &LinearStiffnessForceModel::Input::equilibrium_position)
+        ;
+
+    py::class_<LinearStiffnessForceModel, ForceModel>(m, "LinearStiffnessForceModel",
+        "Linear stiffness force model")
+        .def(py::init<const LinearStiffnessForceModel::Input& /*data*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>(),
+            py::arg("input_data"),
+            py::arg("body_name"),
+            py::arg("env")
+            )
+        .def_static("parse", &LinearStiffnessForceModel::parse, py::arg("yaml"))
+        .def_static("model_name", &LinearStiffnessForceModel::model_name,
+            "Returns model name \"linear stiffness\"")
+        .def("get_force", &LinearStiffnessForceModel::get_force,
+            py::arg("states"),
+            py::arg("t"),
+            py::arg("env"),
+            py::arg("commands") = std::map<std::string,double>())
         ;
 
     py::class_<MMGManeuveringForceModel::Input>(m, "MMGManeuveringForceModelInput",
