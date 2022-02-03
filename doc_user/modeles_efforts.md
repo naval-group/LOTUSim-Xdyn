@@ -1159,7 +1159,11 @@ L'angle d'attaque $`\alpha`$ et la vitesse de l'écoulement relatif $`U = |\vec{
 
 ![](images/angle_of_attack.svg)
 
-L'angle d'attaque $`\alpha`$, défini entre -180° et 180°, est formé entre la vitesse relative projetée dans le plan $`\vec{V}`$ et l'axe longitudinal $`\vec{x_i}`$ du repère local.
+L'angle d'attaque $`\alpha`$, défini entre -180° et 180°, est l'angle formé entre la direction de l'écoulement et l'axe de référence du profil. Il est donc la somme de l'angle $`\beta`$ (entre la vitesse relative projetée dans le plan $`\vec{V}`$ et l'axe longitudinal $`\vec{x_i}`$ du repère local) et de l'angle de commande (optionnel, nul si non spécifié).
+
+L'angle $`\alpha`$ est utilisé pour interpoler les coefficients de portance et de traînée, tandis que l'angle $`\beta`$ est utilisé pour replacer les efforts de portance (perpendiculaire à l'écoulement par définition) et traînée (parallèle  à l'écoulement par définition) dans le repère local.
+
+L'intérêt de la commande par rapport à la position du repère local est que la commande est dynamique et peut être changée au cours de la simulation, alors que le repère local est fixé. 
 
 Il est à noter que les coefficients $`C_l`$, $`C_d`$ et $`C_m`$ sont généralement très dépendants du régime d'écoulement. xdyn n'effectue aucune vérification du nombre de Reynolds, il appartient à l'utilisateur de s'assurer que les polaires de coefficients sont pertinentes au regards des conditions de l'écoulement. La vitesse de l'écoulement $`U`$ et l'angle d'attaque $`\alpha`$ sont disponibles en sortie du modèle d'effort, sous les noms respectifs `U(model_name,body_name)` et `alpha(model_name,body_name)`.
 
@@ -1190,6 +1194,8 @@ Les données polaires de coefficients de portance et traînée peuvent être don
 La clé booléenne `take waves orbital velocity into account` permet d'ajouter la vitesse orbitale de houle à l'écoulement relatif. Avec ce paramètre activé, un modèle de houle doit aussi être défini dans la section `environment models`.
 
 Les clés optionnelles `moment coefficient` (vecteur de coefficients) et `chord length` (longueur en `{unit: ..., value: ...}`) permettent d'ajouter le calcul d'un moment autour de l'origine de repère local et selon $`\vec{z_i}`$. Ce moment est toujours déstabilisant pour $`C_m`$ positif (donc positif autour de $`\vec{z_i}`$ pour $`\alpha > 0`$ et négatif pour $`\alpha < 0`$). Si `chord length` est précisé, sa valeur est utilisée pour $`d_{ref}`$, sinon $`d_{ref} = \sqrt{S_{ref}}`$.
+
+Enfin, il est possible de commander l'angle avec la clé optionnelle `angle command` (par exemple `angle command: beta`). Cette command agit comme un décalage d'angle, ce qui est utile pour modéliser des profils portants commandés (safran, profils anti-roulis, etc...). Si cette option est utilisée, il faut fournir au modèle la commande dans la section dédiée du fichier YAML (dans l'exemple, la commande s'appellerait `centreboard(beta)`).
 
 
 ## Modèle d'effort aérodynamique quadratique par polaire
@@ -1248,6 +1254,8 @@ La clé `AWA` (pour Apparent Wind Angle) correspond à l'angle de vent apparent,
 ![](images/apparent_wind.svg)
 
 Les données polaires de coefficients de portance et traînée peuvent être données de 0° à 360° ou de 0° à 180°. Dans ce second cas, une hypothèse de symmétrie selon l'axe longitudinal du corps ($`\vec{x_0}`$ du repère propre) est appliquée.
+
+Comme pour le modèle hydrodynamique, il est possible de commander l'angle avec la clé optionnelle `angle command` (par exemple `angle command: beta`). Cette command agit comme un décalage d'angle, ce qui est utile pour modéliser des profils portants commandés (notamment une voile). Si cette option est utilisée, il faut fournir au modèle la commande dans la section dédiée du fichier YAML (dans l'exemple, la commande s'appellerait `main sail(beta)`). Attention, si cette opton est utilisée, l'angle d'interpolation n'est plus l'angle de vent apparent (AWA), mais l'angle incident (la clé `AWA` garde son nom mais ne représente plus un angle de vent apparent).
 
 ### Références
 
