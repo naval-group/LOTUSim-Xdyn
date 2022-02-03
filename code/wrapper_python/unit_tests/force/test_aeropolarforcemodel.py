@@ -8,10 +8,10 @@ from contextlib import redirect_stderr
 from typing import Optional
 
 import numpy as np
-
 from xdyn.core import BodyStates, EnvironmentAndFrames
 from xdyn.core.io import YamlCoordinates, YamlRotation
-from xdyn.env.wind import WindMeanVelocityProfileInput
+from xdyn.env.wind import (UniformWindVelocityProfile,
+                           WindMeanVelocityProfileInput)
 from xdyn.exceptions import InvalidInputException
 from xdyn.force import AeroPolarForceModel, AeroPolarForceModelInput
 
@@ -28,6 +28,7 @@ def get_data() -> str:
     AWA: {unit: deg, values: [0,7,9,12,28,60,90,120,150,180]}
     lift coefficient: [0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,-0.11207]
     drag coefficient: [0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483]
+    angle command: beta
     """
 
 
@@ -47,7 +48,7 @@ def get_states(u: Optional[float] = 0.0, v: Optional[float] = 0.0) -> BodyStates
     states.qr.record(0, 1)
     states.qi.record(0, 0)
     states.qj.record(0, 0)
-    states.qr.record(0, 0)
+    states.qk.record(0, 0)
     return states
 
 
@@ -73,6 +74,7 @@ class AeroPolarForceModelTest(unittest.TestCase):
             assert_equal(data.apparent_wind_angle[i], np.pi * AWA[i] / 180)
             assert_equal(data.lift_coefficient[i], Cl[i])
             assert_equal(data.drag_coefficient[i], Cd[i])
+        self.assertEqual(data.angle_command, "beta")
 
     def test_several_values(self):
         data = AeroPolarForceModelInput()
@@ -267,6 +269,43 @@ class AeroPolarForceModelTest(unittest.TestCase):
             AeroPolarForceModel(data, "body", env)
         expected_regex = "WARNING: In an aerodynamic polar force model 'test', you provided a maximum apparent wind higher than 360deg. All values over 360deg will be ignored."
         self.assertTrue(re.search(expected_regex, buf.getvalue()), buf.getvalue())
+
+    def test_angle_can_be_controlled(self):
+        data = AeroPolarForceModelInput()
+        data.name = "test"
+        data.calculation_point_in_body_frame = YamlCoordinates(0,0,0)
+        data.reference_area = 1000
+        data.apparent_wind_angle = [0.,0.12217305,0.15707963,0.20943951,0.48869219,1.04719755,1.57079633,2.0943951,2.61799388,np.pi]
+        data.lift_coefficient = [0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,-0.11207]
+        data.drag_coefficient = [0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483]
+        data.angle_command = "beta"
+        env = EnvironmentAndFrames()
+        force_model = AeroPolarForceModel(data, "body", env)
+        states = get_states()
+        env.set_rho_air(1.2)
+        wind_data = WindMeanVelocityProfileInput()
+        wind_data.velocity = 10
+        wind_data.direction = 0
+        env.set_wind_model(wind_data)
+        eps = 1E-10
+        assert_equal = lambda x, y: self.assertAlmostEqual(x, y, delta=eps)
+        assert_equal(80689.800000000003, force_model.get_force(states, 0, env, {"beta": 0}).X())
+        assert_equal(6724.2000000000098, force_model.get_force(states, 0, env, {"beta": 0}).Y())
+
+        with self.assertRaises(IndexError) as pcm:
+            force_model.get_force(states, 0, env)
+        expected_msg = "map::at"
+        self.assertTrue(expected_msg in str(pcm.exception), str(pcm.exception))
+
+        wind_data.direction = 90.0 * np.pi / 180.0
+        env.set_wind_model(wind_data)
+        assert_equal(-6724.2000000000098, force_model.get_force(states, 0, env, {"beta": 90 * np.pi / 180.0}).X())
+        assert_equal(80689.800000000003, force_model.get_force(states, 0, env, {"beta": 90 * np.pi / 180.0}).Y())
+
+        wind_data.direction = -90 * np.pi / 180.0
+        env.set_wind_model(wind_data)
+        assert_equal(-6724.2000000000098, force_model.get_force(states, 0, env, {"beta": -90 * np.pi / 180.0}).X())
+        assert_equal(-80689.800000000003, force_model.get_force(states, 0, env, {"beta": -90 * np.pi / 180.0}).Y())
 
 
 if __name__ == "__main__":
