@@ -3,7 +3,7 @@
 # - tests the generated wheel in a fresh docker container
 
 help:
-	echo "Run higher target to build wheel! It can not be built directly from this Makefile"
+	@echo "Run higher target to build wheel! It can not be built directly from this Makefile"
 
 debian_10_package: DOCKER_IMAGE_BUILD=xdyn-python-deb10-build
 debian_10_package: DOCKER_IMAGE_TEST=xdyn-python-deb10-test
