@@ -47,9 +47,7 @@ class WageningenControlledForceModelTest(unittest.TestCase):
         self.assertEqual("port side propeller", data.name)
         self.assertEqual(3, data.number_of_blades)
         self.assertEqual(0, data.position_of_propeller_frame.angle.phi)
-        self.assertEqual(
-            -10 * np.pi / 180.0, data.position_of_propeller_frame.angle.theta
-        )
+        self.assertEqual(-10 * np.pi / 180.0, data.position_of_propeller_frame.angle.theta)
         self.assertEqual(-1 * np.pi / 180.0, data.position_of_propeller_frame.angle.psi)
         self.assertEqual(-4, data.position_of_propeller_frame.coordinates.x)
         self.assertEqual(-2, data.position_of_propeller_frame.coordinates.y)
@@ -399,9 +397,7 @@ class WageningenControlledForceModelTest(unittest.TestCase):
         states = BodyStates()
         states.u.record(0, 3)
         commands = {"rpm": 20 * 2 * np.pi}
-        self.assertAlmostEqual(
-            3.0 / 400.0, model.advance_ratio(states, commands), delta=1e-5
-        )
+        self.assertAlmostEqual(3.0 / 400.0, model.advance_ratio(states, commands), delta=1e-5)
 
     def test_force(self):
         data = WageningenControlledForceModel.parse(wageningen())
@@ -433,9 +429,7 @@ class WageningenControlledForceModelTest(unittest.TestCase):
         states.u.record(0, 1)
         commands = {"rpm": 5 * 2 * np.pi, "P/D": 0.5}
         wrench = model.get_force(states, self.random_double_between(), env, commands)
-        self.assertAlmostEqual(
-            -1024 * 25 * 32 * 0.015890316523410611543, wrench.K(), delta=EPS
-        )
+        self.assertAlmostEqual(-1024 * 25 * 32 * 0.015890316523410611543, wrench.K(), delta=EPS)
 
     def test_torque_should_have_sign_corresponding_to_rotation(self):
         data = WageningenControlledForceModel.parse(wageningen())
@@ -453,15 +447,11 @@ class WageningenControlledForceModelTest(unittest.TestCase):
         }
         self.assertGreater(
             0,
-            w_clockwise.get_force(
-                states, self.random_double_between(), env, commands
-            ).K(),
+            w_clockwise.get_force(states, self.random_double_between(), env, commands).K(),
         )
         self.assertLess(
             0,
-            w_anti_clockwise.get_force(
-                states, self.random_double_between(), env, commands
-            ).K(),
+            w_anti_clockwise.get_force(states, self.random_double_between(), env, commands).K(),
         )
 
     def test_bug_2825_can_use_propeller_with_rpm_zero(self):
@@ -474,9 +464,7 @@ class WageningenControlledForceModelTest(unittest.TestCase):
         commands = {"rpm": 0, "P/D": 0.5}
         buf = io.StringIO()
         with redirect_stderr(buf):
-            wrench = model.get_force(
-                states, self.random_double_between(), env, commands
-            )
+            wrench = model.get_force(states, self.random_double_between(), env, commands)
         expected_regex = "Warning: Wageningen model used outside of its domain. Maybe n is too small\? Invalid advance ratio J: expected 0 <= J <= 1.5 but got J=inf. Saturating at 1.5 to continue simulation."
         self.assertTrue(re.search(expected_regex, buf.getvalue()), buf.getvalue())
         self.assertAlmostEqual(0, wrench.X(), delta=EPS)
@@ -496,9 +484,7 @@ class WageningenControlledForceModelTest(unittest.TestCase):
         commands = {"rpm": 1e-16, "P/D": 0.5}
         buf = io.StringIO()
         with redirect_stderr(buf):
-            wrench = model.get_force(
-                states, self.random_double_between(), env, commands
-            )
+            wrench = model.get_force(states, self.random_double_between(), env, commands)
         expected_regex = "Warning: Wageningen model used outside of its domain. Maybe n is too small\? Invalid advance ratio J: expected 0 <= J <= 1.5 but got J=.*. Saturating at 1.5 to continue simulation."
         self.assertTrue(re.search(expected_regex, buf.getvalue()), buf.getvalue())
 
