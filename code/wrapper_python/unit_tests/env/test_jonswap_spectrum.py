@@ -66,9 +66,7 @@ class JonswapSpectrumTest(unittest.TestCase):
         for h in range(1, 1001):
             omega = self.rng.random_double().between(1, 2)()
             k = S.get_wave_number(omega, h)
-            self.assertAlmostEqual(
-                omega * omega, 9.81 * k * np.tanh(k * h), delta=1e-15
-            )
+            self.assertAlmostEqual(omega * omega, 9.81 * k * np.tanh(k * h), delta=1e-15)
 
     def test_should_throw_if_gamma_is_negative(self):
         expected_msg = "gamma should be greater than 0: got"
