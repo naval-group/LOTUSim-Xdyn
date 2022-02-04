@@ -13,7 +13,7 @@ enum class AngleRepresentation
 
 struct GrpcSetParametersResponse
 {
-    GrpcSetParametersResponse();
+    GrpcSetParametersResponse() = default;
     double                   date_of_first_callback; // Date at which the controller should be called for the first time. Will often be equal to just t0.
     std::vector<std::string> setpoint_names;         // Name of the controller inputs (setpoints) which xdyn must supply.
     AngleRepresentation      angle_representation;   // Does the controller need to be called with get_commands_quaternion or with get_commands_euler_321?
@@ -23,7 +23,7 @@ struct GrpcSetParametersResponse
 
 struct GrpcControllerResponse
 {
-    GrpcControllerResponse();
+    GrpcControllerResponse() = default;
     std::map<std::string,double> commands; // Commands computed by the controller
     double next_call; // Date at which the solver should call the controller again
 };
@@ -35,7 +35,7 @@ class GrpcControllerInterface
         virtual ~GrpcControllerInterface();
         struct Input
         {
-            Input ();
+            Input () = default;
             std::string url;  //!< URL at which the gRPC controller may be reached,
                               //!< e.g. pid:9002
             std::string name; //!< Name used to disambiguate commands created by
