@@ -13,7 +13,7 @@
 #include <boost/optional.hpp>
 
 // Code to handle boost::optional usage in force_models
-// When C++ 17 standard will be used, we will be able to replace this std::optional
+// TODO: When C++ 17 standard will be used, we will be able to replace this std::optional
 namespace pybind11 { namespace detail {
     template <typename T>
     struct type_caster<boost::optional<T>> : optional_caster<boost::optional<T>> {};
