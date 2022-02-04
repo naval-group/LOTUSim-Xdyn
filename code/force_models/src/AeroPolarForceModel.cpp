@@ -113,12 +113,3 @@ Wrench AeroPolarForceModel::get_force(const BodyStates& states, const double t, 
     }
     return ret;
 }
-
-AeroPolarForceModel::Input::Input():
-        name(),
-        calculation_point_in_body_frame(),
-        apparent_wind_angle(),
-        lift_coefficient(),
-        drag_coefficient(),
-        reference_area()
-{}
