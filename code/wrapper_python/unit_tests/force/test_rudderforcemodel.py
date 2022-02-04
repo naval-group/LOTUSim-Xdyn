@@ -228,7 +228,7 @@ class RudderForceModelTest(unittest.TestCase):
         self.assertEqual(-3 * np.pi / 4, vs.outside_wake)
 
     def _disabled_test_ship_speed_relative_to_the_fluid(self):
-        # This test is disabled as in the C++ code
+        # This test is disabled as in the C++ code
         A, phi, _ = self.get_wave_model()
         env = get_environment_and_frames(A, phi)
         parameters = self.random_rudder_force_model_input()
@@ -280,9 +280,7 @@ class RudderForceModelTest(unittest.TestCase):
     def test_force_and_torque(self):
         A, phi, _ = self.get_wave_model()
         env = get_environment_and_frames(A, phi)
-        model = RudderForceModel(
-            RudderForceModel.parse(rudder()), self.random_string(), env
-        )
+        model = RudderForceModel(RudderForceModel.parse(rudder()), self.random_string(), env)
         self.assertEqual(type(model), RudderForceModel)
         self.assertEqual("propeller+rudder", model.model_name())
         states = BodyStates()
