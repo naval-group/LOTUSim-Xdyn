@@ -12,6 +12,7 @@ from xdyn.ssc.random import DataGenerator
 
 EPS: float = 1e-14
 
+
 def get_env() -> EnvironmentAndFrames:
     env = EnvironmentAndFrames()
     env.rho = 1024
