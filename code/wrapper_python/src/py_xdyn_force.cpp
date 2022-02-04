@@ -128,7 +128,13 @@ void py_add_module_xdyn_force(py::module& m0)
         ;
 
     py::class_<ResistanceCurveForceModel::Yaml>(m, "ResistanceCurveForceModelInput")
-        .def(py::init<>())
+        .def(py::init<
+            const std::vector<double>& /*Va*/,
+            const std::vector<double>& /*R*/
+            >(),
+            py::arg("Va") = std::vector<double>(),
+            py::arg("R") = std::vector<double>()
+        )
         .def_readwrite("Va", &ResistanceCurveForceModel::Yaml::Va)
         .def_readwrite("R", &ResistanceCurveForceModel::Yaml::R)
         ;
@@ -1053,7 +1059,17 @@ void py_add_module_xdyn_force(py::module& m0)
 
     py::class_<ManeuveringForceModel::Yaml>(m, "ManeuveringForceModelInput",
         "Input for ManeuveringForceModel")
-        .def(py::init<>())
+        .def(py::init<
+            const std::string& /*name*/,
+            const YamlPosition& /*frame_of_reference*/,
+            const std::vector<std::string>& /*commands*/,
+            const std::map<std::string, std::string> /*var2expr*/
+        >(),
+            py::arg("name") = "",
+            py::arg("frame_of_reference") = YamlPosition(),
+            py::arg("commands") = std::vector<std::string>(),
+            py::arg("var2expr") = std::map<std::string, std::string>()
+            )
         .def_readwrite("name", &ManeuveringForceModel::Yaml::name)
         .def_readwrite("frame_of_reference", &ManeuveringForceModel::Yaml::frame_of_reference)
         .def_readwrite("commands", &ManeuveringForceModel::Yaml::commands)
