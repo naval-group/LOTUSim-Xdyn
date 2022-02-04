@@ -19,17 +19,6 @@
 
 std::string SimpleStationKeepingController::model_name() {return "simple station-keeping controller";}
 
-SimpleStationKeepingController::Yaml::Yaml() :
-            name(),
-            ksi_x(),
-            T_x(),
-            ksi_y(),
-            T_y(),
-            ksi_psi(),
-            T_psi()
-{
-}
-
 SimpleStationKeepingController::Yaml SimpleStationKeepingController::parse(const std::string& yaml)
 {
     std::stringstream stream(yaml);
