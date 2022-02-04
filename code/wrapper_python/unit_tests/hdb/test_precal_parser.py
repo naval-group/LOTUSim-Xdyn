@@ -5,10 +5,20 @@ import os
 import unittest
 
 import numpy as np
-from xdyn.data.test.precal import (added_mass_damping_matrix_inf_freq, general,
-                                   precal, raos, ship_particulars)
-from xdyn.hdb import (PrecalFile, PrecalParser, parse_precal_from_file,
-                      parse_precal_from_string, parse_rao_attributes)
+from xdyn.data.test.precal import (
+    added_mass_damping_matrix_inf_freq,
+    general,
+    precal,
+    raos,
+    ship_particulars,
+)
+from xdyn.hdb import (
+    PrecalFile,
+    PrecalParser,
+    parse_precal_from_file,
+    parse_precal_from_string,
+    parse_rao_attributes,
+)
 
 
 class PrecalParserTest(unittest.TestCase):
