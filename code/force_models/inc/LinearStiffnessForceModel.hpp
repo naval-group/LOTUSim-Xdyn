@@ -10,7 +10,6 @@ class LinearStiffnessForceModel : public ForceModel
     public:
         struct Input
         {
-            Input();
             std::string name;
             Eigen::Matrix<double,6,6> K;
             boost::optional<YamlPosition> equilibrium_position;

@@ -7,13 +7,6 @@
 
 std::string LinearStiffnessForceModel::model_name() {return "linear stiffness";}
 
-LinearStiffnessForceModel::Input::Input():
-    name(),
-    K(),
-    equilibrium_position()
-{
-}
-
 LinearStiffnessForceModel::LinearStiffnessForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env):
         ForceModel(input.name, {}, body_name, env),
         K(input.K),
