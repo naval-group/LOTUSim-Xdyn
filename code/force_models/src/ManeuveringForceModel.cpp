@@ -14,15 +14,6 @@
 #include "yaml2eigen.hpp"
 #include "InvalidInputException.hpp"
 
-
-ManeuveringForceModel::Yaml::Yaml() :
-    name(),
-    frame_of_reference(),
-    commands(),
-    var2expr()
-{
-}
-
 std::string ManeuveringForceModel::model_name() {return "maneuvering";}
 
 ManeuveringForceModel::Yaml ManeuveringForceModel::parse(const std::string& yaml)
