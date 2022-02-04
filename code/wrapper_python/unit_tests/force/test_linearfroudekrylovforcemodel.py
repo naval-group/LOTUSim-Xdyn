@@ -45,9 +45,7 @@ def get_states_with_forward_speed(u: float) -> BodyStates:
     return states
 
 
-def get_wave_model(
-    period: float, direction: float = 0.0, height: float = 1.0
-) -> WaveModel:
+def get_wave_model(period: float, direction: float = 0.0, height: float = 1.0) -> WaveModel:
     omega = 2 * np.pi / period
     ss = Stretching(h=0, delta=1)
     A = discretize(
