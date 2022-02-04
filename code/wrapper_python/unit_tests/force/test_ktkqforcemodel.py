@@ -19,9 +19,7 @@ class KtKqForceModelTest(unittest.TestCase):
         data = KtKqForceModel.parse(kt_kq())
         self.assertEqual("port side propeller", data.name)
         self.assertEqual(0, data.position_of_propeller_frame.angle.phi)
-        self.assertEqual(
-            -10 * np.pi / 180.0, data.position_of_propeller_frame.angle.theta
-        )
+        self.assertEqual(-10 * np.pi / 180.0, data.position_of_propeller_frame.angle.theta)
         self.assertEqual(-1 * np.pi / 180.0, data.position_of_propeller_frame.angle.psi)
         self.assertEqual(-4, data.position_of_propeller_frame.coordinates.x)
         self.assertEqual(-2, data.position_of_propeller_frame.coordinates.y)
