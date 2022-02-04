@@ -2,7 +2,20 @@
 # - builds the xdyn wheel from xdyn python shared library
 # - tests the generated wheel in a fresh docker container
 
-help:
+DIR := $(notdir $(shell pwd))
+PYTHON=python3
+DOCKER_AS_ROOT:=docker run -t --rm -w /opt/share/${DIR} -v $(shell pwd)/..:/opt/share
+DOCKER_AS_USER:=$(DOCKER_AS_ROOT) -u $(shell id -u):$(shell id -g)
+DOCKER_RUN_BUILD_BASH=$(DOCKER_AS_USER) $(DOCKER_IMAGE_BUILD) /bin/bash -c
+DOCKER_RUN_TEST_BASH=$(DOCKER_AS_USER) $(DOCKER_IMAGE_TEST) /bin/bash -c
+
+# Display the name and comment of each target followed by ' ##'
+help: ## Display help and exit.
+	@echo 'usage: make [target]'
+	@echo
+	@echo 'targets:'
+	@egrep '^(.+)\:\ ##\ (.+)' ${MAKEFILE_LIST} | column -t -c 2 -s ':#'
+	@echo
 	@echo "Run higher target to build wheel! It can not be built directly from this Makefile"
 
 debian_10_package: DOCKER_IMAGE_BUILD=xdyn-python-deb10-build
@@ -30,27 +43,34 @@ ubuntu2004_py308_package: test_only
 
 test_additional_platforms_depending_on_debian: ubuntu2004_py308_package
 
+doc: ## Create documentation with Sphinx
 doc: debian_11_py309_package
 	@make -C doc
 
-DIR := $(notdir $(shell pwd))
-PYTHON=python3
-DOCKER_AS_ROOT:=docker run -t --rm -w /opt/share/${DIR} -v $(shell pwd)/..:/opt/share
-DOCKER_AS_USER:=$(DOCKER_AS_ROOT) -u $(shell id -u):$(shell id -g)
-DOCKER_RUN_BUILD_BASH=$(DOCKER_AS_USER) $(DOCKER_IMAGE_BUILD) /bin/bash -c
-DOCKER_RUN_TEST_BASH=$(DOCKER_AS_USER) $(DOCKER_IMAGE_TEST) /bin/bash -c
-
-test_only:
+test_only: ## Install an existing wheel and run tests
 	make ${DOCKER_IMAGE_TEST}
 	make DOCKER_IMAGE_TEST=${DOCKER_IMAGE_TEST} package_test_run
 
-package:
+package: ## Create the wheel package
 	make ${DOCKER_IMAGE_BUILD}
 	make DOCKER_IMAGE_BUILD=${DOCKER_IMAGE_BUILD} package_build_wheel
 	make ${DOCKER_IMAGE_TEST}
 	make DOCKER_IMAGE_TEST=${DOCKER_IMAGE_TEST} package_test_run
 
-package_build_wheel:
+format: ## Use isort and black to format code
+	@make xdyn-python-deb11-py309-format-lint
+	$(DOCKER_AS_USER) xdyn-python-deb11-py309-format-lint /bin/bash -c \
+		"isort --profile black unit_tests && \
+		 black --line-length 100 unit_tests"
+
+lint: ## Check Python unit tests code with isort, black, and pylint
+	@make xdyn-python-deb11-py309-format-lint
+	$(DOCKER_AS_USER) xdyn-python-deb11-py309-format-lint /bin/bash -c \
+		"isort --profile black --check unit_tests && \
+		 black --line-length 100 --check unit_tests && \
+		 pylint --max-line-length=100 unit_tests"
+
+package_build_wheel: ## Create xdyn wheel package
 	$(eval GIT_VERSION := $(shell $(DOCKER_AS_USER) -v $(shell pwd)/../..:/all $(DOCKER_IMAGE_BUILD) \
 		/bin/bash -c "cd /all && git describe --abbrev=0 --tag --always | cut -f2 -dv"))
 	@echo "GIT_VERSION = ${GIT_VERSION}"
@@ -58,14 +78,14 @@ package_build_wheel:
 	    "GIT_VERSION=\"${GIT_VERSION}\" ${PYTHON} setup.py bdist_wheel &&\
 		mv dist/*.whl ."
 
-package_test_run:
+package_test_run: ## Test the xdyn package with a docker image containing only required dependencies
 	$(DOCKER_RUN_TEST_BASH) "${PYTHON} -m unit_tests"
 
 package_test_run_for_a_specific_file:
 	$(DOCKER_RUN_TEST_BASH) \
 		"cd unit_tests/exe && ${PYTHON} test_xdyn.py"
 
-clean:
+clean: ## Removed all generated files
 	@rm -rf build
 	@rm -rf core
 	@rm -rf dist
@@ -165,6 +185,14 @@ xdyn-python-deb11-py310-test:
 		-f Dockerfile_deb11_py3yz_test \
 		-t $@ .
 
+.PHONY=xdyn-python-deb11-py309-format-lint
+xdyn-python-deb11-py309-format-lint:
+	docker build \
+		--build-arg PYTHON_MAJOR_VERSION=3 \
+		--build-arg PYTHON_MINOR_VERSION=9 \
+		--build-arg PYTHON_PATCH_VERSION=9 \
+		-f Dockerfile_deb11_py3yz_format_lint \
+		-t $@ .
 
 .PHONY=xdyn-python-ubuntu2004-py308-test
 xdyn-python-ubuntu2004-py308-test:
