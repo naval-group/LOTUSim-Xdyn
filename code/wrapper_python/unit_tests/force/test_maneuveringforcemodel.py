@@ -86,9 +86,7 @@ class ManeuveringForceModelTest(unittest.TestCase):
         N: 0
         """
         env = get_env_with_default_rotation_convention()
-        force = ManeuveringForceModel(
-            ManeuveringForceModel.parse(yaml), "some body", env
-        )
+        force = ManeuveringForceModel(ManeuveringForceModel.parse(yaml), "some body", env)
         self.assertEqual("maneuvering", force.model_name())
         states = get_body("some body").get_states()
         t = 10
