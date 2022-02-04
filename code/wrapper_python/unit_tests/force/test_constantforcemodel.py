@@ -50,9 +50,7 @@ def get_states(
     body = get_body(body_name)
     states = body.get_states()
     states.convention = YamlRotation("angle", ["z", "y'", "x''"])
-    quaternion = states.convert_to_quaternion(
-        SscEulerAngles(phi, theta, psi), states.convention
-    )
+    quaternion = states.convert_to_quaternion(SscEulerAngles(phi, theta, psi), states.convention)
     states.x.record(0, 0.1)
     states.y.record(0, 2.04)
     states.z.record(0, 6.28)
@@ -166,12 +164,8 @@ class ConstantForceModelTest(unittest.TestCase):
         states = get_states(env, body_name, phi, theta, psi)
         force_model = ConstantForceModel(data, body_name, env)
         wrench = force_model(states, 0.0, env)
-        self.assertAlmostEqual(
-            10e3 * np.sqrt(2) / 2 + 20e3 * np.sqrt(2) / 2, wrench.X()
-        )
-        self.assertAlmostEqual(
-            -10e3 * np.sqrt(2) / 2 + 20e3 * np.sqrt(2) / 2, wrench.Y()
-        )
+        self.assertAlmostEqual(10e3 * np.sqrt(2) / 2 + 20e3 * np.sqrt(2) / 2, wrench.X())
+        self.assertAlmostEqual(-10e3 * np.sqrt(2) / 2 + 20e3 * np.sqrt(2) / 2, wrench.Y())
         self.assertAlmostEqual(30e3, wrench.Z())
 
     def test_ship_at_30_deg(self):
@@ -184,12 +178,8 @@ class ConstantForceModelTest(unittest.TestCase):
         states = get_states(env, body_name, phi, theta, psi)
         force_model = ConstantForceModel(data, body_name, env)
         wrench = force_model(states, 0.0, env)
-        self.assertAlmostEqual(
-            10e3 * np.sqrt(3) / 2 + 20e3 * np.sqrt(1) / 2, wrench.X()
-        )
-        self.assertAlmostEqual(
-            -10e3 * np.sqrt(1) / 2 + 20e3 * np.sqrt(3) / 2, wrench.Y()
-        )
+        self.assertAlmostEqual(10e3 * np.sqrt(3) / 2 + 20e3 * np.sqrt(1) / 2, wrench.X())
+        self.assertAlmostEqual(-10e3 * np.sqrt(1) / 2 + 20e3 * np.sqrt(3) / 2, wrench.Y())
         self.assertAlmostEqual(30e3, wrench.Z())
 
     def wrench_checks(self, W, frame_name: str, force: np.ndarray, torque: np.ndarray):
