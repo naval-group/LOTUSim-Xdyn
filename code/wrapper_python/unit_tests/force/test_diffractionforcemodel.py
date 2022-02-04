@@ -49,9 +49,7 @@ def get_states_with_forward_speed(u: float) -> BodyStates:
     return states
 
 
-def get_wave_model(
-    period: float, direction: float = 0.0, height: float = 1.0
-) -> WaveModel:
+def get_wave_model(period: float, direction: float = 0.0, height: float = 1.0) -> WaveModel:
     omega = 2 * np.pi / period
     ss = Stretching(h=0, delta=1)
     A = discretize(
@@ -209,9 +207,7 @@ class DiffractionForceModelTest(unittest.TestCase):
         assert_equal(F.Y(), -3.284304e5 * np.sin(5.459499e-1), 200)
         assert_equal(F.Z(), -5.820626e5 * np.sin(-1.525810), 20)
         assert_equal(F.K(), 1.460688e6 * np.sin(6.670656e-1), 700)
-        assert_equal(
-            F.M(), -3.140660e7 * np.sin(-1.375271), 4000
-        )  # Still a small relative error
+        assert_equal(F.M(), -3.140660e7 * np.sin(-1.375271), 4000)  # Still a small relative error
         assert_equal(
             F.N(), -2.301511e7 * np.sin(5.846877e-1), 12000
         )  # Still a small relative error
