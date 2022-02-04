@@ -172,7 +172,7 @@ xdyn-python-deb11-py310-build:
 	docker build \
 		--build-arg PYTHON_MAJOR_VERSION=3 \
 		--build-arg PYTHON_MINOR_VERSION=10 \
-		--build-arg PYTHON_PATCH_VERSION=1 \
+		--build-arg PYTHON_PATCH_VERSION=2 \
 		-f Dockerfile_deb11_py3yz_pybind \
 		-t $@ .
 
@@ -181,7 +181,7 @@ xdyn-python-deb11-py310-test:
 	docker build \
 		--build-arg PYTHON_MAJOR_VERSION=3 \
 		--build-arg PYTHON_MINOR_VERSION=10 \
-		--build-arg PYTHON_PATCH_VERSION=1 \
+		--build-arg PYTHON_PATCH_VERSION=2 \
 		-f Dockerfile_deb11_py3yz_test \
 		-t $@ .
 
