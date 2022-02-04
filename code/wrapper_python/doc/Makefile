@@ -10,8 +10,8 @@ all: \
 	build
 
 build_docker_images:
-	cp ../xdyn-*-cp39-cp39-linux_x86_64.whl .
-	docker build . -t $(DOCKER_IMAGE_BUILD)
+	@cp ../xdyn-*-cp39-cp39-linux_x86_64.whl .
+	@docker build . -t $(DOCKER_IMAGE_BUILD)
 
 init:
 	@$(eval GIT_VERSION := $(shell $(DOCKER_AS_USER) -v $(shell pwd)/../../..:/all $(DOCKER_IMAGE_BUILD) \
