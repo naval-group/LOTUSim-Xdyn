@@ -26,9 +26,7 @@ class WaveNumberFunctorTest(unittest.TestCase):
         T2 = F2(3)
         assert_near(0.2943e2 * tanh(0.135e3) - 0.49e2, T2[0])
         assert_near(
-            0.981e1 * tanh(0.135e3)
-            + 0.132435e4
-            - 0.132435e4 * pow(tanh(0.135e3), 0.2e1),
+            0.981e1 * tanh(0.135e3) + 0.132435e4 - 0.132435e4 * pow(tanh(0.135e3), 0.2e1),
             T2[1],
         )
         assert_near(
