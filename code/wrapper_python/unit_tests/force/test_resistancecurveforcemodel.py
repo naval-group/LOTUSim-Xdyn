@@ -1,7 +1,6 @@
 """
 Unit test for ResistanceCurveForceModel
 """
-import unittest
 import io
 import re
 import unittest
