@@ -4,10 +4,9 @@ Unit test for XDyn
 import os
 import unittest
 
-from xdyn.data.yaml import falling_ball_example
-
 import xdyn
 from xdyn import ErrorReporter, XdynCommandLineArguments, run
+from xdyn.data.yaml import falling_ball_example
 
 
 class XDynTest(unittest.TestCase):
