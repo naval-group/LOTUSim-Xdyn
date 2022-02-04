@@ -23,6 +23,7 @@ from xdyn.hdb import (
 
 class PrecalParserTest(unittest.TestCase):
     """Test class for PrecalParser"""
+
     def test_can_parse_empty_section(self):
         data = parse_precal_from_string("[some section]")
         section = data.sections[0]
@@ -50,11 +51,12 @@ class PrecalParserTest(unittest.TestCase):
 
     def test_can_parse_vectors(self):
         data = parse_precal_from_string(
-        """
+            """
         [Particulars-ship]
         COB              = {1.519,0.000,0.066}  (ship center of buoyancy w.r.t. aft
         perpendicular - centerline - keel line, calculated from geometry)
-        """)
+        """
+        )
         self.assertEqual(type(data), PrecalFile)
         section = data.sections[0]
         self.assertEqual(1, len(data.sections))
@@ -76,15 +78,20 @@ class PrecalParserTest(unittest.TestCase):
 
     def test_can_parse_rao_titles(self):
         data_raos = parse_precal_from_string(raos()).raos
-        self.assertEqual("Signal 1: surge motion at (70.015,0.000,7.510), h=-1.000m, phi_a=0.500deg, U=0.000kn, mu=180.000deg (amplitude unit = m/m, phase unit = deg)",
-            data_raos[0].title_line)
-        self.assertEqual("Signal 5: pitch motion at (70.015,0.000,7.510), h=-1.000m, phi_a=0.500deg, U=20.000kn, mu=90.000deg (amplitude unit = deg/m, phase unit = deg)",
-            data_raos[29].title_line)
+        self.assertEqual(
+            "Signal 1: surge motion at (70.015,0.000,7.510), h=-1.000m, phi_a=0.500deg, U=0.000kn, mu=180.000deg (amplitude unit = m/m, phase unit = deg)",
+            data_raos[0].title_line,
+        )
+        self.assertEqual(
+            "Signal 5: pitch motion at (70.015,0.000,7.510), h=-1.000m, phi_a=0.500deg, U=20.000kn, mu=90.000deg (amplitude unit = deg/m, phase unit = deg)",
+            data_raos[29].title_line,
+        )
 
     def test_can_parse_rao_attributes(self):
         rao_attributes = parse_rao_attributes(
             "Signal 1: surge motion at (70.015,0.000,7.510), h=-1.000m, phi_a=0.500deg, "
-            "U=12.000kn, mu=180.000deg (amplitude unit = m/m, phase unit = deg)")
+            "U=12.000kn, mu=180.000deg (amplitude unit = m/m, phase unit = deg)"
+        )
         self.assertEqual("surge motion", rao_attributes.name)
         self.assertTrue(np.allclose([70.015, 0.000, 7.510], rao_attributes.position))
         self.assertEqual(-1, rao_attributes.h)
@@ -113,15 +120,15 @@ class PrecalParserTest(unittest.TestCase):
         self.assertEqual("deg", data_raos[15].attributes.mu_unit)
         self.assertEqual("m/m", data_raos[15].attributes.amplitude_unit)
         self.assertEqual("deg", data_raos[15].attributes.phase_unit)
-        self.assertEqual(0.100835E+01, data_raos[15].left_column[1])
-        self.assertEqual(0.105814E+01, data_raos[15].left_column[6])
+        self.assertEqual(0.100835e01, data_raos[15].left_column[1])
+        self.assertEqual(0.105814e01, data_raos[15].left_column[6])
         self.assertEqual(-0.081168, data_raos[15].right_column[1])
         self.assertEqual(-15.504014, data_raos[15].right_column[6])
 
         # No phases - Signal 10: F_drift_m1_c4, U=20.000kn, mu=180.000deg
         self.assertEqual("kN/m2", data_raos[38].attributes.amplitude_unit)
-        self.assertEqual(-0.655426E+01, data_raos[38].left_column[0])
-        self.assertEqual(-0.690853E+02, data_raos[38].left_column[4])
+        self.assertEqual(-0.655426e01, data_raos[38].left_column[0])
+        self.assertEqual(-0.690853e02, data_raos[38].left_column[4])
         self.assertEqual("N.A.", data_raos[38].attributes.phase_unit)
         self.assertEqual(0, data_raos[38].right_column[0])
         self.assertEqual(0, data_raos[38].right_column[4])
@@ -138,34 +145,42 @@ class PrecalParserTest(unittest.TestCase):
     def test_can_parse_added_mass_multi_line_vector(self):
         data = parse_precal_from_string(added_mass_damping_matrix_inf_freq())
         section = data.sections[0]
-        self.assertEqual(1, len( data.sections))
+        self.assertEqual(1, len(data.sections))
         self.assertTrue("total_added_mass_matrix_inf_freq_U1_mu1" in section.vector_values)
-        self.assertEqual(36,
-            len(section.vector_values["total_added_mass_matrix_inf_freq_U1_mu1"]))
-        self.assertEqual(0.110E+06,
-            section.vector_values["total_added_mass_matrix_inf_freq_U1_mu1"][0])
-        self.assertEqual(-0.888E-01,
-            section.vector_values["total_added_mass_matrix_inf_freq_U1_mu1"][1])
-        self.assertEqual(0.612E+01,
-            section.vector_values["total_added_mass_matrix_inf_freq_U1_mu1"][5])
+        self.assertEqual(36, len(section.vector_values["total_added_mass_matrix_inf_freq_U1_mu1"]))
+        self.assertEqual(
+            0.110e06,
+            section.vector_values["total_added_mass_matrix_inf_freq_U1_mu1"][0],
+        )
+        self.assertEqual(
+            -0.888e-01,
+            section.vector_values["total_added_mass_matrix_inf_freq_U1_mu1"][1],
+        )
+        self.assertEqual(
+            0.612e01,
+            section.vector_values["total_added_mass_matrix_inf_freq_U1_mu1"][5],
+        )
 
         self.assertTrue("total_added_mass_matrix_inf_freq_U1_mu2" in section.vector_values)
-        self.assertEqual(36,
-            len(section.vector_values["total_added_mass_matrix_inf_freq_U1_mu2"]))
-        self.assertEqual(0.174E+02,
-            section.vector_values["total_added_mass_matrix_inf_freq_U1_mu2"][29])
+        self.assertEqual(36, len(section.vector_values["total_added_mass_matrix_inf_freq_U1_mu2"]))
+        self.assertEqual(
+            0.174e02,
+            section.vector_values["total_added_mass_matrix_inf_freq_U1_mu2"][29],
+        )
 
         self.assertTrue("total_added_mass_matrix_inf_freq_U2_mu1" in section.vector_values)
-        self.assertEqual(36,
-            len(section.vector_values["total_added_mass_matrix_inf_freq_U2_mu1"]))
-        self.assertEqual(0.570E+01,
-            section.vector_values["total_added_mass_matrix_inf_freq_U2_mu1"][5])
+        self.assertEqual(36, len(section.vector_values["total_added_mass_matrix_inf_freq_U2_mu1"]))
+        self.assertEqual(
+            0.570e01,
+            section.vector_values["total_added_mass_matrix_inf_freq_U2_mu1"][5],
+        )
 
         self.assertTrue("total_added_mass_matrix_inf_freq_U2_mu2" in section.vector_values)
-        self.assertEqual(36,
-                len(section.vector_values["total_added_mass_matrix_inf_freq_U2_mu2"]))
-        self.assertEqual(-0.119E+03,
-            section.vector_values["total_added_mass_matrix_inf_freq_U2_mu2"][29])
+        self.assertEqual(36, len(section.vector_values["total_added_mass_matrix_inf_freq_U2_mu2"]))
+        self.assertEqual(
+            -0.119e03,
+            section.vector_values["total_added_mass_matrix_inf_freq_U2_mu2"][29],
+        )
 
     def test_can_parse_added_mass_matrix(self):
         """
@@ -197,47 +212,47 @@ class PrecalParserTest(unittest.TestCase):
         """
         data = PrecalParser.from_string(precal())
         Ma = data.get_added_mass()
-        self.assertEqual(+0.110E+06, +Ma[0, 0])
-        self.assertEqual(-0.888E-01, -Ma[0, 1])
-        self.assertEqual(+0.226E+06, -Ma[0, 2])
-        self.assertEqual(-0.144E+00, +Ma[0, 3])
-        self.assertEqual(+0.270E+08, -Ma[0, 4])
-        self.assertEqual(+0.612E+01, -Ma[0, 5])
+        self.assertEqual(+0.110e06, +Ma[0, 0])
+        self.assertEqual(-0.888e-01, -Ma[0, 1])
+        self.assertEqual(+0.226e06, -Ma[0, 2])
+        self.assertEqual(-0.144e00, +Ma[0, 3])
+        self.assertEqual(+0.270e08, -Ma[0, 4])
+        self.assertEqual(+0.612e01, -Ma[0, 5])
 
-        self.assertEqual(-0.122E-01, -Ma[1, 0])
-        self.assertEqual(+0.344E+07, +Ma[1, 1])
-        self.assertEqual(-0.563E-02, +Ma[1, 2])
-        self.assertEqual(-0.113E+07, -Ma[1, 3])
-        self.assertEqual(+0.169E+02, +Ma[1, 4])
-        self.assertEqual(+0.497E+08, +Ma[1, 5])
+        self.assertEqual(-0.122e-01, -Ma[1, 0])
+        self.assertEqual(+0.344e07, +Ma[1, 1])
+        self.assertEqual(-0.563e-02, +Ma[1, 2])
+        self.assertEqual(-0.113e07, -Ma[1, 3])
+        self.assertEqual(+0.169e02, +Ma[1, 4])
+        self.assertEqual(+0.497e08, +Ma[1, 5])
 
-        self.assertEqual(+0.227E+06, -Ma[2, 0])
-        self.assertEqual(-0.898E+00, +Ma[2, 1])
-        self.assertEqual(+0.129E+08, +Ma[2, 2])
-        self.assertEqual(+0.763E+01, -Ma[2, 3])
-        self.assertEqual(+0.844E+08, +Ma[2, 4])
-        self.assertEqual(+0.512E+01, +Ma[2, 5])
+        self.assertEqual(+0.227e06, -Ma[2, 0])
+        self.assertEqual(-0.898e00, +Ma[2, 1])
+        self.assertEqual(+0.129e08, +Ma[2, 2])
+        self.assertEqual(+0.763e01, -Ma[2, 3])
+        self.assertEqual(+0.844e08, +Ma[2, 4])
+        self.assertEqual(+0.512e01, +Ma[2, 5])
 
-        self.assertEqual(+0.183E+00, +Ma[3, 0])
-        self.assertEqual(-0.123E+07, -Ma[3, 1])
-        self.assertEqual(+0.251E+01, -Ma[3, 2])
-        self.assertEqual(+0.498E+08, +Ma[3, 3])
-        self.assertEqual(+0.854E+02, -Ma[3, 4])
-        self.assertEqual(+0.338E+09, -Ma[3, 5])
+        self.assertEqual(+0.183e00, +Ma[3, 0])
+        self.assertEqual(-0.123e07, -Ma[3, 1])
+        self.assertEqual(+0.251e01, -Ma[3, 2])
+        self.assertEqual(+0.498e08, +Ma[3, 3])
+        self.assertEqual(+0.854e02, -Ma[3, 4])
+        self.assertEqual(+0.338e09, -Ma[3, 5])
 
-        self.assertEqual(+0.270E+08, -Ma[4, 0])
-        self.assertEqual(+0.106E+01, +Ma[4, 1])
-        self.assertEqual(+0.845E+08, +Ma[4, 2])
-        self.assertEqual(-0.431E+02, -Ma[4, 3])
-        self.assertEqual(+0.119E+11, +Ma[4, 4])
-        self.assertEqual(+0.174E+02, +Ma[4, 5])
+        self.assertEqual(+0.270e08, -Ma[4, 0])
+        self.assertEqual(+0.106e01, +Ma[4, 1])
+        self.assertEqual(+0.845e08, +Ma[4, 2])
+        self.assertEqual(-0.431e02, -Ma[4, 3])
+        self.assertEqual(+0.119e11, +Ma[4, 4])
+        self.assertEqual(+0.174e02, +Ma[4, 5])
 
-        self.assertEqual(0.164E+01, -Ma[5, 0])
-        self.assertEqual(0.497E+08, +Ma[5, 1])
-        self.assertEqual(0.101E+02, +Ma[5, 2])
-        self.assertEqual(0.345E+09, -Ma[5, 3])
-        self.assertEqual(0.214E+03, +Ma[5, 4])
-        self.assertEqual(0.522E+10, +Ma[5, 5])
+        self.assertEqual(0.164e01, -Ma[5, 0])
+        self.assertEqual(0.497e08, +Ma[5, 1])
+        self.assertEqual(0.101e02, +Ma[5, 2])
+        self.assertEqual(0.345e09, -Ma[5, 3])
+        self.assertEqual(0.214e03, +Ma[5, 4])
+        self.assertEqual(0.522e10, +Ma[5, 5])
 
     def test_can_parse_angular_frequencies(self):
         data = PrecalParser.from_string(precal())
@@ -259,25 +274,25 @@ class PrecalParserTest(unittest.TestCase):
         data = PrecalParser.from_string(precal())
         A_11 = data.get_added_mass_coeff(0, 0)
         self.assertEqual(7, len(A_11))
-        self.assertEqual(0.275560E+03, A_11[0])
-        self.assertEqual(0.271498E+03, A_11[1])
-        self.assertEqual(0.233842E+03, A_11[2])
-        self.assertEqual(0.183239E+03, A_11[3])
-        self.assertEqual(0.147226E+03, A_11[4])
-        self.assertEqual(0.128148E+03, A_11[5])
-        self.assertEqual(0.114148E+03, A_11[6])
+        self.assertEqual(0.275560e03, A_11[0])
+        self.assertEqual(0.271498e03, A_11[1])
+        self.assertEqual(0.233842e03, A_11[2])
+        self.assertEqual(0.183239e03, A_11[3])
+        self.assertEqual(0.147226e03, A_11[4])
+        self.assertEqual(0.128148e03, A_11[5])
+        self.assertEqual(0.114148e03, A_11[6])
 
     def test_can_get_radiation_damping_matrix_coefficients_for_each_frequency(self):
         data = PrecalParser.from_string(precal())
         Br_34 = data.get_radiation_damping_coeff(2, 3)
         self.assertEqual(7, len(Br_34))
-        self.assertEqual(-0.223749E-03, Br_34[0])
-        self.assertEqual(-0.214409E-03, Br_34[1])
-        self.assertEqual( 0.123597E-02, Br_34[2])
-        self.assertEqual( 0.176562E-02, Br_34[3])
-        self.assertEqual( 0.260162E-03, Br_34[4])
-        self.assertEqual(-0.352648E-03, Br_34[5])
-        self.assertEqual(-0.102490E-02, Br_34[6])
+        self.assertEqual(-0.223749e-03, Br_34[0])
+        self.assertEqual(-0.214409e-03, Br_34[1])
+        self.assertEqual(0.123597e-02, Br_34[2])
+        self.assertEqual(0.176562e-02, Br_34[3])
+        self.assertEqual(0.260162e-03, Br_34[4])
+        self.assertEqual(-0.352648e-03, Br_34[5])
+        self.assertEqual(-0.102490e-02, Br_34[6])
 
     def test_can_parse_diffraction_module_raos(self):
         data = PrecalParser.from_string(precal())
@@ -305,12 +320,12 @@ class PrecalParserTest(unittest.TestCase):
 
         # Multiplied by 1e3 to convert the table data to N/m
         # column (axis), pulsation, incidence
-        self.assertEqual(0.138050E+03 * 1e3, table[0][6][1]) # X (F_dif_m1), first line, 180°
-        self.assertEqual(0.117473E-02 * 1e3, table[1][6][1]) # Y (F_dif_m2), first line, 180°
-        self.assertEqual(0.847017E+04 * 1e3, table[2][4][0]) # Z (F_dif_m3), third line, 90°
-        self.assertEqual(0.360716E+04 * 1e3, table[3][1][0]) # K (F_dif_m4), sixth line, 90°
-        self.assertEqual(0.898604E+05 * 1e3, table[4][1][0]) # M (F_dif_m5), sixth line, 90°
-        self.assertEqual(0.291656E-01 * 1e3, table[5][0][1]) # N (F_dif_m6), seventh line, 180°
+        self.assertEqual(0.138050e03 * 1e3, table[0][6][1])  # X (F_dif_m1), first line, 180°
+        self.assertEqual(0.117473e-02 * 1e3, table[1][6][1])  # Y (F_dif_m2), first line, 180°
+        self.assertEqual(0.847017e04 * 1e3, table[2][4][0])  # Z (F_dif_m3), third line, 90°
+        self.assertEqual(0.360716e04 * 1e3, table[3][1][0])  # K (F_dif_m4), sixth line, 90°
+        self.assertEqual(0.898604e05 * 1e3, table[4][1][0])  # M (F_dif_m5), sixth line, 90°
+        self.assertEqual(0.291656e-01 * 1e3, table[5][0][1])  # N (F_dif_m6), seventh line, 180°
 
     def test_can_parse_diffraction_phase_raos(self):
         data = PrecalParser.from_string(precal())
@@ -337,12 +352,13 @@ class PrecalParserTest(unittest.TestCase):
                 self.assertEqual(2, len(table[mod_idx][period_idx]))
 
         # column (axis), pulsation, incidence
-        self.assertAlmostEqual(  90.317017 * np.pi / 180, table[0][6][1]) # X (F_dif_m1), first line, 180°
-        self.assertAlmostEqual( -48.947906 * np.pi / 180, table[1][6][1]) # Y (F_dif_m2), first line, 180°
-        self.assertAlmostEqual( 131.552856 * np.pi / 180, table[2][4][0]) # Z (F_dif_m3), third line, 90°
-        self.assertAlmostEqual(-128.995148 * np.pi / 180, table[3][4][0]) # K (F_dif_m4), third line, 90°
-        self.assertAlmostEqual( 137.499237 * np.pi / 180, table[4][1][0]) # M (F_dif_m5), sixth line, 90°
-        self.assertAlmostEqual( -50.890854 * np.pi / 180, table[5][0][1]) # N (F_dif_m6), seventh line, 180°
+        r2d = np.pi / 180
+        self.assertAlmostEqual(90.317017 * r2d, table[0][6][1])  # X (F_dif_m1), first line, 180°
+        self.assertAlmostEqual(-48.947906 * r2d, table[1][6][1])  # Y (F_dif_m2), first line, 180°
+        self.assertAlmostEqual(131.552856 * r2d, table[2][4][0])  # Z (F_dif_m3), third line, 90°
+        self.assertAlmostEqual(-128.995148 * r2d, table[3][4][0])  # K (F_dif_m4), third line, 90°
+        self.assertAlmostEqual(137.499237 * r2d, table[4][1][0])  # M (F_dif_m5), sixth line, 90°
+        self.assertAlmostEqual(-50.890854 * r2d, table[5][0][1])  # N (F_dif_m6), seventh line, 180°
 
     def test_can_parse_froude_krylov_module_raos(self):
         # sim > parRES > exnp.pincWaveFrc
@@ -370,12 +386,12 @@ class PrecalParserTest(unittest.TestCase):
 
         # Multiplied by 1e3 to convert the table data to N/m
         # column (axis), pulsation, incidence
-        self.assertEqual(0.419735E+02 * 1E3, table[0][6][0]) # X (F_inc_m1), first line, 90°
-        self.assertEqual(0.988816E-03 * 1E3, table[1][5][1]) # Y (F_inc_m2), second line, 180°
-        self.assertEqual(0.179547E+05 * 1E3, table[2][4][0]) # Z (F_inc_m3), third line, 90°
-        self.assertEqual(0.658274E-02 * 1E3, table[3][3][1]) # K (F_inc_m4), fourth line, 180°
-        self.assertEqual(0.114842E+06 * 1E3, table[4][2][0]) # M (F_inc_m5), fifth line, 90°
-        self.assertEqual(0.208950E-01 * 1E3, table[5][1][1]) # N (F_inc_m6), sixth line, 180°
+        self.assertEqual(0.419735e02 * 1e3, table[0][6][0])  # X (F_inc_m1), first line, 90°
+        self.assertEqual(0.988816e-03 * 1e3, table[1][5][1])  # Y (F_inc_m2), second line, 180°
+        self.assertEqual(0.179547e05 * 1e3, table[2][4][0])  # Z (F_inc_m3), third line, 90°
+        self.assertEqual(0.658274e-02 * 1e3, table[3][3][1])  # K (F_inc_m4), fourth line, 180°
+        self.assertEqual(0.114842e06 * 1e3, table[4][2][0])  # M (F_inc_m5), fifth line, 90°
+        self.assertEqual(0.208950e-01 * 1e3, table[5][1][1])  # N (F_inc_m6), sixth line, 180°
 
     def test_can_parse_froude_krylov_phase_raos(self):
         data = PrecalParser.from_string(precal())
@@ -400,12 +416,13 @@ class PrecalParserTest(unittest.TestCase):
             for period_idx in range(7):
                 self.assertEqual(2, len(table[mod_idx][period_idx]))
         # column (axis), pulsation, incidence
-        self.assertAlmostEqual(-179.999939 * np.pi/180, table[0][6][0]) # X (F_inc_m1), first line, 90°
-        self.assertAlmostEqual( 171.732681 * np.pi/180, table[1][5][1]) # Y (F_inc_m2), second line, 180°
-        self.assertAlmostEqual(  -0.000003 * np.pi/180, table[2][4][0]) # Z (F_inc_m3), third line, 90°
-        self.assertAlmostEqual( -26.438093 * np.pi/180, table[3][3][1]) # K (F_inc_m4), fourth line, 180°
-        self.assertAlmostEqual(  -0.000017 * np.pi/180, table[4][2][0]) # M (F_inc_m5), fifth line, 90°
-        self.assertAlmostEqual(  -0.018264 * np.pi/180, table[5][1][1]) # N (F_inc_m6), sixth line, 180°
+        r2d = np.pi / 180
+        self.assertAlmostEqual(-179.999939 * r2d, table[0][6][0])  # X (F_inc_m1), first line, 90°
+        self.assertAlmostEqual(171.732681 * r2d, table[1][5][1])  # Y (F_inc_m2), second line, 180°
+        self.assertAlmostEqual(-0.000003 * r2d, table[2][4][0])  # Z (F_inc_m3), third line, 90°
+        self.assertAlmostEqual(-26.438093 * r2d, table[3][3][1])  # K (F_inc_m4), fourth line, 180°
+        self.assertAlmostEqual(-0.000017 * r2d, table[4][2][0])  # M (F_inc_m5), fifth line, 90°
+        self.assertAlmostEqual(-0.018264 * r2d, table[5][1][1])  # N (F_inc_m6), sixth line, 180°
 
 
 if __name__ == "__main__":
