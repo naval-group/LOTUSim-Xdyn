@@ -18,12 +18,12 @@ def get_env() -> EnvironmentAndFrames:
     return env
 
 
-def get_position_states(x: float, y: float, z: float, phi: float, theta: float, psi: float) -> BodyStates :
+def get_position_states(
+    x: float, y: float, z: float, phi: float, theta: float, psi: float
+) -> BodyStates:
     states = BodyStates()
     states.convention = YamlRotation("angle", ["z", "y'", "x''"])
-    quaternion = states.convert_to_quaternion(
-        SscEulerAngles(phi, theta, psi), states.convention
-    )
+    quaternion = states.convert_to_quaternion(SscEulerAngles(phi, theta, psi), states.convention)
     states.x.record(0, x)
     states.y.record(0, y)
     states.z.record(0, z)
@@ -100,7 +100,6 @@ class LinearStiffnessForceModelTest(unittest.TestCase):
         self.assertEqual(149.0, data.K[5, 4])
         self.assertEqual(151.0, data.K[5, 5])
 
-
     def test_can_parse_optional(self):
         """Check that parse function produces a valid LinearStiffnessForceModelInput data object"""
         yaml_data = """
@@ -137,12 +136,15 @@ class LinearStiffnessForceModelTest(unittest.TestCase):
         data = LinearStiffnessForceModelInput()
         data.name = "test"
         data.K = np.array(
-            [[2,     3,   5,   7,  11,  13],
-             [17,   19,  23,  29,  31,  37],
-             [41,   43,  47,  53,  59,  61],
-             [67,   71,  73,  79,  83,  89],
-             [97,  101, 103, 107, 109, 113],
-             [127, 131, 137, 139, 149, 151]])
+            [
+                [2, 3, 5, 7, 11, 13],
+                [17, 19, 23, 29, 31, 37],
+                [41, 43, 47, 53, 59, 61],
+                [67, 71, 73, 79, 83, 89],
+                [97, 101, 103, 107, 109, 113],
+                [127, 131, 137, 139, 149, 151],
+            ]
+        )
         K = data.K
         model = LinearStiffnessForceModel(data, "body", env)
         for _ in range(100):
@@ -150,14 +152,22 @@ class LinearStiffnessForceModelTest(unittest.TestCase):
             y = self.random_double_between(-10.0, +10.0)
             z = self.random_double_between(-10.0, +10.0)
             phi = self.random_double_between(-np.pi, np.pi)
-            theta = self.random_double_between(-np.pi/3, np.pi/3) # Restricting the range of angles to avoid gimbal lock
+            theta = self.random_double_between(
+                -np.pi / 3, np.pi / 3
+            )  # Restricting the range of angles to avoid gimbal lock
             psi = self.random_double_between(-np.pi, np.pi)
             states = get_position_states(x, y, z, phi, theta, psi)
             wrench = model.get_force(states, self.random_double_between(), env)
             self.assertEqual("body", wrench.get_frame())
             for j in range(3):
-                assert_near(sum(K[j, c] * dof for c, dof in enumerate((x, y, z, phi, theta, psi))), -wrench.force[j])
-                assert_near(sum(K[j + 3, c] * dof for c, dof in enumerate((x, y, z, phi, theta, psi))), -wrench.torque[j])
+                assert_near(
+                    sum(K[j, c] * dof for c, dof in enumerate((x, y, z, phi, theta, psi))),
+                    -wrench.force[j],
+                )
+                assert_near(
+                    sum(K[j + 3, c] * dof for c, dof in enumerate((x, y, z, phi, theta, psi))),
+                    -wrench.torque[j],
+                )
 
     def test_example_with_equilibrium_input(self):
         EPS = 1e-9
@@ -166,36 +176,58 @@ class LinearStiffnessForceModelTest(unittest.TestCase):
         data = LinearStiffnessForceModelInput()
         data.name = "test"
         data.K = np.array(
-            [[2,     3,   5,   7,  11,  13],
-             [17,   19,  23,  29,  31,  37],
-             [41,   43,  47,  53,  59,  61],
-             [67,   71,  73,  79,  83,  89],
-             [97,  101, 103, 107, 109, 113],
-             [127, 131, 137, 139, 149, 151]])
+            [
+                [2, 3, 5, 7, 11, 13],
+                [17, 19, 23, 29, 31, 37],
+                [41, 43, 47, 53, 59, 61],
+                [67, 71, 73, 79, 83, 89],
+                [97, 101, 103, 107, 109, 113],
+                [127, 131, 137, 139, 149, 151],
+            ]
+        )
         x0 = 1
         y0 = 2
         z0 = 3
-        phi0 = np.pi/10.
-        theta0 = np.pi/8.
-        psi0 = np.pi/12.
-        data.equilibrium_position = YamlPosition(YamlCoordinates(x0,y0,z0), YamlAngle(phi0,theta0,psi0), "body")
+        phi0 = np.pi / 10.0
+        theta0 = np.pi / 8.0
+        psi0 = np.pi / 12.0
+        data.equilibrium_position = YamlPosition(
+            YamlCoordinates(x0, y0, z0), YamlAngle(phi0, theta0, psi0), "body"
+        )
         K = data.K
         model = LinearStiffnessForceModel(data, "body", env)
         for _ in range(100):
-            x = self.random_double_between(-10.0,+10.0)
-            y = self.random_double_between(-10.0,+10.0)
-            z = self.random_double_between(-10.0,+10.0)
+            x = self.random_double_between(-10.0, +10.0)
+            y = self.random_double_between(-10.0, +10.0)
+            z = self.random_double_between(-10.0, +10.0)
             phi = self.random_double_between(-np.pi, np.pi)
-            theta = self.random_double_between(-np.pi/3, np.pi/3) # Restricting the range of angles to avoid gimbal lock
+            theta = self.random_double_between(
+                -np.pi / 3, np.pi / 3
+            )  # Restricting the range of angles to avoid gimbal lock
             psi = self.random_double_between(-np.pi, np.pi)
-            states = get_position_states(x,y,z,phi,theta,psi)
+            states = get_position_states(x, y, z, phi, theta, psi)
             wrench = model.get_force(states, self.random_double_between(), env)
             self.assertEqual("body", wrench.get_frame())
             for j in range(3):
                 k = j + 3
-                assert_near(K[j, 0]*(x-x0) + K[j, 1]*(y-y0) + K[j, 2]*(z-z0) + K[j, 3]*(phi-phi0) + K[j, 4]*(theta-theta0) + K[j, 5]*(psi-psi0), -wrench.force[j])
-                assert_near(K[k, 0]*(x-x0) + K[k, 1]*(y-y0) + K[k, 2]*(z-z0) + K[k, 3]*(phi-phi0) + K[k, 4]*(theta-theta0) + K[k, 5]*(psi-psi0), -wrench.torque[j])
-
+                assert_near(
+                    K[j, 0] * (x - x0)
+                    + K[j, 1] * (y - y0)
+                    + K[j, 2] * (z - z0)
+                    + K[j, 3] * (phi - phi0)
+                    + K[j, 4] * (theta - theta0)
+                    + K[j, 5] * (psi - psi0),
+                    -wrench.force[j],
+                )
+                assert_near(
+                    K[k, 0] * (x - x0)
+                    + K[k, 1] * (y - y0)
+                    + K[k, 2] * (z - z0)
+                    + K[k, 3] * (phi - phi0)
+                    + K[k, 4] * (theta - theta0)
+                    + K[k, 5] * (psi - psi0),
+                    -wrench.torque[j],
+                )
 
 
 if __name__ == "__main__":
