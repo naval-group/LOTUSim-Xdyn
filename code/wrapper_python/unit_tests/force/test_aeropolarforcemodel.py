@@ -10,8 +10,7 @@ from typing import Optional
 import numpy as np
 from xdyn.core import BodyStates, EnvironmentAndFrames
 from xdyn.core.io import YamlCoordinates, YamlRotation
-from xdyn.env.wind import (UniformWindVelocityProfile,
-                           WindMeanVelocityProfileInput)
+from xdyn.env.wind import UniformWindVelocityProfile, WindMeanVelocityProfileInput
 from xdyn.exceptions import InvalidInputException
 from xdyn.force import AeroPolarForceModel, AeroPolarForceModelInput
 
