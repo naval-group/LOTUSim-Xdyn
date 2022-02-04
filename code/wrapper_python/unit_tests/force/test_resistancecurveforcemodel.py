@@ -99,26 +99,38 @@ class ResistanceCurveForceModelTest(unittest.TestCase):
         self.assertEqual(0, force.M())
         self.assertEqual(0, force.N())
 
-    def test_should_issue_a_warning_when_speed_is_lower_than_min_speed_specified_in_resistance_curve_table(self):
+    def test_should_issue_a_warning_when_speed_is_lower_than_min_speed_specified_in_resistance_curve_table(
+        self,
+    ):
         env = EnvironmentAndFrames()
-        model= ResistanceCurveForceModel(ResistanceCurveForceModel.parse(resistance_curve()), "", env)
+        model = ResistanceCurveForceModel(
+            ResistanceCurveForceModel.parse(resistance_curve()), "", env
+        )
         states = get_states()
         states.u.record(0, -1)
         buf = io.StringIO()
         with redirect_stderr(buf):
             model.get_force(states, self.rng.random_double()(), env)
-        expected_regex = "Warning: resistance curve is tabulated from .* m/s, but received Va = .* m/s"
+        expected_regex = (
+            "Warning: resistance curve is tabulated from .* m/s, but received Va = .* m/s"
+        )
         self.assertTrue(re.search(expected_regex, buf.getvalue()), buf.getvalue())
 
-    def test_should_issue_a_warning_when_speed_is_greater_than_max_speed_specified_in_resistance_curve_table(self):
+    def test_should_issue_a_warning_when_speed_is_greater_than_max_speed_specified_in_resistance_curve_table(
+        self,
+    ):
         env = EnvironmentAndFrames()
-        model = ResistanceCurveForceModel(ResistanceCurveForceModel.parse(resistance_curve()), "", env)
+        model = ResistanceCurveForceModel(
+            ResistanceCurveForceModel.parse(resistance_curve()), "", env
+        )
         states = get_states()
-        states.u.record(0, 20*1852/3600 + 1E-10)
+        states.u.record(0, 20 * 1852 / 3600 + 1e-10)
         buf = io.StringIO()
         with redirect_stderr(buf):
             model.get_force(states, self.rng.random_double()(), env)
-        expected_regex = "Warning: resistance curve is tabulated up to .* m/s, but received Va = .* m/s"
+        expected_regex = (
+            "Warning: resistance curve is tabulated up to .* m/s, but received Va = .* m/s"
+        )
         self.assertTrue(re.search(expected_regex, buf.getvalue()), buf.getvalue())
 
     def test_with_filtered_states(self):
