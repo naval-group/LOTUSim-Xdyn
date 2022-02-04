@@ -13,28 +13,6 @@
 
 std::string MMGManeuveringForceModel::model_name() {return "MMG maneuvering";}
 
-MMGManeuveringForceModel::Input::Input():
-        application_point(),
-        Lpp(),
-        T(),
-        Xvv(),
-        Xrr(),
-        Xvr(),
-        Xvvvv(),
-        Yv(),
-        Yr(),
-        Yvvv(),
-        Yrvv(),
-        Yvrr(),
-        Yrrr(),
-        Nv(),
-        Nr(),
-        Nvvv(),
-        Nrvv(),
-        Nvrr(),
-        Nrrr()
-{}
-
 MMGManeuveringForceModel::MMGManeuveringForceModel(const Input& input_, const std::string& body_name, const EnvironmentAndFrames& env):
         ForceModel(MMGManeuveringForceModel::model_name(), {}, YamlPosition(input_.application_point, YamlAngle(), body_name), body_name, env),
         input(input_)
