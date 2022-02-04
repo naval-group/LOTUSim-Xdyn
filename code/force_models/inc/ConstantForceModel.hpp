@@ -18,7 +18,7 @@ class ConstantForceModel : public ForceModel
     public:
         struct Input
         {
-            Input();
+            Input() = default;
             std::string frame;
             double x;
             double y;
