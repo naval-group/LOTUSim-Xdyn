@@ -60,9 +60,7 @@ class AiryTest(unittest.TestCase):
                 -Hs
                 / 2
                 * np.sin(
-                    -2 * np.pi / Tp * t
-                    + k * (x[0] * np.cos(psi0) + y[0] * np.sin(psi0))
-                    + phi
+                    -2 * np.pi / Tp * t + k * (x[0] * np.cos(psi0) + y[0] * np.sin(psi0)) + phi
                 ),
                 wave.get_elevation(x, y, t)[0],
                 delta=1e-6,
@@ -144,11 +142,7 @@ class AiryTest(unittest.TestCase):
         ref_eta = (
             lambda t: -Hs
             / np.sqrt(2)
-            * np.sin(
-                -2 * np.pi / Tp * t
-                + k * (x[0] * np.cos(psi0) + y[0] * np.sin(psi0))
-                + phi
-            )
+            * np.sin(-2 * np.pi / Tp * t + k * (x[0] * np.cos(psi0) + y[0] * np.sin(psi0)) + phi)
         )
         assert_equal = lambda x, y: self.assertAlmostEqual(x, y, delta=1e-6)
         for t in np.arange(0.0, 3 * Tp, 0.1):
@@ -204,11 +198,7 @@ class AiryTest(unittest.TestCase):
             * rho
             * g
             * np.exp(-k * z[0])
-            * np.sin(
-                -2 * np.pi / Tp * t
-                + k * (x[0] * np.cos(psi0) + y[0] * np.sin(psi0))
-                + phi
-            )
+            * np.sin(-2 * np.pi / Tp * t + k * (x[0] * np.cos(psi0) + y[0] * np.sin(psi0)) + phi)
         )
         assert_equal = lambda x, y: self.assertAlmostEqual(x, y, delta=1e-6)
         for t in np.arange(0.0, 3 * Tp, 0.1):
@@ -227,9 +217,7 @@ class AiryTest(unittest.TestCase):
         g = 9.81
         k = omega0 * omega0 / g
         get_eta = (
-            lambda x, y: Hs
-            / 2
-            * np.cos(omega0 * t - k * (x * np.cos(psi) + y * np.sin(psi)) + phi)
+            lambda x, y: Hs / 2 * np.cos(omega0 * t - k * (x * np.cos(psi) + y * np.sin(psi)) + phi)
         )
         assert_equal = lambda x, y: self.assertAlmostEqual(x, y, delta=BIG_EPS)
         assert_equal(0.045232, get_eta(x=-0.1, y=+0.0))
@@ -659,9 +647,7 @@ class AiryTest(unittest.TestCase):
         self.assertAlmostEqual(
             np.exp(-k * z[0]) / np.exp(-k * z[1]), (V.m[0, 0]) / (V.m[0, 1]), delta=eps
         )
-        self.assertAlmostEqual(
-            np.exp(-k * z[0]) / np.exp(-k * z[1]), pdyn[0] / pdyn[1], delta=eps
-        )
+        self.assertAlmostEqual(np.exp(-k * z[0]) / np.exp(-k * z[1]), pdyn[0] / pdyn[1], delta=eps)
         self.assertLessEqual(abs(V.m[0, 1]), abs(V.m[0, 0]))
         self.assertLessEqual(abs(V.m[1, 1]), abs(V.m[1, 0]))
         self.assertLessEqual(abs(V.m[2, 1]), abs(V.m[2, 0]))
