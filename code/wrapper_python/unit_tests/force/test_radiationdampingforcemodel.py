@@ -49,10 +49,7 @@ def get_hdb_data(yaml: YamlRadiationDamping, only_diagonal_terms: bool = True):
         TypeOfQuadrature.FILON, TypeOfQuadrature.GAUSS_KRONROD
     ).build_exponential_intervals(omega_min, omega_max, N)
     Br = [analytical_Br(omega) for omega in omegas]
-    Ma = [
-        compute_Ma_from_K(omega, A, analytical_K, yaml.tau_min, yaml.tau_max)
-        for omega in omegas
-    ]
+    Ma = [compute_Ma_from_K(omega, A, analytical_K, yaml.tau_min, yaml.tau_max) for omega in omegas]
     return omegas, Ma, Br, only_diagonal_terms
 
 
@@ -133,12 +130,8 @@ class RadiationDampingForceModelTest(unittest.TestCase):
         self.assertTrue(data.output_Br_and_K)
         self.assertEqual(10, data.tau_max)
         self.assertEqual(0.2094395, data.tau_min)
-        self.assertEqual(
-            TypeOfQuadrature.CLENSHAW_CURTIS, data.type_of_quadrature_for_convolution
-        )
-        self.assertEqual(
-            TypeOfQuadrature.SIMPSON, data.type_of_quadrature_for_cos_transform
-        )
+        self.assertEqual(TypeOfQuadrature.CLENSHAW_CURTIS, data.type_of_quadrature_for_convolution)
+        self.assertEqual(TypeOfQuadrature.SIMPSON, data.type_of_quadrature_for_cos_transform)
         self.assertEqual(0.696, data.calculation_point_in_body_frame.x)
         self.assertEqual(0, data.calculation_point_in_body_frame.y)
         self.assertEqual(1.418, data.calculation_point_in_body_frame.z)
