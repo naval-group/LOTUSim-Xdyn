@@ -17,14 +17,6 @@
 
 std::string WageningenControlledForceModel::model_name() {return "wageningen B-series";}
 
-
-WageningenControlledForceModel::Yaml::Yaml() :
-        AbstractWageningen::Yaml(),
-        number_of_blades(),
-        blade_area_ratio()
-{
-}
-
 WageningenControlledForceModel::Yaml::Yaml(const AbstractWageningen::Yaml& y) :
                 AbstractWageningen::Yaml(y),
                 number_of_blades(),
