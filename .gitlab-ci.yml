@@ -45,18 +45,6 @@ build:debian10-release:
        variables:
         - $NIGHTLY_BUILD
 
-#build:debian10-release-python:
-#   stage: build
-#   script:
-#     - make NB_OF_PARALLEL_BUILDS="-j 1" debian_10_release_gcc_8_wrapper
-#     - mv build_deb10_pywrapper/xdyn.deb .
-#     - mv code/wrapper_python/*.whl .
-#   artifacts:
-#     when: on_success
-#     paths:
-#     - xdyn.deb
-#     - xdyn*.whl
-
 build:debian10-coverage:
    stage: build
    script:
