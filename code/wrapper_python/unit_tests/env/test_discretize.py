@@ -153,18 +153,14 @@ class DiscretizeTest(unittest.TestCase):
         S = JonswapSpectrum(Hs, Tp, gamma)
         D = DiracDirectionalSpreading(np.pi / 4)
         omega_min = self.rng.random_double().greater_than(0)()
-        omega_max = (
-            self.rng.random_double().greater_than(0).no().greater_than(omega_min)()
-        )
+        omega_max = self.rng.random_double().greater_than(0).no().greater_than(omega_min)()
         nfreq = self.rng.random_size_t()()
         ndir = self.rng.random_size_t()()
         s = Stretching(delta=0, h=0)
         expected_regex = "omega_max.*<.*omega_min"
         with self.assertRaises(InvalidInputException) as pcm:
             discretize(S, D, omega_min, omega_max, nfreq, ndir, s, False)
-        self.assertTrue(
-            re.search(expected_regex, str(pcm.exception)), str(pcm.exception)
-        )
+        self.assertTrue(re.search(expected_regex, str(pcm.exception)), str(pcm.exception))
 
     def test_should_throw_if_nfreq_is_zero(self):
         Hs = 3
@@ -209,12 +205,12 @@ class DiscretizeTest(unittest.TestCase):
         nfreq = 1
         ndir = self.rng.random_size_t()()
         s = Stretching(delta=0, h=0)
-        expected_regex = "Asked for a single frequency \(nfreq = 1\), but omega_min \(=.*\) != omega_max \(=.*\)"
+        expected_regex = (
+            "Asked for a single frequency \(nfreq = 1\), but omega_min \(=.*\) != omega_max \(=.*\)"
+        )
         with self.assertRaises(InvalidInputException) as pcm:
             discretize(S, D, omega_min, omega_max, nfreq, ndir, s, False)
-        self.assertTrue(
-            re.search(expected_regex, str(pcm.exception)), str(pcm.exception)
-        )
+        self.assertTrue(re.search(expected_regex, str(pcm.exception)), str(pcm.exception))
 
     def test_should_throw_if_omega_min_equals_omega_max_but_nfreq_is_not_one(self):
         Hs = 3
@@ -230,9 +226,7 @@ class DiscretizeTest(unittest.TestCase):
         expected_regex = "omega_min = omega_max \(=.*\) but nfreq != 1"
         with self.assertRaises(InvalidInputException) as pcm:
             discretize(S, D, omega_min, omega_max, nfreq, ndir, s, False)
-        self.assertTrue(
-            re.search(expected_regex, str(pcm.exception)), str(pcm.exception)
-        )
+        self.assertTrue(re.search(expected_regex, str(pcm.exception)), str(pcm.exception))
 
     def test_filtering_with_a_ratio_of_1_should_merely_sort_the_spectrum_by_amplitude(
         self,
@@ -323,12 +317,8 @@ class DiscretizeTest(unittest.TestCase):
 
     def test_dynamic_pressure_factor(self):
         s = Stretching(delta=0, h=0)
-        self.assertEqual(
-            np.exp(-3), dynamic_pressure_factor(k=1, z=3, eta=2, stretching=s)
-        )
-        self.assertEqual(
-            np.exp(-10), dynamic_pressure_factor(k=2, z=5, eta=4, stretching=s)
-        )
+        self.assertEqual(np.exp(-3), dynamic_pressure_factor(k=1, z=3, eta=2, stretching=s))
+        self.assertEqual(np.exp(-10), dynamic_pressure_factor(k=2, z=5, eta=4, stretching=s))
         self.assertEqual(
             (np.exp(1) + np.exp(-1)) / (np.exp(3) + np.exp(-3)),
             dynamic_pressure_factor(k=1, z=2, eta=-4, stretching=s, h=3),
@@ -551,12 +541,8 @@ class DiscretizeTest(unittest.TestCase):
             ys = [ya, yb, yc]
             ret = area_curve(xs, ys)
             self.assertEqual(0, ret[0])
-            self.assertAlmostEqual(
-                (xb - xa) * ya, ret[1], delta=1e-12 * max(1.0, abs(ret[1]))
-            )
-            self.assertAlmostEqual(
-                (xc - xa) * ya, ret[2], delta=1e-12 * max(1.0, abs(ret[1]))
-            )
+            self.assertAlmostEqual((xb - xa) * ya, ret[1], delta=1e-12 * max(1.0, abs(ret[1])))
+            self.assertAlmostEqual((xc - xa) * ya, ret[2], delta=1e-12 * max(1.0, abs(ret[1])))
 
     def test_area_curve_can_integrate_rectangle_after_lots_of_zeros(self):
         for _ in range(1000):
@@ -601,16 +587,12 @@ class DiscretizeTest(unittest.TestCase):
         )
         self.assertAlmostEqual(
             2,
-            find_integration_bound_yielding_target_area(
-                2.5, xs, ys, area_curve(xs, ys)
-            ),
+            find_integration_bound_yielding_target_area(2.5, xs, ys, area_curve(xs, ys)),
             delta=EPS,
         )
         self.assertAlmostEqual(
             3,
-            find_integration_bound_yielding_target_area(
-                5.5, xs, ys, area_curve(xs, ys)
-            ),
+            find_integration_bound_yielding_target_area(5.5, xs, ys, area_curve(xs, ys)),
             delta=EPS,
         )
         self.assertAlmostEqual(
