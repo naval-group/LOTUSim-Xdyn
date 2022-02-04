@@ -8,7 +8,6 @@ from contextlib import redirect_stderr
 from typing import Callable
 
 import numpy as np
-
 from xdyn.core import BodyStates, EnvironmentAndFrames
 from xdyn.core.io import TypeOfQuadrature, YamlRadiationDamping
 from xdyn.data.test import analytical_Br, analytical_K, bug_3210
