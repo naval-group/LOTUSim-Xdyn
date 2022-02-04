@@ -23,7 +23,7 @@ class KtKqForceModel : public AbstractWageningen
     public:
         struct Yaml : public AbstractWageningen::Yaml
         {
-            Yaml();
+            Yaml() = default;
             Yaml(const AbstractWageningen::Yaml& y);
             std::vector<double> J;
             std::vector<double> Kt;
