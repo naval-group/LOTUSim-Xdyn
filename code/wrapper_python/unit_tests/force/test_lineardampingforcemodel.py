@@ -4,7 +4,6 @@ Unit test for LinearDampingForceModel
 import unittest
 
 import numpy as np
-
 from xdyn.core import BodyStates, EnvironmentAndFrames
 from xdyn.core.io import YamlRotation
 from xdyn.data.body import get_body
