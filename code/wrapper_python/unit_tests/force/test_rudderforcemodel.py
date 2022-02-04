@@ -4,7 +4,6 @@ Unit test for RudderForceModel
 import unittest
 
 import numpy as np
-
 from xdyn.core import (
     BlockedDOF,
     BodyStates,
