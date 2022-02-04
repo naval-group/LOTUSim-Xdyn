@@ -143,9 +143,7 @@ class GravityForceModelTest(unittest.TestCase):
         inertia[1, 1] = 100
         inertia[2, 2] = 100
         self.assertAlmostEqual(0, model.potential_energy(states, [0.0, 0.0, 0.0]))
-        self.assertAlmostEqual(
-            -120663.0, model.potential_energy(states, [0.0, 0.0, 123])
-        )
+        self.assertAlmostEqual(-120663.0, model.potential_energy(states, [0.0, 0.0, 123]))
 
 
 if __name__ == "__main__":
