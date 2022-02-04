@@ -13,7 +13,7 @@ class HydroPolarForceModel : public ForceModel
     public:
         struct Input
         {
-            Input();
+            Input() = default;
             std::string name;
             YamlPosition internal_frame;
             std::vector<double> angle_of_attack;

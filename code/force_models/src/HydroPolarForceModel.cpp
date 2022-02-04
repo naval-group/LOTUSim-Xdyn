@@ -79,18 +79,6 @@ HydroPolarForceModel::HydroPolarForceModel(const Input& input, const std::string
     }
 }
 
-HydroPolarForceModel::Input::Input():
-        name(),
-        internal_frame(),
-        angle_of_attack(),
-        lift_coefficient(),
-        drag_coefficient(),
-        moment_coefficient(),
-        reference_area(),
-        chord_length(),
-        use_waves_velocity()
-{}
-
 HydroPolarForceModel::Input HydroPolarForceModel::parse(const std::string& yaml)
 {
     std::stringstream stream(yaml);
