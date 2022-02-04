@@ -171,9 +171,7 @@ class HydroPolarForceModelTest(unittest.TestCase):
         data = HydroPolarForceModelInput()
         data.name = "test"
         # Internal frame is placed under water, 5m under the body frame's origin
-        data.internal_frame = YamlPosition(
-            YamlCoordinates(0, 0, 5), YamlAngle(0, 0, 0), "body"
-        )
+        data.internal_frame = YamlPosition(YamlCoordinates(0, 0, 5), YamlAngle(0, 0, 0), "body")
         data.reference_area = 100
         data.angle_of_attack = [
             0.0,
@@ -241,9 +239,7 @@ class HydroPolarForceModelTest(unittest.TestCase):
     def test_should_throw_for_invalid_polar_input(self):
         data = HydroPolarForceModelInput()
         data.name = "test"
-        data.internal_frame = YamlPosition(
-            YamlCoordinates(0, 0, 5), YamlAngle(0, 0, 0), "body"
-        )
+        data.internal_frame = YamlPosition(YamlCoordinates(0, 0, 5), YamlAngle(0, 0, 0), "body")
         data.reference_area = 1000
         data.use_waves_velocity = False
         env = EnvironmentAndFrames()
@@ -283,7 +279,9 @@ class HydroPolarForceModelTest(unittest.TestCase):
             0.38250,
             0.96888,
         ]
-        expected_msg = "Angle of attack, lift coefficient and drag coefficient must all have the same size."
+        expected_msg = (
+            "Angle of attack, lift coefficient and drag coefficient must all have the same size."
+        )
         with self.assertRaises(InvalidInputException) as pcm:
             HydroPolarForceModel(data, "body", env)
         self.assertTrue(expected_msg in str(pcm.exception), str(pcm.exception))
@@ -322,7 +320,9 @@ class HydroPolarForceModelTest(unittest.TestCase):
             0.96888,
             1.31578,
         ]
-        expected_msg = "Angle of attack must be provided from either -180° or 0deg (symmetry) to 180deg."
+        expected_msg = (
+            "Angle of attack must be provided from either -180° or 0deg (symmetry) to 180deg."
+        )
         with self.assertRaises(InvalidInputException) as pcm:
             HydroPolarForceModel(data, "body", env)
         self.assertTrue(expected_msg in str(pcm.exception), str(pcm.exception))
@@ -330,9 +330,7 @@ class HydroPolarForceModelTest(unittest.TestCase):
     def test_should_print_warning_for_polar_input_with_unexpected_bounds(self):
         data = HydroPolarForceModelInput()
         data.name = "test"
-        data.internal_frame = YamlPosition(
-            YamlCoordinates(0, 0, 5), YamlAngle(0, 0, 0), "body"
-        )
+        data.internal_frame = YamlPosition(YamlCoordinates(0, 0, 5), YamlAngle(0, 0, 0), "body")
         data.reference_area = 1000
         data.use_waves_velocity = False
         env = EnvironmentAndFrames()
@@ -489,9 +487,7 @@ class HydroPolarForceModelTest(unittest.TestCase):
         data = HydroPolarForceModelInput()
         data.name = "test"
         # Internal frame is placed under water, 5m under the body frame's origin
-        data.internal_frame = YamlPosition(
-            YamlCoordinates(0, 0, 5), YamlAngle(0, 0, 0), "body"
-        )
+        data.internal_frame = YamlPosition(YamlCoordinates(0, 0, 5), YamlAngle(0, 0, 0), "body")
         data.reference_area = 100
         data.angle_of_attack = []
         data.lift_coefficient = []
@@ -509,9 +505,7 @@ class HydroPolarForceModelTest(unittest.TestCase):
         data = HydroPolarForceModelInput()
         data.name = "test"
         # Internal frame is placed under water, 5m under the body frame's origin
-        data.internal_frame = YamlPosition(
-            YamlCoordinates(0, 0, 5), YamlAngle(0, 0, 0), "body"
-        )
+        data.internal_frame = YamlPosition(YamlCoordinates(0, 0, 5), YamlAngle(0, 0, 0), "body")
         data.reference_area = 100
         data.angle_of_attack = [
             0.0,
@@ -564,9 +558,7 @@ class HydroPolarForceModelTest(unittest.TestCase):
         data = HydroPolarForceModelInput()
         data.name = "test"
         # Internal frame is placed under water, 5m above the body frame's origin (in the air)
-        data.internal_frame = YamlPosition(
-            YamlCoordinates(0, 0, -5), YamlAngle(0, 0, 0), "body"
-        )
+        data.internal_frame = YamlPosition(YamlCoordinates(0, 0, -5), YamlAngle(0, 0, 0), "body")
         data.reference_area = 100
         data.angle_of_attack = [
             0.0,
@@ -627,11 +619,44 @@ class HydroPolarForceModelTest(unittest.TestCase):
         data = HydroPolarForceModelInput()
         data.name = "test"
         # Internal frame is placed under water, 5m under the body frame's origin
-        data.internal_frame = YamlPosition(YamlCoordinates(0,0,5), YamlAngle(0,0,0), "body")
+        data.internal_frame = YamlPosition(YamlCoordinates(0, 0, 5), YamlAngle(0, 0, 0), "body")
         data.reference_area = 100
-        data.angle_of_attack = [0.,0.12217305,0.15707963,0.20943951,0.48869219,1.04719755,1.57079633,2.0943951,2.61799388,np.pi]
-        data.lift_coefficient = [0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,0.]
-        data.drag_coefficient = [0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483]
+        data.angle_of_attack = [
+            0.0,
+            0.12217305,
+            0.15707963,
+            0.20943951,
+            0.48869219,
+            1.04719755,
+            1.57079633,
+            2.0943951,
+            2.61799388,
+            np.pi,
+        ]
+        data.lift_coefficient = [
+            0.00000,
+            0.94828,
+            1.13793,
+            1.25000,
+            1.42681,
+            1.38319,
+            1.26724,
+            0.93103,
+            0.38793,
+            0.0,
+        ]
+        data.drag_coefficient = [
+            0.03448,
+            0.01724,
+            0.01466,
+            0.01466,
+            0.02586,
+            0.11302,
+            0.38250,
+            0.96888,
+            1.31578,
+            1.34483,
+        ]
         data.use_waves_velocity = False
         data.angle_command = "beta"
         env = EnvironmentAndFrames()
@@ -643,7 +668,7 @@ class HydroPolarForceModelTest(unittest.TestCase):
         states = get_states(10, 0)
         wrench = force_model.get_force(states, 0, env, {"beta": 0})
         assert_equal(wrench.X(), -172399.99999999997)
-        assert_equal(wrench.Y(), 0.)
+        assert_equal(wrench.Y(), 0.0)
         # u=10, v=0, beta=30° -> AoA=30°
         states = get_states(10, 0)
         wrench = force_model.get_force(states, 0, env, {"beta": np.pi / 6})
@@ -663,18 +688,18 @@ class HydroPolarForceModelTest(unittest.TestCase):
         # u=0, v=10, beta=90  -> AoA=0°
         states = get_states(0, 10)
         wrench = force_model.get_force(states, 0, env, {"beta": np.pi / 2})
-        assert_equal(wrench.X(), 0.)
+        assert_equal(wrench.X(), 0.0)
         assert_equal(wrench.Y(), -172399.99999999997)
         # u=0, v=-10, beta=-90  -> AoA=0°
         states = get_states(0, -10)
         wrench = force_model.get_force(states, 0, env, {"beta": -np.pi / 2})
-        assert_equal(wrench.X(), 0.)
+        assert_equal(wrench.X(), 0.0)
         assert_equal(wrench.Y(), 172399.99999999997)
         # u=-10, v=0, beta=180  -> AoA=0°
         states = get_states(-10, 0)
         wrench = force_model.get_force(states, 0, env, {"beta": np.pi})
         assert_equal(wrench.X(), 172399.99999999997)
-        assert_equal(wrench.Y(), 0.)
+        assert_equal(wrench.Y(), 0.0)
 
 
 if __name__ == "__main__":
