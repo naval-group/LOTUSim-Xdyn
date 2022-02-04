@@ -4,7 +4,6 @@ Unit test for WaveNumberFunctor
 import unittest
 
 from numpy import tanh
-
 from xdyn.env.wave import WaveNumberFunctor
 
 
