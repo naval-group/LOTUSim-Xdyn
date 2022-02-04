@@ -179,9 +179,7 @@ class HDBParserTest(unittest.TestCase):
 
     def test_bug_3238(self):
         data = HDBParser.from_string(bug_3238_hdb())
-        expected_msg = (
-            "Unable to find section 'DIFFRACTION_FORCES_AND_MOMENTS' in the RAO file."
-        )
+        expected_msg = "Unable to find section 'DIFFRACTION_FORCES_AND_MOMENTS' in the RAO file."
         with self.assertRaises(InvalidInputException) as pcm:
             data.get_diffraction_module()
         self.assertTrue(expected_msg in str(pcm.exception), str(pcm.exception))
