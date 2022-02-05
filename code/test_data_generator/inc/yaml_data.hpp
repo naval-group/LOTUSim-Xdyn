@@ -94,9 +94,6 @@ namespace test_data
     std::string yml_bug_3230();
     std::string bug_3235();
     std::string bug_3207_yml();
-    std::string bug_3230_yml();
-    std::string hos();
-    std::string hos_for_parser_validation_only();
     std::string bug_3241();
     std::string constant_force();
     std::string issue_20();

@@ -67,10 +67,10 @@ TEST_F(SimpleStationKeepingControllerTest, force_and_torque)
     states.r.record(0, 10);
     states.x.record(0, x);
     states.y.record(0, y);
-    states.total_inertia = MatrixPtr(new Eigen::Matrix<double,6,6>());
-    states.total_inertia->operator()(0,0) = 4;
-    states.total_inertia->operator()(1,1) = 5;
-    states.total_inertia->operator()(5,5) = 6;
+    states.total_inertia = Eigen::Matrix<double,6,6>::Zero();
+    states.total_inertia(0,0) = 4;
+    states.total_inertia(1,1) = 5;
+    states.total_inertia(5,5) = 6;
 
     std::map<std::string,double> commands;
     commands["x_co"] = 5;

@@ -1,0 +1,22 @@
+ARG PYTHON_MAJOR_VERSION=3
+ARG PYTHON_MINOR_VERSION=10
+ARG PYTHON_PATCH_VERSION=2
+FROM python:${PYTHON_MAJOR_VERSION}.${PYTHON_MINOR_VERSION}.${PYTHON_PATCH_VERSION}-slim-bullseye
+# One requires to test:
+# - python3
+# - python3-pip: Needed to install the wheel
+# - numpy: The xdyn dependency
+#
+# One also installs:
+# - isort to sort import
+# - black to format code
+# - pylint to check unit test code
+RUN python3 -m pip install -U pip \
+ && python3 -m pip install \
+    numpy \
+    isort==5.10.1 \
+    black==22.1.0 \
+    pylint==2.12.2
+ADD xdyn*${PYTHON_MAJOR_VERSION}${PYTHON_MINOR_VERSION}*-linux_x86_64.whl /
+RUN python3 -m pip install --no-index --find-links / xdyn \
+ && python3 -c 'import xdyn; print(dir(xdyn)); print(xdyn.__version__)'

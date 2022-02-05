@@ -17,20 +17,6 @@
 
 std::string ConstantForceModel::model_name() {return "constant force";}
 
-ConstantForceModel::Input::Input() :
-        frame(),
-        x(),
-        y(),
-        z(),
-        X(),
-        Y(),
-        Z(),
-        K(),
-        M(),
-        N()
-{
-}
-
 ConstantForceModel::Input ConstantForceModel::parse(const std::string& yaml)
 {
     std::stringstream stream(yaml);

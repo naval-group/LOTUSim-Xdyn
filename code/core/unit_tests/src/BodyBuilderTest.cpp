@@ -374,48 +374,48 @@ TEST_F(BodyBuilderTest, mesh_to_body_is_correct)
     Mt = Ma+Mrb
     for i in range(6):
         for j in range(6):
-            print('    ASSERT_DOUBLE_EQ({2},(double)states.solid_body_inertia->operator()({0},{1}));'.format(i,j,Mrb[i,j]))
+            print('    ASSERT_DOUBLE_EQ({2},(double)states.solid_body_inertia({0},{1}));'.format(i,j,Mrb[i,j]))
  * \endcode
  */
 TEST_F(BodyBuilderTest, rigid_body_inertia_is_correct)
 {
     const auto states = body->get_states();
-    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia->operator()(0,0));
-    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia->operator()(0,1));
-    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia->operator()(0,2));
-    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia->operator()(0,3));
-    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia->operator()(0,4));
-    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia->operator()(0,5));
-    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia->operator()(1,0));
-    ASSERT_DOUBLE_EQ(12,(double)states.solid_body_inertia->operator()(1,1));
-    ASSERT_DOUBLE_EQ(13,(double)states.solid_body_inertia->operator()(1,2));
-    ASSERT_DOUBLE_EQ(14,(double)states.solid_body_inertia->operator()(1,3));
-    ASSERT_DOUBLE_EQ(15,(double)states.solid_body_inertia->operator()(1,4));
-    ASSERT_DOUBLE_EQ(16,(double)states.solid_body_inertia->operator()(1,5));
-    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia->operator()(2,0));
-    ASSERT_DOUBLE_EQ(13,(double)states.solid_body_inertia->operator()(2,1));
-    ASSERT_DOUBLE_EQ(16,(double)states.solid_body_inertia->operator()(2,2));
-    ASSERT_DOUBLE_EQ(20,(double)states.solid_body_inertia->operator()(2,3));
-    ASSERT_DOUBLE_EQ(25,(double)states.solid_body_inertia->operator()(2,4));
-    ASSERT_DOUBLE_EQ(31,(double)states.solid_body_inertia->operator()(2,5));
-    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia->operator()(3,0));
-    ASSERT_DOUBLE_EQ(14,(double)states.solid_body_inertia->operator()(3,1));
-    ASSERT_DOUBLE_EQ(20,(double)states.solid_body_inertia->operator()(3,2));
-    ASSERT_DOUBLE_EQ(30,(double)states.solid_body_inertia->operator()(3,3));
-    ASSERT_DOUBLE_EQ(45,(double)states.solid_body_inertia->operator()(3,4));
-    ASSERT_DOUBLE_EQ(66,(double)states.solid_body_inertia->operator()(3,5));
-    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia->operator()(4,0));
-    ASSERT_DOUBLE_EQ(15,(double)states.solid_body_inertia->operator()(4,1));
-    ASSERT_DOUBLE_EQ(25,(double)states.solid_body_inertia->operator()(4,2));
-    ASSERT_DOUBLE_EQ(45,(double)states.solid_body_inertia->operator()(4,3));
-    ASSERT_DOUBLE_EQ(80,(double)states.solid_body_inertia->operator()(4,4));
-    ASSERT_DOUBLE_EQ(136,(double)states.solid_body_inertia->operator()(4,5));
-    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia->operator()(5,0));
-    ASSERT_DOUBLE_EQ(16,(double)states.solid_body_inertia->operator()(5,1));
-    ASSERT_DOUBLE_EQ(31,(double)states.solid_body_inertia->operator()(5,2));
-    ASSERT_DOUBLE_EQ(66,(double)states.solid_body_inertia->operator()(5,3));
-    ASSERT_DOUBLE_EQ(136,(double)states.solid_body_inertia->operator()(5,4));
-    ASSERT_DOUBLE_EQ(262,(double)states.solid_body_inertia->operator()(5,5));
+    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia(0,0));
+    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia(0,1));
+    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia(0,2));
+    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia(0,3));
+    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia(0,4));
+    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia(0,5));
+    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia(1,0));
+    ASSERT_DOUBLE_EQ(12,(double)states.solid_body_inertia(1,1));
+    ASSERT_DOUBLE_EQ(13,(double)states.solid_body_inertia(1,2));
+    ASSERT_DOUBLE_EQ(14,(double)states.solid_body_inertia(1,3));
+    ASSERT_DOUBLE_EQ(15,(double)states.solid_body_inertia(1,4));
+    ASSERT_DOUBLE_EQ(16,(double)states.solid_body_inertia(1,5));
+    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia(2,0));
+    ASSERT_DOUBLE_EQ(13,(double)states.solid_body_inertia(2,1));
+    ASSERT_DOUBLE_EQ(16,(double)states.solid_body_inertia(2,2));
+    ASSERT_DOUBLE_EQ(20,(double)states.solid_body_inertia(2,3));
+    ASSERT_DOUBLE_EQ(25,(double)states.solid_body_inertia(2,4));
+    ASSERT_DOUBLE_EQ(31,(double)states.solid_body_inertia(2,5));
+    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia(3,0));
+    ASSERT_DOUBLE_EQ(14,(double)states.solid_body_inertia(3,1));
+    ASSERT_DOUBLE_EQ(20,(double)states.solid_body_inertia(3,2));
+    ASSERT_DOUBLE_EQ(30,(double)states.solid_body_inertia(3,3));
+    ASSERT_DOUBLE_EQ(45,(double)states.solid_body_inertia(3,4));
+    ASSERT_DOUBLE_EQ(66,(double)states.solid_body_inertia(3,5));
+    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia(4,0));
+    ASSERT_DOUBLE_EQ(15,(double)states.solid_body_inertia(4,1));
+    ASSERT_DOUBLE_EQ(25,(double)states.solid_body_inertia(4,2));
+    ASSERT_DOUBLE_EQ(45,(double)states.solid_body_inertia(4,3));
+    ASSERT_DOUBLE_EQ(80,(double)states.solid_body_inertia(4,4));
+    ASSERT_DOUBLE_EQ(136,(double)states.solid_body_inertia(4,5));
+    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia(5,0));
+    ASSERT_DOUBLE_EQ(16,(double)states.solid_body_inertia(5,1));
+    ASSERT_DOUBLE_EQ(31,(double)states.solid_body_inertia(5,2));
+    ASSERT_DOUBLE_EQ(66,(double)states.solid_body_inertia(5,3));
+    ASSERT_DOUBLE_EQ(136,(double)states.solid_body_inertia(5,4));
+    ASSERT_DOUBLE_EQ(262,(double)states.solid_body_inertia(5,5));
 }
 
 /**
@@ -433,42 +433,42 @@ TEST_F(BodyBuilderTest, rigid_body_inertia_is_correct)
 TEST_F(BodyBuilderTest, total_inertia_is_correct)
 {
     const auto states = body->get_states();
-    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia->operator()(0,0));
-    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia->operator()(0,1));
-    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia->operator()(0,2));
-    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia->operator()(0,3));
-    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia->operator()(0,4));
-    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia->operator()(0,5));
-    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia->operator()(1,0));
-    ASSERT_DOUBLE_EQ(14,(double)states.total_inertia->operator()(1,1));
-    ASSERT_DOUBLE_EQ(16,(double)states.total_inertia->operator()(1,2));
-    ASSERT_DOUBLE_EQ(18,(double)states.total_inertia->operator()(1,3));
-    ASSERT_DOUBLE_EQ(20,(double)states.total_inertia->operator()(1,4));
-    ASSERT_DOUBLE_EQ(22,(double)states.total_inertia->operator()(1,5));
-    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia->operator()(2,0));
-    ASSERT_DOUBLE_EQ(16,(double)states.total_inertia->operator()(2,1));
-    ASSERT_DOUBLE_EQ(22,(double)states.total_inertia->operator()(2,2));
-    ASSERT_DOUBLE_EQ(30,(double)states.total_inertia->operator()(2,3));
-    ASSERT_DOUBLE_EQ(40,(double)states.total_inertia->operator()(2,4));
-    ASSERT_DOUBLE_EQ(52,(double)states.total_inertia->operator()(2,5));
-    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia->operator()(3,0));
-    ASSERT_DOUBLE_EQ(18,(double)states.total_inertia->operator()(3,1));
-    ASSERT_DOUBLE_EQ(30,(double)states.total_inertia->operator()(3,2));
-    ASSERT_DOUBLE_EQ(50,(double)states.total_inertia->operator()(3,3));
-    ASSERT_DOUBLE_EQ(80,(double)states.total_inertia->operator()(3,4));
-    ASSERT_DOUBLE_EQ(122,(double)states.total_inertia->operator()(3,5));
-    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia->operator()(4,0));
-    ASSERT_DOUBLE_EQ(20,(double)states.total_inertia->operator()(4,1));
-    ASSERT_DOUBLE_EQ(40,(double)states.total_inertia->operator()(4,2));
-    ASSERT_DOUBLE_EQ(80,(double)states.total_inertia->operator()(4,3));
-    ASSERT_DOUBLE_EQ(150,(double)states.total_inertia->operator()(4,4));
-    ASSERT_DOUBLE_EQ(262,(double)states.total_inertia->operator()(4,5));
-    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia->operator()(5,0));
-    ASSERT_DOUBLE_EQ(22,(double)states.total_inertia->operator()(5,1));
-    ASSERT_DOUBLE_EQ(52,(double)states.total_inertia->operator()(5,2));
-    ASSERT_DOUBLE_EQ(122,(double)states.total_inertia->operator()(5,3));
-    ASSERT_DOUBLE_EQ(262,(double)states.total_inertia->operator()(5,4));
-    ASSERT_DOUBLE_EQ(514,(double)states.total_inertia->operator()(5,5));
+    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia(0,0));
+    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia(0,1));
+    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia(0,2));
+    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia(0,3));
+    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia(0,4));
+    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia(0,5));
+    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia(1,0));
+    ASSERT_DOUBLE_EQ(14,(double)states.total_inertia(1,1));
+    ASSERT_DOUBLE_EQ(16,(double)states.total_inertia(1,2));
+    ASSERT_DOUBLE_EQ(18,(double)states.total_inertia(1,3));
+    ASSERT_DOUBLE_EQ(20,(double)states.total_inertia(1,4));
+    ASSERT_DOUBLE_EQ(22,(double)states.total_inertia(1,5));
+    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia(2,0));
+    ASSERT_DOUBLE_EQ(16,(double)states.total_inertia(2,1));
+    ASSERT_DOUBLE_EQ(22,(double)states.total_inertia(2,2));
+    ASSERT_DOUBLE_EQ(30,(double)states.total_inertia(2,3));
+    ASSERT_DOUBLE_EQ(40,(double)states.total_inertia(2,4));
+    ASSERT_DOUBLE_EQ(52,(double)states.total_inertia(2,5));
+    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia(3,0));
+    ASSERT_DOUBLE_EQ(18,(double)states.total_inertia(3,1));
+    ASSERT_DOUBLE_EQ(30,(double)states.total_inertia(3,2));
+    ASSERT_DOUBLE_EQ(50,(double)states.total_inertia(3,3));
+    ASSERT_DOUBLE_EQ(80,(double)states.total_inertia(3,4));
+    ASSERT_DOUBLE_EQ(122,(double)states.total_inertia(3,5));
+    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia(4,0));
+    ASSERT_DOUBLE_EQ(20,(double)states.total_inertia(4,1));
+    ASSERT_DOUBLE_EQ(40,(double)states.total_inertia(4,2));
+    ASSERT_DOUBLE_EQ(80,(double)states.total_inertia(4,3));
+    ASSERT_DOUBLE_EQ(150,(double)states.total_inertia(4,4));
+    ASSERT_DOUBLE_EQ(262,(double)states.total_inertia(4,5));
+    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia(5,0));
+    ASSERT_DOUBLE_EQ(22,(double)states.total_inertia(5,1));
+    ASSERT_DOUBLE_EQ(52,(double)states.total_inertia(5,2));
+    ASSERT_DOUBLE_EQ(122,(double)states.total_inertia(5,3));
+    ASSERT_DOUBLE_EQ(262,(double)states.total_inertia(5,4));
+    ASSERT_DOUBLE_EQ(514,(double)states.total_inertia(5,5));
 }
 
 /**

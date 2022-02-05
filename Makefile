@@ -2,6 +2,9 @@
 
 all: update-submodules windows debian debug doc all_docker_images
 
+DOCKER_AS_ROOT:=docker run -t --rm -w /opt/share -v $(shell pwd):/opt/share
+DOCKER_AS_USER:=$(DOCKER_AS_ROOT) -u $(shell id -u):$(shell id -g)
+
 HEADERS=code/ssc/ssc/check_ssc_version.hpp\
         code/ssc/ssc/csv_file_reader.hpp\
         code/ssc/ssc/csv_writer.hpp\
@@ -65,6 +68,7 @@ debian_9_release_gcc_6: BUILD_DIR = build_deb9
 debian_9_release_gcc_6: CPACK_GENERATOR = DEB
 debian_9_release_gcc_6: DOCKER_IMAGE = sirehna/base-image-debian9-gcc6-xdyn
 debian_9_release_gcc_6: BOOST_ROOT = /opt/boost
+debian_9_release_gcc_6: BUILD_PYTHON_WRAPPER = False
 debian_9_release_gcc_6: cmake-debian-target build-debian test-debian
 
 debian_10_release_gcc_8: BUILD_TYPE = Release
@@ -73,6 +77,7 @@ debian_10_release_gcc_8: CPACK_GENERATOR = DEB
 debian_10_release_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:2021-04-16
 debian_10_release_gcc_8: BOOST_ROOT = /opt/boost
 debian_10_release_gcc_8: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_10_release_gcc_8: BUILD_PYTHON_WRAPPER = False
 debian_10_release_gcc_8: cmake-debian-target build-debian test-debian
 
 debian_10_coverage_gcc_8: BUILD_TYPE = Coverage
@@ -81,6 +86,7 @@ debian_10_coverage_gcc_8: CPACK_GENERATOR = DEB
 debian_10_coverage_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:2021-04-16
 debian_10_coverage_gcc_8: BOOST_ROOT = /opt/boost
 debian_10_coverage_gcc_8: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_10_coverage_gcc_8: BUILD_PYTHON_WRAPPER = False
 debian_10_coverage_gcc_8: cmake-debian-target build-debian test-debian
 
 debian_10_profile_gcc_8: BUILD_TYPE = Profile
@@ -89,6 +95,7 @@ debian_10_profile_gcc_8: CPACK_GENERATOR = DEB
 debian_10_profile_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:2021-04-16
 debian_10_profile_gcc_8: BOOST_ROOT = /opt/boost
 debian_10_profile_gcc_8: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_10_profile_gcc_8: BUILD_PYTHON_WRAPPER = False
 debian_10_profile_gcc_8: cmake-debian-target build-debian test-debian
 
 debian_10_debug_gcc_8: BUILD_TYPE = Debug
@@ -96,29 +103,132 @@ debian_10_debug_gcc_8: BUILD_DIR = build_deb10_dbg
 debian_10_debug_gcc_8: CPACK_GENERATOR = DEB
 debian_10_debug_gcc_8: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn:2021-04-16
 debian_10_debug_gcc_8: BOOST_ROOT = /opt/boost
+debian_10_debug_gcc_8: BUILD_PYTHON_WRAPPER = False
 debian_10_debug_gcc_8: cmake-debian-target build-debian
 
 debian_11_debug_gcc_10: BUILD_TYPE = Debug
 debian_11_debug_gcc_10: BUILD_DIR = build_deb11_dbg
 debian_11_debug_gcc_10: CPACK_GENERATOR = DEB
-debian_11_debug_gcc_10: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-08-17
+debian_11_debug_gcc_10: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-12-12
 debian_11_debug_gcc_10: BOOST_ROOT = /opt/boost
+debian_11_debug_gcc_10: BUILD_PYTHON_WRAPPER = False
 debian_11_debug_gcc_10: cmake-debian-target build-debian
 
 debian_11_profile_gcc_10: BUILD_TYPE = Profile
 debian_11_profile_gcc_10: BUILD_DIR = build_deb11_profile
 debian_11_profile_gcc_10: CPACK_GENERATOR = DEB
-debian_11_profile_gcc_10: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-08-17
+debian_11_profile_gcc_10: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-12-12
 debian_11_profile_gcc_10: BOOST_ROOT = /opt/boost
+debian_11_profile_gcc_10: BUILD_PYTHON_WRAPPER = False
 debian_11_profile_gcc_10: cmake-debian-target build-debian
 
 debian_11_release_gcc_10: BUILD_TYPE = Release
 debian_11_release_gcc_10: BUILD_DIR = build_deb11
 debian_11_release_gcc_10: CPACK_GENERATOR = DEB
-debian_11_release_gcc_10: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-08-17
+debian_11_release_gcc_10: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-12-12
 debian_11_release_gcc_10: BOOST_ROOT = /opt/boost
 debian_11_release_gcc_10: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_11_release_gcc_10: BUILD_PYTHON_WRAPPER = False
 debian_11_release_gcc_10: cmake-debian-target build-debian test-debian
+
+debian_11_release_gcc_10_wrapper: BUILD_TYPE = Release
+debian_11_release_gcc_10_wrapper: BUILD_DIR = build_deb11_pywrapper
+debian_11_release_gcc_10_wrapper: CPACK_GENERATOR = DEB
+debian_11_release_gcc_10_wrapper: DOCKER_IMAGE = xdyn-python-deb11-py309-build
+debian_11_release_gcc_10_wrapper: BOOST_ROOT = /opt/boost
+debian_11_release_gcc_10_wrapper: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_11_release_gcc_10_wrapper: BUILD_PYTHON_WRAPPER = True
+debian_11_release_gcc_10_wrapper: PYTHON_VERSION=3.9
+debian_11_release_gcc_10_wrapper: PYTHON_TEST_TARGET=debian_11_py309_package
+debian_11_release_gcc_10_wrapper: build-docker-python-image cmake-debian-target build-debian test-debian package-debian-python-with-doc
+
+debian_11_release_gcc_10_wrapper_py307: BUILD_TYPE = Release
+debian_11_release_gcc_10_wrapper_py307: BUILD_DIR = build_deb11_pywrapper
+debian_11_release_gcc_10_wrapper_py307: CPACK_GENERATOR = DEB
+debian_11_release_gcc_10_wrapper_py307: DOCKER_IMAGE = xdyn-python-deb11-py307-build
+debian_11_release_gcc_10_wrapper_py307: BOOST_ROOT = /opt/boost
+debian_11_release_gcc_10_wrapper_py307: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_11_release_gcc_10_wrapper_py307: BUILD_PYTHON_WRAPPER = True
+debian_11_release_gcc_10_wrapper_py307: PYTHON_VERSION=3.7
+debian_11_release_gcc_10_wrapper_py307: PYTHON_TEST_TARGET=debian_11_py307_package
+debian_11_release_gcc_10_wrapper_py307: ADDITIONAL_CMAKE_PARAMETERS = "-DPython_EXECUTABLE=/usr/local/bin/python3"
+debian_11_release_gcc_10_wrapper_py307: build-docker-python-image cmake-debian-target build-debian test-debian package-debian-python
+
+debian_11_release_gcc_10_wrapper_py308: BUILD_TYPE = Release
+debian_11_release_gcc_10_wrapper_py308: BUILD_DIR = build_deb11_pywrapper
+debian_11_release_gcc_10_wrapper_py308: CPACK_GENERATOR = DEB
+debian_11_release_gcc_10_wrapper_py308: DOCKER_IMAGE = xdyn-python-deb11-py308-build
+debian_11_release_gcc_10_wrapper_py308: BOOST_ROOT = /opt/boost
+debian_11_release_gcc_10_wrapper_py308: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_11_release_gcc_10_wrapper_py308: BUILD_PYTHON_WRAPPER = True
+debian_11_release_gcc_10_wrapper_py308: PYTHON_VERSION=3.8
+debian_11_release_gcc_10_wrapper_py308: PYTHON_TEST_TARGET=debian_11_py308_package
+debian_11_release_gcc_10_wrapper_py308: ADDITIONAL_CMAKE_PARAMETERS = "-DPython_EXECUTABLE=/usr/local/bin/python3"
+debian_11_release_gcc_10_wrapper_py308: build-docker-python-image cmake-debian-target build-debian test-debian package-debian-python
+
+debian_11_release_gcc_10_wrapper_py310: BUILD_TYPE = Release
+debian_11_release_gcc_10_wrapper_py310: BUILD_DIR = build_deb11_pywrapper
+debian_11_release_gcc_10_wrapper_py310: CPACK_GENERATOR = DEB
+debian_11_release_gcc_10_wrapper_py310: DOCKER_IMAGE = xdyn-python-deb11-py310-build
+debian_11_release_gcc_10_wrapper_py310: BOOST_ROOT = /opt/boost
+debian_11_release_gcc_10_wrapper_py310: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_11_release_gcc_10_wrapper_py310: BUILD_PYTHON_WRAPPER = True
+debian_11_release_gcc_10_wrapper_py310: PYTHON_VERSION=3.10
+debian_11_release_gcc_10_wrapper_py310: PYTHON_TEST_TARGET=debian_11_py310_package
+debian_11_release_gcc_10_wrapper_py310: ADDITIONAL_CMAKE_PARAMETERS = "-DPython_EXECUTABLE=/usr/local/bin/python3"
+debian_11_release_gcc_10_wrapper_py310: build-docker-python-image cmake-debian-target build-debian test-debian package-debian-python
+
+debian_11_release_gcc_10_wrapper_python_all:
+	@echo "Create Python3 wheels for Python 3.7, 3.8, 3.9 and 3.10"
+	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.7
+	make debian_11_release_gcc_10_wrapper_py307
+	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.8
+	make debian_11_release_gcc_10_wrapper_py308
+	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.9
+	make debian_11_release_gcc_10_wrapper
+	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.10
+	make debian_11_release_gcc_10_wrapper_py310
+	ls code/wrapper_python/*.whl
+	make -C code/wrapper_python test_additional_platforms_depending_on_debian
+	@echo "Success for :"
+	@echo " - Linux x86-64 Debian 11 with Python 3.7"
+	@echo " - Linux x86-64 Debian 11 with Python 3.8"
+	@echo " - Linux x86-64 Debian 11 with Python 3.9 (default Python version)"
+	@echo " - Linux x86-64 Debian 11 with Python 3.10"
+	@echo " - Linux x86-64 Ubuntu 20.04 with Python 3.8, using the Debian 11 generated wheel"
+
+debian_10_release_gcc_8_wrapper: BUILD_TYPE = Release
+debian_10_release_gcc_8_wrapper: BUILD_DIR = build_deb10_pywrapper
+debian_10_release_gcc_8_wrapper: CPACK_GENERATOR = DEB
+debian_10_release_gcc_8_wrapper: DOCKER_IMAGE = xdyn-python-deb10-build
+debian_10_release_gcc_8_wrapper: BOOST_ROOT = /opt/boost
+debian_10_release_gcc_8_wrapper: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_10_release_gcc_8_wrapper: BUILD_PYTHON_WRAPPER = True
+debian_10_release_gcc_8_wrapper: PYTHON_VERSION=3.7
+debian_10_release_gcc_8_wrapper: PYTHON_TEST_TARGET=debian_10_package
+debian_10_release_gcc_8_wrapper: build-docker-python-image cmake-debian-target build-debian test-debian package-debian-python-specific-deb10-gcc8
+
+build-docker-python-image:
+	make -C code/wrapper_python ${DOCKER_IMAGE}
+
+package-debian-python:
+	@mkdir -p code/wrapper_python/build
+	cp -rf ${BUILD_DIR}/lib.linux-x86_64-${PYTHON_VERSION} code/wrapper_python/build/.
+	make -C code/wrapper_python ${PYTHON_TEST_TARGET}
+
+package-debian-python-with-doc:
+	@echo "Create the xdyn wheel file and generate the HTML sphinx associated documenation"
+	@mkdir -p code/wrapper_python/build
+	cp -rf ${BUILD_DIR}/lib.linux-x86_64-${PYTHON_VERSION} code/wrapper_python/build/.
+	make -C code/wrapper_python ${PYTHON_TEST_TARGET}
+	make -C code/wrapper_python doc
+	@echo "xdyn python documentation is located in code/wrapper_python/doc/src/build/html"
+
+package-debian-python-specific-deb10-gcc8:
+	@mkdir -p code/wrapper_python/build/lib.linux-x86_64-${PYTHON_VERSION}
+	cp -rf ${BUILD_DIR}/lib.linux-x86_64-${PYTHON_VERSION}/xdyn.so \
+		code/wrapper_python/build/lib.linux-x86_64-${PYTHON_VERSION}/xdyn.cpython-37m-x86_64-linux-gnu.so
+	make -C code/wrapper_python ${PYTHON_TEST_TARGET}
 
 windows_gccx_posix: BUILD_TYPE=Release
 windows_gccx_posix: BUILD_DIR=build_win_posix
@@ -128,8 +238,6 @@ windows_gccx_posix: BOOST_ROOT=/usr/src/mxe/usr/x86_64-w64-mingw32.static.posix
 windows_gccx_posix: HDF5_DIR=/opt/HDF5_1_8_20/cmake
 windows_gccx_posix: cmake-windows-target build-windows test-windows
 
-DOCKER_AS_ROOT:=docker run -t --rm -w /opt/share -v $(shell pwd):/opt/share
-DOCKER_AS_USER:=$(DOCKER_AS_ROOT) -u $(shell id -u):$(shell id -g)
 
 code/yaml-cpp/CMakeLists.txt: yaml-cpp-CMakeLists.txt
 	$(DOCKER_AS_USER) $(DOCKER_IMAGE) /bin/bash -c \
@@ -167,6 +275,7 @@ cmake-windows-target: code/yaml-cpp/CMakeLists.txt
 	        -D Boost_SYSTEM_LIBRARY:PATH=$(BOOST_ROOT)/lib/libboost_system-mt.a \
 	        -D Boost_REGEX_LIBRARY:PATH=$(BOOST_ROOT)/lib/libboost_regex-mt.a \
 	        -D CMAKE_SYSTEM_VERSION=7 \
+	        -D BUILD_PYTHON_WRAPPER:BOOL=$(BUILD_PYTHON_WRAPPER) \
 	        /opt/share/code"
 
 build-windows:
@@ -204,6 +313,8 @@ cmake-debian-target: code/yaml-cpp/CMakeLists.txt
 	     -D CMAKE_INSTALL_PREFIX:PATH=/opt/xdyn \
 	     -D HDF5_DIR=$(HDF5_DIR) \
 	     -D BOOST_ROOT:PATH=$(BOOST_ROOT) \
+	     -D BUILD_PYTHON_WRAPPER:BOOL=$(BUILD_PYTHON_WRAPPER) \
+	     $(ADDITIONAL_CMAKE_PARAMETERS) \
 	    /opt/share/code"
 
 build-debian: SHELL:=/bin/bash
@@ -273,6 +384,7 @@ clean:
 	rm -rf build_*
 	rm -rf yaml-cpp
 	@make -C doc_user clean; rm -f doc_user/xdyn.deb doc.html
+	@make -C code/python_wrapper clean
 
 GREP=$(DOCKER_AS_USER) --entrypoint /bin/grep bitnami/minideb
 

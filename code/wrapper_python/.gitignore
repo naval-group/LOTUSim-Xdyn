@@ -1,0 +1,8 @@
+core
+dist
+build
+pybind11
+*.egg-info
+*.whl
+**.coverage
+**nosetests.xml

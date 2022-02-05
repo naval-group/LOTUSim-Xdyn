@@ -13,6 +13,7 @@ class AeroPolarForceModel : public ForceModel
     public:
         struct Input
         {
+            Input() = default;
             std::string name;
             YamlCoordinates calculation_point_in_body_frame;
             std::vector<double> apparent_wind_angle;

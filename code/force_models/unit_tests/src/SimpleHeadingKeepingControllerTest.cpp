@@ -55,8 +55,8 @@ TEST_F(SimpleHeadingKeepingControllerTest, force_and_torque)
     states.qj.record(0,  0);
     states.qk.record(0,  sin(psi/2));
     states.r.record(0, 10);
-    states.total_inertia = MatrixPtr(new Eigen::Matrix<double,6,6>());
-    states.total_inertia->operator()(2,2) = 4;
+    states.total_inertia = Eigen::Matrix<double,6,6>::Zero();
+    states.total_inertia(2,2) = 4;
 
     std::map<std::string,double> commands;
     commands["psi_co"] = 5;

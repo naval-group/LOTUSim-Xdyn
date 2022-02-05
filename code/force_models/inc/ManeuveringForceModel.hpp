@@ -26,7 +26,7 @@ class ManeuveringForceModel : public ForceModel
 
         struct Yaml
         {
-            Yaml();
+            Yaml() = default;
             std::string name;
             YamlPosition frame_of_reference;
             std::vector<std::string> commands;

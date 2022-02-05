@@ -29,7 +29,7 @@ class WageningenControlledForceModel : public AbstractWageningen
     public:
         struct Yaml : public AbstractWageningen::Yaml
         {
-            Yaml();
+            Yaml() = default;
             Yaml(const AbstractWageningen::Yaml& y);
             virtual ~Yaml(){}
             size_t number_of_blades;

@@ -46,7 +46,7 @@ double compute_Ma_from_K(const double omega, const double A, std::function<doubl
     return A - (1/omega)*ssc::integrate::Simpson(g).integrate_f(tau_min, tau_max, 1e-2);
 }
 
-TR1(shared_ptr)<HDBParser> RadiationDampingForceModelTest::get_hdb_data(const YamlRadiationDamping yaml, const bool only_diagonal_terms) const
+TR1(shared_ptr)<HDBParser> RadiationDampingForceModelTest::get_hdb_data(const YamlRadiationDamping& yaml, const bool only_diagonal_terms) const
 {
     std::vector<double> Br;
     std::vector<double> Ma;

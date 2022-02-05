@@ -16,18 +16,6 @@
 #include <cmath>
 #define PI M_PI
 
-
-AbstractWageningen::Yaml::Yaml() :
-        name(),
-        position_of_propeller_frame(),
-        wake_coefficient(),
-        relative_rotative_efficiency(),
-        thrust_deduction_factor(),
-        rotating_clockwise(),
-        diameter()
-{
-}
-
 AbstractWageningen::Yaml AbstractWageningen::parse(const std::string& yaml)
 {
     std::stringstream stream(yaml);

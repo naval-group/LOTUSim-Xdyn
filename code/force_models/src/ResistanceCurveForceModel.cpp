@@ -35,10 +35,6 @@ class ResistanceCurveForceModel::Impl
         double vmax;
 };
 
-ResistanceCurveForceModel::Yaml::Yaml() : Va(), R()
-{
-}
-
 ResistanceCurveForceModel::ResistanceCurveForceModel(const Yaml& data, const std::string& body_name, const EnvironmentAndFrames& env) :
         ForceModel(model_name(), {}, body_name, env),
         pimpl(new Impl(data))

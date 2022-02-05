@@ -113,4 +113,3 @@ Wrench AeroPolarForceModel::get_force(const BodyStates& states, const double t, 
     }
     return ret;
 }
-

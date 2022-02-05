@@ -13,18 +13,6 @@ template <> std::string get_type_of_service<GrpcControllerInterface>()
     return "controller";
 }
 
-GrpcControllerInterface::Input::Input () : url (), name (), yaml () {}
-
-GrpcSetParametersResponse::GrpcSetParametersResponse ()
-    : date_of_first_callback (), setpoint_names (), angle_representation (),
-      command_names()
-{
-}
-
-GrpcControllerResponse::GrpcControllerResponse () : commands (), next_call ()
-{
-}
-
 GrpcControllerResponse convert_controller_response(const ControllerResponse& response);
 GrpcControllerResponse convert_controller_response(const ControllerResponse& response)
 {

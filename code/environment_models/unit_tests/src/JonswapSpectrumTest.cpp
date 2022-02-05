@@ -117,7 +117,7 @@ TEST_F(JonswapSpectrumTest, should_throw_if_gamma_is_zero)
 {
     for (size_t i = 0 ; i < NB_TRIALS ; ++i)
     {
-        const double Hs = a.random<double>().no().greater_than(0);
+        const double Hs = a.random<double>().greater_than(0);
         const double Tp = a.random<double>().greater_than(0);
         const double gamma = 0;
         ASSERT_THROW(JonswapSpectrum(Hs, Tp, gamma),InvalidInputException);

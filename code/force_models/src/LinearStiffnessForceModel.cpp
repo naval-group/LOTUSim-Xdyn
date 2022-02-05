@@ -7,7 +7,7 @@
 
 std::string LinearStiffnessForceModel::model_name() {return "linear stiffness";}
 
-LinearStiffnessForceModel::LinearStiffnessForceModel(const Input input, const std::string& body_name, const EnvironmentAndFrames& env) :
+LinearStiffnessForceModel::LinearStiffnessForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env):
         ForceModel(input.name, {}, body_name, env),
         K(input.K),
         equilibrium_position(input.equilibrium_position)
@@ -36,7 +36,7 @@ Wrench LinearStiffnessForceModel::get_force(const BodyStates& states, const doub
             angles.theta,
             angles.psi;
     }
-    
+
     return Wrench(ssc::kinematics::Point(body_name,0,0,0), body_name, -K*X);
 }
 

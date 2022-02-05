@@ -55,7 +55,7 @@ std::string dump(const std::string& yaml, const int problematic_line)
         {
             ss << "  ";
         }
-        ss << std::setw(width) << line_number << " | " << replace_whitespace(line) << std::endl;
+        ss << std::setw(int(width)) << line_number << " | " << replace_whitespace(line) << std::endl;
     }
     return ss.str();
 }
