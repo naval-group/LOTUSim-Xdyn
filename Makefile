@@ -197,17 +197,6 @@ debian_11_release_gcc_10_wrapper_python_all:
 	@echo " - Linux x86-64 Debian 11 with Python 3.10"
 	@echo " - Linux x86-64 Ubuntu 20.04 with Python 3.8, using the Debian 11 generated wheel"
 
-debian_10_release_gcc_8_wrapper: BUILD_TYPE = Release
-debian_10_release_gcc_8_wrapper: BUILD_DIR = build_deb10_pywrapper
-debian_10_release_gcc_8_wrapper: CPACK_GENERATOR = DEB
-debian_10_release_gcc_8_wrapper: DOCKER_IMAGE = xdyn-python-deb10-build
-debian_10_release_gcc_8_wrapper: BOOST_ROOT = /opt/boost
-debian_10_release_gcc_8_wrapper: HDF5_DIR = /usr/local/hdf5/share/cmake
-debian_10_release_gcc_8_wrapper: BUILD_PYTHON_WRAPPER = True
-debian_10_release_gcc_8_wrapper: PYTHON_VERSION=3.7
-debian_10_release_gcc_8_wrapper: PYTHON_TEST_TARGET=debian_10_package
-debian_10_release_gcc_8_wrapper: build-docker-python-image cmake-debian-target build-debian test-debian package-debian-python-specific-deb10-gcc8
-
 build-docker-python-image:
 	make -C code/wrapper_python ${DOCKER_IMAGE}
 
@@ -384,7 +373,7 @@ clean:
 	rm -rf build_*
 	rm -rf yaml-cpp
 	@make -C doc_user clean; rm -f doc_user/xdyn.deb doc.html
-	@make -C code/python_wrapper clean
+	@make -C code/wrapper_python clean
 
 GREP=$(DOCKER_AS_USER) --entrypoint /bin/grep bitnami/minideb
 
