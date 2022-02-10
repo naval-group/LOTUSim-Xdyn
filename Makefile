@@ -51,7 +51,7 @@ ${HEADERS}:
 cmake-debian: BUILD_TYPE = Release
 cmake-debian: BUILD_DIR = build_deb11
 cmake-debian: CPACK_GENERATOR = DEB
-cmake-debian: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-08-17
+cmake-debian: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-12-12
 cmake-debian: BOOST_ROOT = /opt/boost
 cmake-debian: cmake-debian-target
 
@@ -334,7 +334,7 @@ docker-ci: xdyn.deb
 docker: BUILD_TYPE = Release
 docker: BUILD_DIR = build_deb11
 docker: CPACK_GENERATOR = DEB
-docker: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-08-17
+docker: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-12-12
 docker: BOOST_ROOT = /opt/boost
 docker: HDF5_DIR = /usr/local/hdf5/share/cmake
 docker: cmake-debian-target build-debian
