@@ -9,6 +9,7 @@ RUN apt-get update -yq && \
     apt-get install \
         --yes \
         --no-install-recommends \
+        wait-for-it \
         libgfortran5 \
         libquadmath0 && \
     apt-get autoclean && \
@@ -17,8 +18,6 @@ RUN apt-get update -yq && \
     rm -rf /tmp/* /var/tmp/* && \
     rm -rf /var/lib/apt/lists
 
-ADD ./interfaces/forces/wait-for-it.sh /usr/bin/
-RUN chmod a+x /usr/bin/wait-for-it.sh
 ADD xdyn.deb /
 RUN dpkg -r xdyn && \
     dpkg -i xdyn.deb
