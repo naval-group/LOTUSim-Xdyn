@@ -42,12 +42,12 @@ class FlettnerRotorForceModel : public ForceModel
         const double reference_area; //!< Reference area (in square metres) of the wing, for lift and drag normalization
 
         // The interpolators need to be behind pointers because interpolation is non-const
-        std::shared_ptr<ssc::interpolation::SplineVariableStep> Cl;
-        std::shared_ptr<ssc::interpolation::SplineVariableStep> Cd;
+        std::unique_ptr<ssc::interpolation::SplineVariableStep> Cl;
+        std::unique_ptr<ssc::interpolation::SplineVariableStep> Cd;
 
         std::pair<double, double> sr_bounds; //!< Interpolation bounds
 
-        const std::shared_ptr<double> spin_ratio; // Needs to be a pointer to be saved during get_force, which is const
+        const std::unique_ptr<double> spin_ratio; // Needs to be a pointer to be saved during get_force, which is const
 };
 
 #endif /* FORCE_MODELS_INC_FLETTNERROTORFORCEMODEL_HPP_ */
