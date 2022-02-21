@@ -83,7 +83,7 @@ TEST_F(FlettnerRotorForceModelTest, example)
     const BodyStates states = get_states(6.);
     UniformWindVelocityProfile::Input wind_input;
     wind_input.velocity = 10;
-    // U in [4;16] m/s
+    // U in [4;16] m/s so that with 80rpm, the spin ratio stays in [0;6]
 
     const double eps = 1E-10;
     double rpm = 80*2*M_PI/60.; // 80 rpm
