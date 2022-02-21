@@ -43,6 +43,7 @@ TEST_F(AeroPolarForceModelTest, can_parse)
     ASSERT_EQ(input.angle_command.get(), "beta");
 }
 
+namespace {
 BodyStates get_states(const double forward_speed = 0.)
 {
     BodyStates states(0);
@@ -60,6 +61,7 @@ BodyStates get_states(const double forward_speed = 0.)
     states.qj.record(0, 0);
     states.qk.record(0, 0);
     return states;
+}
 }
 
 TEST_F(AeroPolarForceModelTest, several_values)
