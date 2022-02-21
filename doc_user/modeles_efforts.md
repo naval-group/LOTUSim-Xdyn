@@ -2768,6 +2768,11 @@ de rotation autour de l'axe $`- \vec{z_b}`$, qui correspond toujours à l'axe du
  être choisi judicieusement selon le profil de vent choisi (dont dépendent aussi les coefficients de 
  portance et traînée).
 
+ Les valeurs des coefficients $`C_l`$ et $`C_d`$ sont interpolées selon la valeur de $`S_R`$ calculée 
+ à chaque pas de temps, en utilisant une interpolation par spline. Si la valeur de $`S_R`$ sort de 
+ l'intervalle connu, une valeur saturée (au minimum ou au maximum) est utilisée pour l'interpolation 
+ et un message d'avertissement est affiché.
+
 ## Modèle d'effort distant
 
 Si l'on souhaite utiliser un modèle d'effort qui n'est pas implémenté dans xdyn, il est possible
