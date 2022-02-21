@@ -2764,8 +2764,9 @@ de rotation autour de l'axe $`- \vec{z_b}`$, qui correspond toujours à l'axe du
 ![](images/flettner_rotor.svg)
 
 **Attention :** le point spécifié dans la section `rotor position in body frame` est le point d'application
- de l'effort (pas la position de la base du rotor). Il est généralement judicieux de le placer à mi-hauteur 
- du rotor.
+ de l'effort (pas la position de la base du rotor), c'est-à-dire le point de poussée vélique. Il doit 
+ être choisi judicieusement selon le profil de vent choisi (dont dépendent aussi les coefficients de 
+ portance et traînée).
 
 ## Modèle d'effort distant
 
