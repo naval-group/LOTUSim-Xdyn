@@ -70,7 +70,7 @@ Wrench FlettnerRotorForceModel::get_force(const BodyStates& states, const double
     }
     else if (sr_interp > sr_bounds.second)
     {
-        std::cerr << "Warning: spin ratio in Flettner rotor model '" << name << "' exceeds maximum tabulated value. Saturatings at SR=" << sr_bounds.second << std::endl;
+        std::cerr << "Warning: spin ratio in Flettner rotor model '" << name << "' exceeds maximum tabulated value. Saturating at SR=" << sr_bounds.second << std::endl;
         sr_interp = sr_bounds.second;
     }
     const double rho = env.get_rho_air();
