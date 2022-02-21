@@ -2724,13 +2724,13 @@ F_d = \frac{1}{2} \rho_{air} C_d(S_R) D L U^2
 
 Où :
 
-- $`F_l`$ est l'effort de portance, perpendiculaire à la direction de l'écoulement d'air,
-- $`F_d`$ est l'effort de traînée, parallèle à la direction de l'écoulement d'air,
-- $`\rho_{air}`$ est la masse volumique de l'air,
+- $`F_l`$ est l'effort de portance (en N), perpendiculaire à la direction de l'écoulement d'air,
+- $`F_d`$ est l'effort de traînée (en N), parallèle à la direction de l'écoulement d'air,
+- $`\rho_{air}`$ est la masse volumique de l'air (en kg/m<sup>3</sup>),
 - $`C_l`$ et $`C_d`$ sont les coefficients de portance et de traînée (respectivement),
-- $`D`$ est le diamètre du rotor,
-- $`L`$ est la longueur du rotor,
-- $`U`$ est la vitesse de l'écoulement d'air, projetée dans le plan normal à l'axe du rotor, et dépendant 
+- $`D`$ est le diamètre du rotor (en m),
+- $`L`$ est la longueur du rotor (en m),
+- $`U`$ est la vitesse de l'écoulement d'air (en m/s), projetée dans le plan normal à l'axe du rotor, et dépendant 
 de la vitesse du corps et de celle du vent,
 - $`S_R`$ est le ratio de vitesse de peau, calculé par :
 
