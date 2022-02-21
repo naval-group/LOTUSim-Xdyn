@@ -65,7 +65,7 @@ Wrench FlettnerRotorForceModel::get_force(const BodyStates& states, const double
     double sr_interp = *spin_ratio;
     if (sr_interp < sr_bounds.first)
     {
-        std::cerr << "Warning: spin ratio in Flettner rotor model '" << name << "' subceeds minimum tabulated value. Saturatings at SR=" << sr_bounds.first << std::endl;
+        std::cerr << "Warning: spin ratio in Flettner rotor model '" << name << "' subceeds minimum tabulated value. Saturating at SR=" << sr_bounds.first << std::endl;
         sr_interp = sr_bounds.first;
     }
     else if (sr_interp > sr_bounds.second)
