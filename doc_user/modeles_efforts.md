@@ -1352,6 +1352,7 @@ Ce modèle est paramétré par la section YAML suivante :
 ### Références
 
 - *Introduction of MMG standard method for ship maneuvering predictions*, 2014, H. Yasukawa, Y. Yoshimura, Journal of Marine Science and Technology 20(1):37-52, [doi:10.1007/s00773-014-0293-y](http://dx.doi.org/10.1007/s00773-014-0293-y).
+
 ## Efforts commandés
 
 Les efforts commandés correspondent, par exemple, aux efforts de propulsion, de
