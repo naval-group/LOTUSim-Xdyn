@@ -396,7 +396,7 @@ NISTOR
 
 ### Description
 
-Plusieurs efforts peuvent être modélisés sous la forme d'une raideur linéaire, notamment l'effort 
+Plusieurs efforts peuvent être modélisés sous la forme d'une raideur linéaire, notamment l'effort
 hydrostatique pour de faibles mouvements ou certains types d'ancrages. Un effort de raideur linéaire
 s'exprime comme le produit d'une matrice de raideur $`K`$ avec le vecteur position :
 
@@ -874,7 +874,7 @@ Même si le modèle de Holtrop & Mennen ne nécessite pas de connaître la forme
 - $`Vol`$ : déplacement (volumique)
 - [optionnel] $`S`$ : surface mouillée
 - $`lcb`$ : position du centre de flottaison sur l'axe longitudinal, en % de $`Lwl`$, avec comme origine le milieu du navire (entre les 2 parallèles). Par exemple, un navire de longueur ($`Lwl = 50m`$) dont le centre de flottaison est placé 1.5m en avant du milieu (entre parallèles), aura $`lcb = 3%`$ (des valeurs négatives sont possibles).
-- $`Cm`$ : coefficient de section médiane 
+- $`Cm`$ : coefficient de section médiane
 - $`Cwp`$ : coefficient de plan de flottaison
 - $`Abt`$ : aire transversale du bulbe d'étrave (nulle si pas de bulbe d'étrave)
 - $`hb`$ : position verticale de centre de l'aire $`Abt`$ par rapport à la quille
@@ -904,7 +904,7 @@ Forme de la poupe | Coefficient Cstern
 Forme de barge | -25
 Sections en 'V' | -10
 Sections standardes | 0
-Sections en 'U' | +10 
+Sections en 'U' | +10
 
 #### Paramétrage
 
@@ -1215,7 +1215,7 @@ L'angle d'attaque $`\alpha`$, défini entre -180° et 180°, est l'angle formé 
 
 L'angle $`\alpha`$ est utilisé pour interpoler les coefficients de portance et de traînée, tandis que l'angle $`\beta`$ est utilisé pour replacer les efforts de portance (perpendiculaire à l'écoulement par définition) et traînée (parallèle  à l'écoulement par définition) dans le repère local.
 
-L'intérêt de la commande par rapport à la position du repère local est que la commande est dynamique et peut être changée au cours de la simulation, alors que le repère local est fixé. 
+L'intérêt de la commande par rapport à la position du repère local est que la commande est dynamique et peut être changée au cours de la simulation, alors que le repère local est fixé.
 
 Il est à noter que les coefficients $`C_l`$, $`C_d`$ et $`C_m`$ sont généralement très dépendants du régime d'écoulement. xdyn n'effectue aucune vérification du nombre de Reynolds, il appartient à l'utilisateur de s'assurer que les polaires de coefficients sont pertinentes au regards des conditions de l'écoulement. La vitesse de l'écoulement $`U`$ et l'angle d'attaque $`\alpha`$ sont disponibles en sortie du modèle d'effort, sous les noms respectifs `U(model_name,body_name)` et `alpha(model_name,body_name)`.
 
