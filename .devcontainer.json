@@ -9,7 +9,8 @@
         "twxs.cmake",
         "cschlosser.doxdocgen",
         "xaver.clang-format",
-        "peterj.proto"
+        "peterj.proto",
+        "ms-vscode.cpptools-extension-pack"
     ],
     "settings": {
         "editor.rulers": [
