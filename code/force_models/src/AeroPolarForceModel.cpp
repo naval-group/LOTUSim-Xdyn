@@ -75,10 +75,10 @@ Wrench AeroPolarForceModel::get_force(const BodyStates& states, const double t, 
 {
     using namespace std;
     const Eigen::Vector3d omega(states.p(), states.q(), states.r());
-    const Eigen::Vector3d Vg(states.u(), states.v(), states.w());
-    const Eigen::Vector3d Vp = Vg - calculation_point.cross(omega);
+    const Eigen::Vector3d Vo(states.u(), states.v(), states.w());
+    const Eigen::Vector3d Vp = Vo - calculation_point.cross(omega);
     const auto rotation = states.get_rot_from_ned_to_body();
-    const Eigen::Vector3d application_point_in_NED = states.G.v + rotation*calculation_point;
+    const Eigen::Vector3d application_point_in_NED = Eigen::Vector3d(states.x(), states.y(), states.z()) + rotation*calculation_point;
     const Eigen::Vector3d wind_in_NED = env.wind->get_wind(application_point_in_NED, t);
     const Eigen::Vector3d true_wind_in_body_frame = rotation.transpose()*wind_in_NED;
     const Eigen::Vector3d W = true_wind_in_body_frame - Vp; // Apparent wind in body frame

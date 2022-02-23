@@ -108,13 +108,13 @@ Wrench HydroPolarForceModel::get_force(const BodyStates& states, const double t,
 {
     using namespace std;
     const Eigen::Vector3d omega(states.p(), states.q(), states.r());
-    const Eigen::Vector3d Vg(states.u(), states.v(), states.w());
+    const Eigen::Vector3d Vo(states.u(), states.v(), states.w());
     const auto T = env.k->get(name, body_name);
     const Eigen::Vector3d P_body = T.get_point().v; // Coordinates of point P in body frame
-    const Eigen::Vector3d Vp_body = Vg - P_body.cross(omega); // Velocity of point P of body relative to NED, expressed in body frame
+    const Eigen::Vector3d Vp_body = Vo - P_body.cross(omega); // Velocity of point P of body relative to NED, expressed in body frame
     Eigen::Vector3d Vp = T.get_rot()*Vp_body; // Velocity of P in fluid, expressed in internal frame
     const auto rotation = states.get_rot_from_ned_to_body();
-    const Eigen::Vector3d P_NED = states.G.v + rotation*P_body; // Coordinates of point P in NED frame
+    const Eigen::Vector3d P_NED = Eigen::Vector3d(states.x(), states.y(), states.z()) + rotation*P_body; // Coordinates of point P in NED frame
     double water_height = 0.;
     if (env.w.use_count())
     {

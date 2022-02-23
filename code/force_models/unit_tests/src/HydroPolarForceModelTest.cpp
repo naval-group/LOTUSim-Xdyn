@@ -74,6 +74,8 @@ TEST_F(HydroPolarForceModelTest, can_parse_optional_output)
     ASSERT_EQ(input.angle_command.get(), "beta");
 }
 
+
+namespace {
 BodyStates get_states(const double u = 0., const double v = 0.)
 {
     BodyStates states(0);
@@ -92,6 +94,7 @@ BodyStates get_states(const double u = 0., const double v = 0.)
     states.qj.record(0, 0);
     states.qr.record(0, 0);
     return states;
+}
 }
 
 TEST_F(HydroPolarForceModelTest, orientation_test)

@@ -2702,6 +2702,77 @@ actionneurs du même type) ainsi que la projection de ce même effort suivant
 l'axe $`X`$ du repère NED.
 
 
+## Modèle de rotor Flettner
+
+Un rotor Flettner est un cylindre vertical en rotation sur lui-même, qui produit un effort de portance 
+(en plus de la traînée) lorsqu'il est placé dans un écoulement. Un tel dispositif peut être utilisé 
+comme une voile pour exploiter le vent comme force propulsive. En revanche, le [modèle d'effort aérodynamique quadratique par polaire](#mod%C3%A8le-deffort-a%C3%A9rodynamique-quadratique-par-polaire) n'est pas adapté à la modélisation 
+d'un rotor Flettner, car pour ce dernier les coefficients de portance et de traînée ne dépendent pas 
+de l'angle de vent relatif, mais du ratio de vitesse de peau.
+
+### Description
+
+Les efforts du vent sur un rotor Flettner peuvent être modélisés de façon quadratique à l'aide de 
+coefficients de portance et traînée :
+
+```math
+F_l = \frac{1}{2} \rho_{air} C_l(S_R) D L U^2
+```
+```math
+F_d = \frac{1}{2} \rho_{air} C_d(S_R) D L U^2
+```
+
+Où :
+
+- $`F_l`$ est l'effort de portance (en N), perpendiculaire à la direction de l'écoulement d'air,
+- $`F_d`$ est l'effort de traînée (en N), parallèle à la direction de l'écoulement d'air,
+- $`\rho_{air}`$ est la masse volumique de l'air (en kg/m<sup>3</sup>),
+- $`C_l`$ et $`C_d`$ sont les coefficients de portance et de traînée (respectivement),
+- $`D`$ est le diamètre du rotor (en m),
+- $`L`$ est la longueur du rotor (en m),
+- $`U`$ est la vitesse de l'écoulement d'air (en m/s), projetée dans le plan normal à l'axe du rotor, et dépendant 
+de la vitesse du corps et de celle du vent,
+- $`S_R`$ est le ratio de vitesse de peau, calculé par :
+
+```math
+S_R = \frac{\omega D}{2 U}
+```
+
+Où $`\omega`$ est la vitesse de rotation du rotor (en rad/s).
+
+### Paramétrage
+
+Le modèle de rotor Flettner est paramétré dans xdyn avec la section YAML suivante :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+- model: Flettner rotor
+  name: rotor_1
+  rotor position in body frame:
+    x: {value: 50, unit: m}
+    y: {value: 0, unit: m}
+    z: {value: -20, unit: m}
+  diameter: {value: 5, unit: m}
+  length: {value: 30, unit: m}
+  spin ratio: [0, 0.606, 1.212, 1.818, 2.424, 3.030, 3.636, 4.242, 4.848, 5.454]
+  lift coefficient: [0.010, 0.546, 1.631, 3.465, 6.136, 8.762, 10.473, 11.626, 12.285, 12.674]
+  drag coefficient: [0.707, 0.736, 0.557, 0.717, 1.347, 2.284, 3.236, 4.161, 4.803, 5.271]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+La commande de vitesse de rotation doit aussi être présente, sous le nom `rpm`. Il s'agit de la vitesse 
+de rotation autour de l'axe $`- \vec{z_b}`$, qui correspond toujours à l'axe du rotor.
+
+![](images/flettner_rotor.svg)
+
+**Attention :** le point spécifié dans la section `rotor position in body frame` est le point d'application
+ de l'effort (pas la position de la base du rotor), c'est-à-dire le point de poussée vélique. Il doit 
+ être choisi judicieusement selon le profil de vent choisi (dont dépendent aussi les coefficients de 
+ portance et traînée).
+
+ Les valeurs des coefficients $`C_l`$ et $`C_d`$ sont interpolées selon la valeur de $`S_R`$ calculée 
+ à chaque pas de temps, en utilisant une interpolation par spline. Si la valeur de $`S_R`$ sort de 
+ l'intervalle connu, une valeur saturée (au minimum ou au maximum) est utilisée pour l'interpolation 
+ et un message d'avertissement est affiché.
+
 ## Modèle d'effort distant
 
 Si l'on souhaite utiliser un modèle d'effort qui n'est pas implémenté dans xdyn, il est possible

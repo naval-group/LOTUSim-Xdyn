@@ -49,8 +49,8 @@ class HydroPolarForceModel : public ForceModel
         boost::optional<std::string> angle_command; //!< Optional command for the angle (in rad)
 
         // These variables are computed at each time step and stored for outputting
-        const std::shared_ptr<double> relative_velocity; //!< Relative flow velocity at the origin of internal frame (m/s) = U
-        const std::shared_ptr<double> angle_of_attack; //!< Angle of attack (rad) = alpha
+        const std::unique_ptr<double> relative_velocity; //!< Relative flow velocity at the origin of internal frame (m/s) = U
+        const std::unique_ptr<double> angle_of_attack; //!< Angle of attack (rad) = alpha
 };
 
 #endif /* FORCE_MODELS_INC_HYDROPOLARFORCEMODEL_HPP_ */
