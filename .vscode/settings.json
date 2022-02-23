@@ -90,5 +90,6 @@
         "variant": "cpp",
         "alignedvector3": "cpp"
     },
-    "python.formatting.provider": "autopep8"
+    "python.formatting.provider": "autopep8",
+    "cmake.sourceDirectory": "${workspaceFolder}/code"
 }
