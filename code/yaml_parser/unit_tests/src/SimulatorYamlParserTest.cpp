@@ -6,6 +6,7 @@
  */
 
 #include "gmock/gmock.h"
+#include <boost/algorithm/string.hpp> // For boost::replace_all
 using namespace testing; // So we can use 'ElementsAre' unqualified
 #include "external_data_structures_parsers.hpp"
 #include "SimulatorYamlParserTest.hpp"
@@ -224,6 +225,28 @@ TEST_F(SimulatorYamlParserTest, can_parse_added_mass_matrix_from_hdb_file)
     const YamlSimulatorInput input = SimulatorYamlParser(test_data::added_mass_from_hdb_file()).parse();
     ASSERT_TRUE(input.bodies.front().dynamics.added_mass.read_from_file);
     ASSERT_EQ("test_ship.hdb", input.bodies.front().dynamics.added_mass.hdb_filename);
+}
+
+TEST_F(SimulatorYamlParserTest, should_get_an_error_message_when_using_the_old_key_for_hdb_files)
+{
+    bool exception_thrown = false;
+    try {
+        std::string yaml_data = test_data::added_mass_from_precal_file();
+        boost::replace_all(yaml_data, "from raodb:", "from precal:");
+        const YamlSimulatorInput input = SimulatorYamlParser(yaml_data).parse();
+        ASSERT_TRUE(input.bodies.front().dynamics.added_mass.read_from_file);
+        ASSERT_EQ("test_ship.hdb", input.bodies.front().dynamics.added_mass.hdb_filename);
+    }
+    catch(const InvalidInputException& exception) {
+        ASSERT_EQ("Error parsing 'body' section (body 'body 1'): In node 'added mass matrix at the "
+                  "center of gravity and projected in the body frame': You used YAML key 'from "
+                  "precal' but this key is deprecated: you should use 'from hdb' instead.",
+                  exception.get_message());
+        exception_thrown = true;
+    }
+    if (!exception_thrown) {
+        ASSERT_FALSE(true) << "No exception thrown!";
+    }
 }
 
 TEST_F(SimulatorYamlParserTest, can_parse_added_mass_matrix_from_precal_file)
