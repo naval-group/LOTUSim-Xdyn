@@ -3452,7 +3452,7 @@ std::string test_data::tutorial_09_gRPC_wave_model()
          + "    Tp: 15\n"
          + "    gamma: 1.2\n"
          + "    waves propagating to: 0\n"
-         + "    omega: [1,2,3]\n"
+         + "    omega: [0.5,1]\n"
          + "bodies: # All bodies have NED as parent frame\n"
          + "  - name: cube\n"
          + "    mesh: cube.stl\n"
@@ -3473,7 +3473,13 @@ std::string test_data::tutorial_09_gRPC_wave_model()
          + "    external forces:\n"
          + "      - model: gravity\n"
          + "      - model: non-linear hydrostatic (fast)\n"
-         + "\n";
+         + "      - model: diffraction\n"
+         + "        hdb: test_ship.hdb\n"
+         + "        calculation point in body frame:\n"
+         + "            x: {value: 0.696, unit: m}\n"
+         + "            y: {value: 0, unit: m}\n"
+         + "            z: {value: 1.418, unit: m}\n"
+         + "        mirror for 180 to 360: true\n" + "\n";
 }
 
 std::string test_data::tutorial_10_gRPC_force_model()

@@ -25,26 +25,26 @@ def run(state):
     return json.loads(result)
 
 def test_should_get_the_right_number_of_results_from_xdyn_in_cosim_mode():
-    state = {"Dt": 2,
+    state = {"Dt": 0.1,
              "states": [{"t": 0, "x": 0, "y": 8, "z": 12, "u": 1, "v": 0,
                          "w": 0, "p": 0, "q": 1, "r": 0, "qr": 1, "qi": 0,
                          "qj": 0, "qk": 0}]}
 
     res = run(state)
-    assert len(res['t']) == 21
-    assert len(res['x']) == 21
-    assert len(res['y']) == 21
-    assert len(res['z']) == 21
-    assert len(res['u']) == 21
-    assert len(res['v']) == 21
-    assert len(res['w']) == 21
-    assert len(res['p']) == 21
-    assert len(res['q']) == 21
-    assert len(res['r']) == 21
-    assert len(res['qr']) == 21
-    assert len(res['qi']) == 21
-    assert len(res['qj']) == 21
-    assert len(res['qk']) == 21
-    assert len(res['phi']) == 21
-    assert len(res['theta']) == 21
-    assert len(res['psi']) == 21
+    assert len(res['t']) == 2
+    assert len(res['x']) == 2
+    assert len(res['y']) == 2
+    assert len(res['z']) == 2
+    assert len(res['u']) == 2
+    assert len(res['v']) == 2
+    assert len(res['w']) == 2
+    assert len(res['p']) == 2
+    assert len(res['q']) == 2
+    assert len(res['r']) == 2
+    assert len(res['qr']) == 2
+    assert len(res['qi']) == 2
+    assert len(res['qj']) == 2
+    assert len(res['qk']) == 2
+    assert len(res['phi']) == 2
+    assert len(res['theta']) == 2
+    assert len(res['psi']) == 2

@@ -402,7 +402,15 @@ class Airy(waves.AbstractWaveModel):
 
         """
         keys = ("si", "dj", "omega", "psi", "k", "phase")
-        return [{key: self.directional_spectrum[key] for key in keys}]
+        d = {'si': self.directional_spectrum['si'],
+             'dj': self.directional_spectrum['dj'],
+             'omega': self.directional_spectrum['omega'],
+             'psi': self.directional_spectrum['psi'],
+             'k': self.directional_spectrum['k'],
+             'phase': self.directional_spectrum['phase']}
+        # This is a hack to test the xdyn fix introduced in dc093f17
+        # The original call was equivalent to 'return [d]'.
+        return [d,d]
 
 
 if __name__ == '__main__':
