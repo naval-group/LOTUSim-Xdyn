@@ -32,133 +32,16 @@ yaml_data = load_yaml('tutorial_09_gRPC_wave_model.yml')
 print_yaml(yaml_data)
 ```
 
-### Ecriture du modèle de houle
+### Écriture du modèle de houle
 
-Dans un fichier Python (nommé `airy.py` dans cet exemple) on écrit :
+Dans un fichier Python (nommé `airy.py` dans cet exemple), on écrit :
 
-```python evaluate=False, results='hidden'
-"""Airy wave model. As implemented in xdyn."""
-
-import math
-import yaml
-import numpy as np
-import waves
-
-
-def pdyn_factor(k, z, eta):
-    return 0 if (eta != 0 and z < eta) else math.exp(-k * z)
-
-
-class Airy(waves.AbstractWaveModel):
-    def __init__(self):
-        self.psi0 = None
-        self.jonswap_parameters = {'sigma_a': 0.07, 'sigma_b': 0.09}
-        self.directional_spectrum = {}
-
-    def set_parameters(self, parameters):
-        param = yaml.safe_load(parameters)
-        self.jonswap_parameters['t_p'] = param['Tp']
-        self.jonswap_parameters['gamma'] = param['gamma']
-        self.directional_spectrum['omega'] = param['omega']
-        self.directional_spectrum['psi'] = \
-            [param['waves propagating to']*math.pi/180]
-        self.jonswap_parameters['hs_square'] = param['Hs']*param['Hs']
-        self.jonswap_parameters['omega0'] = 2*math.pi/param['Tp']
-        self.jonswap_parameters['coeff'] = 1-0.287*math.log(param['gamma'])
-        self.directional_spectrum['si'] = [self.jonswap(omega) for omega in
-                                           param['omega']]
-        self.directional_spectrum['dj'] = [1]
-        self.directional_spectrum['psi'] = [1]
-        self.directional_spectrum['k'] = [omega*omega/9.81 for omega in
-                                          param['omega']]
-        phases = np.random.uniform(low=0,
-                                   high=2*math.pi,
-                                   size=(len(param['omega']),))
-        self.directional_spectrum['phase'] = phases
-
-    def jonswap(self, omega):
-        sigma_a = self.jonswap_parameters['sigma_a']
-        sigma_b = self.jonswap_parameters['sigma_b']
-        omega0 = self.jonswap_parameters['omega0']
-        hs_square = self.jonswap_parameters['hs_square']
-        coeff = self.jonswap_parameters['coeff']
-        gamma = self.jonswap_parameters['coeff']
-        sigma = sigma_a if omega <= omega0 else sigma_b
-        ratio = omega0/omega
-        alpha = ratio*ratio*ratio*ratio
-        awm_5 = coeff*5.0/16.0*alpha/omega*hs_square
-        bwm_4 = 1.25*alpha
-        kappa = (omega-omega0)/(sigma*omega0)
-        return awm_5*math.exp(-bwm_4)*math.pow(gamma,
-                                               math.exp(-0.5*kappa*kappa))
-
-    def elevation(self, x, y, t):
-        zeta = 0
-        dir_spec = self.directional_spectrum
-        psi = dir_spec['psi'][0]
-        for s_i, k, omega, phase in zip(dir_spec['si'],
-                                        dir_spec['k'],
-                                        dir_spec['omega'],
-                                        dir_spec['phase']):
-            k_x_cos_psi_y_sin_psi = k * (x * math.cos(psi) + y * math.sin(psi))
-            zeta -= s_i * math.sin(-omega*t + k_x_cos_psi_y_sin_psi + phase)
-        return zeta
-
-    def dynamic_pressure(self, x, y, z, t):
-        dir_spec = self.directional_spectrum
-        eta = self.elevation(x, y, t)
-        acc = 0
-        psi = dir_spec['psi'][0]
-        for s_i, k, omega, phase in zip(['si'],
-                                        dir_spec['k'],
-                                        dir_spec['omega'],
-                                        dir_spec['phase']):
-            k_x_cos_psi_y_sin_psi = k * (x * math.cos(psi)
-                                         + y * math.sin(psi))
-            acc -= s_i * pdyn_factor(k, z, eta)*math.sin(-omega*t
-                                                         + k_x_cos_psi_y_sin_psi
-                                                         + phase)
-        return 1000*9.81*acc
-
-    def orbital_velocity(self, x, y, z, t):
-        dir_spec = self.directional_spectrum
-        eta = self.elevation(x, y, t)
-        v_x = 0
-        v_y = 0
-        v_z = 0
-        psi = dir_spec['psi'][0]
-        for s_i, k, omega, phase in zip(['si'],
-                                        dir_spec['k'],
-                                        dir_spec['omega'],
-                                        dir_spec['phase']):
-            pdyn_factor = self.pdyn_factor(k, z, eta)
-            pdyn_factor_sh = pdyn_factor
-            k_x_cos_psi_y_sin_psi = k * (x * math.cos(psi)
-                                         + y * math.sin(psi))
-            theta = -omega * t + k_x_cos_psi_y_sin_psi + phase
-            cos_theta = math.cos(theta)
-            sin_theta = math.sin(theta)
-            a_k_omega = s_i * k / omega
-            a_k_omega_pdyn_factor_sin_theta = a_k_omega * pdyn_factor \
-                * sin_theta
-            v_x += a_k_omega_pdyn_factor_sin_theta * math.cos(psi)
-            v_y += a_k_omega_pdyn_factor_sin_theta * math.sin(psi)
-            v_z += a_k_omega * pdyn_factor_sh * cos_theta
-
-        return {'vx': v_x, 'vy': v_y, 'vz': v_z}
-
-    def angular_frequencies_for_rao(self):
-        return self.directional_spectrum['omegas']
-
-    def directions_for_rao(self):
-        return self.directional_spectrum['psis']
-
-    def spectrum(self, x, y, t):
-        return self.directional_spectrum
-
-
-if __name__ == '__main__':
-    waves.serve(Airy())
+```python echo=False, evaluate=True, results='raw'
+print("```python")
+with open("/waves/airy.py", "r", encoding="utf-8") as fid:
+    content = fid.read()
+print(content)
+print("```")
 ```
 
 ### Lancement de la simulation
