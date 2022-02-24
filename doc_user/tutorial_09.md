@@ -38,7 +38,7 @@ Dans un fichier Python (nommé `airy.py` dans cet exemple), on écrit :
 
 ```python echo=False, evaluate=True, results='raw'
 print("```python")
-with open("/waves/airy.py", "r", encoding="utf-8") as fid:
+with open("/waves/python/server/airy.py", "r", encoding="utf-8") as fid:
     content = fid.read()
 print(content)
 print("```")
