@@ -408,6 +408,8 @@ class Airy(waves.AbstractWaveModel):
              'psi': self.directional_spectrum['psi'],
              'k': self.directional_spectrum['k'],
              'phase': self.directional_spectrum['phase']}
+        # This is a hack to test the xdyn fix introduced in dc093f17
+        # The original call was equivalent to 'return [d]'.
         return [d,d]
 
 
