@@ -61,7 +61,7 @@ Wrench FlettnerRotorForceModel::get_force(const BodyStates& states, const double
     const double U = sqrt(W(0)*W(0) + W(1)*W(1)); // Apparent wind speed projected in the internal horizontal plane
 
     const double rpm = commands.at("rpm");
-    *spin_ratio = (rpm!=0. && U>0.) ? abs(rpm*radius/U) : 0.;
+    *spin_ratio = (rpm!=0. && U>0.) ? std::abs(rpm*radius/U) : 0.;
     double sr_interp = *spin_ratio;
     if (sr_interp < sr_bounds.first)
     {
