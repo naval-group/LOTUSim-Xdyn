@@ -43,6 +43,7 @@
 #include "LinearFroudeKrylovForceModel.hpp"
 #include "MMGManeuveringForceModel.hpp"
 #include "LinearStiffnessForceModel.hpp"
+#include "FlettnerRotorForceModel.hpp"
 
 SimulatorBuilder get_builder(const YamlSimulatorInput& input, const double t0, const ssc::data_source::DataSource& command_listener);
 SimulatorBuilder get_builder(const YamlSimulatorInput& input, const double t0, const ssc::data_source::DataSource& command_listener)
@@ -87,7 +88,8 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& input, const double t0, c
            .can_parse<HydroPolarForceModel>()
            .can_parse<LinearFroudeKrylovForceModel>()
            .can_parse<MMGManeuveringForceModel>()
-           .can_parse<LinearStiffnessForceModel>();
+           .can_parse<LinearStiffnessForceModel>()
+           .can_parse<FlettnerRotorForceModel>();
     return builder;
 }
 
