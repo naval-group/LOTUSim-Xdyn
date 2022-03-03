@@ -1,3 +1,19 @@
+# v5.1.0 (2022-03-01)
+
+- #224 Update python code in documentation that does not work
+- #60 Flettner rotor force model is not known by xdyn
+- #223 Fix grpc directional_spectra method that contains an indice bug
+- #59 Flettner rotor force model
+- #221 Fix title section in documentation
+- #220 Fix orbital_velocity in integration_tests grpc_tests waves airy py
+- #219 Fix broken builds for debian 9 and debian 10
+- #218 Fix documentation for method ruddermodel get_vs
+- #217 Fix wave direction convention in code documentation
+- #215 Fix documentation description for waves propagating to
+- #214 Bug while evaluating torque transport
+- #26 New feature generic stiffness matrix
+- #57 Making lifting profile models controllable
+
 # v5.0.1 (2021-12-02)
 
 - #212 Hdf5 output no longer exports discretised spectra
@@ -149,5 +165,3 @@
 - #20 Erreur lors de l utilisation du modele d effort constant force
 - #14 Ajout module d effort constant
 - #18 Les fichiers yaml d entrees ont une erreur d unite pour les tp sans consequence pour les resultats
-
-
