@@ -88,8 +88,35 @@ HydroPolarForceModel::Input HydroPolarForceModel::parse(const std::string& yaml)
     Input ret;
     node["name"] >> ret.name;
     ssc::yaml_parser::parse_uv(node["angle of attack"], ret.angle_of_attack);
-    node["lift coefficient"] >> ret.lift_coefficient;
-    node["drag coefficient"] >> ret.drag_coefficient;
+    try
+    {
+        node["lift coefficient"] >> ret.lift_coefficient;
+    }
+    catch (const YAML::Exception& e)
+    {
+        YAML::Emitter emitter;
+        emitter << node;
+        const std::string msg
+            = std::string("Unable to parse 'lift coefficient' for hydrodynamic polar force model '")
+              + ret.name + "': expected a list of values (e.g. [1,2,3]). The offending YAML was:\n"
+              + emitter.c_str();
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, msg);
+    }
+
+    try
+    {
+        node["drag coefficient"] >> ret.drag_coefficient;
+    }
+    catch (const YAML::Exception& e)
+    {
+        YAML::Emitter emitter;
+        emitter << node;
+        const std::string msg
+            = std::string("Unable to parse 'drag coefficient' for hydrodynamic polar force model '")
+              + ret.name + "': expected a list of values (e.g. [1,2,3]). The offending YAML was:\n"
+              + emitter.c_str();
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, msg);
+    }
     parse_optional(node, "moment coefficient", ret.moment_coefficient);
     ssc::yaml_parser::parse_uv(node["reference area"], ret.reference_area);
     if (node.FindValue("chord length"))
