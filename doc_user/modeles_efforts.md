@@ -1104,7 +1104,7 @@ $`\overline{\phi} = \frac{1}{2}\left(\frac{\textrm{atan}(z_2^h-z_1^h)}{d_{12}} +
 $`\overline{\theta} = \frac{1}{2}\left(\frac{\textrm{atan}(z_2^h-z_4^h)}{d_{24}} +
 \frac{\textrm{atan}(z_1^h-z_3^h)}{d_{13}}\right)`$
 
-où $`d_{ij} = \sqrt{(x^h_i-x^h_j)^2 + (y^h_i-y^h_j)}`$ est la distance entre deux
+où $`d_{ij} = \sqrt{(x^h_i-x^h_j)^2 + (y^h_i-y^h_j)^2}`$ est la distance entre deux
 points de mesure.
 
 Le torseur d'effort est donné dans le repère NED par :

@@ -226,25 +226,30 @@ void operator >> (const YAML::Node& node, YamlPoint& p)
 
 void parse_YamlDynamics6x6Matrix(const YAML::Node& node, YamlDynamics6x6Matrix& m, const bool parse_frame, const std::string& frame_name)
 {
-    if (const YAML::Node *parameter = node.FindValue("from hdb"))
+    if (node.FindValue("from precal"))
     {
-        if (   node.FindValue("row 1")
-            or node.FindValue("row 2")
-            or node.FindValue("row 3")
-            or node.FindValue("row 4")
-            or node.FindValue("row 5")
-            or node.FindValue("row 6"))
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "You used YAML key 'from precal' but this key is deprecated: you should use 'from hdb' instead.");
+    }
+    if (const YAML::Node* parameter = node.FindValue("from hdb"))
+    {
+        if (node.FindValue("row 1") or node.FindValue("row 2") or node.FindValue("row 3")
+            or node.FindValue("row 4") or node.FindValue("row 5") or node.FindValue("row 6"))
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "cannot specify both an HDB filename & a matrix (both keys 'from hdb' and one of 'row 1', 'row 2', 'row 3', 'row 4', 'row 5' or 'row 6' were found in the YAML file).");
+            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                    "cannot specify both an HDB filename & a matrix (both keys 'from hdb' and "
+                    "one of 'row 1', 'row 2', 'row 3', 'row 4', 'row 5' or 'row 6' were found in "
+                    "the YAML file).");
         }
         if (node.FindValue("from raodb"))
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "cannot specify both an HDB filename & a PRECAL_R filename (both keys 'from hdb' and 'from raodb' were found in the YAML file).");
+            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                    "cannot specify both an HDB filename & a PRECAL_R filename (both keys 'from "
+                    "hdb' and 'from raodb' were found in the YAML file).");
         }
         m.read_from_file = true;
         *parameter >> m.hdb_filename;
     }
-    else if (const YAML::Node *parameter = node.FindValue("from raodb"))
+    else if (const YAML::Node* parameter = node.FindValue("from raodb"))
     {
         m.read_from_file = true;
         *parameter >> m.precal_filename;
@@ -268,9 +273,12 @@ void parse_YamlDynamics6x6Matrix(const YAML::Node& node, YamlDynamics6x6Matrix& 
             node["row 5"] >> m.row_5;
             node["row 6"] >> m.row_6;
         }
-        catch(const YAML::Exception& e)
+        catch (const YAML::Exception& e)
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to parse matrix in the YAML file. The problem was: '" << e.msg << "' and it was detected line " << e.mark.line+1 << " column " << e.mark.column+1 << " of the concatenated YAML file.");
+            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                    "Unable to parse matrix in the YAML file. The problem was: '"
+                        << e.msg << "' and it was detected line " << e.mark.line + 1 << " column "
+                        << e.mark.column + 1 << " of the concatenated YAML file.");
         }
     }
 }

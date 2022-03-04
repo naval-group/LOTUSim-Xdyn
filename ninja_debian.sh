@@ -7,5 +7,5 @@ docker run \
     -v $(pwd)/build_deb11:/build \
     -w /build \
     -v $(pwd):/opt/share \
-    sirehna/base-image-debian11-gcc10:2021-08-17 \
+    sirehna/base-image-debian11-gcc10:2021-12-12 \
     /bin/sh -c "cd /build && ninja `echo $*`"
