@@ -40,8 +40,8 @@ FlettnerRotorForceModel::Input FlettnerRotorForceModel::parse(const std::string&
     ssc::yaml_parser::parse_uv(node["length"], ret.length);
     ssc::yaml_parser::parse_uv(node["diameter"], ret.diameter);
     node["spin ratio"] >> ret.spin_ratio;
-    node["lift coefficient"] >> ret.lift_coefficient;
-    node["drag coefficient"] >> ret.drag_coefficient;
+    ret.lift_coefficient = extract_vector_of_doubles(node, "lift coefficient");
+    ret.drag_coefficient = extract_vector_of_doubles(node, "drag coefficient");
     node["rotor position in body frame"] >> ret.calculation_point_in_body_frame;
 
     return ret;

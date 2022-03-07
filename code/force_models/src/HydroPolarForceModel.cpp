@@ -88,8 +88,8 @@ HydroPolarForceModel::Input HydroPolarForceModel::parse(const std::string& yaml)
     Input ret;
     node["name"] >> ret.name;
     ssc::yaml_parser::parse_uv(node["angle of attack"], ret.angle_of_attack);
-    node["lift coefficient"] >> ret.lift_coefficient;
-    node["drag coefficient"] >> ret.drag_coefficient;
+    ret.lift_coefficient = extract_vector_of_doubles(node, "lift coefficient");
+    ret.drag_coefficient = extract_vector_of_doubles(node, "drag coefficient");
     parse_optional(node, "moment coefficient", ret.moment_coefficient);
     ssc::yaml_parser::parse_uv(node["reference area"], ret.reference_area);
     if (node.FindValue("chord length"))

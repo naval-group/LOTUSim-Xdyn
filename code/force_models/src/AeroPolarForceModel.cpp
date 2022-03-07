@@ -63,8 +63,8 @@ AeroPolarForceModel::Input AeroPolarForceModel::parse(const std::string& yaml)
     Input ret;
     node["name"] >> ret.name;
     ssc::yaml_parser::parse_uv(node["AWA"], ret.apparent_wind_angle);
-    node["lift coefficient"] >> ret.lift_coefficient;
-    node["drag coefficient"] >> ret.drag_coefficient;
+    ret.lift_coefficient = extract_vector_of_doubles(node, "lift coefficient");
+    ret.drag_coefficient = extract_vector_of_doubles(node, "drag coefficient");
     ssc::yaml_parser::parse_uv(node["reference area"], ret.reference_area);
     node["calculation point in body frame"] >> ret.calculation_point_in_body_frame;
     parse_optional(node, "angle command", ret.angle_command);

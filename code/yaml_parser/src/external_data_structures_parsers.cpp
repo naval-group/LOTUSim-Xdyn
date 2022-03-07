@@ -398,3 +398,23 @@ void operator >> (const YAML::Node& node, YamlFilteredStates& p)
     PARSE_FILTERED_STATE(theta);
     PARSE_FILTERED_STATE(psi);
 }
+
+std::vector<double> extract_vector_of_doubles(const YAML::Node& node, const std::string& key)
+{
+    std::vector<double> ret;
+    try
+    {
+        node[key] >> ret;
+    }
+    catch (const YAML::Exception& e)
+    {
+        YAML::Emitter emitter;
+        emitter << node;
+        const std::string msg
+            = std::string("Unable to parse '")
+              + key + "': expected a list of values (e.g. [1,2,3]). The offending YAML was:\n"
+              + emitter.c_str();
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, msg);
+    }
+    return ret;
+}
