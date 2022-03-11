@@ -402,9 +402,9 @@ s'exprime comme le produit d'une matrice de raideur $`K`$ avec le vecteur positi
 
 ```math
 \vec{F} =
-K (X - X_{eq})
+- K (X - X_{eq})
 =
-K \left[\begin{array}{c}
+ - K \left[\begin{array}{c}
 x - x_{eq} \\
 y - y_{eq} \\
 z - z_{eq} \\
@@ -415,6 +415,12 @@ z - z_{eq} \\
 ````
 
 Où le $`X`$ est le vecteur position instantané et $`X_{eq}`$ est la position à l'équilibre.
+
+Attention, les forces ainsi obtenues sont dans le repère global (NED), alors que les moments sont 
+dans le repère du corps. Cette distinction n'est généralement pas faite car ce type de modèle est 
+souvent utilisé dans une hypothèse de petits mouvements (où le repère du corps est confondu avec le 
+repère global), mais est nécessaire pour xdyn car les deux repères sont indépendants. Il faut alors 
+être particulièrement attentif aux combinaisons de rotations.
 
 ### Paramétrage
 
