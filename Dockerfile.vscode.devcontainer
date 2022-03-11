@@ -19,6 +19,7 @@ RUN apt-get update -yq && \
         python3-grpcio \
         make \
         protobuf-compiler-grpc \
+        ssh \
         git \
  && apt-get autoclean \
  && apt-get autoremove \
