@@ -137,13 +137,14 @@ TEST_F(LinearStiffnessForceModelTest, example)
         theta = a.random<double>().between(-M_PI/3,M_PI/3);
         psi = a.random<double>().between(-M_PI/3,M_PI/3);
         states = get_position_states(x,y,z,phi,theta,psi);
+        const ssc::kinematics::RotationMatrix rotation = states.get_rot_from_ned_to_body().transpose();
         const Wrench f = F.get_force(states, a.random<double>(), env, {});
-        ASSERT_EQ("body", f.get_frame());
+        ASSERT_EQ("NED", f.get_frame());
         for (int j=0;j<3;++j)
         {
             const int k = j+3;
             ASSERT_NEAR(K(j,0)*x + K(j,1)*y + K(j,2)*z + K(j,3)*phi + K(j,4)*theta + K(j,5)*psi, -f.force[j],  EPS)<<" row: "<<i << ", col:"<<j;
-            ASSERT_NEAR(K(k,0)*x + K(k,1)*y + K(k,2)*z + K(k,3)*phi + K(k,4)*theta + K(k,5)*psi, -f.torque[j], EPS)<<" row: "<<i << ", col:"<<k;
+            ASSERT_NEAR(K(k,0)*x + K(k,1)*y + K(k,2)*z + K(k,3)*phi + K(k,4)*theta + K(k,5)*psi, -(rotation*f.torque)[j], EPS)<<" row: "<<i << ", col:"<<k;
         }
     }
 }
@@ -180,13 +181,14 @@ TEST_F(LinearStiffnessForceModelTest, example_with_equilibrium_input)
         theta = a.random<double>().between(-M_PI/3,M_PI/3);
         psi = a.random<double>().between(-M_PI/3,M_PI/3);
         states = get_position_states(x,y,z,phi,theta,psi);
+        const ssc::kinematics::RotationMatrix rotation = states.get_rot_from_ned_to_body().transpose();
         const Wrench f = F.get_force(states, a.random<double>(), env, {});
-        ASSERT_EQ("body", f.get_frame());
+        ASSERT_EQ("NED", f.get_frame());
         for (int j=0;j<3;++j)
         {
             const int k = j+3;
             ASSERT_NEAR(K(j,0)*(x-x0) + K(j,1)*(y-y0) + K(j,2)*(z-z0) + K(j,3)*(phi-phi0) + K(j,4)*(theta-theta0) + K(j,5)*(psi-psi0), -f.force[j],  EPS)<<" row: "<<i << ", col:"<<j;
-            ASSERT_NEAR(K(k,0)*(x-x0) + K(k,1)*(y-y0) + K(k,2)*(z-z0) + K(k,3)*(phi-phi0) + K(k,4)*(theta-theta0) + K(k,5)*(psi-psi0), -f.torque[j], EPS)<<" row: "<<i << ", col:"<<k;
+            ASSERT_NEAR(K(k,0)*(x-x0) + K(k,1)*(y-y0) + K(k,2)*(z-z0) + K(k,3)*(phi-phi0) + K(k,4)*(theta-theta0) + K(k,5)*(psi-psi0), -(rotation*f.torque)[j], EPS)<<" row: "<<i << ", col:"<<k;
         }
     }
 }

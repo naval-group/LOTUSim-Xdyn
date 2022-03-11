@@ -36,8 +36,9 @@ Wrench LinearStiffnessForceModel::get_force(const BodyStates& states, const doub
             angles.theta,
             angles.psi;
     }
-
-    return Wrench(ssc::kinematics::Point(body_name,0,0,0), body_name, -K*X);
+    const Eigen::Matrix<double, 6, 1> res = -K*X;
+    // Forces are in NED frame but moments are in body frame
+    return Wrench(ssc::kinematics::Point(body_name,0,0,0), "NED", res.head(3), states.get_rot_from_ned_to_body()*res.tail(3));;
 }
 
 LinearStiffnessForceModel::Input LinearStiffnessForceModel::parse(const std::string& yaml)
