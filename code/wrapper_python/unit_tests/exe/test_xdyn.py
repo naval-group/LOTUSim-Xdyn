@@ -13,7 +13,7 @@ class XDynTest(unittest.TestCase):
     """Test class for XDyn"""
 
     def test_xdyn_version(self):
-        self.assertEqual(xdyn.__version__, "5.1.0")
+        self.assertEqual(xdyn.__version__, "5.0.1")
 
     def test_xdyn_no_argument(self):
         input_data = XdynCommandLineArguments()
