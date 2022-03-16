@@ -79,7 +79,7 @@ package_build_wheel: ## Create xdyn wheel package
 		mv dist/*.whl ."
 
 package_test_run: ## Test the xdyn package with a docker image containing only required dependencies
-	$(DOCKER_RUN_TEST_BASH) "${PYTHON} -m unit_tests"
+	$(DOCKER_RUN_TEST_BASH) "${PYTHON} -m unittest discover -s unit_tests"
 
 package_test_run_for_a_specific_file:
 	$(DOCKER_RUN_TEST_BASH) \
