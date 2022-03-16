@@ -94,5 +94,6 @@ clean:
 		  big.hdb\
 		  output_filtered_force.tsv\
 		  tutorial_14_filtered_states.yml\
-		  hash.md5
+		  hash.md5\
+		  filtered_states.csv
 

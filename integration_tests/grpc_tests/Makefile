@@ -1,4 +1,4 @@
-.PHONY: all
+.PHONY: all clean
 
 all:
 	@make -C force
@@ -7,3 +7,10 @@ all:
 	@make -C cosim
 	@make -C model_exchange
 	@make -C controller
+
+clean:
+	@make -C force $@
+	@make -C waves $@
+	@make -C cosim $@
+	@make -C model_exchange $@
+	@make -C controller $@

@@ -360,7 +360,7 @@ all_docker_images: docker-ci docker_grpc_force_model docker_grpc_waves_model
 doc: BUILD_TYPE = Release
 doc: BUILD_DIR = build_deb11
 doc: CPACK_GENERATOR = DEB
-doc: DOCKER_IMAGE = sirehna/base-image-debian10-gcc8-xdyn
+doc: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-12-12
 doc: BOOST_ROOT = /opt/boost
 doc: build-debian
 	cd doc_user && \
