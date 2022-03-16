@@ -1,7 +1,6 @@
 # Dockerfile with xdyn, a python interpreter, various python libraries, and
 # pandoc
-# python:3.7-bullseye
-FROM python@sha256:6790dfb201d2fa06b0935ea0bfa1227d2240280af56d0fe08772b11eb31402b5
+FROM python:3.10-slim-bullseye
 
 # Install
 # - gcc to build psutil package used by pandoc-eqnos
@@ -17,28 +16,27 @@ RUN apt-get update && \
     echo "Install pandoc" && \
     mkdir pandoc_bin && \
     cd pandoc_bin && \
-    python3 -c 'from urllib.request import urlretrieve; urlretrieve("https://github.com/jgm/pandoc/releases/download/2.7.2/pandoc-2.7.2-linux.tar.gz", filename="pandoc.tar.gz")' && \
+    python3 -c 'from urllib.request import urlretrieve; urlretrieve("https://github.com/jgm/pandoc/releases/download/2.17.1.1/pandoc-2.17.1.1-linux-amd64.tar.gz", filename="pandoc.tar.gz")' && \
     tar -xzf pandoc.tar.gz --strip 1 && \
     ls && \
     cp bin/* /usr/bin && \
     cd .. && \
     rm -rf pandoc_bin pandoc.tar.gz
 
-RUN python3 -m pip install -U pip && \
-    python3 -m pip install \
-        h5py==3.1.0\
-        jupyter_client==6.1.7 \
-        matplotlib==3.3.3\
-        numpy==1.19.4\
-        pandas==1.1.4\
-        pandoc-eqnos==2.4.0\
-        pandoc-fignos==2.4.0\
-        pweave==0.30.3\
-        pyyaml==5.3.1\
-        xlrd==1.2.0\
-        xlwt==1.3.0\
-        && \
-    mkdir -p /tmp_build/report
+RUN python3 -m pip install -U pip \
+ && python3 -m pip install \
+        h5py==3.6.0 \
+        jupyter_client==7.1.2 \
+        matplotlib==3.5.1 \
+        numpy==1.22.3 \
+        pandas==1.4.1 \
+        pandoc-eqnos==2.5.0 \
+        pandoc-fignos==2.4.0 \
+        pweave==0.30.3 \
+        pyyaml==5.3.1 \
+        xlrd==1.2.0 \
+        xlwt==1.3.0 \
+ && mkdir -p /tmp_build/report
 
 ADD setup.cfg setup.py /tmp_build/
 ADD report /tmp_build/report
