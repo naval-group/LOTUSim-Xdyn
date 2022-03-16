@@ -139,10 +139,10 @@ clean:
 	      concatenated_doc_pandoc_png.md \
 	      doc.html \
 	      doc.docx \
-		  interfaces_utilisateur.md \
-		  tutorial_11.md \
-		  tutorial_14.md \
-		  controleurs.md \
+	      interfaces_utilisateur.md \
+	      tutorial_11.md \
+	      tutorial_14.md \
+	      controleurs.md \
 	      pict*.svg
 	rm -rf tuto_execution
 	@make -C training clean
