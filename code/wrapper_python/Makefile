@@ -18,10 +18,6 @@ help: ## Display help and exit.
 	@echo
 	@echo "Run higher target to build wheel! It can not be built directly from this Makefile"
 
-debian_10_package: DOCKER_IMAGE_BUILD=xdyn-python-deb10-build
-debian_10_package: DOCKER_IMAGE_TEST=xdyn-python-deb10-test
-debian_10_package: package
-
 debian_11_py309_package: DOCKER_IMAGE_BUILD=xdyn-python-deb11-py309-build
 debian_11_py309_package: DOCKER_IMAGE_TEST=xdyn-python-deb11-py309-test
 debian_11_py309_package: package
@@ -98,11 +94,6 @@ clean: ## Removed all generated files
 	@rm -f unit_tests/core
 	@rm -f unit_tests/nosetests.xml
 	@find . -type d -name __pycache__ -exec rm -rf {} \; || true
-
-
-.PHONY=xdyn-python-deb10-build
-xdyn-python-deb10-build: Dockerfile_deb10_pybind
-	docker build . -f $^ -t $@
 
 .PHONY=xdyn-python-deb11-build
 xdyn-python-deb11-build:
