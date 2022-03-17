@@ -4,16 +4,12 @@ Unit test for XDyn
 import os
 import unittest
 
-import xdyn
 from xdyn import ErrorReporter, XdynCommandLineArguments, run
 from xdyn.data.yaml import falling_ball_example
 
 
 class XDynTest(unittest.TestCase):
     """Test class for XDyn"""
-
-    def test_xdyn_version(self):
-        self.assertEqual(xdyn.__version__, "5.0.1")
 
     def test_xdyn_no_argument(self):
         input_data = XdynCommandLineArguments()
