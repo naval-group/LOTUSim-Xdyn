@@ -6,7 +6,8 @@ all: invalid_yaml_returns_non_zero_error_code \
 	 no_extra_hdf5_output_when_not_required\
 	 issue_196\
 	 issue_199\
-	 issue_202
+	 issue_202\
+	 issue_39
 
 
 DOCKER_RUN=docker run -t --rm -u $(shell id -u):$(shell id -g) -v $(shell pwd):/work -w /work
@@ -31,6 +32,7 @@ invalid_yaml_returns_non_zero_error_code: tutorial_01_falling_ball.yml cube.stl
 include Makefile.check_exports
 include Makefile.binary_stl
 include Makefile.issue_202
+include Makefile.issue_39
 
 tutorial_01_falling_ball.yml:
 	@echo "Copying tutorial files from xdyn's Docker container..."
@@ -70,4 +72,5 @@ clean:
 		   falling_ball.json\
 		   tutorial_05_froude_krylov.yml\
 		   stable_cube_test.yml\
-		   issue_202.csv
+		   issue_202.csv\
+		   issue_39.out.csv

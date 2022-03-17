@@ -7,3 +7,5 @@ test_ship.stl
 test_ship_in_waves.yml
 test_ship_in_waves.yml.new
 stable_cube_test.yml
+issue_39.out.csv
+issue_202.csv
