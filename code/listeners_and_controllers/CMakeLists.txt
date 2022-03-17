@@ -7,6 +7,7 @@ SET(SRC src/builders.cpp
         src/Controller.cpp
         src/PIDController.cpp
         src/GrpcController.cpp
+        src/CSVController.cpp
         )
 
 # Using C++ 2011
