@@ -157,8 +157,9 @@ class LinearStiffnessForceModelTest(unittest.TestCase):
             )  # Restricting the range of angles to avoid gimbal lock
             psi = self.random_double_between(-np.pi, np.pi)
             states = get_position_states(x, y, z, phi, theta, psi)
+            rotation = states.get_rot_from_ned_to_body().transpose()
             wrench = model.get_force(states, self.random_double_between(), env)
-            self.assertEqual("body", wrench.get_frame())
+            self.assertEqual("NED", wrench.get_frame())
             for j in range(3):
                 assert_near(
                     sum(K[j, c] * dof for c, dof in enumerate((x, y, z, phi, theta, psi))),
@@ -166,7 +167,7 @@ class LinearStiffnessForceModelTest(unittest.TestCase):
                 )
                 assert_near(
                     sum(K[j + 3, c] * dof for c, dof in enumerate((x, y, z, phi, theta, psi))),
-                    -wrench.torque[j],
+                    -np.matmul(rotation, wrench.torque)[j],
                 )
 
     def test_example_with_equilibrium_input(self):
@@ -206,8 +207,9 @@ class LinearStiffnessForceModelTest(unittest.TestCase):
             )  # Restricting the range of angles to avoid gimbal lock
             psi = self.random_double_between(-np.pi, np.pi)
             states = get_position_states(x, y, z, phi, theta, psi)
+            rotation = states.get_rot_from_ned_to_body().transpose()
             wrench = model.get_force(states, self.random_double_between(), env)
-            self.assertEqual("body", wrench.get_frame())
+            self.assertEqual("NED", wrench.get_frame())
             for j in range(3):
                 k = j + 3
                 assert_near(
@@ -226,7 +228,7 @@ class LinearStiffnessForceModelTest(unittest.TestCase):
                     + K[k, 3] * (phi - phi0)
                     + K[k, 4] * (theta - theta0)
                     + K[k, 5] * (psi - psi0),
-                    -wrench.torque[j],
+                    -np.matmul(rotation, wrench.torque)[j],
                 )
 
 
