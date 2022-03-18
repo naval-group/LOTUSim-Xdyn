@@ -26,6 +26,7 @@ class CSVController : public Controller
     struct Yaml
     {
         Yaml(const std::string& yaml);
+        std::string path; //!< Path to CSV file containing the commands
     };
 
     CSVController(const double tstart, const std::string& yaml);

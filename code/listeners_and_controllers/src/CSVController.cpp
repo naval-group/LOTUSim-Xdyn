@@ -16,9 +16,14 @@ CSVController::CSVController(const double tstart, const std::string& yaml_)
 {
 }
 
-CSVController::Yaml::Yaml(const std::string& )
+CSVController::Yaml::Yaml(const std::string& yaml) : path()
 {
-
+    std::stringstream stream(yaml);
+    std::stringstream ss;
+    YAML::Parser parser(stream);
+    YAML::Node node;
+    parser.GetNextDocument(node);
+    node["path"] >> path;
 }
 
     std::vector<std::string> CSVController::get_command_names() const

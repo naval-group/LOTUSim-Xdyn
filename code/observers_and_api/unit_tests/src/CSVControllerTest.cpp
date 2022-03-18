@@ -50,3 +50,9 @@ TEST_F(CSVControllerTest, smoke_test)
 {
     ASSERT_NO_THROW(CSVController(0, test_yaml()));
 }
+
+TEST_F(CSVControllerTest, can_parse_yaml_path)
+{
+    const CSVController controller(0, test_yaml());
+    ASSERT_EQ("path/../to/file.csv", controller.yaml.path);
+}
