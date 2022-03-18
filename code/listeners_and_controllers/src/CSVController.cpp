@@ -16,7 +16,7 @@ CSVController::CSVController(const double tstart, const std::string& yaml_)
 {
 }
 
-CSVController::Yaml::Yaml(const std::string& yaml) : path()
+CSVController::Yaml::Yaml(const std::string& yaml) : path(), time_column()
 {
     std::stringstream stream(yaml);
     std::stringstream ss;
@@ -24,6 +24,7 @@ CSVController::Yaml::Yaml(const std::string& yaml) : path()
     YAML::Node node;
     parser.GetNextDocument(node);
     node["path"] >> path;
+    node["time column name"] >> time_column;
 }
 
     std::vector<std::string> CSVController::get_command_names() const

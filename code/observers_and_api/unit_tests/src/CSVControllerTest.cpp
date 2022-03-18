@@ -56,3 +56,9 @@ TEST_F(CSVControllerTest, can_parse_yaml_path)
     const CSVController controller(0, test_yaml());
     ASSERT_EQ("path/../to/file.csv", controller.yaml.path);
 }
+
+TEST_F(CSVControllerTest, can_parse_time_column)
+{
+    const CSVController controller(0, test_yaml());
+    ASSERT_EQ("t", controller.yaml.time_column);
+}
