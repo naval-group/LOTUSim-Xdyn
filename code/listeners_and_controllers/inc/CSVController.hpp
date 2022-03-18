@@ -12,6 +12,7 @@
 #include "State.hpp"
 #include <ssc/data_source.hpp>
 #include <string>
+#include <map>
 
 /*
  * Tests for CSVController are found in `observers_and_api/unit_tests/src/CSVControllerTest.cpp`
@@ -33,6 +34,7 @@ class CSVController : public Controller
                                 //!< value in the CSV matches the beginning of the simulation.
                                 //!< Otherwise, the time values read from the CSV file are left
                                 //!< unchanged.
+        std::map<std::string,std::string> commands; //!< Command name to column name mapping
     };
 
     CSVController(const double tstart, const std::string& yaml);

@@ -84,3 +84,11 @@ TEST_F(CSVControllerTest, can_parse_time_shift_to_match_tstart)
     boost::replace_all(yaml, "shift time column to match tstart: false", "shift time column to match tstart: foo");
     ASSERT_THROW(CSVController(0, yaml), InvalidInputException);
 }
+
+TEST_F(CSVControllerTest, can_parse_commands)
+{
+    auto commands = CSVController(0, test_yaml()).yaml.commands;
+    ASSERT_EQ(2, commands.size());
+    ASSERT_EQ(commands["port side propeller(beta)"], "beta_co");
+    ASSERT_EQ(commands["port side propeller(rpm)"], "rpm_co");
+}

@@ -21,6 +21,7 @@ CSVController::Yaml::Yaml(const std::string& yaml)
     , time_column()
     , separator(',')
     , shift_time_column(false)
+    , commands()
 {
     std::stringstream stream(yaml);
     std::stringstream ss;
@@ -45,6 +46,7 @@ CSVController::Yaml::Yaml(const std::string& yaml)
                   << shift << "' but only 'true' and 'false' are allowed.");
     }
     shift_time_column = shift == "true";
+    node["commands"] >> commands;
 }
 
 std::vector<std::string> CSVController::get_command_names() const
