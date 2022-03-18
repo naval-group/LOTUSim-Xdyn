@@ -10,8 +10,8 @@
 #include "check_input_yaml.hpp"
 #include "yaml.h"
 
-CSVController::CSVController(const double tstart, const double dt, const std::string& yaml_)
-    : Controller(tstart, dt)
+CSVController::CSVController(const double tstart, const std::string& yaml_)
+    : Controller(tstart, 0)
     , yaml(yaml_)
 {
 }
@@ -46,4 +46,9 @@ double CSVController::compute_command(const double , const double ,
                                       const double )
 {
     return 0;
+}
+
+double CSVController::get_date_of_next_update(const double current_time) const
+{
+    return current_time;
 }

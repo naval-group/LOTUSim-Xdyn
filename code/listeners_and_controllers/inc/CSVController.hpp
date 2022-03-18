@@ -28,7 +28,7 @@ class CSVController : public Controller
         Yaml(const std::string& yaml);
     };
 
-    CSVController(const double tstart, const double dt, const std::string& yaml);
+    CSVController(const double tstart, const std::string& yaml);
 
     std::vector<std::string> get_command_names() const;
     std::string get_name() const;
@@ -53,6 +53,11 @@ class CSVController : public Controller
     /** \brief Computes the command value from the input data
      */
     double compute_command(const double setpoint, const double measured_value, const double t);
+
+    /**
+     * @brief Get the date of next discrete state update (next line in CSV file)
+     */
+    double get_date_of_next_update(const double current_time) const override;
 };
 
 #endif /* CSVCONTROLLER_HPP_ */
