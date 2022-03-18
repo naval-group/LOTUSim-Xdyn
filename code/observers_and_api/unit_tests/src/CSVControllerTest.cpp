@@ -34,7 +34,15 @@ void CSVControllerTest::TearDown() {}
 std::string CSVControllerTest::test_yaml() const
 {
     std::stringstream yaml_string;
-    yaml_string << "";
+    yaml_string << "name: some unique name\n"
+                << "type: csv\n"
+                << "path: path/../to/file.csv\n"
+                << "time column name: t\n"
+                << "separator: comma\n"
+                << "shift time column to match tstart: true\n"
+                << "commands:\n"
+                << "    port side propeller(beta): beta_co\n"
+                << "    port side propeller(rpm): rpm_co";
     return yaml_string.str();
 }
 
