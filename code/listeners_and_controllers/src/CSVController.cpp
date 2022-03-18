@@ -20,6 +20,7 @@ CSVController::Yaml::Yaml(const std::string& yaml)
     : path()
     , time_column()
     , separator(',')
+    , shift_time_column(false)
 {
     std::stringstream stream(yaml);
     std::stringstream ss;
@@ -34,9 +35,19 @@ CSVController::Yaml::Yaml(const std::string& yaml)
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "Invalid separator: got '" << separator << "' but only 'comma' and 'semicolon' are allowed.");
     }
+    separator = sep == "comma" ? ',' : ';';
+    std::string shift;
+    node["shift time column to match tstart"] >> shift;
+    if (shift != "true" && shift != "false")
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+              "Invalid value for 'shift time column to match tstart': got '"
+                  << shift << "' but only 'true' and 'false' are allowed.");
+    }
+    shift_time_column = shift == "true";
 }
 
-    std::vector<std::string> CSVController::get_command_names() const
+std::vector<std::string> CSVController::get_command_names() const
 {
     return {};
 }

@@ -75,3 +75,12 @@ TEST_F(CSVControllerTest, can_parse_separator_and_throw_if_it_is_unknown)
     ASSERT_EQ(';', CSVController(0, yaml).yaml.separator);
 }
 
+TEST_F(CSVControllerTest, can_parse_time_shift_to_match_tstart)
+{
+    std::string yaml = test_yaml();
+    ASSERT_TRUE(CSVController(0, yaml).yaml.shift_time_column);
+    boost::replace_all(yaml, "shift time column to match tstart: true", "shift time column to match tstart: false");
+    ASSERT_FALSE(CSVController(0, yaml).yaml.shift_time_column);
+    boost::replace_all(yaml, "shift time column to match tstart: false", "shift time column to match tstart: foo");
+    ASSERT_THROW(CSVController(0, yaml), InvalidInputException);
+}

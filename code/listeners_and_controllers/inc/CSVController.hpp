@@ -29,6 +29,10 @@ class CSVController : public Controller
         std::string path; //!< Path to CSV file containing the commands
         std::string time_column; //!< Title of the time column
         char separator; //!< Column separator (either ',' or ';')
+        bool shift_time_column; //!< If set to true, the time values are shifted so the first time
+                                //!< value in the CSV matches the beginning of the simulation.
+                                //!< Otherwise, the time values read from the CSV file are left
+                                //!< unchanged.
     };
 
     CSVController(const double tstart, const std::string& yaml);
