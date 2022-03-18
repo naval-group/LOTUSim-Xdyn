@@ -28,6 +28,7 @@ class CSVController : public Controller
         Yaml(const std::string& yaml);
         std::string path; //!< Path to CSV file containing the commands
         std::string time_column; //!< Title of the time column
+        char separator; //!< Column separator (either ',' or ';')
     };
 
     CSVController(const double tstart, const std::string& yaml);

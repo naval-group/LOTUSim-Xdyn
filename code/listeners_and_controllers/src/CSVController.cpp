@@ -16,7 +16,10 @@ CSVController::CSVController(const double tstart, const std::string& yaml_)
 {
 }
 
-CSVController::Yaml::Yaml(const std::string& yaml) : path(), time_column()
+CSVController::Yaml::Yaml(const std::string& yaml)
+    : path()
+    , time_column()
+    , separator(',')
 {
     std::stringstream stream(yaml);
     std::stringstream ss;
@@ -25,6 +28,12 @@ CSVController::Yaml::Yaml(const std::string& yaml) : path(), time_column()
     parser.GetNextDocument(node);
     node["path"] >> path;
     node["time column name"] >> time_column;
+    std::string sep;
+    node["separator"] >> sep;
+    if (sep != "comma" && sep != "semicolon")
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Invalid separator: got '" << separator << "' but only 'comma' and 'semicolon' are allowed.");
+    }
 }
 
     std::vector<std::string> CSVController::get_command_names() const

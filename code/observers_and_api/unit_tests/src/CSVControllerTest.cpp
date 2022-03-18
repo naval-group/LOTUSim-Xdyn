@@ -5,16 +5,16 @@
  *      Author: cady
  */
 
-#include "simulator_api.hpp"
-#include <ssc/solver/Scheduler.hpp>
-#include <ssc/solver/DiscreteSystem.hpp>
-#include "listeners.hpp"
 #include "CSVControllerTest.hpp"
 #include "CSVController.hpp"
+#include "listeners.hpp"
 #include "parse_controllers.hpp"
 #include "parse_time_series.hpp"
+#include "simulator_api.hpp"
 #include "yaml_data.hpp"
-
+#include <boost/algorithm/string.hpp>
+#include <ssc/solver/DiscreteSystem.hpp>
+#include <ssc/solver/Scheduler.hpp>
 #define EPS (1E-14)
 #define _USE_MATH_DEFINE
 #include <cmath>
@@ -62,3 +62,16 @@ TEST_F(CSVControllerTest, can_parse_time_column)
     const CSVController controller(0, test_yaml());
     ASSERT_EQ("t", controller.yaml.time_column);
 }
+
+TEST_F(CSVControllerTest, can_parse_separator_and_throw_if_it_is_unknown)
+{
+    std::string yaml = test_yaml();
+    ASSERT_NO_THROW(CSVController(0, yaml));
+    ASSERT_EQ(',', CSVController(0, yaml).yaml.separator);
+    boost::replace_all(yaml, "separator: comma", "separator: something");
+    ASSERT_THROW(CSVController(0, yaml), InvalidInputException);
+    boost::replace_all(yaml, "separator: something", "separator: semicolon");
+    ASSERT_NO_THROW(CSVController(0, yaml));
+    ASSERT_EQ(';', CSVController(0, yaml).yaml.separator);
+}
+
