@@ -51,7 +51,13 @@ CSVController::Yaml::Yaml(const std::string& yaml)
 
 std::vector<std::string> CSVController::get_command_names() const
 {
-    return {};
+    std::vector<std::string> ret(yaml.commands.size());
+    int i = 0;
+    for (const auto kv:yaml.commands)
+    {
+        ret[i++] = kv.first;
+    }
+    return ret;
 }
 
 std::string CSVController::get_name() const

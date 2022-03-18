@@ -92,3 +92,10 @@ TEST_F(CSVControllerTest, can_parse_commands)
     ASSERT_EQ(commands["port side propeller(beta)"], "beta_co");
     ASSERT_EQ(commands["port side propeller(rpm)"], "rpm_co");
 }
+
+TEST_F(CSVControllerTest, commands_should_be_correct)
+{
+    const CSVController controller(0, test_yaml());
+    const std::vector<std::string> expected_commands = {"port side propeller(beta)", "port side propeller(rpm)"};
+    ASSERT_EQ(expected_commands, controller.get_command_names());
+}
