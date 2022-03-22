@@ -2597,8 +2597,9 @@ repère NED du moment autour de l'axe Y du navire.
 
 ### Description
 
-Le but de ce modèle est de spécifier des courbes d'effort d'hélice $`K_t`$ et
-$`K_q`$ en fonction du coefficient d'avance $`J`$ uniquement.
+Ce modèle permet de spécifier les courbes d'effort d'hélice $`K_t`$ et
+$`K_q`$ en fonction du coefficient d'avance $`J`$ en eaux libres et d'évaluer
+le torseur d'efforts derrière la carène.
 Hormis le calcul de $`Kt`$ et $`Kq`$, ce modèle est identique au modèle d'hélice
 Wageningen série B décrit ci-dessus. Le torseur des efforts générés par l'hélice
 et subis par le navire (apparaissant donc dans le membre de droite de l'équation
@@ -2687,8 +2688,8 @@ external forces:
   [la documentation](#expression-des-efforts),
 - `diameter` : diamètre de l'hélice (en m),
 - `J`: coefficient d'avance. Correspond aux listes Kt et Kq,
-- `Kt`: coefficient de poussée en fonction de `J`,
-- `Kq`: coefficient de moment en fonction de `J`.
+- `Kt`: coefficient de poussée en eaux libres en fonction de `J`,
+- `Kq`: coefficient de moment en eaux libres en fonction de `J`.
 
 ### Sorties
 
