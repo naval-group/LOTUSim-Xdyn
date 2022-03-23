@@ -12,6 +12,7 @@
 #include "core/inc/StatesFilter.hpp"
 #include "core/inc/SurfaceElevationInterface.hpp"
 #include "core/inc/SurfaceElevationFromWaves.hpp"
+#include "core/inc/yaml2eigen.hpp"
 #include "environment_models/inc/Airy.hpp"
 #include "environment_models/inc/DiscreteDirectionalWaveSpectrum.hpp"
 #include "environment_models/inc/UniformWindVelocityProfile.hpp"
@@ -650,6 +651,7 @@ void py_add_module_xdyn_core(py::module& m0)
         .def("K", static_cast<double (Wrench::*)() const>(&Wrench::K), "Get K")
         .def("M", static_cast<double (Wrench::*)() const>(&Wrench::M), "Get M")
         .def("N", static_cast<double (Wrench::*)() const>(&Wrench::N), "Get N")
+        .def("change_frame", static_cast<void (Wrench::*)(const std::string&, const ssc::kinematics::KinematicsPtr&)>(&Wrench::change_frame))
         ;
 
     py::class_<SurfaceElevationPtr>(m, "SurfaceElevationPtr")
@@ -810,4 +812,6 @@ void py_add_module_xdyn_core(py::module& m0)
         .def("get_wave_angular_frequency_for_each_model", &SurfaceElevationFromWaves::get_wave_angular_frequency_for_each_model)
         .def("get_models", &SurfaceElevationFromWaves::get_models)
         ;
+
+    m.def("make_transform", &make_transform);
 }
