@@ -94,14 +94,11 @@ Wrench AeroPolarForceModel::get_force(const BodyStates& states, const double t, 
     {
         alpha += 2*M_PI; // Putting alpha in [0,2*pi]
     }
-    if (symmetry && alpha>M_PI)
-    {
-        alpha = 2*M_PI - alpha;
-    }
-    const double lift = 0.5*Cl->f(alpha)*env.get_rho_air()*pow(U, 2)*reference_area;
-    const double drag = 0.5*Cd->f(alpha)*env.get_rho_air()*pow(U, 2)*reference_area;
+    const double alpha_prime = (symmetry && alpha>M_PI) ? 2*M_PI - alpha : alpha;
+    const double lift = 0.5*Cl->f(alpha_prime)*env.get_rho_air()*pow(U, 2)*reference_area;
+    const double drag = 0.5*Cd->f(alpha_prime)*env.get_rho_air()*pow(U, 2)*reference_area;
     Wrench ret(ssc::kinematics::Point(body_name, calculation_point), body_name);
-    if (beta>=0.) // Starboard wind
+    if (alpha<M_PI) // Starboard wind
     {
         ret.X() = -drag*cos(beta) + lift*sin(beta);
         ret.Y() = -drag*sin(beta) - lift*cos(beta);
