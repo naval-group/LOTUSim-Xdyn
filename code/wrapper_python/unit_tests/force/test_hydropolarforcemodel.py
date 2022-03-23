@@ -6,9 +6,10 @@ import re
 import unittest
 from contextlib import redirect_stderr
 from typing import Optional
+from copy import deepcopy
 
 import numpy as np
-from xdyn.core import BodyStates, EnvironmentAndFrames
+from xdyn.core import BodyStates, EnvironmentAndFrames, make_transform
 from xdyn.core.io import YamlAngle, YamlCoordinates, YamlPosition, YamlRotation
 from xdyn.exceptions import InvalidInputException
 from xdyn.force import HydroPolarForceModel, HydroPolarForceModelInput
@@ -615,6 +616,67 @@ class HydroPolarForceModelTest(unittest.TestCase):
         assert_is_almost_zero(wrench.M())
         assert_is_almost_zero(wrench.N())
 
+    def test_symmetrical_behavior(self):
+        data = HydroPolarForceModelInput()
+        data.name = "test"
+        # Internal frame is placed under water, 5m under the body frame's origin
+        data.internal_frame = YamlPosition(YamlCoordinates(0, 0, 5), YamlAngle(0, 0, 0), "body")
+        data.reference_area = 100
+        data.angle_of_attack = [
+            0.0,
+            0.12217305,
+            0.15707963,
+            0.20943951,
+            0.48869219,
+            1.04719755,
+            1.57079633,
+            2.0943951,
+            2.61799388,
+            np.pi,
+        ]
+        data.lift_coefficient = [
+            0.00000,
+            0.94828,
+            1.13793,
+            1.25000,
+            1.42681,
+            1.38319,
+            1.26724,
+            0.93103,
+            0.38793,
+            0.0,
+        ]
+        data.drag_coefficient = [
+            0.03448,
+            0.01724,
+            0.01466,
+            0.01466,
+            0.02586,
+            0.11302,
+            0.38250,
+            0.96888,
+            1.31578,
+            1.34483,
+        ]
+        data.use_waves_velocity = False
+        env = EnvironmentAndFrames()
+        env.rho = 1000
+        env.rot = YamlRotation("angle", ["z", "y'", "x''"])
+        force_model = HydroPolarForceModel(data, "body", env)
+        states = get_states(10, 0)
+        eps = 10e-8
+
+        angles = [0., 30., 60., 90., 120., 150., 180.]
+        for angle in angles:
+            data.internal_frame.angle.psi = angle*np.pi/180
+            env.k_add(make_transform(data.internal_frame, data.name, env.rot))
+            wrench = force_model.get_force(states, 0, env)
+            data.internal_frame.angle.psi = -angle*np.pi/180
+            env.k_add(make_transform(data.internal_frame, data.name, env.rot))
+            wrench_sym = force_model.get_force(states, 0, env)
+            self.assertAlmostEqual(wrench.X(), wrench_sym.X(), delta=eps)
+            self.assertAlmostEqual(wrench.Y(), -wrench_sym.Y(), delta=eps)
+
     def test_angle_can_be_controlled(self):
         data = HydroPolarForceModelInput()
         data.name = "test"
@@ -700,6 +762,134 @@ class HydroPolarForceModelTest(unittest.TestCase):
         wrench = force_model.get_force(states, 0, env, {"beta": np.pi})
         assert_equal(wrench.X(), 172399.99999999997)
         assert_equal(wrench.Y(), 0.0)
+
+    def test_angle_control_is_equivalent_to_frame_rotation(self):
+        data = HydroPolarForceModelInput()
+        # Internal frame is placed under water, 5m under the body frame's origin
+        data.internal_frame = YamlPosition(YamlCoordinates(0, 0, 5), YamlAngle(0, 0, 0), "body")
+        data.reference_area = 100
+        data.angle_of_attack = [
+            0.0,
+            0.12217305,
+            0.15707963,
+            0.20943951,
+            0.48869219,
+            1.04719755,
+            1.57079633,
+            2.0943951,
+            2.61799388,
+            np.pi,
+        ]
+        data.lift_coefficient = [
+            0.00000,
+            0.94828,
+            1.13793,
+            1.25000,
+            1.42681,
+            1.38319,
+            1.26724,
+            0.93103,
+            0.38793,
+            0.0,
+        ]
+        data.drag_coefficient = [
+            0.03448,
+            0.01724,
+            0.01466,
+            0.01466,
+            0.02586,
+            0.11302,
+            0.38250,
+            0.96888,
+            1.31578,
+            1.34483,
+        ]
+        data.use_waves_velocity = False
+        env = EnvironmentAndFrames()
+        env.rho = 1000
+        env.rot = YamlRotation("angle", ["z", "y'", "x''"])
+        states = get_states(10, 0)
+
+        variable_frame_data = data # data is mutable so this is just a reference
+        variable_frame_data.name = "variable_frame"
+        variable_frame_force_model = HydroPolarForceModel(variable_frame_data, "body", env)
+
+        controlled_angle_data = data
+        controlled_angle_data.name = "controlled_angle"
+        controlled_angle_data.angle_command = "beta"
+        controlled_angle_force_model = HydroPolarForceModel(controlled_angle_data, "body", env)
+
+        eps = 10e-8
+
+        angles = [0., 30., 60., 90., 120., 150., 180.]
+        for angle in angles:
+            variable_frame_data.internal_frame.angle.psi = angle*np.pi/180
+            env.k_add(make_transform(variable_frame_data.internal_frame, "variable_frame", env.rot))
+            wrench_variable_frame = variable_frame_force_model.get_force(states, 0, env)
+            wrench_controlled_angle = controlled_angle_force_model.get_force(states, 0, env, {"beta": angle*np.pi/180})
+            wrench_variable_frame.change_frame("body", env.k)
+            wrench_controlled_angle.change_frame("body", env.k)
+            self.assertAlmostEqual(wrench_variable_frame.X(), wrench_controlled_angle.X(), delta=eps)
+            self.assertAlmostEqual(wrench_variable_frame.Y(), wrench_controlled_angle.Y(), delta=eps)
+
+    def test_symmetrical_behavior_with_controlled_angle(self):
+        data = HydroPolarForceModelInput()
+        # Internal frame is placed under water, 5m under the body frame's origin
+        data.internal_frame = YamlPosition(YamlCoordinates(0, 0, 5), YamlAngle(0, 0, 0), "body")
+        data.name = "test"
+        data.reference_area = 100
+        data.angle_of_attack = [
+            0.0,
+            0.12217305,
+            0.15707963,
+            0.20943951,
+            0.48869219,
+            1.04719755,
+            1.57079633,
+            2.0943951,
+            2.61799388,
+            np.pi,
+        ]
+        data.lift_coefficient = [
+            0.00000,
+            0.94828,
+            1.13793,
+            1.25000,
+            1.42681,
+            1.38319,
+            1.26724,
+            0.93103,
+            0.38793,
+            0.0,
+        ]
+        data.drag_coefficient = [
+            0.03448,
+            0.01724,
+            0.01466,
+            0.01466,
+            0.02586,
+            0.11302,
+            0.38250,
+            0.96888,
+            1.31578,
+            1.34483,
+        ]
+        data.use_waves_velocity = False
+        data.angle_command = "beta"
+        env = EnvironmentAndFrames()
+        env.rho = 1000
+        env.rot = YamlRotation("angle", ["z", "y'", "x''"])
+        states = get_states(10, 0)
+        force_model = HydroPolarForceModel(data, "body", env)
+
+        eps = 10e-8
+
+        angles = [0., 30., 60., 90., 120., 150., 180.]
+        for angle in angles:
+            wrench = force_model.get_force(states, 0, env, {"beta": np.pi*angle/180})
+            wrench_sym = force_model.get_force(states, 0, env, {"beta": -np.pi*angle/180})
+            self.assertAlmostEqual(wrench.X(), wrench_sym.X(), delta=eps)
+            self.assertAlmostEqual(wrench.Y(), -wrench_sym.Y(), delta=eps)
 
 
 if __name__ == "__main__":

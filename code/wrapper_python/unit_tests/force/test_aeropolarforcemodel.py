@@ -151,7 +151,7 @@ class AeroPolarForceModelTest(unittest.TestCase):
         assert_equal = lambda x, y: self.assertAlmostEqual(x, y, delta=eps)
         wrench = force_model.get_force(states, 0, env)
         assert_equal(80689.800000000003, wrench.X())
-        assert_equal(+6724.2000000000098, force_model.get_force(states, 0, env).Y())
+        assert_equal(6724.2000000000098, force_model.get_force(states, 0, env).Y())
         wind_data.direction = 45 * np.pi / 180
         env.set_wind_model(wind_data)
         wrench = force_model.get_force(states, 0, env)
@@ -598,7 +598,7 @@ class AeroPolarForceModelTest(unittest.TestCase):
         wind_data.direction = -90 * np.pi / 180.0
         env.set_wind_model(wind_data)
         assert_equal(
-            -6724.2000000000098,
+            6724.2000000000098,
             force_model.get_force(states, 0, env, {"beta": -90 * np.pi / 180.0}).X(),
         )
         assert_equal(
