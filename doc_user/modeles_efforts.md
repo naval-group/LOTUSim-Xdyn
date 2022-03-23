@@ -416,10 +416,10 @@ z - z_{eq} \\
 
 Où le $`X`$ est le vecteur position instantané et $`X_{eq}`$ est la position à l'équilibre.
 
-Attention, les forces ainsi obtenues sont dans le repère global (NED), alors que les moments sont 
-dans le repère du corps. Cette distinction n'est généralement pas faite car ce type de modèle est 
-souvent utilisé dans une hypothèse de petits mouvements (où le repère du corps est confondu avec le 
-repère global), mais est nécessaire pour xdyn car les deux repères sont indépendants. Il faut alors 
+Attention, les forces ainsi obtenues sont dans le repère global (NED), alors que les moments sont
+dans le repère du corps. Cette distinction n'est généralement pas faite car ce type de modèle est
+souvent utilisé dans une hypothèse de petits mouvements (où le repère du corps est confondu avec le
+repère global), mais est nécessaire pour xdyn car les deux repères sont indépendants. Il faut alors
 être particulièrement attentif aux combinaisons de rotations.
 
 ### Paramétrage
@@ -2597,8 +2597,9 @@ repère NED du moment autour de l'axe Y du navire.
 
 ### Description
 
-Le but de ce modèle est de spécifier des courbes d'effort d'hélice $`K_t`$ et
-$`K_q`$ en fonction du coefficient d'avance $`J`$ uniquement.
+Ce modèle permet de spécifier les courbes d'effort et de couple d'hélice $`K_t`$ et
+$`K_q`$ en fonction du coefficient d'avance $`J`$ en eaux libres et d'évaluer
+le torseur d'efforts derrière la carène.
 Hormis le calcul de $`Kt`$ et $`Kq`$, ce modèle est identique au modèle d'hélice
 Wageningen série B décrit ci-dessus. Le torseur des efforts générés par l'hélice
 et subis par le navire (apparaissant donc dans le membre de droite de l'équation
@@ -2659,7 +2660,7 @@ external forces:
 - `name` : Nom du composant. Défini par l'utilisateur. Doit correspondre à
   celui renseigné dans le fichier de
   [commandes attendues](#syntaxe-du-fichier-de-commande),
-- `model` : Nom du modèle. Doit être `wageningen B-series` pour utiliser ce
+- `model` : Nom du modèle. Doit être `Kt(J) & Kq(J)` pour utiliser ce
   modèle,
 - `position of propeller frame` : Définition du
   [repère de l'hélice](#expression-des-efforts),
@@ -2687,8 +2688,8 @@ external forces:
   [la documentation](#expression-des-efforts),
 - `diameter` : diamètre de l'hélice (en m),
 - `J`: coefficient d'avance. Correspond aux listes Kt et Kq,
-- `Kt`: coefficient de poussée en fonction de `J`,
-- `Kq`: coefficient de moment en fonction de `J`.
+- `Kt`: coefficient de poussée en eau libre en fonction de `J`,
+- `Kq`: coefficient de moment en eau libre en fonction de `J`.
 
 ### Sorties
 
@@ -2710,15 +2711,15 @@ l'axe $`X`$ du repère NED.
 
 ## Modèle de rotor Flettner
 
-Un rotor Flettner est un cylindre vertical en rotation sur lui-même, qui produit un effort de portance 
-(en plus de la traînée) lorsqu'il est placé dans un écoulement. Un tel dispositif peut être utilisé 
-comme une voile pour exploiter le vent comme force propulsive. En revanche, le [modèle d'effort aérodynamique quadratique par polaire](#mod%C3%A8le-deffort-a%C3%A9rodynamique-quadratique-par-polaire) n'est pas adapté à la modélisation 
-d'un rotor Flettner, car pour ce dernier les coefficients de portance et de traînée ne dépendent pas 
+Un rotor Flettner est un cylindre vertical en rotation sur lui-même, qui produit un effort de portance
+(en plus de la traînée) lorsqu'il est placé dans un écoulement. Un tel dispositif peut être utilisé
+comme une voile pour exploiter le vent comme force propulsive. En revanche, le [modèle d'effort aérodynamique quadratique par polaire](#mod%C3%A8le-deffort-a%C3%A9rodynamique-quadratique-par-polaire) n'est pas adapté à la modélisation
+d'un rotor Flettner, car pour ce dernier les coefficients de portance et de traînée ne dépendent pas
 de l'angle de vent relatif, mais du ratio de vitesse de peau.
 
 ### Description
 
-Les efforts du vent sur un rotor Flettner peuvent être modélisés de façon quadratique à l'aide de 
+Les efforts du vent sur un rotor Flettner peuvent être modélisés de façon quadratique à l'aide de
 coefficients de portance et traînée :
 
 ```math
@@ -2736,7 +2737,7 @@ Où :
 - $`C_l`$ et $`C_d`$ sont les coefficients de portance et de traînée (respectivement),
 - $`D`$ est le diamètre du rotor (en m),
 - $`L`$ est la longueur du rotor (en m),
-- $`U`$ est la vitesse de l'écoulement d'air (en m/s), projetée dans le plan normal à l'axe du rotor, et dépendant 
+- $`U`$ est la vitesse de l'écoulement d'air (en m/s), projetée dans le plan normal à l'axe du rotor, et dépendant
 de la vitesse du corps et de celle du vent,
 - $`S_R`$ est le ratio de vitesse de peau, calculé par :
 
@@ -2764,19 +2765,19 @@ Le modèle de rotor Flettner est paramétré dans xdyn avec la section YAML suiv
   drag coefficient: [0.707, 0.736, 0.557, 0.717, 1.347, 2.284, 3.236, 4.161, 4.803, 5.271]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-La commande de vitesse de rotation doit aussi être présente, sous le nom `rpm`. Il s'agit de la vitesse 
+La commande de vitesse de rotation doit aussi être présente, sous le nom `rpm`. Il s'agit de la vitesse
 de rotation autour de l'axe $`- \vec{z_b}`$, qui correspond toujours à l'axe du rotor.
 
 ![](images/flettner_rotor.svg)
 
 **Attention :** le point spécifié dans la section `rotor position in body frame` est le point d'application
- de l'effort (pas la position de la base du rotor), c'est-à-dire le point de poussée vélique. Il doit 
- être choisi judicieusement selon le profil de vent choisi (dont dépendent aussi les coefficients de 
+ de l'effort (pas la position de la base du rotor), c'est-à-dire le point de poussée vélique. Il doit
+ être choisi judicieusement selon le profil de vent choisi (dont dépendent aussi les coefficients de
  portance et traînée).
 
- Les valeurs des coefficients $`C_l`$ et $`C_d`$ sont interpolées selon la valeur de $`S_R`$ calculée 
- à chaque pas de temps, en utilisant une interpolation par spline. Si la valeur de $`S_R`$ sort de 
- l'intervalle connu, une valeur saturée (au minimum ou au maximum) est utilisée pour l'interpolation 
+ Les valeurs des coefficients $`C_l`$ et $`C_d`$ sont interpolées selon la valeur de $`S_R`$ calculée
+ à chaque pas de temps, en utilisant une interpolation par spline. Si la valeur de $`S_R`$ sort de
+ l'intervalle connu, une valeur saturée (au minimum ou au maximum) est utilisée pour l'interpolation
  et un message d'avertissement est affiché.
 
 ## Modèle d'effort distant
