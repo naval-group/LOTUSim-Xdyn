@@ -126,3 +126,16 @@ void TempFile::close()
 {
     csv.close();
 }
+
+TEST_F(CSVControllerTest, can_read_data_from_csv)
+{
+    std::string yaml = test_yaml();
+    CSVController controller(0, yaml);
+    const double tstart = 0.1;
+    const double dt = 0.5;
+    ssc::solver::Scheduler scheduler(tstart, 2, dt);
+    Sim sys = get_system(test_data::falling_ball_example(), 0);
+    controller.callback(scheduler, &sys);
+    ASSERT_NEAR(65, sys.get_input_value("port side propeller(rpm)"), 1e-6);
+    ASSERT_NEAR(78, sys.get_input_value("port side propeller(beta)"), 1e-6);
+}
