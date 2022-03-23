@@ -5,6 +5,7 @@
  *      Author: cady
  */
 
+#include <cstdio> // For remove
 #include "CSVControllerTest.hpp"
 #include "CSVController.hpp"
 #include "listeners.hpp"
@@ -21,8 +22,12 @@
 #define PI M_PI
 
 CSVControllerTest::CSVControllerTest()
-    : a(ssc::random_data_generator::DataGenerator(54545))
+    : csv()
+    , a(ssc::random_data_generator::DataGenerator(54545))
 {
+    csv << "t,some column,rpm_co,beta_co\n";
+    csv << "0.2,23,65,78\n";
+    csv.close();
 }
 
 CSVControllerTest::~CSVControllerTest() {}
@@ -43,7 +48,9 @@ std::string CSVControllerTest::test_yaml() const
                 << "commands:\n"
                 << "    port side propeller(beta): beta_co\n"
                 << "    port side propeller(rpm): rpm_co";
-    return yaml_string.str();
+    std::string out = yaml_string.str();
+    boost::replace_all(out, "path/../to/file.csv", csv.get_filename());
+    return out;
 }
 
 TEST_F(CSVControllerTest, smoke_test)
@@ -54,7 +61,7 @@ TEST_F(CSVControllerTest, smoke_test)
 TEST_F(CSVControllerTest, can_parse_yaml_path)
 {
     const CSVController controller(0, test_yaml());
-    ASSERT_EQ("path/../to/file.csv", controller.yaml.path);
+    ASSERT_EQ(csv.get_filename(), controller.yaml.path);
 }
 
 TEST_F(CSVControllerTest, can_parse_time_column)
@@ -98,4 +105,24 @@ TEST_F(CSVControllerTest, commands_should_be_correct)
     const CSVController controller(0, test_yaml());
     const std::vector<std::string> expected_commands = {"port side propeller(beta)", "port side propeller(rpm)"};
     ASSERT_EQ(expected_commands, controller.get_command_names());
+}
+
+
+TempFile::TempFile() : filename(tmpnam(NULL)), csv(std::ofstream(filename, std::ofstream::out))
+{
+}
+
+TempFile::~TempFile()
+{
+    remove(filename.c_str());
+}
+
+std::string TempFile::get_filename() const
+{
+    return filename;
+}
+
+void TempFile::close()
+{
+    csv.close();
 }
