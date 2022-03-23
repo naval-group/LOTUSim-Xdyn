@@ -248,7 +248,7 @@ Un modèle gRPC externe Python déclarant la méthode `force` suivante :
 ```python
 def force(self, states, commands, __):
     """Force model."""
-    return {'Fx': 0, 
+    return {'Fx': 0,
             'Fy': 0,
             'Fz': 0,
             'Mx': 0,
@@ -274,7 +274,7 @@ output:
 Les sorties d'effort sont spécifiées de la façon suivante :
 
 - `Fx(modèle,corps,repère)` en N
-- `Fy(modèle,corps,repère)` en N 
+- `Fy(modèle,corps,repère)` en N
 - `Fz(modèle,corps,repère)` en N
 - `Mx(modèle,corps,repère)` en N.m
 - `My(modèle,corps,repère)` en N.m
@@ -310,19 +310,19 @@ nécessaire pour maintenir des degrés de liberté en cas de forçage :
 - `My(blocked states,corps,corps)`, par exemple `My(blocked states,TestShip,TestShip)`
 - `Mz(blocked states,corps,corps)`, par exemple `Mz(blocked states,TestShip,TestShip)`
 
-La somme des efforts de Coriolis et des efforts centripètes est notée `fictious
+La somme des efforts de Coriolis et des efforts centripètes est notée `fictitious
 forces`. Il s'agit des efforts dûs au caractère non-galliléen du repère lié au
 corps (forces d'inertie d'entraînement et de Coriolis). Voir _Guidance And
 Control of Ocean Vehicles_, ISBN 0 471 94113 1, Thor I. Fossen, Hydrodynamic
 Forces And Moments equation (2.125) chapter 2.4.1 page 36 $`C_A(\nu)`$ pour le
 détail du calcul.
 
-- `Fx(fictious forces,corps,repère)`, par exemple `Fx(fictious forces,TestShip,NED)` ou `Fx(fictious forces,TestShip,TestShip)`
-- `Fy(fictious forces,corps,repère)`, par exemple `Fy(fictious forces,TestShip,NED)` ou `Fy(fictious forces,TestShip,TestShip)`
-- `Fz(fictious forces,corps,repère)`, par exemple `Fz(fictious forces,TestShip,NED)` ou `Fz(fictious forces,TestShip,TestShip)`
-- `Mx(fictious forces,corps,repère)`, par exemple `Mx(fictious forces,TestShip,NED)` ou `Mx(fictious forces,TestShip,TestShip)`
-- `My(fictious forces,corps,repère)`, par exemple `My(fictious forces,TestShip,NED)` ou `My(fictious forces,TestShip,TestShip)`
-- `Mz(fictious forces,corps,repère)`, par exemple `Mz(fictious forces,TestShip,NED)` ou `Mz(fictious forces,TestShip,TestShip)`
+- `Fx(fictitious forces,corps,repère)`, par exemple `Fx(fictitious forces,TestShip,NED)` ou `Fx(fictitious forces,TestShip,TestShip)`
+- `Fy(fictitious forces,corps,repère)`, par exemple `Fy(fictitious forces,TestShip,NED)` ou `Fy(fictitious forces,TestShip,TestShip)`
+- `Fz(fictitious forces,corps,repère)`, par exemple `Fz(fictitious forces,TestShip,NED)` ou `Fz(fictitious forces,TestShip,TestShip)`
+- `Mx(fictitious forces,corps,repère)`, par exemple `Mx(fictitious forces,TestShip,NED)` ou `Mx(fictitious forces,TestShip,TestShip)`
+- `My(fictitious forces,corps,repère)`, par exemple `My(fictitious forces,TestShip,NED)` ou `My(fictitious forces,TestShip,TestShip)`
+- `Mz(fictitious forces,corps,repère)`, par exemple `Mz(fictitious forces,TestShip,NED)` ou `Mz(fictitious forces,TestShip,TestShip)`
 
 ### Exemple
 
@@ -1025,7 +1025,7 @@ Exemple de sortie:
   "psi": [0,0],
   "extra_observations": {
     "Fz(gravity,body,NED)": [2.135e3, 2.135e3],
-    "My(hydrostatic,body,body)": [4.984e4, 5.247e4] 
+    "My(hydrostatic,body,body)": [4.984e4, 5.247e4]
   }
 }
 ~~~~
