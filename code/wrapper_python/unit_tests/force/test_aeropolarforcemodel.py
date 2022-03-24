@@ -8,9 +8,9 @@ from contextlib import redirect_stderr
 from typing import Optional
 
 import numpy as np
-from xdyn.core import BodyStates, EnvironmentAndFrames
+from xdyn.core import BodyStates, EnvironmentAndFrames, Wrench
 from xdyn.core.io import YamlCoordinates, YamlRotation
-from xdyn.env.wind import UniformWindVelocityProfile, WindMeanVelocityProfileInput
+from xdyn.env.wind import WindMeanVelocityProfileInput
 from xdyn.exceptions import InvalidInputException
 from xdyn.force import AeroPolarForceModel, AeroPolarForceModelInput
 
@@ -53,6 +53,12 @@ def get_states(u: Optional[float] = 0.0, v: Optional[float] = 0.0) -> BodyStates
 
 class AeroPolarForceModelTest(unittest.TestCase):
     """Test class for AeroPolarForceModel"""
+
+    def check_zkmn_are_zeros(self, wrench: Wrench):
+        self.assertEqual(wrench.Z(), 0.0)
+        self.assertEqual(wrench.K(), 0.0)
+        self.assertEqual(wrench.M(), 0.0)
+        self.assertEqual(wrench.N(), 0.0)
 
     def test_can_parse(self):
         data = AeroPolarForceModel.parse(get_data())
@@ -151,47 +157,56 @@ class AeroPolarForceModelTest(unittest.TestCase):
         assert_equal = lambda x, y: self.assertAlmostEqual(x, y, delta=eps)
         wrench = force_model.get_force(states, 0, env)
         assert_equal(80689.800000000003, wrench.X())
-        assert_equal(-6724.2000000000098, force_model.get_force(states, 0, env).Y())
+        assert_equal(-6724.2000000000098, wrench.Y())
+        self.check_zkmn_are_zeros(wrench)
         wind_data.direction = 45 * np.pi / 180
         env.set_wind_model(wind_data)
         wrench = force_model.get_force(states, 0, env)
         assert_equal(78937.416185313908, wrench.X())
         assert_equal(21889.902640217559, wrench.Y())
+        self.check_zkmn_are_zeros(wrench)
         wind_data.direction = 90 * np.pi / 180
         env.set_wind_model(wind_data)
         wrench = force_model.get_force(states, 0, env)
         assert_equal(76034.400072671793, wrench.X())
         assert_equal(22949.999826340063, wrench.Y())
+        self.check_zkmn_are_zeros(wrench)
         wind_data.direction = 135 * np.pi / 180
         env.set_wind_model(wind_data)
         wrench = force_model.get_force(states, 0, env)
         assert_equal(58259.36619649193, wrench.X())
         assert_equal(63226.236365071731, wrench.Y())
+        self.check_zkmn_are_zeros(wrench)
         wind_data.direction = 180 * np.pi / 180
         env.set_wind_model(wind_data)
         wrench = force_model.get_force(states, 0, env)
         assert_equal(-2068.8000000000002, wrench.X())
-        assert_equal(0, force_model.get_force(states, 0, env).Y())
+        assert_equal(0, wrench.Y())
+        self.check_zkmn_are_zeros(wrench)
         wind_data.direction = 225 * np.pi / 180
         env.set_wind_model(wind_data)
         wrench = force_model.get_force(states, 0, env)
         assert_equal(58259.366196491937, wrench.X())
         assert_equal(-63226.236365071782, wrench.Y())
+        self.check_zkmn_are_zeros(wrench)
         wind_data.direction = 270 * np.pi / 180
         env.set_wind_model(wind_data)
         wrench = force_model.get_force(states, 0, env)
         assert_equal(76034.4000726718080, wrench.X())
         assert_equal(-22949.999826340088, wrench.Y())
+        self.check_zkmn_are_zeros(wrench)
         wind_data.direction = 315 * np.pi / 180
         env.set_wind_model(wind_data)
         wrench = force_model.get_force(states, 0, env)
         assert_equal(78937.416185313894, wrench.X())
         assert_equal(-21889.902640217573, wrench.Y())
+        self.check_zkmn_are_zeros(wrench)
         wind_data.direction = 355 * np.pi / 180
         env.set_wind_model(wind_data)
         wrench = force_model.get_force(states, 0, env)
         assert_equal(80930.439263099062, wrench.X())
         assert_equal(-9736.6379043679153, wrench.Y())
+        self.check_zkmn_are_zeros(wrench)
 
     def test_orientation_test_no_forward_speed(self):
         data = AeroPolarForceModelInput()
@@ -240,29 +255,33 @@ class AeroPolarForceModelTest(unittest.TestCase):
         env.set_rho_air(1.2)
         wind_data = WindMeanVelocityProfileInput()
         wind_data.velocity = 10
-        # North wind (270°), heading North, Vs=0 --> AWA = 0°
+        # Wind coming from North propagating to South (180°), heading North, Vs=0 --> AWA = 0°
         wind_data.direction = np.pi * 180 / 180
         env.set_wind_model(wind_data)
-        F = force_model.get_force(states, 0, env)
-        self.assertLess(F.X(), 0)
-        self.assertAlmostEqual(F.Y(), 0, delta=1e-10)
-        # South wind (270°), heading North, Vs=0 --> 180 = 180°
+        wrench = force_model.get_force(states, 0, env)
+        self.assertLess(wrench.X(), 0)
+        self.assertAlmostEqual(wrench.Y(), 0, delta=1e-10)
+        self.check_zkmn_are_zeros(wrench)
+        # Wind coming from South propagating to North (0°), heading North, Vs=0 --> AWA = 180°
         wind_data.direction = 0
         env.set_wind_model(wind_data)
-        F = force_model.get_force(states, 0, env)
-        self.assertGreater(F.X(), 0)
-        # East wind (270°), heading North, Vs=0 --> AWA = 90°
+        wrench = force_model.get_force(states, 0, env)
+        self.assertGreater(wrench.X(), 0)
+        self.check_zkmn_are_zeros(wrench)
+        # Wind coming from East propagating to South (270°), heading North, Vs=0 --> AWA = 90°
         wind_data.direction = np.pi * 270 / 180
         env.set_wind_model(wind_data)
-        F = force_model.get_force(states, 0, env)
-        self.assertGreater(F.X(), 0)
-        self.assertLess(F.Y(), 0)
-        # West wind (90°), heading North, Vs=0 --> AWA = 270°
+        wrench = force_model.get_force(states, 0, env)
+        self.assertGreater(wrench.X(), 0)
+        self.assertLess(wrench.Y(), 0)
+        self.check_zkmn_are_zeros(wrench)
+        # Wind coming from West propagating to East (90°), heading North, Vs=0 --> AWA = 270°
         wind_data.direction = np.pi * 90 / 180
         env.set_wind_model(wind_data)
-        F = force_model.get_force(states, 0, env)
-        self.assertGreater(F.X(), 0)
-        self.assertGreater(F.Y(), 0)
+        wrench = force_model.get_force(states, 0, env)
+        self.assertGreater(wrench.X(), 0)
+        self.assertGreater(wrench.Y(), 0)
+        self.check_zkmn_are_zeros(wrench)
 
     def test_orientation_test_with_forward_speed(self):
         data = AeroPolarForceModelInput()
@@ -311,29 +330,32 @@ class AeroPolarForceModelTest(unittest.TestCase):
         env.set_rho_air(1.2)
         wind_data = WindMeanVelocityProfileInput()
         wind_data.velocity = 10
-        # North wind (270°), heading North, Vs=10m/s --> AWA = 0°
+        # North wind (180°), heading North, Vs=10m/s --> AWA = 0°
         wind_data.direction = np.pi * 180 / 180
         env.set_wind_model(wind_data)
-        F = force_model.get_force(states, 0, env)
-        self.assertLess(F.X(), 0)
-        self.assertAlmostEqual(F.Y(), 0, delta=1e-10)
-        # South wind (270°), heading North, Vs=10m/s --> 180 = 180°
+        wrench = force_model.get_force(states, 0, env)
+        self.assertLess(wrench.X(), 0)
+        self.assertAlmostEqual(wrench.Y(), 0, delta=1e-10)
+        # South wind (0°), heading North, Vs=10m/s --> AWA = 180°
         wind_data.direction = 0
         env.set_wind_model(wind_data)
-        F = force_model.get_force(states, 0, env)
-        self.assertGreater(F.X(), 0)
+        wrench = force_model.get_force(states, 0, env)
+        self.assertGreater(wrench.X(), 0)
+        self.check_zkmn_are_zeros(wrench)
         # North-East wind (225°), heading North, Vs=10m/s --> AWA = 90°
         wind_data.direction = np.pi * 225 / 180
         env.set_wind_model(wind_data)
-        F = force_model.get_force(states, 0, env)
-        self.assertGreater(F.X(), 0)
-        self.assertLess(F.Y(), 0)
+        wrench = force_model.get_force(states, 0, env)
+        self.assertGreater(wrench.X(), 0)
+        self.assertLess(wrench.Y(), 0)
+        self.check_zkmn_are_zeros(wrench)
         # North-West wind (135°), heading North, Vs=10m/s --> AWA = 270°
         wind_data.direction = np.pi * 135 / 180
         env.set_wind_model(wind_data)
-        F = force_model.get_force(states, 0, env)
-        self.assertGreater(F.X(), 0)
-        self.assertGreater(F.Y(), 0)
+        wrench = force_model.get_force(states, 0, env)
+        self.assertGreater(wrench.X(), 0)
+        self.assertGreater(wrench.Y(), 0)
+        self.check_zkmn_are_zeros(wrench)
 
     def test_should_throw_for_invalid_polar_data(self):
         data = AeroPolarForceModelInput()
@@ -576,8 +598,10 @@ class AeroPolarForceModelTest(unittest.TestCase):
         env.set_wind_model(wind_data)
         eps = 1e-10
         assert_equal = lambda x, y: self.assertAlmostEqual(x, y, delta=eps)
-        assert_equal(22949.999826340067, force_model.get_force(states, 0, env, {"beta": 90.0 * np.pi / 180.0}).X())
-        assert_equal(76034.400072671793, force_model.get_force(states, 0, env, {"beta": 90.0 * np.pi / 180.0}).Y())
+        wrench = force_model.get_force(states, 0, env, {"beta": 90.0 * np.pi / 180.0})
+        assert_equal(22949.999826340067, wrench.X())
+        assert_equal(76034.400072671793, wrench.Y())
+        self.check_zkmn_are_zeros(wrench)
 
         with self.assertRaises(IndexError) as pcm:
             force_model.get_force(states, 0, env)
@@ -586,25 +610,17 @@ class AeroPolarForceModelTest(unittest.TestCase):
 
         wind_data.direction = 90.0 * np.pi / 180.0
         env.set_wind_model(wind_data)
-        assert_equal(
-            -76034.400072671793,
-            force_model.get_force(states, 0, env, {"beta": 180.0 * np.pi / 180.0}).X(),
-        )
-        assert_equal(
-            22949.999826340067,
-            force_model.get_force(states, 0, env, {"beta": 180.0 * np.pi / 180.0}).Y(),
-        )
+        wrench = force_model.get_force(states, 0, env, {"beta": 180.0 * np.pi / 180.0})
+        assert_equal(-76034.400072671793, wrench.X())
+        assert_equal(22949.999826340067, wrench.Y())
+        self.check_zkmn_are_zeros(wrench)
 
         wind_data.direction = -90 * np.pi / 180.0
         env.set_wind_model(wind_data)
-        assert_equal(
-            76034.400072671793,
-            force_model.get_force(states, 0, env, {"beta": 0.}).X(),
-        )
-        assert_equal(
-            -22949.999826340067,
-            force_model.get_force(states, 0, env, {"beta": 0.}).Y(),
-        )
+        wrench = force_model.get_force(states, 0, env, {"beta": 0.0})
+        assert_equal(76034.400072671793, wrench.X())
+        assert_equal(-22949.999826340067, wrench.Y())
+        self.check_zkmn_are_zeros(wrench)
 
 
 if __name__ == "__main__":
