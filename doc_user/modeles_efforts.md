@@ -1253,7 +1253,7 @@ La clé booléenne `take waves orbital velocity into account` permet d'ajouter l
 
 Les clés optionnelles `moment coefficient` (vecteur de coefficients) et `chord length` (longueur en `{unit: ..., value: ...}`) permettent d'ajouter le calcul d'un moment autour de l'origine de repère local et selon $`\vec{z_i}`$. Ce moment est toujours déstabilisant pour $`C_m`$ positif (donc positif autour de $`\vec{z_i}`$ pour $`\alpha > 0`$ et négatif pour $`\alpha < 0`$). Si `chord length` est précisé, sa valeur est utilisée pour $`d_{ref}`$, sinon $`d_{ref} = \sqrt{S_{ref}}`$.
 
-Enfin, il est possible de commander l'angle avec la clé optionnelle `angle command` (par exemple `angle command: beta`). Cette command agit comme un décalage d'angle, ce qui est utile pour modéliser des profils portants commandés (safran, profils anti-roulis, etc...). Si cette option est utilisée, il faut fournir au modèle la commande dans la section dédiée du fichier YAML (dans l'exemple, la commande s'appellerait `centreboard(beta)`).
+Enfin, il est possible de commander l'angle avec la clé optionnelle `angle command` (par exemple `angle command: beta`). Cette commande agit comme un décalage d'angle, ce qui est utile pour modéliser des profils portants commandés (safran, profils anti-roulis, etc...). Si cette option est utilisée, il faut fournir au modèle la commande dans la section dédiée du fichier YAML (dans l'exemple, la commande s'appellerait `centreboard(beta)`).
 
 
 ## Modèle d'effort aérodynamique quadratique par polaire
