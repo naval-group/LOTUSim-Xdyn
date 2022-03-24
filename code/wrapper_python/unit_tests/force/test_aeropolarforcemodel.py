@@ -622,6 +622,69 @@ class AeroPolarForceModelTest(unittest.TestCase):
         assert_equal(-22949.999826340067, wrench.Y())
         self.check_zkmn_are_zeros(wrench)
 
+    def test_symmetrical_behavior(self):
+        data = AeroPolarForceModelInput()
+        data.name = "test"
+        data.calculation_point_in_body_frame = YamlCoordinates(0, 0, 0)
+        data.reference_area = 1000
+        data.apparent_wind_angle = [
+            0.0,
+            0.12217305,
+            0.15707963,
+            0.20943951,
+            0.48869219,
+            1.04719755,
+            1.57079633,
+            2.0943951,
+            2.61799388,
+            np.pi,
+        ]
+        data.lift_coefficient = [
+            0.00000,
+            0.94828,
+            1.13793,
+            1.25000,
+            1.42681,
+            1.38319,
+            1.26724,
+            0.93103,
+            0.38793,
+            -0.11207,
+        ]
+        data.drag_coefficient = [
+            0.03448,
+            0.01724,
+            0.01466,
+            0.01466,
+            0.02586,
+            0.11302,
+            0.38250,
+            0.96888,
+            1.31578,
+            1.34483,
+        ]
+        data.angle_command = "beta"
+        env = EnvironmentAndFrames()
+        force_model = AeroPolarForceModel(data, "body", env)
+        states = get_states()
+        env.set_rho_air(1.2)
+        wind_data = WindMeanVelocityProfileInput()
+        wind_data.velocity = 10
+        wind_data.direction = np.pi
+        env.set_wind_model(wind_data)
+        eps = 1e-10
+        assert_equal = lambda x, y: self.assertAlmostEqual(x, y, delta=eps)
+        wrench = force_model.get_force(states, 0, env, {"beta": 0})
+        wind_directions_deg = [5, 30, 60, 90, 120, 150, 175]
+        wind_directions = np.array(wind_directions_deg) / 180 * np.pi
+        for wind_direction in wind_directions:
+            wrench = force_model.get_force(states, 0, env, {"beta": wind_direction})
+            wrench_sym = force_model.get_force(states, 0, env, {"beta": -wind_direction})
+            assert_equal(+wrench.X(), +wrench_sym.X())
+            assert_equal(+wrench.Y(), -wrench_sym.Y())
+            self.check_zkmn_are_zeros(wrench)
+            self.check_zkmn_are_zeros(wrench_sym)
+
 
 if __name__ == "__main__":
 
