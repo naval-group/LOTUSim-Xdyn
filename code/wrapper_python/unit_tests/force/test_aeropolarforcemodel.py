@@ -674,12 +674,11 @@ class AeroPolarForceModelTest(unittest.TestCase):
         env.set_wind_model(wind_data)
         eps = 1e-10
         assert_equal = lambda x, y: self.assertAlmostEqual(x, y, delta=eps)
-        wrench = force_model.get_force(states, 0, env, {"beta": 0})
-        wind_directions_deg = [5, 30, 60, 90, 120, 150, 175]
-        wind_directions = np.array(wind_directions_deg) / 180 * np.pi
-        for wind_direction in wind_directions:
-            wrench = force_model.get_force(states, 0, env, {"beta": wind_direction})
-            wrench_sym = force_model.get_force(states, 0, env, {"beta": -wind_direction})
+        betas_deg = [5, 30, 60, 90, 120, 150, 175]
+        betas = np.array(betas_deg) / 180 * np.pi
+        for beta in betas:
+            wrench = force_model.get_force(states, 0, env, {"beta": beta})
+            wrench_sym = force_model.get_force(states, 0, env, {"beta": -beta})
             assert_equal(+wrench.X(), +wrench_sym.X())
             assert_equal(+wrench.Y(), -wrench_sym.Y())
             self.check_zkmn_are_zeros(wrench)
