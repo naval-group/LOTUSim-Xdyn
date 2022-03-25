@@ -151,7 +151,7 @@ class AeroPolarForceModelTest(unittest.TestCase):
         assert_equal = lambda x, y: self.assertAlmostEqual(x, y, delta=eps)
         wrench = force_model.get_force(states, 0, env)
         assert_equal(80689.800000000003, wrench.X())
-        assert_equal(6724.2000000000098, force_model.get_force(states, 0, env).Y())
+        assert_equal(-6724.2000000000098, force_model.get_force(states, 0, env).Y())
         wind_data.direction = 45 * np.pi / 180
         env.set_wind_model(wind_data)
         wrench = force_model.get_force(states, 0, env)
@@ -576,8 +576,8 @@ class AeroPolarForceModelTest(unittest.TestCase):
         env.set_wind_model(wind_data)
         eps = 1e-10
         assert_equal = lambda x, y: self.assertAlmostEqual(x, y, delta=eps)
-        assert_equal(80689.800000000003, force_model.get_force(states, 0, env, {"beta": 0}).X())
-        assert_equal(6724.2000000000098, force_model.get_force(states, 0, env, {"beta": 0}).Y())
+        assert_equal(22949.999826340067, force_model.get_force(states, 0, env, {"beta": 90.0 * np.pi / 180.0}).X())
+        assert_equal(76034.400072671793, force_model.get_force(states, 0, env, {"beta": 90.0 * np.pi / 180.0}).Y())
 
         with self.assertRaises(IndexError) as pcm:
             force_model.get_force(states, 0, env)
@@ -587,23 +587,23 @@ class AeroPolarForceModelTest(unittest.TestCase):
         wind_data.direction = 90.0 * np.pi / 180.0
         env.set_wind_model(wind_data)
         assert_equal(
-            -6724.2000000000098,
-            force_model.get_force(states, 0, env, {"beta": 90 * np.pi / 180.0}).X(),
+            -76034.400072671793,
+            force_model.get_force(states, 0, env, {"beta": 180.0 * np.pi / 180.0}).X(),
         )
         assert_equal(
-            80689.800000000003,
-            force_model.get_force(states, 0, env, {"beta": 90 * np.pi / 180.0}).Y(),
+            22949.999826340067,
+            force_model.get_force(states, 0, env, {"beta": 180.0 * np.pi / 180.0}).Y(),
         )
 
         wind_data.direction = -90 * np.pi / 180.0
         env.set_wind_model(wind_data)
         assert_equal(
-            6724.2000000000098,
-            force_model.get_force(states, 0, env, {"beta": -90 * np.pi / 180.0}).X(),
+            76034.400072671793,
+            force_model.get_force(states, 0, env, {"beta": 0.}).X(),
         )
         assert_equal(
-            -80689.800000000003,
-            force_model.get_force(states, 0, env, {"beta": -90 * np.pi / 180.0}).Y(),
+            -22949.999826340067,
+            force_model.get_force(states, 0, env, {"beta": 0.}).Y(),
         )
 
 

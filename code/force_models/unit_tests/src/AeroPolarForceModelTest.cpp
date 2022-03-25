@@ -87,7 +87,7 @@ TEST_F(AeroPolarForceModelTest, several_values)
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
     const double eps = 1E-10;
     ASSERT_NEAR(80689.800000000003, force_model.get_force(states, 0, env, {}).X(), eps);
-    ASSERT_NEAR(6724.2000000000098, force_model.get_force(states, 0, env, {}).Y(), eps);
+    ASSERT_NEAR(-6724.2000000000098, force_model.get_force(states, 0, env, {}).Y(), eps);
     wind_input.direction = 45*M_PI/180;
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
     ASSERT_NEAR(78937.416185313908, force_model.get_force(states, 0, env, {}).X(), eps);
