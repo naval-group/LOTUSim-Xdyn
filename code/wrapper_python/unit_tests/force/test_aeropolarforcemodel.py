@@ -268,7 +268,7 @@ class AeroPolarForceModelTest(unittest.TestCase):
         wrench = force_model.get_force(states, 0, env)
         self.assertGreater(wrench.X(), 0)
         self.check_zkmn_are_zeros(wrench)
-        # Wind coming from East propagating to South (270°), heading North, Vs=0 --> AWA = 90°
+        # Wind coming from East propagating to West (270°), heading North, Vs=0 --> AWA = 90°
         wind_data.direction = np.pi * 270 / 180
         env.set_wind_model(wind_data)
         wrench = force_model.get_force(states, 0, env)
