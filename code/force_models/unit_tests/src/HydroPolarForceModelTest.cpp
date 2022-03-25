@@ -2,6 +2,7 @@
 
 #include "HydroPolarForceModelTest.hpp"
 #include "HydroPolarForceModel.hpp"
+#include "yaml2eigen.hpp"
 
 HydroPolarForceModelTest::HydroPolarForceModelTest()
 {
@@ -279,6 +280,39 @@ TEST_F(HydroPolarForceModelTest, should_print_warning_and_return_zero_force_if_c
     std::cerr.rdbuf(orig);
 }
 
+TEST_F(HydroPolarForceModelTest, symmetrical_behavior)
+{
+    HydroPolarForceModel::Input input;
+    // Internal frame is placed under water, 5m under the body frame's origin
+    input.internal_frame = YamlPosition(YamlCoordinates(0,0,5), YamlAngle(0,0,0), "body");
+    input.name = "test";
+    input.reference_area = 100;
+    input.angle_of_attack = {0.,0.12217305,0.15707963,0.20943951,0.48869219,1.04719755,1.57079633,2.0943951,2.61799388,M_PI};
+    input.lift_coefficient = {0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,0.};
+    input.drag_coefficient = {0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483};
+    input.use_waves_velocity = false;
+    EnvironmentAndFrames env;
+    env.rho = 1000;
+    env.rot = YamlRotation("angle", {"z","y'","x''"});
+    BodyStates states = get_states(10, 0);
+    HydroPolarForceModel force_model(input, "body", env);
+
+    const double eps = 1E-8;
+
+    std::vector<double> angles = {0,30,60,90,120,150,180};
+    for(double angle: angles)
+    {
+        input.internal_frame.angle.psi = angle*M_PI/180;
+        env.k->add(make_transform(input.internal_frame, input.name, env.rot));
+        Wrench F = force_model.get_force(states, 0, env, {});
+        input.internal_frame.angle.psi = -angle*M_PI/180;
+        env.k->add(make_transform(input.internal_frame, input.name, env.rot));
+        Wrench F_sym = force_model.get_force(states, 0, env, {});
+        ASSERT_NEAR(F.X(), F_sym.X(), eps) << "angle: " << angle << "deg";
+        ASSERT_NEAR(F.Y(), -F_sym.Y(), eps) << "angle: " << angle << "deg";;
+    }
+}
+
 TEST_F(HydroPolarForceModelTest, angle_can_be_controlled)
 {
     HydroPolarForceModel::Input input;
@@ -333,4 +367,74 @@ TEST_F(HydroPolarForceModelTest, angle_can_be_controlled)
     F = force_model.get_force(states, 0, env, {{"beta", M_PI}});
     ASSERT_NEAR(F.X(), 172399.99999999997, eps);
     ASSERT_NEAR(F.Y(), 0., eps);
+}
+
+TEST_F(HydroPolarForceModelTest, angle_control_is_equivalent_to_frame_rotation)
+{
+    HydroPolarForceModel::Input input;
+    // Internal frame is placed under water, 5m under the body frame's origin
+    input.internal_frame = YamlPosition(YamlCoordinates(0,0,5), YamlAngle(0,0,0), "body");
+    input.reference_area = 100;
+    input.angle_of_attack = {0.,0.12217305,0.15707963,0.20943951,0.48869219,1.04719755,1.57079633,2.0943951,2.61799388,M_PI};
+    input.lift_coefficient = {0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,0.};
+    input.drag_coefficient = {0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483};
+    input.use_waves_velocity = false;
+    EnvironmentAndFrames env;
+    env.rho = 1000;
+    env.rot = YamlRotation("angle", {"z","y'","x''"});
+    BodyStates states = get_states(10, 0);
+
+    HydroPolarForceModel::Input variable_frame_input = input;
+    variable_frame_input.name = "variable_frame";
+    HydroPolarForceModel variable_frame_force_model(variable_frame_input, "body", env);
+
+    HydroPolarForceModel::Input controlled_angle_input = input;
+    controlled_angle_input.name = "controlled_angle";
+    controlled_angle_input.angle_command = "beta";
+    const HydroPolarForceModel controlled_angle_force_model(controlled_angle_input, "body", env);
+
+    const double eps = 1E-8;
+
+    std::vector<double> angles = {-180,-150,-120,-90,-60,-30,0,30,60,90,120,150,180};
+    for(double angle: angles)
+    {
+        variable_frame_input.internal_frame.angle.psi = angle*M_PI/180;
+        env.k->add(make_transform(variable_frame_input.internal_frame, variable_frame_input.name, env.rot));
+        Wrench F_controlled_angle = controlled_angle_force_model.get_force(states, 0, env, {{"beta", angle*M_PI/180}});
+        Wrench F_variable_frame = variable_frame_force_model.get_force(states, 0, env, {});
+        F_controlled_angle.change_frame("body", env.k);
+        F_variable_frame.change_frame("body", env.k);
+        ASSERT_NEAR(F_controlled_angle.X(), F_variable_frame.X(), eps) << "angle: " << angle << "deg";
+        ASSERT_NEAR(F_controlled_angle.Y(), F_variable_frame.Y(), eps) << "angle: " << angle << "deg";;
+    }
+}
+
+TEST_F(HydroPolarForceModelTest, symmetrical_behavior_with_controlled_angle)
+{
+    HydroPolarForceModel::Input input;
+    // Internal frame is placed under water, 5m under the body frame's origin
+    input.internal_frame = YamlPosition(YamlCoordinates(0,0,5), YamlAngle(0,0,0), "body");
+    input.name = "test";
+    input.reference_area = 100;
+    input.angle_of_attack = {0.,0.12217305,0.15707963,0.20943951,0.48869219,1.04719755,1.57079633,2.0943951,2.61799388,M_PI};
+    input.lift_coefficient = {0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,0.};
+    input.drag_coefficient = {0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483};
+    input.use_waves_velocity = false;
+    input.angle_command = "beta";
+    EnvironmentAndFrames env;
+    env.rho = 1000;
+    env.rot = YamlRotation("angle", {"z","y'","x''"});
+    BodyStates states = get_states(10, 0);
+    HydroPolarForceModel force_model(input, "body", env);
+
+    const double eps = 1E-8;
+
+    std::vector<double> angles = {0,30,60,90,120,150,180};
+    for(double angle: angles)
+    {
+        Wrench F = force_model.get_force(states, 0, env, {{"beta", angle*M_PI/180}});
+        Wrench F_sym = force_model.get_force(states, 0, env, {{"beta", -angle*M_PI/180}});
+        ASSERT_NEAR(F.X(), F_sym.X(), eps) << "angle: " << angle << "deg";
+        ASSERT_NEAR(F.Y(), -F_sym.Y(), eps) << "angle: " << angle << "deg";;
+    }
 }

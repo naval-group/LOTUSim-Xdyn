@@ -145,7 +145,7 @@ Wrench HydroPolarForceModel::get_force(const BodyStates& states, const double t,
         const double alpha_prime = (symmetry && alpha<0) ? -alpha : alpha;
         const double lift = 0.5*Cl->f(alpha_prime)*env.rho*pow(U, 2)*reference_area;
         const double drag = 0.5*Cd->f(alpha_prime)*env.rho*pow(U, 2)*reference_area;
-        if (beta>=0)
+        if (alpha>=0)
         {
             ret.X() = -drag*cos(beta) + lift*sin(beta);
             ret.Y() =  drag*sin(beta) + lift*cos(beta);
@@ -167,7 +167,7 @@ Wrench HydroPolarForceModel::get_force(const BodyStates& states, const double t,
                 normalization_cubic_length = pow(reference_area, 1.5);
             }
             const double moment = 0.5*Cm->f(alpha_prime)*env.rho*pow(U, 2)*normalization_cubic_length;
-            if (beta>=0)
+            if (alpha>=0)
             {
                 ret.N() = moment;
             }

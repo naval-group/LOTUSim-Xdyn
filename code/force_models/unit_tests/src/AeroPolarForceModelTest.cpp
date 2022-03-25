@@ -80,11 +80,14 @@ TEST_F(AeroPolarForceModelTest, several_values)
     UniformWindVelocityProfile::Input wind_input;
     wind_input.velocity = 10;
 
+    // WARNING: The lift force is not continuous at AWA=180° because it changes side (gybing),
+    // thus it is not a very good test point (side of lift might depend on implementation)
+
     wind_input.direction = 0*M_PI/180;
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
     const double eps = 1E-10;
     ASSERT_NEAR(80689.800000000003, force_model.get_force(states, 0, env, {}).X(), eps);
-    ASSERT_NEAR(6724.2000000000098, force_model.get_force(states, 0, env, {}).Y(), eps); // This test fails for some reason
+    ASSERT_NEAR(-6724.2000000000098, force_model.get_force(states, 0, env, {}).Y(), eps);
     wind_input.direction = 45*M_PI/180;
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
     ASSERT_NEAR(78937.416185313908, force_model.get_force(states, 0, env, {}).X(), eps);
@@ -135,24 +138,24 @@ TEST_F(AeroPolarForceModelTest, orientation_test_no_forward_speed)
     env.set_rho_air(1.2);
     UniformWindVelocityProfile::Input wind_input;
     wind_input.velocity = 10;
-    // North wind (270°), heading North, Vs=0 --> AWA = 0°
+    // Wind coming from North propagating to South (180°), heading North, Vs=0 --> AWA = 0°
     wind_input.direction = M_PI*180/180;
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
     auto F = force_model.get_force(states, 0, env, {});
     ASSERT_LT(F.X(), 0);
     ASSERT_NEAR(F.Y(), 0, 1e-10);
-    // South wind (270°), heading North, Vs=0 --> 180 = 180°
+    // Wind coming from South propagating to North (0°), heading North, Vs=0 --> AWA = 180°
     wind_input.direction = 0;
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
     F = force_model.get_force(states, 0, env, {});
     ASSERT_GT(F.X(), 0);
-    // East wind (270°), heading North, Vs=0 --> AWA = 90°
+    // Wind coming from East propagating to West (270°), heading North, Vs=0 --> AWA = 90°
     wind_input.direction = M_PI*270/180;
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
     F = force_model.get_force(states, 0, env, {});
     ASSERT_GT(F.X(), 0);
     ASSERT_LT(F.Y(), 0);
-    // West wind (90°), heading North, Vs=0 --> AWA = 270°
+    // Wind coming from West propagating to East (90°), heading North, Vs=0 --> AWA = 270°
     wind_input.direction = M_PI*90/180;
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
     F = force_model.get_force(states, 0, env, {});
@@ -175,24 +178,24 @@ TEST_F(AeroPolarForceModelTest, orientation_test_with_forward_speed)
     env.set_rho_air(1.2);
     UniformWindVelocityProfile::Input wind_input;
     wind_input.velocity = 10;
-    // North wind (270°), heading North, Vs=10m/s --> AWA = 0°
+    // North wind (180°), heading North, Vs=10m/s
     wind_input.direction = M_PI*180/180;
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
     auto F = force_model.get_force(states, 0, env, {});
     ASSERT_LT(F.X(), 0);
     ASSERT_NEAR(F.Y(), 0, 1e-10);
-    // South wind (270°), heading North, Vs=10m/s --> 180 = 180°
+    // South wind (0°), heading North, Vs=10m/s
     wind_input.direction = 0;
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
     F = force_model.get_force(states, 0, env, {});
     ASSERT_GT(F.X(), 0);
-    // North-East wind (225°), heading North, Vs=10m/s --> AWA = 90°
+    // North-East wind (225°), heading North, Vs=10m/s
     wind_input.direction = M_PI*225/180;
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
     F = force_model.get_force(states, 0, env, {});
     ASSERT_GT(F.X(), 0);
     ASSERT_LT(F.Y(), 0);
-    // North-West wind (135°), heading North, Vs=10m/s --> AWA = 270°
+    // North-West wind (135°), heading North, Vs=10m/s
     wind_input.direction = M_PI*135/180;
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
     F = force_model.get_force(states, 0, env, {});
@@ -277,19 +280,48 @@ TEST_F(AeroPolarForceModelTest, angle_can_be_controlled)
     wind_input.direction = 0;
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
     const double eps = 1E-10;
-    ASSERT_NEAR(80689.800000000003, force_model.get_force(states, 0, env, {{"beta", 0}}).X(), eps);
-    ASSERT_NEAR(6724.2000000000098, force_model.get_force(states, 0, env, {{"beta", 0}}).Y(), eps);
+    ASSERT_NEAR(22949.999826340067, force_model.get_force(states, 0, env, {{"beta", 90*M_PI/180}}).X(), eps);
+    ASSERT_NEAR(76034.400072671793, force_model.get_force(states, 0, env, {{"beta", 90*M_PI/180}}).Y(), eps);
 
     ASSERT_THROW(force_model.get_force(states, 0, env, {}), std::out_of_range);
 
     wind_input.direction = 90*M_PI/180;
-    std::cout << "wind_input.direction: " << wind_input.direction << std::endl;
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
-    ASSERT_NEAR(-6724.2000000000098, force_model.get_force(states, 0, env, {{"beta", 90*M_PI/180}}).X(), eps);
-    ASSERT_NEAR(80689.800000000003, force_model.get_force(states, 0, env, {{"beta", 90*M_PI/180}}).Y(), eps);
+    ASSERT_NEAR(-76034.400072671793, force_model.get_force(states, 0, env, {{"beta", 180*M_PI/180}}).X(), eps);
+    ASSERT_NEAR(22949.999826340067, force_model.get_force(states, 0, env, {{"beta", 180*M_PI/180}}).Y(), eps);
 
     wind_input.direction = -90*M_PI/180;
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
-    ASSERT_NEAR(-6724.2000000000098, force_model.get_force(states, 0, env, {{"beta", -90*M_PI/180}}).X(), eps);
-    ASSERT_NEAR(-80689.800000000003, force_model.get_force(states, 0, env, {{"beta", -90*M_PI/180}}).Y(), eps);
+    ASSERT_NEAR(76034.400072671793, force_model.get_force(states, 0, env, {{"beta", 0}}).X(), eps);
+    ASSERT_NEAR(-22949.999826340067, force_model.get_force(states, 0, env, {{"beta", 0}}).Y(), eps);
+}
+
+TEST_F(AeroPolarForceModelTest, symmetrical_behavior)
+{
+    AeroPolarForceModel::Input input;
+    input.name = "test";
+    input.calculation_point_in_body_frame = YamlCoordinates(0,0,0);
+    input.reference_area = 1000;
+    input.apparent_wind_angle = {0.,0.12217305,0.15707963,0.20943951,0.48869219,1.04719755,1.57079633,2.0943951,2.61799388,M_PI};
+    input.lift_coefficient = {0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,-0.11207};
+    input.drag_coefficient = {0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483};
+    input.angle_command = "beta";
+    EnvironmentAndFrames env;
+    const AeroPolarForceModel force_model(input, "body", env);
+    const BodyStates states = get_states();
+    env.set_rho_air(1.2);
+    UniformWindVelocityProfile::Input wind_input;
+    wind_input.velocity = 10;
+    wind_input.direction = M_PI; // North wind
+    env.wind.reset(new UniformWindVelocityProfile(wind_input));
+    const double eps = 1E-10;
+
+    std::vector<double> wind_directions = {5,30,60,90,120,150,175};
+    for(double& wind_direction: wind_directions)
+    {
+        Wrench F = force_model.get_force(states, 0, env, {{"beta", wind_direction*M_PI/180}});
+        Wrench F_sym = force_model.get_force(states, 0, env, {{"beta", -wind_direction*M_PI/180}});
+        ASSERT_NEAR(F.X(), F_sym.X(), eps);
+        ASSERT_NEAR(F.Y(), -F_sym.Y(), eps);
+    }
 }
