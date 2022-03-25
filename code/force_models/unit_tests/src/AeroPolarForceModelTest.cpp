@@ -138,24 +138,24 @@ TEST_F(AeroPolarForceModelTest, orientation_test_no_forward_speed)
     env.set_rho_air(1.2);
     UniformWindVelocityProfile::Input wind_input;
     wind_input.velocity = 10;
-    // North wind (270°), heading North, Vs=0 --> AWA = 0°
+    // Wind coming from North propagating to South (180°), heading North, Vs=0 --> AWA = 0°
     wind_input.direction = M_PI*180/180;
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
     auto F = force_model.get_force(states, 0, env, {});
     ASSERT_LT(F.X(), 0);
     ASSERT_NEAR(F.Y(), 0, 1e-10);
-    // South wind (270°), heading North, Vs=0 --> 180 = 180°
+    // Wind coming from South propagating to North (0°), heading North, Vs=0 --> AWA = 180°
     wind_input.direction = 0;
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
     F = force_model.get_force(states, 0, env, {});
     ASSERT_GT(F.X(), 0);
-    // East wind (270°), heading North, Vs=0 --> AWA = 90°
+    // Wind coming from East propagating to West (270°), heading North, Vs=0 --> AWA = 90°
     wind_input.direction = M_PI*270/180;
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
     F = force_model.get_force(states, 0, env, {});
     ASSERT_GT(F.X(), 0);
     ASSERT_LT(F.Y(), 0);
-    // West wind (90°), heading North, Vs=0 --> AWA = 270°
+    // Wind coming from West propagating to East (90°), heading North, Vs=0 --> AWA = 270°
     wind_input.direction = M_PI*90/180;
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
     F = force_model.get_force(states, 0, env, {});
@@ -178,24 +178,24 @@ TEST_F(AeroPolarForceModelTest, orientation_test_with_forward_speed)
     env.set_rho_air(1.2);
     UniformWindVelocityProfile::Input wind_input;
     wind_input.velocity = 10;
-    // North wind (270°), heading North, Vs=10m/s --> AWA = 0°
+    // North wind (180°), heading North, Vs=10m/s
     wind_input.direction = M_PI*180/180;
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
     auto F = force_model.get_force(states, 0, env, {});
     ASSERT_LT(F.X(), 0);
     ASSERT_NEAR(F.Y(), 0, 1e-10);
-    // South wind (270°), heading North, Vs=10m/s --> 180 = 180°
+    // South wind (0°), heading North, Vs=10m/s
     wind_input.direction = 0;
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
     F = force_model.get_force(states, 0, env, {});
     ASSERT_GT(F.X(), 0);
-    // North-East wind (225°), heading North, Vs=10m/s --> AWA = 90°
+    // North-East wind (225°), heading North, Vs=10m/s
     wind_input.direction = M_PI*225/180;
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
     F = force_model.get_force(states, 0, env, {});
     ASSERT_GT(F.X(), 0);
     ASSERT_LT(F.Y(), 0);
-    // North-West wind (135°), heading North, Vs=10m/s --> AWA = 270°
+    // North-West wind (135°), heading North, Vs=10m/s
     wind_input.direction = M_PI*135/180;
     env.wind.reset(new UniformWindVelocityProfile(wind_input));
     F = force_model.get_force(states, 0, env, {});
