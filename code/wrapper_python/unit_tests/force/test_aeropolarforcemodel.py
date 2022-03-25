@@ -330,26 +330,26 @@ class AeroPolarForceModelTest(unittest.TestCase):
         env.set_rho_air(1.2)
         wind_data = WindMeanVelocityProfileInput()
         wind_data.velocity = 10
-        # North wind (180°), heading North, Vs=10m/s --> AWA = 0°
+        # North wind (180°), heading North, Vs=10m/s
         wind_data.direction = np.pi * 180 / 180
         env.set_wind_model(wind_data)
         wrench = force_model.get_force(states, 0, env)
         self.assertLess(wrench.X(), 0)
         self.assertAlmostEqual(wrench.Y(), 0, delta=1e-10)
-        # South wind (0°), heading North, Vs=10m/s --> AWA = 180°
+        # South wind (0°), heading North, Vs=10m/s
         wind_data.direction = 0
         env.set_wind_model(wind_data)
         wrench = force_model.get_force(states, 0, env)
         self.assertGreater(wrench.X(), 0)
         self.check_zkmn_are_zeros(wrench)
-        # North-East wind (225°), heading North, Vs=10m/s --> AWA = 90°
+        # North-East wind (225°), heading North, Vs=10m/s
         wind_data.direction = np.pi * 225 / 180
         env.set_wind_model(wind_data)
         wrench = force_model.get_force(states, 0, env)
         self.assertGreater(wrench.X(), 0)
         self.assertLess(wrench.Y(), 0)
         self.check_zkmn_are_zeros(wrench)
-        # North-West wind (135°), heading North, Vs=10m/s --> AWA = 270°
+        # North-West wind (135°), heading North, Vs=10m/s
         wind_data.direction = np.pi * 135 / 180
         env.set_wind_model(wind_data)
         wrench = force_model.get_force(states, 0, env)
