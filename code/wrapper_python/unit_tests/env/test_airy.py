@@ -53,7 +53,7 @@ class AiryTest(unittest.TestCase):
         wave = Airy(A, random_seed)
         x = [self.rng.random_double()()]
         y = [self.rng.random_double()()]
-        phi = 3.4482969340598712549 # Cf. C++ test code in AiryTest.cpp#L65
+        phi = 3.4482969340598712549  # Cf. C++ test code in AiryTest.cpp#L65
         k = 4.0 * np.pi * np.pi / Tp / Tp / 9.81
         for t in np.arange(0, 3 * Tp, 0.1):
             self.assertAlmostEqual(
