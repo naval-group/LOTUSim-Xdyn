@@ -1,13 +1,16 @@
 #ifndef FORCE_MODELS_INC_FLETTNERROTORFORCEMODEL_HPP_
 #define FORCE_MODELS_INC_FLETTNERROTORFORCEMODEL_HPP_
 
+#include <map>
+#include <memory> // std::unique_ptr
 #include <string>
+#include <utility>  // std::pair
+#include <vector>
 #include <Eigen/Dense>
 #include <ssc/kinematics.hpp>
 #include <ssc/interpolation.hpp>
 
 #include "BodyStates.hpp"
-#include "yaml.h"
 #include "ForceModel.hpp"
 
 class FlettnerRotorForceModel : public ForceModel
