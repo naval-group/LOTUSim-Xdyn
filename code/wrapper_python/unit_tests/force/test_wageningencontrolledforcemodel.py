@@ -11,10 +11,7 @@ from xdyn.core import BodyStates, EnvironmentAndFrames
 from xdyn.core.io import YamlRotation
 from xdyn.data.yaml import wageningen
 from xdyn.exceptions import InvalidInputException
-from xdyn.force import (
-    WageningenControlledForceModel,
-    WageningenControlledForceModelInput,
-)
+from xdyn.force import WageningenControlledForceModel, WageningenControlledForceModelInput
 from xdyn.ssc.random import DataGenerator
 
 EPS: float = 1e-2
