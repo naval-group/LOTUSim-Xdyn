@@ -424,7 +424,7 @@ class FlettnerRotorForceModelTest(unittest.TestCase):
             wrench = force_model.get_force(states, 0, env, {"rpm": rpm})
             self.check_wrench(wrench, f_x, f_y)
 
-        rpm = 80 * 2 * np.pi / 60.0  # 80 rpm
+        rpm = 80 * 2 * np.pi / 60.0  # Convert 80 rpm to rad/s
         check_result(rpm=rpm, direction_deg=0, f_x=7361.1764011673276, f_y=18075.777282637151)
         check_result(rpm=rpm, direction_deg=45, f_x=-36787.49720659107, f_y=15437.791488833873)
         check_result(rpm=rpm, direction_deg=90, f_x=-39956.556862188991, f_y=-13927.940130287869)
