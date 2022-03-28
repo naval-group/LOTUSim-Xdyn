@@ -417,81 +417,33 @@ class FlettnerRotorForceModelTest(unittest.TestCase):
         states = get_states(6.0)
         wind_data = WindMeanVelocityProfileInput()
         wind_data.velocity = 10
-        # U in [416] m/s so that with 80rpm, the spin ratio stays in [06]
+        # U in [4; 16] m/s so that with 80rpm, the spin ratio stays in [0; 6]
+        def check_result(rpm: float, direction_deg: float, f_x: float, f_y: float):
+            wind_data.direction = direction_deg * np.pi / 180
+            env.set_wind_model(wind_data)
+            wrench = force_model.get_force(states, 0, env, {"rpm": rpm})
+            self.check_wrench(wrench, f_x, f_y)
+
         rpm = 80 * 2 * np.pi / 60.0  # 80 rpm
-        wind_data.direction = 0 * np.pi / 180
-        env.set_wind_model(wind_data)
-        wrench = force_model.get_force(states, 0, env, {"rpm": rpm})
-        self.check_wrench(wrench, f_x=7361.1764011673276, f_y=18075.777282637151)
-        wind_data.direction = 45 * np.pi / 180
-        env.set_wind_model(wind_data)
-        wrench = force_model.get_force(states, 0, env, {"rpm": rpm})
-        self.check_wrench(wrench, f_x=-36787.49720659107, f_y=15437.791488833873)
-        wind_data.direction = 90 * np.pi / 180
-        env.set_wind_model(wind_data)
-        wrench = force_model.get_force(states, 0, env, {"rpm": rpm})
-        self.check_wrench(wrench, f_x=-39956.556862188991, f_y=-13927.940130287869)
-        wind_data.direction = 135 * np.pi / 180
-        env.set_wind_model(wind_data)
-        wrench = force_model.get_force(states, 0, env, {"rpm": rpm})
-        self.check_wrench(wrench, f_x=-30206.149589655892, f_y=-32236.318966192313)
-        wind_data.direction = 180 * np.pi / 180
-        env.set_wind_model(wind_data)
-        wrench = force_model.get_force(states, 0, env, {"rpm": rpm})
-        self.check_wrench(wrench, f_x=-12583.849591836341, f_y=-43440.368957916231)
-        wind_data.direction = 225 * np.pi / 180
-        env.set_wind_model(wind_data)
-        wrench = force_model.get_force(states, 0, env, {"rpm": rpm})
-        self.check_wrench(wrench, f_x=10452.554605245305, f_y=-42922.439769275981)
-        wind_data.direction = 270 * np.pi / 180
-        env.set_wind_model(wind_data)
-        wrench = force_model.get_force(states, 0, env, {"rpm": rpm})
-        self.check_wrench(wrench, f_x=31092.444520695881, f_y=-28701.460699443058)
-        wind_data.direction = 315 * np.pi / 180
-        env.set_wind_model(wind_data)
-        wrench = force_model.get_force(states, 0, env, {"rpm": rpm})
-        self.check_wrench(wrench, f_x=39709.160968113858, f_y=-3850.7001942607922)
-        wind_data.direction = 355 * np.pi / 180
-        env.set_wind_model(wind_data)
-        wrench = force_model.get_force(states, 0, env, {"rpm": rpm})
-        self.check_wrench(wrench, f_x=11295.30237797498, f_y=16484.557927518184)
+        check_result(rpm=rpm, direction_deg=0, f_x=7361.1764011673276, f_y=18075.777282637151)
+        check_result(rpm=rpm, direction_deg=45, f_x=-36787.49720659107, f_y=15437.791488833873)
+        check_result(rpm=rpm, direction_deg=90, f_x=-39956.556862188991, f_y=-13927.940130287869)
+        check_result(rpm=rpm, direction_deg=135, f_x=-30206.149589655892, f_y=-32236.318966192313)
+        check_result(rpm=rpm, direction_deg=180, f_x=-12583.849591836341, f_y=-43440.368957916231)
+        check_result(rpm=rpm, direction_deg=225, f_x=10452.554605245305, f_y=-42922.439769275981)
+        check_result(rpm=rpm, direction_deg=270, f_x=31092.444520695881, f_y=-28701.460699443058)
+        check_result(rpm=rpm, direction_deg=315, f_x=39709.160968113858, f_y=-3850.7001942607922)
+        check_result(rpm=rpm, direction_deg=355, f_x=11295.30237797498, f_y=16484.557927518184)
         rpm = -80 * 2 * np.pi / 60.0  # -80 rpm
-        wind_data.direction = 0 * np.pi / 180
-        env.set_wind_model(wind_data)
-        wrench = force_model.get_force(states, 0, env, {"rpm": rpm})
-        self.check_wrench(wrench, f_x=7361.1764011673313, f_y=-18075.777282637151)
-        wind_data.direction = 45 * np.pi / 180
-        env.set_wind_model(wind_data)
-        wrench = force_model.get_force(states, 0, env, {"rpm": rpm})
-        self.check_wrench(wrench, f_x=39709.160968113865, f_y=3850.7001942607767)
-        wind_data.direction = 90 * np.pi / 180
-        env.set_wind_model(wind_data)
-        wrench = force_model.get_force(states, 0, env, {"rpm": rpm})
-        self.check_wrench(wrench, f_x=31092.444520695884, f_y=28701.460699443051)
-        wind_data.direction = 135 * np.pi / 180
-        env.set_wind_model(wind_data)
-        wrench = force_model.get_force(states, 0, env, {"rpm": rpm})
-        self.check_wrench(wrench, f_x=10452.554605245312, f_y=42922.439769275981)
-        wind_data.direction = 180 * np.pi / 180
-        env.set_wind_model(wind_data)
-        wrench = force_model.get_force(states, 0, env, {"rpm": rpm})
-        self.check_wrench(wrench, f_x=-12583.849591836333, f_y=43440.368957916231)
-        wind_data.direction = 225 * np.pi / 180
-        env.set_wind_model(wind_data)
-        wrench = force_model.get_force(states, 0, env, {"rpm": rpm})
-        self.check_wrench(wrench, f_x=-30206.149589655892, f_y=32236.31896619231)
-        wind_data.direction = 270 * np.pi / 180
-        env.set_wind_model(wind_data)
-        wrench = force_model.get_force(states, 0, env, {"rpm": rpm})
-        self.check_wrench(wrench, f_x=-39956.556862188991, f_y=13927.940130287881)
-        wind_data.direction = 315 * np.pi / 180
-        env.set_wind_model(wind_data)
-        wrench = force_model.get_force(states, 0, env, {"rpm": rpm})
-        self.check_wrench(wrench, f_x=-36787.497206591077, f_y=-15437.791488833853)
-        wind_data.direction = 355 * np.pi / 180
-        env.set_wind_model(wind_data)
-        wrench = force_model.get_force(states, 0, env, {"rpm": rpm})
-        self.check_wrench(wrench, f_x=3334.7095751087259, f_y=-19702.898718850181)
+        check_result(rpm=rpm, direction_deg=0, f_x=7361.1764011673313, f_y=-18075.777282637151)
+        check_result(rpm=rpm, direction_deg=45, f_x=39709.160968113865, f_y=3850.7001942607767)
+        check_result(rpm=rpm, direction_deg=90, f_x=31092.444520695884, f_y=28701.460699443051)
+        check_result(rpm=rpm, direction_deg=135, f_x=10452.554605245312, f_y=42922.439769275981)
+        check_result(rpm=rpm, direction_deg=180, f_x=-12583.849591836333, f_y=43440.368957916231)
+        check_result(rpm=rpm, direction_deg=225, f_x=-30206.149589655892, f_y=32236.31896619231)
+        check_result(rpm=rpm, direction_deg=270, f_x=-39956.556862188991, f_y=13927.940130287881)
+        check_result(rpm=rpm, direction_deg=315, f_x=-36787.497206591077, f_y=-15437.791488833853)
+        check_result(rpm=rpm, direction_deg=355, f_x=3334.7095751087259, f_y=-19702.898718850181)
 
     def test_should_issue_a_warning_when_spin_ratio_out_of_interpolation_bounds(self):
         data = FlettnerRotorForceModelInput()
