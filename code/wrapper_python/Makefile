@@ -56,13 +56,13 @@ package: ## Create the wheel package
 format: ## Use isort and black to format code
 	@make xdyn-python-deb11-py309-format-lint
 	$(DOCKER_AS_USER) xdyn-python-deb11-py309-format-lint /bin/bash -c \
-		"isort --line-length 100 --profile black unit_tests && \
+		"isort --profile black unit_tests && \
 		 black --line-length 100 unit_tests"
 
 lint: ## Check Python unit tests code with isort, black, and pylint
 	@make xdyn-python-deb11-py309-format-lint
 	$(DOCKER_AS_USER) xdyn-python-deb11-py309-format-lint /bin/bash -c \
-		"isort --line-length 100 --profile black --check unit_tests && \
+		"isort --profile black --check unit_tests && \
 		 black --line-length 100 --check unit_tests && \
 		 pylint --max-line-length=100 unit_tests"
 

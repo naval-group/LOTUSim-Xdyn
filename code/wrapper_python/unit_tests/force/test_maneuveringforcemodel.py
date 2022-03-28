@@ -7,7 +7,11 @@ from math import pi
 from xdyn.core import BodyBuilder, BodyPtr, EnvironmentAndFrames
 from xdyn.core.io import YamlRotation
 from xdyn.data.mesh import two_triangles
-from xdyn.data.yaml import man_with_delay, maneuvering, maneuvering_with_same_frame_of_reference
+from xdyn.data.yaml import (
+    man_with_delay,
+    maneuvering,
+    maneuvering_with_same_frame_of_reference,
+)
 from xdyn.force import ManeuveringForceModel
 from xdyn.ssc.datasource import DataSource
 from xdyn.ssc.random import DataGenerator

@@ -4,7 +4,12 @@ Unit test for RudderForceModel
 import unittest
 
 import numpy as np
-from xdyn.core import BlockedDOF, BodyStates, BodyWithoutSurfaceForces, EnvironmentAndFrames
+from xdyn.core import (
+    BlockedDOF,
+    BodyStates,
+    BodyWithoutSurfaceForces,
+    EnvironmentAndFrames,
+)
 from xdyn.core.io import YamlFilteredStates, YamlRotation
 from xdyn.data.yaml import rudder
 from xdyn.env.wave import (
