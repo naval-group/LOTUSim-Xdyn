@@ -434,7 +434,7 @@ class FlettnerRotorForceModelTest(unittest.TestCase):
         check_result(rpm=rpm, direction_deg=270, f_x=31092.444520695881, f_y=-28701.460699443058)
         check_result(rpm=rpm, direction_deg=315, f_x=39709.160968113858, f_y=-3850.7001942607922)
         check_result(rpm=rpm, direction_deg=355, f_x=11295.30237797498, f_y=16484.557927518184)
-        rpm = -80 * 2 * np.pi / 60.0  # -80 rpm
+        rpm = -80 * 2 * np.pi / 60.0  # -80 rpm in rad/s
         check_result(rpm=rpm, direction_deg=0, f_x=7361.1764011673313, f_y=-18075.777282637151)
         check_result(rpm=rpm, direction_deg=45, f_x=39709.160968113865, f_y=3850.7001942607767)
         check_result(rpm=rpm, direction_deg=90, f_x=31092.444520695884, f_y=28701.460699443051)
