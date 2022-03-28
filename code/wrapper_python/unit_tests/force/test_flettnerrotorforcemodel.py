@@ -403,7 +403,7 @@ class FlettnerRotorForceModelTest(unittest.TestCase):
     def test_example(self):
         data = FlettnerRotorForceModelInput()
         data.name = "test"
-        # Rotor frame is rotated 180° along x-axis to be over water.
+        # Rotor frame is rotated 180° along x-axis to be above water.
         data.calculation_point_in_body_frame = YamlCoordinates(0, 0, 0)
         data.diameter = 5
         data.length = 30
