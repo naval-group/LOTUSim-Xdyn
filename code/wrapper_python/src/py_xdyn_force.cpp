@@ -12,6 +12,7 @@
 #include "force_models/inc/FastHydrostaticForceModel.hpp"
 #include "force_models/inc/KtKqForceModel.hpp"
 #include "force_models/inc/ConstantForceModel.hpp"
+#include "force_models/inc/FlettnerRotorForceModel.hpp"
 #include "force_models/inc/HoltropMennenForceModel.hpp"
 #include "force_models/inc/HydrostaticForceModel.hpp"
 #include "force_models/inc/HydroPolarForceModel.hpp"
@@ -407,6 +408,52 @@ void py_add_module_xdyn_force(py::module& m0)
             py::arg("t"),
             py::arg("env"),
             py::arg("commands") = std::map<std::string,double>()
+            )
+        ;
+
+    py::class_<FlettnerRotorForceModel::Input>(m, "FlettnerRotorForceModelInput",
+        "Input for FlettnerRotorForceModel")
+        .def(py::init<
+            const std::string& /*name*/,
+            const YamlCoordinates& /*calculation_point_in_body_frame*/,
+            double /*diameter*/,
+            double /*length*/,
+            std::vector<double> /*spin_ratio*/,
+            std::vector<double> /*lift_coefficient*/,
+            std::vector<double> /*drag_coefficient*/
+            >(),
+            py::arg("name") = "",
+            py::arg("calculation_point_in_body_frame") = YamlCoordinates(),
+            py::arg("diameter") = 0.0,
+            py::arg("length") = 0.0,
+            py::arg("spin_ratio") = std::vector<double>(),
+            py::arg("lift_coefficient") = std::vector<double>(),
+            py::arg("drag_coefficient") = std::vector<double>()
+            )
+        .def_readwrite("name", &FlettnerRotorForceModel::Input::name)
+        .def_readwrite("calculation_point_in_body_frame", &FlettnerRotorForceModel::Input::calculation_point_in_body_frame)
+        .def_readwrite("diameter", &FlettnerRotorForceModel::Input::diameter)
+        .def_readwrite("length", &FlettnerRotorForceModel::Input::length)
+        .def_readwrite("spin_ratio", &FlettnerRotorForceModel::Input::spin_ratio)
+        .def_readwrite("lift_coefficient", &FlettnerRotorForceModel::Input::lift_coefficient)
+        .def_readwrite("drag_coefficient", &FlettnerRotorForceModel::Input::drag_coefficient)
+        ;
+
+    py::class_<FlettnerRotorForceModel, ForceModel>(m, "FlettnerRotorForceModel", "Flettner rotor force")
+        .def(py::init<const FlettnerRotorForceModel::Input& /*input*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>(),
+            py::arg("input_data"),
+            py::arg("body_name"),
+            py::arg("env")
+            )
+        .def_static("parse", &FlettnerRotorForceModel::parse, py::arg("yaml"))
+        .def_static("model_name", &FlettnerRotorForceModel::model_name,
+            "Returns model name \"Flettner rotor\"")
+        .def("get_force", &FlettnerRotorForceModel::get_force,
+            py::arg("states"),
+            py::arg("t"),
+            py::arg("env"),
+            py::arg("commands"),
+            py::call_guard<py::scoped_ostream_redirect, py::scoped_estream_redirect>()
             )
         ;
 

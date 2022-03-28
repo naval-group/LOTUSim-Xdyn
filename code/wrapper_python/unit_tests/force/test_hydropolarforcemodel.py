@@ -6,7 +6,6 @@ import re
 import unittest
 from contextlib import redirect_stderr
 from typing import Optional
-from copy import deepcopy
 
 import numpy as np
 from xdyn.core import BodyStates, EnvironmentAndFrames, make_transform
@@ -666,12 +665,12 @@ class HydroPolarForceModelTest(unittest.TestCase):
         states = get_states(10, 0)
         eps = 10e-8
 
-        angles = [0., 30., 60., 90., 120., 150., 180.]
+        angles = [0.0, 30.0, 60.0, 90.0, 120.0, 150.0, 180.0]
         for angle in angles:
-            data.internal_frame.angle.psi = angle*np.pi/180
+            data.internal_frame.angle.psi = angle * np.pi / 180
             env.k_add(make_transform(data.internal_frame, data.name, env.rot))
             wrench = force_model.get_force(states, 0, env)
-            data.internal_frame.angle.psi = -angle*np.pi/180
+            data.internal_frame.angle.psi = -angle * np.pi / 180
             env.k_add(make_transform(data.internal_frame, data.name, env.rot))
             wrench_sym = force_model.get_force(states, 0, env)
             self.assertAlmostEqual(wrench.X(), wrench_sym.X(), delta=eps)
@@ -810,7 +809,7 @@ class HydroPolarForceModelTest(unittest.TestCase):
         env.rot = YamlRotation("angle", ["z", "y'", "x''"])
         states = get_states(10, 0)
 
-        variable_frame_data = data # data is mutable so this is just a reference
+        variable_frame_data = data  # data is mutable so this is just a reference
         variable_frame_data.name = "variable_frame"
         variable_frame_force_model = HydroPolarForceModel(variable_frame_data, "body", env)
 
@@ -821,16 +820,22 @@ class HydroPolarForceModelTest(unittest.TestCase):
 
         eps = 10e-8
 
-        angles = [0., 30., 60., 90., 120., 150., 180.]
+        angles = [0.0, 30.0, 60.0, 90.0, 120.0, 150.0, 180.0]
         for angle in angles:
-            variable_frame_data.internal_frame.angle.psi = angle*np.pi/180
+            variable_frame_data.internal_frame.angle.psi = angle * np.pi / 180
             env.k_add(make_transform(variable_frame_data.internal_frame, "variable_frame", env.rot))
             wrench_variable_frame = variable_frame_force_model.get_force(states, 0, env)
-            wrench_controlled_angle = controlled_angle_force_model.get_force(states, 0, env, {"beta": angle*np.pi/180})
+            wrench_controlled_angle = controlled_angle_force_model.get_force(
+                states, 0, env, {"beta": angle * np.pi / 180}
+            )
             wrench_variable_frame.change_frame("body", env.k)
             wrench_controlled_angle.change_frame("body", env.k)
-            self.assertAlmostEqual(wrench_variable_frame.X(), wrench_controlled_angle.X(), delta=eps)
-            self.assertAlmostEqual(wrench_variable_frame.Y(), wrench_controlled_angle.Y(), delta=eps)
+            self.assertAlmostEqual(
+                wrench_variable_frame.X(), wrench_controlled_angle.X(), delta=eps
+            )
+            self.assertAlmostEqual(
+                wrench_variable_frame.Y(), wrench_controlled_angle.Y(), delta=eps
+            )
 
     def test_symmetrical_behavior_with_controlled_angle(self):
         data = HydroPolarForceModelInput()
@@ -884,10 +889,10 @@ class HydroPolarForceModelTest(unittest.TestCase):
 
         eps = 10e-8
 
-        angles = [0., 30., 60., 90., 120., 150., 180.]
+        angles = [0.0, 30.0, 60.0, 90.0, 120.0, 150.0, 180.0]
         for angle in angles:
-            wrench = force_model.get_force(states, 0, env, {"beta": np.pi*angle/180})
-            wrench_sym = force_model.get_force(states, 0, env, {"beta": -np.pi*angle/180})
+            wrench = force_model.get_force(states, 0, env, {"beta": np.pi * angle / 180})
+            wrench_sym = force_model.get_force(states, 0, env, {"beta": -np.pi * angle / 180})
             self.assertAlmostEqual(wrench.X(), wrench_sym.X(), delta=eps)
             self.assertAlmostEqual(wrench.Y(), -wrench_sym.Y(), delta=eps)
 
