@@ -160,3 +160,22 @@ TEST_F(CSVLineByLineReaderTest, non_increasing_dates)
     CSVLineByLineReader reader = get_reader();
     ASSERT_THROW(reader.get_values(20), InvalidInputException);
 }
+
+TEST_F(CSVLineByLineReaderTest, next_date_should_be_correct)
+{
+    happy_case(csv);
+    CSVLineByLineReader reader = get_reader();
+    ASSERT_DOUBLE_EQ(0.2, reader.get_next_date());
+    reader.get_values(-20);
+    ASSERT_DOUBLE_EQ(0.2, reader.get_next_date());
+    reader.get_values(0.2);
+    ASSERT_DOUBLE_EQ(0.2001, reader.get_next_date());
+    reader.get_values(0.2001);
+    ASSERT_DOUBLE_EQ(2.001, reader.get_next_date());
+    reader.get_values(2.001);
+    ASSERT_DOUBLE_EQ(2.01, reader.get_next_date());
+    reader.get_values(2.01);
+    ASSERT_DOUBLE_EQ(2.01, reader.get_next_date());
+    reader.get_values(201);
+    ASSERT_DOUBLE_EQ(2.01, reader.get_next_date());
+}

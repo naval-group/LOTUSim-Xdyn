@@ -53,6 +53,7 @@ class CSVLineByLineReader
 
         std::vector<std::string> get_headers();
         void set_read_position(const double date); //!< Sets the position in the stream buffer so 'date' is between current_date and next_date
+        void fix_next_date_on_end_of_file(); //!< Make sure next.date==current.date when reaching then end of the CSV file
 
         const CSVYaml yaml;
         std::ifstream file;

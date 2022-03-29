@@ -59,11 +59,22 @@ CSVLineByLineReader::CSVLineByLineReader(const CSVYaml& y)
             THROW(__PRETTY_FUNCTION__, InvalidInputException, "CSV file '" << yaml.path << "' was found, but it looks empty.")
         }
     }
+    next = read_next_line();
+    file.clear();
+    file.seekg(position_of_first_line, file.beg);
+}
+
+void CSVLineByLineReader::fix_next_date_on_end_of_file()
+{
+    if (next.values.empty())
+    {
+        next.date = current.date;
+    }
 }
 
 /**
  * @brief Sets the position in the stream buffer so 'date' is between current_date and next_date
- * 
+ *
  * @param date
  */
 void CSVLineByLineReader::set_read_position(const double date)
@@ -75,21 +86,20 @@ void CSVLineByLineReader::set_read_position(const double date)
     }
     while (date >= next.date && !read_next_line().values.empty()) {
     }
-    if (date2position.empty()) return;
-    // Initialize the position of the first line if necessary
-    if (!position_of_first_line)
+    if (date2position.empty())
     {
-        position_of_first_line = date2position.begin()->second;
+        fix_next_date_on_end_of_file();
+        return;
     }
-    if (date2position.empty() || date < date2position.begin()->first)
+    if (date < date2position.begin()->first)
     {
         current = zero;
         file.clear();
         file.seekg(position_of_first_line, file.beg);
         next = read_next_line();
+        fix_next_date_on_end_of_file();
         return;
     }
-    
     std::streampos previous_pos = position_of_first_line;
     double previous_date = std::numeric_limits<double>::max();
     current = DateValues(yaml.commands);
@@ -101,6 +111,7 @@ void CSVLineByLineReader::set_read_position(const double date)
             file.seekg(previous_pos, file.beg);
             current = read_next_line();
             next = read_next_line();
+            fix_next_date_on_end_of_file();
             return;
         }
         previous_date = dateposition.first;
@@ -110,6 +121,7 @@ void CSVLineByLineReader::set_read_position(const double date)
     file.seekg(previous_pos, file.beg);
     current = read_next_line();
     next = read_next_line();
+    fix_next_date_on_end_of_file();
 }
 
 std::unordered_map<std::string, double> CSVLineByLineReader::get_values(const double t)
