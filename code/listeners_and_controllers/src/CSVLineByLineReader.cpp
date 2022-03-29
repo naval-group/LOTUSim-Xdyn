@@ -35,7 +35,7 @@ CSVLineByLineReader::CSVLineByLineReader(const CSVYaml& y)
 , next(yaml.commands)
 , has_more_values(false)
 , date2position()
-, position_of_first_line(0)
+, position_of_first_line(file.tellg())
 , zero()
 , max_date_so_far(std::numeric_limits<double>::min())
 {
@@ -102,7 +102,7 @@ void CSVLineByLineReader::set_read_position(const double date)
         return;
     }
     
-    long int previous_pos = position_of_first_line;
+    std::streampos previous_pos = position_of_first_line;
     double previous_date = std::numeric_limits<double>::max();
     current = DateValues(yaml.commands);
     for (const auto dateposition:date2position)
@@ -166,7 +166,7 @@ CSVLineByLineReader::DateValues CSVLineByLineReader::read_next_line()
 {
     std::vector<std::string>   result;
     std::string                line;
-    const long int current_position = file.tellg();
+    const std::streampos current_position = file.tellg();
     // Get a new line from the CSV file
     std::getline(file, line);
 
