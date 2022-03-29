@@ -8,6 +8,9 @@ SET(SRC src/builders.cpp
         src/PIDController.cpp
         src/GrpcController.cpp
         src/CSVController.cpp
+        src/CSVLineByLineReader.cpp
+        src/TempFile.cpp
+        src/CSVYaml.cpp
         )
 
 # Using C++ 2011

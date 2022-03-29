@@ -3,6 +3,7 @@ set(MODULE_UNDER_TEST listeners_and_controllers)
 project(${MODULE_UNDER_TEST}_tests)
 FILE(GLOB SRC src/listenersTest.cpp
               src/GrpcControllerTest.cpp
+              src/CSVLineByLineReaderTest.cpp
               )
 
 # Tests for Controller.cpp are found in:
