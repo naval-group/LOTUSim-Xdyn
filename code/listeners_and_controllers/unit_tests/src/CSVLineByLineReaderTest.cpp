@@ -1,5 +1,6 @@
 #include "CSVLineByLineReaderTest.hpp"
 #include "CSVYaml.hpp"
+#include "InvalidInputException.hpp"
 #include "TempFile.hpp"
 
 CSVLineByLineReaderTest::CSVLineByLineReaderTest() : csv(), a(29081981)
@@ -107,4 +108,55 @@ TEST_F(CSVLineByLineReaderTest, can_get_correct_value_for_time_between_timestamp
     values = reader.get_values(1);
     ASSERT_DOUBLE_EQ(665, values["port side propeller(rpm)"]);
     ASSERT_DOUBLE_EQ(778, values["port side propeller(beta)"]);
+}
+
+TEST_F(CSVLineByLineReaderTest, can_get_correct_value_before_first_timestamp_and_after_last_timestamp)
+{
+    happy_case(csv);
+    CSVLineByLineReader reader = get_reader();
+    std::unordered_map<std::string, double> values = reader.get_values(0.005);
+    ASSERT_DOUBLE_EQ(0, values["port side propeller(rpm)"]);
+    ASSERT_DOUBLE_EQ(0, values["port side propeller(beta)"]);
+    values = reader.get_values(3);
+    ASSERT_DOUBLE_EQ(66.5, values["port side propeller(rpm)"]);
+    ASSERT_DOUBLE_EQ(47.78, values["port side propeller(beta)"]);
+}
+
+TEST_F(CSVLineByLineReaderTest, empty_file)
+{
+    empty(csv);
+    CSVLineByLineReader reader = get_reader();
+    std::unordered_map<std::string, double> values;
+    for (size_t i = 0 ; i < 1000 ; ++i)
+    {
+        values = reader.get_values(a.random<double>());
+        ASSERT_DOUBLE_EQ(0, values["port side propeller(rpm)"]);
+        ASSERT_DOUBLE_EQ(0, values["port side propeller(beta)"]);
+    }
+}
+
+TEST_F(CSVLineByLineReaderTest, file_with_just_one_line)
+{
+    single_line(csv);
+    CSVLineByLineReader reader = get_reader();
+    std::unordered_map<std::string, double> values = reader.get_values(0.005);
+    ASSERT_DOUBLE_EQ(0, values["port side propeller(rpm)"]);
+    ASSERT_DOUBLE_EQ(0, values["port side propeller(beta)"]);
+    values = reader.get_values(-1000);
+    ASSERT_DOUBLE_EQ(0, values["port side propeller(rpm)"]);
+    ASSERT_DOUBLE_EQ(0, values["port side propeller(beta)"]);
+    values = reader.get_values(0);
+    ASSERT_DOUBLE_EQ(0, values["port side propeller(rpm)"]);
+    ASSERT_DOUBLE_EQ(0, values["port side propeller(beta)"]);
+
+    values = reader.get_values(3);
+    ASSERT_DOUBLE_EQ(65, values["port side propeller(rpm)"]);
+    ASSERT_DOUBLE_EQ(78, values["port side propeller(beta)"]);
+}
+
+TEST_F(CSVLineByLineReaderTest, non_increasing_dates)
+{
+    non_decreasing(csv);
+    CSVLineByLineReader reader = get_reader();
+    ASSERT_THROW(reader.get_values(20), InvalidInputException);
 }

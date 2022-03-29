@@ -63,7 +63,8 @@ class CSVLineByLineReader
         bool has_more_values;
         std::map<double, std::streampos> date2position; //!< For each date, stores the position in the CSV file
         std::streampos position_of_first_line;
-        
+        const DateValues zero; //!< Default values (everything at zero, date at infinity)
+        double max_date_so_far;
 };
 
 #endif // CSVLINEBYLINEREADERHPP

@@ -36,6 +36,8 @@ CSVLineByLineReader::CSVLineByLineReader(const CSVYaml& y)
 , has_more_values(false)
 , date2position()
 , position_of_first_line(0)
+, zero()
+, max_date_so_far(std::numeric_limits<double>::min())
 {
     if (yaml.path.empty())
     {
@@ -70,6 +72,7 @@ template <typename K, typename V> std::ostream& operator<<(std::ostream& os, con
     return os << "}";
 }
 
+
 /**
  * @brief Sets the position in the stream buffer so 'date' is between current_date and next_date
  * 
@@ -77,15 +80,30 @@ template <typename K, typename V> std::ostream& operator<<(std::ostream& os, con
  */
 void CSVLineByLineReader::set_read_position(const double date)
 {
+    if (current.date == std::numeric_limits<double>::max() && date2position.empty())
+    {
+        current = read_next_line();
+        next = read_next_line();
+    }
     while (date >= next.date && !read_next_line().values.empty()) {
     }
+    if (date2position.empty()) return;
+    // Initialize the position of the first line if necessary
     if (!position_of_first_line)
     {
-        position_of_first_line = 0;
-        if (!date2position.empty()) date2position.begin()->second;
+        position_of_first_line = date2position.begin()->second;
     }
+    if (date2position.empty() || date < date2position.begin()->first)
+    {
+        current = zero;
+        file.clear();
+        file.seekg(position_of_first_line, file.beg);
+        next = read_next_line();
+        return;
+    }
+    
     long int previous_pos = position_of_first_line;
-    double previous_date = std::numeric_limits<double>::min();
+    double previous_date = std::numeric_limits<double>::max();
     current = DateValues(yaml.commands);
     for (const auto dateposition:date2position)
     {
@@ -100,6 +118,10 @@ void CSVLineByLineReader::set_read_position(const double date)
         previous_date = dateposition.first;
         previous_pos = dateposition.second;
     }
+    file.clear();
+    file.seekg(previous_pos, file.beg);
+    current = read_next_line();
+    next = read_next_line();
 }
 
 std::unordered_map<std::string, double> CSVLineByLineReader::get_values(const double t)
@@ -129,13 +151,13 @@ std::vector<std::string> CSVLineByLineReader::get_headers()
 }
 
 CSVLineByLineReader::DateValues::DateValues()
-: date(std::numeric_limits<double>::min())
+: date(std::numeric_limits<double>::max())
 , values()
 {
 }
 
 CSVLineByLineReader::DateValues::DateValues(const std::map<std::string,std::string>& commands2columns)
-: date(std::numeric_limits<double>::min())
+: date(std::numeric_limits<double>::max())
 , values(zero_commands(commands2columns))
 {
 }
@@ -167,7 +189,22 @@ CSVLineByLineReader::DateValues CSVLineByLineReader::read_next_line()
         if (headers[i] == yaml.time_column)
         {
             ret.date = strtod(buffer.c_str(), NULL);
-            date2position[ret.date] = current_position;
+            if (date2position.find(ret.date)==date2position.end())
+            {
+                if (max_date_so_far>=ret.date)
+                {
+                    std::stringstream ss;
+                    ss << "Values in time column '" << yaml.time_column << "' in CSV file '"
+                       << yaml.path
+                       << "' should be increasing: got "
+                       << max_date_so_far
+                       << " followed by "
+                       << ret.date;
+                    THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
+                }
+                date2position[ret.date] = current_position;
+                max_date_so_far = ret.date;
+            }
         }
         i++;
     }
