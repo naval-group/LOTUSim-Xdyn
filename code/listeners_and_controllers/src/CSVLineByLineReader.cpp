@@ -61,18 +61,6 @@ CSVLineByLineReader::CSVLineByLineReader(const CSVYaml& y)
     }
 }
 
-template <typename K, typename V> std::ostream& operator<<(std::ostream& os, const std::unordered_map<K,V>& m)
-{
-    os << "{";
-    for (const auto kv:m)
-    {
-        os << kv.first << ": " << kv.second << "  ";
-    }
-
-    return os << "}";
-}
-
-
 /**
  * @brief Sets the position in the stream buffer so 'date' is between current_date and next_date
  * 
