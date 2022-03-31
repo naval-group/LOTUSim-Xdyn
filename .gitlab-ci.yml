@@ -150,9 +150,8 @@ Deploy to beta:
     before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
     script:
-    - export VERSION=beta-$(date +%Y-%m-%d)
-    - docker build --pull --cache-from "$CI_REGISTRY_IMAGE:test" --tag "$CI_REGISTRY_IMAGE:$VERSION" .
-    - docker push "$CI_REGISTRY_IMAGE:$VERSION"
+    - docker build --pull --cache-from "$CI_REGISTRY_IMAGE:test" --tag "$CI_REGISTRY_IMAGE:beta" .
+    - docker push "$CI_REGISTRY_IMAGE:beta"
     only:
         variables:
             - $CI_REGISTRY_PASSWORD
