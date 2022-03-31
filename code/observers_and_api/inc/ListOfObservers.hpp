@@ -18,6 +18,7 @@ class ListOfObservers
         ListOfObservers(const std::vector<YamlOutput>& yaml);
         ListOfObservers(const std::vector<ObserverPtr>& observers);
         void observe(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems);
+        void check_variables_to_serialize_are_available() const;
         std::vector<ObserverPtr> get() const;
         bool empty() const;
 

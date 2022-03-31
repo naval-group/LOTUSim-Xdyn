@@ -52,6 +52,14 @@ ListOfObservers::ListOfObservers(const std::vector<ObserverPtr>& observers_) : o
 {
 }
 
+void ListOfObservers::check_variables_to_serialize_are_available() const
+{
+    for (auto observer:observers)
+    {
+        observer->check_variables_to_serialize_are_available();
+    }
+}
+
 void ListOfObservers::observe(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems)
 {
     for (auto observer:observers)

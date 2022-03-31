@@ -114,6 +114,18 @@ void Observer::serialize_requested_variables(const std::vector<std::string>& var
     flush_after_write();
 }
 
+void Observer::check_variables_to_serialize_are_available() const
+{
+    for (auto variable_name:requested_serializations)
+    {
+        const bool serialized_before_solver_step = serialize.find(variable_name) != serialize.end();
+        if (not(serialized_before_solver_step))
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, __LINE__ << " In the 'outputs' section of the YAML file, you asked for '" << variable_name << "', but it is not computed: maybe it is misspelt or the corresponding model is not in the YAML.");
+        }
+    }
+}
+
 Observer::~Observer()
 {
 }

@@ -40,6 +40,7 @@ class Observer
         Observer(const std::vector<std::string>& data);
         virtual void observe(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems); // Only what was requested by the user in the YAML file
         void observe_everything(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems); // Everything (not just what the user asked). Used for co-simulation
+        void check_variables_to_serialize_are_available() const;
         virtual ~Observer();
 
         template <typename T> void write(
