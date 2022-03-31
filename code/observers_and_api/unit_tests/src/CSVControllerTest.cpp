@@ -107,26 +107,6 @@ TEST_F(CSVControllerTest, commands_should_be_correct)
     ASSERT_EQ(expected_commands, controller.get_command_names());
 }
 
-
-TempFile::TempFile() : filename(tmpnam(NULL)), csv(std::ofstream(filename, std::ofstream::out))
-{
-}
-
-TempFile::~TempFile()
-{
-    remove(filename.c_str());
-}
-
-std::string TempFile::get_filename() const
-{
-    return filename;
-}
-
-void TempFile::close()
-{
-    csv.close();
-}
-
 TEST_F(CSVControllerTest, can_read_data_from_csv)
 {
     std::string yaml = test_yaml();
