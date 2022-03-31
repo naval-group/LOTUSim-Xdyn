@@ -64,6 +64,13 @@ CSVLineByLineReader::CSVLineByLineReader(const CSVYaml& y)
     file.seekg(position_of_first_line, file.beg);
 }
 
+/**
+ * @brief Makes sure next.date==current.date when reaching the end of the CSV file.
+ * @details When reaching the end of the CSV file, we must enforce the condition
+ * "next.date == current.date" as this is what the ssc::solver::Scheduler class expects (when
+ * using the CSVLineByLineReader in a CSVController) to prevent scheduling new events after the
+ * CSV file has ended.
+ */
 void CSVLineByLineReader::fix_next_date_on_end_of_file()
 {
     if (next.values.empty())
