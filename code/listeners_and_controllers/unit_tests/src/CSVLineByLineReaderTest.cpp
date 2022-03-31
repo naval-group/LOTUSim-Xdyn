@@ -43,3 +43,14 @@ TEST_F(CSVLineByLineReaderTest, can_get_values_at_time_values_in_csv)
     ASSERT_DOUBLE_EQ(6.65, values["port side propeller(rpm)"]);
     ASSERT_DOUBLE_EQ(4.778, values["port side propeller(beta)"]);
 }
+
+TEST_F(CSVLineByLineReaderTest, can_get_correct_value_for_time_between_timestamps)
+{
+    CSVLineByLineReader reader = get_reader();
+    std::unordered_map<std::string, double> values = reader.get_values(0.20005);
+    ASSERT_DOUBLE_EQ(65, values["port side propeller(rpm)"]);
+    ASSERT_DOUBLE_EQ(78, values["port side propeller(beta)"]);
+    values = reader.get_values(1);
+    ASSERT_DOUBLE_EQ(665, values["port side propeller(rpm)"]);
+    ASSERT_DOUBLE_EQ(778, values["port side propeller(beta)"]);
+}
