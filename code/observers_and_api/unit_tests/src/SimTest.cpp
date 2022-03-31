@@ -656,6 +656,7 @@ TEST_F(SimTest, bug_3003_crash_in_manoeuvring_model)
     const auto res = simulate<ssc::solver::RK4Stepper>(test_data::bug_3003(), scheduler);
 
     const double eps = 1E-10;
+    ASSERT_GT(res.size(), 0);
     ASSERT_NEAR(-0.099, res.at(0).x[ZIDX(0)], eps);
 }
 
