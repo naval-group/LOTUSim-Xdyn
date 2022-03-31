@@ -7,14 +7,15 @@
 
 #include "parse_controllers.hpp"
 #include "InvalidInputException.hpp"
-
+#include "external_data_structures_parsers.hpp"
 #include <ssc/yaml_parser.hpp>
 
-void operator >> (const YAML::Node& node, YamlController& c)
+      void
+      operator>>(const YAML::Node& node, YamlController& c)
 {
     node["type"] >> c.type;
-    node["dt"] >> c.dt;
-
+    c.dt = 0;
+    try_to_parse(node, "dt", c.dt);
     YAML::Emitter out;
     out << node;
     c.rest_of_the_yaml = out.c_str();
