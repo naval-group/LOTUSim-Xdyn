@@ -85,5 +85,5 @@ Wrench FlettnerRotorForceModel::get_force(const BodyStates& states, const double
 
 void FlettnerRotorForceModel::extra_observations(Observer& observer) const
 {
-    observer.write(*spin_ratio, DataAddressing({"efforts",body_name,name,"SR"},std::string("SR(")+name+","+body_name+")"));
+    observer.write_before_solver_step(*spin_ratio, DataAddressing({"efforts",body_name,name,"SR"},std::string("SR(")+name+","+body_name+")"));
 }

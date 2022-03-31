@@ -129,8 +129,8 @@ Wrench GMForceModel::get_force(const BodyStates& states, const double t, const E
 
 void GMForceModel::extra_observations(Observer& observer) const
 {
-    observer.write(*GM,DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"GM"},std::string("GM(") + get_body_name() + ")"));
-    observer.write(*GZ,DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"GM"},std::string("GZ(") + get_body_name() + ")"));
+    observer.write_before_solver_step(*GM,DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"GM"},std::string("GM(") + get_body_name() + ")"));
+    observer.write_before_solver_step(*GZ,DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"GM"},std::string("GZ(") + get_body_name() + ")"));
 }
 
 double GMForceModel::pe(const BodyStates& , const std::vector<double>& , const EnvironmentAndFrames& ) const

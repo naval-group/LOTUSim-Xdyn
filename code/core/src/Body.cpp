@@ -211,37 +211,37 @@ BlockedDOF::Vector Body::get_delta_F(const StateType& dx_dt, const ssc::kinemati
 
 void Body::feed(const StateType& x, Observer& observer, const YamlRotation& c) const
 {
-    observer.write(*_X(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"X"},std::string("x(")+states.name+")"));
-    observer.write(*_Y(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"Y"},std::string("y(")+states.name+")"));
-    observer.write(*_Z(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"Z"},std::string("z(")+states.name+")"));
-    observer.write(*_U(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"U"},std::string("u(")+states.name+")"));
-    observer.write(*_V(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"V"},std::string("v(")+states.name+")"));
-    observer.write(*_W(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"W"},std::string("w(")+states.name+")"));
-    observer.write(*_P(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"P"},std::string("p(")+states.name+")"));
-    observer.write(*_Q(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"Q"},std::string("q(")+states.name+")"));
-    observer.write(*_R(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"R"},std::string("r(")+states.name+")"));
-    observer.write(*_QR(x,idx),DataAddressing(std::vector<std::string>{"states",states.name,"Quat","Qr"},std::string("qr(")+states.name+")"));
-    observer.write(*_QI(x,idx),DataAddressing(std::vector<std::string>{"states",states.name,"Quat","Qi"},std::string("qi(")+states.name+")"));
-    observer.write(*_QJ(x,idx),DataAddressing(std::vector<std::string>{"states",states.name,"Quat","Qj"},std::string("qj(")+states.name+")"));
-    observer.write(*_QK(x,idx),DataAddressing(std::vector<std::string>{"states",states.name,"Quat","Qk"},std::string("qk(")+states.name+")"));
+    observer.write_after_solver_step(*_X(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"X"},std::string("x(")+states.name+")"));
+    observer.write_after_solver_step(*_Y(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"Y"},std::string("y(")+states.name+")"));
+    observer.write_after_solver_step(*_Z(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"Z"},std::string("z(")+states.name+")"));
+    observer.write_after_solver_step(*_U(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"U"},std::string("u(")+states.name+")"));
+    observer.write_after_solver_step(*_V(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"V"},std::string("v(")+states.name+")"));
+    observer.write_after_solver_step(*_W(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"W"},std::string("w(")+states.name+")"));
+    observer.write_after_solver_step(*_P(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"P"},std::string("p(")+states.name+")"));
+    observer.write_after_solver_step(*_Q(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"Q"},std::string("q(")+states.name+")"));
+    observer.write_after_solver_step(*_R(x,idx), DataAddressing(std::vector<std::string>{"states",states.name,"R"},std::string("r(")+states.name+")"));
+    observer.write_after_solver_step(*_QR(x,idx),DataAddressing(std::vector<std::string>{"states",states.name,"Quat","Qr"},std::string("qr(")+states.name+")"));
+    observer.write_after_solver_step(*_QI(x,idx),DataAddressing(std::vector<std::string>{"states",states.name,"Quat","Qi"},std::string("qi(")+states.name+")"));
+    observer.write_after_solver_step(*_QJ(x,idx),DataAddressing(std::vector<std::string>{"states",states.name,"Quat","Qj"},std::string("qj(")+states.name+")"));
+    observer.write_after_solver_step(*_QK(x,idx),DataAddressing(std::vector<std::string>{"states",states.name,"Quat","Qk"},std::string("qk(")+states.name+")"));
     const auto angles = get_angles(x, c);
-    observer.write(angles.phi, DataAddressing(std::vector<std::string>{"states",states.name,"PHI"},std::string("phi(")+states.name+")"));
-    observer.write(angles.theta, DataAddressing(std::vector<std::string>{"states",states.name,"THETA"},std::string("theta(")+states.name+")"));
-    observer.write(angles.psi, DataAddressing(std::vector<std::string>{"states",states.name,"PSI"},std::string("psi(")+states.name+")"));
+    observer.write_after_solver_step(angles.phi, DataAddressing(std::vector<std::string>{"states",states.name,"PHI"},std::string("phi(")+states.name+")"));
+    observer.write_after_solver_step(angles.theta, DataAddressing(std::vector<std::string>{"states",states.name,"THETA"},std::string("theta(")+states.name+")"));
+    observer.write_after_solver_step(angles.psi, DataAddressing(std::vector<std::string>{"states",states.name,"PSI"},std::string("psi(")+states.name+")"));
 
     const auto filtered_states = get_filtered_states(states, x);
-    observer.write(filtered_states.x, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"X"},std::string("x_filtered(")+states.name+")"));
-    observer.write(filtered_states.y, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"Y"},std::string("y_filtered(")+states.name+")"));
-    observer.write(filtered_states.z, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"Z"},std::string("z_filtered(")+states.name+")"));
-    observer.write(filtered_states.u, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"U"},std::string("u_filtered(")+states.name+")"));
-    observer.write(filtered_states.v, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"V"},std::string("v_filtered(")+states.name+")"));
-    observer.write(filtered_states.w, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"W"},std::string("w_filtered(")+states.name+")"));
-    observer.write(filtered_states.p, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"P"},std::string("p_filtered(")+states.name+")"));
-    observer.write(filtered_states.q, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"Q"},std::string("q_filtered(")+states.name+")"));
-    observer.write(filtered_states.r, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"R"},std::string("r_filtered(")+states.name+")"));
-    observer.write(filtered_states.phi, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"PHI"},std::string("phi_filtered(")+states.name+")"));
-    observer.write(filtered_states.theta, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"THETA"},std::string("theta_filtered(")+states.name+")"));
-    observer.write(filtered_states.psi, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"PSI"},std::string("psi_filtered(")+states.name+")"));
+    observer.write_after_solver_step(filtered_states.x, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"X"},std::string("x_filtered(")+states.name+")"));
+    observer.write_after_solver_step(filtered_states.y, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"Y"},std::string("y_filtered(")+states.name+")"));
+    observer.write_after_solver_step(filtered_states.z, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"Z"},std::string("z_filtered(")+states.name+")"));
+    observer.write_after_solver_step(filtered_states.u, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"U"},std::string("u_filtered(")+states.name+")"));
+    observer.write_after_solver_step(filtered_states.v, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"V"},std::string("v_filtered(")+states.name+")"));
+    observer.write_after_solver_step(filtered_states.w, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"W"},std::string("w_filtered(")+states.name+")"));
+    observer.write_after_solver_step(filtered_states.p, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"P"},std::string("p_filtered(")+states.name+")"));
+    observer.write_after_solver_step(filtered_states.q, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"Q"},std::string("q_filtered(")+states.name+")"));
+    observer.write_after_solver_step(filtered_states.r, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"R"},std::string("r_filtered(")+states.name+")"));
+    observer.write_after_solver_step(filtered_states.phi, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"PHI"},std::string("phi_filtered(")+states.name+")"));
+    observer.write_after_solver_step(filtered_states.theta, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"THETA"},std::string("theta_filtered(")+states.name+")"));
+    observer.write_after_solver_step(filtered_states.psi, DataAddressing(std::vector<std::string>{"filtered_states",states.name,"PSI"},std::string("psi_filtered(")+states.name+")"));
 }
 
 std::string Body::get_name() const

@@ -48,7 +48,7 @@ std::vector<std::string> Observer::all_variables(std::map<std::string, std::func
 
 void Observer::observe(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems)
 {
-    write(t, DataAddressing(std::vector<std::string>(1,"t"), "t"));
+    write_before_solver_step(t, DataAddressing(std::vector<std::string>(1,"t"), "t"));
     sys.output(sys.state,*this, t, discrete_systems);
     if(output_everything)
     {
@@ -65,7 +65,7 @@ void Observer::observe(const Sim& sys, const double t, const std::vector<std::sh
 
 void Observer::observe_everything(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems)
 {
-    write(t, DataAddressing(std::vector<std::string>(1,"t"), "t"));
+    write_before_solver_step(t, DataAddressing(std::vector<std::string>(1,"t"), "t"));
     sys.output(sys.state,*this, t, discrete_systems);
     const auto all_vars = all_variables(initialize);
     initialize_serialization_of_requested_variables(all_vars);

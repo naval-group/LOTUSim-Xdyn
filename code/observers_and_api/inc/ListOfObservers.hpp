@@ -26,13 +26,13 @@ class ListOfObservers
 
         static ObserverPtr parse_observer(const YamlOutput& output);
 
-        template <typename T> void write(
+        template <typename T> void write_after_solver_step(
                 const T& val,
                 const DataAddressing& address)
         {
             for (auto observer:observers)
             {
-                observer->write(val, address);
+                observer->write_after_solver_step(val, address);
             }
         }
 

@@ -43,7 +43,21 @@ class Observer
         void check_variables_to_serialize_are_available() const;
         virtual ~Observer();
 
-        template <typename T> void write(
+        /**
+         * @brief For variables such as forces & discrete states, which should only be observed after a solver step
+         */
+        template <typename T> void write_before_solver_step(
+                const T& val,
+                const DataAddressing& address)
+        {
+            initialize[address.name] = get_initializer(val, address);
+            serialize[address.name] = get_serializer(val, address);
+        }
+
+        /**
+         * @brief For variables such as continuous states, which should only be observed after a solver step
+         */
+        template <typename T> void write_after_solver_step(
                 const T& val,
                 const DataAddressing& address)
         {

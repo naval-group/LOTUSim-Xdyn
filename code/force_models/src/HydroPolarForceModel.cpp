@@ -184,6 +184,6 @@ Wrench HydroPolarForceModel::get_force(const BodyStates& states, const double t,
 
 void HydroPolarForceModel::extra_observations(Observer& observer) const
 {
-    observer.write(*angle_of_attack, DataAddressing({"efforts",body_name,name,"alpha"},std::string("alpha(")+name+","+body_name+")"));
-    observer.write(*relative_velocity, DataAddressing({"efforts",body_name,name,"U"},std::string("U(")+name+","+body_name+")"));
+    observer.write_before_solver_step(*angle_of_attack, DataAddressing({"efforts",body_name,name,"alpha"},std::string("alpha(")+name+","+body_name+")"));
+    observer.write_before_solver_step(*relative_velocity, DataAddressing({"efforts",body_name,name,"U"},std::string("U(")+name+","+body_name+")"));
 }

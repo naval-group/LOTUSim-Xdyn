@@ -57,7 +57,7 @@ void EnvironmentAndFrames::feed(
             if(kk.z.size()!=0)
             {
                 const auto address = DataAddressing(std::vector<std::string>{"waveElevation"},"waves");
-                observer.write(kk, address);
+                observer.write_before_solver_step(kk, address);
             }
         }
     }
