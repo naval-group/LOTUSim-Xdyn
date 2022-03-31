@@ -39,8 +39,7 @@ void Observer::before_write()
 {
 }
 
-std::vector<std::string> all_variables(std::map<std::string, std::function<void()> >& map);
-std::vector<std::string> all_variables(std::map<std::string, std::function<void()> >& map)
+std::vector<std::string> Observer::all_variables(std::map<std::string, std::function<void()> >& map) const
 {
     std::vector<std::string> ret;
     std::transform(map.begin(), map.end(), std::back_inserter(ret), [](const std::pair<std::string, std::function<void()> >& p){return p.first;});
