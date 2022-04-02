@@ -17,6 +17,7 @@
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
+#include <limits>
 
 ForceModel::ForceModel(const std::string& name_, const std::vector<std::string>& commands_, const YamlPosition& internal_frame, const std::string& body_name_, const EnvironmentAndFrames& env) :
     commands(commands_),
@@ -24,7 +25,9 @@ ForceModel::ForceModel(const std::string& name_, const std::vector<std::string>&
     body_name(body_name_),
     has_internal_frame(true),
     known_reference_frame(internal_frame.frame),
-    latest_force_in_body_frame(ssc::kinematics::Point(body_name))
+    latest_force_in_body_frame(ssc::kinematics::Point(body_name)),
+    date_of_latest_force_in_body_frame(std::numeric_limits<double>::min()),
+    state_used_for_last_evaluation()
 {
     env.k->add(make_transform(internal_frame, name, env.rot));
 }
@@ -35,7 +38,9 @@ ForceModel::ForceModel(const std::string& name_, const std::vector<std::string>&
     body_name(body_name_),
     has_internal_frame(false),
     known_reference_frame(),
-    latest_force_in_body_frame(ssc::kinematics::Point(body_name))
+    latest_force_in_body_frame(ssc::kinematics::Point(body_name)),
+    date_of_latest_force_in_body_frame(std::numeric_limits<double>::min()),
+    state_used_for_last_evaluation()
 {
 }
 
@@ -56,12 +61,33 @@ std::map<std::string,double> ForceModel::get_commands(ssc::data_source::DataSour
     return ret;
 }
 
+template <typename T> bool equal(const std::vector<T>& left, const std::vector<T>& right)
+{
+    const size_t n = left.size();
+    if (right.size() != n) return false;
+    for (size_t i = 0 ; i < n ; ++i)
+    {
+        if (left[i] != right[i]) return false;
+    }
+    return true;
+}
+
+bool ForceModel::is_cached(const double t, const std::vector<double>& states) const
+{
+    return t == date_of_latest_force_in_body_frame && equal(states, state_used_for_last_evaluation);
+}
+
 ssc::kinematics::Wrench ForceModel::operator()(const BodyStates& states, const double t, const EnvironmentAndFrames& env, ssc::data_source::DataSource& command_listener)
 {
-    auto F = get_force(states, t, env, get_commands(command_listener,t));
-    can_find_internal_frame(env.k);
-    F.change_point_and_frame(states.G, body_name, env.k);
-    latest_force_in_body_frame = ssc::kinematics::Wrench(states.G, F.to_vector());
+    if (not(is_cached(t, states.get_current_state_values(0))))
+    {
+        auto F = get_force(states, t, env, get_commands(command_listener,t));
+        can_find_internal_frame(env.k);
+        F.change_point_and_frame(states.G, body_name, env.k);
+        latest_force_in_body_frame = ssc::kinematics::Wrench(states.G, F.to_vector());
+        state_used_for_last_evaluation = states.get_current_state_values(0);
+        date_of_latest_force_in_body_frame = t;
+    }
     return latest_force_in_body_frame;
 }
 

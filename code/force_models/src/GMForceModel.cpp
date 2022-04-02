@@ -118,6 +118,12 @@ Wrench GMForceModel::get_force(const BodyStates& states, const double t, const E
     const double gz2 = get_gz_for_shifted_states(states, t, env);
     *GM = (gz1-gz2)/dphi;
     *GZ = (gz1+gz2)/2;
+    // Make sure to call get_force again to restore the cache: otherwise calculating GZ & GM will
+    // have modified latest_force_in_body_frame (and then Kinematics object)
+    // but won't be detected by ForceModel::operator()
+    BodyWithSurfaceForces body(states, 0, BlockedDOF(""), YamlFilteredStates());
+    body.update_kinematics(states.get_current_state_values(0),env.k);
+    underlying_hs_force_model->get_force(states, t, env, {});
     return ret;
 }
 

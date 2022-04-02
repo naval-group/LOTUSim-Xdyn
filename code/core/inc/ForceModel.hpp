@@ -129,10 +129,13 @@ class ForceModel
         double get_command(const std::string& command_name, ssc::data_source::DataSource& command_listener, const double t) const;
         std::map<std::string,double> get_commands(ssc::data_source::DataSource& command_listener, const double t) const;
         void can_find_internal_frame(const ssc::kinematics::KinematicsPtr& k) const;
+        bool is_cached(const double t, const std::vector<double>& states) const; // Used to check if we need to re-evaluate the force model or just used the cached version
 
         bool has_internal_frame;
         std::string known_reference_frame;
         ssc::kinematics::Wrench latest_force_in_body_frame;
+        double date_of_latest_force_in_body_frame; //!< For memoization: this is used so that we can observe the force before integration without calculating the model unnecessarily
+        std::vector<double> state_used_for_last_evaluation; //!< For memoization: this is used so that we can observe the force before integration without calculating the model unnecessarily
 };
 
 #endif /* FORCEMODEL_HPP_ */
