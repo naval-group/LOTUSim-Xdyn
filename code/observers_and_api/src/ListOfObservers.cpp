@@ -68,6 +68,14 @@ void ListOfObservers::observe(const Sim& sys, const double t, const std::vector<
     }
 }
 
+void ListOfObservers::flush()
+{
+    for (auto observer:observers)
+    {
+        observer->flush();
+    }
+}
+
 std::vector<ObserverPtr> ListOfObservers::get() const
 {
     return observers;

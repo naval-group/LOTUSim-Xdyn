@@ -110,7 +110,6 @@ void Observer::serialize_requested_variables(const std::vector<std::string>& var
         if (i<(n-1)) flush_value_during_write();
         ++i;
     }
-    flush_after_write();
 }
 
 void Observer::check_variables_to_serialize_are_available() const
@@ -127,6 +126,11 @@ void Observer::check_variables_to_serialize_are_available() const
 
 Observer::~Observer()
 {
+}
+
+void Observer::flush()
+{
+    flush_after_write();
 }
 
 void Observer::flush_value_during_initialization()

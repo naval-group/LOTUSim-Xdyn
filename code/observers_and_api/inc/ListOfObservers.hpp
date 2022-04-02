@@ -21,6 +21,7 @@ class ListOfObservers
         void check_variables_to_serialize_are_available() const;
         std::vector<ObserverPtr> get() const;
         bool empty() const;
+        void flush();
 
         void add_observer(const ObserverPtr& observer);
 

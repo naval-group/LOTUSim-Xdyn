@@ -24,3 +24,8 @@ std::vector<Res> SimObserver::get() const
 {
     return res;
 }
+
+void SimObserver::flush()
+{
+
+}

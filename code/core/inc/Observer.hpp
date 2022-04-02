@@ -42,6 +42,7 @@ class Observer
         void observe_everything(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems); // Everything (not just what the user asked). Used for co-simulation
         void check_variables_to_serialize_are_available() const;
         virtual ~Observer();
+        void flush();
 
         /**
          * @brief For variables such as forces & discrete states, which should only be observed after a solver step

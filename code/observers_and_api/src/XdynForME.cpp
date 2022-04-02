@@ -56,6 +56,7 @@ YamlState XdynForME::handle(const SimServerInputs& request)
     SimulationServerObserver observer(request.requested_output);
     builder.sim.dx_dt(request.state_at_t, dx_dt, t);
     observer.observe(builder.sim, request.t, std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >());
+    observer.flush();
 
     YamlState state_derivatives;
     state_derivatives.t = request.t;
