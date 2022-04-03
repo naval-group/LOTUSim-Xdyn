@@ -17,8 +17,9 @@ class ListOfObservers
     public:
         ListOfObservers(const std::vector<YamlOutput>& yaml);
         ListOfObservers(const std::vector<ObserverPtr>& observers);
-        void observe(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems);
         void check_variables_to_serialize_are_available() const;
+        void observe_before_solver_step(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems);
+        void observe_after_solver_step(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems);
         std::vector<ObserverPtr> get() const;
         bool empty() const;
         void flush();
@@ -26,6 +27,16 @@ class ListOfObservers
         void add_observer(const ObserverPtr& observer);
 
         static ObserverPtr parse_observer(const YamlOutput& output);
+
+        template <typename T> void write_before_solver_step(
+                const T& val,
+                const DataAddressing& address)
+        {
+            for (auto observer:observers)
+            {
+                observer->write_before_solver_step(val, address);
+            }
+        }
 
         template <typename T> void write_after_solver_step(
                 const T& val,

@@ -15,7 +15,11 @@ SimObserver::SimObserver() : res(std::vector<Res>())
 void SimObserver::check_variables_to_serialize_are_available() const
 {}
 
-void SimObserver::observe(const Sim& s, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& )
+void SimObserver::observe_before_solver_step(const Sim& , const double , const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& )
+{
+}
+
+void SimObserver::observe_after_solver_step(const Sim& s, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& )
 {
     res.push_back(Res(t,s.state));
 }

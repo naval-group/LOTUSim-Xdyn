@@ -232,6 +232,7 @@ ssc::kinematics::PointMatrix Sim::get_waves(const double t//!< Current instant
 
 void Sim::output(const StateType& x, Observer& obs, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems) const
 {
+    obs.write_before_solver_step(t, DataAddressing(std::vector<std::string>(1,"t"), "t"));
     StateType x_with_forced_states;
     for (auto body: pimpl->bodies)
     {
@@ -246,6 +247,7 @@ void Sim::output(const StateType& x, Observer& obs, const double t, const std::v
             const auto body = pimpl->name2bodyptr[body_name];
             const auto G = body->get_origin(x);
             force->feed(obs,pimpl->env.k, pimpl->command_listener, t);
+            force->extra_observations(obs);
         }
     }
     for (auto body:pimpl->bodies)

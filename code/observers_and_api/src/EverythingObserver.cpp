@@ -23,15 +23,36 @@ std::string get_body_name(const Sim& sys)
     return sys.get_bodies().front()->get_name();
 }
 
-void EverythingObserver::observe(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems)
+void EverythingObserver::observe_everything(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems, const bool before_solver_step)
 {
-    observe_everything(sys, t, discrete_systems);
+    sys.output(sys.state,*this, t, discrete_systems);
+    const auto all_vars = all_variables(initialize);
+    initialize_serialization_of_requested_variables(all_vars);
+
+    if (before_solver_step)
+    {
+        serialize_before_solver_step(all_vars);
+    }
+    else
+    {
+        serialize_after_solver_step(all_vars);
+    }
     const std::string body_name = get_body_name(sys);
     for (const auto key_values:m)
     {
         const auto inserter = get_inserter(body_name, key_values.first);
         add(inserter, key_values.second);
     }
+}
+
+void EverythingObserver::observe_before_solver_step(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems)
+{
+    observe_everything(sys, t, discrete_systems, true);
+}
+
+void EverythingObserver::observe_after_solver_step(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems)
+{
+    observe_everything(sys, t, discrete_systems, false);
 }
 
 std::function<void(Res&, const double)> get_state_inserter(const size_t idx);

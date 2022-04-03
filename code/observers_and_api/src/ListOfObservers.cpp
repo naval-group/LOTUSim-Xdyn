@@ -60,11 +60,19 @@ void ListOfObservers::check_variables_to_serialize_are_available() const
     }
 }
 
-void ListOfObservers::observe(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems)
+void ListOfObservers::observe_before_solver_step(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems)
 {
     for (auto observer:observers)
     {
-        observer->observe(sys,t, discrete_systems);
+        observer->observe_before_solver_step(sys,t, discrete_systems);
+    }
+}
+
+void ListOfObservers::observe_after_solver_step(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems)
+{
+    for (auto observer:observers)
+    {
+        observer->observe_after_solver_step(sys,t, discrete_systems);
     }
 }
 

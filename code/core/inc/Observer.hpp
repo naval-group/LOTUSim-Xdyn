@@ -38,11 +38,9 @@ class Observer
     public:
         Observer(); // Outputs everything by default
         Observer(const std::vector<std::string>& data);
-        // Observe (serialize) only what was requested by the user in the YAML file
-        virtual void observe(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems);
-        // Observe all serializable variables (not just what the user asked). Used for co-simulation
-        void observe_everything(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems);
         void check_variables_to_serialize_are_available() const;
+        virtual void observe_before_solver_step(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems); // Writes before calling the solver. Cf. solve.hpp Only what was requested by the user in the YAML file
+        virtual void observe_after_solver_step(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems); // Writes after calling the solver. Cf. solve.hpp Only what was requested by the user in the YAML file
         virtual ~Observer();
         void flush();
         // Makes sure the observers know about the variables the system makes available for serialization (so we can run check_variables_to_serialize_are_available solve.hpp)
@@ -56,7 +54,7 @@ class Observer
                 const DataAddressing& address)
         {
             initialize[address.name] = get_initializer(val, address);
-            serialize[address.name] = get_serializer(val, address);
+            serializers_called_before_solver_step[address.name] = get_serializer(val, address);
         }
 
         /**
@@ -67,7 +65,7 @@ class Observer
                 const DataAddressing& address)
         {
             initialize[address.name] = get_initializer(val, address);
-            serialize[address.name] = get_serializer(val, address);
+            serializers_called_after_solver_step[address.name] = get_serializer(val, address);
         }
 
         virtual void write_before_simulation(const std::vector<FlatDiscreteDirectionalWaveSpectrum>& val, const DataAddressing& address);
@@ -98,13 +96,16 @@ class Observer
 
     protected:
         void initialize_serialization_of_requested_variables(const std::vector<std::string>& variables_to_serialize);
-        void serialize_requested_variables(const std::vector<std::string>& variables_to_serialize);
+        void serialize_before_solver_step(const std::vector<std::string>& variables_to_serialize);
+        void serialize_after_solver_step(const std::vector<std::string>& variables_to_serialize);
+        void serialize_requested_variables(const std::vector<std::string>& variables_to_serialize, const std::map<std::string, std::function<void()> >& serialize);
         std::vector<std::string> all_variables(std::map<std::string, std::function<void()> >& map) const;
 
     private:
         bool initialized;
         bool output_everything;
-        std::map<std::string, std::function<void()> > serialize;
+        std::map<std::string, std::function<void()> > serializers_called_before_solver_step;
+        std::map<std::string, std::function<void()> > serializers_called_after_solver_step;
 
     protected:
         std::map<std::string, std::function<void()> > initialize;

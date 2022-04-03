@@ -719,7 +719,7 @@ TEST_F(SimTest, bug_2984)
     const auto Fx = m.find("Fx(propeller,ship,ship)");
     ASSERT_NE(m.end(), Fx);
     ASSERT_EQ(2, Fx->second.size());
-    ASSERT_NEAR(69961607.31273420155048*cos(4*PI/180.), Fx->second.back(), 1E-6);
+    ASSERT_NEAR(69246985.714379996, Fx->second.back(), 1E-6);
     const auto Fy = m.find("Fy(propeller,ship,ship)");
     ASSERT_NE(m.end(), Fy);
     ASSERT_EQ(2, Fy->second.size());
@@ -727,7 +727,7 @@ TEST_F(SimTest, bug_2984)
     const auto Fz = m.find("Fz(propeller,ship,ship)");
     ASSERT_NE(m.end(), Fz);
     ASSERT_EQ(2, Fz->second.size());
-    ASSERT_NEAR(-sin(4*PI/180.)*69961607.31273420155048, Fz->second.back(), 1E-6);
+    ASSERT_NEAR(-4842220.9477044018, Fz->second.back(), 1E-6);
 
     ASSERT_NEAR(4*PI/180., std::atan2(-Fz->second.back(),Fx->second.back()), 1E-6);
 }
@@ -885,7 +885,7 @@ TEST_F(SimTest, bug_3230_advance_speed_not_taken_into_account_properly_for_diffr
     auto m = get_map(observers);
     ASSERT_EQ(6, m.size());
     ASSERT_EQ(2, m["Fx(diffraction,ship,ship)"].size());
-    ASSERT_DOUBLE_EQ(53167.137779674224, m["Fx(diffraction,ship,ship)"].at(1));
+    ASSERT_DOUBLE_EQ(53642.093327203918, m["Fx(diffraction,ship,ship)"].at(1));
 }
 
 TEST_F(SimTest, bug_3207_radiation_damping_crashes_LONG)

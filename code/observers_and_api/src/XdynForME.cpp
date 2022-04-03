@@ -55,8 +55,9 @@ YamlState XdynForME::handle(const SimServerInputs& request)
     StateType dx_dt(13, 0);
     // Here we use a CoSimulationObserver, but only for the requested extra observations.
     SimulationServerObserver observer(request.requested_output);
+    observer.observe_before_solver_step(builder.sim, request.t, std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >());
     builder.sim.dx_dt(request.state_at_t, dx_dt, t);
-    observer.observe(builder.sim, request.t, std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >());
+    observer.observe_after_solver_step(builder.sim, request.t, std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >());
     observer.flush();
 
     YamlState state_derivatives;

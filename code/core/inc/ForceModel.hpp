@@ -117,9 +117,8 @@ class ForceModel
         }
 
         void feed(Observer& observer, ssc::kinematics::KinematicsPtr& k, ssc::data_source::DataSource& command_listener, const double t) const;
-
-    protected:
         virtual void extra_observations(Observer& observer) const;
+    protected:
         std::vector<std::string> commands;
         std::string name;
         std::string body_name;
