@@ -9,6 +9,7 @@
 #define CSVOBSERVER_HPP_
 
 #include <ostream>
+#include <unordered_map>
 
 #include "Observer.hpp"
 
@@ -24,8 +25,10 @@ class CsvObserver : public Observer
         void flush_after_write();
         void flush_value_during_write();
 
+        bool flush_during_write;
         bool output_to_file;
         std::ostream& os;
+        std::unordered_map<std::string, double> cache; //!< As observations are made out-of-order, cache them & use requested_serializations to put them back in order
 
         using Observer::get_serializer;
         using Observer::get_initializer;

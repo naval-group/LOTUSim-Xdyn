@@ -58,6 +58,7 @@ void Observer::observe(const Sim& sys, const double t, const std::vector<std::sh
     if(output_everything)
     {
         const auto all_vars = all_variables(initialize);
+        requested_serializations = all_vars;
         initialize_serialization_of_requested_variables(all_vars);
         serialize_requested_variables(all_vars);
     }
