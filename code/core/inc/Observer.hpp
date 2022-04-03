@@ -90,16 +90,19 @@ class Observer
 
         void remove_variable(const std::string& variable_to_remove);
         bool should_serialize(const std::string& variable) const;
+        std::vector<std::string> requested_serializations;
 
-    private:
+    protected:
         void initialize_serialization_of_requested_variables(const std::vector<std::string>& variables_to_serialize);
         void serialize_requested_variables(const std::vector<std::string>& variables_to_serialize);
         std::vector<std::string> all_variables(std::map<std::string, std::function<void()> >& map) const;
 
+    private:
         bool initialized;
         bool output_everything;
-        std::vector<std::string> requested_serializations;
         std::map<std::string, std::function<void()> > serialize;
+
+    protected:
         std::map<std::string, std::function<void()> > initialize;
 };
 

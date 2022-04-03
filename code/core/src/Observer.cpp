@@ -13,15 +13,20 @@
 #include "SurfaceElevationGrid.hpp"
 
 Observer::Observer()
-    : initialized(false)
+    : requested_serializations()
+    , initialized(false)
     , output_everything(true)
-    , requested_serializations()
     , serialize()
     , initialize()
 {
 }
 
-Observer::Observer(const std::vector<std::string>& data_) : initialized(false), output_everything(false), requested_serializations(data_), serialize(), initialize()
+Observer::Observer(const std::vector<std::string>& data_)
+    : requested_serializations(data_)
+    , initialized(false)
+    , output_everything(false)
+    , serialize()
+    , initialize()
 {
 }
 
