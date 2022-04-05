@@ -13,6 +13,7 @@
 #include "listeners.hpp"
 #include "PIDController.hpp"
 #include "GrpcController.hpp"
+#include "CSVController.hpp"
 #include "YamlTimeSeries.hpp"
 
 #include <ssc/macros.hpp>
@@ -105,6 +106,10 @@ Controller* build_controller(const double tstart, const YamlController& yaml_con
     if (yaml_controller.type == "GRPC")
     {
         return GrpcController::build(tstart, yaml_controller.rest_of_the_yaml, sys);
+    }
+    if (yaml_controller.type == "CSV")
+    {
+        return new CSVController(tstart, yaml_controller.rest_of_the_yaml);
     }
     THROW(__PRETTY_FUNCTION__, InvalidInputException, "Controller type '" << yaml_controller.type << "' is unknown. Known controller types are: PID, GRPC");
     return NULL;

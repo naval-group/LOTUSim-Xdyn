@@ -116,6 +116,14 @@ TEST_F(CSVControllerTest, can_read_data_from_csv)
     ssc::solver::Scheduler scheduler(tstart, 2, dt);
     Sim sys = get_system(test_data::falling_ball_example(), 0);
     controller.callback(scheduler, &sys);
+    // First time step is t0 = 0: all commands are zeros because t0 in CSV is 0.2
+    ASSERT_NEAR(0, sys.get_input_value("port side propeller(rpm)"), 1e-6);
+    ASSERT_NEAR(0, sys.get_input_value("port side propeller(beta)"), 1e-6);
+    scheduler.advance_to_next_time_event();
+    controller.callback(scheduler, &sys);
+    // We should now be at t = 0.2 (first line in CSV) because t0+dt = 0 + 0.5 = 0.5 > 0.2
+    ASSERT_EQ(0.2, scheduler.get_time());
+    // Commands should now contain the first line of the CSV
     ASSERT_NEAR(65, sys.get_input_value("port side propeller(rpm)"), 1e-6);
     ASSERT_NEAR(78, sys.get_input_value("port side propeller(beta)"), 1e-6);
 }
