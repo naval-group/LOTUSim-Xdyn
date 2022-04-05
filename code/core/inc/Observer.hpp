@@ -38,11 +38,15 @@ class Observer
     public:
         Observer(); // Outputs everything by default
         Observer(const std::vector<std::string>& data);
-        virtual void observe(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems); // Only what was requested by the user in the YAML file
-        void observe_everything(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems); // Everything (not just what the user asked). Used for co-simulation
+        // Observe (serialize) only what was requested by the user in the YAML file
+        virtual void observe(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems);
+        // Observe all serializable variables (not just what the user asked). Used for co-simulation
+        void observe_everything(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems);
         void check_variables_to_serialize_are_available() const;
         virtual ~Observer();
         void flush();
+        // Makes sure the observers know about the variables the system makes available for serialization (so we can run check_variables_to_serialize_are_available solve.hpp)
+        void collect_available_serializations(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems);
 
         /**
          * @brief For variables such as forces & discrete states, which should only be observed after a solver step

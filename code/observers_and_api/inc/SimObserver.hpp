@@ -33,6 +33,7 @@ class SimObserver
         void check_variables_to_serialize_are_available() const;
         std::vector<Res> get() const;
         void flush();
+        void collect_available_serializations(const Sim& ss, const double , const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& );
 
     private:
         std::vector<Res> res;

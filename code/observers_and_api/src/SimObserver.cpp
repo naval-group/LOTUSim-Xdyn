@@ -20,6 +20,10 @@ void SimObserver::observe(const Sim& s, const double t, const std::vector<std::s
     res.push_back(Res(t,s.state));
 }
 
+void SimObserver::collect_available_serializations(const Sim& , const double , const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& )
+{
+}
+
 std::vector<Res> SimObserver::get() const
 {
     return res;

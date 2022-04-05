@@ -46,6 +46,8 @@ class ListOfObservers
                 observer->write_before_simulation(val, address);
             }
         }
+        // Makes sure the observers know about the variables the system makes available for serialization (so we can run check_variables_to_serialize_are_available solve.hpp)
+        void collect_available_serializations(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems);
 
     private:
 

@@ -68,6 +68,14 @@ void ListOfObservers::observe(const Sim& sys, const double t, const std::vector<
     }
 }
 
+void ListOfObservers::collect_available_serializations(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems)
+{
+    for (auto observer:observers)
+    {
+        observer->collect_available_serializations(sys,t, discrete_systems);
+    }
+}
+
 void ListOfObservers::flush()
 {
     for (auto observer:observers)
