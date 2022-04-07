@@ -110,6 +110,7 @@ TEST_F(CSVControllerTest, commands_should_be_correct)
 TEST_F(CSVControllerTest, can_read_data_from_csv)
 {
     std::string yaml = test_yaml();
+    boost::replace_all(yaml, "shift time column to match tstart: true", "shift time column to match tstart: false");
     CSVController controller(0, yaml);
     const double tstart = 0.1;
     const double dt = 0.5;
