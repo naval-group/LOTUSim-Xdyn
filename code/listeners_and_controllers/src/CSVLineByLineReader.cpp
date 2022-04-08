@@ -222,3 +222,12 @@ double CSVLineByLineReader::get_next_date() const
 {
     return next.date;
 }
+
+double CSVLineByLineReader::get_initial_date() const
+{
+    if (date2position.empty())
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Requesting initial date of an empty CSV file.")
+    }
+    return date2position.begin()->first;
+}

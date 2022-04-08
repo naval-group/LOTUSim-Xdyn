@@ -179,3 +179,14 @@ TEST_F(CSVLineByLineReaderTest, next_date_should_be_correct)
     reader.get_values(201);
     ASSERT_DOUBLE_EQ(2.01, reader.get_next_date());
 }
+
+TEST_F(CSVLineByLineReaderTest, initial_date_should_be_correct)
+{
+    happy_case(csv);
+    CSVLineByLineReader reader = get_reader();
+    for (int i = 0 ; i < 1000; ++i)
+    {
+        reader.get_values(a.random<double>());
+        ASSERT_DOUBLE_EQ(0.2, reader.get_initial_date());
+    }
+}

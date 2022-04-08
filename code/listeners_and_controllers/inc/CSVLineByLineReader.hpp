@@ -28,6 +28,13 @@ class CSVLineByLineReader
         double get_next_date() const;
 
         /**
+         * @brief Get the date on the first line of the CSV file
+         * Used by the CSV controller when shifting dates.
+         * @return First date of CSV
+         */
+        double get_initial_date() const;
+
+        /**
          * @brief True if the CSV file has been read entirely (has_more_value is false)
          * 
          * @return true we reached the end of file, false otherwise.
