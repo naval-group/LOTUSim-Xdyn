@@ -1,9 +1,19 @@
-issue_39: issue_39.out.csv issue_39.py
+issue_39: issue_39.out.with_shift.csv issue_39.out.without_shift.csv issue_39.py
 	@echo "Checking commands generated from CSV (issue #39)"
 	@${DOCKER_RUN} --entrypoint python python:3.10-slim issue_39.py
 	@echo "✓ Output is correct!"
 
-issue_39.out.csv: issue_39.yml issue_39.csv
-	@echo "Running simulation for issue #39..."
-	${DOCKER_RUN} xdyn:latest issue_39.yml -s euler --dt 1 --tend 11
+issue_39.out.with_shift.csv: issue_39.yml issue_39.csv
+	@echo "Running simulation for issue #39 (with time shift)..."
+	@${DOCKER_RUN} xdyn:latest issue_39.yml -s euler --dt 1 --tend 11
+	@mv issue_39.out.csv $@
+	@echo "Done!"
+
+issue_39_without_shift.yml: issue_39.yml 
+	@cat $< | sed "s/shift time column to match tstart: true/shift time column to match tstart: false/g" > $@
+
+issue_39.out.without_shift.csv: issue_39_without_shift.yml issue_39.csv
+	@echo "Running simulation for issue #39 (without time shift)..."
+	@${DOCKER_RUN} xdyn:latest issue_39_without_shift.yml -s euler --dt 1 --tend 11
+	@mv issue_39.out.csv $@
 	@echo "Done!"

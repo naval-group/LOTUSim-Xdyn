@@ -27,6 +27,7 @@ CSVControllerTest::CSVControllerTest()
 {
     csv << "t,some column,rpm_co,beta_co\n";
     csv << "0.2,23,65,78\n";
+    csv << "0.796,-4.3,965.1,-7.8\n";
     csv.close();
 }
 
@@ -127,4 +128,37 @@ TEST_F(CSVControllerTest, can_read_data_from_csv)
     // Commands should now contain the first line of the CSV
     ASSERT_NEAR(65, sys.get_input_value("port side propeller(rpm)"), 1e-6);
     ASSERT_NEAR(78, sys.get_input_value("port side propeller(beta)"), 1e-6);
+}
+
+TEST_F(CSVControllerTest, can_read_data_from_csv_with_time_shift)
+{
+    const std::string yaml = test_yaml();
+    CSVController controller(0, yaml);
+    const double tstart = 0.1;
+    const double dt = 0.5;
+    ssc::solver::Scheduler scheduler(tstart, 2, dt);
+    Sim sys = get_system(test_data::falling_ball_example(), 0);
+    controller.callback(scheduler, &sys);
+    // First time step is t0 = 0.1: t0 in CSV was shifted
+    ASSERT_EQ(tstart, scheduler.get_time());
+    ASSERT_NEAR(65, sys.get_input_value("port side propeller(rpm)"), 1e-6);
+    ASSERT_NEAR(78, sys.get_input_value("port side propeller(beta)"), 1e-6);
+    // Advance in time
+    scheduler.advance_to_next_time_event();
+    // Update controller
+    controller.callback(scheduler, &sys);
+    // We should now be at t = 0.6 (first line in CSV) because t0+dt = 0.1 + 0.5 = 0.6
+    ASSERT_EQ(0.6, scheduler.get_time());
+    // Commands should still contain the first line of the CSV
+    ASSERT_NEAR(65, sys.get_input_value("port side propeller(rpm)"), 1e-6);
+    ASSERT_NEAR(78, sys.get_input_value("port side propeller(beta)"), 1e-6);
+    // Advance in time
+    scheduler.advance_to_next_time_event();
+    // Update controller
+    controller.callback(scheduler, &sys);
+    // We should now be at t = 0.696 (second line in CSV) because t0+dt = 0.6 + 0.5 = 1.1 > 0.696
+    ASSERT_NEAR(0.696, scheduler.get_time(), 1e-6);
+    // Commands should now contain the last line of the CSV
+    ASSERT_NEAR(965.1, sys.get_input_value("port side propeller(rpm)"), 1e-6);
+    ASSERT_NEAR(-7.8, sys.get_input_value("port side propeller(beta)"), 1e-6);
 }

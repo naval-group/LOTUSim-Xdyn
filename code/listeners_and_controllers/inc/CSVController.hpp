@@ -63,6 +63,8 @@ class CSVController : public Controller
     
 
     CSVLineByLineReader csv;
+    double tstart;
+    bool got_tstart;
 };
 
 #endif /* CSVCONTROLLER_HPP_ */

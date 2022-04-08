@@ -9,6 +9,7 @@
 #include "CSVController.hpp"
 #include "check_input_yaml.hpp"
 #include "yaml.h"
+#include <numeric>
 
 CSVController::Yaml::Yaml(const std::string& yaml)
     : path()
@@ -59,6 +60,8 @@ CSVController::CSVController(const double tstart, const std::string& yaml_)
     : Controller(tstart, 0)
     , yaml(yaml_)
     , csv(toCSVYaml(yaml))
+    , tstart(std::numeric_limits<double>::min())
+    , got_tstart(false)
 {
 }
 
@@ -77,7 +80,13 @@ std::vector<std::string> CSVController::get_command_names() const
 void CSVController::update_discrete_states(const double time,
                                            ssc::solver::ContinuousSystem* sys)
 {
-    const auto commands = csv.get_values(time);
+    if (not(got_tstart))
+    {
+        tstart = time;
+        got_tstart = true;
+    }
+    const double t = yaml.shift_time_column ? time - tstart + csv.get_initial_date() : time;
+    const auto commands = csv.get_values(t);
     for (const auto cv:commands)
     {
         Controller::set_discrete_state(sys, cv.first, cv.second);
@@ -90,5 +99,6 @@ double CSVController::get_date_of_next_update(const double current_time) const
     // "don't call the controller again" by ssc::solver::DiscreteSystem::callback
     if (csv.eof()) return current_time;
     // If there are more values, we just return the date of the next line.
-    return csv.get_next_date();
+    const double tnext = csv.get_next_date();
+    return yaml.shift_time_column ? tnext - csv.get_initial_date() + tstart: tnext;
 }

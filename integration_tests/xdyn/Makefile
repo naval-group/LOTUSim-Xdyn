@@ -73,4 +73,6 @@ clean:
 		   tutorial_05_froude_krylov.yml\
 		   stable_cube_test.yml\
 		   issue_202.csv\
-		   issue_39.out.csv
+		   issue_39.out.without_shift.csv\
+		   issue_39.out.with_shift.csv\
+		   issue_39_without_shift.yml
