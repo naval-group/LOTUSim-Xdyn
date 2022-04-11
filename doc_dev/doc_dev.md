@@ -12,38 +12,21 @@ et principes qui ont régi les développements.
 
 # Récupération du code et compilation
 
-Deux possibilités sont offertes au développeur :
-
-- Soit recréer l'environnement de développement
-- Soit utiliser une machine virtuelle configurée avec Vagrant et travailler sur
-  une configuration Linux standard
-
-## En recréant tout l'environnement de développement
-
-Il faut se référer au fichier `bootstrap.sh` qui décrit la liste des
-dépendances de X-DYN.
-La solution avec `Vagrant` présentée ci-dessous est cependant à préférer.
-
-## En utilisant Vagrant
-
-Pour installer les outils nécessaires pour compiler X-Dyn à l'aide de Vagrant,
-il faut :
+Pour travailler sur le code d'xdyn, il faut :
 
 - Une connexion internet
-- [Vagrant](https://www.vagrantup.com/downloads.html).
-- [Virtual Box](https://www.virtualbox.org/) dans une version supportée par
-  Vagrant + modification du BIOS pour autoriser la machine virtuelle.
-- La bibliothèque de connaissances antérieures de SIREHNA
-  (Sirehna Scientific Computing ou SSC), en version deb (dont le MD5 est 80c050abcfd8310daf56ea2db991ba91)
+- [Docker](https://www.docker.com)
 - [Git](https://git-scm.com/downloads) + paramétrage des clés SSH
+- [VSCode](https://code.visualstudio.com/) avec l'extension ["Remote containers"](https://code.visualstudio.com/docs/remote/containers) pour fournir un environnement de développement pré-configuré. Il suffit d'ouvrir
+le dossier xdyn sous VSCode et de cliquer sur le bouton vert en bas à gauche de la fenêtre pour
+rouvrir le dossier dans le devcontainer.
 
-
-On commence par cloner le dépôt (nécessite les droits d'accès au répertoire `xdyn` et au répertoire `ThirdParty` qui est géré comme un module git) :
+On commence par cloner le dépôt :
 
 - Sur le réseau SIREHNA :
   `git clone --recursive git@gitlab.sirehna.com:root/xdyn.git --config core.autocrlf=input`
-- Sur le serveur de l'IRT Jules Verne :
-  `git clone git@gitlab2.irt-jules-verne.fr:cecady/x-dyn.git --config core.autocrlf=input`
+- Sur Gitlab.com :
+  `git clone git@gitlab.com:sirehna_naval_group/sirehna/xdyn.git --config core.autocrlf=input`
 
 L'option `--recursive` permet de récupérer les dépendances (`submodules`).
 L'option `--config core.autocrlf` input permet de forcer les caractères de fin de
@@ -52,45 +35,31 @@ tout en protégeant le dépôt d'une erreur dans les retours chariots.
 Le développeur sous windows devra prendre la précaution d'utiliser les caractères
 de fin de ligne Linux lors de la création de nouveaux fichiers.
 
-On copie le fichier `ssc.deb` dans le répertoire `xdyn` ainsi créé.
-On ouvre une invite de commande dans ce répertoire
-(idéalement, en utilisant git BASH fourni avec l'installation de Git).
+À la racine du dépôt xdyn se trouvent les scripts shell suivant :
 
-On s'assure d'avoir une connexion Internet fonctionnelle (compter environ 1h).
-On s'assure que VirtualBox est déjà lancé.
-On s'assure que la mémoire allouée à la machine virtuelle ne dépasse pas un
-quart de la mémoire physique
-(`vb.memory` dans le fichier `Vagrantfile`).
-On tape `vagrant up`.
-En cas d'erreur, il peut être nécessaire de relancer 2 ou 3 fois la commande (suite au blocage par des logiciels de sécurité).
-
-La machine virtuelle Vagrant va être créée à partir d'une image de base
-(base box) qui va être configurée.
-Cette opération est longue (environ trois quarts d'heure).
-Une fois la machine virtuelle créée, une compilation est lancée et tous les
-tests sont exécutés.
-
-Troubleshooting : certaines étapes de l'installation sont longues
-(notamment l'installation de police Latex), mais il arrive aussi que la
-machine virtuelle se mette en pause si elle manque de mémoire vive.
-Cela peut se vérifier dans l'interface de Virtual Box.
-
-À la racine du dépôt X-Dyn se trouvent trois scripts shell :
-
-- `vagrant_cmake.sh` qui lance CMake sur la machine virtuelle afin de préparer
-  le build,
-- `vagrant_ninja.sh` qui effectue la compilation et la génération de la
-  documentation en utilisant le système de build Ninja,
-- `vagrant_run_all_tests.sh` qui lance tous les tests. On peut en sélectionner
-  un sous-ensemble en utilisant le flag `--gtest_filter='*LONG*'` par exemple.
-  Se référer à [la documentation de Google Test](https://github.com/google/googletest/blob/master/googletest/docs/AdvancedGuide.md#running-a-subset-of-the-tests).
-
-
-L'idée, en utilisant Vagrant, est que l'on utilise son éditeur local
-(de la machine hôte) mais le compilateur et les bibliothèques de la machine
-virtuelle.
-Le répertoire contenant le dépôt de x-dyn est automatiquement partagé avec la
-machine virtuelle créée par Vagrant.
+- `gdb.sh` : lance xdyn ou les tests unitaires sous GDB. Une fois qu'on a compilé xdyn
+  en mode debug (par exemple en utilisant le script `./ninja_debug.sh run_all_tests`) il suffit de
+  lancer `./gdb.sh run_all_tests` depuis la racine du dépôt pour initier une session GDB sur
+  l'exécutable `run_all_tests` (tests unitaires). Pour faire la même chose pour xdyn, il faut lancer
+  `./ninja_debug.sh xdyn` suivi de `./gdb.sh executables/xdyn`.
+- `ninja_debian.sh` : compile en mode release pour Linux. On lancera par exemple
+  `./ninja_debian.sh xdyn` pour compiler xdyn ou `./ninja_debian.sh run_all_tests` pour compiler les
+  tests unitaires.
+- `ninja_debug.sh` : compilation en mode debug (Linux uniquement). On lancera par exemple
+  `./ninja_debug.sh xdyn` pour compiler xdyn ou `./ninja_debug.sh run_all_tests` pour compiler les
+  tests unitaires.
+- `ninja_windows.sh` : permet de compiler en mode release pour Windows. On lancera par exemple
+  `./ninja_windows.sh xdyn` pour compiler xdyn ou `./ninja_windows.sh run_all_tests` pour compiler
+  les tests unitaires.
+- `run_all_tests_debian.sh` : lancement des tests unitaires (sous Linux). On peut adjoindre des
+  flags Google Test, par exemple
+  `./run_all_tests_debian.sh --gtest_filter='CSV*':-'*can_read_data_from_csv'` pour lancer les tests
+  dont le nom commence par `CSV`, mais ne se termine pas par `can_read_data_from_csv`. Voir [la documentation Google Test](https://github.com/google/googletest/blob/main/docs/advanced.md#running-a-subset-of-the-tests) pour plus de détails. Il est nécessaire d'avoir lancé `./ninja_debian.sh run_all_tests` avant.
+- `run_all_tests_valgrind.sh` : permet d'exécuter les tests à l'intérieur de [Valgrind](https://valgrind.org/), afin de
+  détecter d'éventuels problèmes mémoire. Il faut avoir lancé `./ninja_debug.sh run_all_tests`
+  au préalable.
+- `run_all_tests_windows.sh` : lancement des tests sous Windows. Nécessite d'avoir lancé
+  `./ninja_windows.sh run_all_tests` auparavant.
 
 # Cartographie des modules
 
@@ -108,30 +77,30 @@ minimisation des dépendances est nécessaire pour ordonnancer la compilation
 (éviter les cycles, savoir quel fichier compiler en premier) et permet de
 limiter les impacts des modifications éventuelles apportées à un module.
 
-Voici la description des modules de X-DYN :
+Voici la description des modules d'xdyn :
 
 | Module                     | Description                                                                     |
 |----------------------------|---------------------------------------------------------------------------------|
 | `core`                     | Cœur de calcul décrivant le comportement de l'outil au cours de la simulation   |
 | `environment_models`       | Modèles de houle                                                                |
 | `exceptions`               | Gestion des erreurs                                                             |
-| `executables`              | Programmes principaux (sim, gz)                                                 |
+| `executables`              | Programmes principaux (xdyn-for-me, xdyn-for-cs, xdyn, gz)                      |
 | `external_data_structures` | Structures de données image des fichiers YAML. Toutes les structures de         |
 |                            | données de ce module ont un nom commençant par Yaml pour signifier qu'elles     |
 |                            | sont l'image d'une partie du fichier YAML d'entrée.                             |
 | `external_file_formats`    | Lecture des fichiers externes (hdb, stl)                                        |
 | `force_models`             | Modèles d'effort                                                                |
 | `gz_curves`                | Calcul des GZ et GM                                                             |
-| `hdb_interpolators`        | Calcul des efforts de radiation (convolution)                                   |
+| `hdb_interpolators`        | Extraction d'informations des fichiers PRECAL_R et HDB (AQUA+)                  |
 | `interface_hdf5`           | Ecriture des fichiers HDF5                                                      |
 | `mesh`                     | Calculs sur les maillages (intersection navire/surface libre, itération sur les |
 |                            | facettes)                                                                       |
 | `observers_and_api`        | Définition des sorties en cours de simulation (CSV, HDF5, websocket...)         |
 | `listeners_and_controllers`| Lecture des fichiers de commande, des contrôleurs et des spectres de houle      |
-| `slamming`                 | Calcul des efforts de slamming                                                  |
 | `test_data_generator`      | Génération des données de test (notamment utilisées pour générer les tutoriels) |
 | `yaml_parser`              | Interprétation des parties génériques du YAML (non spécifiques à un modèle)     |
 |                            | par exemple la définition des corps et des sorties.                             |
+| `wrapper_python`           | Fichiers nécessaires pour la création de l'interface Python à l'API xdyn        |
 
 Chaque module contient nécessairement :
 
@@ -324,6 +293,11 @@ Deux éléments de design sont essentiels dans la classe `Observer` :
    fonction d'initialisation et une fonction de sérialisation à un dictionnaire
    : aucune valeur n'est écrite immédiatement.
 
+Ce design a l'inconvénient de rendre plus compliquée une intervention sur la façon dont la
+sérialisation est appelée par le solveur puisqu'il faut potentiellement modifier le code du SSC et
+chaque observateur, comme cela a été le cas lors de l'ajout des contrôleurs et pour corriger la
+sérialisation des efforts.
+
 En pratique, le fonctionnement est le suivant :
 
 - L'utilisateur défini les sérialisations qu'il souhaite voir réaliser dans la
@@ -342,13 +316,25 @@ En pratique, le fonctionnement est le suivant :
 
 La classe `ListOfObservers` est un observateur (au sens de
 `ssc::solver::quicksolve`) mais ne dérive pas de `Observer`. Cela signifie
-qu'elle doit simplement disposer d'une méthode `observer`, prenant un système à
-simuler et le temps courant. Cette méthode se contente d'appeler la méthode
-`observe` de chaque observateur contenu dans `ListOfObservers`.
+qu'elle doit simplement disposer d'une méthode `observe_before_solver_step` et d'une méthode
+`observe_after_solver_step`, qui prennent un système à simuler et le temps courant. Ces méthodes
+se contentent d'appeler les méthodes `observe_before_solver_step` et `observe_after_solver_step`
+(respectivement) de chaque observateur contenu dans `ListOfObservers`. La différence entre
+`observe_before_solver_step` et `observe_after_solver_step` est uniquement l'ordre dans lequel elles
+sont appelées : `observe_after_solver_step` sert à sérialiser les états (après appel au stepper ou
+avant le premier pas de temps) tandis que `observe_before_solver_step` va sérialiser essentiellement
+les efforts après appel au stepper. En effet, comme la sérialisation ne fait qu'observer l'état des
+variables et n'effectue pas d'appel aux modèles d'effort (pour éviter des appels coûteux inutiles),
+il est essentiel qu'elle soit appelée au bon moment : si les efforts sont observés après l'appel au
+stepper, les valeurs d'effort correspondront à des pas de temps et des états intermédiaires (par
+exemple t+dt/2 et $`x+h\cdot\frac{k}{2}`$ pour un stepper RK4). Pour éviter une double évaluation
+des efforts, un système de cache a été implémenté (memoization) afin que l'évaluation des efforts
+réalisée juste avant observation soit réutilisée pour la première étape du stepper (qui, quel que
+soit le schéma numérique, commence par évaluer le système à l'instant courant).
 
-La méthode `Observer::observe` commence par rendre le temps disponible en
-appelant la méthode `write`. Ensuite, l'observateur demande au système de lui
-donner toutes les valeurs sérialisables grâce à la méthode `Sim::output`. Cette
+Les méthodes `Observer::observe_(after/before)_solver_step` commencent par rendre le temps
+disponible aux sorties en appelant la méthode `write`. Ensuite, l'observateur demande au système
+de lui donner toutes les valeurs sérialisables grâce à la méthode `Sim::output`. Cette
 dernière appelle la méthode `feed` de chaque modèle d'effort et de chaque
 corps. Le rôle des méthodes `feed` consiste à fournir à l'observateur toutes
 les valeurs qui peuvent être sérialisées. Dans le cas des modèles d'effort, ce
@@ -360,7 +346,7 @@ HDF5) et une valeur.
 Il est important de noter qu'à ce stade aucune valeur n'a été effectivement
 écrite par l'observateur : il contient simplement des valeurs que l'on peut
 sérialiser. La sérialisation effective est commandée par les deux dernières
-lignes d'`Observer::observer` : `initialize_everything_if_necessary` et
+lignes d'`Observer::observe` : `initialize_everything_if_necessary` et
 `serialize_everything`. La première n'est appelée qu'une fois avant le premier
 pas de temps (par exemple, pour écrire la ligne de titre d'un fichier CSV) et
 la seconde est appelée systématiquement. Elle boucle sur la liste des choses à
@@ -649,8 +635,8 @@ On peut créer un programme d'installation en faisant :
 
 # Intégration continue
 
-Le code source d'X-DYN est versionné sous [GIT](http://www.git-scm.com). Le
-serveur d'intégration continue ([Jenkins](http://www.jenkins-ci.org)) a les
+Le code source d'xdyn est versionné sous [Git](http://www.git-scm.com). Le
+serveur d'intégration continue [Gitlab](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/pipelines) a les
 responsabilités suivantes :
 
 * Récupérer le code source depuis le dépôt Git
@@ -667,71 +653,20 @@ Les branches Git sont utilisées comme suit :
 * Chaque nouvelle fonctionnalité est développée dans une branche spécifique qui
   a vocation à ne contenir qu'un nombre restreint de commits (quelques dizaines
   au maximum) et à n'être utilisée qu'une dizaine de jours au plus. Ces
-  "branches fonctionnelles" ou "feature branch" sont préfixées de `dev/`, par
-  exemple `dev/feature1`.
-* Le serveur d'intégration contient un processus `XDYN_DEV` qui surveille tout
-  changement dans n'importe quelle branche `dev/*` et réalise pour chacune
-  l'ensemble des étapes précédemment décrites
-* En cas de succès, le responsable du dépôt effectue une revue de code sur la
-  branche fonctionnelle, puis, le cas échéant, attend le retour du serveur
+  "branches fonctionnelles" ou "feature branch" sont rattachées à une issue Gitlab.
+* On ne peut pas faire directement de commit sur la branche master.
+* Le serveur d'intégration lance à chaque push l'ensemble des étapes précédemment décrites
+* En cas de succès, un maintainer effectue une revue de code (Merge Request) sur la
+  feature branch, puis, le cas échéant, attend le retour du serveur
   d'intégration continue suite à ses modifications
-* Le responsable du dépôt migre la branche dans `ready/` (par exemple
-  `ready/feature1`)
-* Le serveur d'intégration contient un processus nommé `XDYN_INTEGRATION` qui
-  surveille tout changement dans n'importe quelle branche `ready/*` et réalise,
-  le cas échéant, un merge de la branche en question dans une branch
-  d'intégration puis l'ensemble des opérations de build
-* En cas de succès, la branche `integration` est mergée dans la branche
-  `master`
-* Le serveur d'intégration continue contient un processus nommé
-  `XDYN_PRODUCTION` qui, à son tour, build la branche `master`
+* Lorsque toutes les remarques de la revue de code sont traitées et que le pipeline d'intégration
+  continue passe, le maintainer merge la feature branche dans la branche principale `master`.
 
 L'intérêt de ce processus est d'isoler les erreurs dans les feature branches.
 Ainsi, les développeurs ne sont pas impactés par les erreurs commises sur les
 branches sur lesquelles ils ne travaillent pas. Au cours du développement, les
 développeurs doivent régulièrement faire un rebase sur `master` (sur laquelle
-personne ne commit mis à part Jenkins) afin de s'assurer d'avoir la dernière
-version à jour.
-
-Voici un exemple de commandes git permettant de réaliser une partie des actions
-décrites ci-dessus. Les commandes suivantes créent une branche localement, puis
-la synchronise sur le serveur.
-
-~~~~~~~~~~~~~~~~~~~~ {.bash}
-git checkout -b dev/feature1
-git push -u
-~~~~~~~~~~~~~~~~~~~~
-
-Dans les versions de git>2, il faut faire :
-
-~~~~~~~~~~~~~~~~~~~~ {.bash}
-git checkout -b dev/feature1
-git push --set-upstream origin dev/feature1
-~~~~~~~~~~~~~~~~~~~~
-
-Il est ensuite possible de modifier les fichiers ou d'ajouter des fichiers puis
-de faire des commits et de les sauvegarder sur le serveur.
-
-~~~~~~~~~~~~~~~~~~~~ {.bash}
-git commit nomDuFichier
-git push
-~~~~~~~~~~~~~~~~~~~~
-
-De manière régulière et avant de soumettre la branche à une revue du
-responsable du dépôt, il faut faire un rebase sur master.
-Cela permet de résoudre au plus tôt d'éventuels conflits.
-Pour cela le mieux est de récupérer localement les modifications existant sur le
-serveur, puis de les intégrer dans l'historique de git.
-Cela peut se faire grâce aux commandes suivantes :
-
-~~~~~~~~~~~~~~~~~~~~ {.bash}
-git checkout master
-git pull
-git checkout dev/feature1
-git rebase master
-git push -f
-~~~~~~~~~~~~~~~~~~~~
-
+personne ne commit) afin de s'assurer d'avoir la dernière version à jour.
 
 
 # Tutoriels
