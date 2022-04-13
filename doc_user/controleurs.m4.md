@@ -77,11 +77,13 @@ Le champ `controllers` (facultatif) à la racine du yaml permet de définir les
 paramètres permettant d'intégrer des contrôleurs à la simulation, qui vont
 calculer les commandes dont ont besoin les efforts commandés.
 
-Les seule clefs communes à tous les types de contrôleurs sont `type` (pour
-choisir le type de contrôleur) et `dt` (pour renseigner le pas de temps du
-contrôleur). Le pas de temps `dt` est supposé constant, sauf si `dt` vaut zéro,
-auquel cas le contrôleur doit donner à chaque appel la date du prochain appel.
-Hormis `type` et `dt`, chaque type de contrôleur peut posséder sa propre
+Les seules clefs communes à tous les types de contrôleurs sont `type` (pour
+choisir le type de contrôleur), `name` (pour identifier le contrôleur dans les
+sorties) et `dt` (pour renseigner le pas de temps du contrôleur). Le pas de
+temps `dt` est supposé constant, sauf si `dt` vaut zéro, auquel cas le
+contrôleur doit donner à chaque appel la date du prochain appel. Le nom `name`
+doit être unique : deux contrôleurs ne peuvent pas avoir le même nom. Hormis
+`type`, `name` et `dt`, chaque type de contrôleur peut posséder sa propre
 paramétrisation.
 
 Deux types de contrôleur sont actuellement implémentés
