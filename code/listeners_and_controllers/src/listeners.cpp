@@ -101,15 +101,15 @@ Controller* build_controller(const double tstart, const YamlController& yaml_con
 {
     if (yaml_controller.type == "PID")
     {
-        return new PIDController (tstart, yaml_controller.dt, yaml_controller.rest_of_the_yaml);
+        return new PIDController (tstart, yaml_controller.dt, yaml_controller.name, yaml_controller.rest_of_the_yaml);
     }
     if (yaml_controller.type == "GRPC")
     {
-        return GrpcController::build(tstart, yaml_controller.rest_of_the_yaml, sys);
+        return GrpcController::build(tstart, yaml_controller.name, yaml_controller.rest_of_the_yaml, sys);
     }
     if (yaml_controller.type == "CSV")
     {
-        return new CSVController(tstart, yaml_controller.rest_of_the_yaml);
+        return new CSVController(tstart, yaml_controller.name, yaml_controller.rest_of_the_yaml);
     }
     THROW(__PRETTY_FUNCTION__, InvalidInputException, "Controller type '" << yaml_controller.type << "' is unknown. Known controller types are: PID, GRPC");
     return NULL;

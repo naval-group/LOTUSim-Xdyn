@@ -15,9 +15,10 @@
 struct YamlController
 {
     YamlController();
-    std::string type;                             //!< Type of the controller (PID, gRPC)
-    double dt;                                    //!< Time step of the discrete system
-    std::string rest_of_the_yaml;                 //!< All other fields that are spectific to the controller type
+    std::string type;             //!< Type of the controller (PID, gRPC)
+    double dt;                    //!< Time step of the discrete system
+    std::string name;             //!< Name of the controller instance (so we can reference it in the outputs section)
+    std::string rest_of_the_yaml; //!< All other fields that are spectific to the controller type
 };
 
 

@@ -14,15 +14,15 @@ class GrpcController : public Controller
 {
   public:
     static GrpcController *build (const double tstart,
+                                  const std::string& name,
                                   const std::string &yaml, ssc::solver::ContinuousSystem& sys);
     std::vector<std::string> get_command_names () const;
-    std::string get_name () const;
 
   private:
     GrpcController () = delete;
     GrpcController (const double tstart,
-                    const std::shared_ptr<GrpcControllerInterface> &grpc,
-                    const std::string &name);
+                    const std::string& name,
+                    const std::shared_ptr<GrpcControllerInterface> &grpc);
     /**
      * @brief Updates the controller output value in the datasource.
      *

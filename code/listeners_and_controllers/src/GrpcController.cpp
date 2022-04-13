@@ -1,10 +1,10 @@
 #include "GrpcController.hpp"
 
-GrpcController* GrpcController::build(const double tstart, const std::string& yaml, ssc::solver::ContinuousSystem& sys)
+GrpcController* GrpcController::build(const double tstart, const std::string& name_, const std::string& yaml, ssc::solver::ContinuousSystem& sys)
 {
     const auto parsed_yaml = GrpcControllerInterface::parse(yaml);
     const auto grpc = GrpcControllerInterface::build(parsed_yaml, tstart);
-    auto ret = new GrpcController(tstart, grpc, parsed_yaml.name);
+    auto ret = new GrpcController(tstart, name_, grpc);
     const auto command_names = grpc->get_command_names();
     const auto setpoint_names = grpc->get_setpoint_names();
     std::vector<double> setpoints(setpoint_names.size(), 0);
@@ -17,15 +17,9 @@ std::vector<std::string> GrpcController::get_command_names() const
     return grpc->get_command_names();
 }
 
-std::string GrpcController::get_name() const
-{
-    return name;
-}
-
-GrpcController::GrpcController (const double tstart, const std::shared_ptr<GrpcControllerInterface>& grpc_, const std::string& name_) :
-                    Controller(tstart, grpc_->get_dt())
-                    , grpc(grpc_)
-                    , name(name_)
+GrpcController::GrpcController (const double tstart, const std::string& name_, const std::shared_ptr<GrpcControllerInterface>& grpc_) :
+                    Controller(tstart, grpc_->get_dt(), name_)
+                    , grpc(grpc_), name(name_)
 {
     
 }
