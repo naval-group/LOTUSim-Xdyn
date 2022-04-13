@@ -5,6 +5,7 @@
  *      Author: cady
  */
 #include <algorithm>
+#include <unordered_set>
 #include <sstream>
 
 #include "check_input_yaml.hpp"
@@ -118,5 +119,19 @@ void check_state_name(const std::string& state_name)
 YamlSimulatorInput check_input_yaml(const YamlSimulatorInput& input)
 {
     check_rotations(input.rotations);
+    check_for_duplicated_controller_names(input.controllers);
     return input;
+}
+
+void check_for_duplicated_controller_names(const std::vector<YamlController>& controller_yaml)
+{
+    std::unordered_set<std::string> names;
+    for (const auto& controller:controller_yaml)
+    {
+        if (names.count(controller.name))
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "Controller name '" << controller.name << "' is defined twice in the YAML: each controller should have a unique name.");
+        }
+        names.insert(controller.name);
+    }
 }
