@@ -1,4 +1,4 @@
-.PHONY: all clean invalid_yaml_returns_non_zero_error_code tutorial_12 extra_hdf5_output_when_required no_extra_hdf5_output_when_not_required issue_196 issue_199 issue_202
+.PHONY: all clean invalid_yaml_returns_non_zero_error_code tutorial_12 extra_hdf5_output_when_required no_extra_hdf5_output_when_not_required issue_196 issue_199 issue_202 issue_39 issue_235
 
 all: invalid_yaml_returns_non_zero_error_code \
 	 tutorial_12\
@@ -7,7 +7,8 @@ all: invalid_yaml_returns_non_zero_error_code \
 	 issue_196\
 	 issue_199\
 	 issue_202\
-	 issue_39
+	 issue_39\
+	 issue_235
 
 
 DOCKER_RUN=docker run -t --rm -u $(shell id -u):$(shell id -g) -v $(shell pwd):/work -w /work
@@ -33,6 +34,7 @@ include Makefile.check_exports
 include Makefile.binary_stl
 include Makefile.issue_202
 include Makefile.issue_39
+include Makefile.issue_235
 
 tutorial_01_falling_ball.yml:
 	@echo "Copying tutorial files from xdyn's Docker container..."
