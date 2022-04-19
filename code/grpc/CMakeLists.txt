@@ -39,8 +39,6 @@ IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
             ENDIF()
         ENDIF()
     ENDIF()
-ELSE()
-    SET(CMAKE_CXX_FLAGS "")
 ENDIF()
 
 include_directories(inc)
