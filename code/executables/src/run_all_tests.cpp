@@ -7,8 +7,8 @@
 
 
 #include <gtest/gtest.h>
+#include <google/protobuf/stubs/common.h>
 #include <iostream>
-#include "google/protobuf/stubs/common.h"
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
