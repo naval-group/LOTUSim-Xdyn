@@ -49,7 +49,7 @@ Pour simuler une surface libre parfaitement plane, on opère de la façon
 suivante :
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-    environment:
+    environment models:
       - model: no waves
         constant sea elevation in NED frame: {value: 0, unit: m}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
