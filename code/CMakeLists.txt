@@ -206,6 +206,7 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         ${PROJECT_NAME}
         ${GRPC_GRPCPP_UNSECURE}
         ${PROTOBUF_LIBPROTOBUF}
+        ${Boost_REGEX_LIBRARY}
         ${Boost_THREAD_LIBRARY}
         )
 
