@@ -338,8 +338,7 @@ peuvent commencer un caractère (optionnel) `+` ou `-` suivi :
 - **soit** `INF` ou `INFINITY` (en ignorant la casse)
 - **soit** `NAN` or `NANsequence` (en ignorant la casse) ou `sequence` est une
   séquence de caractères, chaque caractère étant un caractère alphanumérique ou
-  le caractère (`_`) A valid floating point number for strtod using the "C"
-  locale is formed by an optional sign character (+ or -), followed by one of:
+  le caractère (`_`)
 
 Si les dates du fichier ne couvrent pas tout le fichier, la valeur des
 commandes est de zéro avant la première valeur du CSV et est égale à la
