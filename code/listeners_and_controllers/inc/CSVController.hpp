@@ -60,7 +60,6 @@ class CSVController : public Controller
      */
     double get_date_of_next_update(const double current_time) const override;
 
-    
 
     CSVLineByLineReader csv;
     double tstart;
