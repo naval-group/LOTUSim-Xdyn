@@ -325,7 +325,7 @@ Les chaînes de caractères n'ont pas besoin d'être entre guillemets (et s'il y
 des guillemets, ils doivent également figurer, le cas échéant, dans `time
 column name` et `commands`.
 
-Pour être interprêtées comme des nombres flottants par xdyn, les valeurs lues dans le CSV
+Pour être interprétées comme des nombres flottants par xdyn, les valeurs lues dans le CSV
 peuvent commencer un caractère (optionnel) `+` ou `-` suivi :
 
 - **soit** d'une séquence de chiffres, contenant au plus un caractère décimal (`.`)
