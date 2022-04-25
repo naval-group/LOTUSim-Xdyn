@@ -331,8 +331,8 @@ peuvent commencer un caractère (optionnel) `+` ou `-` suivi :
 - **soit** d'une séquence de chiffres, contenant au plus un caractère décimal (`.`)
   et optionnellement suivi d'un exposant (un caractère `e` ou `E` suivi d'un
   signe optionnel et d'une séquence de chiffres)
-- **soit** d'un préfix `0x` ou `0X` et d'une séquence de chiffres hexadécimaux avec
-  au plus un caractère décimal (`.`) et optionnallement suivi d'un exposant (un
+- **soit** d'un préfixe `0x` ou `0X` et d'une séquence de chiffres hexadécimaux avec
+  au plus un caractère décimal (`.`) et optionnellement suivi d'un exposant (un
   caractère `p` ou `P` suivi d'un signe optionnel et d'une séquence de chiffres
   hexadécimaux)
 - **soit** `INF` ou `INFINITY` (en ignorant la casse)
