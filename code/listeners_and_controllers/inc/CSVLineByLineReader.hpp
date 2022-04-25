@@ -52,9 +52,9 @@ class CSVLineByLineReader
         CSVLineByLineReader() = delete;
         CSVLineByLineReader(const std::string&) = delete;
         /**
-         * @brief Reads the next line from the CSV. Returns true if we haven't reached end-of-file.
+         * @brief Reads the next line from the CSV.
          * 
-         * @return true if there are lines left in the CSV, false if we reached EOF.
+         * @return DateValues object containing the time & requested column values in the next line.
          */
         DateValues read_next_line();
 
