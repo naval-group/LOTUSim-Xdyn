@@ -311,7 +311,7 @@ controllers:
 - `separator` est le caractère utilisé pour séparer les colonnes (`comma` ou `semicolon`).
 - `shift time column to match tstart` détermine l'origine des temps : si cette
   valeur est `true`, les valeurs de la colonne des temps correspondront
-  précisément au temps de simulation. Si sa valeur est `false`, seul l'interval
+  précisément au temps de simulation. Si sa valeur est `false`, seul l'intervalle
   de temps entre deux lignes consécutives sera conservé : le premier instant
   sera supposé égal au début de la simulation, quelle que soit la valeur lue
   dans le CSV. Ceci permet de facilement réutiliser une partie d'un fichier CSV
