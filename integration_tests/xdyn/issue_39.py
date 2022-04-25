@@ -12,7 +12,7 @@ def row_vals_match(row, val):
 
 
 def check(row, dates):
-    """Checks the values in the row mathc the commands in the CSV."""
+    """Checks the values in the row match the commands in the CSV."""
     t = float(row['t'])
     if t < dates[0]:
         return row_vals_match(row, 0)
