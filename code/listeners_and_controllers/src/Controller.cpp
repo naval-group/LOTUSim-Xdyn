@@ -8,7 +8,7 @@
 #include "Controller.hpp"
 #include "InvalidInputException.hpp"
 
-Controller::Controller(const double tstart, const double dt) : ssc::solver::DiscreteSystem(tstart, dt)
+Controller::Controller(const double date_of_first_call_, const double dt) : ssc::solver::DiscreteSystem(date_of_first_call_, dt)
 {
 }
 

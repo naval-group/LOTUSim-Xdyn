@@ -39,7 +39,8 @@ class CSVController : public Controller
         std::map<std::string,std::string> commands; //!< Command name to column name mapping
     };
 
-    CSVController(const double tstart, const std::string& yaml);
+    CSVController(const double tstart //!< Date of beginning of simulation (usually 0): this is needed by the parent class, but the date of the first call can only be known after reading the first line of the CSV file (or if shift_time_column is true)
+               , const std::string& yaml);
 
     std::vector<std::string> get_command_names() const;
 
@@ -61,8 +62,29 @@ class CSVController : public Controller
     double get_date_of_next_update(const double current_time) const override;
 
 
+    /**
+     * @brief Initializes member tstart on the first controller call: for the CSV controller, this
+     * is the first simulation step. This value does not necessarily correspond to the date of the
+     * first line in the CSV file: it is used to shift the time values of the CSV file
+     * (if shift_time_column is set to true). When it is used, all dates in the CSV file are shifted
+     * so the first date (on the CSV's first line) matches the simulation tstart.
+     * @param t Current simulation time
+     */
+    void initialize_tstart_on_first_call(const double t);
+
+    /**
+     * @brief Calculates a shifted time value if shift_time_column is set to true. If shift_time_column
+     * is false, simply return the 'time' input unchanged. If the time is shifted, it is done so the
+     * date of the first line in the CSV file matches the simulation start date. This means only the
+     * time span between two consecutive lines of the CSV file is preserved: all original dates will
+     * be changed.
+     * @param time Current simulation time
+     * @return Shifted time (or just 'time' if no shift was requested)
+     */
+    double shift_time_if_necessary(const double time) const;
+
     CSVLineByLineReader csv;
-    double tstart;
+    double tstart; //!< Date of the first simulation step (used to shift the time column if necessary)
     bool got_tstart;
 };
 

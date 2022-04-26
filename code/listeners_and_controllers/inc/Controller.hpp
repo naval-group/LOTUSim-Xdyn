@@ -19,7 +19,7 @@
 class Controller : public ssc::solver::DiscreteSystem
 {
     public:
-        Controller(const double tstart, const double dt);
+        Controller(const double date_of_first_call, const double dt);
 
         virtual ~Controller();
 

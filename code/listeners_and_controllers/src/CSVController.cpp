@@ -55,7 +55,8 @@ CSVYaml toCSVYaml(const CSVController::Yaml& yaml)
     return ret;
 }
 
-CSVController::CSVController(const double tstart, const std::string& yaml_)
+CSVController::CSVController(const double tstart //!< Date of beginning of simulation (usually 0): this is needed by the parent class, but the date of the first call can only be known after reading the first line of the CSV file (or if shift_time_column is true)
+, const std::string& yaml_)
     : Controller(tstart, 0)
     , yaml(yaml_)
     , csv(toCSVYaml(yaml))
@@ -76,15 +77,32 @@ std::vector<std::string> CSVController::get_command_names() const
     return ret;
 }
 
-void CSVController::update_discrete_states(const double time,
-                                           ssc::solver::ContinuousSystem* sys)
+void CSVController::initialize_tstart_on_first_call(const double t)
 {
+    // Only set tstart once
     if (not(got_tstart))
     {
-        tstart = time;
+        tstart = t;
         got_tstart = true;
     }
-    const double t = yaml.shift_time_column ? time - tstart + csv.get_initial_date() : time;
+}
+
+double CSVController::shift_time_if_necessary(const double time) const
+{
+    if (yaml.shift_time_column)
+    {
+        // Shift each time instant so simulation's tstart matches the date of the first line of the
+        // CSV file
+        return time - tstart + csv.get_initial_date();
+    }
+    return time;
+}
+
+void CSVController::update_discrete_states(const double time, //!< Current simulation time
+                                           ssc::solver::ContinuousSystem* sys)
+{
+    initialize_tstart_on_first_call(time);
+    const double t = shift_time_if_necessary(time);
     const auto commands = csv.get_values(t);
     for (const auto cv:commands)
     {
