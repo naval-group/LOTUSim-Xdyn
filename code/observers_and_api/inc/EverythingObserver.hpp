@@ -20,7 +20,6 @@ class EverythingObserver : public MapObserver
         std::vector<Res> get() const;
 
     private:
-        void observe(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems); // Writes before calling the solver. Cf. solve.hpp Only what was requested by the user in the YAML file
         std::function<void(Res&, const double)> get_inserter(const std::string& body_name, const std::string& var_name) const;
         void fill_res();
         void add(const std::function<void(Res&, const double)>& inserter, const std::vector<double>& values);
