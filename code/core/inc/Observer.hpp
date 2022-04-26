@@ -47,7 +47,7 @@ class Observer
         void collect_available_serializations(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems);
 
         /**
-         * @brief For variables such as forces & discrete states, which should only be observed after a solver step
+         * @brief For variables such as forces & discrete states, which should only be observed before a solver step
          */
         template <typename T> void write_before_solver_step(
                 const T& val,
