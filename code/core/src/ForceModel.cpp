@@ -27,7 +27,8 @@ ForceModel::ForceModel(const std::string& name_, const std::vector<std::string>&
     known_reference_frame(internal_frame.frame),
     latest_force_in_body_frame(ssc::kinematics::Point(body_name)),
     date_of_latest_force_in_body_frame(std::numeric_limits<double>::min()),
-    state_used_for_last_evaluation()
+    state_used_for_last_evaluation(),
+    commands_used_for_last_evaluation()
 {
     env.k->add(make_transform(internal_frame, name, env.rot));
 }
@@ -40,7 +41,8 @@ ForceModel::ForceModel(const std::string& name_, const std::vector<std::string>&
     known_reference_frame(),
     latest_force_in_body_frame(ssc::kinematics::Point(body_name)),
     date_of_latest_force_in_body_frame(std::numeric_limits<double>::min()),
-    state_used_for_last_evaluation()
+    state_used_for_last_evaluation(),
+    commands_used_for_last_evaluation()
 {
 }
 
@@ -72,21 +74,30 @@ template <typename T> bool equal(const std::vector<T>& left, const std::vector<T
     return true;
 }
 
-bool ForceModel::is_cached(const double t, const std::vector<double>& states) const
+bool ForceModel::is_cached(const double t, const std::vector<double>& states, const std::vector<double>& current_command_values) const
 {
-    return t == date_of_latest_force_in_body_frame && equal(states, state_used_for_last_evaluation);
+    return t == date_of_latest_force_in_body_frame 
+            && equal(states, state_used_for_last_evaluation)
+            && equal(current_command_values, commands_used_for_last_evaluation);
 }
 
 ssc::kinematics::Wrench ForceModel::operator()(const BodyStates& states, const double t, const EnvironmentAndFrames& env, ssc::data_source::DataSource& command_listener)
 {
-    if (not(is_cached(t, states.get_current_state_values(0))))
+    const auto com = get_commands(command_listener,t);
+    std::vector<double> current_command_values;
+    for (const auto kv:com)
     {
-        auto F = get_force(states, t, env, get_commands(command_listener,t));
+        current_command_values.push_back(kv.second);
+    }
+    if (not(is_cached(t, states.get_current_state_values(0), current_command_values)))
+    {
+        auto F = get_force(states, t, env, com);
         can_find_internal_frame(env.k);
         F.change_point_and_frame(states.G, body_name, env.k);
         latest_force_in_body_frame = ssc::kinematics::Wrench(states.G, F.to_vector());
         state_used_for_last_evaluation = states.get_current_state_values(0);
         date_of_latest_force_in_body_frame = t;
+        commands_used_for_last_evaluation = current_command_values;
     }
     return latest_force_in_body_frame;
 }
