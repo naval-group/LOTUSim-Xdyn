@@ -19,6 +19,48 @@
 #define PI M_PI
 #include <limits>
 
+
+Memoization::Memoization(const std::function<Wrench(const BodyStates&, const double, const EnvironmentAndFrames&, const std::map<std::string,double>&)>& callback_)
+    : date_of_latest_force_in_body_frame(std::numeric_limits<double>::min())
+    , state_used_for_last_evaluation()
+    , commands_used_for_last_evaluation()
+    , callback(callback_)
+    , cached_force(ssc::kinematics::Wrench(ssc::kinematics::Point("")))
+{}
+
+template <typename T> bool equal(const std::vector<T>& left, const std::vector<T>& right)
+{
+    const size_t n = left.size();
+    if (right.size() != n) return false;
+    for (size_t i = 0 ; i < n ; ++i)
+    {
+        if (left[i] != right[i]) return false;
+    }
+    return true;
+}
+
+bool Memoization::is_cached(const double t, const std::vector<double>& states, const std::vector<double>& current_command_values) const
+{
+    return t == date_of_latest_force_in_body_frame 
+            && equal(states, state_used_for_last_evaluation)
+            && equal(current_command_values, commands_used_for_last_evaluation);
+}
+
+Wrench Memoization::run_if_not_cached(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands)
+{
+    std::vector<double> current_command_values;
+    for (const auto kv:commands)
+    {
+        current_command_values.push_back(kv.second);
+    }
+    if (not(is_cached(t, states.get_current_state_values(0), current_command_values)))
+    {
+        cached_force = callback(states, t, env, commands);
+    }
+    return cached_force;
+}
+
+using namespace std::placeholders; // for _1, _2, _3...
 ForceModel::ForceModel(const std::string& name_, const std::vector<std::string>& commands_, const YamlPosition& internal_frame, const std::string& body_name_, const EnvironmentAndFrames& env) :
     commands(commands_),
     name(name_),
@@ -26,9 +68,7 @@ ForceModel::ForceModel(const std::string& name_, const std::vector<std::string>&
     has_internal_frame(true),
     known_reference_frame(internal_frame.frame),
     latest_force_in_body_frame(ssc::kinematics::Point(body_name)),
-    date_of_latest_force_in_body_frame(std::numeric_limits<double>::min()),
-    state_used_for_last_evaluation(),
-    commands_used_for_last_evaluation()
+    memo(std::bind(&ForceModel::get_force, this, _1, _2, _3, _4))
 {
     env.k->add(make_transform(internal_frame, name, env.rot));
 }
@@ -40,9 +80,7 @@ ForceModel::ForceModel(const std::string& name_, const std::vector<std::string>&
     has_internal_frame(false),
     known_reference_frame(),
     latest_force_in_body_frame(ssc::kinematics::Point(body_name)),
-    date_of_latest_force_in_body_frame(std::numeric_limits<double>::min()),
-    state_used_for_last_evaluation(),
-    commands_used_for_last_evaluation()
+    memo(std::bind(&ForceModel::get_force, this, _1, _2, _3, _4))
 {
 }
 
@@ -63,42 +101,13 @@ std::map<std::string,double> ForceModel::get_commands(ssc::data_source::DataSour
     return ret;
 }
 
-template <typename T> bool equal(const std::vector<T>& left, const std::vector<T>& right)
-{
-    const size_t n = left.size();
-    if (right.size() != n) return false;
-    for (size_t i = 0 ; i < n ; ++i)
-    {
-        if (left[i] != right[i]) return false;
-    }
-    return true;
-}
-
-bool ForceModel::is_cached(const double t, const std::vector<double>& states, const std::vector<double>& current_command_values) const
-{
-    return t == date_of_latest_force_in_body_frame 
-            && equal(states, state_used_for_last_evaluation)
-            && equal(current_command_values, commands_used_for_last_evaluation);
-}
-
 ssc::kinematics::Wrench ForceModel::operator()(const BodyStates& states, const double t, const EnvironmentAndFrames& env, ssc::data_source::DataSource& command_listener)
 {
     const auto com = get_commands(command_listener,t);
-    std::vector<double> current_command_values;
-    for (const auto kv:com)
-    {
-        current_command_values.push_back(kv.second);
-    }
-    if (not(is_cached(t, states.get_current_state_values(0), current_command_values)))
-    {
-        auto F = get_force(states, t, env, com);
-        can_find_internal_frame(env.k);
-        F.change_point_and_frame(states.G, body_name, env.k);
-        latest_force_in_body_frame = ssc::kinematics::Wrench(states.G, F.to_vector());
-        state_used_for_last_evaluation = states.get_current_state_values(0);
-        date_of_latest_force_in_body_frame = t;
-        commands_used_for_last_evaluation = current_command_values;
-    }
+    auto F = memo.run_if_not_cached(states, t, env, com);
+    can_find_internal_frame(env.k);
+    F.change_point_and_frame(states.G, body_name, env.k);
+    latest_force_in_body_frame = ssc::kinematics::Wrench(states.G, F.to_vector());
     return latest_force_in_body_frame;
 }
 

@@ -44,6 +44,27 @@ struct HasParse
     static const bool value = sizeof(check<T>(0)) == sizeof(yes);
 };
 
+
+/**
+ * @brief This allows us to observe the force before integration without calculating the model unnecessarily
+ */
+class Memoization
+{
+    public:
+        Memoization() = delete;
+        Memoization(const std::function<Wrench(const BodyStates&, const double, const EnvironmentAndFrames&, const std::map<std::string,double>&)>& callback);
+        Wrench run_if_not_cached(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>&);
+
+
+    private:
+        bool is_cached(const double t, const std::vector<double>& states, const std::vector<double>& current_command_values) const;
+        double date_of_latest_force_in_body_frame; 
+        std::vector<double> state_used_for_last_evaluation;
+        std::vector<double> commands_used_for_last_evaluation;
+        std::function<Wrench(const BodyStates&, const double, const EnvironmentAndFrames&, const std::map<std::string,double>&)> callback;
+        Wrench cached_force;
+};
+
 /** \brief These force models read commands from a DataSource.
  *  \details Provides facilities to the derived classes to retrieve the commands
  *  \addtogroup model_wrappers
@@ -128,14 +149,12 @@ class ForceModel
         double get_command(const std::string& command_name, ssc::data_source::DataSource& command_listener, const double t) const;
         std::map<std::string,double> get_commands(ssc::data_source::DataSource& command_listener, const double t) const;
         void can_find_internal_frame(const ssc::kinematics::KinematicsPtr& k) const;
-        bool is_cached(const double t, const std::vector<double>& states, const std::vector<double>& current_command_values) const; // Used to check if we need to re-evaluate the force model or just used the cached version
 
         bool has_internal_frame;
         std::string known_reference_frame;
         ssc::kinematics::Wrench latest_force_in_body_frame;
-        double date_of_latest_force_in_body_frame; //!< For memoization: this is used so that we can observe the force before integration without calculating the model unnecessarily
-        std::vector<double> state_used_for_last_evaluation; //!< For memoization: this is used so that we can observe the force before integration without calculating the model unnecessarily
-        std::vector<double> commands_used_for_last_evaluation; //!< For memoization: this is used so that we can observe the force before integration without calculating the model unnecessarily
+        Memoization memo;
+        
 };
 
 #endif /* FORCEMODEL_HPP_ */
