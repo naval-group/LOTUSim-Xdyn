@@ -8,13 +8,10 @@
 #include <cstdio> // For remove
 #include "CSVControllerTest.hpp"
 #include "CSVController.hpp"
-#include "listeners.hpp"
 #include "parse_controllers.hpp"
-#include "parse_time_series.hpp"
 #include "simulator_api.hpp"
 #include "yaml_data.hpp"
 #include <boost/algorithm/string.hpp>
-#include <ssc/solver/DiscreteSystem.hpp>
 #include <ssc/solver/Scheduler.hpp>
 #define EPS (1E-14)
 #define _USE_MATH_DEFINE
