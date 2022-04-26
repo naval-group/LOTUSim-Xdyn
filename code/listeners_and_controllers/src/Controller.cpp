@@ -21,13 +21,6 @@ std::vector<std::string> Controller::get_outputs() const
     return get_command_names();
 }
 
-/**
- * @brief Updates the controller output value in the datasource
-    *
-    * This method will be called by the "ssc::solver::DiscreteSystem::callback" method.
-    * @param time Current simulation time (in seconds).
-    * @param system The continuous system. Used to retrieve the continuous states.
-    */
 void Controller::set_discrete_state(ssc::solver::ContinuousSystem* sys, const std::string& command_name, const double command_value)
 {
     sys->set_discrete_state(command_name, command_value);
