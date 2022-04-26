@@ -99,7 +99,7 @@ double CSVController::shift_time_if_necessary(const double time) const
 }
 
 void CSVController::update_discrete_states(const double time, //!< Current simulation time
-                                           ssc::solver::ContinuousSystem* sys)
+                                           ssc::solver::ContinuousSystem& sys)
 {
     initialize_tstart_on_first_call(time);
     const double t = shift_time_if_necessary(time);

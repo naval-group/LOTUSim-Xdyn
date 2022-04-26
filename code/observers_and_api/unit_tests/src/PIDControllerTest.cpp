@@ -106,7 +106,7 @@ TEST_F(PIDControllerTest, update_command_in_ds_example)
     StateType states = {x, y, 300.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 1, 0, 0, 0};
     sys.get_bodies().front()->update_body_states(states, tstart);
 
-    controller.callback(scheduler, &sys);
+    controller.callback(scheduler, sys);
     const double error = rpm_co - (x - y);
     ASSERT_NEAR(Kp * error, sys.get_input_value("propeller(rpm)"), 1e-6);
 
@@ -137,7 +137,7 @@ TEST_F(PIDControllerTest, can_compute_PID_commands)
     StateType states = {x, y, 300.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 1, 0, 0, 0};
     sys.get_bodies().front()->update_body_states(states, tstart);
 
-    controller.callback(scheduler, &sys);
+    controller.callback(scheduler, sys);
     const double first_expected_command = Kp * error;
     ASSERT_NEAR(first_expected_command, sys.get_input_value("propeller(rpm)"), 1e-6);
 
@@ -152,7 +152,7 @@ TEST_F(PIDControllerTest, can_compute_PID_commands)
     states = {x, y, 300.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 1, 0, 0, 0};
     sys.get_bodies().front()->update_body_states(states, tstart + dt);
 
-    controller.callback(scheduler, &sys);
+    controller.callback(scheduler, sys);
     const double second_expected_command = Kp * error2 + Ki * error2 * dt + Kd * (error2 - error) / dt;
     ASSERT_NEAR(second_expected_command, sys.get_input_value("propeller(rpm)"), 1e-6);
 
@@ -167,7 +167,7 @@ TEST_F(PIDControllerTest, can_compute_PID_commands)
     states = {x, y, 300.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 1, 0, 0, 0};
     sys.get_bodies().front()->update_body_states(states, tstart + 2 * dt);
 
-    controller.callback(scheduler, &sys);
+    controller.callback(scheduler, sys);
     const double third_expected_command = Kp * error3 + Ki * (error2 * dt + error3 * dt) + Kd * (error3 - error2) / dt;
     ASSERT_NEAR(third_expected_command, sys.get_input_value("propeller(rpm)"), 1e-6);
 }
@@ -194,20 +194,20 @@ TEST_F(PIDControllerTest, can_compute_PID_commands_several_times_at_first_time_s
     sys.set_command_listener(std::map<std::string, double>({ { "t", tstart }, { "rpm_co", rpm_co } }));
     const StateType states = {x, y, 300.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 1, 0, 0, 0};
     sys.get_bodies().front()->update_body_states(states, tstart);
-    controller.callback(scheduler, &sys);
+    controller.callback(scheduler, sys);
     const double first_expected_command = Kp * error;
     ASSERT_NEAR(first_expected_command, sys.get_input_value("propeller(rpm)"), 1e-6);
 
     // First time step again should send back the same result
     ASSERT_EQ(tstart, scheduler.get_time());
-    controller.callback(scheduler, &sys);
+    controller.callback(scheduler, sys);
     ASSERT_NEAR(first_expected_command, sys.get_input_value("propeller(rpm)"), 1e-6);
 
     // A time step before the previous time should send back the same result
     scheduler.add_time_event(tstart - dt / 2);
     scheduler.advance_to_next_time_event();
     ASSERT_EQ(tstart - dt / 2, scheduler.get_time());
-    controller.callback(scheduler, &sys);
+    controller.callback(scheduler, sys);
     ASSERT_NEAR(first_expected_command, sys.get_input_value("propeller(rpm)"), 1e-6);
 }
 
@@ -233,7 +233,7 @@ TEST_F(PIDControllerTest, can_use_euler_angles_in_states)
     const StateType states = {100.0, 200.0, 300.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, std::get<0>(quaternion), std::get<1>(quaternion), std::get<2>(quaternion), std::get<3>(quaternion)};
     sys.get_bodies().front()->update_body_states(states, tstart);
 
-    controller.callback(scheduler, &sys);
+    controller.callback(scheduler, sys);
     const double first_expected_command = Kp * error;
     ASSERT_NEAR(first_expected_command, sys.get_input_value("propeller(psi_co)"), 1e-6);
 }
@@ -281,7 +281,7 @@ TEST_F(PIDControllerTest, can_initialize_controllers)
 
     const auto controllers = get_initialized_controllers(tstart,
                                              parse_controller_yaml(yaml_controllers.str()),
-                                             std::vector<YamlTimeSeries>(), scheduler, &sys
+                                             std::vector<YamlTimeSeries>(), scheduler, sys
                                              );
 
     // Check controllers commands have been initialized in the datasource

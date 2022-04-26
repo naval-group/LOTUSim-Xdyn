@@ -85,7 +85,7 @@ PIDController::Yaml::Yaml (const std::string &yaml) : Kp (), Ki (), Kd (), state
  * @param system The continuous system. Used to retrieve the continuous states.
  */
 void
-PIDController::update_discrete_states (const double time, ssc::solver::ContinuousSystem* sys)
+PIDController::update_discrete_states (const double time, ssc::solver::ContinuousSystem& sys)
 {
     const double command_value = compute_command(Controller::get_setpoint(sys, yaml.setpoint_name),
                                                  get_measured_value(sys),
@@ -96,7 +96,7 @@ PIDController::update_discrete_states (const double time, ssc::solver::Continuou
 /** \brief Gets the value of the controller measured input used by `compute_command` from the system states
  */
 double
-PIDController::get_measured_value(const ssc::solver::ContinuousSystem* sys) const
+PIDController::get_measured_value(const ssc::solver::ContinuousSystem& sys) const
 {
     double measured_state = 0;
     for (const auto& name_coeff : yaml.state_weights)

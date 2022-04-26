@@ -12,6 +12,7 @@
 #include "yaml_data.hpp"
 #include "InvalidInputException.hpp"
 #include "PIDController.hpp"
+#include "Sim.hpp"
 
 #define EPS (1E-14)
 #define _USE_MATH_DEFINE
@@ -191,6 +192,17 @@ TEST_F(listenersTest, should_throw_if_force_model_name_is_not_defined_for_a_comm
     ASSERT_THROW(make_command_listener(parse_command_yaml(commands)), InvalidInputException);
 }
 
+Sim get_dummy_sim();
+Sim get_dummy_sim()
+{
+    const std::vector<BodyPtr> bodies;
+    const std::vector<ListOfForces> forces;
+    const EnvironmentAndFrames env;
+    const StateType x;
+    const ssc::data_source::DataSource command_listener;
+    return Sim(bodies, forces, env, x, command_listener);
+}
+
 TEST_F(listenersTest, get_pid_controllers_example)
 {
     const std::string commands =
@@ -202,10 +214,12 @@ TEST_F(listenersTest, get_pid_controllers_example)
         "    t: [0]\n"
         "    rpm: {unit: rad/s, values: [3]}\n"
         "    psi_co: {unit: deg, values: [30]}\n";
+    
+    Sim sim = get_dummy_sim();
     //! [controllersTest listen_to_file_example]
     const auto controllers = build_controllers(0,
                                              parse_controller_yaml(test_data::controllers()),
-                                             parse_command_yaml(commands), NULL
+                                             parse_command_yaml(commands), sim
                                              );
     ASSERT_EQ(2, controllers.size());
     ASSERT_EQ("propeller(rpm)", ((PIDController*)controllers.at(0).get())->yaml.command_name);
@@ -225,5 +239,6 @@ TEST_F(listenersTest, should_throw_if_controllers_and_commands_define_the_same_c
         "    rpm: {unit: rad/s, values: [3]}\n");
     const std::vector<YamlController> yaml_controllers = parse_controller_yaml(test_data::controllers());
 
-    ASSERT_THROW(build_controllers(0, yaml_controllers, yaml_commands, NULL), InvalidInputException);
+    Sim sim = get_dummy_sim();
+    ASSERT_THROW(build_controllers(0, yaml_controllers, yaml_commands, sim), InvalidInputException);
 }

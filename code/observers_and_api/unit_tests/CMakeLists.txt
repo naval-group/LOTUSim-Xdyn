@@ -20,6 +20,7 @@ FILE(GLOB SRC
         src/EverythingObserverTest.cpp
         src/JSONSerializerTest.cpp
         src/CoSimulationObserverTest.cpp
+        src/listenersTest.cpp
         )
 # ------8<---------------------------------------------->8-----
 

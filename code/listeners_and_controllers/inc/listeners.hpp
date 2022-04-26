@@ -28,7 +28,7 @@ ssc::data_source::DataSource make_command_listener(const std::vector<YamlTimeSer
 void add_setpoints_listener(ssc::data_source::DataSource& ds, const std::vector<YamlTimeSeries>& setpoints);
 
 class Controller;
-Controller* build_controller(const double tstart, const YamlController& yaml_controller, Sim* sys);
+Controller* build_controller(const double tstart, const YamlController& yaml_controller, Sim& sys);
 void check_no_controller_outputs_are_defined_in_a_command(const Controller* controller, const std::vector<YamlTimeSeries>& yaml_commands);
 
 /**  \brief Reads data from YAML & returns the corresponding controllers.
@@ -38,13 +38,13 @@ std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > get_initialized_contr
                                                const std::vector<YamlController>& yaml_controllers,
                                                const std::vector<YamlTimeSeries>& yaml_commands,
                                                ssc::solver::Scheduler& scheduler,
-                                               Sim* sys
+                                               Sim& sys
                                                );
 
 std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > build_controllers(const double tstart,
                                                const std::vector<YamlController>& yaml_controllers,
                                                const std::vector<YamlTimeSeries>& yaml_commands,
-                                               Sim* sys
+                                               Sim& sys
                                                );
 
 #endif /* LISTENERS_HPP_ */
