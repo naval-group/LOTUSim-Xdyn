@@ -24,4 +24,4 @@ class CSVControllerTest : public ::testing::Test
       ssc::random_data_generator::DataGenerator a;
 };
 
-#endif  /* PIDCONTROLLERTEST_HPP_ */
+#endif  /* CSVCONTROLLERTEST_HPP_ */
