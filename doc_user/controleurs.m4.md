@@ -276,3 +276,71 @@ pour être sérialisées.
 
 Le [tutoriel 11](#tutoriel-11-utilisation-dun-contr%C3%B4leur-distant) donne un exemple d'utilisation de contrôleur distant.
 
+### Commandes lues d'un fichier CSV
+
+Il est possible, à la place d'un contrôleur, de lire directement les sorties de
+contrôleurs (les commandes actionneurs) depuis un fichier CSV. Pour ce faire,
+on utilise le contrôleur `csv`. Ce dernier lit le fichier CSV ligne à ligne (il
+ne charge pas l'ensemble du fichier en mémoire) et utilise les valeurs lues en
+tant que commandes. La première ligne de ce fichier est sensée contenir les
+noms des colonnes (qui doivent tous être distincts).
+
+Sa paramétrisation est la suivante :
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+controllers:
+  - name: some unique name
+    type: csv
+    path: path/to/file.csv
+    time column name: t
+    separator: comma
+    shift time column to match tstart: true
+    commands:
+        port side propeller(beta): beta_co
+        port side propeller(rpm): rpm_co
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- `name` est utilisé pour identifier les sorties du contrôleur (cf. section
+  `outputs`).
+- `type` doit avoir pour valeur `csv` pour lire les commandes d'un fichier.
+- `path` est le chemin (absolu ou relatif au répertoire de lancement d'xdyn)
+  vers le fichier CSV. Le fichier CSV doit rester disponible pendant toute la
+  durée de la simulation.
+- `time column name` est l'identifiant de la colonne contenant les dates. Ces
+  dates doivent être strictement croissantes.
+- `separator` est le caractère utilisé pour séparer les colonnes (`comma` ou `semicolon`).
+- `shift time column to match tstart` détermine l'origine des temps : si cette
+  valeur est `true`, les valeurs de la colonne des temps correspondront
+  précisément au temps de simulation. Si sa valeur est `false`, seul l'intervalle
+  de temps entre deux lignes consécutives sera conservé : le premier instant
+  sera supposé égal au début de la simulation, quelle que soit la valeur lue
+  dans le CSV. Ceci permet de facilement réutiliser une partie d'un fichier CSV
+  dans une simulation sans devoir changer toutes les dates.
+- `commands` contient une liste de clefs-valeurs : la clef correspond à la commande
+  actionneur retournée par ce contrôleur (sa sortie) et la valeur doit être un nom
+  de colonne valide. Pour permettre plus de flexibilité, xdyn ne vérifie pas
+  que la commande est bien utilisée.
+
+Les chaînes de caractères n'ont pas besoin d'être entre guillemets (et s'il y a
+des guillemets, ils doivent également figurer, le cas échéant, dans `time
+column name` et `commands`.
+
+Pour être interprétées comme des nombres flottants par xdyn, les valeurs lues dans le CSV
+peuvent commencer un caractère (optionnel) `+` ou `-` suivi :
+
+- **soit** d'une séquence de chiffres, contenant au plus un caractère décimal (`.`)
+  et optionnellement suivi d'un exposant (un caractère `e` ou `E` suivi d'un
+  signe optionnel et d'une séquence de chiffres)
+- **soit** d'un préfixe `0x` ou `0X` et d'une séquence de chiffres hexadécimaux avec
+  au plus un caractère décimal (`.`) et optionnellement suivi d'un exposant (un
+  caractère `p` ou `P` suivi d'un signe optionnel et d'une séquence de chiffres
+  hexadécimaux)
+- **soit** `INF` ou `INFINITY` (en ignorant la casse)
+- **soit** `NAN` or `NANsequence` (en ignorant la casse) ou `sequence` est une
+  séquence de caractères, chaque caractère étant un caractère alphanumérique ou
+  le caractère (`_`)
+
+Si les dates du fichier ne couvrent pas tout le fichier, la valeur des
+commandes est de zéro avant la première valeur du CSV et est égale à la
+dernière valeur lue après la dernière date du CSV.
+

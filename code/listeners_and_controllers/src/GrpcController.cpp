@@ -1,14 +1,10 @@
 #include "GrpcController.hpp"
 
-GrpcController* GrpcController::build(const double tstart, const std::string& yaml, ssc::solver::ContinuousSystem *sys)
+GrpcController* GrpcController::build(const double tstart, const std::string& yaml, ssc::solver::ContinuousSystem& sys)
 {
     const auto parsed_yaml = GrpcControllerInterface::parse(yaml);
     const auto grpc = GrpcControllerInterface::build(parsed_yaml, tstart);
     auto ret = new GrpcController(tstart, grpc, parsed_yaml.name);
-    if (!sys)
-    {
-        return ret;
-    }
     const auto command_names = grpc->get_command_names();
     const auto setpoint_names = grpc->get_setpoint_names();
     std::vector<double> setpoints(setpoint_names.size(), 0);
@@ -34,14 +30,14 @@ GrpcController::GrpcController (const double tstart, const std::shared_ptr<GrpcC
     
 }
 
-void GrpcController::add_controller_outputs_to_data_source(const double time, ssc::solver::ContinuousSystem *sys, const std::vector<double>& setpoints)
+void GrpcController::add_controller_outputs_to_data_source(const double time, ssc::solver::ContinuousSystem& sys, const std::vector<double>& setpoints)
 {
-    auto dx_dt = sys->get_latest_dx_dt();
+    auto dx_dt = sys.get_latest_dx_dt();
     if (dx_dt.empty())
     {
         dx_dt = std::vector<double>(13, 0);
     }
-    const auto response = grpc->get_commands(time, sys->state, dx_dt, setpoints);
+    const auto response = grpc->get_commands(time, sys.state, dx_dt, setpoints);
     const auto commands = response.commands;
     for (auto command : commands)
     {
@@ -50,16 +46,13 @@ void GrpcController::add_controller_outputs_to_data_source(const double time, ss
 }
 
 void GrpcController::update_discrete_states (const double time,
-                                 ssc::solver::ContinuousSystem *sys)
+                                 ssc::solver::ContinuousSystem& sys)
 {
-    if (sys)
+    const auto setpoint_names = grpc->get_setpoint_names();
+    std::vector<double> setpoints(setpoint_names.size(), 0);
+    for (size_t i = 0 ; i < setpoint_names.size() ; ++i)
     {
-        const auto setpoint_names = grpc->get_setpoint_names();
-        std::vector<double> setpoints(setpoint_names.size(), 0);
-        for (size_t i = 0 ; i < setpoint_names.size() ; ++i)
-        {
-            setpoints[i] = Controller::get_setpoint(sys, setpoint_names[i]);
-        }
-        add_controller_outputs_to_data_source(time, sys, setpoints);        
+        setpoints[i] = Controller::get_setpoint(sys, setpoint_names[i]);
     }
+    add_controller_outputs_to_data_source(time, sys, setpoints);        
 }

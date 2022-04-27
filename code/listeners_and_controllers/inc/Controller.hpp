@@ -9,18 +9,17 @@
 #define CONTROLLER_HPP_
 
 #include <string>
-#include <ssc/data_source.hpp>
 #include <ssc/solver/DiscreteSystem.hpp>
 #include <ssc/solver/ContinuousSystem.hpp>
 #include "Sim.hpp"
 /**
  * @brief Constant step controller.
- * 
+ *
  */
 class Controller : public ssc::solver::DiscreteSystem
 {
     public:
-        Controller(const double tstart, const double dt);
+        Controller(const double date_of_first_call, const double dt);
 
         virtual ~Controller();
 
@@ -40,15 +39,15 @@ class Controller : public ssc::solver::DiscreteSystem
          * @param command_name The name of the datasource command that should be updated.
          * @param command_value The value of the datasource command that should replace the previous one.
          */
-        void set_discrete_state(ssc::solver::ContinuousSystem* system, const std::string& command_name, const double command_value);
+        void set_discrete_state(ssc::solver::ContinuousSystem& system, const std::string& command_name, const double command_value);
 
         /** \brief Gets the value of the controller setpoint input used by `compute_command` from the datasource
          */
-        double get_setpoint(const ssc::solver::ContinuousSystem* sys, const std::string& setpoint_name) const;
+        double get_setpoint(const ssc::solver::ContinuousSystem& sys, const std::string& setpoint_name) const;
 
         /** \brief Gets the value of the system state used by the controller to compute its input
          */
-        double get_system_output(const ssc::solver::ContinuousSystem* sys, const std::string& state_name) const;
+        double get_system_output(const ssc::solver::ContinuousSystem& sys, const std::string& state_name) const;
 
     private:
         /**
@@ -58,7 +57,7 @@ class Controller : public ssc::solver::DiscreteSystem
          * @param time Current simulation time (in seconds).
          * @param system The continuous system. Used to retrieve the continuous states.
          */
-        virtual void update_discrete_states(const double time, ssc::solver::ContinuousSystem* system) = 0;
+        virtual void update_discrete_states(const double time, ssc::solver::ContinuousSystem& system) = 0;
 
 };
 

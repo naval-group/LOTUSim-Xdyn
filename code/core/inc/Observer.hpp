@@ -38,16 +38,34 @@ class Observer
     public:
         Observer(); // Outputs everything by default
         Observer(const std::vector<std::string>& data);
-        virtual void observe(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems); // Only what was requested by the user in the YAML file
-        void observe_everything(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems); // Everything (not just what the user asked). Used for co-simulation
+        void check_variables_to_serialize_are_available() const;
+        virtual void observe_before_solver_step(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems); // Writes before calling the solver. Cf. solve.hpp Only what was requested by the user in the YAML file
+        virtual void observe_after_solver_step(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems); // Writes after calling the solver. Cf. solve.hpp Only what was requested by the user in the YAML file
         virtual ~Observer();
+        void flush();
+        // Makes sure the observers know about the variables the system makes available for serialization (so we can run check_variables_to_serialize_are_available solve.hpp)
+        void collect_available_serializations(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems);
 
-        template <typename T> void write(
+        /**
+         * @brief For variables such as forces & discrete states, which should only be observed before a solver step
+         */
+        template <typename T> void write_before_solver_step(
                 const T& val,
                 const DataAddressing& address)
         {
             initialize[address.name] = get_initializer(val, address);
-            serialize[address.name] = get_serializer(val, address);
+            serializers_called_before_solver_step[address.name] = get_serializer(val, address);
+        }
+
+        /**
+         * @brief For variables such as continuous states, which should only be observed after a solver step
+         */
+        template <typename T> void write_after_solver_step(
+                const T& val,
+                const DataAddressing& address)
+        {
+            initialize[address.name] = get_initializer(val, address);
+            serializers_called_after_solver_step[address.name] = get_serializer(val, address);
         }
 
         virtual void write_before_simulation(const std::vector<FlatDiscreteDirectionalWaveSpectrum>& val, const DataAddressing& address);
@@ -74,15 +92,22 @@ class Observer
 
         void remove_variable(const std::string& variable_to_remove);
         bool should_serialize(const std::string& variable) const;
+        std::vector<std::string> requested_serializations;
+
+    protected:
+        void initialize_serialization_of_requested_variables(const std::vector<std::string>& variables_to_serialize);
+        void serialize_before_solver_step(const std::vector<std::string>& variables_to_serialize);
+        void serialize_after_solver_step(const std::vector<std::string>& variables_to_serialize);
+        void serialize_requested_variables(const std::vector<std::string>& variables_to_serialize, const std::map<std::string, std::function<void()> >& serialize);
+        std::vector<std::string> all_variables(std::map<std::string, std::function<void()> >& map) const;
 
     private:
-        void initialize_serialization_of_requested_variables(const std::vector<std::string>& variables_to_serialize);
-        void serialize_requested_variables(const std::vector<std::string>& variables_to_serialize);
-
         bool initialized;
         bool output_everything;
-        std::vector<std::string> requested_serializations;
-        std::map<std::string, std::function<void()> > serialize;
+        std::map<std::string, std::function<void()> > serializers_called_before_solver_step;
+        std::map<std::string, std::function<void()> > serializers_called_after_solver_step;
+
+    protected:
         std::map<std::string, std::function<void()> > initialize;
 };
 

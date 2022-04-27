@@ -35,7 +35,7 @@ template <typename StepperType> std::vector<Res> simulate(Sim& sys, const YamlSi
 {
     EverythingObserver observer;
     const double tstart = scheduler.get_time();
-    const auto controllers = get_initialized_controllers(tstart, input.controllers, input.commands, scheduler, &sys);
+    const auto controllers = get_initialized_controllers(tstart, input.controllers, input.commands, scheduler, sys);
     ssc::solver::quicksolve<StepperType>(sys, scheduler, observer, controllers);
     auto ret = observer.get();
     return ret;
@@ -106,7 +106,7 @@ template <typename StepperType> std::vector<Res> simulate(const YamlSimulatorInp
     const double tstart = scheduler.get_time();
     Sim sys = get_system(input, mesh, tstart, commands);
     SimObserver observer;
-    const auto controllers = get_initialized_controllers(tstart, input.controllers, input.commands, scheduler, &sys);
+    const auto controllers = get_initialized_controllers(tstart, input.controllers, input.commands, scheduler, sys);
     ssc::solver::quicksolve<StepperType>(sys, scheduler, observer, controllers);
     return observer.get();
 }

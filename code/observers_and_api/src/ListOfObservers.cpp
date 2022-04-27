@@ -52,11 +52,43 @@ ListOfObservers::ListOfObservers(const std::vector<ObserverPtr>& observers_) : o
 {
 }
 
-void ListOfObservers::observe(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems)
+void ListOfObservers::check_variables_to_serialize_are_available() const
 {
     for (auto observer:observers)
     {
-        observer->observe(sys,t, discrete_systems);
+        observer->check_variables_to_serialize_are_available();
+    }
+}
+
+void ListOfObservers::observe_before_solver_step(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems)
+{
+    for (auto observer:observers)
+    {
+        observer->observe_before_solver_step(sys,t, discrete_systems);
+    }
+}
+
+void ListOfObservers::observe_after_solver_step(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems)
+{
+    for (auto observer:observers)
+    {
+        observer->observe_after_solver_step(sys,t, discrete_systems);
+    }
+}
+
+void ListOfObservers::collect_available_serializations(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems)
+{
+    for (auto observer:observers)
+    {
+        observer->collect_available_serializations(sys,t, discrete_systems);
+    }
+}
+
+void ListOfObservers::flush()
+{
+    for (auto observer:observers)
+    {
+        observer->flush();
     }
 }
 

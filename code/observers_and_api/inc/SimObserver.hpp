@@ -29,8 +29,12 @@ class SimObserver
 {
     public:
         SimObserver();
-        void observe(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems);
+        void check_variables_to_serialize_are_available() const;
+        void observe_before_solver_step(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems);
+        void observe_after_solver_step(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems);
         std::vector<Res> get() const;
+        void flush();
+        void collect_available_serializations(const Sim& ss, const double , const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& );
 
     private:
         std::vector<Res> res;

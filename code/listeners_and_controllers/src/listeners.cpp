@@ -13,6 +13,7 @@
 #include "listeners.hpp"
 #include "PIDController.hpp"
 #include "GrpcController.hpp"
+#include "CSVController.hpp"
 #include "YamlTimeSeries.hpp"
 
 #include <ssc/macros.hpp>
@@ -96,7 +97,7 @@ void add_setpoints_listener(ssc::data_source::DataSource& ds,
     ds.check_out();
 }
 
-Controller* build_controller(const double tstart, const YamlController& yaml_controller, Sim* sys)
+Controller* build_controller(const double tstart, const YamlController& yaml_controller, Sim& sys)
 {
     if (yaml_controller.type == "PID")
     {
@@ -105,6 +106,10 @@ Controller* build_controller(const double tstart, const YamlController& yaml_con
     if (yaml_controller.type == "GRPC")
     {
         return GrpcController::build(tstart, yaml_controller.rest_of_the_yaml, sys);
+    }
+    if (yaml_controller.type == "CSV")
+    {
+        return new CSVController(tstart, yaml_controller.rest_of_the_yaml);
     }
     THROW(__PRETTY_FUNCTION__, InvalidInputException, "Controller type '" << yaml_controller.type << "' is unknown. Known controller types are: PID, GRPC");
     return NULL;
@@ -125,14 +130,14 @@ void check_no_controller_outputs_are_defined_in_a_command(const Controller* cont
   */
 void initialize_controllers(const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& controllers,
                             ssc::solver::Scheduler& scheduler,
-                            Sim* system
+                            Sim& system
                             );
 
 
 std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > build_controllers(const double tstart,
                                                const std::vector<YamlController>& yaml_controllers,
                                                const std::vector<YamlTimeSeries>& yaml_commands,
-                                               Sim* sys
+                                               Sim& sys
                                                )
 {
     std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > controllers;
@@ -153,7 +158,7 @@ std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > get_initialized_contr
                                                const std::vector<YamlController>& yaml_controllers, //!< Parsed YAML controllers
                                                const std::vector<YamlTimeSeries>& yaml_commands, //!< Parsed YAML commands
                                                ssc::solver::Scheduler& scheduler,
-                                               Sim* sys
+                                               Sim& sys
                                                )
 {
     const auto controllers = build_controllers(tstart, yaml_controllers, yaml_commands, sys);
@@ -170,10 +175,10 @@ std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > get_initialized_contr
 
 void initialize_controllers(const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& controllers,
                             ssc::solver::Scheduler& scheduler,
-                            Sim* system
+                            Sim& system
                             )
 {
-    system->set_discrete_state("t", scheduler.get_time());
+    system.set_discrete_state("t", scheduler.get_time());
     for (auto controller:controllers)
     {
         controller->initialize(scheduler, system);

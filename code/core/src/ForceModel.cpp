@@ -17,14 +17,58 @@
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
+#include <limits>
 
+
+Memoization::Memoization(const std::function<Wrench(const BodyStates&, const double, const EnvironmentAndFrames&, const std::map<std::string,double>&)>& callback_)
+    : date_of_latest_force_in_body_frame(std::numeric_limits<double>::min())
+    , state_used_for_last_evaluation()
+    , commands_used_for_last_evaluation()
+    , callback(callback_)
+    , cached_force(ssc::kinematics::Wrench(ssc::kinematics::Point("")))
+{}
+
+template <typename T> bool equal(const std::vector<T>& left, const std::vector<T>& right)
+{
+    const size_t n = left.size();
+    if (right.size() != n) return false;
+    for (size_t i = 0 ; i < n ; ++i)
+    {
+        if (left[i] != right[i]) return false;
+    }
+    return true;
+}
+
+bool Memoization::is_cached(const double t, const std::vector<double>& states, const std::vector<double>& current_command_values) const
+{
+    return t == date_of_latest_force_in_body_frame 
+            && equal(states, state_used_for_last_evaluation)
+            && equal(current_command_values, commands_used_for_last_evaluation);
+}
+
+Wrench Memoization::run_if_not_cached(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands)
+{
+    std::vector<double> current_command_values;
+    for (const auto kv:commands)
+    {
+        current_command_values.push_back(kv.second);
+    }
+    if (not(is_cached(t, states.get_current_state_values(0), current_command_values)))
+    {
+        cached_force = callback(states, t, env, commands);
+    }
+    return cached_force;
+}
+
+using namespace std::placeholders; // for _1, _2, _3...
 ForceModel::ForceModel(const std::string& name_, const std::vector<std::string>& commands_, const YamlPosition& internal_frame, const std::string& body_name_, const EnvironmentAndFrames& env) :
     commands(commands_),
     name(name_),
     body_name(body_name_),
     has_internal_frame(true),
     known_reference_frame(internal_frame.frame),
-    latest_force_in_body_frame(ssc::kinematics::Point(body_name))
+    latest_force_in_body_frame(ssc::kinematics::Point(body_name)),
+    memo(std::bind(&ForceModel::get_force, this, _1, _2, _3, _4))
 {
     env.k->add(make_transform(internal_frame, name, env.rot));
 }
@@ -35,7 +79,8 @@ ForceModel::ForceModel(const std::string& name_, const std::vector<std::string>&
     body_name(body_name_),
     has_internal_frame(false),
     known_reference_frame(),
-    latest_force_in_body_frame(ssc::kinematics::Point(body_name))
+    latest_force_in_body_frame(ssc::kinematics::Point(body_name)),
+    memo(std::bind(&ForceModel::get_force, this, _1, _2, _3, _4))
 {
 }
 
@@ -58,7 +103,8 @@ std::map<std::string,double> ForceModel::get_commands(ssc::data_source::DataSour
 
 ssc::kinematics::Wrench ForceModel::operator()(const BodyStates& states, const double t, const EnvironmentAndFrames& env, ssc::data_source::DataSource& command_listener)
 {
-    auto F = get_force(states, t, env, get_commands(command_listener,t));
+    const auto com = get_commands(command_listener,t);
+    auto F = memo.run_if_not_cached(states, t, env, com);
     can_find_internal_frame(env.k);
     F.change_point_and_frame(states.G, body_name, env.k);
     latest_force_in_body_frame = ssc::kinematics::Wrench(states.G, F.to_vector());
@@ -147,32 +193,31 @@ void ForceModel::feed(Observer& observer, ssc::kinematics::KinematicsPtr& k, ssc
     {
         can_find_internal_frame(k);
         const Wrench tau_in_internal_frame_at_P = tau_in_body_frame_at_G.change_point_and_frame(ssc::kinematics::Point(name,0,0,0), name, k);
-        observer.write(tau_in_internal_frame_at_P.X(),DataAddressing({"efforts",body_name,name,name,"Fx"},std::string("Fx(")+name+","+body_name+","+name+")"));
-        observer.write(tau_in_internal_frame_at_P.Y(),DataAddressing({"efforts",body_name,name,name,"Fy"},std::string("Fy(")+name+","+body_name+","+name+")"));
-        observer.write(tau_in_internal_frame_at_P.Z(),DataAddressing({"efforts",body_name,name,name,"Fz"},std::string("Fz(")+name+","+body_name+","+name+")"));
-        observer.write(tau_in_internal_frame_at_P.K(),DataAddressing({"efforts",body_name,name,name,"Mx"},std::string("Mx(")+name+","+body_name+","+name+")"));
-        observer.write(tau_in_internal_frame_at_P.M(),DataAddressing({"efforts",body_name,name,name,"My"},std::string("My(")+name+","+body_name+","+name+")"));
-        observer.write(tau_in_internal_frame_at_P.N(),DataAddressing({"efforts",body_name,name,name,"Mz"},std::string("Mz(")+name+","+body_name+","+name+")"));
+        observer.write_before_solver_step(tau_in_internal_frame_at_P.X(),DataAddressing({"efforts",body_name,name,name,"Fx"},std::string("Fx(")+name+","+body_name+","+name+")"));
+        observer.write_before_solver_step(tau_in_internal_frame_at_P.Y(),DataAddressing({"efforts",body_name,name,name,"Fy"},std::string("Fy(")+name+","+body_name+","+name+")"));
+        observer.write_before_solver_step(tau_in_internal_frame_at_P.Z(),DataAddressing({"efforts",body_name,name,name,"Fz"},std::string("Fz(")+name+","+body_name+","+name+")"));
+        observer.write_before_solver_step(tau_in_internal_frame_at_P.K(),DataAddressing({"efforts",body_name,name,name,"Mx"},std::string("Mx(")+name+","+body_name+","+name+")"));
+        observer.write_before_solver_step(tau_in_internal_frame_at_P.M(),DataAddressing({"efforts",body_name,name,name,"My"},std::string("My(")+name+","+body_name+","+name+")"));
+        observer.write_before_solver_step(tau_in_internal_frame_at_P.N(),DataAddressing({"efforts",body_name,name,name,"Mz"},std::string("Mz(")+name+","+body_name+","+name+")"));
     }
 
-    observer.write(tau_in_body_frame_at_Ob.X(),DataAddressing({"efforts",body_name,name,body_name,"Fx"},std::string("Fx(")+name+","+body_name+","+body_name+")"));
-    observer.write(tau_in_body_frame_at_Ob.Y(),DataAddressing({"efforts",body_name,name,body_name,"Fy"},std::string("Fy(")+name+","+body_name+","+body_name+")"));
-    observer.write(tau_in_body_frame_at_Ob.Z(),DataAddressing({"efforts",body_name,name,body_name,"Fz"},std::string("Fz(")+name+","+body_name+","+body_name+")"));
-    observer.write(tau_in_body_frame_at_Ob.K(),DataAddressing({"efforts",body_name,name,body_name,"Mx"},std::string("Mx(")+name+","+body_name+","+body_name+")"));
-    observer.write(tau_in_body_frame_at_Ob.M(),DataAddressing({"efforts",body_name,name,body_name,"My"},std::string("My(")+name+","+body_name+","+body_name+")"));
-    observer.write(tau_in_body_frame_at_Ob.N(),DataAddressing({"efforts",body_name,name,body_name,"Mz"},std::string("Mz(")+name+","+body_name+","+body_name+")"));
-
-    observer.write(tau_in_ned_frame_at_G.X(),DataAddressing({"efforts",body_name,name,"NED","Fx"},std::string("Fx(")+name+","+body_name+",NED)"));
-    observer.write(tau_in_ned_frame_at_G.Y(),DataAddressing({"efforts",body_name,name,"NED","Fy"},std::string("Fy(")+name+","+body_name+",NED)"));
-    observer.write(tau_in_ned_frame_at_G.Z(),DataAddressing({"efforts",body_name,name,"NED","Fz"},std::string("Fz(")+name+","+body_name+",NED)"));
-    observer.write(tau_in_ned_frame_at_G.K(),DataAddressing({"efforts",body_name,name,"NED","Mx"},std::string("Mx(")+name+","+body_name+",NED)"));
-    observer.write(tau_in_ned_frame_at_G.M(),DataAddressing({"efforts",body_name,name,"NED","My"},std::string("My(")+name+","+body_name+",NED)"));
-    observer.write(tau_in_ned_frame_at_G.N(),DataAddressing({"efforts",body_name,name,"NED","Mz"},std::string("Mz(")+name+","+body_name+",NED)"));
+    observer.write_before_solver_step(tau_in_body_frame_at_Ob.X(),DataAddressing({"efforts",body_name,name,body_name,"Fx"},std::string("Fx(")+name+","+body_name+","+body_name+")"));
+    observer.write_before_solver_step(tau_in_body_frame_at_Ob.Y(),DataAddressing({"efforts",body_name,name,body_name,"Fy"},std::string("Fy(")+name+","+body_name+","+body_name+")"));
+    observer.write_before_solver_step(tau_in_body_frame_at_Ob.Z(),DataAddressing({"efforts",body_name,name,body_name,"Fz"},std::string("Fz(")+name+","+body_name+","+body_name+")"));
+    observer.write_before_solver_step(tau_in_body_frame_at_Ob.K(),DataAddressing({"efforts",body_name,name,body_name,"Mx"},std::string("Mx(")+name+","+body_name+","+body_name+")"));
+    observer.write_before_solver_step(tau_in_body_frame_at_Ob.M(),DataAddressing({"efforts",body_name,name,body_name,"My"},std::string("My(")+name+","+body_name+","+body_name+")"));
+    observer.write_before_solver_step(tau_in_body_frame_at_Ob.N(),DataAddressing({"efforts",body_name,name,body_name,"Mz"},std::string("Mz(")+name+","+body_name+","+body_name+")"));
+    observer.write_before_solver_step(tau_in_ned_frame_at_G.X(),DataAddressing({"efforts",body_name,name,"NED","Fx"},std::string("Fx(")+name+","+body_name+",NED)"));
+    observer.write_before_solver_step(tau_in_ned_frame_at_G.Y(),DataAddressing({"efforts",body_name,name,"NED","Fy"},std::string("Fy(")+name+","+body_name+",NED)"));
+    observer.write_before_solver_step(tau_in_ned_frame_at_G.Z(),DataAddressing({"efforts",body_name,name,"NED","Fz"},std::string("Fz(")+name+","+body_name+",NED)"));
+    observer.write_before_solver_step(tau_in_ned_frame_at_G.K(),DataAddressing({"efforts",body_name,name,"NED","Mx"},std::string("Mx(")+name+","+body_name+",NED)"));
+    observer.write_before_solver_step(tau_in_ned_frame_at_G.M(),DataAddressing({"efforts",body_name,name,"NED","My"},std::string("My(")+name+","+body_name+",NED)"));
+    observer.write_before_solver_step(tau_in_ned_frame_at_G.N(),DataAddressing({"efforts",body_name,name,"NED","Mz"},std::string("Mz(")+name+","+body_name+",NED)"));
 
     for (const auto command_name:commands)
     {
         const double command_value = get_command(command_name, command_listener, t);
-        observer.write(command_value,DataAddressing({"efforts",body_name,name,"commands",command_name},std::string(name+"("+command_name+")")));
+        observer.write_before_solver_step(command_value,DataAddressing({"efforts",body_name,name,"commands",command_name},std::string(name+"("+command_name+")")));
     }
 
     extra_observations(observer);

@@ -51,7 +51,7 @@ de visualisation).
 
 La figure suivante illustre les interactions entre ces composants.
 
-![](images/solver.svg "Fonctionnement du solveur")
+![](images/solver.png "Fonctionnement du solveur")
 
 ## Steppers
 

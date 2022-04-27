@@ -195,7 +195,7 @@ void GRPCForceModel::extra_observations(Observer& observer) const
     const auto extra_observations = pimpl->get_extra_observations();
     for (const auto observation : extra_observations)
     {
-        observer.write(observation.second, DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),observation.first},observation.first + std::string("(") + get_body_name() + ")"));
+        observer.write_before_solver_step(observation.second, DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),observation.first},observation.first + std::string("(") + get_body_name() + ")"));
     }
 }
 

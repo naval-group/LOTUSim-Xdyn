@@ -71,7 +71,7 @@ void run_simulation(const XdynCommandLineArguments& input_data, ErrorReporter& e
         const auto input = SimulatorYamlParser(yaml_input).parse();
         auto sys = get_system(input, input_data.tstart);
         ssc::solver::Scheduler scheduler(input_data.tstart, input_data.tend, input_data.initial_timestep);
-        const auto controllers = get_initialized_controllers(input_data.tstart, input.controllers, input.commands, scheduler, &sys);
+        const auto controllers = get_initialized_controllers(input_data.tstart, input.controllers, input.commands, scheduler, sys);
         auto observers_description = build_observers_description(yaml_input);
         ListOfObservers observers(observers_description);
         add_observers_from_cli(input_data, observers);

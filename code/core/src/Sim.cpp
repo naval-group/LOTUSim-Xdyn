@@ -61,12 +61,12 @@ class Sim::Impl
 
         void feed_force(Observer& observer, ssc::kinematics::UnsafeWrench& W, const std::string& force_name, const std::string& body_name, const std::string& frame)
         {
-            observer.write(W.X(),DataAddressing({"efforts",body_name,force_name,frame,"Fx"}, "Fx("+force_name+","+body_name+","+frame+")"));
-            observer.write(W.Y(),DataAddressing({"efforts",body_name,force_name,frame,"Fy"}, "Fy("+force_name+","+body_name+","+frame+")"));
-            observer.write(W.Z(),DataAddressing({"efforts",body_name,force_name,frame,"Fz"}, "Fz("+force_name+","+body_name+","+frame+")"));
-            observer.write(W.K(),DataAddressing({"efforts",body_name,force_name,frame,"Mx"}, "Mx("+force_name+","+body_name+","+frame+")"));
-            observer.write(W.M(),DataAddressing({"efforts",body_name,force_name,frame,"My"}, "My("+force_name+","+body_name+","+frame+")"));
-            observer.write(W.N(),DataAddressing({"efforts",body_name,force_name,frame,"Mz"}, "Mz("+force_name+","+body_name+","+frame+")"));
+            observer.write_before_solver_step(W.X(),DataAddressing({"efforts",body_name,force_name,frame,"Fx"}, "Fx("+force_name+","+body_name+","+frame+")"));
+            observer.write_before_solver_step(W.Y(),DataAddressing({"efforts",body_name,force_name,frame,"Fy"}, "Fy("+force_name+","+body_name+","+frame+")"));
+            observer.write_before_solver_step(W.Z(),DataAddressing({"efforts",body_name,force_name,frame,"Fz"}, "Fz("+force_name+","+body_name+","+frame+")"));
+            observer.write_before_solver_step(W.K(),DataAddressing({"efforts",body_name,force_name,frame,"Mx"}, "Mx("+force_name+","+body_name+","+frame+")"));
+            observer.write_before_solver_step(W.M(),DataAddressing({"efforts",body_name,force_name,frame,"My"}, "My("+force_name+","+body_name+","+frame+")"));
+            observer.write_before_solver_step(W.N(),DataAddressing({"efforts",body_name,force_name,frame,"Mz"}, "Mz("+force_name+","+body_name+","+frame+")"));
         }
 
         ssc::data_source::DataSource& get_command_listener()
@@ -232,6 +232,7 @@ ssc::kinematics::PointMatrix Sim::get_waves(const double t//!< Current instant
 
 void Sim::output(const StateType& x, Observer& obs, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems) const
 {
+    obs.write_before_solver_step(t, DataAddressing(std::vector<std::string>(1,"t"), "t"));
     StateType x_with_forced_states;
     for (auto body: pimpl->bodies)
     {
@@ -246,18 +247,19 @@ void Sim::output(const StateType& x, Observer& obs, const double t, const std::v
             const auto body = pimpl->name2bodyptr[body_name];
             const auto G = body->get_origin(x);
             force->feed(obs,pimpl->env.k, pimpl->command_listener, t);
+            force->extra_observations(obs);
         }
     }
     for (auto body:pimpl->bodies)
     {
         body->feed(normalized_x, obs, pimpl->env.rot);
         auto dF = body->get_delta_F(pimpl->_dx_dt,pimpl->sum_of_forces_in_body_frame[body->get_name()]);
-        obs.write((double)dF(0),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"Fx"},std::string("Fx(blocked states,")+body->get_name()+","+body->get_name()+")"));
-        obs.write((double)dF(1),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"Fy"},std::string("Fy(blocked states,")+body->get_name()+","+body->get_name()+")"));
-        obs.write((double)dF(2),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"Fz"},std::string("Fz(blocked states,")+body->get_name()+","+body->get_name()+")"));
-        obs.write((double)dF(3),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"Mx"},std::string("Mx(blocked states,")+body->get_name()+","+body->get_name()+")"));
-        obs.write((double)dF(4),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"My"},std::string("My(blocked states,")+body->get_name()+","+body->get_name()+")"));
-        obs.write((double)dF(5),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"Mz"},std::string("Mz(blocked states,")+body->get_name()+","+body->get_name()+")"));
+        obs.write_before_solver_step((double)dF(0),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"Fx"},std::string("Fx(blocked states,")+body->get_name()+","+body->get_name()+")"));
+        obs.write_before_solver_step((double)dF(1),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"Fy"},std::string("Fy(blocked states,")+body->get_name()+","+body->get_name()+")"));
+        obs.write_before_solver_step((double)dF(2),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"Fz"},std::string("Fz(blocked states,")+body->get_name()+","+body->get_name()+")"));
+        obs.write_before_solver_step((double)dF(3),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"Mx"},std::string("Mx(blocked states,")+body->get_name()+","+body->get_name()+")"));
+        obs.write_before_solver_step((double)dF(4),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"My"},std::string("My(blocked states,")+body->get_name()+","+body->get_name()+")"));
+        obs.write_before_solver_step((double)dF(5),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"Mz"},std::string("Mz(blocked states,")+body->get_name()+","+body->get_name()+")"));
     }
     pimpl->env.feed(obs, t, pimpl->bodies, normalized_x);
     for (auto body:pimpl->bodies)
@@ -271,7 +273,7 @@ void Sim::output(const StateType& x, Observer& obs, const double t, const std::v
         for (const auto output : discrete_system->get_outputs())
         {
             const double value = pimpl->command_listener.get<double>(output);
-            obs.write(value, DataAddressing(std::vector<std::string>{"controllers",name}, output));
+            obs.write_before_solver_step(value, DataAddressing(std::vector<std::string>{"controllers",name}, output));
         }
     }
 }
