@@ -23,9 +23,13 @@ On peut contrôler des modèles d'effort de deux manières :
 
 - en renseignant les commandes de façon statique dans la section `commands` du
   fichier YAML d'entrée
-- en utilisant des contrôleurs internes ([PID](#r%C3%A9gulateur-pid)) ou [externes](#contr%C3%B4leurs-externes) (interface gRPC)
+- en utilisant des contrôleurs internes ([PID](#r%C3%A9gulateur-pid),
+  [CSV](#contr%C3%B4leurs-csv)) ou [externes](#contr%C3%B4leurs-externes)
+  (interface gRPC)
 
 Ces deux méthodes sont détaillées ci-dessous.
+
+## Commandes et consignes
 
 ### Commandes statiques
 
@@ -128,6 +132,8 @@ setpoints:
       v_co: {unit: knot, values: [0, 1]}
       w_co: {unit: knot, values: [0, 1]}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Types de contrôleurs
 
 ### Régulateur PID
 
@@ -278,14 +284,13 @@ pour être sérialisées.
 
 Le [tutoriel 11](#tutoriel-11-utilisation-dun-contr%C3%B4leur-distant) donne un exemple d'utilisation de contrôleur distant.
 
-### Commandes lues d'un fichier CSV
+### Contrôleur CSV
 
-Il est possible, à la place d'un contrôleur, de lire directement les sorties de
-contrôleurs (les commandes actionneurs) depuis un fichier CSV. Pour ce faire,
-on utilise le contrôleur `csv`. Ce dernier lit le fichier CSV ligne à ligne (il
-ne charge pas l'ensemble du fichier en mémoire) et utilise les valeurs lues en
-tant que commandes. La première ligne de ce fichier est sensée contenir les
-noms des colonnes (qui doivent tous être distincts).
+Ce contrôleur particulier lit les commandes actionneurs d'un fichier CSV.  Le
+fichier CSV est lu ligne à ligne (il ne charge pas l'ensemble du fichier en
+mémoire) et le contrôleur CSV utilise les valeurs lues en tant que commandes.
+La première ligne du fichier CSV est sensée contenir les noms des colonnes (qui
+doivent tous être distincts).
 
 Sa paramétrisation est la suivante :
 
