@@ -1,5 +1,23 @@
-# v5.1.0 (2022-03-01)
+# v6.0.0 (2022-04-27)
 
+- #240 Fix interfaces submodule reference
+- #39 Add possibility to use csv file as input to commands
+- #238 Error in the documentation for the definition of the environment
+- #65 Constant tag for beta version on dockerhub
+- #234 Add python wrapper for flettnerrotormodel
+- #62 Lift direction does not take angle command into account in polar force models
+- #203 Typo error in xdyn doc
+- #231 Typo in documentation
+- #227 Build does not fail on python version check
+- #61 Wrong frame in generic stiffness model
+- #233 Fix broken documentation generation
+- #229 Clearer error message on parse error for hydro polar model
+- #222 Wrong exception when the wrong key is set in yaml file
+
+
+# v5.1.0 (2022-03-03)
+
+- #226 Update changelog due to new version 5 0 1 5 1
 - #224 Update python code in documentation that does not work
 - #60 Flettner rotor force model is not known by xdyn
 - #223 Fix grpc directional_spectra method that contains an indice bug
@@ -13,6 +31,7 @@
 - #214 Bug while evaluating torque transport
 - #26 New feature generic stiffness matrix
 - #57 Making lifting profile models controllable
+
 
 # v5.0.1 (2021-12-02)
 
@@ -165,3 +184,5 @@
 - #20 Erreur lors de l utilisation du modele d effort constant force
 - #14 Ajout module d effort constant
 - #18 Les fichiers yaml d entrees ont une erreur d unite pour les tp sans consequence pour les resultats
+
+
