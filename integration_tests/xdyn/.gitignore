@@ -9,3 +9,7 @@ test_ship_in_waves.yml.new
 stable_cube_test.yml
 issue_39.out.csv
 issue_202.csv
+issue_39.out.with_shift.csv
+issue_39.out.without_shift.csv
+issue_39_without_shift.yml
+issue_235.dup.yml

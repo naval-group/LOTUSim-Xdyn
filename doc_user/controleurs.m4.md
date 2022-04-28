@@ -23,9 +23,13 @@ On peut contrôler des modèles d'effort de deux manières :
 
 - en renseignant les commandes de façon statique dans la section `commands` du
   fichier YAML d'entrée
-- en utilisant des contrôleurs internes ([PID](#r%C3%A9gulateur-pid)) ou [externes](#contr%C3%B4leurs-externes) (interface gRPC)
+- en utilisant des contrôleurs internes ([PID](#r%C3%A9gulateur-pid),
+  [CSV](#contr%C3%B4leurs-csv)) ou [externes](#contr%C3%B4leurs-externes)
+  (interface gRPC)
 
 Ces deux méthodes sont détaillées ci-dessous.
+
+## Commandes et consignes
 
 ### Commandes statiques
 
@@ -77,11 +81,13 @@ Le champ `controllers` (facultatif) à la racine du yaml permet de définir les
 paramètres permettant d'intégrer des contrôleurs à la simulation, qui vont
 calculer les commandes dont ont besoin les efforts commandés.
 
-Les seule clefs communes à tous les types de contrôleurs sont `type` (pour
-choisir le type de contrôleur) et `dt` (pour renseigner le pas de temps du
-contrôleur). Le pas de temps `dt` est supposé constant, sauf si `dt` vaut zéro,
-auquel cas le contrôleur doit donner à chaque appel la date du prochain appel.
-Hormis `type` et `dt`, chaque type de contrôleur peut posséder sa propre
+Les seules clefs communes à tous les types de contrôleurs sont `type` (pour
+choisir le type de contrôleur), `name` (pour identifier le contrôleur dans les
+sorties) et `dt` (pour renseigner le pas de temps du contrôleur). Le pas de
+temps `dt` est supposé constant, sauf si `dt` vaut zéro, auquel cas le
+contrôleur doit donner à chaque appel la date du prochain appel. Le nom `name`
+doit être unique : deux contrôleurs ne peuvent pas avoir le même nom. Hormis
+`type`, `name` et `dt`, chaque type de contrôleur peut posséder sa propre
 paramétrisation.
 
 Deux types de contrôleur sont actuellement implémentés
@@ -126,6 +132,8 @@ setpoints:
       v_co: {unit: knot, values: [0, 1]}
       w_co: {unit: knot, values: [0, 1]}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Types de contrôleurs
 
 ### Régulateur PID
 
@@ -276,14 +284,13 @@ pour être sérialisées.
 
 Le [tutoriel 11](#tutoriel-11-utilisation-dun-contr%C3%B4leur-distant) donne un exemple d'utilisation de contrôleur distant.
 
-### Commandes lues d'un fichier CSV
+### Contrôleur CSV
 
-Il est possible, à la place d'un contrôleur, de lire directement les sorties de
-contrôleurs (les commandes actionneurs) depuis un fichier CSV. Pour ce faire,
-on utilise le contrôleur `csv`. Ce dernier lit le fichier CSV ligne à ligne (il
-ne charge pas l'ensemble du fichier en mémoire) et utilise les valeurs lues en
-tant que commandes. La première ligne de ce fichier est sensée contenir les
-noms des colonnes (qui doivent tous être distincts).
+Ce contrôleur particulier lit les commandes actionneurs d'un fichier CSV.  Le
+fichier CSV est lu ligne à ligne (il ne charge pas l'ensemble du fichier en
+mémoire) et le contrôleur CSV utilise les valeurs lues en tant que commandes.
+La première ligne du fichier CSV est sensée contenir les noms des colonnes (qui
+doivent tous être distincts).
 
 Sa paramétrisation est la suivante :
 

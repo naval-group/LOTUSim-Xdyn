@@ -95,6 +95,7 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& input, const double t0, c
 
 Sim get_system(const YamlSimulatorInput& input, const double t0)
 {
+    check_input_yaml(input);
     ssc::data_source::DataSource command_listener = make_command_listener(input.commands);
     add_setpoints_listener(command_listener, input.setpoints);
     return get_builder(input, t0, command_listener).build();

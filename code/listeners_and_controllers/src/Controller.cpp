@@ -8,7 +8,9 @@
 #include "Controller.hpp"
 #include "InvalidInputException.hpp"
 
-Controller::Controller(const double date_of_first_call_, const double dt) : ssc::solver::DiscreteSystem(date_of_first_call_, dt)
+Controller::Controller(const double date_of_first_call_, const double dt, const std::string& name_)
+: ssc::solver::DiscreteSystem(date_of_first_call_, dt)
+, name(name_)
 {
 }
 
@@ -19,6 +21,11 @@ Controller::~Controller()
 std::vector<std::string> Controller::get_outputs() const
 {
     return get_command_names();
+}
+
+std::string Controller::get_name() const
+{
+    return name;
 }
 
 void Controller::set_discrete_state(ssc::solver::ContinuousSystem& sys, const std::string& command_name, const double command_value)

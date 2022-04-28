@@ -53,46 +53,46 @@ std::string CSVControllerTest::test_yaml() const
 
 TEST_F(CSVControllerTest, smoke_test)
 {
-    ASSERT_NO_THROW(CSVController(0, test_yaml()));
+    ASSERT_NO_THROW(CSVController(0, a.random<std::string>(), test_yaml()));
 }
 
 TEST_F(CSVControllerTest, can_parse_yaml_path)
 {
-    const CSVController controller(0, test_yaml());
+    const CSVController controller(0, a.random<std::string>(), test_yaml());
     ASSERT_EQ(csv.get_filename(), controller.yaml.path);
 }
 
 TEST_F(CSVControllerTest, can_parse_time_column)
 {
-    const CSVController controller(0, test_yaml());
+    const CSVController controller(0, a.random<std::string>(), test_yaml());
     ASSERT_EQ("t", controller.yaml.time_column);
 }
 
 TEST_F(CSVControllerTest, can_parse_separator_and_throw_if_it_is_unknown)
 {
     std::string yaml = test_yaml();
-    ASSERT_NO_THROW(CSVController(0, yaml));
-    ASSERT_EQ(',', CSVController(0, yaml).yaml.separator);
+    ASSERT_NO_THROW(CSVController(0, a.random<std::string>(), yaml));
+    ASSERT_EQ(',', CSVController(0, a.random<std::string>(), yaml).yaml.separator);
     boost::replace_all(yaml, "separator: comma", "separator: something");
-    ASSERT_THROW(CSVController(0, yaml), InvalidInputException);
+    ASSERT_THROW(CSVController(0, a.random<std::string>(), yaml), InvalidInputException);
     boost::replace_all(yaml, "separator: something", "separator: semicolon");
-    ASSERT_NO_THROW(CSVController(0, yaml));
-    ASSERT_EQ(';', CSVController(0, yaml).yaml.separator);
+    ASSERT_NO_THROW(CSVController(0, a.random<std::string>(), yaml));
+    ASSERT_EQ(';', CSVController(0, a.random<std::string>(), yaml).yaml.separator);
 }
 
 TEST_F(CSVControllerTest, can_parse_time_shift_to_match_tstart)
 {
     std::string yaml = test_yaml();
-    ASSERT_TRUE(CSVController(0, yaml).yaml.shift_time_column);
+    ASSERT_TRUE(CSVController(0, a.random<std::string>(), yaml).yaml.shift_time_column);
     boost::replace_all(yaml, "shift time column to match tstart: true", "shift time column to match tstart: false");
-    ASSERT_FALSE(CSVController(0, yaml).yaml.shift_time_column);
+    ASSERT_FALSE(CSVController(0, a.random<std::string>(), yaml).yaml.shift_time_column);
     boost::replace_all(yaml, "shift time column to match tstart: false", "shift time column to match tstart: foo");
-    ASSERT_THROW(CSVController(0, yaml), InvalidInputException);
+    ASSERT_THROW(CSVController(0, a.random<std::string>(), yaml), InvalidInputException);
 }
 
 TEST_F(CSVControllerTest, can_parse_commands)
 {
-    auto commands = CSVController(0, test_yaml()).yaml.commands;
+    auto commands = CSVController(0, a.random<std::string>(), test_yaml()).yaml.commands;
     ASSERT_EQ(2, commands.size());
     ASSERT_EQ(commands["port side propeller(beta)"], "beta_co");
     ASSERT_EQ(commands["port side propeller(rpm)"], "rpm_co");
@@ -100,7 +100,7 @@ TEST_F(CSVControllerTest, can_parse_commands)
 
 TEST_F(CSVControllerTest, commands_should_be_correct)
 {
-    const CSVController controller(0, test_yaml());
+    const CSVController controller(0, a.random<std::string>(), test_yaml());
     const std::vector<std::string> expected_commands = {"port side propeller(beta)", "port side propeller(rpm)"};
     ASSERT_EQ(expected_commands, controller.get_command_names());
 }
@@ -109,7 +109,7 @@ TEST_F(CSVControllerTest, can_read_data_from_csv)
 {
     std::string yaml = test_yaml();
     boost::replace_all(yaml, "shift time column to match tstart: true", "shift time column to match tstart: false");
-    CSVController controller(0, yaml);
+    CSVController controller(0, a.random<std::string>(), yaml);
     const double tstart = 0.1;
     const double dt = 0.5;
     ssc::solver::Scheduler scheduler(tstart, 2, dt);
@@ -130,7 +130,7 @@ TEST_F(CSVControllerTest, can_read_data_from_csv)
 TEST_F(CSVControllerTest, can_read_data_from_csv_with_time_shift)
 {
     const std::string yaml = test_yaml();
-    CSVController controller(0, yaml);
+    CSVController controller(0, a.random<std::string>(), yaml);
     const double tstart = 0.1;
     const double dt = 0.5;
     ssc::solver::Scheduler scheduler(tstart, 2, dt);

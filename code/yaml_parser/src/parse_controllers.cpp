@@ -14,6 +14,7 @@
       operator>>(const YAML::Node& node, YamlController& c)
 {
     node["type"] >> c.type;
+    node["name"] >> c.name;
     c.dt = 0;
     try_to_parse(node, "dt", c.dt);
     YAML::Emitter out;

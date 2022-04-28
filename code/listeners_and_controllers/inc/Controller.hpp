@@ -19,7 +19,7 @@
 class Controller : public ssc::solver::DiscreteSystem
 {
     public:
-        Controller(const double date_of_first_call, const double dt);
+        Controller(const double date_of_first_call, const double dt, const std::string& name);
 
         virtual ~Controller();
 
@@ -29,6 +29,7 @@ class Controller : public ssc::solver::DiscreteSystem
          */
         virtual std::vector<std::string> get_command_names() const = 0;
         std::vector<std::string> get_outputs() const;
+        std::string get_name() const;
 
     protected:
         /**
@@ -58,6 +59,7 @@ class Controller : public ssc::solver::DiscreteSystem
          * @param system The continuous system. Used to retrieve the continuous states.
          */
         virtual void update_discrete_states(const double time, ssc::solver::ContinuousSystem& system) = 0;
+        std::string name;
 
 };
 

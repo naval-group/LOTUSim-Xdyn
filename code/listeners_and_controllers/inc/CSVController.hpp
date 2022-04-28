@@ -38,7 +38,7 @@ class CSVController : public Controller
     };
 
     CSVController(const double tstart //!< Date of beginning of simulation (usually 0): this is needed by the parent class, but the date of the first call can only be known after reading the first line of the CSV file (or if shift_time_column is true)
-               , const std::string& yaml);
+                , const std::string& name, const std::string& yaml);
 
     std::vector<std::string> get_command_names() const;
 

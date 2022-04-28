@@ -56,8 +56,9 @@ CSVYaml toCSVYaml(const CSVController::Yaml& yaml)
 }
 
 CSVController::CSVController(const double tstart //!< Date of beginning of simulation (usually 0): this is needed by the parent class, but the date of the first call can only be known after reading the first line of the CSV file (or if shift_time_column is true)
+, const std::string& name_
 , const std::string& yaml_)
-    : Controller(tstart, 0)
+    : Controller(tstart, 0, name_)
     , yaml(yaml_)
     , csv(toCSVYaml(yaml))
     , tstart(std::numeric_limits<double>::min())
