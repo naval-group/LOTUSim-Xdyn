@@ -1,11 +1,15 @@
-DOCKER_HDF5_IMAGE:=hdfgroup/hdf5lib:1.10.6
-DOCKER_H5DUMP:=${DOCKER_RUN} ${DOCKER_HDF5_IMAGE} h5dump
+DOCKER_HDF5_IMAGE:=h5dump
+DOCKER_H5DUMP:=${DOCKER_RUN} ${DOCKER_HDF5_IMAGE}
+
+docker_build_h5dump:
+	@docker build . -t ${DOCKER_HDF5_IMAGE} > /dev/null
+.PHONY: docker_build_h5dump
 
 test_ship_in_waves.yml:
 	@echo "Copying tutorial files from xdyn's Docker container..."
 	@${DOCKER_RUN} -v $(shell pwd):/xdyn_demos --entrypoint /bin/bash xdyn -c "cp /usr/demos/$@ /xdyn_demos/"
 
-extra_hdf5_output_when_required: test_ship_in_waves.yml test_ship.stl
+extra_hdf5_output_when_required: docker_build_h5dump test_ship_in_waves.yml test_ship.stl
 	@echo "Checking if we can output scripts, meshes, command line, waves, spectra & YAML"
 	@${DOCKER_RUN} xdyn --dt 1 --tend 1 test_ship_in_waves.yml
 	@${DOCKER_H5DUMP} \
@@ -26,12 +30,12 @@ extra_hdf5_output_when_required: test_ship_in_waves.yml test_ship.stl
 	@if grep -q 0 .commands.result; then \
 		echo "Found everything in the HDF5 file: test passed!" && rm -f .commands.result; \
 	else \
-	echo "At least one thing was not found: test failed!" && rm -f .commands.result && exit 1; \
+		echo "At least one thing was not found: test failed!" && rm -f .commands.result && exit 1; \
 	fi
 
 	@echo "Checking that script, mesh, command line & YAML are not outputted unless specified in the YAML"
 
-no_extra_hdf5_output_when_not_required: test_ship_in_waves.yml test_ship.stl
+no_extra_hdf5_output_when_not_required: docker_build_h5dump test_ship_in_waves.yml test_ship.stl
 	@echo "Checking scripts, meshes, command line, waves, spectra & YAML are *not* outputted by default"
 	@cp test_ship_in_waves.yml test_ship_in_waves.yml.new
 	@sed -i 's/data:.*/data: []/g' test_ship_in_waves.yml.new
