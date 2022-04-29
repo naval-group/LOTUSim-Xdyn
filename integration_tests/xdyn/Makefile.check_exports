@@ -26,7 +26,7 @@ extra_hdf5_output_when_required: docker_build_h5dump test_ship_in_waves.yml test
 		-d /outputs/spectra/00/k\
 		-d /outputs/spectra/00/omega\
 		-d /outputs/spectra/00/phase\
-		-c 1 test.h5; echo $$? >> .commands.result
+		-c 1 test.h5 > /dev/null; echo $$? >> .commands.result
 	@if grep -q 0 .commands.result; then \
 		echo "Found everything in the HDF5 file: test passed!" && rm -f .commands.result; \
 	else \
@@ -42,7 +42,7 @@ no_extra_hdf5_output_when_not_required: docker_build_h5dump test_ship_in_waves.y
 	@${DOCKER_RUN} xdyn --dt 1 --tend 1 test_ship_in_waves.yml.new
 	@${DOCKER_H5DUMP} \
 		-d /inputs/meshes/TestShip/faces\
-		-c 1 test.h5; echo $$? >> .commands.result
+		-c 1 test.h5 > /dev/null; echo $$? >> .commands.result
 	@if grep -q 0 .commands.result; then \
 		echo "Found mesh, but it shouldn't be outputted by default: test failed!" && rm -f test_ship_in_waves.yml.new .commands.result && exit 1 \
 	else \
@@ -50,7 +50,7 @@ no_extra_hdf5_output_when_not_required: docker_build_h5dump test_ship_in_waves.y
 	fi
 	@${DOCKER_H5DUMP} \
 		-d /scripts/MatLab/demoMatLab.m\
-		-c 1 test.h5; echo $$? >> .commands.result
+		-c 1 test.h5 > /dev/null; echo $$? >> .commands.result
 	@if grep -q 0 .commands.result; then \
 		echo "Found matlab script, but it shouldn't be outputted by default: test failed!" && rm -f test_ship_in_waves.yml.new .commands.result && exit 1 \
 	else \
@@ -58,7 +58,7 @@ no_extra_hdf5_output_when_not_required: docker_build_h5dump test_ship_in_waves.y
 	fi
 	@${DOCKER_H5DUMP} \
 		-d /scripts/Python/demoPython.py\
-		-c 1 test.h5; echo $$? >> .commands.result
+		-c 1 test.h5 > /dev/null; echo $$? >> .commands.result
 	@if grep -q 0 .commands.result; then \
 		echo "Found python script, but it shouldn't be outputted by default: test failed!" && rm -f .commands.result test_ship_in_waves.yml.new && exit 1 \
 	else \
@@ -66,7 +66,7 @@ no_extra_hdf5_output_when_not_required: docker_build_h5dump test_ship_in_waves.y
 	fi
 	@${DOCKER_H5DUMP} \
 		-d /inputs/yaml/input\
-		-c 1 test.h5; echo $$? >> .commands.result
+		-c 1 test.h5 > /dev/null; echo $$? >> .commands.result
 	@if grep -q 0 .commands.result; then \
 		echo "Found input YAML, but it shouldn't be outputted by default: test failed!" && rm -f .commands.result test_ship_in_waves.yml.new && exit 1 \
 	else \
@@ -77,7 +77,7 @@ no_extra_hdf5_output_when_not_required: docker_build_h5dump test_ship_in_waves.y
 		-d /outputs/waves/x\
 		-d /outputs/waves/y\
 		-d /outputs/waves/z\
-		-c 1 test.h5; echo $$? >> .commands.result
+		-c 1 test.h5 > /dev/null; echo $$? >> .commands.result
 	@if grep -q 0 .commands.result; then \
 		echo "Found waves, but they shouldn't be outputted by default: test failed!" && rm -f .commands.result test_ship_in_waves.yml.new && exit 1 \
 	else \
@@ -89,7 +89,7 @@ no_extra_hdf5_output_when_not_required: docker_build_h5dump test_ship_in_waves.y
 		-d /outputs/spectra/00/k\
 		-d /outputs/spectra/00/omega\
 		-d /outputs/spectra/00/phase\
-		-c 1 test.h5; echo $$? >> .commands.result
+		-c 1 test.h5 > /dev/null; echo $$? >> .commands.result
 	@if grep -q 0 .commands.result; then \
 		echo "Found spectra, but they shouldn't be outputted by default: test failed!" && rm -f .commands.result test_ship_in_waves.yml.new && exit 1 \
 	else \
