@@ -1,4 +1,10 @@
-.PHONY: all clean invalid_yaml_returns_non_zero_error_code tutorial_12 extra_hdf5_output_when_required no_extra_hdf5_output_when_not_required issue_196 issue_199 issue_202 issue_39 issue_235
+.PHONY: all clean \
+	invalid_yaml_returns_non_zero_error_code \
+	tutorial_12 \
+	extra_hdf5_output_when_required \
+	no_extra_hdf5_output_when_not_required \
+	issue_196 issue_199 issue_202 issue_39 issue_235 \
+	test_output_size
 
 all: invalid_yaml_returns_non_zero_error_code \
 	 tutorial_12\
@@ -8,7 +14,8 @@ all: invalid_yaml_returns_non_zero_error_code \
 	 issue_199\
 	 issue_202\
 	 issue_39\
-	 issue_235
+	 issue_235\
+	 test_output_size
 
 
 DOCKER_RUN=docker run -t --rm -u $(shell id -u):$(shell id -g) -v $(shell pwd):/work -w /work
@@ -77,4 +84,5 @@ clean:
 		   issue_202.csv\
 		   issue_39.out.without_shift.csv\
 		   issue_39.out.with_shift.csv\
-		   issue_39_without_shift.yml
+		   issue_39_without_shift.yml\
+		   res.csv res.hdf5 res.json res.tsv

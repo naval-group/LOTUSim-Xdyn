@@ -1,15 +1,52 @@
-DOCKER_HDF5_IMAGE:=h5dump
-DOCKER_H5DUMP:=${DOCKER_RUN} ${DOCKER_HDF5_IMAGE}
+DOCKER_IMAGE:=xdyn-check
+DOCKER_H5DUMP:=${DOCKER_RUN} --entrypoint h5dump ${DOCKER_IMAGE}
+DOCKER_PYTHON:=${DOCKER_RUN} --entrypoint python3 ${DOCKER_IMAGE}
 
-docker_build_h5dump:
-	@docker build . -t ${DOCKER_HDF5_IMAGE} > /dev/null
-.PHONY: docker_build_h5dump
+docker_build_xdyn_check:
+	@docker build . -t ${DOCKER_IMAGE} > /dev/null
+.PHONY: docker_build_xdyn_check
 
 test_ship_in_waves.yml:
 	@echo "Copying tutorial files from xdyn's Docker container..."
 	@${DOCKER_RUN} -v $(shell pwd):/xdyn_demos --entrypoint /bin/bash xdyn -c "cp /usr/demos/$@ /xdyn_demos/"
 
-extra_hdf5_output_when_required: docker_build_h5dump test_ship_in_waves.yml test_ship.stl
+PYTHON_CODE_CHECK_SIZE_HDF5:= \
+	import numpy as np; \
+	import h5py; \
+	res=h5py.File('res.hdf5','r'); \
+	assert np.allclose(np.arange(0,1.1,0.1),res['outputs']['t'])
+
+PYTHON_CODE_CHECK_SIZE_CSV:= \
+	import numpy as np; \
+	res=np.genfromtxt('res.csv',names=True,delimiter=',');\
+	assert np.allclose(np.arange(0,1.1,0.1),res['t'])
+
+PYTHON_CODE_CHECK_SIZE_JSON:= \
+	import json; \
+	lines = open('res.json','r').readlines();\
+	data = [json.loads(line) for line in lines]; \
+	times = [d['t'] for d in data];\
+	assert np.allclose(np.arange(0,1.1,0.1),times)
+
+PYTHON_CODE_CHECK_SIZE_TSV:= \
+	import numpy as np; \
+	res=np.genfromtxt('res.tsv',names=True,delimiter='\t');\
+	assert np.allclose(np.arange(0,1.1,0.1),res['t'])
+
+test_output_size: docker_build_xdyn_check test_ship_in_waves.yml test_ship.stl
+	@echo "Checking if we get the correct time vector in HDF5, CSV"
+	@${DOCKER_RUN} xdyn --dt 0.1 --tend 1 test_ship_in_waves.yml -o res.hdf5
+	@${DOCKER_PYTHON} -c "${PYTHON_CODE_CHECK_SIZE_HDF5}"
+	@${DOCKER_RUN} xdyn --dt 0.1 --tend 1 test_ship_in_waves.yml -o res.hdf5 -s euler
+	@${DOCKER_PYTHON} -c "${PYTHON_CODE_CHECK_SIZE_HDF5}"
+	@${DOCKER_RUN} xdyn --dt 0.1 --tend 1 test_ship_in_waves.yml -o res.csv
+	@${DOCKER_PYTHON} -c "${PYTHON_CODE_CHECK_SIZE_CSV}"
+	@${DOCKER_RUN} xdyn --dt 0.1 --tend 1 test_ship_in_waves.yml -o res.csv -s euler
+	@${DOCKER_PYTHON} -c "${PYTHON_CODE_CHECK_SIZE_CSV}"
+	@rm -f res.hdf5 res.csv
+	@echo Success
+
+extra_hdf5_output_when_required: docker_build_xdyn_check test_ship_in_waves.yml test_ship.stl
 	@echo "Checking if we can output scripts, meshes, command line, waves, spectra & YAML"
 	@${DOCKER_RUN} xdyn --dt 1 --tend 1 test_ship_in_waves.yml
 	@${DOCKER_H5DUMP} \
@@ -35,7 +72,7 @@ extra_hdf5_output_when_required: docker_build_h5dump test_ship_in_waves.yml test
 
 	@echo "Checking that script, mesh, command line & YAML are not outputted unless specified in the YAML"
 
-no_extra_hdf5_output_when_not_required: docker_build_h5dump test_ship_in_waves.yml test_ship.stl
+no_extra_hdf5_output_when_not_required: docker_build_xdyn_check test_ship_in_waves.yml test_ship.stl
 	@echo "Checking scripts, meshes, command line, waves, spectra & YAML are *not* outputted by default"
 	@cp test_ship_in_waves.yml test_ship_in_waves.yml.new
 	@sed -i 's/data:.*/data: []/g' test_ship_in_waves.yml.new
