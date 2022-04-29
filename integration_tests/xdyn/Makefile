@@ -61,7 +61,7 @@ test_ship.stl:
 	@${DOCKER_RUN_XDYN_BASH} "cp /usr/demos/$@ /xdyn_demos/"
 
 clean:
-	rm -rf tutorial_01_falling_ball.yml\
+	@rm -rf tutorial_01_falling_ball.yml\
 		   cube.stl\
 		   .commands.result\
 		   ONRT_SIMMAN.raodb.ini\
