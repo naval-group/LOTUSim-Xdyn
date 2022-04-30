@@ -14,24 +14,36 @@ PYTHON_CODE_CHECK_SIZE_HDF5:= \
 	import numpy as np; \
 	import h5py; \
 	res=h5py.File('res.hdf5','r'); \
-	assert np.allclose(np.arange(0,1.1,0.1),res['outputs']['t'])
+	time_vector=res['outputs']['t'];\
+	length_time_vector=len(time_vector);\
+	assert length_time_vector == 11, f'Time vector contains {length_time_vector} elements, instead of 11, for HDF5 export: t={time_vector}';\
+	assert np.allclose(np.arange(0,1.1,0.1),time_vector), f'Error checking size for HDF5: {time_vector}'
+
 
 PYTHON_CODE_CHECK_SIZE_CSV:= \
 	import numpy as np; \
 	res=np.genfromtxt('res.csv',names=True,delimiter=',');\
-	assert np.allclose(np.arange(0,1.1,0.1),res['t'])
+	time_vector=res['t'];\
+	length_time_vector = len(time_vector);\
+	assert length_time_vector == 11, f'Time vector contains {length_time_vector} elements, instead of 11, for CSV export: t={time_vector}';\
+	assert np.allclose(np.arange(0,1.1,0.1),time_vector), f'Error checking size for CSV: {time_vector}'
 
 PYTHON_CODE_CHECK_SIZE_JSON:= \
 	import json; \
-	lines = open('res.json','r').readlines();\
-	data = [json.loads(line) for line in lines]; \
-	times = [d['t'] for d in data];\
-	assert np.allclose(np.arange(0,1.1,0.1),times)
+	lines=open('res.json','r').readlines();\
+	data=[json.loads(line) for line in lines]; \
+	time_vector=[d['t'] for d in data];\
+	length_time_vector = len(time_vector);\
+	assert length_time_vector == 11, f'Time vector contains {length_time_vector} elements, instead of 11, for JSON export: t={time_vector}';\
+	assert np.allclose(np.arange(0,1.1,0.1),time_vector), f'Error checking size for JSON: {time_vector}'
 
 PYTHON_CODE_CHECK_SIZE_TSV:= \
 	import numpy as np; \
 	res=np.genfromtxt('res.tsv',names=True,delimiter='\t');\
-	assert np.allclose(np.arange(0,1.1,0.1),res['t'])
+	time_vector=res['t'];\
+	length_time_vector = len(time_vector);\
+	assert length_time_vector == 11, f'Time vector contains {length_time_vector} elements, instead of 11, for TSV export: t={time_vector}';\
+	assert np.allclose(np.arange(0,1.1,0.1),time_vector), f'Error checking size for CSV: {time_vector}'
 
 test_output_size: docker_build_xdyn_check test_ship_in_waves.yml test_ship.stl
 	@echo "Checking if we get the correct time vector in HDF5, CSV"
