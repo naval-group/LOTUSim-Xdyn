@@ -65,9 +65,6 @@ def check_time_vector_size_in_output_json(filename: str = "res.json"):
 
 
 def create_parser() -> argparse.ArgumentParser:
-    """
-    Create the parser
-    """
     parser = argparse.ArgumentParser(
         description="Main entry point to check output size wrt format\n",
         add_help=True,
