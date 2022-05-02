@@ -22,7 +22,7 @@ Observer::Observer()
 {
 }
 
-Observer::Observer(const std::vector<std::string>& data_) 
+Observer::Observer(const std::vector<std::string>& data_)
     : requested_serializations(data_)
     , initialized(false)
     , output_everything(false)
@@ -78,7 +78,6 @@ void Observer::observe_before_solver_step(const Sim& sys, const double t, const 
 
 void Observer::observe_after_solver_step(const Sim& sys, const double t, const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& discrete_systems)
 {
-    write_after_solver_step(t, DataAddressing(std::vector<std::string>(1,"t"), "t"));
     sys.output(sys.state,*this, t, discrete_systems);
     if(output_everything)
     {

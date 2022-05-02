@@ -13,3 +13,7 @@ issue_39.out.with_shift.csv
 issue_39.out.without_shift.csv
 issue_39_without_shift.yml
 issue_235.dup.yml
+res.hdf5
+res.csv
+res.tsv
+res.json
