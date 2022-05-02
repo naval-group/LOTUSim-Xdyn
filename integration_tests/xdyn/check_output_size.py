@@ -28,11 +28,10 @@ def _message_size(format: str, time_vector: np.ndarray) -> str:
 
 
 def _message_vector(format: str, time_vector: np.ndarray) -> str:
-    msg = f"Error checking size for {format}: {time_vector}"
-    return msg
+    return f"Error checking size for {format}: {time_vector}"
 
 
-def check_size_hdf5(filename: str = "res.hdf5"):
+def check_time_vector_size_in_output_hdf5(filename: str = "res.hdf5"):
     res = h5py.File(filename, "r")
     time_vector = res["outputs"]["t"]
     length_time_vector = len(time_vector)
@@ -40,7 +39,7 @@ def check_size_hdf5(filename: str = "res.hdf5"):
     assert np.allclose(_EXPECTED_TIME_VECTOR, time_vector), _message_vector("HDF5", time_vector)
 
 
-def check_size_csv(filename: str = "res.csv"):
+def check_time_vector_size_in_output_csv(filename: str = "res.csv"):
     res = np.genfromtxt(filename, names=True, delimiter=",")
     time_vector = res["t"]
     length_time_vector = len(time_vector)
@@ -48,7 +47,7 @@ def check_size_csv(filename: str = "res.csv"):
     assert np.allclose(_EXPECTED_TIME_VECTOR, time_vector), _message_vector("CSV", time_vector)
 
 
-def check_size_tsv(filename: str = "res.tsv"):
+def check_time_vector_size_in_output_tsv(filename: str = "res.tsv"):
     res = np.genfromtxt(filename, names=True, delimiter="\t")
     time_vector = res["t"]
     length_time_vector = len(time_vector)
@@ -56,7 +55,7 @@ def check_size_tsv(filename: str = "res.tsv"):
     assert np.allclose(_EXPECTED_TIME_VECTOR, time_vector), _message_vector("TSV", time_vector)
 
 
-def check_size_json(filename: str = "res.json"):
+def check_time_vector_size_in_output_json(filename: str = "res.json"):
     lines = open(filename, "r").readlines()
     data = [json.loads(line) for line in lines]
     time_vector = [d["t"] for d in data]
@@ -73,10 +72,8 @@ def create_parser() -> argparse.ArgumentParser:
         description="Main entry point to check output size wrt format\n",
         add_help=True,
     )
-
     parser.add_argument("format", choices=["csv", "hdf5", "json", "tsv"], help="Result format")
     parser.add_argument("filename", type=str, help="Filename to check")
-
     return parser
 
 
@@ -87,10 +84,10 @@ def main(cli: List[str] = None) -> None:
     parser = create_parser()
     args = parser.parse_args(cli)
     format2checker = {
-        "csv": check_size_csv,
-        "tsv": check_size_tsv,
-        "json": check_size_json,
-        "hdf5": check_size_hdf5,
+        "csv": check_time_vector_size_in_output_csv,
+        "tsv": check_time_vector_size_in_output_tsv,
+        "json": check_time_vector_size_in_output_json,
+        "hdf5": check_time_vector_size_in_output_hdf5,
     }
     format2checker[args.format](args.filename)
 
