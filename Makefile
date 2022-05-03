@@ -29,13 +29,12 @@ HEADERS=code/ssc/ssc/check_ssc_version.hpp\
         code/ssc/ssc/websocket.hpp\
         code/ssc/ssc/yaml_parser.hpp
 
+headers: ${HEADERS}
 windows: ${HEADERS} windows_gccx_posix
 debian11: ${HEADERS} debian_11_release_gcc_10
 debian: ${HEADERS} debian_11_release_gcc_10
 debug: ${HEADERS} debian_11_debug_gcc_10
-headers: ${HEADERS}
-
-
+ubuntu1804-intel: ${HEADERS} ubuntu_18_04_release_intel_compiler
 
 update-submodules:
 	@echo "Updating Git submodules..."
@@ -62,6 +61,15 @@ cmake-windows: DOCKER_IMAGE=sirehna/base-image-win64-gcc540-win32threads-ssc-xdy
 cmake-windows: BOOST_ROOT=/usr/src/mxe/usr/x86_64-w64-mingw32.static
 cmake-windows: HDF5_DIR=/opt/HDF5_1_8_20/cmake
 cmake-windows: cmake-windows-target
+
+ubuntu_18_04_release_intel_compiler: BUILD_TYPE = Release
+ubuntu_18_04_release_intel_compiler: BUILD_DIR = build_ubuntu1804_intel
+ubuntu_18_04_release_intel_compiler: CPACK_GENERATOR = DEB
+ubuntu_18_04_release_intel_compiler: DOCKER_IMAGE = sirehna/base-image-ubuntu18-04-intel-oneapi-2022-02:2022-04-19
+ubuntu_18_04_release_intel_compiler: BOOST_ROOT = /opt/boost
+ubuntu_18_04_release_intel_compiler: HDF5_DIR = /usr/local/hdf5/share/cmake
+ubuntu_18_04_release_intel_compiler: BUILD_PYTHON_WRAPPER = False
+ubuntu_18_04_release_intel_compiler: cmake-ubuntu-intel-target build-ubuntu-intel test-ubuntu-intel
 
 debian_9_release_gcc_6: BUILD_TYPE = Release
 debian_9_release_gcc_6: BUILD_DIR = build_deb9
@@ -318,6 +326,53 @@ test-debian: SHELL:=/bin/bash
 test-debian:
 	$(DOCKER_AS_USER) $(DOCKER_IMAGE) /bin/bash -c \
 	   "cp validation/codecov_bash.sh $(BUILD_DIR) && \
+	    cd $(BUILD_DIR) &&\
+	    ./run_all_tests &&\
+	    if [[ $(BUILD_TYPE) == Coverage ]];\
+	    then\
+	    echo Coverage;\
+	    gprof run_all_tests gmon.out > gprof_res.txt 2> gprof_res.err;\
+	    bash codecov_bash.sh && \
+	    rm codecov_bash.sh;\
+	    fi"
+
+cmake-ubuntu-intel-target: SHELL:=/bin/bash
+cmake-ubuntu-intel-target: code/yaml-cpp/CMakeLists.txt
+	docker pull $(DOCKER_IMAGE) || true
+	$(DOCKER_AS_USER) $(DOCKER_IMAGE) /bin/bash -c \
+	   "source /opt/intel/oneapi/setvars.sh && \
+	    cd /opt/share &&\
+	    mkdir -p $(BUILD_DIR) &&\
+	    cd $(BUILD_DIR) &&\
+	    cmake -Wno-dev \
+	     -G Ninja \
+	     -D CMAKE_C_COMPILER=icc \
+	     -D CMAKE_CXX_COMPILER=icpc \
+	     -D THIRD_PARTY_DIRECTORY=/opt/ \
+	     -D BUILD_DOCUMENTATION:BOOL=False \
+	     -D CPACK_GENERATOR=$(CPACK_GENERATOR) \
+	     -D CMAKE_BUILD_TYPE=$(BUILD_TYPE) \
+	     -D CMAKE_INSTALL_PREFIX:PATH=/opt/xdyn \
+	     -D HDF5_DIR=$(HDF5_DIR) \
+	     -D BOOST_ROOT:PATH=$(BOOST_ROOT) \
+	     -D BUILD_PYTHON_WRAPPER:BOOL=$(BUILD_PYTHON_WRAPPER) \
+	     $(ADDITIONAL_CMAKE_PARAMETERS) \
+	    /opt/share/code"
+
+build-ubuntu-intel: SHELL:=/bin/bash
+build-ubuntu-intel:
+	$(DOCKER_AS_USER) $(DOCKER_IMAGE) /bin/bash -c \
+	   "source /opt/intel/oneapi/setvars.sh && \
+	    cd /opt/share && \
+	    mkdir -p $(BUILD_DIR) && \
+	    cd $(BUILD_DIR) && \
+	    ninja $(NB_OF_PARALLEL_BUILDS) package"
+
+test-ubuntu-intel: SHELL:=/bin/bash
+test-ubuntu-intel:
+	$(DOCKER_AS_USER) $(DOCKER_IMAGE) /bin/bash -c \
+	   "source /opt/intel/oneapi/setvars.sh && \
+	    cp validation/codecov_bash.sh $(BUILD_DIR) && \
 	    cd $(BUILD_DIR) &&\
 	    ./run_all_tests &&\
 	    if [[ $(BUILD_TYPE) == Coverage ]];\
