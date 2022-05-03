@@ -62,8 +62,8 @@ INCLUDE_DIRECTORIES(${observers_and_api_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${hdb_interpolators_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${gz_curves_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${interface_hdf5_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${grpc_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
-
 
 # For gRPC
 INCLUDE_DIRECTORIES(SYSTEM ${PROTOBUF_INCLUDE_DIR})
@@ -211,7 +211,7 @@ TARGET_LINK_LIBRARIES(generate_stl_examples
         )
 
 ADD_EXECUTABLE(xdyn-for-cs
-        src//display_command_line_arguments.cpp
+        src/display_command_line_arguments.cpp
         src/parse_XdynForCSCommandLineArguments.cpp
         src/build_observers_description.cpp
         src/XdynForCSCommandLineArguments.cpp
@@ -255,6 +255,21 @@ TARGET_LINK_LIBRARIES(xdyn-for-me
         ${Boost_THREAD_LIBRARY}
         )
 
+ADD_EXECUTABLE(xdyn-grpc-airy
+        src/xdyn_grpc_airy.cpp
+        src/display_command_line_arguments.cpp
+        src/parse_XdynCommandLineArguments.cpp
+        src/XdynCommandLineArguments.cpp
+        src/ErrorReporter.cpp
+        )
+TARGET_LINK_LIBRARIES(xdyn-grpc-airy
+        x-dyn
+        ${Boost_PROGRAM_OPTIONS_LIBRARY}
+        boost_program_options_descriptions_static
+        ${GRPC_GRPCPP_UNSECURE}
+        ${PROTOBUF_LIBPROTOBUF}
+        ${Boost_THREAD_LIBRARY}
+        )
 ################################################################################
 INSTALL(TARGETS xdyn
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
@@ -263,6 +278,8 @@ INSTALL(TARGETS xdyn-for-cs
 INSTALL(TARGETS gz
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
 INSTALL(TARGETS xdyn-for-me
+        RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
+INSTALL(TARGETS xdyn-grpc-airy
         RUNTIME DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
 FILE(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/demos")
 

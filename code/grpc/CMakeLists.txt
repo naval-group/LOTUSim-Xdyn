@@ -6,6 +6,7 @@ set(SRC src/SurfaceElevationFromGRPC.cpp
         src/ToGRPC.cpp
         src/FromGRPC.cpp
         src/GrpcControllerInterface.cpp
+        src/AiryGRPC.cpp
         )
 
 # Using C++ 2011
