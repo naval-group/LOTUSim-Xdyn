@@ -91,6 +91,14 @@ build:debian11-debug:
        variables:
         - $NIGHTLY_BUILD
 
+build:ubuntu-18-04-intel-22-02-release:
+   stage: build
+   script:
+     - make NB_OF_PARALLEL_BUILDS="-j 1" ubuntu1804-intel
+   only:
+       variables:
+        - $NIGHTLY_BUILD
+
 integration tests:
     stage: test
     script:
