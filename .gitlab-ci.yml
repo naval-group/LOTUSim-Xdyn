@@ -95,6 +95,11 @@ build:ubuntu-18-04-intel-22-02-release:
    stage: build
    script:
      - make NB_OF_PARALLEL_BUILDS="-j 1" ubuntu1804-intel
+     - mv build_ubuntu1804_intel/xdyn.deb xdyn_ubuntu1804_intel.deb
+   artifacts:
+     when: on_success
+     paths:
+     - xdyn_ubuntu1804_intel.deb
    only:
        variables:
         - $NIGHTLY_BUILD
