@@ -6,17 +6,19 @@
 #include "Stretching.hpp" // To be removed later // xdyn/code/environment_models/inc/Stretching.hpp
 #include "YamlWaveModelInput.hpp" // To be removed late // xdyn/code/external_data_structures/inc/YamlWaveModelInput.hpp
 #include "discretize.hpp" // To be removed late // xdyn/code/environment_models/inc/discretize.hpp
+
+
 //#include "args.hxx"
 #include "wave_types.pb.h"
 #include "wave_types.grpc.pb.h"
 #include "wave_grpc.grpc.pb.h"
 #include "wave_grpc.pb.h"
+#include <grpcpp/grpcpp.h>
+#include <cmath>
 #include <iostream>
 #include <memory>
-#include <vector>
 #include <string>
-#include <cmath>
-#include <grpcpp/grpcpp.h>
+#include <vector>
 
 #define PI (4.0 * std::atan(1.0))
 #define G 9.81
@@ -89,9 +91,13 @@ double compute_elevation(const double x, const double y, const double t, const A
 }
 */
 
+// const EnvironmentAndFrames &env,
+// SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(data)
+// const auto input = SimulatorYamlParser(yaml_input).parse();
+
 class WavesImpl final : public Waves::Service {
     public:
-        explicit WavesImpl(const Airy& _wave_spectrum): wave_spectrum(_wave_spectrum) {}
+        explicit WavesImpl(const EnvironmentAndFrames& _env): env(_env) {}
         // rpc elevations(XYTGrid)                                    returns (XYZTGrid);
         // rpc dynamic_pressures(XYZTGrid)                            returns (DynamicPressuresResponse);
         // rpc orbital_velocities(XYZTGrid)                           returns (OrbitalVelocitiesResponse);
@@ -106,18 +112,17 @@ class WavesImpl final : public Waves::Service {
             reply->clear_y();
             reply->clear_z();
             reply->set_t(request->t());
-            std::vector<double> vec_x;
-            vec_x.reserve(request->x_size());
+            std::vector<double> vec_x(request->x_size());
             std::copy(request->x().begin(), request->x().end(), std::back_inserter(vec_x));
-            std::vector<double> vec_y;
-            vec_y.reserve(request->y_size());
+            std::vector<double> vec_y(request->y_size());
             std::copy(request->y().begin(), request->y().end(), std::back_inserter(vec_y));
-            const std::vector<double> res ;//= wave_spectrum.elevation(vec_x, vec_y, request->t());
+            // const std::vector<double> res_elevations = wave_spectrum.get_elevation(vec_x, vec_y, request->t());
+            const std::vector<double> res_elevations = env.w->get_and_check_wave_height(vec_x, vec_y, request->t());
             for (size_t index = 0; index < size_t(request->x_size()); ++index)
             {
                 reply->add_x(request->x(index));
                 reply->add_y(request->y(index));
-                reply->add_z(res[index]);
+                reply->add_z(res_elevations[index]);
             }
             return Status::OK;
         }
@@ -141,12 +146,18 @@ class WavesImpl final : public Waves::Service {
             reply->clear_z();
             reply->clear_pdyn();
             reply->set_t(request->t());
+            std::vector<double> vec_x(request->x_size()); std::copy(request->x().begin(), request->x().end(), std::back_inserter(vec_x));
+            std::vector<double> vec_y(request->y_size()); std::copy(request->y().begin(), request->y().end(), std::back_inserter(vec_y));
+            std::vector<double> vec_z(request->z_size()); std::copy(request->z().begin(), request->z().end(), std::back_inserter(vec_z));
+            const std::vector<double> res_elevations = env.w->get_and_check_wave_height(vec_x, vec_y, request->t());
+            const std::vector<double> res_pdyn = env.w->get_and_check_dynamic_pressure(
+                env.rho, env.g, vec_x, vec_y, vec_z, res_elevations, request->t());
             for (size_t index = 0; index < size_t(request->x_size()); ++index)
             {
                 reply->add_x(request->x(index));
                 reply->add_y(request->y(index));
                 reply->add_z(request->z(index));
-                reply->add_pdyn(request->x(index) + request->y(index));
+                reply->add_pdyn(res_pdyn[index]);
             }
             return Status::OK;
         }
@@ -161,18 +172,27 @@ class WavesImpl final : public Waves::Service {
             reply->clear_vy();
             reply->clear_vz();
             reply->set_t(request->t());
+            std::vector<double> vec_x(request->x_size()); std::copy(request->x().begin(), request->x().end(), std::back_inserter(vec_x));
+            std::vector<double> vec_y(request->y_size()); std::copy(request->y().begin(), request->y().end(), std::back_inserter(vec_y));
+            std::vector<double> vec_z(request->z_size()); std::copy(request->z().begin(), request->z().end(), std::back_inserter(vec_z));
+            const std::vector<double> res_elevations = env.w->get_and_check_wave_height(vec_x, vec_y, request->t());
+            const ssc::kinematics::PointMatrix res_velocities = env.w->get_and_check_orbital_velocity(
+                env.g, vec_x, vec_y, vec_z, request->t(), res_elevations);
             for (size_t index = 0; index < size_t(request->x_size()); ++index)
             {
                 reply->add_x(request->x(index));
                 reply->add_y(request->y(index));
                 reply->add_z(request->z(index));
-                reply->add_vx(request->x(index) + request->y(index));
-                reply->add_vy(request->x(index) + request->y(index));
-                reply->add_vz(request->x(index) + request->y(index));
+                reply->add_vx(res_velocities.m(0, index));
+                reply->add_vy(res_velocities.m(1, index));
+                reply->add_vz(res_velocities.m(2, index));
             }
             return Status::OK;
         }
 
+        // get_wave_directions_for_each_model
+        // get_directional_spectra
+        // get_wave_angular_frequency_for_each_model
 
         /*
             message PhasesForEachFrequency
@@ -204,87 +224,8 @@ class WavesImpl final : public Waves::Service {
             // reply->clear_k();
             return Status::OK;
         }
-
-        // rpc GetElevation (ElevationRequest) returns (ElevationResponse) {}
-        /*
-        Status GetElevation(ServerContext* context, const ElevationRequest* request,
-                            ElevationResponse* reply) override
-        {
-            reply->clear_elevation_points();
-            reply->set_t(request->t());
-            for (const Point& point : request->points())
-            {
-                ElevationPoint* added_elevation_point = reply->add_elevation_points();
-                added_elevation_point->set_x(point.x());
-                added_elevation_point->set_y(point.y());
-                added_elevation_point->set_z(point.x() + point.y());
-            }
-
-            return Status::OK;
-        }
-        */
-        /*
-        Status GetElevationInputRepeated(ServerContext* context, const ElevationRequestRepeated* request,
-                            ElevationResponse* reply) override
-        {
-            reply->clear_elevation_points();
-            reply->set_t(request->t());
-            for (size_t index = 0; index < request->x_size(); ++index)
-            {
-                ElevationPoint* added_elevation_point = reply->add_elevation_points();
-                added_elevation_point->set_x(request->x(index));
-                added_elevation_point->set_y(request->y(index));
-                added_elevation_point->set_z(request->x(index) + request->y(index));
-            }
-
-            return Status::OK;
-        }
-        */
-        /*
-        Status GetElevationOutputRepeated(ServerContext* context, const ElevationRequest* request,
-                            ElevationResponseRepeated* reply) override
-        {
-            reply->clear_z();
-            reply->clear_x(); reply->clear_y();
-            reply->set_t(request->t());
-            for (const Point& point : request->points())
-            {
-                reply->add_x(point.x());
-                reply->add_y(point.y());
-                reply->add_z(point.x() + point.y());
-            }
-
-            return Status::OK;
-        }
-        */
-        /*
-        Status GetElevations(ServerContext* context, const ElevationRequest* request,
-                            ServerWriter<ElevationResponse>* writer) override
-        {
-            ElevationResponse elevation;
-            if (request->dt() > 0 && request->t_end() - request->t_start() > 0)
-            {
-                const double count = (request->t_end() - request->t_start()) / request->dt();
-                for (size_t index = 0; index <= count; ++index)
-                {
-                    const double t = request->t_start() + index * request->dt();
-                    elevation.clear_elevation_points();
-                    elevation.set_t(t);
-                    for (const Point& point : request->points())
-                    {
-                        ElevationPoint* added_elevation_point = elevation.add_elevation_points();
-                        added_elevation_point->set_x(point.x());
-                        added_elevation_point->set_y(point.y());
-                        added_elevation_point->set_z(compute_elevation(point.x(), point.y(), t, wave_spectrum));
-                    }
-                    writer->Write(elevation);
-                }
-            }
-            return Status::OK;
-        }
-        */
     private:
-        Airy wave_spectrum;
+        EnvironmentAndFrames env;
 };
 
 /*
@@ -327,8 +268,8 @@ void compute_wave_spectrum(Airy& wave_spectrum, const bool& use_full_spectrum)
     }
 }
 */
-
-Airy create_default_spectrum()
+Airy create_default_wave_model();
+Airy create_default_wave_model()
 {
     const double Hs = 3;
     const double Tp = 5;
@@ -352,10 +293,11 @@ Airy create_default_spectrum()
     return Airy(A, random_phase);
 }
 
-void run_xdyn_airy_server(const Airy& wave_spectrum)
+//void run_xdyn_airy_server(/*const Airy& wave_spectrum*/)
+void run_xdyn_airy_server(const EnvironmentAndFrames& env)
 {
     const std::string server_address("0.0.0.0:50051");
-    WavesImpl service(wave_spectrum);
+    WavesImpl service(env);
     ServerBuilder builder;
     builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
     builder.RegisterService(&service);

@@ -12,7 +12,8 @@
 #include "display_command_line_arguments.hpp"
 #include "ErrorReporter.hpp"
 #include "AiryGRPC.hpp"
-
+#include "simulator_api.hpp" // xdyn/code/observers_and_api/inc/simulator_api.hpp
+#include "yaml_data.hpp" // To be removed late // xdyn/code/test_data_generator/inc/yaml_data.hpp
 struct XdynGrpcAiryCommandLineArguments
 {
     std::vector<std::string> yaml_filenames;
@@ -78,7 +79,9 @@ int run(const XdynGrpcAiryCommandLineArguments& input_data, ErrorReporter& error
 {
     if (not(input_data.empty()))
     {
-        run_xdyn_airy_server(create_default_spectrum());
+        // run_xdyn_airy_server(create_default_wave_model());
+        const EnvironmentAndFrames env(get_system(test_data::simple_waves(), 0.0).get_env());
+        run_xdyn_airy_server(env);
     }
     if (error_outputter.contains_errors())
     {
@@ -132,8 +135,10 @@ int main(int argc, char** argv)
         }
     }
     //const auto ret = run(input_data, error_outputter);
-    const Airy airy = create_default_spectrum();
-    run_xdyn_airy_server(airy);
+    // const Airy airy = create_default_wave_model();
+    // run_xdyn_airy_server(airy);
+    const EnvironmentAndFrames env(get_system(test_data::simple_waves(), 0.0).get_env());
+    run_xdyn_airy_server(env);
     int ret = EXIT_SUCCESS;
     google::protobuf::ShutdownProtobufLibrary();
     return ret;
