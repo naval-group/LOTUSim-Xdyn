@@ -13,7 +13,7 @@ DOCKER_RUN_BASH:= ${DOCKER_RUN} \
 all: cosim sim hdb precal-r tutorial_14 clean
 
 tutorial_14: filtered_states.csv
-	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/work -w /work python:3.8-slim-buster python3 test_filtered_states.py
+	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/work -w /work python:3.10-slim python3 test_filtered_states.py
 	@echo "Tutorial 14's output file passed all test assertions!"
 
 filtered_states.csv: docker-compose-filtered-states.yml filtered_force.py tutorial_14_filtered_states.yml
@@ -56,11 +56,11 @@ big.hdb:
         -c "cp /usr/demos/$@ /xdyn_demos/"
 
 precal-r: precal_r_output.csv test_precal_r.py
-	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/work -w /work python:3.8-slim-buster python3 test_precal_r.py
+	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/work -w /work python:3.10-slim python3 test_precal_r.py
 	@echo "All PRECAL_R data was properly passed to the gRPC force model! Test passed!"
 
 hdb: hdb_output.csv test_hdb.py
-	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/work -w /work python:3.8-slim-buster python3 test_hdb.py
+	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/work -w /work python:3.10-slim python3 test_hdb.py
 	@echo "All HDB data was properly passed to the gRPC force model! Test passed!"
 
 hdb_output.csv: tutorial_13_hdb_force_model.yml docker-compose-hdb.yml big.hdb
@@ -96,4 +96,3 @@ clean:
 		  tutorial_14_filtered_states.yml\
 		  hash.md5\
 		  filtered_states.csv
-
