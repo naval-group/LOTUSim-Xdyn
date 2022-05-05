@@ -1,14 +1,4 @@
 #include "AiryGRPC.hpp"
-#include "Airy.hpp"
-#include "DiracSpectralDensity.hpp" // To be removed later // xdyn/code/environment_models/inc/DiracSpectralDensity.hpp
-#include "DiracDirectionalSpreading.hpp" // To be removed later // xdyn/code/environment_models/inc/DiracDirectionalSpreading.hpp
-#include "DiscreteDirectionalWaveSpectrum.hpp" // To be removed later // xdyn/code/environment_models/inc/DiscreteDirectionalWaveSpectrum.hpp
-#include "Stretching.hpp" // To be removed later // xdyn/code/environment_models/inc/Stretching.hpp
-#include "YamlWaveModelInput.hpp" // To be removed late // xdyn/code/external_data_structures/inc/YamlWaveModelInput.hpp
-#include "discretize.hpp" // To be removed late // xdyn/code/environment_models/inc/discretize.hpp
-
-#include "ToGRPC.hpp"
-//#include "args.hxx"
 #include "wave_types.pb.h"
 #include "wave_types.grpc.pb.h"
 #include "wave_grpc.grpc.pb.h"
@@ -73,27 +63,6 @@ service Waves
 // using wave::Waves;
 // using wave::Airy;
 // using wave::WaveSpectrumLine;
-
-/*
-double compute_elevation(const double x, const double y, const double t, const Airy& wave_spectrum);
-double compute_elevation(const double x, const double y, const double t, const Airy& wave_spectrum)
-{
-    double result = 0;
-    for (const WaveSpectrumLine& spectrum_line : wave_spectrum.spectrum_lines())
-    {
-        result += - spectrum_line.a() * sin(
-                                        spectrum_line.k() * (x * cos(spectrum_line.psi()) + y * sin(spectrum_line.psi()))
-                                        - spectrum_line.omega() * t
-                                        + spectrum_line.phase()
-                                    );
-    }
-    return result;
-}
-*/
-
-// const EnvironmentAndFrames &env,
-// SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(data)
-// const auto input = SimulatorYamlParser(yaml_input).parse();
 
 class WavesImpl final : public Waves::Service {
     public:
@@ -246,32 +215,6 @@ class WavesImpl final : public Waves::Service {
         EnvironmentAndFrames env;
 };
 
-Airy create_default_wave_model();
-Airy create_default_wave_model()
-{
-    const double Hs = 3;
-    const double Tp = 5;
-    const double psi = 0;
-    const double omega0 = 2*PI/Tp;
-    // const double g = 9.81;
-    // const double rho = 1000;
-
-    // ssc::random_data_generator::DataGenerator a(123);
-    const double omega_min = 0.1;
-    const double omega_max = 10;
-    const size_t nfreq = 100;
-
-    YamlStretching ys;
-    ys.h = 20;//10;
-    ys.delta = 1;//0;
-    const double h = 20;
-    const Stretching stretching(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, h, stretching, false);
-    const double random_phase = 0.123456; /*a.random<double>().between(-PI,PI);*/
-    return Airy(A, random_phase);
-}
-
-//void run_xdyn_airy_server(/*const Airy& wave_spectrum*/)
 void run_xdyn_airy_server(const EnvironmentAndFrames& env)
 {
     const std::string server_address("0.0.0.0:50051");
