@@ -2,6 +2,7 @@ build
 build*32
 build*64
 build_deb*
+build_ubuntu*
 build_win*
 code/build_*
 code/yaml-cpp

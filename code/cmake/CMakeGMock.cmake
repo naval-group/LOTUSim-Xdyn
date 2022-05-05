@@ -10,4 +10,3 @@ SET(GMOCK_INCLUDE_DIRS ${THIRD_PARTY_DIRECTORY}/googletest/googlemock/include
                        ${THIRD_PARTY_DIRECTORY}/googletest/googlemock/include/gmock/)
 SET(GTEST_INCLUDE_DIRS ${THIRD_PARTY_DIRECTORY}/googletest/googletest/include
                        ${THIRD_PARTY_DIRECTORY}/googletest/googletest/include/gtest)
-

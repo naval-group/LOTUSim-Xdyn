@@ -179,6 +179,7 @@ INSTALL(FILES integration_tests.py
 
 SET(TEST_EXE run_all_tests)
 INCLUDE_DIRECTORIES(SYSTEM ${PROTOBUF_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(SYSTEM ${GRPC_INCLUDE_DIR})
 ADD_EXECUTABLE(${TEST_EXE}
         executables/src/run_all_tests.cpp
         $<TARGET_OBJECTS:mesh_tests>
@@ -205,6 +206,7 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         ${PROJECT_NAME}
         ${GRPC_GRPCPP_UNSECURE}
         ${PROTOBUF_LIBPROTOBUF}
+        ${Boost_REGEX_LIBRARY}
         ${Boost_THREAD_LIBRARY}
         )
 

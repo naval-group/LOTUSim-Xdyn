@@ -5,20 +5,21 @@
  *      Author: cady
  */
 
-#include <sstream>
-
 #include "environment_parsersTest.hpp"
 #include "environment_parsers.hpp"
 #include "yaml_data.hpp"
 #include "InvalidInputException.hpp"
 
 #include <boost/algorithm/string.hpp> // replace in string
+#include <boost/regex.hpp>
 
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
 #define DEG (180./PI)
-#include <boost/algorithm/string.hpp>
+
+#include <sstream>
+
 const YamlWaveModel environment_parsersTest::yaml = parse_waves(test_data::waves_for_parser_validation_only());
 
 environment_parsersTest::environment_parsersTest() : a(ssc::random_data_generator::DataGenerator(1212))
@@ -211,7 +212,16 @@ TEST_F(environment_parsersTest, clearer_error_message_if_missing_unit_value)
     }
     catch (const InvalidInputException& e)
     {
-        ASSERT_EQ("Error parsing section wave/spectra: In file /opt/share/code/yaml_parser/src/environment_parsers.cpp, line 149, function void operator>>(const YAML::Node&, YamlStretching&): Error parsing wave stretching parameters ('wave/spectra/stretching' section in the YAML file): In file /opt/share/code/yaml_parser/src/environment_parsers.cpp, line 141, function void operator>>(const YAML::Node&, YamlStretching&): Error parsing wave stretching parameters 'h': was expecting an object with fields 'unit' and 'value', e.g.:\n\th: {unit: 'm', value: 101}\nbut got the following error trying to parse it: yaml-cpp: error at line 0, column 0: bad dereference",e.get_message());
+        /*
+         * G++ and Intel Compiler do not produce the same result for macro __PRETTY_FUNCTION__
+         * There are some space differences in the result, (in front of & characters)
+         * Therefore, we use regex to check the result.
+         * Note: We do not use Google Test MatchesRegex, since it requires POSIX regex
+         * that is not shipped with Windows MXE cross platform build
+         * Thus, we use boost::regex!
+         */
+        const boost::regex expected_regex("Error parsing section wave/spectra: In file /opt/share/code/yaml_parser/src/environment_parsers.cpp, line 149, function void operator>>\\(const YAML::Node\\s*&, YamlStretching\\s*&\\): Error parsing wave stretching parameters \\('wave/spectra/stretching' section in the YAML file\\): In file /opt/share/code/yaml_parser/src/environment_parsers.cpp, line 141, function void operator>>\\(const YAML::Node\\s*&, YamlStretching\\s*&\\): Error parsing wave stretching parameters 'h': was expecting an object with fields 'unit' and 'value', e.g.:\n\th: \\{unit: 'm', value: 101\\}\nbut got the following error trying to parse it: yaml-cpp: error at line 0, column 0: bad dereference");
+        ASSERT_TRUE(boost::regex_match(e.get_message(), expected_regex)) << e.get_message();
     }
     ASSERT_THROW(parse_waves(wave_yaml), InvalidInputException);
 }
