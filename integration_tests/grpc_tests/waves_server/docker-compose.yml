@@ -1,0 +1,20 @@
+version: '3'
+services:
+  server:
+    image: xdyn
+    entrypoint: xdyn-grpc-airy toto
+    working_dir: /data
+    volumes:
+      - ./:/data:ro
+    user: ${CURRENT_UID}
+  client:
+    build: client
+    depends_on:
+    - server
+    user: ${CURRENT_UID}
+    volumes:
+    - ./client:/data
+    working_dir: /data
+    environment:
+    - no_proxy
+    entrypoint: wait-for-it server:50051 -s -t 20 -- python3 tests.py
