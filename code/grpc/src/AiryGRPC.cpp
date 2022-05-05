@@ -13,6 +13,7 @@ using grpc::ServerBuilder;
 using grpc::ServerContext;
 using grpc::ServerWriter;
 using grpc::Status;
+using grpc::StatusCode;
 
 // Forward declaration
 // `get_environment` will parse the input YAML data and build the EnvironmentAndFrames object
@@ -34,7 +35,22 @@ class WavesImpl final : public Waves::Service {
         Status set_parameters(ServerContext* /*context*/, const SetParameterRequest* request, SetParameterResponse* reply) override
         {
             const std::string yaml_data(request->parameters());
-            env = get_environment(yaml_data);
+            std::cout <<yaml_data<<std::endl;
+            try
+            {
+                env = get_environment(yaml_data);
+            }
+            catch (const std::exception& e)
+            {
+                // error_outputter.internal_error(e.what());
+                // if (error_outputter.contains_errors())
+                // {
+                //     std::cerr << error_outputter.get_message() << std::endl;
+                // }
+                reply->set_error_message(grpc::string("ERROR"));
+                return Status(StatusCode::INVALID_ARGUMENT, e.what());
+                //return Status(StatusCode::INVALID_ARGUMENT, error_outputter.get_message());
+            }
             reply->clear_error_message();
             return Status::OK;
         }
