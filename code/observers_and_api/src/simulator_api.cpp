@@ -169,6 +169,11 @@ Sim get_system(const std::string& yaml, const MeshMap& meshes, const double t0)
     return get_system(check_input_yaml(input), meshes, t0);
 }
 
+EnvironmentAndFrames get_environment(const std::string& yaml_data)
+{
+    return EnvironmentAndFrames(get_system(yaml_data, 0.0).get_env());
+}
+
 MeshMap make_mesh_map(const YamlSimulatorInput& input, const std::string& mesh)
 {
     const auto name = input.bodies.front().name;
@@ -176,4 +181,3 @@ MeshMap make_mesh_map(const YamlSimulatorInput& input, const std::string& mesh)
     meshes[name] = read_stl(mesh);
     return meshes;
 }
-
