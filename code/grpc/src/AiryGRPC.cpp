@@ -62,8 +62,8 @@ class WavesImpl final : public Waves::Service {
             reply->clear_y();
             reply->clear_z();
             reply->set_t(request->t());
-            std::vector<double> vec_x(request->x_size()); std::copy(request->x().begin(), request->x().end(), std::back_inserter(vec_x));
-            std::vector<double> vec_y(request->y_size()); std::copy(request->y().begin(), request->y().end(), std::back_inserter(vec_y));
+            const std::vector<double> vec_x(request->x().begin(), request->x().end());
+            const std::vector<double> vec_y(request->y().begin(), request->y().end());
             const std::vector<double> res_elevations = env.w->get_and_check_wave_height(vec_x, vec_y, request->t());
             for (size_t index = 0; index < size_t(request->x_size()); ++index)
             {
@@ -82,9 +82,9 @@ class WavesImpl final : public Waves::Service {
             reply->clear_z();
             reply->clear_pdyn();
             reply->set_t(request->t());
-            std::vector<double> vec_x(request->x_size()); std::copy(request->x().begin(), request->x().end(), std::back_inserter(vec_x));
-            std::vector<double> vec_y(request->y_size()); std::copy(request->y().begin(), request->y().end(), std::back_inserter(vec_y));
-            std::vector<double> vec_z(request->z_size()); std::copy(request->z().begin(), request->z().end(), std::back_inserter(vec_z));
+            const std::vector<double> vec_x(request->x().begin(), request->x().end());
+            const std::vector<double> vec_y(request->y().begin(), request->y().end());
+            const std::vector<double> vec_z(request->z().begin(), request->z().end());
             const std::vector<double> res_elevations = env.w->get_and_check_wave_height(vec_x, vec_y, request->t());
             const std::vector<double> res_pdyn = env.w->get_and_check_dynamic_pressure(
                 env.rho, env.g, vec_x, vec_y, vec_z, res_elevations, request->t());
@@ -108,9 +108,9 @@ class WavesImpl final : public Waves::Service {
             reply->clear_vy();
             reply->clear_vz();
             reply->set_t(request->t());
-            std::vector<double> vec_x(request->x_size()); std::copy(request->x().begin(), request->x().end(), std::back_inserter(vec_x));
-            std::vector<double> vec_y(request->y_size()); std::copy(request->y().begin(), request->y().end(), std::back_inserter(vec_y));
-            std::vector<double> vec_z(request->z_size()); std::copy(request->z().begin(), request->z().end(), std::back_inserter(vec_z));
+            const std::vector<double> vec_x(request->x().begin(), request->x().end());
+            const std::vector<double> vec_y(request->y().begin(), request->y().end());
+            const std::vector<double> vec_z(request->z().begin(), request->z().end());
             const std::vector<double> res_elevations = env.w->get_and_check_wave_height(vec_x, vec_y, request->t());
             const ssc::kinematics::PointMatrix res_velocities = env.w->get_and_check_orbital_velocity(
                 env.g, vec_x, vec_y, vec_z, request->t(), res_elevations);
