@@ -98,7 +98,6 @@ int display_help(char *argv, XdynGrpcAiryCommandLineArguments& input_data)
     return EXIT_SUCCESS;
 }
 
-
 int main(int argc, char** argv)
 {
     XdynGrpcAiryCommandLineArguments input_data;
@@ -134,10 +133,7 @@ int main(int argc, char** argv)
             return EXIT_FAILURE;
         }
     }
-    //const auto ret = run(input_data, error_outputter);
-    // const Airy airy = create_default_wave_model();
-    // run_xdyn_airy_server(airy);
-    const EnvironmentAndFrames env(get_system(test_data::simple_waves(), 0.0).get_env());
+    const EnvironmentAndFrames env(get_environment(test_data::simple_waves()));
     run_xdyn_airy_server(env);
     int ret = EXIT_SUCCESS;
     google::protobuf::ShutdownProtobufLibrary();
