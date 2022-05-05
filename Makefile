@@ -336,7 +336,6 @@ test-debian:
 	    rm codecov_bash.sh;\
 	    fi"
 
-cmake-ubuntu-intel-target: SHELL:=/bin/bash
 cmake-ubuntu-intel-target: code/yaml-cpp/CMakeLists.txt
 	docker pull $(DOCKER_IMAGE) || true
 	$(DOCKER_AS_USER) $(DOCKER_IMAGE) /bin/bash -c \
@@ -359,7 +358,6 @@ cmake-ubuntu-intel-target: code/yaml-cpp/CMakeLists.txt
 	     $(ADDITIONAL_CMAKE_PARAMETERS) \
 	    /opt/share/code"
 
-build-ubuntu-intel: SHELL:=/bin/bash
 build-ubuntu-intel:
 	$(DOCKER_AS_USER) $(DOCKER_IMAGE) /bin/bash -c \
 	   "source /opt/intel/oneapi/setvars.sh && \
@@ -368,20 +366,11 @@ build-ubuntu-intel:
 	    cd $(BUILD_DIR) && \
 	    ninja $(NB_OF_PARALLEL_BUILDS) package"
 
-test-ubuntu-intel: SHELL:=/bin/bash
 test-ubuntu-intel:
 	$(DOCKER_AS_USER) $(DOCKER_IMAGE) /bin/bash -c \
 	   "source /opt/intel/oneapi/setvars.sh && \
-	    cp validation/codecov_bash.sh $(BUILD_DIR) && \
 	    cd $(BUILD_DIR) &&\
-	    ./run_all_tests &&\
-	    if [[ $(BUILD_TYPE) == Coverage ]];\
-	    then\
-	    echo Coverage;\
-	    gprof run_all_tests gmon.out > gprof_res.txt 2> gprof_res.err;\
-	    bash codecov_bash.sh && \
-	    rm codecov_bash.sh;\
-	    fi"
+	    ./run_all_tests"
 
 docker-ci: xdyn.deb
 	@docker build . --tag xdyn
