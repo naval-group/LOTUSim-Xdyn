@@ -155,8 +155,8 @@ def test_02_monochromatic_spectrum():
         spectrum = waves.spectrum()
         assert len(spectrum) == 1
         LOGGER.info(spectrum)
-        # assert spectrum[0]["dj"][0]==1.0 # Will have to be updated once submodule interface is updated
-        assert (2 * spectrum[0]["si"][0]) ** 0.5 == 2.5
+        assert spectrum[0]["dj"][0] == 1.0
+        assert (2 * spectrum[0]["si"][0]) ** 0.5 == (0.5 * 5.0)
         assert spectrum[0]["omega"] == [0.5235987755982988]
         assert spectrum[0]["psi"] == [0.0]
         assert spectrum[0]["k"] == [0.5235987755982988**2 / 9.81]
