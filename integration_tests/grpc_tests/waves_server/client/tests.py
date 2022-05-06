@@ -33,19 +33,28 @@ environmental constants:
     rho: {value: 1000, unit: kg/m^3}
     nu: {value: 1.18e-6, unit: m^2/s}
 environment models:
-- model: airy
-  depth: {value: 100, unit: m}
-  seed of the random data generator: 0
-  stretching:
-     delta: 0
-     h: {unit: m, value: 100}
-  spectral density:
-    type: dirac
-    Hs: {value: 5, unit: m}
-    omega0: {value: 15, unit: rad/s}
-  directional spreading:
-    type: dirac
-    waves propagating to: {value: 0, unit: deg}
+  - model: waves
+    discretization:
+       ndir: 1
+       nfreq: 1
+       omega min: {value: 0.1, unit: rad/s}
+       omega max: {value: 6, unit: rad/s}
+       energy fraction: 1
+       equal energy bins: false
+    spectra:
+    - model: airy
+      depth: {value: 1e9, unit: m} # Infinite depth
+      seed of the random data generator: 0
+      stretching:
+          delta: 0
+          h: {unit: m, value: 1e9}
+      spectral density:
+          type: dirac
+          Hs: {value: 5, unit: m}
+          omega0: {value: 0.5235987755982988, unit: rad/s} # Tp = 12 sec
+      directional spreading:
+          type: dirac
+          waves propagating to: {value: 0, unit: deg}
 """
 
 DATA_WAVE_TWO_SPECTRA = """
@@ -124,8 +133,39 @@ def test_01_no_wave():
         assert directions_for_rao == []
 
 
-def test_02_monochromatic_spectra():
-    pass
+def test_02_monochromatic_spectrum():
+    with grpc.insecure_channel("waves-server:50051") as channel:
+        parameters = DATA_WAVE_MONOCHROMATIC
+        LOGGER.info("Creating Waves instance")
+        waves = Waves(channel, parameters)
+        elevations_request = {"t": 5, "points": [(1, 2), (3, 5)]}
+        elevations = waves.elevations(elevations_request)
+        for elevation in elevations:
+            assert not np.allclose(elevation["z"], 0.0)
+        orbital_velocities_request = {"t": 5, "points": [(1, 2, 10), (3, 5, 15)]}
+        orbital_velocities = waves.orbital_velocities(orbital_velocities_request)
+        for orbital_velocity in orbital_velocities:
+            assert not np.allclose(orbital_velocity["vx"], 0.0)
+            assert np.allclose(orbital_velocity["vy"], 0.0)
+            assert not np.allclose(orbital_velocity["vz"], 0.0)
+        dynamic_pressures_request = {"t": 5, "points": [(1, 2, 10), (3, 5, 15)]}
+        dynamic_pressures = waves.dynamic_pressures(dynamic_pressures_request)
+        for dynamic_pressure in dynamic_pressures:
+            assert not np.allclose(dynamic_pressure["pdyn"], 0.0)
+        spectrum = waves.spectrum()
+        assert len(spectrum) == 1
+        LOGGER.info(spectrum)
+        # assert spectrum[0]["dj"][0]==1.0 # Will have to be updated once submodule interface is updated
+        assert (2 * spectrum[0]["si"][0]) ** 0.5 == 2.5
+        assert spectrum[0]["omega"] == [0.5235987755982988]
+        assert spectrum[0]["psi"] == [0.0]
+        assert spectrum[0]["k"] == [0.5235987755982988**2 / 9.81]
+        angular_frequencies_for_rao = waves.angular_frequencies_for_rao()
+        assert len(angular_frequencies_for_rao) == 1
+        assert angular_frequencies_for_rao[0] == [0.5235987755982988]
+        directions_for_rao = waves.directions_for_rao()
+        assert len(directions_for_rao) == 1
+        assert directions_for_rao[0] == [0]
 
 
 def test_03_two_spectra():
@@ -157,7 +197,7 @@ def test_03_two_spectra():
 
 def main():
     test_01_no_wave()
-    test_02_monochromatic_spectra()
+    test_02_monochromatic_spectrum()
     test_03_two_spectra()
 
 
