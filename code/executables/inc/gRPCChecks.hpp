@@ -2,13 +2,14 @@
 #define GRPCSIZECHECKERSHPP
 
 #include <grpcpp/grpcpp.h>
+#include <functional>
 
 #include "InternalErrorException.hpp"
 #include "InvalidInputException.hpp"
 #include "ErrorReporter.hpp"
 
 grpc::Status to_gRPC_status(const ErrorReporter& error_outputter);
-
+grpc::Status run_and_report_errors_as_gRPC_status(const std::function<void(void)>& f);
 
 #define SIZE size()
 #define PASTER(x,y) x ## _ ## y
