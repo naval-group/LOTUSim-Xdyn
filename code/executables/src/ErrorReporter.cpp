@@ -1,13 +1,11 @@
-#include <boost/algorithm/string.hpp> // For boost::replace_all
 #include "ErrorReporter.hpp"
-#include "InternalErrorException.hpp"
 #include "ConnexionError.hpp"
-#include "MeshException.hpp"
 #include "GRPCError.hpp"
+#include "InternalErrorException.hpp"
+#include "InvalidInputException.hpp"
+#include "MeshException.hpp"
 #include "NumericalErrorException.hpp"
-#include "yaml-cpp/exceptions.h"
 #include "listeners.hpp"
-#include "simulator_api.hpp"
 
 #include <ssc/exception_handling.hpp>
 #include <ssc/json/JSONException.hpp>
@@ -15,8 +13,11 @@
 #include <ssc/websocket.hpp>
 #include <ssc/text_file_reader.hpp>
 
-#include <functional>
+#include <boost/algorithm/string.hpp> // For boost::replace_all
 #include <boost/program_options.hpp>
+#include <yaml-cpp/exceptions.h>
+
+#include <functional>
 #include <sstream>
 #include <iomanip>
 
