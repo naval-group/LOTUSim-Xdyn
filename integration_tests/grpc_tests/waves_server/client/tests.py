@@ -1,3 +1,4 @@
+import unittest
 import grpc
 import numpy as np
 
@@ -105,101 +106,106 @@ environment models:
 """
 
 
-def test_01_no_wave():
-    """Launch the server & run some gRPC calls."""
-    with grpc.insecure_channel("waves-server:50051") as channel:
-        parameters = DATA_NO_WAVE
-        LOGGER.info("Creating Waves instance")
-        waves = Waves(channel, parameters)
-        elevations_request = {"t": 5, "points": [(1, 2), (3, 5)]}
-        elevations = waves.elevations(elevations_request)
-        for elevation in elevations:
-            assert np.allclose(elevation["z"], 0.0)
-        orbital_velocities_request = {"t": 5, "points": [(1, 2, 10), (3, 5, 15)]}
-        orbital_velocities = waves.orbital_velocities(orbital_velocities_request)
-        for orbital_velocity in orbital_velocities:
-            assert np.allclose(orbital_velocity["vx"], 0.0)
-            assert np.allclose(orbital_velocity["vy"], 0.0)
-            assert np.allclose(orbital_velocity["vz"], 0.0)
-        dynamic_pressures_request = {"t": 5, "points": [(1, 2, 10), (3, 5, 15)]}
-        dynamic_pressures = waves.dynamic_pressures(dynamic_pressures_request)
-        for dynamic_pressure in dynamic_pressures:
-            assert np.allclose(dynamic_pressure["pdyn"], 0.0)
-        spectrum = waves.spectrum()
-        assert spectrum == []
-        angular_frequencies_for_rao = waves.angular_frequencies_for_rao()
-        assert angular_frequencies_for_rao == []
-        directions_for_rao = waves.directions_for_rao()
-        assert directions_for_rao == []
+class AiryTest(unittest.TestCase):
+    """Test class for Airy"""
 
+    def test_00_invalid_parameters(self):
+        """Launch the server & run some gRPC calls."""
+        with grpc.insecure_channel("waves-server:50051") as channel:
+            LOGGER.info("Creating Waves instance")
+            with self.assertRaises(Exception) as pcm:
+                Waves(channel, "random string")
+            LOGGER.info(pcm.exception)
+            LOGGER.info(pcm.exception.details)
+            # self.assertTrue(expected_msg in str(pcm.exception), str(pcm.exception))
 
-def test_02_monochromatic_spectrum():
-    with grpc.insecure_channel("waves-server:50051") as channel:
-        parameters = DATA_WAVE_MONOCHROMATIC
-        LOGGER.info("Creating Waves instance")
-        waves = Waves(channel, parameters)
-        elevations_request = {"t": 5, "points": [(1, 2), (3, 5)]}
-        elevations = waves.elevations(elevations_request)
-        for elevation in elevations:
-            assert not np.allclose(elevation["z"], 0.0)
-        orbital_velocities_request = {"t": 5, "points": [(1, 2, 10), (3, 5, 15)]}
-        orbital_velocities = waves.orbital_velocities(orbital_velocities_request)
-        for orbital_velocity in orbital_velocities:
-            assert not np.allclose(orbital_velocity["vx"], 0.0)
-            assert np.allclose(orbital_velocity["vy"], 0.0)
-            assert not np.allclose(orbital_velocity["vz"], 0.0)
-        dynamic_pressures_request = {"t": 5, "points": [(1, 2, 10), (3, 5, 15)]}
-        dynamic_pressures = waves.dynamic_pressures(dynamic_pressures_request)
-        for dynamic_pressure in dynamic_pressures:
-            assert not np.allclose(dynamic_pressure["pdyn"], 0.0)
-        spectrum = waves.spectrum()
-        assert len(spectrum) == 1
-        LOGGER.info(spectrum)
-        assert spectrum[0]["dj"][0] == 1.0
-        assert (2 * spectrum[0]["si"][0]) ** 0.5 == (0.5 * 5.0)
-        assert spectrum[0]["omega"] == [0.5235987755982988]
-        assert spectrum[0]["psi"] == [0.0]
-        assert spectrum[0]["k"] == [0.5235987755982988**2 / 9.81]
-        angular_frequencies_for_rao = waves.angular_frequencies_for_rao()
-        assert len(angular_frequencies_for_rao) == 1
-        assert angular_frequencies_for_rao[0] == [0.5235987755982988]
-        directions_for_rao = waves.directions_for_rao()
-        assert len(directions_for_rao) == 1
-        assert directions_for_rao[0] == [0]
+    def test_01_no_wave(self):
+        """Launch the server & run some gRPC calls."""
+        with grpc.insecure_channel("waves-server:50051") as channel:
+            parameters = DATA_NO_WAVE
+            LOGGER.info("Creating Waves instance")
+            waves = Waves(channel, parameters)
+            elevations_request = {"t": 5, "points": [(1, 2), (3, 5)]}
+            elevations = waves.elevations(elevations_request)
+            for elevation in elevations:
+                assert np.allclose(elevation["z"], 0.0)
+            orbital_velocities_request = {"t": 5, "points": [(1, 2, 10), (3, 5, 15)]}
+            orbital_velocities = waves.orbital_velocities(orbital_velocities_request)
+            for orbital_velocity in orbital_velocities:
+                assert np.allclose(orbital_velocity["vx"], 0.0)
+                assert np.allclose(orbital_velocity["vy"], 0.0)
+                assert np.allclose(orbital_velocity["vz"], 0.0)
+            dynamic_pressures_request = {"t": 5, "points": [(1, 2, 10), (3, 5, 15)]}
+            dynamic_pressures = waves.dynamic_pressures(dynamic_pressures_request)
+            for dynamic_pressure in dynamic_pressures:
+                assert np.allclose(dynamic_pressure["pdyn"], 0.0)
+            spectrum = waves.spectrum()
+            assert spectrum == []
+            angular_frequencies_for_rao = waves.angular_frequencies_for_rao()
+            assert angular_frequencies_for_rao == []
+            directions_for_rao = waves.directions_for_rao()
+            assert directions_for_rao == []
 
+    def test_02_monochromatic_spectrum(self):
+        with grpc.insecure_channel("waves-server:50051") as channel:
+            parameters = DATA_WAVE_MONOCHROMATIC
+            LOGGER.info("Creating Waves instance")
+            waves = Waves(channel, parameters)
+            elevations_request = {"t": 5, "points": [(1, 2), (3, 5)]}
+            elevations = waves.elevations(elevations_request)
+            for elevation in elevations:
+                assert not np.allclose(elevation["z"], 0.0)
+            orbital_velocities_request = {"t": 5, "points": [(1, 2, 10), (3, 5, 15)]}
+            orbital_velocities = waves.orbital_velocities(orbital_velocities_request)
+            for orbital_velocity in orbital_velocities:
+                assert not np.allclose(orbital_velocity["vx"], 0.0)
+                assert np.allclose(orbital_velocity["vy"], 0.0)
+                assert not np.allclose(orbital_velocity["vz"], 0.0)
+            dynamic_pressures_request = {"t": 5, "points": [(1, 2, 10), (3, 5, 15)]}
+            dynamic_pressures = waves.dynamic_pressures(dynamic_pressures_request)
+            for dynamic_pressure in dynamic_pressures:
+                assert not np.allclose(dynamic_pressure["pdyn"], 0.0)
+            spectrum = waves.spectrum()
+            assert len(spectrum) == 1
+            LOGGER.info(spectrum)
+            assert spectrum[0]["dj"][0] == 1.0
+            assert (2 * spectrum[0]["si"][0]) ** 0.5 == (0.5 * 5.0)
+            assert spectrum[0]["omega"] == [0.5235987755982988]
+            assert spectrum[0]["psi"] == [0.0]
+            assert spectrum[0]["k"] == [0.5235987755982988**2 / 9.81]
+            angular_frequencies_for_rao = waves.angular_frequencies_for_rao()
+            assert len(angular_frequencies_for_rao) == 1
+            assert angular_frequencies_for_rao[0] == [0.5235987755982988]
+            directions_for_rao = waves.directions_for_rao()
+            assert len(directions_for_rao) == 1
+            assert directions_for_rao[0] == [0]
 
-def test_03_two_spectra():
-    with grpc.insecure_channel("waves-server:50051") as channel:
-        parameters = DATA_WAVE_TWO_SPECTRA
-        LOGGER.info("Creating Waves instance")
-        waves = Waves(channel, parameters)
-        elevations_request = {"t": 5, "points": [(1, 2), (3, 5)]}
-        elevations = waves.elevations(elevations_request)
-        for elevation in elevations:
-            assert not np.allclose(elevation["z"], 0.0)
-        orbital_velocities_request = {"t": 5, "points": [(1, 2, 10), (3, 5, 15)]}
-        orbital_velocities = waves.orbital_velocities(orbital_velocities_request)
-        for orbital_velocity in orbital_velocities:
-            assert not np.allclose(orbital_velocity["vx"], 0.0)
-            assert not np.allclose(orbital_velocity["vy"], 0.0)
-            assert not np.allclose(orbital_velocity["vz"], 0.0)
-        dynamic_pressures_request = {"t": 5, "points": [(1, 2, 10), (3, 5, 15)]}
-        dynamic_pressures = waves.dynamic_pressures(dynamic_pressures_request)
-        for dynamic_pressure in dynamic_pressures:
-            assert not np.allclose(dynamic_pressure["pdyn"], 0.0)
-        spectrum = waves.spectrum()
-        assert spectrum != []
-        angular_frequencies_for_rao = waves.angular_frequencies_for_rao()
-        assert angular_frequencies_for_rao != []
-        directions_for_rao = waves.directions_for_rao()
-        assert directions_for_rao != []
-
-
-def main():
-    test_01_no_wave()
-    test_02_monochromatic_spectrum()
-    test_03_two_spectra()
+    def test_03_two_spectra(self):
+        with grpc.insecure_channel("waves-server:50051") as channel:
+            parameters = DATA_WAVE_TWO_SPECTRA
+            LOGGER.info("Creating Waves instance")
+            waves = Waves(channel, parameters)
+            elevations_request = {"t": 5, "points": [(1, 2), (3, 5)]}
+            elevations = waves.elevations(elevations_request)
+            for elevation in elevations:
+                assert not np.allclose(elevation["z"], 0.0)
+            orbital_velocities_request = {"t": 5, "points": [(1, 2, 10), (3, 5, 15)]}
+            orbital_velocities = waves.orbital_velocities(orbital_velocities_request)
+            for orbital_velocity in orbital_velocities:
+                assert not np.allclose(orbital_velocity["vx"], 0.0)
+                assert not np.allclose(orbital_velocity["vy"], 0.0)
+                assert not np.allclose(orbital_velocity["vz"], 0.0)
+            dynamic_pressures_request = {"t": 5, "points": [(1, 2, 10), (3, 5, 15)]}
+            dynamic_pressures = waves.dynamic_pressures(dynamic_pressures_request)
+            for dynamic_pressure in dynamic_pressures:
+                assert not np.allclose(dynamic_pressure["pdyn"], 0.0)
+            spectrum = waves.spectrum()
+            assert spectrum != []
+            angular_frequencies_for_rao = waves.angular_frequencies_for_rao()
+            assert angular_frequencies_for_rao != []
+            directions_for_rao = waves.directions_for_rao()
+            assert directions_for_rao != []
 
 
 if __name__ == "__main__":
-    main()
+    unittest.main()
