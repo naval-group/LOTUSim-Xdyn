@@ -1,4 +1,6 @@
 #include "AiryGRPC.hpp"
+// #include "ErrorReporter.hpp"
+// #include "gRPCChecks.hpp"
 #include "wave_types.pb.h"
 #include "wave_types.grpc.pb.h"
 #include "wave_grpc.grpc.pb.h"
@@ -18,6 +20,8 @@ using grpc::StatusCode;
 // Forward declaration
 // `get_environment` will parse the input YAML data and build the EnvironmentAndFrames object
 EnvironmentAndFrames get_environment(const std::string& yaml_data);
+// Because run_and_report_errors_as_gRPC_status is not present in libxdyn
+grpc::Status run_and_report_errors_as_gRPC_status(const std::function<void(void)>& f);
 
 class WavesImpl final : public Waves::Service {
     public:
@@ -34,25 +38,14 @@ class WavesImpl final : public Waves::Service {
         // rpc elevations(XYTGrid) returns (XYZTGrid);
         Status set_parameters(ServerContext* /*context*/, const SetParameterRequest* request, SetParameterResponse* reply) override
         {
-            const std::string yaml_data(request->parameters());
-            std::cout <<yaml_data<<std::endl;
-            try
+            const std::function<void()> f = [this, &request]()
             {
-                env = get_environment(yaml_data);
-            }
-            catch (const std::exception& e)
-            {
-                // error_outputter.internal_error(e.what());
-                // if (error_outputter.contains_errors())
-                // {
-                //     std::cerr << error_outputter.get_message() << std::endl;
-                // }
-                reply->set_error_message(grpc::string("ERROR"));
-                return Status(StatusCode::INVALID_ARGUMENT, e.what());
-                //return Status(StatusCode::INVALID_ARGUMENT, error_outputter.get_message());
-            }
+                const std::string yaml_data(request->parameters());
+                std::cout <<yaml_data<<std::endl;
+                this->env = get_environment(yaml_data);
+            };
             reply->clear_error_message();
-            return Status::OK;
+            return run_and_report_errors_as_gRPC_status(f);
         }
 
         // rpc elevations(XYTGrid) returns (XYZTGrid);

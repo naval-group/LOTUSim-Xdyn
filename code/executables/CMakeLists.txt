@@ -261,6 +261,8 @@ ADD_EXECUTABLE(xdyn-grpc-airy
         src/parse_XdynCommandLineArguments.cpp
         src/XdynCommandLineArguments.cpp
         src/ErrorReporter.cpp
+        src/gRPCChecks.cpp
+        $<TARGET_OBJECTS:grpc_airy>
         $<TARGET_OBJECTS:test_data_generator>
         )
 TARGET_LINK_LIBRARIES(xdyn-grpc-airy

@@ -6,7 +6,6 @@ set(SRC src/SurfaceElevationFromGRPC.cpp
         src/ToGRPC.cpp
         src/FromGRPC.cpp
         src/GrpcControllerInterface.cpp
-        src/AiryGRPC.cpp
         )
 
 # Using C++ 2011
@@ -137,3 +136,11 @@ add_library (${PROJECT_NAME} OBJECT
 set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
 
 add_subdirectory(unit_tests)
+
+add_library(${PROJECT_NAME}_airy OBJECT src/AiryGRPC.cpp)
+add_custom_target(genhdr_grpc_airy DEPENDS
+    ${wave_proto_hdrs_t}
+    ${wave_grpc_hdrs_t}
+    ${wave_proto_hdrs_g}
+    ${wave_grpc_hdrs_g})
+add_dependencies(${PROJECT_NAME}_airy genhdr_grpc_airy)

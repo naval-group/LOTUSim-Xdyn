@@ -8,6 +8,8 @@
 #include <exception>
 #include <iostream>
 #include <google/protobuf/stubs/common.h>
+#include <grpcpp/grpcpp.h>
+#include "gRPCChecks.hpp"
 #include "parse_XdynCommandLineArguments.hpp"
 #include "display_command_line_arguments.hpp"
 #include "ErrorReporter.hpp"
