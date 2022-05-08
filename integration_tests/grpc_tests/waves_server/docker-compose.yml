@@ -2,7 +2,7 @@ version: '3'
 services:
   waves-server:
     image: xdyn
-    entrypoint: xdyn-grpc-airy toto
+    entrypoint: xdyn-grpc-airy -p 50051
     working_dir: /data
     volumes:
       - ./:/data:ro
