@@ -4,8 +4,7 @@
 #ifndef GRPC_INC_AIRYGRPC_HPP_
 #define GRPC_INC_AIRYGRPC_HPP_
 
-#include "EnvironmentAndFrames.hpp" //xdyn/code/core/inc/EnvironmentAndFrames.hpp
-
-void run_xdyn_airy_server(const EnvironmentAndFrames& wave_spectrum);
+class EnvironmentAndFrames;
+void run_xdyn_airy_server(const EnvironmentAndFrames& env, const int port_number);
 
 #endif /* GRPC_INC_AIRYGRPC_HPP_ */

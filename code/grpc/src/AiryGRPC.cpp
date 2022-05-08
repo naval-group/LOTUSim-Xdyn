@@ -1,6 +1,5 @@
 #include "AiryGRPC.hpp"
-// #include "ErrorReporter.hpp"
-// #include "gRPCChecks.hpp"
+#include "EnvironmentAndFrames.hpp" //xdyn/code/core/inc/EnvironmentAndFrames.hpp
 #include "wave_types.pb.h"
 #include "wave_types.grpc.pb.h"
 #include "wave_grpc.grpc.pb.h"
@@ -191,9 +190,9 @@ class WavesImpl final : public Waves::Service {
         EnvironmentAndFrames env;
 };
 
-void run_xdyn_airy_server(const EnvironmentAndFrames& env)
+void run_xdyn_airy_server(const EnvironmentAndFrames& env, const int port_number)
 {
-    const std::string server_address("0.0.0.0:50051");
+    const std::string server_address("0.0.0.0:"+std::to_string(port_number));
     WavesImpl service(env);
     ServerBuilder builder;
     builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
