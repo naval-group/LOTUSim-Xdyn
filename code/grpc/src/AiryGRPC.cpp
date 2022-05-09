@@ -33,7 +33,7 @@ class WavesImpl final : public Waves::Service {
             const std::function<void()> f = [this, &request]()
             {
                 const std::string yaml_data(request->parameters());
-                std::cout <<yaml_data<<std::endl;
+                std::cout << yaml_data << std::endl;
                 this->env = get_environment_for_wave_queries(yaml_data);
             };
             return run_and_report_errors_as_gRPC_status(f);
