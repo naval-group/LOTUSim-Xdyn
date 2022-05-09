@@ -46,12 +46,12 @@ int parse_command_line_for_xdyn_grpc_airy(int argc, char **argv, XdynGrpcAiryCom
     input_data.catch_exceptions = not(has.debug);
     if (has.help)
     {
-        print_usage(std::cout, desc, argv[0], "This is a ship simulator");
+        print_usage(std::cout, desc, argv[0], "This is the Airy wave gRPC server, based on xdyn");
         return EXIT_SUCCESS;
     }
     else if (invalid(input_data))
     {
-        print_usage(std::cout, desc, argv[0], "This is a ship simulator");
+        print_usage(std::cout, desc, argv[0], "This is the Airy wave gRPC server, based on xdyn");
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
@@ -88,14 +88,14 @@ int run(const XdynGrpcAiryCommandLineArguments& input_data, ErrorReporter& error
 int display_help(char *argv, XdynGrpcAiryCommandLineArguments& input_data)
 {
     const po::options_description desc = attach_command_line_arguments_to_options_description(input_data);
-    print_usage(std::cout, desc, argv, "This is a ship simulator");
+    print_usage(std::cout, desc, argv, "This is the Airy wave gRPC server, based on xdyn");
     return EXIT_SUCCESS;
 }
 
 int main(int argc, char** argv)
 {
-    XdynGrpcAiryCommandLineArguments input_data;
     int error = 0;
+    XdynGrpcAiryCommandLineArguments input_data;
     ErrorReporter error_outputter;
     try
     {
@@ -127,9 +127,6 @@ int main(int argc, char** argv)
             return EXIT_FAILURE;
         }
     }
-    // const EnvironmentAndFrames env(get_environment(test_data::simple_waves()));
-    // run_xdyn_airy_server(env);
-    // int ret = EXIT_SUCCESS;
     const auto ret = run(input_data, error_outputter);
     google::protobuf::ShutdownProtobufLibrary();
     return ret;
