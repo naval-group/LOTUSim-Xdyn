@@ -49,11 +49,11 @@ class WavesImpl final : public Waves::Service {
             const std::vector<double> vec_x(request->x().begin(), request->x().end());
             const std::vector<double> vec_y(request->y().begin(), request->y().end());
             const std::vector<double> res_elevations = env.w->get_and_check_wave_height(vec_x, vec_y, request->t());
-            for (size_t index = 0; index < size_t(request->x_size()); ++index)
+            for (int index = 0; index < request->x_size(); ++index)
             {
                 reply->add_x(request->x(index));
                 reply->add_y(request->y(index));
-                reply->add_z(res_elevations[index]);
+                reply->add_z(res_elevations.at(index));
             }
             return Status::OK;
         }
@@ -72,12 +72,12 @@ class WavesImpl final : public Waves::Service {
             const std::vector<double> res_elevations = env.w->get_and_check_wave_height(vec_x, vec_y, request->t());
             const std::vector<double> res_pdyn = env.w->get_and_check_dynamic_pressure(
                 env.rho, env.g, vec_x, vec_y, vec_z, res_elevations, request->t());
-            for (size_t index = 0; index < size_t(request->x_size()); ++index)
+            for (int index = 0; index < request->x_size(); ++index)
             {
                 reply->add_x(request->x(index));
                 reply->add_y(request->y(index));
                 reply->add_z(request->z(index));
-                reply->add_pdyn(res_pdyn[index]);
+                reply->add_pdyn(res_pdyn.at(index));
             }
             return Status::OK;
         }
@@ -98,7 +98,7 @@ class WavesImpl final : public Waves::Service {
             const std::vector<double> res_elevations = env.w->get_and_check_wave_height(vec_x, vec_y, request->t());
             const ssc::kinematics::PointMatrix res_velocities = env.w->get_and_check_orbital_velocity(
                 env.g, vec_x, vec_y, vec_z, request->t(), res_elevations);
-            for (size_t index = 0; index < size_t(request->x_size()); ++index)
+            for (int index = 0; index < request->x_size(); ++index)
             {
                 reply->add_x(request->x(index));
                 reply->add_y(request->y(index));
