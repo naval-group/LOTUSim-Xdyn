@@ -19,7 +19,7 @@ const std::string xdyn_grpc_airy_description = "This is the Airy wave gRPC serve
 
 struct XdynGrpcAiryCommandLineArguments
 {
-    int port;
+    short unsigned int port;
     std::vector<std::string> yaml_filenames;
     bool catch_exceptions;
     XdynGrpcAiryCommandLineArguments(): port(50051), yaml_filenames(), catch_exceptions(false){};
@@ -31,7 +31,7 @@ po::options_description attach_command_line_arguments_to_options_description(Xdy
     po::options_description desc("Options");
     desc.add_options()
         ("help,h",                                                                       "Show this help message")
-        ("port,p",     po::value<int>(&input_data.port),                                 "Define server port. Default is 50051")
+        ("port,p",     po::value<short unsigned int>(&input_data.port),                  "Port for the gRPC server. Default is 50051. Available values are 1024-65535 (2^16, but port 0 is reserved and unavailable and ports in range 1-1023 are privileged (application needs to be run as root to have access to those ports)")
         ("yml,y",      po::value<std::vector<std::string> >(&input_data.yaml_filenames), "Name(s) of the YAML file(s)")
         ("debug,d",                                                                      "Used by the application's support team to help error diagnosis. Allows us to pinpoint the exact location in code where the error occurred (do not catch exceptions), eg. for use in a debugger.")
     ;
@@ -39,7 +39,21 @@ po::options_description attach_command_line_arguments_to_options_description(Xdy
 }
 
 bool invalid(const XdynGrpcAiryCommandLineArguments& input);
-bool invalid(const XdynGrpcAiryCommandLineArguments& /*input*/){return false;}
+bool invalid(const XdynGrpcAiryCommandLineArguments& input)
+{
+    if (input.port==0)
+    {
+        std::cerr << "Error: no port number was defined (or port 0 was defined, which is equally invalid)." << std::endl
+                 << "You can define one using the -p flag. Check the available port range using the -h flag." << std::endl;
+        return true;
+    }
+    if (input.port < 1024) // input.port is always less than 65536 because it is a short unsigned int.
+    {
+        std::cerr << "Error: you cannot start this gRPC server on port " << input.port << ": only range 1024-65535 is available." << std::endl;
+        return true;
+    }
+    return false;
+}
 
 int parse_command_line_for_xdyn_grpc_airy(int argc, char **argv, XdynGrpcAiryCommandLineArguments& input_data)
 {

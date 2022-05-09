@@ -164,7 +164,7 @@ class WavesImpl final : public Waves::Service {
         EnvironmentAndFrames env;
 };
 
-void run_xdyn_airy_server(const EnvironmentAndFrames& env, const int port_number)
+void run_xdyn_airy_server(const EnvironmentAndFrames& env, const short unsigned int port_number)
 {
     const std::string server_address("0.0.0.0:"+std::to_string(port_number));
     WavesImpl service(env);
