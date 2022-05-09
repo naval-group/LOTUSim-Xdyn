@@ -39,19 +39,19 @@ po::options_description attach_command_line_arguments_to_options_description(Xdy
 bool invalid(const XdynGrpcAiryCommandLineArguments& input);
 bool invalid(const XdynGrpcAiryCommandLineArguments& /*input*/){return false;}
 
-int parse_command_line_for_xdyn_grpc_airy(int argc, char **argv, XdynGrpcAiryCommandLineArguments& input_data)
+int parse_command_line_for_xdyn_grpc_airy(int argc, char **argv, const std::string& description, XdynGrpcAiryCommandLineArguments& input_data)
 {
     const po::options_description desc = attach_command_line_arguments_to_options_description(input_data);
     const BooleanArguments has = parse_input(argc, argv, desc);
     input_data.catch_exceptions = not(has.debug);
     if (has.help)
     {
-        print_usage(std::cout, desc, argv[0], "This is the Airy wave gRPC server, based on xdyn");
+        print_usage(std::cout, desc, argv[0], description);
         return EXIT_SUCCESS;
     }
     else if (invalid(input_data))
     {
-        print_usage(std::cout, desc, argv[0], "This is the Airy wave gRPC server, based on xdyn");
+        print_usage(std::cout, desc, argv[0], description);
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
@@ -85,22 +85,23 @@ int run(const XdynGrpcAiryCommandLineArguments& input_data, ErrorReporter& error
     return EXIT_SUCCESS;
 }
 
-int display_help(char *argv, XdynGrpcAiryCommandLineArguments& input_data)
+int display_help(char *argv, const std::string& description, XdynGrpcAiryCommandLineArguments& input_data)
 {
     const po::options_description desc = attach_command_line_arguments_to_options_description(input_data);
-    print_usage(std::cout, desc, argv, "This is the Airy wave gRPC server, based on xdyn");
+    print_usage(std::cout, desc, argv, description);
     return EXIT_SUCCESS;
 }
 
 int main(int argc, char** argv)
 {
+    const std::string description("This is the Airy wave gRPC server, based on xdyn");
     int error = 0;
     XdynGrpcAiryCommandLineArguments input_data;
     ErrorReporter error_outputter;
     try
     {
-        if (argc==1) return display_help(argv[0], input_data);
-        error = parse_command_line_for_xdyn_grpc_airy(argc, argv, input_data);
+        if (argc==1) return display_help(argv[0], description, input_data);
+        error = parse_command_line_for_xdyn_grpc_airy(argc, argv, description, input_data);
     }
     catch(boost::program_options::error& e)
     {
