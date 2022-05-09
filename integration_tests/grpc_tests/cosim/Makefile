@@ -1,10 +1,15 @@
 .PHONY: all clean run
 
+DASH:=-
+UNDERSCORE:=_
+SLUG:=$(subst $(DASH),$(UNDERSCORE),$(CI_PROJECT_PATH_SLUG))
+COMPOSE_PROJECT_NAME:=$(shell basename `pwd`)${SLUG}${CI_PIPELINE_ID}
+DOCKER_COMPOSE:=COMPOSE_PROJECT_NAME=$(COMPOSE_PROJECT_NAME) CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose
+
 all: run clean
 
 run: cosimulation.proto tutorial_01_falling_ball.yml
-	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose rm -f
-	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose up -t 0 --exit-code-from test --abort-on-container-exit --build
+	@$(DOCKER_COMPOSE) -t 0 --exit-code-from test --abort-on-container-exit --build
 
 cosimulation.proto: ../../../interfaces/cosimulation.proto
 	cp $< $@
@@ -17,3 +22,4 @@ tutorial_01_falling_ball.yml:
 
 clean:
 	rm -f tutorial_01_falling_ball.yml cosimulation.proto
+	@$(DOCKER_COMPOSE) down --remove-orphans
