@@ -27,9 +27,8 @@ class WavesImpl final : public Waves::Service {
         explicit WavesImpl(const EnvironmentAndFrames& _env): env(_env) {}
 
         // rpc elevations(XYTGrid) returns (XYZTGrid);
-        Status set_parameters(ServerContext* /*context*/, const SetParameterRequest* request, SetParameterResponse* reply) override
+        Status set_parameters(ServerContext* /*context*/, const SetParameterRequest* request, SetParameterResponse* /*reply*/) override
         {
-            reply->clear_error_message();
             const std::function<void()> f = [this, &request]()
             {
                 const std::string yaml_data(request->parameters());
@@ -42,9 +41,6 @@ class WavesImpl final : public Waves::Service {
         // rpc elevations(XYTGrid) returns (XYZTGrid);
         Status elevations(ServerContext* /*context*/, const XYTGrid* request, XYZTGrid* reply) override
         {
-            reply->clear_x();
-            reply->clear_y();
-            reply->clear_z();
             reply->set_t(request->t());
             const std::vector<double> vec_x(request->x().begin(), request->x().end());
             const std::vector<double> vec_y(request->y().begin(), request->y().end());
@@ -61,10 +57,6 @@ class WavesImpl final : public Waves::Service {
         // rpc dynamic_pressures(XYZTGrid) returns (DynamicPressuresResponse);
         Status dynamic_pressures(ServerContext* /*context*/, const XYZTGrid* request, DynamicPressuresResponse* reply) override
         {
-            reply->clear_x();
-            reply->clear_y();
-            reply->clear_z();
-            reply->clear_pdyn();
             reply->set_t(request->t());
             const std::vector<double> vec_x(request->x().begin(), request->x().end());
             const std::vector<double> vec_y(request->y().begin(), request->y().end());
@@ -85,12 +77,6 @@ class WavesImpl final : public Waves::Service {
         // rpc orbital_velocities(XYZTGrid) returns (OrbitalVelocitiesResponse);
         Status orbital_velocities(ServerContext* /*context*/, const XYZTGrid* request, OrbitalVelocitiesResponse* reply) override
         {
-            reply->clear_x();
-            reply->clear_y();
-            reply->clear_z();
-            reply->clear_vx();
-            reply->clear_vy();
-            reply->clear_vz();
             reply->set_t(request->t());
             const std::vector<double> vec_x(request->x().begin(), request->x().end());
             const std::vector<double> vec_y(request->y().begin(), request->y().end());
@@ -113,7 +99,6 @@ class WavesImpl final : public Waves::Service {
         // rpc angular_frequencies_for_rao(AngularFrequenciesRequest) returns (AngularFrequenciesResponse);
         Status angular_frequencies_for_rao(ServerContext* /*context*/, const AngularFrequenciesRequest* /*request*/, AngularFrequenciesResponse* reply) override
         {
-            reply->clear_angular_frequencies();
             std::vector<std::vector<double> > res = env.w->get_wave_angular_frequency_for_each_model();
             for (size_t index = 0; index < res.size(); ++index)
             {
@@ -127,7 +112,6 @@ class WavesImpl final : public Waves::Service {
         // rpc directions_for_rao(DirectionsRequest) returns (DirectionsResponse);
         Status directions_for_rao(ServerContext* /*context*/, const DirectionsRequest* /*request*/, DirectionsResponse* reply) override
         {
-            reply->clear_directions();
             const std::vector<std::vector<double> > res = env.w->get_wave_directions_for_each_model();
             for (size_t index = 0; index < res.size(); ++index)
             {
@@ -141,7 +125,6 @@ class WavesImpl final : public Waves::Service {
         // rpc spectrum(SpectrumRequest) returns (SpectrumResponse);
         Status spectrum(ServerContext* /*context*/, const SpectrumRequest* request, SpectrumResponse* spectrum_response) override
         {
-            spectrum_response->clear_spectrum();
             const std::vector<DiscreteDirectionalWaveSpectrum> spectra = env.w->get_directional_spectra(request->x(), request->y(), request->t());
             for (const auto& spectrum:spectra)
             {
