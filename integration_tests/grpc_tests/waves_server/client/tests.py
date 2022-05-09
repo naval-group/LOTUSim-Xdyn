@@ -127,12 +127,21 @@ class AiryWaveGrpcServerTest(unittest.TestCase):
             LOGGER.info(pcm.exception)
             LOGGER.info(pcm.exception.details)
 
+    def test_00_invalid_requests(self):
+        """Check that an input without a wave model can not build a gRPC Waves client"""
+        with grpc.insecure_channel("waves-server:50051") as channel:
+            LOGGER.info("Creating Waves instance")
+            waves = Waves(channel, DATA_NO_WAVE)
+            with self.assertRaises(KeyError):
+                waves.elevations({"points": [(1, 2), (3, 5)]})
+            with self.assertRaises(Exception):
+                waves.elevations({"t": 10, "points": [(1, 2), (3, 5), (1,)]})
+
     def test_01_no_wave(self):
         """Test that all responses are 0 when no wave is defined"""
         with grpc.insecure_channel("waves-server:50051") as channel:
-            parameters = DATA_NO_WAVE
             LOGGER.info("Creating Waves instance")
-            waves = Waves(channel, parameters)
+            waves = Waves(channel, DATA_NO_WAVE)
             elevations_request = {"t": 5, "points": [(1, 2), (3, 5)]}
             elevations = waves.elevations(elevations_request)
             for elevation in elevations:
@@ -160,9 +169,8 @@ class AiryWaveGrpcServerTest(unittest.TestCase):
         orbital velocities and dynamic pressure are different from zero.
         """
         with grpc.insecure_channel("waves-server:50051") as channel:
-            parameters = DATA_WAVE_MONOCHROMATIC
             LOGGER.info("Creating Waves instance")
-            waves = Waves(channel, parameters)
+            waves = Waves(channel, DATA_WAVE_MONOCHROMATIC)
             elevations_request = {"t": 5, "points": [(1, 2), (3, 5)]}
             elevations = waves.elevations(elevations_request)
             for elevation in elevations:
