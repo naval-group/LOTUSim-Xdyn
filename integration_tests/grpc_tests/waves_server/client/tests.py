@@ -106,21 +106,29 @@ environment models:
 """
 
 
-class AiryTest(unittest.TestCase):
-    """Test class for Airy"""
+class AiryWaveGrpcServerTest(unittest.TestCase):
+    """Test class for Airy wave gRPC server"""
 
     def test_00_invalid_parameters(self):
-        """Launch the server & run some gRPC calls."""
+        """Check that an invalid string can not build a gRPC Waves client"""
         with grpc.insecure_channel("waves-server:50051") as channel:
             LOGGER.info("Creating Waves instance")
             with self.assertRaises(Exception) as pcm:
                 Waves(channel, "random string")
             LOGGER.info(pcm.exception)
             LOGGER.info(pcm.exception.details)
-            # self.assertTrue(expected_msg in str(pcm.exception), str(pcm.exception))
+
+    def test_00_incomplete_yaml_parameters(self):
+        """Check that an input without a wave model can not build a gRPC Waves client"""
+        with grpc.insecure_channel("waves-server:50051") as channel:
+            LOGGER.info("Creating Waves instance")
+            with self.assertRaises(Exception) as pcm:
+                Waves(channel, DATA_NO_ENV)
+            LOGGER.info(pcm.exception)
+            LOGGER.info(pcm.exception.details)
 
     def test_01_no_wave(self):
-        """Launch the server & run some gRPC calls."""
+        """Test that all responses are 0 when no wave is defined"""
         with grpc.insecure_channel("waves-server:50051") as channel:
             parameters = DATA_NO_WAVE
             LOGGER.info("Creating Waves instance")
@@ -147,6 +155,10 @@ class AiryTest(unittest.TestCase):
             assert directions_for_rao == []
 
     def test_02_monochromatic_spectrum(self):
+        """Test all responses for a monochromatic wave spectrum
+        Monochromatic wave phase is not known, so assertions made on elevation,
+        orbital velocities and dynamic pressure are different from zero.
+        """
         with grpc.insecure_channel("waves-server:50051") as channel:
             parameters = DATA_WAVE_MONOCHROMATIC
             LOGGER.info("Creating Waves instance")
@@ -181,6 +193,9 @@ class AiryTest(unittest.TestCase):
             assert directions_for_rao[0] == [0]
 
     def test_03_two_spectra(self):
+        """Test server works with two spectra, that every response has the
+        right size.
+        """
         with grpc.insecure_channel("waves-server:50051") as channel:
             parameters = DATA_WAVE_TWO_SPECTRA
             LOGGER.info("Creating Waves instance")
