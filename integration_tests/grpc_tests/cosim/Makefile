@@ -9,7 +9,7 @@ DOCKER_COMPOSE:=COMPOSE_PROJECT_NAME=$(COMPOSE_PROJECT_NAME) CURRENT_UID=$(shell
 all: run clean
 
 run: cosimulation.proto tutorial_01_falling_ball.yml
-	@$(DOCKER_COMPOSE) -t 0 --exit-code-from test --abort-on-container-exit --build
+	@$(DOCKER_COMPOSE) up -t 0 --exit-code-from test --abort-on-container-exit --build
 
 cosimulation.proto: ../../../interfaces/cosimulation.proto
 	cp $< $@
