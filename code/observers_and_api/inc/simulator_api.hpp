@@ -28,7 +28,7 @@ Sim get_system(const YamlSimulatorInput& input, const VectorOfVectorOfPoints& me
 Sim get_system(const std::string& yaml, const VectorOfVectorOfPoints& mesh, const double t0, ssc::data_source::DataSource& commands);
 Sim get_system(const std::string& yaml, const std::string& mesh, const double t0, ssc::data_source::DataSource& commands);
 Sim get_system(const YamlSimulatorInput& input, const std::map<std::string, VectorOfVectorOfPoints>& meshes, const double t0);
-EnvironmentAndFrames get_environment(const std::string& yaml);
+EnvironmentAndFrames get_environment_for_wave_queries(const std::string& yaml);
 
 typedef std::function<void(std::vector<double>&, const double)> ForceStates;
 

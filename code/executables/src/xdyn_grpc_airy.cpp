@@ -72,7 +72,7 @@ int run(const XdynGrpcAiryCommandLineArguments& input_data, ErrorReporter& error
         error_outputter.run_and_report_errors_without_yaml_dump([&yaml_input,&input_data](){yaml_input = ssc::text_file_reader::TextFileReader(input_data.yaml_filenames).get_contents();});
     }
     EnvironmentAndFrames env;
-    error_outputter.run_and_report_errors_with_yaml_dump([&env, &yaml_input](){env = get_system(yaml_input, 0.0).get_env();}, yaml_input);
+    error_outputter.run_and_report_errors_with_yaml_dump([&env, &yaml_input](){env = get_environment_for_wave_queries(yaml_input);}, yaml_input);
     if (error_outputter.contains_errors())
     {
         return EXIT_FAILURE;

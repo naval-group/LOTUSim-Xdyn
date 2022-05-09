@@ -17,8 +17,8 @@ using grpc::Status;
 using grpc::StatusCode;
 
 // Forward declaration
-// `get_environment` will parse the input YAML data and build the EnvironmentAndFrames object
-EnvironmentAndFrames get_environment(const std::string& yaml_data);
+// `get_environment_for_wave_queries` will parse the input YAML data and build the EnvironmentAndFrames object
+EnvironmentAndFrames get_environment_for_wave_queries(const std::string& yaml_data);
 // Because run_and_report_errors_as_gRPC_status is not present in libxdyn
 grpc::Status run_and_report_errors_as_gRPC_status(const std::function<void(void)>& f);
 
@@ -37,13 +37,13 @@ class WavesImpl final : public Waves::Service {
         // rpc elevations(XYTGrid) returns (XYZTGrid);
         Status set_parameters(ServerContext* /*context*/, const SetParameterRequest* request, SetParameterResponse* reply) override
         {
+            reply->clear_error_message();
             const std::function<void()> f = [this, &request]()
             {
                 const std::string yaml_data(request->parameters());
                 std::cout <<yaml_data<<std::endl;
-                this->env = get_environment(yaml_data);
+                this->env = get_environment_for_wave_queries(yaml_data);
             };
-            reply->clear_error_message();
             return run_and_report_errors_as_gRPC_status(f);
         }
 
