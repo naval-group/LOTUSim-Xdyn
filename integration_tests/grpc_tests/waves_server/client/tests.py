@@ -128,7 +128,7 @@ class AiryWaveGrpcServerTest(unittest.TestCase):
             LOGGER.info(pcm.exception.details)
 
     def test_00_invalid_requests(self):
-        """Check that an input without a wave model can not build a gRPC Waves client"""
+        """Check that exceptions are raised with invalid requests"""
         with grpc.insecure_channel("waves-server:50051") as channel:
             LOGGER.info("Creating Waves instance")
             waves = Waves(channel, DATA_NO_WAVE)
@@ -136,6 +136,10 @@ class AiryWaveGrpcServerTest(unittest.TestCase):
                 waves.elevations({"points": [(1, 2), (3, 5)]})
             with self.assertRaises(Exception):
                 waves.elevations({"t": 10, "points": [(1, 2), (3, 5), (1,)]})
+            with self.assertRaises(Exception):
+                waves.dynamic_pressures({"t": 5, "points": [(1, 2, 10), (3, 5,)]})
+            with self.assertRaises(Exception):
+                waves.orbital_velocities({"t": 5, "points": [(1, 2, 10), (3, 5,)]})
 
     def test_01_no_wave(self):
         """Test that all responses are 0 when no wave is defined"""
