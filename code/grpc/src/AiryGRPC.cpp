@@ -26,14 +26,6 @@ class WavesImpl final : public Waves::Service {
     public:
         explicit WavesImpl(const EnvironmentAndFrames& _env): env(_env) {}
 
-        // OK rpc set_parameters(SetParameterRequest)                    returns (SetParameterResponse);
-        // OK rpc elevations(XYTGrid)                                    returns (XYZTGrid);
-        // OK rpc dynamic_pressures(XYZTGrid)                            returns (DynamicPressuresResponse);
-        // OK rpc orbital_velocities(XYZTGrid)                           returns (OrbitalVelocitiesResponse);
-        // OK rpc spectrum(SpectrumRequest)                              returns (SpectrumResponse);
-        // OK rpc angular_frequencies_for_rao(AngularFrequenciesRequest) returns (AngularFrequenciesResponse);
-        // OK rpc directions_for_rao(DirectionsRequest)                  returns (DirectionsResponse);
-
         // rpc elevations(XYTGrid) returns (XYZTGrid);
         Status set_parameters(ServerContext* /*context*/, const SetParameterRequest* request, SetParameterResponse* reply) override
         {
@@ -128,7 +120,6 @@ class WavesImpl final : public Waves::Service {
                 AngularFrequencies * g = reply->add_angular_frequencies();
                 google::protobuf::RepeatedField<double> field{res[index].begin(), res[index].end()};
                 g->mutable_omegas()->Swap(&field);
-
             }
             return Status::OK;
         }
