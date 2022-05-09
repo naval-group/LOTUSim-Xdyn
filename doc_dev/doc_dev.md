@@ -210,7 +210,7 @@ efforts contrôlés et les corps à simuler.
 
 #### Construction de l'environnement
 
-La méthode `SimulatorBuilder::get_environment` construit l'environnement. Elle
+La méthode `SimulatorBuilder::build_environment_and_frames` construit l'environnement. Elle
 commence par stocker des constantes lues directement depuis le YAML, puis elle
 construit le modèle de houle et l'objet `Kinematics` qui va servir à faire les
 changements de repère.
@@ -715,7 +715,7 @@ Wrench get_force(const BodyStates&, const double, const EnvironmentAndFrames&, s
 ~~~~~~~~
 
 En plus de ces éléments, la classe peut optionnellement implémenter les méthodes suivantes :
-- Si la fonction utilise l'historique des états, une implémentation de `double get_Tmax()` 
+- Si la fonction utilise l'historique des états, une implémentation de `double get_Tmax()`
   pour que le simulateur sache quelle durée garder en mémoire ;
 - Une méthode `void extra_observations(Observer&)` dans le cas où le modèle
   exporte des valeurs en plus du torseur d'effort (exporté d'office).
@@ -726,7 +726,7 @@ dérivées, pas même la description de l'environnement.
 #### Données disponibles pour le calcul de l'effort
 
 Pour l'implémentation du modèle, la classe dispose du temps courant, d'une description de
-l'environnement (`EnvironmentAndFrames`), des valeurs des commandes requises et d'un objet 
+l'environnement (`EnvironmentAndFrames`), des valeurs des commandes requises et d'un objet
 `BodyStates` contenant :
 
 - Les treize états du corps
@@ -757,15 +757,15 @@ de son choix. La classe mère `ForceModel` est responsable de fournir au simulat
 dans le repère du corps et au point de résolution des équations de la dynamique.
 
 En revanche, le repère d'expression de l'effort (ainsi que du point d'application) doit être
-connu du simulateur. Si le modèle d'effort utilise un repère d'expression propre, il doit être 
+connu du simulateur. Si le modèle d'effort utilise un repère d'expression propre, il doit être
 fourni au constructeur de `ForceModel` sous forme de `YamlPosition` (`internal_frame`):
 
 ~~~~~~~~~~~ {.cpp}
 ForceModel(const std::string& name, const std::vector<std::string>& commands, const YamlPosition& internal_frame, const std::string& body_name_, const EnvironmentAndFrames& env);
 ~~~~~~~~~~~
 
-Si le modèle d'effort exprime l'effort dans un repère connu (repère du corps, repère "NED", 
-maillage ou "NED local"), il n'a pas besoin de fournir de `YamlPosition` au constructeur de 
+Si le modèle d'effort exprime l'effort dans un repère connu (repère du corps, repère "NED",
+maillage ou "NED local"), il n'a pas besoin de fournir de `YamlPosition` au constructeur de
 `ForceModel` :
 
 ~~~~~~~~~~~ {.cpp}
@@ -786,9 +786,9 @@ GravityForceModel(const std::string body_name, const EnvironmentAndFrames& env);
 
 #### Définition d'une classe d'effort nécessitant un parseur
 
-Un exemple de cas avec parseur est `GMForceModel`. Un tel modèle doit implémenter 
+Un exemple de cas avec parseur est `GMForceModel`. Un tel modèle doit implémenter
 une méthode statique `parse(const std::string&)` qui prend comme paramètre la section
-du fichier YAML d'entrée lui correspondant, et la parse dans une structure de donnée 
+du fichier YAML d'entrée lui correspondant, et la parse dans une structure de donnée
 qui lui est propre (que l'on nommera `Input` dans cet exemple).
 
 ~~~~~~~~~~~ {.cpp}
@@ -802,12 +802,12 @@ prendre la structure `Input` en premier paramètre :
 GMForceModel(const Input& input_data, const std::string body_name, const EnvironmentAndFrames& env);
 ~~~~~~~~~~~
 
-**Le type de retour de la fonction `parse` doit impérativement être le même que le type du premier 
+**Le type de retour de la fonction `parse` doit impérativement être le même que le type du premier
 paramètre du constructeur !**
 
 ### Spécification des commandes (pour les modèles d'efforts commandés)
 
-Le constructeur de la classe d'effort doit simplement fournir au constructeur de `ForceModel` 
+Le constructeur de la classe d'effort doit simplement fournir au constructeur de `ForceModel`
 une liste des commandes dont il a besoin en second paramètre :
 
 ~~~~~~~~~~~ {.cpp}
@@ -820,9 +820,9 @@ Par exemple :
 ~~~~~~~~ {.cpp}
 SimpleHeadingKeepingController::SimpleHeadingKeepingController(const Input& input_data, const std::string& body_name_, const EnvironmentAndFrames& env_) :
         ControllableForceModel(
-            input.name, 
+            input.name,
             {"psi_co"}, // 'psi_co' is the only command needed by SimpleHeadingKeepingController
-            YamlPosition(YamlCoordinates(),YamlAngle(), body_name_), 
+            YamlPosition(YamlCoordinates(),YamlAngle(), body_name_),
             body_name_,
             env_)
 ~~~~~~~~
@@ -1304,4 +1304,3 @@ pourraient être considérées :
 - La vitesse d'exécution des modèles de manœuvrabilité peut être améliorée :
   actuellement, ils sont interprétés, mais il est possible de les compiler
   dynamiquement pour atteindre les performances d'un code natif.
-
