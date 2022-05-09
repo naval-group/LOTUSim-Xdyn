@@ -8,10 +8,9 @@
 #ifndef GRPC_INC_GRPCFORCEMODEL_HPP_
 #define GRPC_INC_GRPCFORCEMODEL_HPP_
 
-
 #include "EnvironmentAndFrames.hpp"
-#include <ssc/kinematics.hpp>
 #include "ForceModel.hpp"
+#include <ssc/kinematics.hpp>
 
 class GRPCForceModel : public ForceModel
 {

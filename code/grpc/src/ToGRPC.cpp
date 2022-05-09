@@ -7,6 +7,7 @@
 
 
 #include "ToGRPC.hpp"
+#include "ToGRPCCommon.hpp"
 #include "HydroDBParser.hpp"
 
 ToGRPC::ToGRPC(const GRPCForceModel::Input& input_)
@@ -22,47 +23,6 @@ RequiredWaveInformationRequest ToGRPC::from_required_wave_information(const doub
     request.set_z(z);
     request.set_instance_name(instance_name);
     return request;
-}
-
-void spectrum_response_from_discrete_directional_wave_spectra(const std::vector<DiscreteDirectionalWaveSpectrum>& spectra, SpectrumResponse* spectrum_response)
-{
-    if (spectrum_response==nullptr)
-    {
-        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception,
-        "Null pointer passed as input for SpectrumResponse in from_discrete_directional_wave_spectra");
-    }
-    for (const auto& spectrum:spectra)
-    {
-        const auto s = spectrum_response->add_spectrum();
-        for (const auto& Si:spectrum.Si)
-        {
-            s->add_si(Si);
-        }
-        for (const auto& Dj:spectrum.Dj)
-        {
-            s->add_dj(Dj);
-        }
-        for (const auto& omega:spectrum.omega)
-        {
-            s->add_omega(omega);
-        }
-        for (const auto& psi:spectrum.psi)
-        {
-            s->add_psi(psi);
-        }
-        for (const auto& k:spectrum.k)
-        {
-            s->add_k(k);
-        }
-        for (const auto& phases:spectrum.phase)
-        {
-            const auto p = s->add_phase();
-            for (const auto& phase:phases)
-            {
-                p->add_phase(phase);
-            }
-        }
-    }
 }
 
 SpectrumResponse* ToGRPC::from_discrete_directional_wave_spectra(const std::vector<DiscreteDirectionalWaveSpectrum>& spectra) const
@@ -431,14 +391,4 @@ SetForceParameterRequest ToGRPC::from_yaml(const std::string& yaml, const std::s
     request.set_instance_name(instance_name);
     request.set_allocated_results_from_potential_theory(get_results_from_potential_theory(hydro_db_parser));
     return request;
-}
-
-void copy_from_double_vector(const std::vector<double>& origin, ::google::protobuf::RepeatedField< double >* destination)
-{
-    *destination = {origin.begin(), origin.end()};
-}
-
-void copy_from_string_vector(const std::vector<std::string>& origin, ::google::protobuf::RepeatedPtrField< std::string >* destination)
-{
-    *destination = {origin.begin(), origin.end()};
 }
