@@ -24,9 +24,13 @@ RequiredWaveInformationRequest ToGRPC::from_required_wave_information(const doub
     return request;
 }
 
-SpectrumResponse* ToGRPC::from_discrete_directional_wave_spectra(const std::vector<DiscreteDirectionalWaveSpectrum>& spectra) const
+void spectrum_response_from_discrete_directional_wave_spectra(const std::vector<DiscreteDirectionalWaveSpectrum>& spectra, SpectrumResponse* spectrum_response)
 {
-    SpectrumResponse* spectrum_response = new SpectrumResponse();
+    if (spectrum_response==nullptr)
+    {
+        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception,
+        "Null pointer passed as input for SpectrumResponse in from_discrete_directional_wave_spectra");
+    }
     for (const auto& spectrum:spectra)
     {
         const auto s = spectrum_response->add_spectrum();
@@ -59,6 +63,12 @@ SpectrumResponse* ToGRPC::from_discrete_directional_wave_spectra(const std::vect
             }
         }
     }
+}
+
+SpectrumResponse* ToGRPC::from_discrete_directional_wave_spectra(const std::vector<DiscreteDirectionalWaveSpectrum>& spectra) const
+{
+    SpectrumResponse* spectrum_response = new SpectrumResponse();
+    spectrum_response_from_discrete_directional_wave_spectra(spectra, spectrum_response);
     return spectrum_response;
 }
 
