@@ -10,7 +10,6 @@
 #include "make_sim_for_GZ.hpp"
 #include "ResultantForceComputerTest.hpp"
 #include "ResultantForceComputer.hpp"
-#include "SurfaceElevationInterface.hpp"
 #include "GZTypes.hpp"
 #include "stl_data.hpp"
 #include "yaml_data.hpp"
