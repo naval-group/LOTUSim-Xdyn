@@ -1,4 +1,5 @@
 #include "AiryGRPC.hpp"
+#include "ToGRPCCommon.hpp"
 #include "EnvironmentAndFrames.hpp" //xdyn/code/core/inc/EnvironmentAndFrames.hpp
 #include "wave_types.pb.h"
 #include "wave_types.grpc.pb.h"
@@ -126,38 +127,7 @@ class WavesImpl final : public Waves::Service {
         Status spectrum(ServerContext* /*context*/, const SpectrumRequest* request, SpectrumResponse* spectrum_response) override
         {
             const std::vector<DiscreteDirectionalWaveSpectrum> spectra = env.w->get_directional_spectra(request->x(), request->y(), request->t());
-            for (const auto& spectrum:spectra)
-            {
-                const auto s = spectrum_response->add_spectrum();
-                for (const auto& Si:spectrum.Si)
-                {
-                    s->add_si(Si);
-                }
-                for (const auto& Dj:spectrum.Dj)
-                {
-                    s->add_dj(Dj);
-                }
-                for (const auto& omega:spectrum.omega)
-                {
-                    s->add_omega(omega);
-                }
-                for (const auto& psi:spectrum.psi)
-                {
-                    s->add_psi(psi);
-                }
-                for (const auto& k:spectrum.k)
-                {
-                    s->add_k(k);
-                }
-                for (const auto& phases:spectrum.phase)
-                {
-                    const auto p = s->add_phase();
-                    for (const auto& phase:phases)
-                    {
-                        p->add_phase(phase);
-                    }
-                }
-            }
+            spectrum_response_from_discrete_directional_wave_spectra(spectra, spectrum_response);
             return Status::OK;
         }
     private:

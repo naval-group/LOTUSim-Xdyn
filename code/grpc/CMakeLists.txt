@@ -4,6 +4,7 @@ project(grpc)
 set(SRC src/SurfaceElevationFromGRPC.cpp
         src/GRPCForceModel.cpp
         src/ToGRPC.cpp
+        src/ToGRPCCommon.cpp
         src/FromGRPC.cpp
         src/GrpcControllerInterface.cpp
         )
@@ -41,7 +42,7 @@ IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     ENDIF()
 ENDIF()
 
-include_directories(inc)
+INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${exceptions_INCLUDE_DIRS})
@@ -54,9 +55,9 @@ INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${PROTOBUF_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(SYSTEM ${GRPC_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(SYSTEM ${CMAKE_CURRENT_BINARY_DIR})
-include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS}) # For MeshIntersector
-include_directories(${hdb_interpolators_INCLUDE_DIRS}) # For History
+INCLUDE_DIRECTORIES(${hdb_interpolators_INCLUDE_DIRS}) # For History
 
 # gRPC
 SET(wave_proto_types ${CMAKE_CURRENT_SOURCE_DIR}/../../interfaces/wave_types.proto)
