@@ -8,8 +8,6 @@
 #include "Body.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "Observer.hpp"
-#include "SurfaceElevationInterface.hpp"
-#include "YamlBody.hpp"
 #include "NumericalErrorException.hpp"
 
 Body::Body(const size_t i, const BlockedDOF& blocked_states_, const YamlFilteredStates& filtered_states)
