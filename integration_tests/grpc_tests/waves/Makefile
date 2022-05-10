@@ -1,10 +1,15 @@
 .PHONY: all clean run
 
+DASH:=-
+UNDERSCORE:=_
+SLUG:=$(subst $(DASH),$(UNDERSCORE),$(CI_PROJECT_PATH_SLUG))
+COMPOSE_PROJECT_NAME:=$(shell basename `pwd`)${SLUG}${CI_PIPELINE_ID}
+DOCKER_COMPOSE:=COMPOSE_PROJECT_NAME=$(COMPOSE_PROJECT_NAME) CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose
+
 all: run clean
 
 run: tutorial_09_gRPC_wave_model.yml test_ship.hdb
-	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose rm -f
-	@CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose up -t 0 --exit-code-from test --abort-on-container-exit --build
+	@$(DOCKER_COMPOSE) up -t 0 --exit-code-from test --abort-on-container-exit --build
 
 tutorial_09_gRPC_wave_model.yml:
 	@echo "Copying tutorial files from xdyn's Docker container..."
@@ -21,3 +26,4 @@ test_ship.hdb:
 
 clean:
 	rm -f tutorial_09_gRPC_wave_model.yml test_ship.hdb
+	@$(DOCKER_COMPOSE) down --remove-orphans

@@ -1,1 +1,5 @@
 build_*
+code
+doc_*
+.vscode
+.wine

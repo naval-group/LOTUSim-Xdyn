@@ -117,6 +117,15 @@ integration tests:
       paths:
       - xdyn.deb
 
+Cleanup on failure:
+  stage: test
+  needs:
+    - integration tests
+  when: on_failure
+  script:
+    - docker ps
+    - make -C integration_tests clean
+
 doc:
    stage: doc
    script:

@@ -1,0 +1,20 @@
+version: '3'
+services:
+  waves-server:
+    image: xdyn
+    entrypoint: xdyn-grpc-airy -p 50051
+    working_dir: /data
+    volumes:
+      - ./:/data:ro
+    user: ${CURRENT_UID}
+  client:
+    build: client
+    depends_on:
+    - waves-server
+    user: ${CURRENT_UID}
+    volumes:
+    - ./client:/data
+    working_dir: /data
+    environment:
+    - no_proxy
+    entrypoint: wait-for-it waves-server:50051 -s -t 20 -- python3 tests.py

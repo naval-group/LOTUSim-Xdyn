@@ -169,6 +169,27 @@ Sim get_system(const std::string& yaml, const MeshMap& meshes, const double t0)
     return get_system(check_input_yaml(input), meshes, t0);
 }
 
+EnvironmentAndFrames get_environment_for_wave_queries(const std::string& yaml_data)
+{
+    EnvironmentAndFrames env(get_system(yaml_data, 0.0).get_env());
+    if (env.w == nullptr)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+        "No wave environment model is defined");
+    }
+    if (env.g == 0.0)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+        "Gravity constant g can not be zero");
+    }
+    if (env.rho == 0.0)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+        "Water density rho can not be zero");
+    }
+    return env;
+}
+
 MeshMap make_mesh_map(const YamlSimulatorInput& input, const std::string& mesh)
 {
     const auto name = input.bodies.front().name;
@@ -176,4 +197,3 @@ MeshMap make_mesh_map(const YamlSimulatorInput& input, const std::string& mesh)
     meshes[name] = read_stl(mesh);
     return meshes;
 }
-

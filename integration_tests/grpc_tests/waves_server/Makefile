@@ -1,4 +1,4 @@
-.PHONY: all clean
+.PHONY: all clean run
 
 DASH:=-
 UNDERSCORE:=_
@@ -7,13 +7,17 @@ COMPOSE_PROJECT_NAME:=$(shell basename `pwd`)${SLUG}${CI_PIPELINE_ID}
 DOCKER_COMPOSE:=COMPOSE_PROJECT_NAME=$(COMPOSE_PROJECT_NAME) CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose
 
 all:
-	@$(DOCKER_COMPOSE) \
-		up \
+	make -C client
+	make test
+
+test:
+	@${DOCKER_COMPOSE} up \
 		-t 0 \
-        --exit-code-from test \
-        --abort-on-container-exit \
-        --build \
+		--exit-code-from client \
+		--abort-on-container-exit \
+		--build \
 		--remove-orphans
 
 clean:
+	@make --silent -C client clean
 	@$(DOCKER_COMPOSE) down --remove-orphans
