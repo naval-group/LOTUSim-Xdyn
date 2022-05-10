@@ -8,7 +8,6 @@
 #include "RudderForceModel.hpp"
 
 #include "external_data_structures_parsers.hpp"
-#include "SurfaceElevationInterface.hpp"
 #include "yaml2eigen.hpp"
 
 #include <ssc/yaml_parser.hpp>
