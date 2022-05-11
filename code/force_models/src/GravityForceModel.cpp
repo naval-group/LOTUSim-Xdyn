@@ -9,8 +9,6 @@
 #include "GravityForceModel.hpp"
 #include "Body.hpp"
 
-#include <ssc/kinematics.hpp>
-
 std::string GravityForceModel::model_name(){return "gravity";}
 
 GravityForceModel::GravityForceModel(const std::string& body_name_, const EnvironmentAndFrames& env) :
