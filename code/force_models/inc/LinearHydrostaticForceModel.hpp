@@ -62,4 +62,4 @@ class LinearHydrostaticForceModel : public ForceModel
         double d24;
 };
 
-#endif /* GRAVITYFORCEMODEL_HPP_ */
+#endif /* LINEARHYDROSTATICFORCEMODEL_HPP_ */
