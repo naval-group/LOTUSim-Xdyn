@@ -12,7 +12,6 @@
 #include "stl_data.hpp"
 #include "stl_reader.hpp"
 #include "yaml_data.hpp"
-#include <ssc/kinematics.hpp>
 
 const BodyPtr BodyBuilderTest::body = BodyBuilderTest::build_body();
 
