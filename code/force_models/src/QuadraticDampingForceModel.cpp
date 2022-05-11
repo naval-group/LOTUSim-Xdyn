@@ -6,7 +6,6 @@
  */
 
 #include <Eigen/Dense>
-#include <ssc/kinematics.hpp>
 #include "Body.hpp"
 #include "QuadraticDampingForceModel.hpp"
 
