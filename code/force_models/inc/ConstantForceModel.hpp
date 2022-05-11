@@ -10,7 +10,6 @@
 
 
 #include "EnvironmentAndFrames.hpp"
-#include <ssc/kinematics.hpp>
 #include "ForceModel.hpp"
 
 class ConstantForceModel : public ForceModel
