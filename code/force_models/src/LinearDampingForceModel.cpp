@@ -8,7 +8,6 @@
 #include <Eigen/Dense>
 #include "yaml.h"
 
-#include <ssc/kinematics.hpp>
 #include "Body.hpp"
 #include "LinearDampingForceModel.hpp"
 #include "external_data_structures_parsers.hpp"
