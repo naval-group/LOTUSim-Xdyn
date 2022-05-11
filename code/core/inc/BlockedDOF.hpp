@@ -14,7 +14,6 @@
 
 #include <Eigen/Dense>
 
-#include <ssc/interpolation.hpp>
 #include <ssc/kinematics.hpp>
 #include <ssc/macros/tr1_macros.hpp>
 
