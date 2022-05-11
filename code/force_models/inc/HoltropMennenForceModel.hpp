@@ -3,7 +3,6 @@
 
 #include <functional>
 #include <boost/optional.hpp>
-#include <ssc/kinematics.hpp>
 
 #include "ForceModel.hpp"
 #include "EnvironmentAndFrames.hpp"
