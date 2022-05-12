@@ -1091,34 +1091,22 @@ documentation](#efforts-damortissement-visqueux).
 
 Le modèle d'efforts hydrostatiques linéaires est beaucoup plus rapide à
 calculer que son homologue non-linéaire. Habituellement, les efforts
-hydrostatiques linéaires sont juste calculés à partir d'une matrice
+hydrostatiques linéaires sont calculés à partir d'une matrice
 hydrostatique donnée en entrée (ou éventuellement calculée à partir de la
-position du centre de gravité et des données géométriques). L'implémentation à
-quatre points présentée ici est très spécifique.
-
-![](images/linear_hydrostatics.svg)
-
-On utilise les variables suivantes :
-
-
-```math
-\overline{z} = \frac{1}{4}\sum_{i=1}^4 z_i^h
-```
-
-$`\overline{\phi} = \frac{1}{2}\left(\frac{\textrm{atan}(z_2^h-z_1^h)}{d_{12}} +
-\frac{\textrm{atan}(z_4^h-z_3^h)}{d_{43}}\right)`$
-$`\overline{\theta} = \frac{1}{2}\left(\frac{\textrm{atan}(z_2^h-z_4^h)}{d_{24}} +
-\frac{\textrm{atan}(z_1^h-z_3^h)}{d_{13}}\right)`$
-
-où $`d_{ij} = \sqrt{(x^h_i-x^h_j)^2 + (y^h_i-y^h_j)^2}`$ est la distance entre deux
-points de mesure.
+position du centre de gravité et des données géométriques). 
 
 Le torseur d'effort est donné dans le repère NED par :
 
-$`F_{\textrm{hs}} = K_{3\times 3}
-\left[\begin{array}{c}z-\overline{z}-z_{\textrm{eq}}\\\theta-\overline{\theta}-\theta_{\textrm{eq}}\\\psi-\overline{\psi}-\psi_{\textrm{eq}}\end{array}\right]`$
+$`F_{\textrm{hs}} = -K_{3\times 3}
+\left[\begin{array}{c}z-z_{\textrm{eq}}\\\phi-\phi_{\textrm{eq}}\\\beta-\beta_{\textrm{eq}}\end{array}\right] = - \begin{bmatrix}
+K_{33} & K_{34} & K_{35}\\
+K_{43} & K_{44} & K_{45}\\
+K_{53} & K_{54} & K_{55}\\
+\end{bmatrix} \left[\begin{array}{c}z-z_{\textrm{eq}}\\\phi-\phi_{\textrm{eq}}\\\beta-\beta_{\textrm{eq}}\end{array}\right] `$
 
-$`z_{\textrm{eq}}, \theta_{\textrm{eq}}, \psi_{\textrm{eq}}`$ sont les valeurs
+La matrice $`K_{3\times 3}`$ est à indiquer dans le repère du navire avec x vers l'avant, y vers bâbord et z vers le haut comme dans la majorité des logiciels de stabilité. Le signe $`-`$ permet de la placer dans le repère standard de xdyn.
+
+$`z_{\textrm{eq}}, \phi_{\textrm{eq}}, \beta_{\textrm{eq}}`$ sont les valeurs
 d'équilibre renseignées dans le fichier de paramétrage.
 
 ### Paramétrage
@@ -1131,18 +1119,13 @@ d'équilibre renseignées dans le fichier de paramétrage.
   K row 1: [1, 0 , 0]
   K row 2: [0, 1 , 0]
   K row 3: [0, 0 , 1]
-  x1: {value: 10, unit: m}
-  y1: {value: -10, unit: m}
-  x2: {value: 10, unit: m}
-  y2: {value: 10, unit: m}
-  x3: {value: -10, unit: m}
-  y3: {value: -10, unit: m}
-  x4: {value: -10, unit: m}
-  y4: {value: 10, unit: m}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Les coordonnées $`(x_i,y_j)`$ sont données dans le repère body.
 Les coefficients de la matrice $`K`$ sont donnés en unité SI.
+
+### Références
+
+- *Principles of Naval Architecture, Volume III - Motions in Waves and Controllability*, 1989, SNAME, ISBN 0-939773-02-3, page 41
 
 ## Effort constant
 
