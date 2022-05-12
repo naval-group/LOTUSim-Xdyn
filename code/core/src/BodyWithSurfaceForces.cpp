@@ -8,7 +8,6 @@
 
 #include "BodyWithSurfaceForces.hpp"
 #include "EnvironmentAndFrames.hpp"
-#include "SurfaceElevationInterface.hpp"
 
 BodyWithSurfaceForces::BodyWithSurfaceForces(const size_t i, const BlockedDOF& blocked_states_, const YamlFilteredStates& filtered_states) : Body(i, blocked_states_, filtered_states)
 {

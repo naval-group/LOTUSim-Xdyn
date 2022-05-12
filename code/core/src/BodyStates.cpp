@@ -9,7 +9,6 @@
 #include "EnvironmentAndFrames.hpp"
 #include "StateMacros.hpp"
 #include "StatesFilter.hpp"
-#include "SurfaceElevationInterface.hpp"
 #include "YamlBody.hpp"
 #include "yaml2eigen.hpp"
 

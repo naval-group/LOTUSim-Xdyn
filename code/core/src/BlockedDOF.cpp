@@ -15,6 +15,7 @@
 #include "external_data_structures_parsers.hpp"
 
 #include <ssc/csv_file_reader.hpp>
+#include <ssc/interpolation.hpp>
 #include <ssc/text_file_reader.hpp>
 
 typedef YamlDOF<std::vector<double> > Table;

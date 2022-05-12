@@ -6,15 +6,12 @@
  */
 
 
-#include "Observer.hpp"
 #include "Sim.hpp"
+#include "Observer.hpp"
 #include "update_kinematics.hpp"
-#include "SurfaceElevationInterface.hpp"
-#include "YamlWaveModelInput.hpp"
 #include "InternalErrorException.hpp"
 
 #include <ssc/kinematics.hpp>
-#include <ssc/numeric.hpp>
 
 #define SQUARE(x) ((x)*(x))
 

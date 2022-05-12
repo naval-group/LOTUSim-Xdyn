@@ -8,7 +8,7 @@
 #ifndef GZTYPES_HPP_
 #define GZTYPES_HPP_
 
-#include <ssc/kinematics.hpp>
+#include <Eigen/Dense>
 
 namespace GZ
 {

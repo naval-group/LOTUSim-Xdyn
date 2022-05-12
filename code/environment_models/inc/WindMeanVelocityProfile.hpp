@@ -11,9 +11,7 @@
 #include <Eigen/Dense>
 #include <boost/optional/optional.hpp>
 #include <memory>
-#include "yaml-cpp/exceptions.h"
-
-#include "InvalidInputException.hpp"
+#include <string>
 #include "YamlModel.hpp"
 #include "WindModel.hpp"
 

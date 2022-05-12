@@ -10,7 +10,6 @@
 
 #include "EnvironmentAndFrames.hpp"
 #include "ForceModel.hpp"
-#include <ssc/kinematics.hpp>
 
 class GRPCForceModel : public ForceModel
 {

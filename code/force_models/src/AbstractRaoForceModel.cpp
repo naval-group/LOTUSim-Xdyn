@@ -13,14 +13,8 @@
 #include "PrecalParser.hpp"
 #include "InvalidInputException.hpp"
 #include "InternalErrorException.hpp"
-#include "SurfaceElevationInterface.hpp"
 #include "yaml.h"
 #include "external_data_structures_parsers.hpp"
-#include "yaml2eigen.hpp"
-
-#include <ssc/interpolation.hpp>
-
-#include <array>
 
 std::string AbstractRaoForceModel::get_model_name(const YamlRAO::TypeOfRao& type_of_rao)
 {

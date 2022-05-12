@@ -9,8 +9,6 @@
 #define GMFORCEMODEL_HPP_
 
 #include "ImmersedSurfaceForceModel.hpp"
-#include <ssc/kinematics.hpp>
-
 #include "EnvironmentAndFrames.hpp"
 
 class Body;

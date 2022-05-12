@@ -9,7 +9,6 @@
 #define DAMPINGFORCEMODEL_HPP_
 
 #include <Eigen/Dense>
-#include <ssc/kinematics.hpp>
 #include "ForceModel.hpp"
 
 class Body;

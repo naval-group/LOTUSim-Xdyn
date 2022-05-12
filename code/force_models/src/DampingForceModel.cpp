@@ -8,7 +8,6 @@
 #include "DampingForceModel.hpp"
 
 #include <Eigen/Dense>
-#include <ssc/kinematics.hpp>
 #include "Body.hpp"
 
 
@@ -29,4 +28,3 @@ Wrench DampingForceModel::get_force(const BodyStates& states, const double t, co
         states.r();
     return Wrench(states.hydrodynamic_forces_calculation_point, body_name, get_force_and_torque(D, W));
 }
-
