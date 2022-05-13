@@ -41,14 +41,6 @@ TEST_F(LinearHydrostaticForceModelTest, parser_test)
     ASSERT_THAT(input.K1, ElementsAre(1,0,0));
     ASSERT_THAT(input.K2, ElementsAre(0,1,0));
     ASSERT_THAT(input.K3, ElementsAre(0,0,1));
-    ASSERT_DOUBLE_EQ(10, input.x1);
-    ASSERT_DOUBLE_EQ(10, input.x2);
-    ASSERT_DOUBLE_EQ(-10, input.x3);
-    ASSERT_DOUBLE_EQ(-10, input.x4);
-    ASSERT_DOUBLE_EQ(-10, input.y1);
-    ASSERT_DOUBLE_EQ(10, input.y2);
-    ASSERT_DOUBLE_EQ(-10, input.y3);
-    ASSERT_DOUBLE_EQ(10, input.y4);
 }
 
 

@@ -19,14 +19,6 @@ class LinearHydrostaticForceModelTest(unittest.TestCase):
         self.assertTrue(np.allclose(data.K1, [1, 0, 0]))
         self.assertTrue(np.allclose(data.K2, [0, 1, 0]))
         self.assertTrue(np.allclose(data.K3, [0, 0, 1]))
-        self.assertEqual(10, data.x1)
-        self.assertEqual(10, data.x2)
-        self.assertEqual(-10, data.x3)
-        self.assertEqual(-10, data.x4)
-        self.assertEqual(-10, data.y1)
-        self.assertEqual(10, data.y2)
-        self.assertEqual(-10, data.y3)
-        self.assertEqual(10, data.y4)
 
 
 if __name__ == "__main__":
