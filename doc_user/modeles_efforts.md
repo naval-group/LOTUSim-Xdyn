@@ -1098,15 +1098,15 @@ position du centre de gravité et des données géométriques).
 Le torseur d'effort est donné dans le repère NED par :
 
 $`F_{\textrm{hs}} = -K_{3\times 3}
-\left[\begin{array}{c}z-z_{\textrm{eq}}\\\phi-\phi_{\textrm{eq}}\\\beta-\beta_{\textrm{eq}}\end{array}\right] = - \begin{bmatrix}
+\left[\begin{array}{c}z-z_{\textrm{eq}}\\\phi-\phi_{\textrm{eq}}\\\theta-\theta_{\textrm{eq}}\end{array}\right] = - \begin{bmatrix}
 K_{33} & K_{34} & K_{35}\\
 K_{43} & K_{44} & K_{45}\\
 K_{53} & K_{54} & K_{55}\\
-\end{bmatrix} \left[\begin{array}{c}z-z_{\textrm{eq}}\\\phi-\phi_{\textrm{eq}}\\\beta-\beta_{\textrm{eq}}\end{array}\right] `$
+\end{bmatrix} \left[\begin{array}{c}z-z_{\textrm{eq}}\\\phi-\phi_{\textrm{eq}}\\\theta-\theta_{\textrm{eq}}\end{array}\right] `$
 
 La matrice $`K_{3\times 3}`$ est à indiquer dans le repère du navire avec x vers l'avant, y vers bâbord et z vers le haut comme dans la majorité des logiciels de stabilité. Le signe $`-`$ permet de la placer dans le repère standard de xdyn.
 
-$`z_{\textrm{eq}}, \phi_{\textrm{eq}}, \beta_{\textrm{eq}}`$ sont les valeurs
+$`z_{\textrm{eq}}, \phi_{\textrm{eq}}, \theta_{\textrm{eq}}`$ sont les valeurs
 d'équilibre renseignées dans le fichier de paramétrage.
 
 ### Paramétrage
@@ -1114,8 +1114,8 @@ d'équilibre renseignées dans le fichier de paramétrage.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: linear hydrostatics
   z eq: {value: 0, unit: m}
+  phi eq: {value: 0, unit: deg}
   theta eq: {value: 0, unit: deg}
-  psi eq: {value: 0, unit: deg}
   K row 1: [1, 0 , 0]
   K row 2: [0, 1 , 0]
   K row 3: [0, 0 , 1]
