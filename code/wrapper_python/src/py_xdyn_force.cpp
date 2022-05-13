@@ -996,30 +996,14 @@ void py_add_module_xdyn_force(py::module& m0)
             const double& /*phi_eq*/,
             const std::vector<double>& /*K1*/,
             const std::vector<double>& /*K2*/,
-            const std::vector<double>& /*K3*/,
-            const double& /*x1*/,
-            const double& /*y1*/,
-            const double& /*x2*/,
-            const double& /*y2*/,
-            const double& /*x3*/,
-            const double& /*y3*/,
-            const double& /*x4*/,
-            const double& /*y4*/
+            const std::vector<double>& /*K3*/
             >(),
             py::arg("z_eq") = 0.0,
             py::arg("theta_eq") = 0.0,
             py::arg("phi_eq") = 0.0,
             py::arg("K1") = std::vector<double>(),
             py::arg("K2") = std::vector<double>(),
-            py::arg("K3") = std::vector<double>(),
-            py::arg("x1") = 0.0,
-            py::arg("y1") = 0.0,
-            py::arg("x2") = 0.0,
-            py::arg("y2") = 0.0,
-            py::arg("x3") = 0.0,
-            py::arg("y3") = 0.0,
-            py::arg("x4") = 0.0,
-            py::arg("y4") = 0.0
+            py::arg("K3") = std::vector<double>()
             )
         .def_readwrite("z_eq", &LinearHydrostaticForceModel::Input::z_eq)
         .def_readwrite("theta_eq", &LinearHydrostaticForceModel::Input::theta_eq)
@@ -1027,14 +1011,6 @@ void py_add_module_xdyn_force(py::module& m0)
         .def_readwrite("K1", &LinearHydrostaticForceModel::Input::K1)
         .def_readwrite("K2", &LinearHydrostaticForceModel::Input::K2)
         .def_readwrite("K3", &LinearHydrostaticForceModel::Input::K3)
-        .def_readwrite("x1", &LinearHydrostaticForceModel::Input::x1)
-        .def_readwrite("y1", &LinearHydrostaticForceModel::Input::y1)
-        .def_readwrite("x2", &LinearHydrostaticForceModel::Input::x2)
-        .def_readwrite("y2", &LinearHydrostaticForceModel::Input::y2)
-        .def_readwrite("x3", &LinearHydrostaticForceModel::Input::x3)
-        .def_readwrite("y3", &LinearHydrostaticForceModel::Input::y3)
-        .def_readwrite("x4", &LinearHydrostaticForceModel::Input::x4)
-        .def_readwrite("y4", &LinearHydrostaticForceModel::Input::y4)
         ;
 
     py::class_<LinearHydrostaticForceModel, ForceModel>(m, "LinearHydrostaticForceModel", "Linear hydrostatic force model")
