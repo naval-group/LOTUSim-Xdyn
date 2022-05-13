@@ -2711,14 +2711,6 @@ std::string test_data::linear_hydrostatics()
        << "K row 1: [1, 0 , 0]\n"
        << "K row 2: [0, 1 , 0]\n"
        << "K row 3: [0, 0 , 1]\n"
-       << "x1: {value: 10, unit: m}\n"
-       << "y1: {value: -10, unit: m}\n"
-       << "x2: {value: 10, unit: m}\n"
-       << "y2: {value: 10, unit: m}\n"
-       << "x3: {value: -10, unit: m}\n"
-       << "y3: {value: -10, unit: m}\n"
-       << "x4: {value: -10, unit: m}\n"
-       << "y4: {value: 10, unit: m}\n";
     return ss.str();
 }
 
@@ -2752,14 +2744,6 @@ std::string test_data::test_ship_linear_hydrostatics_without_waves()
        << "        K row 1: [100002.8, 0 , 0]\n"
        << "        K row 2: [0, 1E6 , 0]\n"
        << "        K row 3: [0, 0 , 1E6]\n"
-       << "        x1: {value: 10, unit: m}\n"
-       << "        y1: {value: -10, unit: m}\n"
-       << "        x2: {value: 10, unit: m}\n"
-       << "        y2: {value: 10, unit: m}\n"
-       << "        x3: {value: -10, unit: m}\n"
-       << "        y3: {value: -10, unit: m}\n"
-       << "        x4: {value: -10, unit: m}\n"
-       << "        y4: {value: 10, unit: m}\n";
     return ss.str();
 }
 
@@ -2806,14 +2790,6 @@ std::string test_data::test_ship_linear_hydrostatics_with_waves()
        << "        K row 1: [100002.8, 0 , 0]\n"
        << "        K row 2: [0, 1E6 , 0]\n"
        << "        K row 3: [0, 0 , 1E6]\n"
-       << "        x1: {value: 10, unit: m}\n"
-       << "        y1: {value: -10, unit: m}\n"
-       << "        x2: {value: 10, unit: m}\n"
-       << "        y2: {value: 10, unit: m}\n"
-       << "        x3: {value: -10, unit: m}\n"
-       << "        y3: {value: -10, unit: m}\n"
-       << "        x4: {value: -10, unit: m}\n"
-       << "        y4: {value: 10, unit: m}\n";
     return ss.str();
 }
 

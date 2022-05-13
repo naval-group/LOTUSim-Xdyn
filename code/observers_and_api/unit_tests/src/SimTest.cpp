@@ -572,19 +572,19 @@ TEST_F(SimTest, LONG_linear_hydrostatics_with_waves)
 
     const double eps = 1E-3;
     EXPECT_NEAR(1      , res.at(0).x[ZIDX(0)], eps);
-    EXPECT_NEAR(1.1010459072143728, res.at(1).x[ZIDX(0)], eps);
-    EXPECT_NEAR(1.1990755183896542, res.at(2).x[ZIDX(0)], eps);
-    EXPECT_NEAR(1.2864256014997444, res.at(3).x[ZIDX(0)], eps);
-    EXPECT_NEAR(1.3558158151138187, res.at(4).x[ZIDX(0)], eps);
-    EXPECT_NEAR(1.4008027467011974, res.at(5).x[ZIDX(0)], eps);
-    EXPECT_NEAR(1.4161836722048577, res.at(6).x[ZIDX(0)], eps);
-    EXPECT_NEAR(1.3983252434201292, res.at(7).x[ZIDX(0)], eps);
-    EXPECT_NEAR(1.3453969093151239, res.at(8).x[ZIDX(0)], eps);
-    EXPECT_NEAR(1.2574947155099978, res.at(9).x[ZIDX(0)], eps);
-    EXPECT_NEAR(1.1366478447050186, res.at(10).x[ZIDX(0)], eps);
-    EXPECT_NEAR(0.98670744792990239, res.at(11).x[ZIDX(0)], eps);
-    EXPECT_NEAR(0.81312453136543006, res.at(12).x[ZIDX(0)], eps);
-    EXPECT_NEAR(0.62263046374421704, res.at(13).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1.0977655768203616, res.at(1).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1.1908080668425538, res.at(2).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1.2787602739058979, res.at(3).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1.3612750909238365, res.at(4).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1.4380268698370129, res.at(5).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1.5087127069308661, res.at(6).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1.5730536384569165, res.at(7).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1.6307957418487593, res.at(8).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1.6817111381931509, res.at(9).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1.725598892002085, res.at(10).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1.7622858047320056, res.at(11).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1.7916270989098795, res.at(12).x[ZIDX(0)], eps);
+    EXPECT_NEAR(1.8135069901513805, res.at(13).x[ZIDX(0)], eps);
 }
 
 TEST_F(SimTest, LONG_can_simulate_radiation_damping)
