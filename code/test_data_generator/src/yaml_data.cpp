@@ -2743,7 +2743,7 @@ std::string test_data::test_ship_linear_hydrostatics_without_waves()
        << "        phi eq: {value: 0, unit: deg}\n"
        << "        K row 1: [100002.8, 0 , 0]\n"
        << "        K row 2: [0, 1E6 , 0]\n"
-       << "        K row 3: [0, 0 , 1E6]\n"
+       << "        K row 3: [0, 0 , 1E6]\n";
     return ss.str();
 }
 
@@ -2789,7 +2789,7 @@ std::string test_data::test_ship_linear_hydrostatics_with_waves()
        << "        phi eq: {value: 0, unit: deg}\n"
        << "        K row 1: [100002.8, 0 , 0]\n"
        << "        K row 2: [0, 1E6 , 0]\n"
-       << "        K row 3: [0, 0 , 1E6]\n"
+       << "        K row 3: [0, 0 , 1E6]\n";
     return ss.str();
 }
 
