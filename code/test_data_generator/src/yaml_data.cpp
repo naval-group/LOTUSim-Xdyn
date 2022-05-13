@@ -2710,7 +2710,7 @@ std::string test_data::linear_hydrostatics()
        << "phi eq: {value: -3, unit: deg}\n"
        << "K row 1: [1, 0 , 0]\n"
        << "K row 2: [0, 1 , 0]\n"
-       << "K row 3: [0, 0 , 1]\n"
+       << "K row 3: [0, 0 , 1]\n";
     return ss.str();
 }
 
