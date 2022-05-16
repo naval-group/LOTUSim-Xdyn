@@ -1064,11 +1064,6 @@ std::string test_data::test_ship_exact_hydrostatic_test()
     return test_ship_hydrostatic_test("non-linear hydrostatic (exact)");
 }
 
-std::string test_data::test_ship_new_hydrostatic_test()
-{
-    return test_ship_hydrostatic_test("hydrostatic");
-}
-
 std::string test_data::test_ship_waves_test()
 {
     return rotation_convention()

@@ -27,7 +27,6 @@ namespace test_data
     std::string test_ship_hydrostatic_test(const std::string& type);
     std::string test_ship_exact_hydrostatic_test();
     std::string test_ship_fast_hydrostatic_test();
-    std::string test_ship_new_hydrostatic_test();
     std::string test_ship_propulsion();
     std::string test_ship_waves_test();
     std::string test_ship_diffraction();
