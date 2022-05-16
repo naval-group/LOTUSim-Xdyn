@@ -20,7 +20,7 @@
 #include <cmath>
 #define PI M_PI
 
-Sim GZCurveTest::sim = GZ::make_sim(test_data::test_ship_hydrostatic_test("hydrostatic"), test_data::cube());
+Sim GZCurveTest::sim = GZ::make_sim(test_data::test_ship_hydrostatic_test("non-linear hydrostatic (exact)"), test_data::cube());
 
 #define EPS 1E-10
 
