@@ -883,7 +883,7 @@ std::string test_data::new_oscillating_cube_example()
        + no_added_mass()
        + "    external forces:\n"
        + "      - model: gravity\n"
-       + "      - model: hydrostatic\n";
+       + "      - model: non-linear hydrostatic (fast)\n";
 }
 
 
@@ -2434,7 +2434,7 @@ std::string test_data::GM_cube()
        << "  - name: cube\n"
        << "    mesh: cube.stl\n"
        << position_relative_to_mesh(0, 0, 0.5, 0, 0, 0)
-       << initial_position_of_body_frame_deg(0, 0, 0, 60, 0, 0)
+       << initial_position_of_body_frame_deg(0, 0, 0, 0, 0, 0)
        << initial_velocity("cube", 0, 0, 0, 0, 0, 0)
        << "    dynamics:\n"
        << hydrodynamic_calculation_point()
@@ -2444,9 +2444,8 @@ std::string test_data::GM_cube()
        << "    external forces:\n"
        << "      - model: gravity\n"
        << "      - model: GM\n"
-       << "        #name of hydrostatic force model: non-linear hydrostatic (fast)\n"
-       << "        name of hydrostatic force model: hydrostatic\n"
-       << "        roll step: {value: 60, unit: degree}\n";
+       << "        name of hydrostatic force model: non-linear hydrostatic (exact)\n"
+       << "        roll step: {value: 0.1, unit: degree}\n";
     return ss.str();
 }
 
@@ -2931,7 +2930,7 @@ std::string test_data::bug_2963_gm()
        << no_added_mass()
        << "    external forces:\n"
        << "      - model: GM\n"
-       << "        name of hydrostatic force model: hydrostatic\n"
+       << "        name of hydrostatic force model: non-linear hydrostatic (fast)\n"
        << "        roll step: {value: 60, unit: degree}\n";
     return ss.str();
 }

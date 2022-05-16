@@ -8,7 +8,6 @@
 #include "calculate_gz.hpp"
 #include "GZTypes.hpp"
 #include "GravityForceModel.hpp"
-#include "HydrostaticForceModel.hpp"
 #include "ResultantForceComputer.hpp"
 #include "Sim.hpp"
 

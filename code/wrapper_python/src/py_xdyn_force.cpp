@@ -14,7 +14,6 @@
 #include "force_models/inc/ConstantForceModel.hpp"
 #include "force_models/inc/FlettnerRotorForceModel.hpp"
 #include "force_models/inc/HoltropMennenForceModel.hpp"
-#include "force_models/inc/HydrostaticForceModel.hpp"
 #include "force_models/inc/HydroPolarForceModel.hpp"
 #include "force_models/inc/GravityForceModel.hpp"
 #include "force_models/inc/LinearDampingForceModel.hpp"

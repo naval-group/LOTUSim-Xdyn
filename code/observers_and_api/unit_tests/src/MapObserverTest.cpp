@@ -77,15 +77,35 @@ TEST_F(MapObserverTest, GM)
 {
     const double dt = 1;
     const double tend = 1;
-    auto sys = get_system(test_data::GM_cube(), test_data::cube(), 0);
+    auto sys = get_system(test_data::GM_cube(), test_data::cube_for_gm_test(), 0);
     ssc::solver::Scheduler scheduler(0, tend, dt);
     auto observers = observe({"Fz(GM,cube,NED)","GM(cube)"});
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, observers);
     const auto m = get_map(observers);
     ASSERT_TRUE(m.find("Fz(GM,cube,NED)") != m.end());
     ASSERT_TRUE(m.find("GM(cube)") != m.end());
-    ASSERT_NEAR(-1000*9.81*0.5, m.find("Fz(GM,cube,NED)")->second.back(), EPS);
-    ASSERT_NEAR(1/(12*PI), m.find("GM(cube)")->second.back(), EPS);
+    const double max_relative_error = 1E-2;
+    const double expected_fz = -1000*9.81*0.5;
+    ASSERT_NEAR(expected_fz, m.find("Fz(GM,cube,NED)")->second.back(), std::abs(max_relative_error*expected_fz));
+    /*
+    Cf. discussion here: https://gitlab.sirehna.com/sirehna/xdyn/-/merge_requests/166#note_115660
+    
+    Cube with 1 m edges, helf-immersed:
+
+- G is the centre of gravity,
+- M the metacentre,
+- B the centre of buoyancy,
+- V the immersed volume,
+- I The cube's inertia (along the non-vertical x axis, perpendicular to one of the cube's faces)
+
+```math
+\overline{GM} = \overline{BM} - \overline{BG}
+   = I/V - 0.25 = \frac{ab^3}{12\cdot V} - 0.25 = \frac{1}{6}-\frac{1}{4} = -\frac{1}{12}
+```
+   So GM = -1/12
+    */
+    const double expected_gm = -1.0/12.0;
+    ASSERT_NEAR(expected_gm, m.find("GM(cube)")->second.back(), std::abs(max_relative_error*expected_gm));
 }
 
 TEST_F(MapObserverTest, blocked_state_force_residuals_should_appear)

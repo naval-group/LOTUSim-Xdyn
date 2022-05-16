@@ -11,6 +11,7 @@ namespace test_data
     std::string big_cube();
     std::string ponton();
     std::string binary_stl();
+    std::string cube_for_gm_test();
 }
 
 #endif

@@ -8,11 +8,11 @@
 
 #include "check_input_yaml.hpp"
 #include "ForceTester.hpp"
-#include "HydrostaticForceModel.hpp"
 #include "SimulatorYamlParser.hpp"
 #include "simulator_api.hpp"
 #include "StateMacros.hpp"
 #include "GMForceModel.hpp"
+#include "ExactHydrostaticForceModel.hpp"
 #include "DiffractionForceModel.hpp"
 #include "hdb_data.hpp"
 #include "yaml_data.hpp"
@@ -193,7 +193,7 @@ EPoint ForceTester::center_of_buoyancy_in_ned_frame(const double x,
     Tned2body.swap();
     for (const auto force:forces)
     {
-        const auto hs = dynamic_cast<HydrostaticForceModel*>(force.get());
+        const auto hs = dynamic_cast<ExactHydrostaticForceModel*>(force.get());
         if (hs)
         {
             hs->operator()(body->get_states(), current_instant++, env);

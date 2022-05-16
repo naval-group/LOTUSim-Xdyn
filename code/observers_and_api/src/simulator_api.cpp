@@ -27,7 +27,6 @@
 #include "SimpleStationKeepingController.hpp"
 #include "RudderForceModel.hpp"
 #include "SurfaceElevationFromGRPC.hpp"
-#include "HydrostaticForceModel.hpp"
 #include "GMForceModel.hpp"
 #include "KtKqForceModel.hpp"
 #include "LinearHydrostaticForceModel.hpp"
@@ -64,7 +63,6 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& input, const double t0, c
            .can_parse<ExactHydrostaticForceModel>()
            .can_parse<FastHydrostaticForceModel>()
            .can_parse<FroudeKrylovForceModel>()
-           .can_parse<HydrostaticForceModel>()
            .can_parse<LinearDampingForceModel>()
            .can_parse<ResistanceCurveForceModel>()
            .can_parse<DiffractionForceModel>()

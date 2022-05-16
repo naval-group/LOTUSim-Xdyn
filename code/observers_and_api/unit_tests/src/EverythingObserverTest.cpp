@@ -73,9 +73,10 @@ TEST_F(EverythingObserverTest, example)
 
 TEST_F(EverythingObserverTest, GM)
 {
+    const double max_relative_error = 1E-2;
     const double dt = 1;
     const double tend = 1;
-    auto sys = get_system(test_data::GM_cube(), test_data::cube(), 0);
+    auto sys = get_system(test_data::GM_cube(), test_data::cube_for_gm_test(), 0);
     ssc::solver::Scheduler scheduler(0, tend, dt);
     auto list_of_observers = observers();
     ssc::solver::quicksolve<ssc::solver::EulerStepper>(sys, scheduler, list_of_observers);
@@ -87,6 +88,25 @@ TEST_F(EverythingObserverTest, GM)
     ASSERT_EQ(2, results.size());
     ASSERT_TRUE(results.back().extra_observations.find("Fz(GM,cube,NED)") != results.back().extra_observations.end());
     ASSERT_TRUE(results.back().extra_observations.find("GM(cube)") != results.back().extra_observations.end());
-    ASSERT_NEAR(-1000*9.81*0.5, results.back().extra_observations.at("Fz(GM,cube,NED)"), EPS);
-    ASSERT_NEAR(1/(12*PI), results.back().extra_observations.at("GM(cube)"), EPS);
+    const double expected_fz = -1000*9.81*0.5;
+    ASSERT_NEAR(expected_fz, results.back().extra_observations.at("Fz(GM,cube,NED)"), std::abs(max_relative_error*expected_fz));
+    /*
+    Cf. discussion here: https://gitlab.sirehna.com/sirehna/xdyn/-/merge_requests/166#note_115660
+    
+    Cube with 1 m edges, helf-immersed:
+
+- G is the centre of gravity,
+- M the metacentre,
+- B the centre of buoyancy,
+- V the immersed volume,
+- I The cube's inertia (along the non-vertical x axis, perpendicular to one of the cube's faces)
+
+```math
+\overline{GM} = \overline{BM} - \overline{BG}
+   = I/V - 0.25 = \frac{ab^3}{12\cdot V} - 0.25 = \frac{1}{6}-\frac{1}{4} = -\frac{1}{12}
+```
+   So GM = -1/12
+    */
+    const double expected_gm = -1.0/12.0;
+    ASSERT_NEAR(expected_gm, results.back().extra_observations.at("GM(cube)"), std::abs(max_relative_error*expected_gm));
 }
