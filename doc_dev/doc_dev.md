@@ -445,8 +445,8 @@ la classe `BodyWithSurfaceForces` et est déléguée à l'objet `MeshIntersector
 Le rôle de la classe `MeshIntersector`, définie dans le module `mesh`, est de
 pouvoir itérer sur les facettes immergées ou sur les facettes émergées du
 maillage. Cette fonctionalité est utilisée par les efforts de surface
-(`ExactHydrostaticForceModel`, `FastHydrostaticForceModel`, `GMForceModel` et
-`HydrostaticForceModel`) pour intégrer les efforts sur la coque (réalisé par la
+(`ExactHydrostaticForceModel`, `FastHydrostaticForceModel` et `GMForceModel`) 
+pour intégrer les efforts sur la coque (réalisé par la
 méthode `SurfaceForceModel::operator()` définie dans le module `core`).
 
 `MeshIntersector` est une classe dont les performances sont critiques pour la

@@ -74,7 +74,7 @@ GMForceModel::Yaml GMForceModel::parse(const std::string& yaml)
         return ret;
     }
     THROW(__PRETTY_FUNCTION__, InvalidInputException, "Couldn't find any suitable hydrostatic force model: "
-            << "received '" << ret.name_of_hydrostatic_force_model << "', expected one of 'non-linear hydrostatic (exact)', 'non-linear hydrostatic (fast)' or 'hydrostatic'");
+            << "received '" << ret.name_of_hydrostatic_force_model << "', expected one of 'non-linear hydrostatic (exact)' or 'non-linear hydrostatic (fast)'");
     return ret;
 }
 
