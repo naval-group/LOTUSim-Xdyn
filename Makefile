@@ -419,7 +419,7 @@ clean:
 	@make -C doc_user clean; rm -f doc_user/xdyn.deb doc.html
 	@make -C code/wrapper_python clean
 
-GREP=$(DOCKER_AS_USER) --entrypoint /bin/grep bitnami/minideb
+GREP=$(DOCKER_AS_USER) --entrypoint /bin/grep bitnami/minideb@sha256:25c5d5677df967c85b1bc3a33505cb43225dd92de06fe35eda3042348995835f
 
 lint:
 	@cd code && \
