@@ -155,9 +155,9 @@ class SimulatorBuilder
          */
         template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<WindModel,T> >::type* dummy = 0)
         {
-        	(void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
-        	wind_model_parsers.push_back(WindModel::build_parser<T>());
-        	return *this;
+            (void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
+            wind_model_parsers.push_back(WindModel::build_parser<T>());
+            return *this;
         }
 
         std::vector<BodyPtr> get_bodies(const MeshMap& meshes, const std::vector<bool>& bodies_contain_surface_forces, std::map<std::string,double> Tmax) const;
