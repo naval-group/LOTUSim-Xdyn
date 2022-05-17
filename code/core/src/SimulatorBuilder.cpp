@@ -70,11 +70,11 @@ EnvironmentAndFrames SimulatorBuilder::build_environment_and_frames() const
 
     if (surface_elevation_parsers.empty())
     {
-    	THROW(__PRETTY_FUNCTION__, InternalErrorException, "No wave parser defined. Need to call SimulatorBuilder::can_parse<T> with e.g. T=DefaultWaveModel");
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No wave parser defined. Need to call SimulatorBuilder::can_parse<T> with e.g. T=DefaultWaveModel");
     }
     if (wind_model_parsers.empty())
     {
-    	THROW(__PRETTY_FUNCTION__, InternalErrorException, "No wind parser defined. Need to call SimulatorBuilder::can_parse<T> with e.g. T=DefaultWindModel");
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No wind parser defined. Need to call SimulatorBuilder::can_parse<T> with e.g. T=DefaultWindModel");
     }
     for (auto that_model=input.environment.begin() ; that_model != input.environment.end() ; ++that_model)
     {

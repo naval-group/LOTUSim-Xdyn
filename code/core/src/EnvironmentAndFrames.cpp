@@ -21,7 +21,7 @@ EnvironmentAndFrames::EnvironmentAndFrames() : w(),
                                                nu(0),
                                                g(0),
                                                rot(),
-											   rho_air()
+                                               rho_air()
 {
     if (rho<0.0)
     {
@@ -29,7 +29,7 @@ EnvironmentAndFrames::EnvironmentAndFrames() : w(),
     }
     if (rho_air && rho_air<0.0)
     {
-    	THROW(__PRETTY_FUNCTION__, InvalidInputException, "Air density cannot be negative");
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Air density cannot be negative");
     }
     if (nu<0.0)
     {
@@ -70,14 +70,14 @@ void EnvironmentAndFrames::feed(
 
 void EnvironmentAndFrames::set_rho_air(const double value)
 {
-	rho_air = value;
+    rho_air = value;
 }
 
 double EnvironmentAndFrames::get_rho_air() const
 {
-	if(not(rho_air.is_initialized()))
-	{
-		THROW(__PRETTY_FUNCTION__, InvalidInputException,"The value of air density was requested, but was not specified in the input YAML file. Make sure the key 'air rho' is present in the 'environmental constants' section.")
-	}
-	return rho_air.get();
+    if(not(rho_air.is_initialized()))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,"The value of air density was requested, but was not specified in the input YAML file. Make sure the key 'air rho' is present in the 'environmental constants' section.")
+    }
+    return rho_air.get();
 }
