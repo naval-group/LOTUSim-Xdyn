@@ -13,8 +13,8 @@
 class EnvironmentAndFramesTest : public ::testing::Test
 {
 public:
-	EnvironmentAndFramesTest ();
-	virtual ~EnvironmentAndFramesTest ();
+    EnvironmentAndFramesTest ();
+    virtual ~EnvironmentAndFramesTest ();
 };
 
 #endif /* CORE_UNIT_TESTS_INC_ENVIRONMENTANDFRAMESTEST_HPP_ */
