@@ -1097,14 +1097,16 @@ position du centre de gravité et des données géométriques).
 
 Le torseur d'effort est donné dans le repère NED par :
 
-$`F_{\textrm{hs}} = -K_{3\times 3}
-\left[\begin{array}{c}z-z_{\textrm{eq}}\\\phi-\phi_{\textrm{eq}}\\\theta-\theta_{\textrm{eq}}\end{array}\right] = - \begin{bmatrix}
+```math
+F_{\textrm{hs}} = -K_{3\times 3}
+\left[\begin{array}{c}z-z_{\textrm{eq}}\\\phi-\phi_{\textrm{eq}}\\\theta-\theta_{\textrm{eq}}\end{array}\right] = - \left[\begin{array}{ccc}
 K_{33} & K_{34} & K_{35}\\
 K_{43} & K_{44} & K_{45}\\
 K_{53} & K_{54} & K_{55}\\
-\end{bmatrix} \left[\begin{array}{c}z-z_{\textrm{eq}}\\\phi-\phi_{\textrm{eq}}\\\theta-\theta_{\textrm{eq}}\end{array}\right] `$
+\end{array}\right] \left[\begin{array}{c}z-z_{\textrm{eq}}\\\phi-\phi_{\textrm{eq}}\\\theta-\theta_{\textrm{eq}}\end{array}\right]
+```
 
-La matrice $`K_{3\times 3}`$ est à indiquer dans le repère du navire avec x vers l'avant, y vers bâbord et z vers le haut comme dans la majorité des logiciels de stabilité. Le signe $`-`$ permet de la placer dans le repère standard de xdyn.
+La matrice $`K_{3\times 3}`$ est à indiquer dans le repère du navire avec x vers l'avant, y vers bâbord et z vers le haut comme dans la majorité des logiciels de stabilité.
 
 $`z_{\textrm{eq}}, \phi_{\textrm{eq}}, \theta_{\textrm{eq}}`$ sont les valeurs
 d'équilibre renseignées dans le fichier de paramétrage.
