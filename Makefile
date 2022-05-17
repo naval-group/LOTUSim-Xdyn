@@ -424,7 +424,7 @@ GREP=$(DOCKER_AS_USER) --entrypoint /bin/grep bitnami/minideb
 lint:
 	@cd code && \
 	if $(GREP) --recursive --include={*.cpp,*.c,*.hpp,*.h,*.md,*.yml,*.cmake.*.xml,*.html,*.in,*.txt} \
-	        --exclude-dir={eigen,eigen3-hdf5,gcovr,gtest,gmock,google-test,yaml-cpp} -P "\t" . ; \
+	        --exclude-dir={eigen,eigen3-hdf5,gcovr,gtest,gmock,google-test,yaml-cpp,ssc} -P "\t" . ; \
 	then echo "Tabs found in the lines shown above."; false; \
 	else echo "Repo passed no-tabs check."; fi && \
 	cd ..
