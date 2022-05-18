@@ -1,5 +1,14 @@
 .PHONY: all clean
 
+DOCKER_IMAGE=xdyn
+DOCKER_WORKING_DIRECTORY=/xdyn_demos
+DOCKER_RUN:=docker run --rm \
+    -u $(shell id -u):$(shell id -g) \
+    -v $(shell pwd):${DOCKER_WORKING_DIRECTORY} \
+    -w ${DOCKER_WORKING_DIRECTORY}
+DOCKER_RUN_BASH:=$(DOCKER_RUN) \
+    --entrypoint /bin/bash \
+    $(DOCKER_IMAGE) -c
 DASH:=-
 UNDERSCORE:=_
 SLUG:=$(subst $(DASH),$(UNDERSCORE),$(CI_PROJECT_PATH_SLUG))
@@ -13,9 +22,7 @@ run: model_exchange.proto tutorial_01_falling_ball.yml
 
 tutorial_01_falling_ball.yml:
 	@echo "Copying $@ from xdyn's Docker container..."
-	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/xdyn_demos \
-        --entrypoint /bin/bash xdyn \
-        -c "cp /usr/demos/tutorial_01_falling_ball.yml /xdyn_demos/"
+	@$(DOCKER_RUN_BASH) "cp /usr/demos/$@ /xdyn_demos/"
 
 model_exchange.proto: ../../../interfaces/model_exchange.proto
 	cp $< $@
