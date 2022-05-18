@@ -1,5 +1,14 @@
 .PHONY: all clean run
 
+DOCKER_IMAGE=xdyn
+DOCKER_WORKING_DIRECTORY=/xdyn_demos
+DOCKER_RUN:=docker run --rm \
+    -u $(shell id -u):$(shell id -g) \
+    -v $(shell pwd):${DOCKER_WORKING_DIRECTORY} \
+    -w ${DOCKER_WORKING_DIRECTORY}
+DOCKER_RUN_BASH:=$(DOCKER_RUN) \
+    --entrypoint /bin/bash \
+    $(DOCKER_IMAGE) -c
 DASH:=-
 UNDERSCORE:=_
 SLUG:=$(subst $(DASH),$(UNDERSCORE),$(CI_PROJECT_PATH_SLUG))
@@ -16,9 +25,7 @@ cosimulation.proto: ../../../interfaces/cosimulation.proto
 
 tutorial_01_falling_ball.yml:
 	@echo "Copying tutorial files from xdyn's Docker container..."
-	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/xdyn_demos \
-        --entrypoint /bin/bash xdyn \
-        -c "cp /usr/demos/tutorial_01_falling_ball.yml /xdyn_demos/"
+	@$(DOCKER_RUN_BASH) "cp /usr/demos/$@ /xdyn_demos/"
 
 clean:
 	rm -f tutorial_01_falling_ball.yml cosimulation.proto
