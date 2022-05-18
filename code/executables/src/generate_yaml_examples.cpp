@@ -34,6 +34,7 @@ int main(int argc, const char* argv[])
     yaml["tutorial_13_hdb_force_model.yml"]           = test_data::tutorial_13_hdb_force_model();
     yaml["tutorial_13_precal_r_force_model.yml"]      = test_data::tutorial_13_precal_r_force_model();
     yaml["tutorial_14_filtered_states.yml"]           = test_data::tutorial_14_filtered_states();
+    yaml["tutorial_15_gm.yml"]                        = test_data::test_ship_gm_test();
     yaml["ONRT_SIMMAN.raodb.ini"]                     = test_data::precal();
     yaml["oscillating_cube_test.yml"]                 = test_data::oscillating_cube_example();
     yaml["stable_cube_test.yml"]                      = test_data::stable_cube_example();
