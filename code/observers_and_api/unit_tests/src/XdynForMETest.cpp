@@ -180,3 +180,31 @@ TEST_F(XdynForMETest, can_get_extra_observations)
     ASSERT_NE(d_dt.extra_observations.find("Fx(F1,ball,ball)"), d_dt.extra_observations.end());
     ASSERT_NE(d_dt.extra_observations.find("My(F1,ball,ball)"), d_dt.extra_observations.end());
 }
+
+TEST_F(XdynForMETest, extra_observations_response_is_in_sync_with_request)
+{
+    const std::string yaml = test_data::simserver_test_with_commands_and_delay();
+    XdynForME xdyn_for_me(yaml);
+    std::string input_yaml =
+                "{\"Dt\": 10.0,\n"
+                "\"states\":\n"
+                "[ {\"t\": 0.0, \"x\": 4.0,  \"y\": 8.0, \"z\": 12.0, \"u\": 1.0, \"v\": 0.0, \"w\": 0.0, \"p\": 0.0, \"q\": 0.0,   \"r\": 0.0, \"qr\": 1.0, \"qi\": 0.0, \"qj\": 0.0, \"qk\": 0.0}\n"
+                "],\n"
+                "\"commands\": {\"F1(command1)\": 20, \"F1(a)\": 4.5, \"F1(b)\": 5.7},"
+                "\"requested_output\": [\"Fx(F1,ball,ball)\",\"My(F1,ball,ball)\"]}";
+    const YamlState d_dt_0 = xdyn_for_me.handle(deserialize(input_yaml));
+    // Subsequent call with the same request
+    const YamlState d_dt_1 = xdyn_for_me.handle(deserialize(input_yaml));
+    ASSERT_DOUBLE_EQ(d_dt_0.extra_observations.at("Fx(F1,ball,ball)"), d_dt_1.extra_observations.at("Fx(F1,ball,ball)"));
+    ASSERT_DOUBLE_EQ(d_dt_0.extra_observations.at("My(F1,ball,ball)"), d_dt_1.extra_observations.at("My(F1,ball,ball)"));
+    input_yaml =
+                "{\"Dt\": 10.0,\n"
+                "\"states\":\n"
+                "[ {\"t\": 0.0, \"x\": 2.0,  \"y\": 5.0, \"z\": 11.0, \"u\": 2.0, \"v\": 1.0, \"w\": 0.1, \"p\": 3.0, \"q\": 0.7,   \"r\": 0.0, \"qr\": 1.0, \"qi\": 0.0, \"qj\": 0.0, \"qk\": 0.0}\n"
+                "],\n"
+                "\"commands\": {\"F1(command1)\": 20, \"F1(a)\": 4.5, \"F1(b)\": 5.7},"
+                "\"requested_output\": [\"Fx(F1,ball,ball)\",\"My(F1,ball,ball)\"]}"; // Changing request
+    const YamlState d_dt_2 = xdyn_for_me.handle(deserialize(input_yaml));
+    ASSERT_NE(d_dt_0.extra_observations.at("Fx(F1,ball,ball)"), d_dt_2.extra_observations.at("Fx(F1,ball,ball)"));
+    ASSERT_NE(d_dt_0.extra_observations.at("My(F1,ball,ball)"), d_dt_2.extra_observations.at("My(F1,ball,ball)"));
+}
