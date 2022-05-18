@@ -1,5 +1,14 @@
 .PHONY: all clean run
 
+DOCKER_IMAGE=xdyn
+DOCKER_WORKING_DIRECTORY=/xdyn_demos
+DOCKER_RUN:=docker run --rm \
+    -u $(shell id -u):$(shell id -g) \
+    -v $(shell pwd):${DOCKER_WORKING_DIRECTORY} \
+    -w ${DOCKER_WORKING_DIRECTORY}
+DOCKER_RUN_BASH:=$(DOCKER_RUN) \
+    --entrypoint /bin/bash \
+    $(DOCKER_IMAGE) -c
 DASH:=-
 UNDERSCORE:=_
 SLUG:=$(subst $(DASH),$(UNDERSCORE),$(CI_PROJECT_PATH_SLUG))
@@ -13,16 +22,11 @@ run: tutorial_09_gRPC_wave_model.yml test_ship.hdb
 
 tutorial_09_gRPC_wave_model.yml:
 	@echo "Copying tutorial files from xdyn's Docker container..."
-	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/xdyn_demos \
-        --entrypoint /bin/bash xdyn \
-		-c "cp /usr/demos/tutorial_09_gRPC_wave_model.yml /xdyn_demos/" 
+	@$(DOCKER_RUN_BASH) "cp /usr/demos/$@ /xdyn_demos/"
 
 test_ship.hdb:
 	@echo "Copying tutorial files from xdyn's Docker container..."
-	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/xdyn_demos \
-        --entrypoint /bin/bash xdyn \
-		-c "cp /usr/demos/test_ship.hdb /xdyn_demos/" 
-
+	@$(DOCKER_RUN_BASH) "cp /usr/demos/$@ /xdyn_demos/"
 
 clean:
 	rm -f tutorial_09_gRPC_wave_model.yml test_ship.hdb

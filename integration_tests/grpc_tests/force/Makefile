@@ -2,23 +2,24 @@
 
 DOCKER_IMAGE=xdyn
 DOCKER_WORKING_DIRECTORY=/xdyn_demos
-DOCKER_RUN := docker run --rm \
+DOCKER_RUN:=docker run --rm \
     -u $(shell id -u):$(shell id -g) \
-    -v $(shell pwd):${DOCKER_WORKING_DIRECTORY} \
-    -w ${DOCKER_WORKING_DIRECTORY}
-DOCKER_RUN_BASH:= ${DOCKER_RUN} \
+    -v $(shell pwd):$(DOCKER_WORKING_DIRECTORY) \
+    -w $(DOCKER_WORKING_DIRECTORY)
+DOCKER_RUN_BASH:=$(DOCKER_RUN) \
     --entrypoint /bin/bash \
-    ${DOCKER_IMAGE} -c
+    $(DOCKER_IMAGE) -c
+DOCKER_RUN_PYTHON:=$(DOCKER_RUN) python:3.10-slim python3
 DASH:=-
 UNDERSCORE:=_
 SLUG:=$(subst $(DASH),$(UNDERSCORE),$(CI_PROJECT_PATH_SLUG))
-COMPOSE_PROJECT_NAME:=$(shell basename `pwd`)${SLUG}${CI_PIPELINE_ID}
+COMPOSE_PROJECT_NAME:=$(shell basename `pwd`)$(SLUG)$(CI_PIPELINE_ID)
 DOCKER_COMPOSE:=COMPOSE_PROJECT_NAME=$(COMPOSE_PROJECT_NAME) CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose
 
 all: cosim sim hdb precal-r tutorial_14 clean
 
 tutorial_14: filtered_states.csv
-	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/work -w /work python:3.10-slim python3 test_filtered_states.py
+	@$(DOCKER_RUN_PYTHON) test_filtered_states.py
 	@echo "Tutorial 14's output file passed all test assertions!"
 
 filtered_states.csv: docker-compose-filtered-states.yml filtered_force.py tutorial_14_filtered_states.yml
@@ -26,45 +27,38 @@ filtered_states.csv: docker-compose-filtered-states.yml filtered_force.py tutori
 
 tutorial_10_gRPC_force_model.yml:
 	@echo "Copying $@ from xdyn's Docker container..."
-	@${DOCKER_RUN_BASH} \
-        -c "cp /usr/demos/$@ /xdyn_demos/"
+	@$(DOCKER_RUN_BASH) "cp /usr/demos/$@ /xdyn_demos/"
 
 tutorial_14_filtered_states.yml:
 	@echo "Copying $@ from xdyn's Docker container..."
-	@${DOCKER_RUN_BASH} \
-        -c "cp /usr/demos/$@ /xdyn_demos/"
+	@$(DOCKER_RUN_BASH) "cp /usr/demos/$@ /xdyn_demos/"
 
 tutorial_10_gRPC_force_model_commands.yml:
 	@echo "Copying $@ from xdyn's Docker container..."
-	@${DOCKER_RUN_BASH} \
-        -c "cp /usr/demos/$@ /xdyn_demos/"
+	@$(DOCKER_RUN_BASH) "cp /usr/demos/$@ /xdyn_demos/"
 
 tutorial_13_hdb_force_model.yml:
 	@echo "Copying $@ from xdyn's Docker container..."
-	@${DOCKER_RUN_BASH} \
-        -c "cp /usr/demos/$@ /xdyn_demos/"
+	@$(DOCKER_RUN_BASH) "cp /usr/demos/$@ /xdyn_demos/"
 
 tutorial_13_precal_r_force_model.yml:
 	@echo "Copying $@ from xdyn's Docker container..."
-	@${DOCKER_RUN_BASH} \
-        -c "cp /usr/demos/$@ /xdyn_demos/"
+	@$(DOCKER_RUN_BASH) "cp /usr/demos/$@ /xdyn_demos/"
 
 ONRT_SIMMAN.raodb.ini:
 	@echo "Copying $@ from xdyn's Docker container..."
-	@${DOCKER_RUN_BASH} \
-        -c "cp /usr/demos/$@ /xdyn_demos/"
+	@$(DOCKER_RUN_BASH) "cp /usr/demos/$@ /xdyn_demos/"
 
 big.hdb:
 	@echo "Copying $@ from xdyn's Docker container..."
-	@${DOCKER_RUN_BASH} \
-        -c "cp /usr/demos/$@ /xdyn_demos/"
+	@$(DOCKER_RUN_BASH) "cp /usr/demos/$@ /xdyn_demos/"
 
 precal-r: precal_r_output.csv test_precal_r.py
-	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/work -w /work python:3.10-slim python3 test_precal_r.py
+	@$(DOCKER_RUN_PYTHON) test_precal_r.py
 	@echo "All PRECAL_R data was properly passed to the gRPC force model! Test passed!"
 
 hdb: hdb_output.csv test_hdb.py
-	@docker run --rm -u $(shell id -u ):$(shell id -g) -v $(shell pwd):/work -w /work python:3.10-slim python3 test_hdb.py
+	@$(DOCKER_RUN_PYTHON) test_hdb.py
 	@echo "All HDB data was properly passed to the gRPC force model! Test passed!"
 
 hdb_output.csv: tutorial_13_hdb_force_model.yml docker-compose-hdb.yml big.hdb

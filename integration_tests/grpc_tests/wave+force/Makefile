@@ -13,7 +13,7 @@ all:
         --exit-code-from test \
         --abort-on-container-exit \
         --build \
-		--remove-orphans
+        --remove-orphans
 
 clean:
 	@$(DOCKER_COMPOSE) down --remove-orphans
