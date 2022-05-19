@@ -984,6 +984,31 @@ std::string test_data::test_ship_hydrostatic_test(const std::string& type)
     return ss.str();
 }
 
+
+std::string test_data::test_ship_gm_test()
+{
+    return  rotation_convention() +
+       + "\n"
+       + environmental_constants()
+       + "environment models:\n"
+       + "  - model: no waves\n"
+       + "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
+       + "    \n"
+       + "# Fixed frame: NED\n"
+       + "bodies: # All bodies have NED as parent frame\n"
+       + "  - name: TestShip\n"
+       + "    mesh: test_ship.stl\n"
+       + position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
+       + initial_position_of_body_frame(0, 0, -5, 0, -0.0058, 0)
+       + initial_velocity("TestShip", 0, 0, 0, 0, 0, 0)
+       + dynamics()
+       + "    external forces:\n"
+       + "      - model: gravity\n"
+       + "      - model: GM\n"
+       + "        name of hydrostatic force model: non-linear hydrostatic (fast)\n"
+       + "        roll step: {value: 10, unit: deg}\n";
+}
+
 std::string test_data::test_ship_propulsion()
 {
     return rotation_convention()

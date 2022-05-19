@@ -92,6 +92,68 @@ void Observer::observe_after_solver_step(const Sim& sys, const double t, const s
     }
 }
 
+size_t levenshtein_distance(const std::string& s, const std::string& t);
+size_t levenshtein_distance(const std::string& s, const std::string& t)
+{
+    const size_t n = s.size() + 1;
+    const size_t m = t.size() + 1;
+    std::vector<size_t> d(n*m, 0);
+    for (size_t i = 1, im = 0; i < m; ++i, ++im)
+    {
+        for (size_t j = 1, jn = 0; j < n; ++j, ++jn)
+        {
+            if (s[jn] == t[im])
+            {
+                d[(i * n) + j] = d[((i - 1) * n) + (j - 1)];
+            }
+            else
+            {
+                d[(i * n) + j] = std::min(d[(i - 1) * n + j] + 1, // Deletion
+                                 std::min(d[i * n + (j - 1)] + 1, // Insertion
+                                 d[(i - 1) * n + (j - 1)] + 1));  // Substitution
+            }
+        }
+    }
+    return d[n * m - 1];
+}
+
+std::string closest_string(const std::string& string_to_match, const std::vector<std::string>& strings_to_test);
+std::string closest_string(const std::string& string_to_match, const std::vector<std::string>& strings_to_test)
+{
+    if (strings_to_test.empty()) return "";
+    size_t min_idx = 0;
+    size_t min_dist = INT_MAX;
+    size_t k = 0;
+    for (const auto s:strings_to_test)
+    {
+        const size_t levenshtein = levenshtein_distance(string_to_match, s);
+        if (levenshtein < min_dist)
+        {
+            min_idx = k;
+            min_dist = levenshtein;
+        }
+        k++;
+    }
+    return strings_to_test[min_idx];
+}
+
+std::string helpful_error_message_on_missing_requested_serialization(const std::string& missing_variable, const std::vector<std::string>& available_variables);
+std::string helpful_error_message_on_missing_requested_serialization(const std::string& missing_variable, const std::vector<std::string>& available_variables)
+{
+    std::stringstream ss;
+    ss << "Available output variables are: ";
+    if (!available_variables.empty()) ss << available_variables.front();
+    for (int i = 1 ; i < (int)available_variables.size() ; ++i)
+    {
+        ss << ", '" << available_variables[i] << "'";
+    }
+    if (!available_variables.empty())
+    {
+        ss << ". Did you mean '" << closest_string(missing_variable, available_variables) << "'?";
+    }
+    return ss.str();
+}
+
 void Observer::initialize_serialization_of_requested_variables(const std::vector<std::string>& variables_to_serialize)
 {
     if (not(initialized))
@@ -103,7 +165,9 @@ void Observer::initialize_serialization_of_requested_variables(const std::vector
             auto initialize_stuff = initialize.find(stuff);
             if (initialize_stuff == initialize.end())
             {
-                THROW(__PRETTY_FUNCTION__, InvalidInputException, "In the 'outputs' section of the YAML file, you asked for '" << stuff << "', but it is not computed: maybe it is misspelt or the corresponding model is not in the YAML.");
+                std::vector<std::string> available_variables;
+                for( const auto s:initialize) available_variables.push_back(s.first);
+                THROW(__PRETTY_FUNCTION__, InvalidInputException, "In the 'outputs' section of the YAML file, you asked for '" << stuff << "', but it is not computed: maybe it is misspelt or the corresponding model is not in the YAML. " << helpful_error_message_on_missing_requested_serialization(stuff, available_variables));
             }
             initialize_stuff->second();
             if (i<(n-1)) flush_value_during_initialization();
