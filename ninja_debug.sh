@@ -1,4 +1,11 @@
 #!/bin/sh
+rm -f .dockerignore
+echo "./doc_user" > .dockerignore
+echo "./build_win_posix" >> .dockerignore
+echo "./build_deb11" >> .dockerignore
+echo "./.git" >> .dockerignore
+echo "./validation" >> .dockerignore
+echo "./.wine" >> .dockerignore
 make headers
 docker run \
     --name xdyn-ninja-debian \
@@ -10,3 +17,4 @@ docker run \
     -v $(pwd):/opt/share \
     sirehna/base-image-debian11-gcc10:2021-12-12 \
     /bin/sh -c "cd /build && ninja `echo $*`"
+rm -f .dockerignore

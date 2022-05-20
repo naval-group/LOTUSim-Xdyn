@@ -17,6 +17,7 @@ clang
 ssc_debian
 ssc_windows
 .cproject
+.dockerignore
 .pydevproject
 .metadata
 .project

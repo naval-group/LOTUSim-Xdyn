@@ -1,4 +1,9 @@
 #!/bin/sh
+rm -f .dockerignore
+echo "./doc_user" > .dockerignore
+echo "./build_deb11" >> .dockerignore
+echo "./.git" >> .dockerignore
+echo "./validation" >> .dockerignore
 make headers
 docker run  --rm \
     -u $(id -u):$(id -g) \
@@ -12,3 +17,4 @@ docker run  --rm \
         export WINEPREFIX=/opt/share/.wine;\
         wine winecfg;\
         ninja `echo $*` "
+rm -f .dockerignore
