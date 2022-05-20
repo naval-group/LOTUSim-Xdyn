@@ -83,7 +83,3 @@ double FastHydrostaticForceModel::pe(const BodyStates& states, const std::vector
     return -env.rho*env.g*immersed_volume*zC;
 }
 
-/*void FastHydrostaticForceModel::extra_observations(Observer& observer) const
-{
-    observer.write(gz(),DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),get_body_name(),"GZ"},std::string("GZ(")+get_name()+","+get_body_name()+")"));
-}*/
