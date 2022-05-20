@@ -340,24 +340,6 @@ l'intersection de la carène et de la surface libre), il est très coûteux en
 temps de calcul (on peut constater un ordre de grandeur par rapport au modèle
 `fast`).
 
-### Nouveau modèle hydrostatique
-
-Ce modèle utilise une approche différente : au lieu d'intégrer les efforts sur
-toutes les facettes, on calcule le volume immergé du maillage complet et son
-centroïde et l'on écrit :
-
-```math
-F_{\textrm{hs}} = \rho\cdot V\cdot \mathbf{g}
-```
-
-
-Ce modèle a l'avantage de forcer la résultante à être suivant $`z`$.
-
-Ce modèle remplacera à terme les modèles `non-linear hydrostatic (fast)` et
-`non-linear hydrostatic (exact)` parce qu'il est à la fois plus précis que
-`non-linear hydrostatic (exact)` et aussi rapide que `non-linear hydrostatic
-(fast)`.
-
 ### Paramétrage
 
 Pour utiliser le modèle rapide, on écrit :
@@ -371,16 +353,6 @@ pour le modèle précis :
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
 - model: non-linear hydrostatic (exact)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-et pour le nouveau modèle :
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
-- model: hydrostatic
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Le nouveau modèle peut également sortir la position (Bx, By, Bz) du centre de
-carène (immergé). Il suffit, dans la liste `data` de la section `output`, de
-rajouter `Bx` et/ou `By` et/ou `Bz`.
 
 Un exemple de simulation de solide soumis aux efforts hydrostatiques
 (oscillations en immersion) est disponible dans les

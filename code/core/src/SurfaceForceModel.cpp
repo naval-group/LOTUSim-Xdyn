@@ -48,7 +48,12 @@ Wrench SurfaceForceModel::get_force(const BodyStates& states, const double t, co
         F.N() += (x*f.dF(1)-y*f.dF(0));
         ++facet_index;
     }
+    calculations_after_surface_integration(states);
     return F;
+}
+
+void SurfaceForceModel::calculations_after_surface_integration(const BodyStates&) const
+{
 }
 
 double SurfaceForceModel::potential_energy(const BodyStates& states, const std::vector<double>& x, const EnvironmentAndFrames& env) const

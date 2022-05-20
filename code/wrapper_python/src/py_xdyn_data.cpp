@@ -70,7 +70,6 @@ void py_add_module_xdyn_data_yaml(py::module& m)
     m.def("test_ship_hydrostatic_test", &test_data::test_ship_hydrostatic_test);
     m.def("test_ship_exact_hydrostatic_test", &test_data::test_ship_exact_hydrostatic_test);
     m.def("test_ship_fast_hydrostatic_test", &test_data::test_ship_fast_hydrostatic_test);
-    m.def("test_ship_new_hydrostatic_test", &test_data::test_ship_new_hydrostatic_test);
     m.def("test_ship_propulsion", &test_data::test_ship_propulsion);
     m.def("test_ship_waves_test", &test_data::test_ship_waves_test);
     m.def("test_ship_diffraction", &test_data::test_ship_diffraction);

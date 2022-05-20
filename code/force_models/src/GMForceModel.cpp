@@ -13,7 +13,6 @@
 #include "Body.hpp"
 #include "ExactHydrostaticForceModel.hpp"
 #include "FastHydrostaticForceModel.hpp"
-#include "HydrostaticForceModel.hpp"
 #include "Observer.hpp"
 #include "InvalidInputException.hpp"
 #include "BodyWithSurfaceForces.hpp"
@@ -64,11 +63,6 @@ GMForceModel::Yaml GMForceModel::parse(const std::string& yaml)
     Yaml ret;
     node["name of hydrostatic force model"] >> ret.name_of_hydrostatic_force_model;
     ssc::yaml_parser::parse_uv(node["roll step"], ret.roll_step);
-    if (ret.name_of_hydrostatic_force_model == "hydrostatic")
-    {
-        ret.try_to_parse = ForceModel::build_parser<HydrostaticForceModel>();
-        return ret;
-    }
     if (ret.name_of_hydrostatic_force_model == "non-linear hydrostatic (exact)")
     {
         ret.try_to_parse = ForceModel::build_parser<ExactHydrostaticForceModel>();
@@ -80,7 +74,7 @@ GMForceModel::Yaml GMForceModel::parse(const std::string& yaml)
         return ret;
     }
     THROW(__PRETTY_FUNCTION__, InvalidInputException, "Couldn't find any suitable hydrostatic force model: "
-            << "received '" << ret.name_of_hydrostatic_force_model << "', expected one of 'non-linear hydrostatic (exact)', 'non-linear hydrostatic (fast)' or 'hydrostatic'");
+            << "received '" << ret.name_of_hydrostatic_force_model << "', expected one of 'non-linear hydrostatic (exact)' or 'non-linear hydrostatic (fast)'");
     return ret;
 }
 

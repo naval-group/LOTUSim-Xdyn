@@ -19,7 +19,6 @@ set(SRC src/QuadraticDampingForceModel.cpp
         src/maneuvering_DataSource_builder.cpp
         src/SimpleStationKeepingController.cpp
         src/RudderForceModel.cpp
-        src/HydrostaticForceModel.cpp
         src/calculate_gz.cpp
         src/GMForceModel.cpp
         src/KtKqForceModel.cpp

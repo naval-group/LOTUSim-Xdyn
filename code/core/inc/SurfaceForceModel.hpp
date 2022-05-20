@@ -81,6 +81,7 @@ class SurfaceForceModel : public ForceModel
 
     private:
         SurfaceForceModel();
+        virtual void calculations_after_surface_integration(const BodyStates&) const;
         virtual FacetIterator begin(const MeshIntersectorPtr& intersector) const = 0;
         virtual FacetIterator end(const MeshIntersectorPtr& intersector) const = 0;
         virtual double pe(const BodyStates& states, const std::vector<double>& x, const EnvironmentAndFrames& env) const = 0;

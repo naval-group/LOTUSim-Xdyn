@@ -13,7 +13,8 @@
 
 std::string FastHydrostaticForceModel::model_name(){return "non-linear hydrostatic (fast)";}
 
-FastHydrostaticForceModel::FastHydrostaticForceModel(const std::string& body_name_, const EnvironmentAndFrames& env) : ImmersedSurfaceForceModel(model_name(), body_name_, env)
+FastHydrostaticForceModel::FastHydrostaticForceModel(const std::string& body_name_, const EnvironmentAndFrames& env) : ImmersedSurfaceForceModel(model_name(), body_name_, env),
+        centre_of_buoyancy(new Eigen::Vector3d())
 {
     if (env.w.use_count()==0)
     {
@@ -21,14 +22,20 @@ FastHydrostaticForceModel::FastHydrostaticForceModel(const std::string& body_nam
     }
 }
 
-FastHydrostaticForceModel::FastHydrostaticForceModel(const std::string& force_name_, const std::string& body_name_, const EnvironmentAndFrames& env) : ImmersedSurfaceForceModel(force_name_, body_name_, env)
+FastHydrostaticForceModel::FastHydrostaticForceModel(const std::string& force_name_, const std::string& body_name_, const EnvironmentAndFrames& env) : ImmersedSurfaceForceModel(force_name_, body_name_, env),
+        centre_of_buoyancy(new Eigen::Vector3d())
 {
 }
 
-/**double FastHydrostaticForceModel::gz(const EnvironmentAndFrames& env) const
+void FastHydrostaticForceModel::calculations_after_surface_integration(const BodyStates& states) const
 {
-    return calculate_gz(env.k->get("NED", get_body_name()), get_force_in_ned_frame());
-}*/
+    auto C = states.intersector->center_of_mass_immersed();
+
+    if (C.all_facets_are_in_same_plane) C.volume = 0;
+
+    for (size_t i = 0 ; i < 3 ; ++i) centre_of_buoyancy->operator()(i) = C.G(i);
+}
+
 
 std::string FastHydrostaticForceModel::get_name() const
 {
@@ -38,6 +45,13 @@ std::string FastHydrostaticForceModel::get_name() const
 EPoint FastHydrostaticForceModel::get_application_point(const FacetIterator& that_facet, const BodyStates&, const double) const
 {
     return that_facet->centre_of_gravity; // In Body frame
+}
+
+ssc::kinematics::Point FastHydrostaticForceModel::get_centre_of_buoyancy() const
+{
+    return ssc::kinematics::Point(get_body_name(), centre_of_buoyancy->operator()(0),
+                                                   centre_of_buoyancy->operator()(1),
+                                                   centre_of_buoyancy->operator()(2));
 }
 
 std::function<SurfaceForceModel::DF(const FacetIterator &, const size_t, const EnvironmentAndFrames &, const BodyStates &, const double)>
@@ -69,7 +83,3 @@ double FastHydrostaticForceModel::pe(const BodyStates& states, const std::vector
     return -env.rho*env.g*immersed_volume*zC;
 }
 
-/*void FastHydrostaticForceModel::extra_observations(Observer& observer) const
-{
-    observer.write(gz(),DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),get_body_name(),"GZ"},std::string("GZ(")+get_name()+","+get_body_name()+")"));
-}*/

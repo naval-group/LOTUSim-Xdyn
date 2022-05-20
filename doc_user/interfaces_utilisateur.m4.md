@@ -818,7 +818,7 @@ Exemple d'entrée:
   },
   "requested_output": [
     "Fz(gravity,body,NED)",
-    "My(hydrostatic,body,body)"
+    "My(non-linear hydrostatic (exact),body,body)"
   ]
 }
 ~~~~
@@ -872,7 +872,7 @@ Exemple de sortie:
   "dpsi_dt": 0,
   "extra_observations": {
     "Fz(gravity,body,NED)": 2.135e3,
-    "My(hydrostatic,body,body)": 4.984e4
+    "My(non-linear hydrostatic (exact),body,body)": 4.984e4
   }
 }
 ~~~~
@@ -969,7 +969,7 @@ Exemple d'entrée:
   },
   "requested_output": [
     "Fz(gravity,body,NED)",
-    "My(hydrostatic,body,body)"
+    "My(non-linear hydrostatic (exact),body,body)"
   ]
 }
 ~~~~
@@ -1025,7 +1025,7 @@ Exemple de sortie:
   "psi": [0,0],
   "extra_observations": {
     "Fz(gravity,body,NED)": [2.135e3, 2.135e3],
-    "My(hydrostatic,body,body)": [4.984e4, 5.247e4]
+    "My(non-linear hydrostatic (exact),body,body)": [4.984e4, 5.247e4]
   }
 }
 ~~~~
