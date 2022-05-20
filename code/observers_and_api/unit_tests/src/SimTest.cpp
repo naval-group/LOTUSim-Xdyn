@@ -383,12 +383,12 @@ TEST_F(SimTest, rolling_cube_with_big_mesh)
     std::vector<double> phi;
     for (auto r:res)
     {
-        ASSERT_NEAR(0, r.x[XIDX(0)], eps);
-        ASSERT_NEAR(0, r.x[YIDX(0)], eps);
-        ASSERT_NEAR(0, r.x[ZIDX(0)], eps);
-        ASSERT_NEAR(0, r.x[UIDX(0)], eps);
-        ASSERT_NEAR(0, r.x[VIDX(0)], eps);
-        ASSERT_NEAR(0, r.x[WIDX(0)], eps);
+        ASSERT_NEAR(0, r.x[XIDX(0)], 1e-6);
+        ASSERT_NEAR(0, r.x[YIDX(0)], 1e-6);
+        ASSERT_NEAR(0, r.x[ZIDX(0)], 1e-6);
+        ASSERT_NEAR(0, r.x[UIDX(0)], 1e-6);
+        ASSERT_NEAR(0, r.x[VIDX(0)], 1e-6);
+        ASSERT_NEAR(0, r.x[WIDX(0)], 1e-6);
         ASSERT_NEAR(0, r.x[QIDX(0)], eps);
         ASSERT_NEAR(0, r.x[RIDX(0)], eps);
         const auto angle = convert(r.x[QRIDX(0)],r.x[QIIDX(0)],r.x[QJIDX(0)],r.x[QKIDX(0)]);
