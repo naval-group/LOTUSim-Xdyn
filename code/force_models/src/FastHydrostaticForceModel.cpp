@@ -36,10 +36,6 @@ void FastHydrostaticForceModel::calculations_after_surface_integration(const Bod
     for (size_t i = 0 ; i < 3 ; ++i) centre_of_buoyancy->operator()(i) = C.G(i);
 }
 
-/**double FastHydrostaticForceModel::gz(const EnvironmentAndFrames& env) const
-{
-    return calculate_gz(env.k->get("NED", get_body_name()), get_force_in_ned_frame());
-}*/
 
 std::string FastHydrostaticForceModel::get_name() const
 {
