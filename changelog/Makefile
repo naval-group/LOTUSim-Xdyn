@@ -2,7 +2,8 @@
 
 all:
 	@docker build -t changelog .
-	@docker run -it --rm -v $(shell pwd)/../:/work -w /work changelog v5.1.0 v6.0.0 > CHANGELOG.md
+	@docker run -it --rm -v $(shell pwd)/../:/work -w /work changelog v6.0.0 v6.0.1 > CHANGELOG.md
+	@docker run -it --rm -v $(shell pwd)/../:/work -w /work changelog v5.1.0 v6.0.0 >> CHANGELOG.md
 	@docker run -it --rm -v $(shell pwd)/../:/work -w /work changelog v5.0.1 v5.1.0 >> CHANGELOG.md
 	@docker run -it --rm -v $(shell pwd)/../:/work -w /work changelog v5.0.0 v5.0.1 >> CHANGELOG.md
 	@docker run -it --rm -v $(shell pwd)/../:/work -w /work changelog v4.3.0 v5.0.0 >> CHANGELOG.md

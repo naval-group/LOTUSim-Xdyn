@@ -1,5 +1,21 @@
-# v6.0.0 (2022-04-27)
+# v6.0.1 (2022-05-20)
 
+- #144 Utilisation modele hydrostatic avec houle
+- #68 Extra observations output lag in server modes
+- #250 Integration test build clean up
+- #249 Fix tab linter error
+- #247 Update xdyn documentation for efforts hydrostatiques lineaires
+- #246 Wrong hydrostatic forces in waves with linear hydrostatics model
+- #245 Remove unneded include instructions
+- #244 Remove duplicated code for grpc spectrumresponse creation
+- #243 Create a xdyn grpc airy server
+- #66 Update code so that it compiles with intel compilers
+- #241 Hdf5 files generated with version 6 contained twice time values
+
+
+# v6.0.0 (2022-04-28)
+
+- #235 Controller outputs are not written properly in hdf5 files
 - #240 Fix interfaces submodule reference
 - #39 Add possibility to use csv file as input to commands
 - #238 Error in the documentation for the definition of the environment
