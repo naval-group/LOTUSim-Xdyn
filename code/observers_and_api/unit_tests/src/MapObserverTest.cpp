@@ -90,7 +90,7 @@ TEST_F(MapObserverTest, GM)
     /*
     Cf. discussion here: https://gitlab.sirehna.com/sirehna/xdyn/-/merge_requests/166#note_115660
     
-    Cube with 1 m edges, helf-immersed:
+    Cube with 1 m edges, half-immersed:
 
 - G is the centre of gravity,
 - M the metacentre,
