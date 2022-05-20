@@ -397,18 +397,18 @@ TEST_F(SimTest, rolling_cube_with_big_mesh)
         phi.push_back(angle.phi);
     }
     ASSERT_EQ(11, phi.size());
-    eps = 1E-2;
-    ASSERT_NEAR(0.43633231299858238339, phi[0], eps);
-    ASSERT_NEAR(0.43768435305033482, phi[1], eps);
-    ASSERT_NEAR(0.44174294754506388, phi[2], eps);
-    ASSERT_NEAR(0.44851515262040759, phi[3], eps);
-    ASSERT_NEAR(0.45801148069658759, phi[4], eps);
-    ASSERT_NEAR(0.47024394765573296, phi[5], eps);
-    ASSERT_NEAR(0.48522317379612806, phi[6], eps);
-    ASSERT_NEAR(0.50295436708778729, phi[7], eps);
-    ASSERT_NEAR(0.52343196026884675, phi[8], eps);
-    ASSERT_NEAR(0.54663261284397258, phi[9], eps);
-    ASSERT_NEAR(0.57250622838907383, phi[10], eps);
+    eps = 1E-3; // (1e-3 * 180 / pi) = 0.05729 degree
+    ASSERT_NEAR(0.43633, phi[0], eps);
+    ASSERT_NEAR(0.43768, phi[1], eps);
+    ASSERT_NEAR(0.44174, phi[2], 2 * eps);
+    ASSERT_NEAR(0.44851, phi[3], 3 * eps);
+    ASSERT_NEAR(0.45801, phi[4], 4 * eps);
+    ASSERT_NEAR(0.47024, phi[5], 5 * eps);
+    ASSERT_NEAR(0.48522, phi[6], 6 * eps);
+    ASSERT_NEAR(0.50295, phi[7], 7 * eps);
+    ASSERT_NEAR(0.52343, phi[8], 8 * eps);
+    ASSERT_NEAR(0.54663, phi[9], 8 * eps);
+    ASSERT_NEAR(0.57250, phi[10], 9 * eps);
 }
 
 TEST_F(SimTest, LONG_bug_2714_heading_keeping)
