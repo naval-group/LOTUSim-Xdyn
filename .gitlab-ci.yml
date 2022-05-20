@@ -14,6 +14,11 @@ default:
     - make update-submodules
     - make headers
 
+after_script:
+    - docker ps
+    - make clean
+    - docker ps
+
 lint:
    stage: lint
    script:
@@ -116,15 +121,6 @@ integration tests:
       when: on_success
       paths:
       - xdyn.deb
-
-Cleanup on failure:
-  stage: test
-  needs:
-    - integration tests
-  when: on_failure
-  script:
-    - docker ps
-    - make -C integration_tests clean
 
 doc:
    stage: doc
