@@ -100,14 +100,14 @@ std::ostream& operator<<(std::ostream& os, const TestMesh& mesh)
     const auto Mi = convert(mesh.all_nodes);
     const auto L = make_lines(Mi, mesh.edges);
     std::set<size_t> nodes_to_display;
-    for (const auto edge:mesh.edges)
+    for (const auto& edge:mesh.edges)
     {
         nodes_to_display.insert(edge.first);
         nodes_to_display.insert(edge.second);
     }
     const auto lines = make_mesh(Mi, L, nodes_to_display);
     os << std::endl;
-    for (const auto line:lines)
+    for (const auto& line:lines)
     {
         os << line << std::endl;
     }
