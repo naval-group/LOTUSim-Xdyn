@@ -146,7 +146,7 @@ void MeshIntersector::build_closing_edge()
     }
     if (index_of_edges_exactly_on_surface.empty()) return;
     const auto ll = ClosingFacetComputer::group_connected_edges(all_edges_as_pairs, std::vector<size_t>(index_of_edges_exactly_on_surface.begin(),index_of_edges_exactly_on_surface.end()));
-    for (const auto l:ll)
+    for (const auto& l:ll)
     {
         const ClosingFacetComputer c(&mesh->all_nodes, all_edges_as_pairs, l);
         const auto contour = c.contour();
