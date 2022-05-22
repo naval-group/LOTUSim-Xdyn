@@ -102,7 +102,7 @@ std::vector<std::vector<size_t> > convert_sets_to_vectors(const std::vector<std:
 std::vector<std::vector<size_t> > convert_sets_to_vectors(const std::vector<std::set<size_t> >& facets)
 {
     std::vector<std::vector<size_t> > ret;
-    for (const auto facet : facets)
+    for (const auto& facet : facets)
     {
         ret.push_back(std::vector<size_t>(facet.begin(), facet.end()));
     }
