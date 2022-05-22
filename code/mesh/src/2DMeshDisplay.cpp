@@ -8,7 +8,7 @@
 
 #include "2DMeshDisplay.hpp"
 
-XY<Range> get_min_max(const Eigen::Matrix3Xd M)
+XY<Range> get_min_max(const Eigen::Matrix3Xd& M)
 {
     XY<Range> range;
     if ((M.cols()>0) and (M.rows()>0))
