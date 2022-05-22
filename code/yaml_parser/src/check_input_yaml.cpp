@@ -72,7 +72,7 @@ void check_controller_output_is_not_defined_in_a_command(const std::string& cont
 {
     std::stringstream errors;
 
-    for (const YamlTimeSeries commands : commands_input)
+    for (const YamlTimeSeries& commands : commands_input)
     {
         for (const auto& command_name_values : commands.values)
         {
@@ -90,7 +90,7 @@ void check_command_names(const std::vector<YamlTimeSeries>& commands_input)
 {
     std::stringstream errors;
 
-    for (const YamlTimeSeries commands : commands_input)
+    for (const YamlTimeSeries& commands : commands_input)
     {
         if (commands.name == "")
         {
