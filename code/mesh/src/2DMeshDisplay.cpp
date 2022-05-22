@@ -45,7 +45,7 @@ Eigen::Matrix3Xi convert(const Eigen::Matrix3Xd& M)
 std::vector<Line> make_lines(const Eigen::Matrix3Xi& mesh, const ClosingFacetComputer::ListOfEdges& edges)
 {
     std::vector<Line> ret;
-    for (const auto edge:edges)
+    for (const auto& edge:edges)
     {
         Line l;
         const int xmin = std::min(mesh(0,(long)edge.first),mesh(0,(long)edge.second));
@@ -79,7 +79,7 @@ std::vector<std::string> make_mesh(const Eigen::Matrix3Xi& M, const std::vector<
 {
     const std::string spaces(X_CANVAS_SIZE+1, ' ');
     std::vector<std::string> canvas(Y_CANVAS_SIZE+1, spaces);
-    for (const auto line:lines)
+    for (const auto& line:lines)
     {
         for (const auto dot:line)
         {
