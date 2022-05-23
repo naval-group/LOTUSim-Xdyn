@@ -124,7 +124,7 @@ std::string closest_string(const std::string& string_to_match, const std::vector
     size_t min_idx = 0;
     size_t min_dist = INT_MAX;
     size_t k = 0;
-    for (const auto s:strings_to_test)
+    for (const auto& s:strings_to_test)
     {
         const size_t levenshtein = levenshtein_distance(string_to_match, s);
         if (levenshtein < min_dist)
@@ -160,13 +160,13 @@ void Observer::initialize_serialization_of_requested_variables(const std::vector
     {
         const size_t n = variables_to_serialize.size();
         size_t i = 0;
-        for (auto stuff:variables_to_serialize)
+        for (const auto& stuff: variables_to_serialize)
         {
             auto initialize_stuff = initialize.find(stuff);
             if (initialize_stuff == initialize.end())
             {
                 std::vector<std::string> available_variables;
-                for( const auto s:initialize) available_variables.push_back(s.first);
+                for(const auto& s: initialize) available_variables.push_back(s.first);
                 THROW(__PRETTY_FUNCTION__, InvalidInputException, "In the 'outputs' section of the YAML file, you asked for '" << stuff << "', but it is not computed: maybe it is misspelt or the corresponding model is not in the YAML. " << helpful_error_message_on_missing_requested_serialization(stuff, available_variables));
             }
             initialize_stuff->second();
@@ -197,7 +197,7 @@ void Observer::serialize_requested_variables(const std::vector<std::string>& var
 
 void Observer::check_variables_to_serialize_are_available() const
 {
-    for (auto variable_name:requested_serializations)
+    for (const auto& variable_name:requested_serializations)
     {
         const bool serialized_before_solver_step = serializers_called_before_solver_step.find(variable_name) != serializers_called_before_solver_step.end();
         const bool serialized_after_solver_step = serializers_called_after_solver_step.find(variable_name) != serializers_called_after_solver_step.end();
