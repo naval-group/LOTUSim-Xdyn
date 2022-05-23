@@ -8,7 +8,7 @@
 template <typename K, typename V> std::unordered_map<V,K> flip(const std::map<K,V>& commands2columns)
 {
     std::unordered_map<V,K> ret;
-    for (const auto kv:commands2columns)
+    for (const auto& kv:commands2columns)
     {
         ret[kv.second] = kv.first;
     }
@@ -19,7 +19,7 @@ std::unordered_map<std::string, double> zero_commands(const std::map<std::string
 std::unordered_map<std::string, double> zero_commands(const std::map<std::string,std::string>& commands2columns)
 {
     std::unordered_map<std::string, double> ret;
-    for (const auto kv:commands2columns)
+    for (const auto& kv:commands2columns)
     {
         ret[kv.first] = 0;
     }
@@ -110,7 +110,7 @@ void CSVLineByLineReader::set_read_position(const double date)
     std::streampos previous_pos = position_of_first_line;
     double previous_date = std::numeric_limits<double>::max();
     current = DateValues(yaml.commands);
-    for (const auto dateposition:date2position)
+    for (const auto& dateposition:date2position)
     {
         if (date >= previous_date && dateposition.first > date)
         {
