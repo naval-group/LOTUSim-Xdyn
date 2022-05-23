@@ -102,7 +102,7 @@ std::vector<double> PrecalParser::get_vector_value(const std::string& section_ti
             if (section.vector_values.find(vector_key) == section.vector_values.end())
             {
                 std::stringstream ss;
-                for (const auto kv : section.vector_values)
+                for (const auto& kv : section.vector_values)
                 {
                     ss << kv.first << ", ";
                 }
@@ -146,7 +146,7 @@ std::string PrecalParser::get_string_value(const std::string& section_title,
             if (section.string_values.find(string_key) == section.string_values.end())
             {
                 std::stringstream ss;
-                for (const auto kv : section.string_values)
+                for (const auto& kv : section.string_values)
                 {
                     ss << kv.first << ", ";
                 }
