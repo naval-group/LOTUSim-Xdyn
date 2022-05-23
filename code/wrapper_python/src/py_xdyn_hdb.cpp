@@ -36,7 +36,7 @@ std::vector<double> HDBParserForTests::get_radiation_damping_coeff(const size_t 
     {
         std::vector<double> ret;
         ret.reserve(Br.size());
-        for (const auto br:Br)
+        for (const auto& br:Br)
         {
             ret.push_back((double)(10*(i+1)+(j+1))*br);
         }
@@ -58,7 +58,7 @@ std::vector<double> HDBParserForTests::get_added_mass_coeff(const size_t i, cons
     {
         std::vector<double> ret;
         ret.reserve(Ma.size());
-        for (const auto ma:Ma)
+        for (const auto& ma:Ma)
         {
             ret.push_back((double)(10*(i+1)+(j+1))*ma);
         }
