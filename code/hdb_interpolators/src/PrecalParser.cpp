@@ -345,7 +345,7 @@ void check_units(const std::string& pretty_name, const std::string& actual_unit,
 void check_units(const std::string& pretty_name, const std::string& actual_unit, const std::vector<std::string>& expected_units)
 {
     std::stringstream ss;
-    for (const auto expected_unit:expected_units)
+    for (const auto& expected_unit:expected_units)
     {
         if (actual_unit == expected_unit)
         {
@@ -547,7 +547,7 @@ std::vector<double> PrecalParser::get_froude_krylov_phase_psis() const
 
 std::vector<double> PrecalParser::get_angular_frequencies() const
 {
-    for (const auto section : precal_file.sections)
+    for (const auto& section : precal_file.sections)
     {
         const auto it = section.vector_values.find("waveFreq");
         if (it != section.vector_values.end())
@@ -561,7 +561,7 @@ std::vector<double> PrecalParser::get_angular_frequencies() const
 
 double PrecalParser::get_forward_speed() const
 {
-    for (const auto section : precal_file.sections)
+    for (const auto& section : precal_file.sections)
     {
         const auto it = section.vector_values.find("shipSpeed");
         if (it != section.vector_values.end())
@@ -595,7 +595,7 @@ std::vector<double> PrecalParser::extract_matrix_coeff(const std::string& short_
     bool found_signal = false;
     double min_speed = 1E300;
     std::string line;
-    for (const auto rao : precal_file.raos)
+    for (const auto& rao : precal_file.raos)
     {
         if (rao.attributes.name == coeff_name(short_name, i, j))
         {
