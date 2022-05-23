@@ -224,7 +224,7 @@ Array* to_grpc_array(const std::vector<std::vector<double> >& array);
 Array* to_grpc_array(const std::vector<std::vector<double> >& array)
 {
     Array* ret = new Array();
-    for (const auto line : array)
+    for (const auto& line : array)
     {
         if (not(line.empty()))
         {
