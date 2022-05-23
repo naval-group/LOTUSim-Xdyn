@@ -13,7 +13,8 @@
 #include "YamlGRPC.hpp"
 
 #include <string>
-#include <boost/optional.hpp>
+#include <boost/optional/optional_io.hpp>
+
 YamlDefaultWaveModel parse_default_wave_model(const std::string& yaml);
 YamlWaveModel        parse_waves(const std::string& yaml);
 YamlDiscretization   parse_discretization(const std::string& yaml);
