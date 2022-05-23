@@ -78,7 +78,7 @@ TEST_F(XdynForCSTest, can_get_extra_observations)
     const std::vector<YamlState> outputs = sim_server.handle(deserialize(JSON_request));
     ASSERT_EQ(11, outputs.size());
     ASSERT_FALSE(outputs.front().extra_observations. empty());
-    for (const auto output:outputs)
+    for (const auto& output:outputs)
     {
         ASSERT_NE(output.extra_observations.find("GM(cube)"), output.extra_observations.end());
         ASSERT_NE(output.extra_observations.find("GZ(cube)"), output.extra_observations.end());
