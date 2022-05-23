@@ -7,7 +7,7 @@ echo "./.git" >> .dockerignore
 echo "./validation" >> .dockerignore
 docker run -it --rm \
     -u $(id -u):$(id -g) \
-    -v $(pwd):/opt/share \
+    -v "$(pwd)":/opt/share \
     -w /opt/share \
     sirehna/base-image-win64-gccx-posixthreads-ssc-xdyn /bin/bash -c \
        "cd build_win_posix &&\

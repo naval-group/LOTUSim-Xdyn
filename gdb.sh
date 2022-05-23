@@ -6,8 +6,8 @@ docker run $TERMINAL \
     --security-opt seccomp=unconfined \
     --rm \
     -u $(id -u):$(id -g) \
-    -v $(pwd)/build_deb11_dbg:/build \
-    -v $(pwd)/code:/opt/share/code/ \
+    -v "$(pwd)/build_deb11_dbg":/build \
+    -v "$(pwd)/code":/opt/share/code/ \
     -w /build \
     -it \
     sirehna/base-image-debian11-gcc10-gdb \
