@@ -31,7 +31,7 @@ ELSE()
         # Declare the list of static gRPC files needed for version 1.32 and 1.46
         # Only file found in path will be used.
         #
-        # All this needs to be refactored, to use CMake FindPackage to looked
+        # All this needs to be refactored, to use CMake FindPackage to look
         # for static files compiled with -fPIC option to create shared library...
         SET(GRPC_GRPCPP_UNSECURE_TO_SEARCH
             ${GRPC_ROOT_DIR_LIB}/libgrpc++_unsecure.a
