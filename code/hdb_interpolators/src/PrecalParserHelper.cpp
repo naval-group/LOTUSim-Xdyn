@@ -254,7 +254,7 @@ class Parser
     {
         std::string previous_token = "";
         std::string current_key = "";
-        for (const auto token : tokens)
+        for (const auto& token : tokens)
         {
             if (token == ";")
             {
