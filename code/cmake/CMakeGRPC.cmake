@@ -28,15 +28,18 @@ ELSE()
         MESSAGE(STATUS "Using gRPC library compiled with -fPIC flag")
         # SET(GRPC_ROOT_DIR_LIB /usr/lib/x86_64-linux-gnu)
         SET(GRPC_ROOT_DIR_LIB /opt/grpc/lib)
-        SET(GRPC_GRPCPP_UNSECURE
+        # Declare the list of static gRPC files needed for version 1.32 and 1.46
+        # Only file found in path will be used.
+        #
+        # All this needs to be refactored, to use CMake FindPackage to looked
+        # for static files compiled with -fPIC option to create shared library...
+        SET(GRPC_GRPCPP_UNSECURE_TO_SEARCH
             ${GRPC_ROOT_DIR_LIB}/libgrpc++_unsecure.a
             ${GRPC_ROOT_DIR_LIB}/libgrpc.a
             ${GRPC_ROOT_DIR_LIB}/libabsl_strings.a
             ${GRPC_ROOT_DIR_LIB}/libabsl_strings_internal.a
             ${GRPC_ROOT_DIR_LIB}/libabsl_str_format_internal.a
             ${GRPC_ROOT_DIR_LIB}/libabsl_int128.a
-            # ${GRPC_ROOT_DIR_LIB}/libabsl_flags.a
-            # ${GRPC_ROOT_DIR_LIB}/libabsl_flags_internal.a
             ${GRPC_ROOT_DIR_LIB}/libabsl_raw_logging_internal.a
             ${GRPC_ROOT_DIR_LIB}/libabsl_throw_delegate.a
             ${GRPC_ROOT_DIR_LIB}/libabsl_bad_optional_access.a
@@ -77,10 +80,17 @@ ELSE()
             ${GRPC_ROOT_DIR_LIB}/libcrypto.a
             ${GRPC_ROOT_DIR_LIB}/libgpr.a
             ${GRPC_ROOT_DIR_LIB}/libupb.a
-            ${GRPC_ROOT_DIR_LIB}/libaddress_sorting.a
-            z
-            m
-            dl)
+            ${GRPC_ROOT_DIR_LIB}/libaddress_sorting.a)
+        SET(GRPC_GRPCPP_UNSECURE)
+        FOREACH(GRPC_FILE ${GRPC_GRPCPP_UNSECURE_TO_SEARCH})
+            IF(EXISTS ${GRPC_FILE})
+                LIST(APPEND GRPC_GRPCPP_UNSECURE ${GRPC_FILE})
+            ENDIF()
+        ENDFOREACH()
+        LIST(APPEND GRPC_GRPCPP_UNSECURE z)
+        LIST(APPEND GRPC_GRPCPP_UNSECURE m)
+        LIST(APPEND GRPC_GRPCPP_UNSECURE dl)
+        # MESSAGE(STATUS GRPC_GRPCPP_UNSECURE ${GRPC_GRPCPP_UNSECURE})
         # SET(GRPC_CPP_PLUGIN_EXECUTABLE /usr/bin/grpc_cpp_plugin)
         # SET(GRPC_INCLUDE_DIR /usr/include)
         SET(PROTOBUF_PROTOC /opt/grpc/bin/protoc)
