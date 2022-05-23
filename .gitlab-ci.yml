@@ -109,6 +109,19 @@ build:ubuntu-18-04-intel-22-02-release:
        variables:
         - $NIGHTLY_BUILD
 
+build:ubuntu-22-04-gcc11-release:
+   stage: build
+   script:
+     - make NB_OF_PARALLEL_BUILDS="-j 1" ubuntu_22_04_release_gcc_11
+     - mv build_ubuntu2204/xdyn.deb xdyn_ubuntu2204.deb
+   artifacts:
+     when: on_success
+     paths:
+     - xdyn_ubuntu2204.deb
+   only:
+       variables:
+        - $NIGHTLY_BUILD
+
 integration tests:
     stage: test
     script:
