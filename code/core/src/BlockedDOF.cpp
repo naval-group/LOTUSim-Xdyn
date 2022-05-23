@@ -62,7 +62,7 @@ class Builder
         std::vector<Table> build_tables() const
         {
             std::vector<Table> t = input.from_yaml;
-            for (const auto y:input.from_csv)
+            for (const auto& y:input.from_csv)
             {
                 t.push_back(read_table_from_csv(y));
             }
@@ -72,7 +72,7 @@ class Builder
         std::map<BlockableState, Interpolator> get_forced_states() const
         {
             std::map<BlockableState, Interpolator> ret;
-            for (const auto table:tables)
+            for (const auto& table:tables)
             {
                 ret[table.state] = build_interpolator(table);
             }
@@ -82,7 +82,7 @@ class Builder
         std::map<BlockableState, double> get_tmin() const
         {
             std::map<BlockableState, double> tmin;
-            for (const auto table:tables)
+            for (const auto& table:tables)
             {
                 const auto min = std::min_element(table.t.begin(), table.t.end());
                 tmin[table.state] = *min;
@@ -93,7 +93,7 @@ class Builder
         std::map<BlockableState, double> get_tmax() const
         {
             std::map<BlockableState, double> tmax;
-            for (const auto table:tables)
+            for (const auto& table:tables)
             {
                 const auto max = std::max_element(table.t.begin(), table.t.end());
                 tmax[table.state] = *max;
@@ -116,11 +116,11 @@ class Builder
         void check_states_are_not_defined_twice(const YamlBlockedDOF& input) const
         {
             std::map<BlockableState, bool> defined_in_yaml, defined_in_csv;
-            for (const auto state : input.from_yaml)
+            for (const auto& state : input.from_yaml)
             {
                 throw_if_already_defined(state.state, defined_in_yaml);
             }
-            for (const auto state : input.from_csv)
+            for (const auto& state : input.from_csv)
             {
                 throw_if_already_defined(state.state, defined_in_yaml);
                 throw_if_already_defined(state.state, defined_in_csv);
@@ -263,7 +263,7 @@ BlockedDOF::BlockedDOF(const std::string& input, const size_t body_idx) : pimpl(
 
 void BlockedDOF::force_states(StateType& x, const double t) const
 {
-    for (auto dof:pimpl->blocked_dof)
+    for (auto& dof: pimpl->blocked_dof)
     {
         if (pimpl->state_is_blocked_at_that_date(dof.first, t))
         {
