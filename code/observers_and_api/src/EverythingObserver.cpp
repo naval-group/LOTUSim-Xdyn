@@ -38,7 +38,7 @@ void EverythingObserver::observe_everything(const Sim& sys, const double t, cons
         serialize_after_solver_step(all_vars);
     }
     const std::string body_name = get_body_name(sys);
-    for (const auto key_values:m)
+    for (const auto& key_values:m)
     {
         const auto inserter = get_inserter(body_name, key_values.first);
         add(inserter, key_values.second);
