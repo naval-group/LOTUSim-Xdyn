@@ -42,7 +42,36 @@ ELSE()
             ${GRPC_ROOT_DIR_LIB}/libabsl_bad_optional_access.a
             ${GRPC_ROOT_DIR_LIB}/libabsl_time.a
             ${GRPC_ROOT_DIR_LIB}/libabsl_time_zone.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_synchronization.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_spinlock_wait.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_random_internal_randen_hwaes.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_random_internal_randen_hwaes_impl.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_random_internal_randen.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_random_internal_pool_urbg.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_random_seed_gen_exception.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_random_internal_randen_slow.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_random_internal_platform.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_random_internal_seed_material.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_time.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_status.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_cord.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_cord_internal.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_cordz_functions.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_cordz_handle.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_cordz_info.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_statusor.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_bad_variant_access.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_hash.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_malloc_internal.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_stacktrace.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_symbolize.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_demangle_internal.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_debugging_internal.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_low_level_hash.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_exponential_biased.a
+            ${GRPC_ROOT_DIR_LIB}/libabsl_city.a
             ${GRPC_ROOT_DIR_LIB}/libabsl_base.a
+            ${GRPC_ROOT_DIR_LIB}/libre2.a
             ${GRPC_ROOT_DIR_LIB}/libcares.a
             ${GRPC_ROOT_DIR_LIB}/libssl.a
             ${GRPC_ROOT_DIR_LIB}/libcrypto.a
