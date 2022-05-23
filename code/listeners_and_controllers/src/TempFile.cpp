@@ -3,7 +3,7 @@
 
 /**
  * @brief Generate a temporary file and return its name
- * 
+ *
  * @return Name of the generated temporary file.
  */
 std::string get_temp_filename();
@@ -16,7 +16,9 @@ std::string get_temp_filename()
     // not use this TempFile class.
     #if !defined(__MINGW32__)
     // Under gcc linux, we replace the Xs with random characters so the generated file is indeed unique.
-    mkstemp(filename);
+    #define ignore_return_value(x) ((void)(x))
+    int return_value = mkstemp(filename);
+    ignore_return_value(return_value);
     #endif
     return std::string(filename);
 }
