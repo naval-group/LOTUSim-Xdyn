@@ -89,7 +89,7 @@ void write(InfNaNWriter& writer, const std::map<std::string, double>& m);
 void write(InfNaNWriter& writer, const std::map<std::string, double>& m)
 {
     writer.StartObject();
-    for (const auto key_value:m)
+    for (const auto& key_value:m)
     {
         writer.Key(key_value.first.c_str());
         writer.Double(key_value.second);
@@ -191,5 +191,3 @@ std::string serialize(const YamlState& d_dt)
     writer.EndObject();
     return s.GetString();
 }
-
-

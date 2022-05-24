@@ -43,7 +43,7 @@ std::vector<double> SurfaceElevationFromWaves::wave_height(const std::vector<dou
 {
     std::vector<double> zwave(x.size(), 0);
 
-    for (const auto directional_spectrum:directional_spectra)
+    for (const auto& directional_spectrum:directional_spectra)
     {
         const std::vector<double> wave_heights = directional_spectrum->get_elevation(x, y, t);
         for (size_t i = 0; i < wave_heights.size(); ++i)
@@ -82,7 +82,7 @@ std::vector<DiscreteDirectionalWaveSpectrum> SurfaceElevationFromWaves::get_dire
 std::vector<std::vector<double> > SurfaceElevationFromWaves::get_wave_directions_for_each_model() const
 {
     std::vector<std::vector<double> > ret;
-    for (auto model:directional_spectra)
+    for (auto& model:directional_spectra)
     {
         ret.push_back(model->get_psis());
     }
@@ -94,7 +94,7 @@ std::vector<std::vector<double> > SurfaceElevationFromWaves::get_wave_directions
 std::vector<std::vector<double> > SurfaceElevationFromWaves::get_wave_angular_frequency_for_each_model() const
 {
     std::vector<std::vector<double> > ret;
-    for (auto model:directional_spectra)
+    for (auto& model:directional_spectra)
     {
         ret.push_back(model->get_omegas());
     }
@@ -111,7 +111,7 @@ std::vector<double> SurfaceElevationFromWaves::dynamic_pressure(const double rho
                                                                 ) const
 {
     std::vector<double> pdyn(x.size(), 0);
-    for (const auto spectrum : directional_spectra)
+    for (const auto& spectrum : directional_spectra)
     {
         std::vector<double> dynamic_pressure_for_spectrum = spectrum->get_dynamic_pressure(rho, g, x, y, z, eta, t);
         for (size_t i = 0; i < pdyn.size(); ++i)
@@ -131,7 +131,7 @@ ssc::kinematics::PointMatrix SurfaceElevationFromWaves::orbital_velocity(const d
                                                                         ) const
 {
     ssc::kinematics::PointMatrix Vwaves(ssc::kinematics::Matrix3Xd::Zero(3,x.size()), "NED");
-    for (auto spectrum:directional_spectra)
+    for (const auto& spectrum:directional_spectra)
     {
         Vwaves.m += spectrum->get_orbital_velocity(g, x, y, z, t, eta).m;
     }
@@ -142,7 +142,7 @@ void SurfaceElevationFromWaves::serialize_wave_spectra_before_simulation(Observe
 {
     std::vector<FlatDiscreteDirectionalWaveSpectrum> spectra;
     spectra.reserve(directional_spectra.size());
-    for (const auto spectrum:directional_spectra) spectra.push_back(spectrum->get_flat_spectrum());
+    for (const auto& spectrum:directional_spectra) spectra.push_back(spectrum->get_flat_spectrum());
     const DataAddressing address;
     observer->write_before_simulation(spectra, address);
 }

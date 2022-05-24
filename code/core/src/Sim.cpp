@@ -264,10 +264,10 @@ void Sim::output(const StateType& x, Observer& obs, const double t, const std::v
         pimpl->feed_sum_of_forces(obs, body->get_name());
         pimpl->feed_fictitious_forces(obs, body->get_name());
     }
-    for (const auto discrete_system : discrete_systems)
+    for (const auto& discrete_system : discrete_systems)
     {
         const auto name = discrete_system->get_name();
-        for (const auto output : discrete_system->get_outputs())
+        for (const auto& output : discrete_system->get_outputs())
         {
             const double value = pimpl->command_listener.get<double>(output);
             obs.write_before_solver_step(value, DataAddressing(std::vector<std::string>{"controllers",name}, output));
@@ -286,7 +286,7 @@ void Sim::set_bodystates(const State& states_history)
 
 void Sim::set_command_listener(const std::map<std::string, double>& new_commands)
 {
-    for(const auto c : new_commands)
+    for(const auto& c : new_commands)
     {
         pimpl->command_listener.set(c.first, c.second);
     }

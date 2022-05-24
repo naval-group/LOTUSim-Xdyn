@@ -102,7 +102,7 @@ std::vector<std::vector<size_t> > convert_sets_to_vectors(const std::vector<std:
 std::vector<std::vector<size_t> > convert_sets_to_vectors(const std::vector<std::set<size_t> >& facets)
 {
     std::vector<std::vector<size_t> > ret;
-    for (const auto facet : facets)
+    for (const auto& facet : facets)
     {
         ret.push_back(std::vector<size_t>(facet.begin(), facet.end()));
     }
@@ -125,7 +125,7 @@ ClosingFacetComputer::ConnectedComponents ClosingFacetComputer::get_connected_co
         node_idx_to_idx_in_mesh[i++] = idx;
         max_idx = std::max(max_idx, idx);
     }
-    for (const auto edge:edges_) add_edge(idx_in_mesh_to_node_idx[edge.first], idx_in_mesh_to_node_idx[edge.second], G);
+    for (const auto& edge:edges_) add_edge(idx_in_mesh_to_node_idx[edge.first], idx_in_mesh_to_node_idx[edge.second], G);
 
     ConnectedComponents ret;
     ret.component_idx_per_node = std::vector<int>(num_vertices(G));
@@ -184,7 +184,7 @@ std::vector<size_t> ClosingFacetComputer::extract_nodes(const ListOfEdges& edges
 {
     std::set<size_t> used_nodes;
     std::vector<size_t> ret;
-    for (const auto edge:edges_)
+    for (const auto& edge:edges_)
     {
         if (not(has(used_nodes, edge.first)))
         {

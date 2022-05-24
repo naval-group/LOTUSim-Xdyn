@@ -71,6 +71,15 @@ ubuntu_18_04_release_intel_compiler: HDF5_DIR = /usr/local/hdf5/share/cmake
 ubuntu_18_04_release_intel_compiler: BUILD_PYTHON_WRAPPER = False
 ubuntu_18_04_release_intel_compiler: cmake-ubuntu-intel-target build-ubuntu-intel test-ubuntu-intel
 
+ubuntu_22_04_release_gcc_11: BUILD_TYPE = Release
+ubuntu_22_04_release_gcc_11: BUILD_DIR = build_ubuntu2204
+ubuntu_22_04_release_gcc_11: CPACK_GENERATOR = DEB
+ubuntu_22_04_release_gcc_11: DOCKER_IMAGE = sirehna/base-image-ubuntu2204-gcc11:2022-05-23
+ubuntu_22_04_release_gcc_11: BOOST_ROOT = /opt/boost
+ubuntu_22_04_release_gcc_11: HDF5_DIR = /usr/local/hdf5/share/cmake
+ubuntu_22_04_release_gcc_11: BUILD_PYTHON_WRAPPER = False
+ubuntu_22_04_release_gcc_11: cmake-debian-target build-debian test-debian
+
 debian_9_release_gcc_6: BUILD_TYPE = Release
 debian_9_release_gcc_6: BUILD_DIR = build_deb9
 debian_9_release_gcc_6: CPACK_GENERATOR = DEB

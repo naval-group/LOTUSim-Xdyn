@@ -105,7 +105,7 @@ grpc::Status to_grpc(grpc::ServerContext* , const std::vector<YamlState>& res, C
     // See discussion here: https://gitlab.sirehna.com/sirehna/xdyn/-/merge_requests/83#note_41051
     CosimulationState* last_state = new CosimulationState();
     CosimulationStates* all_states = new CosimulationStates();
-    for (const auto s:res)
+    for (const auto& s:res)
     {
         all_states->add_x(s.x);
         all_states->add_y(s.y);

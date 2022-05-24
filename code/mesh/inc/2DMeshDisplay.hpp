@@ -36,7 +36,7 @@ template <typename T> struct XY
 #define DOT_CHAR '*'
 #define POINT_CHAR 'X'
 
-XY<Range> get_min_max(const Eigen::Matrix3Xd M);
+XY<Range> get_min_max(const Eigen::Matrix3Xd& M);
 Eigen::Matrix3Xi convert(const Eigen::Matrix3Xd& M);
 typedef std::vector<XY<int> > Line;
 std::vector<Line> make_lines(const Eigen::Matrix3Xi& mesh, const ClosingFacetComputer::ListOfEdges& edges);

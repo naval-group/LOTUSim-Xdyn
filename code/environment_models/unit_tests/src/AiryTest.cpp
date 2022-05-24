@@ -93,7 +93,7 @@ TEST_F(AiryTest, serialized_spectrum_should_have_all_the_information_we_need)
     const DiscreteDirectionalWaveSpectrum serialized_spectrum = wave.get_spectrum();
     ASSERT_FALSE(serialized_spectrum.phase.empty());
     ASSERT_EQ(1, serialized_spectrum.phase.size());
-    for (const auto phase:serialized_spectrum.phase)
+    for (const auto& phase:serialized_spectrum.phase)
     {
         ASSERT_EQ(1, phase.size());
         ASSERT_NE(0, phase.front());

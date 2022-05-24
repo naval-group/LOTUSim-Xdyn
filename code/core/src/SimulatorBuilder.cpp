@@ -32,7 +32,7 @@ std::vector<BodyPtr> SimulatorBuilder::get_bodies(const MeshMap& meshes, const s
 {
     std::vector<BodyPtr> ret;
     size_t i = 0;
-    for (const auto body:input.bodies)
+    for (const auto& body:input.bodies)
     {
         const auto that_mesh = meshes.find(body.name);
         if (that_mesh != meshes.end())
@@ -116,10 +116,10 @@ EnvironmentAndFrames SimulatorBuilder::build_environment_and_frames() const
 std::map<std::string, double> SimulatorBuilder::get_max_history_length(const std::vector<ListOfForces>& forces_for_all_bodies) const
 {
     std::map<std::string, double> ret;
-    for (const auto forces:forces_for_all_bodies)
+    for (const auto& forces:forces_for_all_bodies)
     {
         double Tmax = 0;
-        for (const auto force:forces) Tmax = std::max(Tmax, force->get_Tmax());
+        for (const auto& force:forces) Tmax = std::max(Tmax, force->get_Tmax());
         if (not(forces.empty())) ret[forces.front()->get_body_name()] = std::max(Tmax, ret[forces.front()->get_body_name()]);
     }
     return ret;

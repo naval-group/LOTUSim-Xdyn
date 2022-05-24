@@ -37,7 +37,10 @@ debian_11_py310_package: package
 ubuntu2004_py308_package: DOCKER_IMAGE_TEST=xdyn-python-ubuntu2004-py308-test
 ubuntu2004_py308_package: test_only
 
-test_additional_platforms_depending_on_debian: ubuntu2004_py308_package
+ubuntu2204_py310_package: DOCKER_IMAGE_TEST=xdyn-python-ubuntu2204-py310-test
+ubuntu2204_py310_package: test_only
+
+test_additional_platforms_depending_on_debian: ubuntu2004_py308_package ubuntu2204_py310_package
 
 doc: ## Create documentation with Sphinx
 doc: debian_11_py309_package
@@ -189,4 +192,10 @@ xdyn-python-deb11-py309-format-lint:
 xdyn-python-ubuntu2004-py308-test:
 	docker build \
 		-f Dockerfile_ubuntu2004_py3_test \
+		-t $@ .
+
+.PHONY=xdyn-python-ubuntu2204-py310-test
+xdyn-python-ubuntu2204-py310-test:
+	docker build \
+		-f Dockerfile_ubuntu2204_py3_test \
 		-t $@ .

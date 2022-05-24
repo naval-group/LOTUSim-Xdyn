@@ -8,7 +8,7 @@
 
 #include "2DMeshDisplay.hpp"
 
-XY<Range> get_min_max(const Eigen::Matrix3Xd M)
+XY<Range> get_min_max(const Eigen::Matrix3Xd& M)
 {
     XY<Range> range;
     if ((M.cols()>0) and (M.rows()>0))
@@ -45,7 +45,7 @@ Eigen::Matrix3Xi convert(const Eigen::Matrix3Xd& M)
 std::vector<Line> make_lines(const Eigen::Matrix3Xi& mesh, const ClosingFacetComputer::ListOfEdges& edges)
 {
     std::vector<Line> ret;
-    for (const auto edge:edges)
+    for (const auto& edge:edges)
     {
         Line l;
         const int xmin = std::min(mesh(0,(long)edge.first),mesh(0,(long)edge.second));
@@ -79,7 +79,7 @@ std::vector<std::string> make_mesh(const Eigen::Matrix3Xi& M, const std::vector<
 {
     const std::string spaces(X_CANVAS_SIZE+1, ' ');
     std::vector<std::string> canvas(Y_CANVAS_SIZE+1, spaces);
-    for (const auto line:lines)
+    for (const auto& line:lines)
     {
         for (const auto dot:line)
         {
@@ -100,14 +100,14 @@ std::ostream& operator<<(std::ostream& os, const TestMesh& mesh)
     const auto Mi = convert(mesh.all_nodes);
     const auto L = make_lines(Mi, mesh.edges);
     std::set<size_t> nodes_to_display;
-    for (const auto edge:mesh.edges)
+    for (const auto& edge:mesh.edges)
     {
         nodes_to_display.insert(edge.first);
         nodes_to_display.insert(edge.second);
     }
     const auto lines = make_mesh(Mi, L, nodes_to_display);
     os << std::endl;
-    for (const auto line:lines)
+    for (const auto& line:lines)
     {
         os << line << std::endl;
     }

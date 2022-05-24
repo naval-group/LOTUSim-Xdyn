@@ -36,7 +36,7 @@ std::vector<YamlTimeSeries> to_YamlTimeSeries(const std::map<std::string, double
 std::vector<YamlTimeSeries> to_YamlTimeSeries(const std::map<std::string, double>& commands)
 {
     std::vector<YamlTimeSeries> ret;
-    for (const auto key_value : commands)
+    for (const auto& key_value : commands)
     {
         YamlTimeSeries ts;
         ts.name = key_value.first;

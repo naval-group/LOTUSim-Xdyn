@@ -41,7 +41,7 @@ template <typename T> bool equal(const std::vector<T>& left, const std::vector<T
 
 bool Memoization::is_cached(const double t, const std::vector<double>& states, const std::vector<double>& current_command_values) const
 {
-    return t == date_of_latest_force_in_body_frame 
+    return t == date_of_latest_force_in_body_frame
             && equal(states, state_used_for_last_evaluation)
             && equal(current_command_values, commands_used_for_last_evaluation);
 }
@@ -49,7 +49,7 @@ bool Memoization::is_cached(const double t, const std::vector<double>& states, c
 Wrench Memoization::run_if_not_cached(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands)
 {
     std::vector<double> current_command_values;
-    for (const auto kv:commands)
+    for (const auto& kv:commands)
     {
         current_command_values.push_back(kv.second);
     }
@@ -214,7 +214,7 @@ void ForceModel::feed(Observer& observer, ssc::kinematics::KinematicsPtr& k, ssc
     observer.write_before_solver_step(tau_in_ned_frame_at_G.M(),DataAddressing({"efforts",body_name,name,"NED","My"},std::string("My(")+name+","+body_name+",NED)"));
     observer.write_before_solver_step(tau_in_ned_frame_at_G.N(),DataAddressing({"efforts",body_name,name,"NED","Mz"},std::string("Mz(")+name+","+body_name+",NED)"));
 
-    for (const auto command_name:commands)
+    for (const auto& command_name:commands)
     {
         const double command_value = get_command(command_name, command_listener, t);
         observer.write_before_solver_step(command_value,DataAddressing({"efforts",body_name,name,"commands",command_name},std::string(name+"("+command_name+")")));

@@ -71,7 +71,7 @@ std::vector<std::string> CSVController::get_command_names() const
 {
     std::vector<std::string> ret(yaml.commands.size());
     int i = 0;
-    for (const auto kv:yaml.commands)
+    for (const auto& kv:yaml.commands)
     {
         ret[i++] = kv.first;
     }
@@ -105,7 +105,7 @@ void CSVController::update_discrete_states(const double time, //!< Current simul
     initialize_tstart_on_first_call(time);
     const double t = shift_time_if_necessary(time);
     const auto commands = csv.get_values(t);
-    for (const auto cv:commands)
+    for (const auto& cv:commands)
     {
         Controller::set_discrete_state(sys, cv.first, cv.second);
     }

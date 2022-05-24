@@ -27,7 +27,7 @@ void sha1_append(Sha1& sha1, const YamlModel& yaml)
 
 void sha1_append(Sha1& sha1, const YamlBody& yaml)
 {
-    for (const auto cf:yaml.external_forces) sha1_append(sha1, cf);
+    for (const auto& cf:yaml.external_forces) sha1_append(sha1, cf);
     sha1_append(sha1,yaml.dynamics);
     sha1_append(sha1, yaml.initial_position_of_body_frame_relative_to_NED_projected_in_NED);
     sha1_append(sha1, yaml.initial_velocity_of_body_frame_relative_to_NED_projected_in_body);
@@ -100,9 +100,8 @@ void sha1_append(Sha1& sha1, const YamlCoordinates& yaml)
 
 void sha1_append(Sha1& sha1, const YamlSimulatorInput& yaml)
 {
-    for (const auto body:yaml.bodies) sha1_append(sha1, body);
-    for (const auto env:yaml.environment) sha1_append(sha1, env);
+    for (const auto& body:yaml.bodies) sha1_append(sha1, body);
+    for (const auto& env:yaml.environment) sha1_append(sha1, env);
     sha1_append(sha1, yaml.environmental_constants);
     sha1_append(sha1, yaml.rotations);
 }
-

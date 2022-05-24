@@ -118,7 +118,7 @@ Controller* build_controller(const double tstart, const YamlController& yaml_con
 void check_no_controller_outputs_are_defined_in_a_command(const Controller* controller, const std::vector<YamlTimeSeries>& yaml_commands)
 {
     const auto command_names = controller->get_command_names();
-    for (const auto command_name:command_names)
+    for (const auto& command_name:command_names)
     {
         check_controller_output_is_not_defined_in_a_command(command_name, yaml_commands);
     }
