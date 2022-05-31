@@ -14,6 +14,11 @@ INSTALL(FILES "${PROJECT_SOURCE_DIR}/../interfaces/model_exchange.proto" DESTINA
 INSTALL(FILES "${PROJECT_SOURCE_DIR}/../interfaces/force.proto" DESTINATION "proto")
 INSTALL(FILES "${PROJECT_SOURCE_DIR}/../interfaces/wave_grpc.proto" DESTINATION "proto")
 INSTALL(FILES "${PROJECT_SOURCE_DIR}/../interfaces/wave_types.proto" DESTINATION "proto")
+INSTALL(FILES "${PROJECT_SOURCE_DIR}/../interfaces/controllers/controller.py" DESTINATION "grpc_python")
+INSTALL(FILES "${PROJECT_SOURCE_DIR}/../interfaces/forces/force.py" DESTINATION "grpc_python")
+INSTALL(FILES "${PROJECT_SOURCE_DIR}/../interfaces/forces/grpc_force_types_marshalling.py" DESTINATION "grpc_python")
+INSTALL(FILES "${PROJECT_SOURCE_DIR}/../interfaces/forces/grpc_force_types.py" DESTINATION "grpc_python")
+INSTALL(FILES "${PROJECT_SOURCE_DIR}/../interfaces/waves/python/client/waves.py" DESTINATION "grpc_python")
 
 FILE(GLOB script ${CMAKE_SOURCE_DIR}/integration_tests.py)
 ADD_CUSTOM_TARGET(python_script)
