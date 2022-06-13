@@ -8,9 +8,9 @@ RUN apt-get update -yq \
     python3-pip \
  && python3 -m pip install -U pip \
  && python3 -m pip install \
-    sphinx \
-    sphinx-autopackagesummary \
-    myst-parser
+    sphinx==4.5.0 \
+    sphinx-autopackagesummary==1.3 \
+    myst-parser==0.18.0
 ADD xdyn*39*-linux_x86_64.whl /
 RUN python3 -m pip install --no-index --find-links / xdyn \
  && python3 -c 'import xdyn; print(dir(xdyn)); print(xdyn.__version__)'
