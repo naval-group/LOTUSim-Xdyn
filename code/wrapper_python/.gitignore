@@ -2,6 +2,8 @@ core
 dist
 build
 pybind11
+proto
+*.deb
 *.egg-info
 *.whl
 **.coverage
