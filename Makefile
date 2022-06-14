@@ -205,9 +205,10 @@ debian_11_release_gcc_10_wrapper_python_all:
 	make debian_11_release_gcc_10_wrapper_py308
 	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.9
 	make debian_11_release_gcc_10_wrapper
-	make -C code/wrapper_python debian_11_py309_deploy
+	make -C code/wrapper_python create_docker_image_debian11_py309
 	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.10
 	make debian_11_release_gcc_10_wrapper_py310
+	make -C code/wrapper_python create_docker_image_ubuntu2204_py310
 	ls code/wrapper_python/*.whl
 	make -C code/wrapper_python test_additional_platforms_depending_on_debian
 	@echo "Success for :"

@@ -43,8 +43,19 @@ ubuntu2204_py310_package: test_only
 xdyn.deb: ../../build_deb11_pywrapper/xdyn.deb
 	@cp $< $@
 
-debian_11_py309_deploy: xdyn.deb
-	docker build -f Dockerfile_deb11_py309_deploy . -t sirehna/xdyn-debian11-py309
+create_docker_image_debian11_py309: xdyn.deb
+	docker build \
+		-f Dockerfile_deb11_py309_deploy \
+		--build-arg DOCKER_BASE_IMAGE=debian:bullseye-slim \
+		-t sirehna/xdyn-debian11-py309 \
+		.
+
+create_docker_image_ubuntu2204_py310: xdyn.deb
+	docker build \
+		-f Dockerfile_deb11_py309_deploy \
+		--build-arg DOCKER_BASE_IMAGE=ubuntu:22.04 \
+		-t sirehna/xdyn-ubuntu2204-py310 \
+		.
 
 test_additional_platforms_depending_on_debian: ubuntu2004_py308_package ubuntu2204_py310_package
 
