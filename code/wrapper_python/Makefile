@@ -45,15 +45,19 @@ xdyn.deb: ../../build_deb11_pywrapper/xdyn.deb
 
 create_docker_image_debian11_py309: xdyn.deb
 	docker build \
-		-f Dockerfile_deb11_py309_deploy \
+		-f Dockerfile_deploy \
 		--build-arg DOCKER_BASE_IMAGE=debian:bullseye-slim \
+		--build-arg PYTHON_MAJOR_VERSION=3 \
+		--build-arg PYTHON_MINOR_VERSION=9 \
 		-t sirehna/xdyn-debian11-py309 \
 		.
 
 create_docker_image_ubuntu2204_py310: xdyn.deb
 	docker build \
-		-f Dockerfile_deb11_py309_deploy \
+		-f Dockerfile_deploy \
 		--build-arg DOCKER_BASE_IMAGE=ubuntu:22.04 \
+		--build-arg PYTHON_MAJOR_VERSION=3 \
+		--build-arg PYTHON_MINOR_VERSION=10 \
 		-t sirehna/xdyn-ubuntu2204-py310 \
 		.
 

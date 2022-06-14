@@ -34,7 +34,9 @@ RUN dpkg -i /xdyn.deb \
     wave_types.proto \
  && PYTHONPATH=/usr/python3 python3 -c'import controller_pb2, cosimulation_pb2, force_pb2, model_exchange_pb2, wave_grpc_pb2, wave_types_pb2' \
  && PYTHONPATH=/usr/python3 python3 -c'import controller_pb2_grpc, cosimulation_pb2_grpc, force_pb2_grpc, model_exchange_pb2_grpc, wave_grpc_pb2_grpc, wave_types_pb2_grpc'
-ADD xdyn*cp39*-linux_x86_64.whl /
+ARG PYTHON_MAJOR_VERSION=3
+ARG PYTHON_MINOR_VERSION=9
+ADD xdyn*cp${PYTHON_MAJOR_VERSION}${PYTHON_MINOR_VERSION}*-linux_x86_64.whl /
 RUN python3 -m pip install --no-index --find-links / xdyn \
  && python3 -c 'import xdyn; print(dir(xdyn)); print(xdyn.__version__)'
 ENV PYTHONPATH /usr/python
