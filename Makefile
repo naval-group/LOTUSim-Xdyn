@@ -416,10 +416,9 @@ doc: CPACK_GENERATOR = DEB
 doc: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-12-12
 doc: BOOST_ROOT = /opt/boost
 doc: build-debian
-	cd doc_user && \
-	cp ../$(BUILD_DIR)/xdyn.deb . && \
-	make && \
-	mv doc.html ..
+	make -C doc
+	mv doc/user_fr/doc.html .
+	mv doc/training/remote_models.pptx .
 
 clean:
 	rm -rf build_*

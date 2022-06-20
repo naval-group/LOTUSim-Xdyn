@@ -1,12 +1,17 @@
 .PHONY: all build clean check images
 
-all: check doc.html training/remote_models.pptx
+ROOT_DIRECTORY=../..
 
-training/remote_models.pptx:
-	@make -C training
+all: check doc.html
 
 check: build concatenated_doc.md
-	@docker run -t --rm -u $(shell id -u):$(shell id -g) --entrypoint xdyn -w /work -v $(shell pwd)/tuto_execution:/work xweave tutorial_06_propulsion.yml --dt 0.1 --tend 1 > err
+	@docker run -t --rm \
+		-u $(shell id -u):$(shell id -g) \
+		--entrypoint xdyn \
+		-w /work \
+		-v $(shell pwd)/tuto_execution:/work \
+		xweave \
+		tutorial_06_propulsion.yml --dt 0.1 --tend 1 > err
 	@if grep -q "Warning" err ; then echo "There was a warning in one of the tutorials" && rm -f err && exit 1; else echo "Tutorials executed with no warnings or errors" && rm -f err && exit 0; fi
 
 concatenated_doc.pmd: \
@@ -36,9 +41,9 @@ concatenated_doc.pmd: \
 
 m4 :=  docker run -t --rm \
                -v $(shell pwd):/work \
-               -v $(shell pwd)/../interfaces:/interfaces \
-               -v $(shell pwd)/../integration_tests/grpc_tests/controller:/controller \
-               -v $(shell pwd)/../integration_tests/grpc_tests/force:/force \
+               -v $(shell pwd)/$(ROOT_DIRECTORY)/interfaces:/interfaces \
+               -v $(shell pwd)/$(ROOT_DIRECTORY)/integration_tests/grpc_tests/controller:/controller \
+               -v $(shell pwd)/$(ROOT_DIRECTORY)/integration_tests/grpc_tests/force:/force \
                -w /work \
                -u $(shell id -u):$(shell id -g) \
                --entrypoint /usr/bin/m4 \
@@ -47,25 +52,25 @@ m4 :=  docker run -t --rm \
 tutorial_11.md: tutorial_11.m4.md
 	$(m4) -I/controller $< > $@
 
-tuto_execution/filtered_states.csv: ../integration_tests/grpc_tests/force/filtered_states.csv
+tuto_execution/filtered_states.csv: $(ROOT_DIRECTORY)/integration_tests/grpc_tests/force/filtered_states.csv
 	@mkdir -p tuto_execution
 	cp $< $@
 
-../integration_tests/grpc_tests/force/filtered_states.csv:
-	@make -C ../integration_tests/grpc_tests/force/ filtered_states.csv
+$(ROOT_DIRECTORY)/integration_tests/grpc_tests/force/filtered_states.csv:
+	@make -C $(ROOT_DIRECTORY)/integration_tests/grpc_tests/force/ filtered_states.csv
 
 tutorial_14.md: tutorial_14.m4.md tuto_execution/filtered_states.csv
 	$(m4) -I/controller -I/force $< > $@
 
-interfaces_utilisateur.md: interfaces_utilisateur.m4.md ../interfaces/cosimulation.proto ../interfaces/model_exchange.proto
+interfaces_utilisateur.md: interfaces_utilisateur.m4.md $(ROOT_DIRECTORY)/interfaces/cosimulation.proto $(ROOT_DIRECTORY)/interfaces/model_exchange.proto
 	$(m4) -I/interfaces $< > $@
 
-controleurs.md: controleurs.m4.md ../interfaces/controller.proto
+controleurs.md: controleurs.m4.md $(ROOT_DIRECTORY)/interfaces/controller.proto
 	$(m4) -I/interfaces $< > $@
 
 xdyn-pweave := docker run -t \
                -v $(shell pwd):/work \
-               -v $(shell pwd)/../interfaces/waves:/waves \
+               -v $(shell pwd)/$(ROOT_DIRECTORY)/interfaces/waves:/waves \
                -w /work \
                -u $(shell id -u):$(shell id -g) \
                --entrypoint /usr/bin/xdyn-weave \
@@ -94,7 +99,7 @@ images: images/spectrum.py
 	    spectrum.py && \
 	cd ..
 
-build: ../build_deb11/xdyn.deb
+build: $(ROOT_DIRECTORY)/build_deb11/xdyn.deb
 	@cp $< .
 	@docker build --tag xweave .
 	@rm xdyn.deb
