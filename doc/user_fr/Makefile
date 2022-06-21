@@ -35,19 +35,19 @@ concatenated_doc.pmd: \
     tutorial_11.md \
     tutorial_12.md \
     tutorial_13.md \
-	tutorial_14.md
+    tutorial_14.md
 	rm -f concatenated_doc.pmd
 	for f in $^ ; do (cat $$f; echo "") >> concatenated_doc.pmd ; done
 
 m4 :=  docker run -t --rm \
-               -v $(shell pwd):/work \
-               -v $(shell pwd)/$(ROOT_DIRECTORY)/interfaces:/interfaces \
-               -v $(shell pwd)/$(ROOT_DIRECTORY)/integration_tests/grpc_tests/controller:/controller \
-               -v $(shell pwd)/$(ROOT_DIRECTORY)/integration_tests/grpc_tests/force:/force \
-               -w /work \
-               -u $(shell id -u):$(shell id -g) \
-               --entrypoint /usr/bin/m4 \
-               sirehna/pandoc@sha256:cc4ec54f6e09cda3cc57c6a125764bc0bb12712511e3f0560a69de6f762761e7
+    -v $(shell pwd):/work \
+    -v $(shell pwd)/$(ROOT_DIRECTORY)/interfaces:/interfaces \
+    -v $(shell pwd)/$(ROOT_DIRECTORY)/integration_tests/grpc_tests/controller:/controller \
+    -v $(shell pwd)/$(ROOT_DIRECTORY)/integration_tests/grpc_tests/force:/force \
+    -w /work \
+    -u $(shell id -u):$(shell id -g) \
+    --entrypoint /usr/bin/m4 \
+    sirehna/pandoc@sha256:cc4ec54f6e09cda3cc57c6a125764bc0bb12712511e3f0560a69de6f762761e7
 
 tutorial_11.md: tutorial_11.m4.md
 	$(m4) -I/controller $< > $@
@@ -62,31 +62,36 @@ $(ROOT_DIRECTORY)/integration_tests/grpc_tests/force/filtered_states.csv:
 tutorial_14.md: tutorial_14.m4.md tuto_execution/filtered_states.csv
 	$(m4) -I/controller -I/force $< > $@
 
-interfaces_utilisateur.md: interfaces_utilisateur.m4.md $(ROOT_DIRECTORY)/interfaces/cosimulation.proto $(ROOT_DIRECTORY)/interfaces/model_exchange.proto
+interfaces_utilisateur.md: \
+        interfaces_utilisateur.m4.md \
+        $(ROOT_DIRECTORY)/interfaces/cosimulation.proto \
+        $(ROOT_DIRECTORY)/interfaces/model_exchange.proto
 	$(m4) -I/interfaces $< > $@
 
 controleurs.md: controleurs.m4.md $(ROOT_DIRECTORY)/interfaces/controller.proto
 	$(m4) -I/interfaces $< > $@
 
 xdyn-pweave := docker run -t \
-               -v $(shell pwd):/work \
-               -v $(shell pwd)/$(ROOT_DIRECTORY)/interfaces/waves:/waves \
-               -w /work \
-               -u $(shell id -u):$(shell id -g) \
-               --entrypoint /usr/bin/xdyn-weave \
-               xweave
+    -v $(shell pwd):/work \
+    -v $(shell pwd)/$(ROOT_DIRECTORY)/interfaces/waves:/waves \
+    -w /work \
+    -u $(shell id -u):$(shell id -g) \
+    --entrypoint /usr/bin/xdyn-weave \
+    xweave
+
 xdyn-pandoc := docker run -t \
-               -v $(shell pwd):/work \
-               -w /work \
-               -u $(shell id -u):$(shell id -g) \
-               --entrypoint /usr/bin/pandoc \
-               xweave
+    -v $(shell pwd):/work \
+    -w /work \
+    -u $(shell id -u):$(shell id -g) \
+    --entrypoint /usr/bin/pandoc \
+    xweave
+
 xdyn-python3 := docker run -t \
-               -v $(shell pwd):/work \
-               -w /work \
-               -u $(shell id -u):$(shell id -g) \
-               --entrypoint /usr/local/bin/python3 \
-               xweave
+    -v $(shell pwd):/work \
+    -w /work \
+    -u $(shell id -u):$(shell id -g) \
+    --entrypoint /usr/local/bin/python3 \
+    xweave
 
 images: images/spectrum.py
 	cd images && \
@@ -105,10 +110,13 @@ build: $(ROOT_DIRECTORY)/build_deb11/xdyn.deb
 	@rm xdyn.deb
 
 concatenated_doc.md: concatenated_doc.pmd
-	$(xdyn-pweave) -f markdown -k python3 concatenated_doc.pmd -o concatenated_doc.md
+	$(xdyn-pweave) -f markdown -k python3 $< -o $@
 
 concatenated_doc_pandoc.md: concatenated_doc.md pandoc_layout.py
-	$(xdyn-python3) pandoc_layout.py concatenated_doc.md -o concatenated_doc_pandoc.md
+	$(xdyn-python3) pandoc_layout.py $< -o $@
+
+concatenated_doc_pandoc_png.md: concatenated_doc_pandoc.md
+	sed -e 's/svg/png/g' $< > $@
 
 doc.html: concatenated_doc_pandoc.md images
 	$(xdyn-pandoc) --title-prefix=XDYN \
@@ -125,9 +133,6 @@ doc.html: concatenated_doc_pandoc.md images
 	    concatenated_doc_pandoc.md \
 	    -o doc.html
 
-concatenated_doc_pandoc_png.md: concatenated_doc_pandoc.md
-	sed -e 's/svg/png/g' concatenated_doc_pandoc.md > concatenated_doc_pandoc_png.md
-
 doc.docx: concatenated_doc_pandoc_png.md images
 	$(xdyn-pandoc) --title-prefix=XDYN \
 	    -s \
@@ -138,16 +143,17 @@ doc.docx: concatenated_doc_pandoc_png.md images
 
 clean:
 	rm -f \
-	      concatenated_doc.pmd \
-	      concatenated_doc.md \
-	      concatenated_doc_pandoc.md \
-	      concatenated_doc_pandoc_png.md \
-	      doc.html \
-	      doc.docx \
-	      interfaces_utilisateur.md \
-	      tutorial_11.md \
-	      tutorial_14.md \
-	      controleurs.md \
-	      pict*.svg
+	    concatenated_doc.pmd \
+	    concatenated_doc.md \
+	    concatenated_doc_pandoc.md \
+	    concatenated_doc_pandoc_png.md \
+	    doc.html \
+	    doc.docx \
+	    interfaces_utilisateur.md \
+	    tutorial_11.md \
+	    tutorial_14.md \
+	    controleurs.md \
+	    pict*.svg
+	rm -rf figures
 	rm -rf tuto_execution
 	rm -rf *.aux *.docx *.html *.pdf *.log *.out *.tex
