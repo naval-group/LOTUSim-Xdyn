@@ -2,7 +2,7 @@
 # Using --security-opt seccomp=unconfined to avoid GDB error: warning: Error disabling address space randomization: Operation not permitted
 # As per https://stackoverflow.com/questions/35860527/warning-error-disabling-address-space-randomization-operation-not-permitted
 rm -f .dockerignore
-echo "./doc_user" > .dockerignore
+echo "./doc" > .dockerignore
 echo "./build_win_posix" >> .dockerignore
 echo "./build_deb11" >> .dockerignore
 echo "./.git" >> .dockerignore
