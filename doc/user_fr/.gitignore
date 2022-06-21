@@ -23,6 +23,7 @@ images/spectrum*.*g
 images/waveB*.*g
 images/waveM*.*g
 tuto_execution
+figures
 pict*.svg
 interfaces_utilisateur.md
 controleurs.md
