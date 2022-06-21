@@ -142,6 +142,7 @@ doc:
      - mv xdyn.deb build_deb11
      - make all_docker_images
      - make doc -W build-debian
+     - mv remote_models.pptx training_remote_models.pptx
    dependencies:
      - build:debian11-release
    artifacts:
