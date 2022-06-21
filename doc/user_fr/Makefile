@@ -130,7 +130,7 @@ concatenated_doc_pandoc_png.md: concatenated_doc_pandoc.md
 
 doc.docx: concatenated_doc_pandoc_png.md images
 	$(xdyn-pandoc) --title-prefix=XDYN \
-	    -s --latexmathml \
+	    -s \
 	    --highlight-style pygments \
 	    -t docx \
 	    -o doc.docx \
