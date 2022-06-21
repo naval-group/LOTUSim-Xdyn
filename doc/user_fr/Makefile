@@ -150,4 +150,4 @@ clean:
 	      controleurs.md \
 	      pict*.svg
 	rm -rf tuto_execution
-	@make -C training clean
+	rm -rf *.aux *.docx *.html *.pdf *.log *.out *.tex
