@@ -133,13 +133,16 @@ doc.html: concatenated_doc_pandoc.md images
 	    concatenated_doc_pandoc.md \
 	    -o doc.html
 
-doc.docx: concatenated_doc_pandoc_png.md images
+
+# Pandoc filter pandoc-eqnos and pandoc-fignos produce non readable docx file...
+doc.docx: concatenated_doc_pandoc_png.md
+	make -C images
 	$(xdyn-pandoc) --title-prefix=XDYN \
 	    -s \
 	    --highlight-style pygments \
 	    -t docx \
 	    -o doc.docx \
-	    concatenated_doc_pandoc.md
+	    concatenated_doc_pandoc_png.md
 
 clean:
 	rm -f \
