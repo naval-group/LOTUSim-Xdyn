@@ -417,8 +417,8 @@ doc: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-12-12
 doc: BOOST_ROOT = /opt/boost
 doc: build-debian
 	make -C doc
-	mv doc/user_fr/doc.html .
-	mv doc/training/remote_models.pptx .
+	mv doc/user_fr/doc.html doc_fr.html
+	mv doc/training/remote_models.pptx doc_training_remote_models.pptx
 
 clean:
 	@rm -rf build_*

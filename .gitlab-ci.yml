@@ -142,14 +142,13 @@ doc:
      - mv xdyn.deb build_deb11
      - make all_docker_images
      - make doc -W build-debian
-     - mv remote_models.pptx training_remote_models.pptx
    dependencies:
      - build:debian11-release
    artifacts:
      when: on_success
      paths:
-     - doc.html
-     - training_remote_models.pptx
+     - doc_fr.html
+     - doc_training_remote_models.pptx
 
 pages:
     stage: deploy
@@ -157,7 +156,7 @@ pages:
         - doc
     script:
         - mkdir -p public
-        - mv doc.html public/index.html
+        - mv doc_fr.html public/index.html
     artifacts:
         when: on_success
         paths:
