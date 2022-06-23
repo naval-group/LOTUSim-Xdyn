@@ -416,15 +416,14 @@ doc: CPACK_GENERATOR = DEB
 doc: DOCKER_IMAGE = sirehna/base-image-debian11-gcc10:2021-12-12
 doc: BOOST_ROOT = /opt/boost
 doc: build-debian
-	cd doc_user && \
-	cp ../$(BUILD_DIR)/xdyn.deb . && \
-	make && \
-	mv doc.html ..
+	make -C doc
+	mv doc/user_fr/doc.html doc_fr.html
+	mv doc/training/remote_models.pptx doc_training_remote_models.pptx
 
 clean:
-	rm -rf build_*
-	rm -rf yaml-cpp
-	@make -C doc_user clean; rm -f doc_user/xdyn.deb
+	@rm -rf build_*
+	@rm -rf yaml-cpp
+	@make -C doc clean
 	@make -C code/wrapper_python clean
 
 GREP=$(DOCKER_AS_USER) --entrypoint /bin/grep bitnami/minideb@sha256:25c5d5677df967c85b1bc3a33505cb43225dd92de06fe35eda3042348995835f
@@ -439,7 +438,7 @@ lint:
 
 changelog: CHANGELOG.md
 changelog: ## Generates CHANGELOG.md from git merge commits
-CHANGELOG.md: ## Generates CHANGELOG.md from git merge commits
+CHANGELOG.md:
 	@make -C changelog
 	@cp changelog/$@ .
 .PHONY: changelog CHANGELOG.md

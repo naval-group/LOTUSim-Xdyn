@@ -1,6 +1,6 @@
 image: sirehna/dind
 services:
-    - docker:dind
+  - docker:dind
 
 stages:
   - lint
@@ -15,99 +15,99 @@ default:
     - make headers
 
 after_script:
-    - docker ps
-    - make clean
-    - docker ps
+  - docker ps
+  - make clean
+  - docker ps
 
 lint:
-   stage: lint
-   script:
-     - make lint
+  stage: lint
+  script:
+    - make lint
 
 build:windows:
-   stage: build
-   script:
-     - make NB_OF_PARALLEL_BUILDS="-j 1" windows
-     - mv build_win_posix/xdyn.zip .
-   artifacts:
-     when: on_success
-     paths:
-     - xdyn.zip
+  stage: build
+  script:
+    - make NB_OF_PARALLEL_BUILDS="-j 1" windows
+    - mv build_win_posix/xdyn.zip .
+  artifacts:
+    when: on_success
+    paths:
+      - xdyn.zip
 
 build:debian9-release:
-   stage: build
-   script:
-     - make NB_OF_PARALLEL_BUILDS="-j 1" debian_9_release_gcc_6
-   only:
-       variables:
-        - $NIGHTLY_BUILD
+  stage: build
+  script:
+    - make NB_OF_PARALLEL_BUILDS="-j 1" debian_9_release_gcc_6
+  only:
+    variables:
+      - $NIGHTLY_BUILD
 
 build:debian10-release:
-   stage: build
-   script:
-     - make NB_OF_PARALLEL_BUILDS="-j 1" debian_10_release_gcc_8
-   only:
-       variables:
-        - $NIGHTLY_BUILD
+  stage: build
+  script:
+    - make NB_OF_PARALLEL_BUILDS="-j 1" debian_10_release_gcc_8
+  only:
+    variables:
+      - $NIGHTLY_BUILD
 
 build:debian10-coverage:
-   stage: build
-   script:
-     - make NB_OF_PARALLEL_BUILDS="-j 1" debian_10_coverage_gcc_8
-   only:
-       variables:
-        - $NIGHTLY_BUILD
+  stage: build
+  script:
+    - make NB_OF_PARALLEL_BUILDS="-j 1" debian_10_coverage_gcc_8
+  only:
+    variables:
+      - $NIGHTLY_BUILD
 
 build:debian10-profile:
-   stage: build
-   script:
-     - make NB_OF_PARALLEL_BUILDS="-j 1" debian_10_profile_gcc_8
-   only:
-       variables:
-        - $NIGHTLY_BUILD
+  stage: build
+  script:
+    - make NB_OF_PARALLEL_BUILDS="-j 1" debian_10_profile_gcc_8
+  only:
+    variables:
+      - $NIGHTLY_BUILD
 
 build:debian11-release:
-   stage: build
-   script:
-     - make NB_OF_PARALLEL_BUILDS="-j 1" debian_11_release_gcc_10
-     - mv build_deb11/xdyn.deb .
-   artifacts:
-     when: on_success
-     paths:
-     - xdyn.deb
+  stage: build
+  script:
+    - make NB_OF_PARALLEL_BUILDS="-j 1" debian_11_release_gcc_10
+    - mv build_deb11/xdyn.deb .
+  artifacts:
+    when: on_success
+    paths:
+      - xdyn.deb
 
 build:debian11-release-python-all:
-   stage: build
-   script:
-     - make NB_OF_PARALLEL_BUILDS="-j 1" debian_11_release_gcc_10_wrapper_python_all
-     - mv build_deb11_pywrapper/xdyn.deb .
-     - mv code/wrapper_python/*.whl .
-   artifacts:
-     when: on_success
-     paths:
-     - xdyn.deb
-     - xdyn*.whl
+  stage: build
+  script:
+    - make NB_OF_PARALLEL_BUILDS="-j 1" debian_11_release_gcc_10_wrapper_python_all
+    - mv build_deb11_pywrapper/xdyn.deb .
+    - mv code/wrapper_python/*.whl .
+  artifacts:
+    when: on_success
+    paths:
+      - xdyn.deb
+      - xdyn*.whl
 
 build:debian11-debug:
-   stage: build
-   script:
-     - make NB_OF_PARALLEL_BUILDS="-j 1" debian_11_debug_gcc_10
-   only:
-       variables:
-        - $NIGHTLY_BUILD
+  stage: build
+  script:
+    - make NB_OF_PARALLEL_BUILDS="-j 1" debian_11_debug_gcc_10
+  only:
+    variables:
+      - $NIGHTLY_BUILD
 
 build:ubuntu-18-04-intel-22-02-release:
-   stage: build
-   script:
-     - make NB_OF_PARALLEL_BUILDS="-j 1" ubuntu1804-intel
-     - mv build_ubuntu1804_intel/xdyn.deb xdyn_ubuntu1804_intel.deb
-   artifacts:
-     when: on_success
-     paths:
-     - xdyn_ubuntu1804_intel.deb
-   only:
-       variables:
-        - $NIGHTLY_BUILD
+  stage: build
+  script:
+    - make NB_OF_PARALLEL_BUILDS="-j 1" ubuntu1804-intel
+    - mv build_ubuntu1804_intel/xdyn.deb xdyn_ubuntu1804_intel.deb
+  artifacts:
+    when: on_success
+    paths:
+      - xdyn_ubuntu1804_intel.deb
+  only:
+    variables:
+      - $NIGHTLY_BUILD
 
 build:ubuntu-22-04-gcc11-release:
    stage: build
@@ -123,85 +123,84 @@ build:ubuntu-22-04-gcc11-release:
         - $NIGHTLY_BUILD
 
 integration tests:
-    stage: test
-    script:
-     - mkdir -p build_deb11
-     - mv xdyn.deb build_deb11
-     - make all_docker_images
-     - make -C integration_tests
-     - mv build_deb11/xdyn.deb .
-    artifacts:
-      when: on_success
-      paths:
+  stage: test
+  script:
+    - mkdir -p build_deb11
+    - mv xdyn.deb build_deb11
+    - make all_docker_images
+    - make -C integration_tests
+    - mv build_deb11/xdyn.deb .
+  artifacts:
+    when: on_success
+    paths:
       - xdyn.deb
 
 doc:
-   stage: doc
-   script:
-     - mkdir -p build_deb11
-     - mv xdyn.deb build_deb11
-     - make all_docker_images
-     - make doc -W build-debian
-     - mv doc_user/training/remote_models.pptx training_remote_models.pptx
-   dependencies:
-     - build:debian11-release
-   artifacts:
-     when: on_success
-     paths:
-     - doc.html
-     - training_remote_models.pptx
+  stage: doc
+  script:
+    - mkdir -p build_deb11
+    - mv xdyn.deb build_deb11
+    - make all_docker_images
+    - make doc -W build-debian
+  dependencies:
+    - build:debian11-release
+  artifacts:
+    when: on_success
+    paths:
+      - doc_fr.html
+      - doc_training_remote_models.pptx
 
 pages:
-    stage: deploy
-    dependencies:
-        - doc
-    script:
-        - mkdir -p public
-        - mv doc.html public/index.html
-    artifacts:
-        when: on_success
-        paths:
-            - public
+  stage: deploy
+  dependencies:
+    - doc
+  script:
+    - mkdir -p public
+    - mv doc_fr.html public/index.html
+  artifacts:
+    when: on_success
+    paths:
+      - public
 
 Deploy to test tag:
-    stage: deploy
-    before_script:
+  stage: deploy
+  before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
-    script:
+  script:
     - docker build --pull --cache-from "$CI_REGISTRY_IMAGE:test" --tag "$CI_REGISTRY_IMAGE:test" .
     - docker push "$CI_REGISTRY_IMAGE:test"
-    only:
-        variables:
-            - $CI_REGISTRY_PASSWORD
-    except:
+  only:
+    variables:
+      - $CI_REGISTRY_PASSWORD
+  except:
     - tags
     - master
 
 Deploy to beta:
-    stage: deploy
-    before_script:
+  stage: deploy
+  before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
-    script:
+  script:
     - docker build --pull --cache-from "$CI_REGISTRY_IMAGE:test" --tag "$CI_REGISTRY_IMAGE:beta" .
     - docker push "$CI_REGISTRY_IMAGE:beta"
-    only:
-        variables:
-            - $CI_REGISTRY_PASSWORD
-        refs:
-            - master
-    except:
+  only:
+    variables:
+      - $CI_REGISTRY_PASSWORD
+    refs:
+      - master
+  except:
     - tags
 
 Deploy tagged version:
-    stage: deploy
-    before_script:
+  stage: deploy
+  before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
-    script:
+  script:
     - docker build --pull --cache-from "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" --tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" .
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
     - docker push "$CI_REGISTRY_IMAGE"
-    only:
-        variables:
-            - $CI_REGISTRY_PASSWORD
-        refs:
-            - tags
+  only:
+    variables:
+      - $CI_REGISTRY_PASSWORD
+    refs:
+      - tags

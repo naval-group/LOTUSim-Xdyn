@@ -1,6 +1,6 @@
 #!/bin/sh
 rm -f .dockerignore
-echo "./doc_user" > .dockerignore
+echo "./doc" > .dockerignore
 echo "./build_win_posix" >> .dockerignore
 echo "./build_deb11_dbg" >> .dockerignore
 echo "./.git" >> .dockerignore

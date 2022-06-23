@@ -8,4 +8,5 @@ remote_models.pptx: remote_models.md
 	@rm -rf plantuml-images/
 
 clean:
-	rm -rf remote_models.pptx
+	@rm -rf remote_models.pptx
+	@rm -rf ./?

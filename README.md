@@ -37,19 +37,19 @@ Pre-built binaries of xdyn are also available:
 There are many other ways of using xdyn, all of which are described
 in [the documentation](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/jobs/artifacts/master/download?job=doc).
 
-The **environment models** implemented inside xdyn are described in detail [here](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/modeles_environnementaux.md)
+The **environment models** implemented inside xdyn are described in detail [here](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/modeles_environnementaux.md)
 
-The **force models** implemented inside xdyn are described in detail [here](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/modeles_efforts_commandes_et_non_commandes.md)
+The **force models** implemented inside xdyn are described in detail [here](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/modeles_efforts_commandes_et_non_commandes.md)
 
 You can also learn how to use xdyn using the tutorials:
 
-- [Falling ball](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/tutorial_01.md)
-- [Hydrostatic](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/tutorial_02.md)
-- [Waves](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/tutorial_03.md)
-- [Propulsion](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/tutorial_06.md)
-- [gRPC wave model](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/tutorial_09.md)
-- [gRPC force model](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/tutorial_10.md)
-- [gRPC controller](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/tutorial_11.md)
+- [Falling ball](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/tutorial_01.md)
+- [Hydrostatic](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/tutorial_02.md)
+- [Waves](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/tutorial_03.md)
+- [Propulsion](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/tutorial_06.md)
+- [gRPC wave model](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/tutorial_09.md)
+- [gRPC force model](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/tutorial_10.md)
+- [gRPC controller](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/tutorial_11.md)
 
 ## Building xdyn from source
 
@@ -156,7 +156,7 @@ Compile xdyn (`make windows`), install the xdyn executable, then run:
 
 All options can be found in [the documentation](https://sirehna_naval_group.gitlab.io/sirehna/xdyn/#ligne-de-commande).
 
-For example, to run the first [tutorial](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/tutorial_01.md),
+For example, to run the first [tutorial](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/tutorial_01.md),
 from the executables/demos folder, you can run:
 
 ```bash
@@ -178,7 +178,7 @@ xdyn <yaml file> [xdyn options]
 
 All options can be found in [the documentation](https://sirehna_naval_group.gitlab.io/sirehna/xdyn/#ligne-de-commande).
 
-For example, to run the first [tutorial](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/tutorial_01.md),
+For example, to run the first [tutorial](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/tutorial_01.md),
 
 ```bash
 xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1
@@ -211,7 +211,7 @@ owned by the current user
 More details can be found in
 [Docker's official documentation](https://docs.docker.com/engine/reference/commandline/run/).
 
-For example, to run the first [tutorial](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc_user/tutorial_01.md) and display the results in the terminal, assuming we are in the project's root directory:
+For example, to run the first [tutorial](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/tutorial_01.md) and display the results in the terminal, assuming we are in the project's root directory:
 
 ```bash
 docker run -it --rm -w /usr/demos sirehna/xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o tsv

@@ -445,7 +445,7 @@ la classe `BodyWithSurfaceForces` et est déléguée à l'objet `MeshIntersector
 Le rôle de la classe `MeshIntersector`, définie dans le module `mesh`, est de
 pouvoir itérer sur les facettes immergées ou sur les facettes émergées du
 maillage. Cette fonctionalité est utilisée par les efforts de surface
-(`ExactHydrostaticForceModel`, `FastHydrostaticForceModel` et `GMForceModel`) 
+(`ExactHydrostaticForceModel`, `FastHydrostaticForceModel` et `GMForceModel`)
 pour intégrer les efforts sur la coque (réalisé par la
 méthode `SurfaceForceModel::operator()` définie dans le module `core`).
 
@@ -691,7 +691,7 @@ Il faut ensuite décider du type d'effort :
 - Modèle d'effort non-surfacique : dérivé de `ForceModel`
 
 La documentation du modèle d'effort doit être mise dans le fichier Markdown
-`XDYN_ROOT/doc_user/modeles_efforts.md`.
+`XDYN_ROOT/doc/user_fr/modeles_efforts.md`.
 
 Ensuite, il faut :
 

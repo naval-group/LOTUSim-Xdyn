@@ -13,7 +13,7 @@ contrôler certains de ses modèles d'effort. Les modèles d'effort qui peuvent
 
 - les [modèles de manœuvrabilité](#mod%C3%A8les-de-man%C5%93uvrabilit%C3%A9)
 - le [modèle d'hélices Wageningen série B](#h%C3%A9lices-wageningen-s%C3%A9rie-b)
-- le [contrôleur de cap simplifié](file:///home/cady/projects/xdyn/doc_user/doc.html#contr%C3%B4leur-de-cap-simplifi%C3%A9)
+- le [contrôleur de cap simplifié](#contr%C3%B4leur-de-cap-simplifi%C3%A9)
 - le [contrôleur de position simplifié](#contr%C3%B4leur-de-position-simplifi%C3%A9)
 - le [modèle hélice + safran](#h%C3%A9lice-et-safran)
 - le [modèle Kt(J) et Kq(J)](#mod%C3%A8le-ktj-kqj)
@@ -350,4 +350,3 @@ peuvent commencer un caractère (optionnel) `+` ou `-` suivi :
 Si les dates du fichier ne couvrent pas tout le fichier, la valeur des
 commandes est de zéro avant la première valeur du CSV et est égale à la
 dernière valeur lue après la dernière date du CSV.
-
