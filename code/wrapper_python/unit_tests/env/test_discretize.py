@@ -316,14 +316,15 @@ class DiscretizeTest(unittest.TestCase):
             self.assertGreaterEqual(energy, ratio * original_energy)
 
     def test_dynamic_pressure_factor(self):
+        assert_almost_equal = lambda x, y: self.assertAlmostEqual(x,y, places=12)
         s = Stretching(delta=0, h=0)
-        self.assertEqual(np.exp(-3), dynamic_pressure_factor(k=1, z=3, eta=2, stretching=s))
-        self.assertEqual(np.exp(-10), dynamic_pressure_factor(k=2, z=5, eta=4, stretching=s))
-        self.assertEqual(
+        assert_almost_equal(np.exp(-3), dynamic_pressure_factor(k=1, z=3, eta=2, stretching=s))
+        assert_almost_equal(np.exp(-10), dynamic_pressure_factor(k=2, z=5, eta=4, stretching=s))
+        assert_almost_equal(
             (np.exp(1) + np.exp(-1)) / (np.exp(3) + np.exp(-3)),
             dynamic_pressure_factor(k=1, z=2, eta=-4, stretching=s, h=3),
         )
-        self.assertEqual(
+        assert_almost_equal(
             (np.exp(0.14) + np.exp(-0.14)) / (np.exp(0.08) + np.exp(-0.08)),
             dynamic_pressure_factor(k=0.2, z=-0.3, h=0.4, eta=-0.5, stretching=s),
         )
