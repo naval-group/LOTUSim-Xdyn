@@ -12,7 +12,7 @@ fichiers de sortie d'xdyn.
 yaml_data = load_yaml('tutorial_14_filtered_states.yml')
 ```
 
-Pour utiliser des états filtrés, on les définis dans la section `filtered
+Pour utiliser des états filtrés, on les définit dans la section `filtered
 states`, définie pour chaque corps au même niveau que les clefs `name` ou
 `position of body frame relative to mesh` par exemple :
 
