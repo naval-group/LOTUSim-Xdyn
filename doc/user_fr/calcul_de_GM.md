@@ -39,12 +39,12 @@ GM = \frac{GZ(\theta+d\theta)-GZ(\theta)}{d\theta}
 
 Voici un exemple de paramétrisation :
 
-~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 external forces:
       - model: GM
         name of hydrostatic force model: non-linear hydrostatic (fast)
         roll step: {value: 1, unit: degree}
-~~~~~~~~~~~~~~~~~~~~
+```
 
 ## Fondements théoriques
 
