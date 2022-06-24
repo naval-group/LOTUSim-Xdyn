@@ -1,6 +1,5 @@
 """Force model using filtered states."""
 
-import yaml
 import numpy as np
 import force
 import logging
