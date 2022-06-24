@@ -2,7 +2,7 @@
 
 from typing import Dict, List
 import yaml
-from controller import StatesEuler, StatesQuaternion
+from controller import StatesEuler
 import controller
 import logging
 
