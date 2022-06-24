@@ -1,6 +1,5 @@
 """Extra observation model"""
 
-import yaml
 import force
 import logging
 SERVICE_NAME = "model.py"
