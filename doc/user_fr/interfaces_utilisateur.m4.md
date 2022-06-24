@@ -17,22 +17,22 @@ Les exemples suivants peuvent être lancés à partir du répertoire `demos`:
 
 ### Simulation avec un solveur Runge-Kutta d'ordre 4 en commençant à t=0
 
-~~~~~~~~~~~~~~~~~~~~ {.bash}
+```bash
 ./xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1
-~~~~~~~~~~~~~~~~~~~~
+```
 
 ou si l'on utilise une invite de commande MS-DOS :
 
-~~~~~~~~~~~~~~~~~~~~ {.bash}
+```bash
 xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1
-~~~~~~~~~~~~~~~~~~~~
+```
 
 En ajoutant l'option -o csv, les sorties se font sur la sortie standard
 (le terminal). Ceci permet de chaîner les traitements (pipe UNIX), par exemple :
 
-~~~~~~~~~~~~~~~~~~~~ {.bash}
+```bash
 ./xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o csv| python plot.py test 0 3
-~~~~~~~~~~~~~~~~~~~~
+```
 
 La commande précédente lance la simulation et génère un tracé (format SVG) à
 l'aide du
@@ -44,9 +44,9 @@ l'installation du simulateur, pour
 
 ### Simulation avec un solveur Euler en commençant à t=1
 
-~~~~~~~~~~~~~~~~~~~~ {.bash}
+```bash
 ./xdyn tutorial_01_falling_ball.yml -s euler --dt 0.1 --tstart 1 --tend 1.2
-~~~~~~~~~~~~~~~~~~~~
+```
 
 # Documentations des données d'entrées du simulateur
 
@@ -72,9 +72,9 @@ Le fichier YAML comprend quatre sections de haut niveau :
 
 On retrouve fréquemment dans le fichier YAML des lignes du type :
 
-~~~~~~~~~~~~~~ {.yaml}
+```yaml
 clef: {value: 65456, unit: km}
-~~~~~~~~~~~~~~
+```
 
 Les unités ne sont pas vérifiées par le système : le parser se contente de
 convertir toutes les entrées en unité du système international avant simulation,
@@ -83,26 +83,27 @@ en un facteur multiplicatif (en utilisant la liste des unités de l'utilitaire U
 [units](http://heirloom.cvs.sourceforge.net/viewvc/heirloom/heirloom/units/)) et
 en multipliant la valeur originale par ce facteur multiplicatif. Par exemple:
 
-~~~~~~~~~~~~~~ {.yaml}
+```yaml
 masse: {value: 10, unit: lb}
-~~~~~~~~~~~~~~
+```
 
 sera vu par xdyn comme:
 
-````{cpp}
+```cpp
 masse = 4.5359237;
-````
+```
+
 L'exemple précédent :
 
-~~~~~~~~~~~~~~ {.yaml}
+```yaml
 clef: {value: 65456, unit: km}
-~~~~~~~~~~~~~~
+```
 
 aurait tout aussi bien pu être écrit :
 
-~~~~~~~~~~~~~~ {.yaml}
+```yaml
 clef: {value: 65456, unit: kW}
-~~~~~~~~~~~~~~
+```
 
 et on aurait obtenu exactement la même valeur numérique, bien que la grandeur
 physique ne soit pas la même : on suppose donc que l'utilisateur renseigne des
@@ -176,12 +177,12 @@ contrôle, on peut utiliser le fichier YAML, dont le contenu est paramétrable.
 La spécification des sorties dans le fichier YAML se fait au moyen de la
 section `output`, à la racine du fichier YAML, dont voici un exemple :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 output:
    - format: csv
      filename: test.csv
      data: [t, x(ball), 'Fx(gravity,ball)']
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - `format` : `csv` pour un fichier texte dont les colonnes sont séparées par
   une virgule, `tsv` pour un fichier texte dont les colonnes sont séparées par
@@ -223,12 +224,12 @@ Par exemple, pour générer un fichier CSV contenant le temps, l'embardée
 (filtrée) et l'assiette pour le navire nommé `TestShip` on utiliserait la
 section suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 output:
    - format: csv
      filename: exemple.csv
      data: [t, y_filtered(TestShip), theta(TestShip)]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 #### Observations supplémentaires des modèles d'effort
 
@@ -261,13 +262,13 @@ rendra `harmonic_oscillator_time` disponible.
 
 On peut ensuite accéder à ces sorties supplémentaires de la façon suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 output:
    - format: tsv
      filename: exemple.tsv
      data:
         - 'harmonic_oscillator_time(TestShip)'
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 #### Efforts
 
@@ -330,12 +331,12 @@ Pour générer un fichier HDF5 contenant l'effort dû à la gravité agissant su
 un corps nommé `ball` projeté dans le repère du corps, ainsi que la somme des
 moments autour de l'axe X, on utiliserait la section suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 output:
    - format: hdf5
      filename: test.h5
      data: [Fx(gravity, ball, ball), Fy(gravity, ball, ball), Fz(gravity, ball, ball), Mx(sum of forces,ball,NED)]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 
 #### Commandes
@@ -348,7 +349,7 @@ etc.) peuvent également figurer dans les sorties. La syntaxe est la suivante :
 Par exemple, supposons que l'on utilise un modèle d'hélice et de safran définis
 par le YAML suivant :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 external forces:
   - name: Prop. & rudder
     model: propeller+rudder
@@ -376,17 +377,17 @@ external forces:
         x: {value: -5.1, unit: m}
         y: {value: -2, unit: m}
         z: {value: 2, unit: m}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Dans ce cas, on peut récupérer la vitesse de rotation de l'hélice et l'angle du
 safran en utilisant la section `output` suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 output:
    - format: csv
      filename: propRudd.csv
      data: [t, 'Prop. & rudder(rpm)', 'Prop. & rudder(beta)']
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 #### Sorties supplémentaires pour le format HDF5
 
@@ -412,23 +413,23 @@ suivantes :
 Par exemple, pour enregistrer le maillage et la ligne de commande (mais pas
 le YAML d'entrée) dans un fichier de sortie au format HDF5 on utilisera :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 output:
    - format: hdf5
      filename: test.h5
      data: [mesh, 'command line']
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 ou, de façon équivalente :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 output:
    - format: hdf5
      filename: test.h5
      data:
        - mesh
        - command line
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 
 
@@ -463,9 +464,9 @@ Par exemple, le script `xdyn_demos.m` va lire le fichier
 `tutorial_01_falling_ball.h5` qui aura préalablement été généré à partir
 de la commande :
 
-~~~~~~~~~~~~~~~~~~~~ {.bash}
+```bash
 ./xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o tutorial_01_falling_ball.h5
-~~~~~~~~~~~~~~~~~~~~
+```
 
 # Interface Docker et génération automatique de rapports
 
@@ -479,24 +480,24 @@ automatique de rapport décrit ci-après.
 Pour utiliser l'image `xdyn`, il faut d'abord installer Docker puis récupérer
 l'image `sirehna/xdyn` en exécutant :
 
-~~~~{.bash}
+```bash
 docker pull sirehna/xdyn
-~~~~
+```
 
 Pour utiliser l'image `xdyn` avec son environnement de post-traitement,
 on récupérera l'image `sirehna/xweave` en exécutant :
 
-~~~~{.bash}
+```bash
 docker pull sirehna/xweave
-~~~~
+```
 
 ## Lancement d'xdyn via l'image docker
 
 Une fois l'image chargée par la commande précédente, on peut lancer :
 
-~~~~{.bash}
+```bash
 docker run -it --rm -v $(pwd):/work -w /work sirehna/xdyn
-~~~~
+```
 
 - le paramètre `-v $(pwd):/work` permet de faire correspondre le répertoire courant avec le répertoire `/work` du conteneur,
 - le paramètre `-w /work` précise que le répertoire de travail du conteneur (celui depuis lequel sera exécuté xdyn) est `/work`,
@@ -504,9 +505,9 @@ docker run -it --rm -v $(pwd):/work -w /work sirehna/xdyn
 
 Si l'on souhaite lancer une simulation, on ajoute les arguments d'xdyn à la suite :
 
-~~~~{.bash}
+```bash
 docker run -it --rm -v $(pwd):/work -w /work sirehna/xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o tsv
-~~~~
+```
 
 ## Génération automatique de rapports (X-Weave)
 
@@ -537,9 +538,9 @@ pré-installé, ce qui permet de lancer xdyn depuis Pweave.
 
 La ligne de commande à utiliser est :
 
-~~~~{.bash}
+```bash
 docker run --rm -it -v $(pwd):/work -w /work -u $(id -u):$(id -g) --entrypoint /usr/bin/xdyn-weave sirehna/xweave -f markdown concatenated_doc.pmd -o concatenated_doc.md
-~~~~
+```
 
 - La première partie de la ligne de commande (`docker run --rm -it -v
     $(pwd):/work -w /work -u $(id -u):$(id -g) --entrypoint /usr/bin/xdyn-weave
@@ -557,9 +558,9 @@ ensuite utiliser [Pandoc](https://pandoc.org/) pour convertir le Markdown au
 format de son choix en utilisant le Pandoc installé dans le containeur X-Weave
 :
 
-~~~~{.bash}
+```bash
 docker run --rm -it -v $(shell pwd):/work -w /work -u $(shell id -u):$(shell id -g) --entrypoint /usr/bin/pandoc xweave concatenated_doc_pandoc.md -o doc.html
-~~~~
+```
 
 ### Commandes Python supplémentaires
 
@@ -685,17 +686,17 @@ avec un ou plusieurs fichiers YAML en paramètre : une fois lancé, ce
 serveur ne simulera donc qu'une seule configuration de l'environnement et du
 navire. Concrètement, on lance le serveur comme suit :
 
-~~~~{.bash}
+```bash
 ./xdyn-for-me --port 9002 tutorial_01_falling_ball.yml
-~~~~
+```
 
 où `--port` sert à définir le port sur lequel écoute le serveur websocket.
 
 Pour lancer ce serveur en mode gRPC, on remplace la ligne précédente par :
 
-~~~~{.bash}
+```bash
 ./xdyn-for-me --grpc --port 9002 tutorial_01_falling_ball.yml
-~~~~
+```
 
 La liste complète des options avec leur description est obtenue en lançant
 l'exécutable avec le flag `-h`.
@@ -710,9 +711,9 @@ et un solveur : une fois lancé, ce serveur ne simulera donc qu'une seule
 configuration de l'environnement et du navire, en utilisant un solveur et
 un pas de temps. Concrètement, on lance le serveur comme suit :
 
-~~~~{.bash}
+```bash
 ./xdyn-for-cs --port 9002 tutorial_01_falling_ball.yml --dt 0.1
-~~~~
+```
 
 où `--port` sert à définir le port sur lequel écoute le serveur websocket.
 
@@ -721,9 +722,9 @@ l'exécutable avec le flag `-h`.
 
 Pour lancer ce serveur en mode gRPC, on remplace la ligne précédente par :
 
-~~~~{.bash}
+```bash
 ./xdyn-for-cs --grpc --port 9002 tutorial_01_falling_ball.yml --dt 0.1
-~~~~
+```
 
 Ensuite, on peut se connecter à l'adresse du serveur pour l'interroger.
 
@@ -777,7 +778,7 @@ Chaque élément de type « État » est composé des éléments suivants:
 
 Exemple d'entrée:
 
-~~~~{.json}
+```json
 {
   "states": [
     {
@@ -821,7 +822,7 @@ Exemple d'entrée:
     "My(non-linear hydrostatic (exact),body,body)"
   ]
 }
-~~~~
+```
 
 La sortie du "Model Exchange" correspond à la dérivée des états
 à savoir `dx/dt`, `dy/dt`, `dz/dt`, `du/dt`, `dv/dt`, `dw/dt`,
@@ -852,7 +853,7 @@ En plus des dérivées des états, le serveur renvoie dans la section "extra_obs
 
 Exemple de sortie:
 
-~~~~{.json}
+```json
 {
   "dx_dt": 0.1,
   "dy_dt": -0.156,
@@ -875,7 +876,7 @@ Exemple de sortie:
     "My(non-linear hydrostatic (exact),body,body)": 4.984e4
   }
 }
-~~~~
+```
 
 La représentation textuelle de ces nombres flottants est faite de façon unique (et non
 exacte) : cela signifie que si les flottants sont différents (binairement),
@@ -927,7 +928,7 @@ Chaque élément de type « État » est composé des éléments suivants:
 
 Exemple d'entrée:
 
-~~~~{.json}
+```json
 {
   "Dt": 10,
   "states": [
@@ -972,7 +973,7 @@ Exemple d'entrée:
     "My(non-linear hydrostatic (exact),body,body)"
   ]
 }
-~~~~
+```
 
 La sortie est une liste d'éléments de type « État augmenté » contenant
 l'historique des états de `t0` à `t0 + Dt` par pas de `dt`.
@@ -1004,7 +1005,7 @@ le travail du client du serveur, mais n'est pas utilisée en interne par xdyn.
 
 Exemple de sortie:
 
-~~~~{.json}
+```json
 {
   "t": [10,10.1],
   "x": [0,0.0999968],
@@ -1028,7 +1029,7 @@ Exemple de sortie:
     "My(non-linear hydrostatic (exact),body,body)": [4.984e4, 5.247e4]
   }
 }
-~~~~
+```
 
 Comme pour le "model exchange", la représentation textuelle de ces nombres
 flottants est faite de façon unique (et non exacte) : cela signifie que si les

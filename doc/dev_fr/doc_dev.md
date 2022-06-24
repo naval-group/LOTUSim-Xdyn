@@ -192,12 +192,12 @@ spécifiques, elle doit être configurée et c'est le rôle de la fonction
 `observers_and_api`. On y trouve des instructions du type :
 
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.cpp}
+```cpp
 SimulatorBuilder builder(yaml, t0, command_listener);
 builder.can_parse<DefaultSurfaceElevation>()
        .can_parse<BretschneiderSpectrum>()
        .can_parse<JonswapSpectrum>();
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 `can_parse` est un template de méthode, défini dans le fichier
 `SimulatorBuilder.cpp` du module `core`. Sa responsabilité est d'ajouter un
@@ -375,9 +375,9 @@ d'interface autour de `boost::odeint`. La commande exécutant la simulation
 s'appelle `quicksolve` et figure dans le fichier `simulator_run.cpp` du module
 `executables` :
 
-~~~~~~~~~~~~~~ {.cpp}
+```cpp
 ssc::solver::quicksolve<Stepper>(system, scheduler, observer);
-~~~~~~~~~~~~~~
+```
 
 Voici une brève description des paramètres (le fonctionnement détaillé du
 solveur figure dans la documentation utilisateur).
@@ -537,7 +537,7 @@ La classe `WebSocketObserver` est définie dans le module `observers_and_api`.
 Elle se connecte à un websocket existant (elle ne crée pas de websocket) et
 envoie les données sous format YAML. Voici un exemple de trame émise :
 
-~~~~~~~~~~~~~ {.yaml}
+```yaml
 {
 'x(TestShip)': 23.4,
 'y(TestShip)': 121.4,
@@ -553,7 +553,7 @@ envoie les données sous format YAML. Voici un exemple de trame émise :
 'qj(TestShip)': 0,
 'qk(TestShip)': 1
 }
-~~~~~~~~~~~~~
+```
 
 Pour des raisons de place, les données de houle sont transmises sous forme
 binaire au format 'base 91' qui permet de n'utiliser que des caractères ascii
@@ -760,17 +760,17 @@ En revanche, le repère d'expression de l'effort (ainsi que du point d'applicati
 connu du simulateur. Si le modèle d'effort utilise un repère d'expression propre, il doit être
 fourni au constructeur de `ForceModel` sous forme de `YamlPosition` (`internal_frame`):
 
-~~~~~~~~~~~ {.cpp}
+```cpp
 ForceModel(const std::string& name, const std::vector<std::string>& commands, const YamlPosition& internal_frame, const std::string& body_name_, const EnvironmentAndFrames& env);
-~~~~~~~~~~~
+```
 
 Si le modèle d'effort exprime l'effort dans un repère connu (repère du corps, repère "NED",
 maillage ou "NED local"), il n'a pas besoin de fournir de `YamlPosition` au constructeur de
 `ForceModel` :
 
-~~~~~~~~~~~ {.cpp}
+```cpp
 ForceModel(const std::string& name, const std::vector<std::string>& commands, const std::string& body_name_, const EnvironmentAndFrames& env);
-~~~~~~~~~~~
+```
 
 ### Definition d'un parseur (pour les modèles à paramètres)
 
@@ -791,16 +791,16 @@ une méthode statique `parse(const std::string&)` qui prend comme paramètre la 
 du fichier YAML d'entrée lui correspondant, et la parse dans une structure de donnée
 qui lui est propre (que l'on nommera `Input` dans cet exemple).
 
-~~~~~~~~~~~ {.cpp}
+```cpp
 static Input parse(const std::string& yaml);
-~~~~~~~~~~~
+```
 
 Le constructeur requis a un prototype légèrement différent puisqu'il doit
 prendre la structure `Input` en premier paramètre :
 
-~~~~~~~~~~~ {.cpp}
+```cpp
 GMForceModel(const Input& input_data, const std::string body_name, const EnvironmentAndFrames& env);
-~~~~~~~~~~~
+```
 
 **Le type de retour de la fonction `parse` doit impérativement être le même que le type du premier
 paramètre du constructeur !**
@@ -810,14 +810,14 @@ paramètre du constructeur !**
 Le constructeur de la classe d'effort doit simplement fournir au constructeur de `ForceModel`
 une liste des commandes dont il a besoin en second paramètre :
 
-~~~~~~~~~~~ {.cpp}
+```cpp
 ForceModel(const std::string& name, const std::vector<std::string>& commands, const YamlPosition& internal_frame, const std::string& body_name_, const EnvironmentAndFrames& env);
 ForceModel(const std::string& name, const std::vector<std::string>& commands, const std::string& body_name_, const EnvironmentAndFrames& env);
-~~~~~~~~~~~
+```
 
 Par exemple :
 
-~~~~~~~~ {.cpp}
+```cpp
 SimpleHeadingKeepingController::SimpleHeadingKeepingController(const Input& input_data, const std::string& body_name_, const EnvironmentAndFrames& env_) :
         ControllableForceModel(
             input.name,
@@ -825,7 +825,7 @@ SimpleHeadingKeepingController::SimpleHeadingKeepingController(const Input& inpu
             YamlPosition(YamlCoordinates(),YamlAngle(), body_name_),
             body_name_,
             env_)
-~~~~~~~~
+```
 
 Bien que le nom du modèle soit spécifié dans le nom de la commande renseigné
 dans le fichier YAML de commande, la méthode `get_force` reçoit un dictionnaire

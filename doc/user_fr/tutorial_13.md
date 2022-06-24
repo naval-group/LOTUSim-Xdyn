@@ -29,7 +29,7 @@ différents pour les efforts internes et pour les efforts externes.
 
 Dans le modèle d'effort (ici un code Python), on peut écrire :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.python}
+```python
 class HDBForceModel(force.Model):
     """Outputs data from HDB in extra_observations."""
 
@@ -59,7 +59,7 @@ class HDBForceModel(force.Model):
 
 if __name__ == '__main__':
     force.serve(HDBForceModel)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Les données sont fournies une seule fois, lors de l'initialisation du modèle,
 dans le troisième paramètre du constructeur du modèle d'effort. Toutes les

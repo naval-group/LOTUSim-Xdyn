@@ -95,20 +95,19 @@ Un exemple d'un tel code de conduite est le
 
 C'est l'étape la plus simple. Elle consiste simplement à lancer :
 
-~~~~~~~~~~~ {.bash}
+```bash
 git remote add gitlab https://gitlab.com/sirehna_naval_group/sirehna/xdyn.git
-~~~~~~~~~~~
+```
 
 Pour mettre à jour le dépôt Gitlab avec les modifications faites à SIREHNA il
 suffit dès lors de faire :
 
-~~~~~~~~~~~ {.bash}
+```bash
 git push gitlab
-~~~~~~~~~~~
+```
 
 De même, pour récupérer les modifications distantes :
 
-~~~~~~~~~~~ {.bash}
+```bash
 git fetch gitlab
-~~~~~~~~~~~
-
+```

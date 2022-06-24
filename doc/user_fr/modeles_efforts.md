@@ -16,11 +16,11 @@ est `model` : chaque modèle possède sinon sa propre paramétrisation
 (éventuellement aucune paramétrisation). Voici un exemple de section `external
 forces` :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 external forces:
   - model: gravity
   - model: non-linear hydrostatic (fast)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 ## États filtrés
 
@@ -144,9 +144,9 @@ repère dans lequel on veut projeter la force.
 
 Pour soumettre un solide à la gravité, on écrit :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: gravity
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 La valeur de $`g`$ utilisée est celle définie dans la section [`environmental
 constants`](#constantes-environnementales) et pour la masse on prend le coeffient $`M_{3,3}`$ (le terme en Z, donc) de la [matrice d'inertie](#matrice-dinertie).
@@ -344,15 +344,15 @@ temps de calcul (on peut constater un ordre de grandeur par rapport au modèle
 
 Pour utiliser le modèle rapide, on écrit :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: non-linear hydrostatic (fast)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 pour le modèle précis :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: non-linear hydrostatic (exact)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Un exemple de simulation de solide soumis aux efforts hydrostatiques
 (oscillations en immersion) est disponible dans les
@@ -398,7 +398,7 @@ repère global), mais est nécessaire pour xdyn car les deux repères sont indé
 
 Le modèle de raideur linéaire peut être paramétré de la façon suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: linear stiffness
   name: mooring
   stiffness matrix:
@@ -416,7 +416,7 @@ Le modèle de raideur linéaire peut être paramétré de la façon suivante :
       phi: {value: 4, unit: rad}
       theta: {value: 5, unit: rad}
       psi: {value: 6, unit: rad}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 La partie `equilibrium position` est optionelle, et permet de spécifier la position d'équilibre $`X_{eq}`$. En son absence, la position d'équilibre est supposée être à zéro (pour toutes les valeurs).
 
@@ -452,9 +452,9 @@ dans la situation suivante :
 
 Pour utiliser ce modèle, on insère la ligne suivante dans la section `external forces` :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: non-linear Froude-Krylov
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 #### Version linéaire
 
@@ -486,7 +486,7 @@ fichier XML d'entrée de PRECAL_R est mise à `true` ou 1.
 
 Dans la section `external forces` on ajoute (pour utiliser un fichier HDB) :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: linear Froude-Krylov
   hdb: test_ship.hdb
   calculation point in body frame:
@@ -495,16 +495,16 @@ Dans la section `external forces` on ajoute (pour utiliser un fichier HDB) :
       z: {value: 1.418, unit: m}
   mirror for 180 to 360: true
   use encounter period: true
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 ou (pour utiliser un fichier PRECAL_R) :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: linear Froude-Krylov
   raodb: test_ship.ini
   mirror for 180 to 360: true
   use encounter period: true
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - `hdb` ou `raodb` : chemin vers le fichier de résultats de calcul
   fréquentiels. Le chemin peut être absolu ou relatif : s'il est relatif, c'est
@@ -673,7 +673,7 @@ Pour utiliser ce modèle, on écrit `model: diffraction`. Le seul paramètre de 
 modèle est le chemin vers le fichier [HDB](#format-hdb) contenant les RAO d'effort du premier ordre.
 La section correspondante dans le fichier HDB est `DIFFRACTION_FORCES_AND_MOMENTS`.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: diffraction
   hdb: test_ship.hdb
   calculation point in body frame:
@@ -682,7 +682,7 @@ La section correspondante dans le fichier HDB est `DIFFRACTION_FORCES_AND_MOMENT
       z: {value: 1.418, unit: m}
   mirror for 180 to 360: true
   use encounter period: true
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Il est à noter que le point de calcul ne figurant pas dans les fichiers HDB,
 il doit être renseigné dans le fichier YAML (`calculation point in body frame`)
@@ -708,12 +708,12 @@ On peut également lire ces RAO depuis un fichier [PRECAL_R](#format-precal_r). 
 le fichier PRECAL_R ait été généré avec la clef `expIncWaveFrc` activée.
 Les RAOs sont alors présents dans les signaux `F_dif_m[...]` de la section `[RAOs]`.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: diffraction
   raodb: test_ship.raodb.ini
   mirror for 180 to 360: true
   use encounter period: true
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Contrairement au cas d'un fichier HDB, le point de calcul est connu : il s'agit du centre de
 gravité. Il ne faut donc pas renseigner le champ `calculation point in body frame` dans le fichier
@@ -805,11 +805,11 @@ cas contraire, le modèle utilise la vitesse d'avance $`u`$ non-filtrée.
 L'interpolation de la courbe de résistance est faite en utilisant des splines
 cubiques.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: resistance curve
   speed: {unit: knot, values: [0,1,2,3,4,5,15,20]}
   resistance: {unit: MN, values: [0,1,4,9,16,25,225,400]}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Cet effort est orienté suivant l'axe $`-x`$ du repère body.
 
@@ -888,7 +888,7 @@ Sections en 'U' | +10
 
 Le modèle de Holtrop & Mennen peut être paramétré dans xdyn de la façon suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: Holtrop & Mennen
   Lwl: {value: 325.5, unit: m}
   Lpp: {value: 320, unit: m}
@@ -909,7 +909,7 @@ Le modèle de Holtrop & Mennen peut être paramétré dans xdyn de la façon sui
   1+k1: 1.5
   1+k2: 2
   apply on ship speed direction: true
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 La clé booléenne `apply on ship speed direction` permet de projeter l'effort sur la direction du vecteur vitesse du navire plutôt que sur l'axe longitudinal. Cela n'est pas recommandé en temps normal car le modèle suppose une vitesse uniquement sur l'axe longitudinal. En revanche, cela permet de simuler dans une moindre mesure des efforts latéraux en l'absence de modèle additionnel et lorsque le navire dérive (attention cependant, les efforts latéraux obtenus n'ont fait l'objet d'aucune validation !).
 
@@ -1017,7 +1017,7 @@ paramètres](#amortissement-quadratique).
 La paramétrisation des efforts d'amortissement linéaires est faite par une
 matrice renseignée de la façon suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: linear damping
   damping matrix at the center of gravity projected in the body frame:
       row 1: [ 0, 0,     0,      0,      0, 0]
@@ -1026,7 +1026,7 @@ matrice renseignée de la façon suivante :
       row 4: [ 0, 0,     0, 1.74e4,      0, 0]
       row 5: [ 0, 0,     0,      0, 4.67e6, 0]
       row 6: [ 0, 0,     0,      0,      0, 0]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Cette matrice est la matrice $`D_l`$ décrite dans [la
 documentation](#efforts-damortissement-visqueux).
@@ -1034,7 +1034,7 @@ documentation](#efforts-damortissement-visqueux).
 La paramétrisation des efforts d'amortissement quadratiques est faite par une
 matrice renseignée de la façon suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: quadratic damping
   damping matrix at the center of gravity projected in the body frame:
       row 1: [ 0, 0,     0,      0,      0, 0]
@@ -1043,7 +1043,7 @@ matrice renseignée de la façon suivante :
       row 4: [ 0, 0,     0, 1.74e4,      0, 0]
       row 5: [ 0, 0,     0,      0, 4.67e6, 0]
       row 6: [ 0, 0,     0,      0,      0, 0]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Cette matrice est la matrice $`(d_{ij})`$ décrite dans [la
 documentation](#efforts-damortissement-visqueux).
@@ -1065,7 +1065,7 @@ Le modèle d'efforts hydrostatiques linéaires est beaucoup plus rapide à
 calculer que son homologue non-linéaire. Habituellement, les efforts
 hydrostatiques linéaires sont calculés à partir d'une matrice
 hydrostatique donnée en entrée (ou éventuellement calculée à partir de la
-position du centre de gravité et des données géométriques). 
+position du centre de gravité et des données géométriques).
 
 Le torseur d'effort est donné dans le repère NED par :
 
@@ -1085,7 +1085,7 @@ d'équilibre renseignées dans le fichier de paramétrage.
 
 ### Paramétrage
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: linear hydrostatics
   z eq: {value: 0, unit: m}
   phi eq: {value: 0, unit: deg}
@@ -1093,7 +1093,7 @@ d'équilibre renseignées dans le fichier de paramétrage.
   K row 1: [1, 0 , 0]
   K row 2: [0, 1 , 0]
   K row 3: [0, 0 , 1]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Les coefficients de la matrice $`K`$ sont donnés en unité SI.
 
@@ -1112,7 +1112,7 @@ repère body pour approcher un effort de propulsion.
 
 ### Paramétrage
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: constant force
   frame: TestShip
   x: {value: 0, unit: m}
@@ -1124,7 +1124,7 @@ repère body pour approcher un effort de propulsion.
   K: {value: 100, unit: kN*m}
   M: {value: 200, unit: kN*m}
   N: {value: 300, unit: kN*m}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Les coordonnées du point d'application de l'effort sont notées `x`, `y` et `z`,
 exprimées dans le repère désigné par `frame`. Les coordonnées `X`, `Y`, `Z`,
@@ -1186,7 +1186,7 @@ Il est à noter que les coefficients $`C_l`$, $`C_d`$ et $`C_m`$ sont générale
 
 Le modèle d'effort hydrodynamique quadratique par polaire est paramétré dans xdyn avec la section YAML suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: hydrodynamic polar
   name: centreboard
   position of calculation frame:
@@ -1202,7 +1202,7 @@ Le modèle d'effort hydrodynamique quadratique par polaire est paramétré dans 
   lift coefficient: [0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,-0.11207]
   drag coefficient: [0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483]
   take waves orbital velocity into account: false
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Les données polaires de coefficients de portance et traînée peuvent être données de -180° à 180° ou de 0° à 180°. Dans ce second cas, une hypothèse de symmétrie selon l'axe longitudinal du repère local $`\vec{x_i}`$ est appliquée, ce qui est utile pour les profils symmétriques.
 
@@ -1251,7 +1251,7 @@ Enfin, le point de calcul donné en entrée a deux fonctions. C'est d'une part l
 
 Le modèle d'effort aérodynamique quadratique par polaire est paramétré dans xdyn avec la section YAML suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: aerodynamic polar
   name: main sail
   calculation point in body frame:
@@ -1262,7 +1262,7 @@ Le modèle d'effort aérodynamique quadratique par polaire est paramétré dans 
   AWA: {unit: deg, values: [0,7,9,12,28,60,90,120,150,180]}
   lift coefficient: [0.00000,0.94828,1.13793,1.25000,1.42681,1.38319,1.26724,0.93103,0.38793,-0.11207]
   drag coefficient: [0.03448,0.01724,0.01466,0.01466,0.02586,0.11302,0.38250,0.96888,1.31578,1.34483]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 La clé `AWA` (pour Apparent Wind Angle) correspond à l'angle de vent apparent, c'est-à-dire l'angle d'incidence de l'écoulement dans le répère propre au corps. Un angle nul correspond à un écoulement selon l'axe $`-\vec{x_0}`$ (du repère propre, soit un vent de face), un angle de 90° un écoulement selon l'angle $`-\vec{y_0}`$ (donc un vent de travers sur tribord)...
 
@@ -1287,7 +1287,7 @@ Le modèle de manœuvrabilité proposé par le Maneuvering Modeling Group fait p
 
 Ce modèle est paramétré par la section YAML suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
   - model: MMG maneuvering
     calculation point in body frame:
         x: {value: -11.1, unit: m}
@@ -1311,7 +1311,7 @@ Ce modèle est paramétré par la section YAML suivante :
     Nrvv: -0.294
     Nvrr: 0.055
     Nrrr: -0.013
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 ### Références
 
 - *Introduction of MMG standard method for ship maneuvering predictions*, 2014, H. Yasukawa, Y. Yoshimura, Journal of Marine Science and Technology 20(1):37-52, [doi:10.1007/s00773-014-0293-y](http://dx.doi.org/10.1007/s00773-014-0293-y).
@@ -1330,7 +1330,7 @@ modèles d'effort, soit dans un fichier à part (plus modulaire).
 
 Voici un exemple d'efforts commandé, qui correspond au modèle d'hélice décrit [ici](#h%C3%A9lices-wageningen-s%C3%A9rie-b) :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 external forces:
   - name: port side propeller
     model: wageningen B-series
@@ -1366,7 +1366,7 @@ external forces:
     number of blades: 3
     blade area ratio AE/A0: 0.5
     diameter: {value: 2, unit: m}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Les commandes sont définies dans les sections `commands` et `controllers` décrites ci-après.
 
@@ -1378,7 +1378,7 @@ Le but de ce modèle d'effort est de pouvoir écrire un modèle de manœuvrabili
 de façon assez générique, sans avoir à recompiler le code source. Des
 expressions simples des états et du temps peuvent être calculées, par exemple:
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: maneuvering
   name: test
   reference frame:
@@ -1426,7 +1426,7 @@ expressions simples des états et du temps peuvent être calculées, par exemple
   Nrr: 0.005
   Nrrr: 0
   Nrvv: 0
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - `reference frame`: Définit la transformation permettant de passer d'un repère
 connu (dont le nom est donné par `frame`) au repère dans lequel sont exprimés
@@ -1443,7 +1443,7 @@ Voici un exemple (très simplifié) de modèle de manoeuvrabilité qui utilise l
 commandes d'un modèle d'hélice + safran qui illustre la syntaxe pour utiliser
 dans un modèle de manoeuvrabilité les commandes d'un autre modèle :
 
-~~~~{.yaml}
+```yaml
 - name: SBPropRudd
   model: propeller+rudder
   position of propeller frame:
@@ -1486,7 +1486,7 @@ dans un modèle de manoeuvrabilité les commandes d'un autre modèle :
   K: 0
   M: 0
   N: 0
-~~~~
+```
 
 Toutes les valeurs sont supposées en unité du système international. Le modèle
 nécessite de spécifier X, Y, Z, K, M et N, les autres clefs pouvant être
@@ -1521,7 +1521,7 @@ de 0 seconde
 De façon plus formelle, les modèles doivent obéir à la grammaire suivante
 (format "Extended Backus-Naur Form" ou EBNF) :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.ebnf}
+```ebnf
 expr                = term  operator_and_term*
 add_operators       = '+' | '-'
 mul_operators       = '*' | '/'
@@ -1534,7 +1534,7 @@ exponent            = base
 atom                = function_call | identifier | double
 function_call       = identifier '(' expr ')'
 identifier          = alpha (alphanum | '_')*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 
 ## Hélices Wageningen série B
@@ -1841,7 +1841,7 @@ bilan des efforts.
 
 Voici un exemple de configuration possible :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 external forces:
   - name: port side propeller
     model: wageningen B-series
@@ -1860,7 +1860,7 @@ external forces:
     number of blades: 3
     blade area ratio AE/A0: 0.5
     diameter: {value: 2, unit: m}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - `name` : nom du composant. Défini par l'utilisateur. Doit correspondre à
 celui renseigné dans le fichier de [commandes
@@ -1964,13 +1964,13 @@ De même, en prenant $`r<0`$ et $`\psi=\psi_{\textrm{co}}`$, le moment généré
 
 ### Paramétrage
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 external forces:
   - name: controller
     model: simple heading controller
     ksi: 0.9
     Tp: {value: 4, unit: s}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - `name` : nom du contrôleur (si l'on en utilise plusieurs)
 - `model` : `simple heading controller` pour ce modèle
@@ -1979,11 +1979,11 @@ external forces:
 
 Ce modèle n'a qu'une seule commande, le cap `psi_co` :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - name: controller
   t: [0,1,3,10]
   psi_co: {unit: deg, values: [25, 30, 40, 0]}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 ## Contrôleur de position simplifié
 
@@ -2079,7 +2079,7 @@ De même, en prenant $`r<0`$ et $`\psi=\psi_{\textrm{co}}`$, le moment généré
 
 ### Paramétrage
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 external forces:
   - name: controller
     model: simple station-keeping controller
@@ -2089,7 +2089,7 @@ external forces:
     T_y: {value: 3, unit: s}
     ksi_psi: 0.8
     T_psi: {value: 4, unit: s}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - `name` : nom du contrôleur (si l'on en utilise plusieurs)
 - `model` : `simple heading controller` pour ce modèle
@@ -2099,13 +2099,13 @@ external forces:
 Ce modèle a trois commandes, le cap `psi_co`, et la position `x_co`, `y_co`
 (dans le repère NED) :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - name: controller
   t: [0,1,3,10]
   x_co: {unit: m, values: [25, 30, 40, 0]}
   y_co: {unit: m, values: [25, 30, 40, 0]}
   psi_co: {unit: deg, values: [25, 30, 40, 0]}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 ## Hélice et safran
 
@@ -2457,7 +2457,7 @@ d'où
 
 ### Paramétrage
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 external forces:
   - name: Prop. & rudder
     model: propeller+rudder
@@ -2485,7 +2485,7 @@ external forces:
         x: {value: -5.1, unit: m}
         y: {value: -2, unit: m}
         z: {value: 2, unit: m}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 On retrouve les paramètres du modèle 'Wageningen' qui ne sont pas décrits à
 nouveau ici (hormis `model`). On a les paramètres supplémentaires suivants :
@@ -2509,24 +2509,24 @@ par `rpm`,
 
 Voici un exemple de section commande correspondante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - name: controller
   t: [1,3,10]
   rpm: {unit: rpm, values: [3000, 3000, 4000]}
   P/D: [0.7,0.7,0.8]
   beta: {unit: deg, values: [10,-15,20]}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 ### Sorties
 
 Pour obtenir les sorties d'effort de ce modèle, on écrit par exemple :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 output:
    - format: csv
      filename: propRudd.csv
      data: [t, 'Fx(Prop. & rudder,TestShip,TestShip)', 'Fy(Prop. & rudder,TestShip,NED)']
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Lorsque l'on demande un effort, on précise :
 
@@ -2592,7 +2592,7 @@ N
 
 Voici un exemple de configuration possible :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 external forces:
   - name: port side propeller
     model: Kt(J) & Kq(J)
@@ -2612,7 +2612,7 @@ external forces:
     J: [-1.00000E+00,-8.00000E-01,-5.00000E-01,-2.50000E-01,-1.00000E-03,1.00000E-03, 2.00000E-01, 4.00000E-01, 6.00000E-01, 7.00000E-01, 8.00000E-01,1.00000E+00]
     Kt: [-4.50000E-01,-2.50000E-01,-1.90000E-01,-2.00000E-01,-2.00000E-01,3.25000E-01, 2.80000E-01, 2.33000E-01, 1.85000E-01, 1.62000E-01,1.36000E-01,8.50000E-02]
     Kq: [-4.80000E-02,-3.30000E-02,-2.20000E-02,-2.50000E-02,-2.80000E-02,3.40000E-02, 3.26000E-02, 2.97000E-02, 2.55000E-02, 2.30000E-02, 2.040000E-02,1.50000E-02]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - `name` : Nom du composant. Défini par l'utilisateur. Doit correspondre à
   celui renseigné dans le fichier de
@@ -2652,12 +2652,12 @@ external forces:
 
 Pour obtenir les sorties d'effort de ce modèle, on écrit par exemple :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 output:
    - format: csv
      filename: prop.csv
      data: [t, 'Fx(port side propeller,TestShip,TestShip)', 'Fx(port side propeller,TestShip,NED)']
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 On obtient dans l'exemple précédent la projection suivant l'axe $`X`$ du repère
 `TestShip` de l'effort `port side propeller` (correspondant au nom de
@@ -2708,7 +2708,7 @@ Où $`\omega`$ est la vitesse de rotation du rotor (en rad/s).
 
 Le modèle de rotor Flettner est paramétré dans xdyn avec la section YAML suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: Flettner rotor
   name: rotor_1
   rotor position in body frame:
@@ -2720,7 +2720,7 @@ Le modèle de rotor Flettner est paramétré dans xdyn avec la section YAML suiv
   spin ratio: [0, 0.606, 1.212, 1.818, 2.424, 3.030, 3.636, 4.242, 4.848, 5.454]
   lift coefficient: [0.010, 0.546, 1.631, 3.465, 6.136, 8.762, 10.473, 11.626, 12.285, 12.674]
   drag coefficient: [0.707, 0.736, 0.557, 0.717, 1.347, 2.284, 3.236, 4.161, 4.803, 5.271]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 La commande de vitesse de rotation doit aussi être présente, sous le nom `rpm`. Il s'agit de la vitesse
 de rotation autour de l'axe $`- \vec{z_b}`$, qui correspond toujours à l'axe du rotor.
@@ -2754,11 +2754,11 @@ fichier de configuration YAML d'xdyn.
 
 Dans la section `external forces`, on ajoute une section de la forme suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: grpc
   name: some name
   url: http://localhost:50001
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Le paramètre `model: grpc` indique à xdyn qu'il s'agit d'un modèle d'effort
 distant et `url` donne l'adresse à laquelle le serveur gRPC peut être joint.
@@ -2810,7 +2810,7 @@ modèle d'effort (valeur de retour de la méthode `set_parameters`). Si l'on
 utilise le framework Python du dépôt [`interfaces`](https://gitlab.com/sirehna_naval_group/sirehna/interfaces/-/blob/1795c55006d11ec46bf25a8cac410be00698a8ba/forces/force.py#L44), ces résultats sont
 stockés dans le troisième argument du constructeur :
 
-```
+```python
 class HDBForceModel(force.Model):
     """Outputs data from HDB in extra_observations."""
 
@@ -2899,9 +2899,8 @@ dans la section (optionnelle) `filtered states` du fichier YAML d'entrée.  Ces
 valeurs filtrées sont fournies aux modèles d'efforts distants. Si l'on utilise
 le framework Python du dépôt
 [`interfaces`](https://gitlab.com/sirehna_naval_group/sirehna/interfaces/-/blob/1795c55006d11ec46bf25a8cac410be00698a8ba/forces/force.py#L44),
-ces valeurs filtrées sont stockées dans le sixième argument de la méthode
-`grpcforce.Model.force(self, t, states, commands, wave_information,
-filtered_states)`.
+ces valeurs filtrées sont stockées dans le cinquième argument de la méthode
+`force.Model.force(self, states, commands, wave_information, filtered_states)`.
 
 ### Exemple d'utilisation
 

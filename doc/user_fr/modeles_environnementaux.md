@@ -18,28 +18,27 @@ plusieurs modèles physiques. Par conséquent, plutôt que d'être renseignées 
 niveau de chaque modèle et risquer ainsi des incohérences, elles figurent dans
 la section `environmental constants` qui a la forme suivante :
 
-~~~~~~~~~~~~~~ {.yaml}
+```yaml
 environmental constants:
     g: {value: 9.81, unit: m/s^2}
     rho: {value: 1025, unit: kg/m^3}
     nu: {value: 1.18e-6, unit: m^2/s}
     air rho: {value: 1.225, unit: kg/m^3}
-~~~~~~~~~~~~~~
+```
 
-De plus on peut y ajouter la masse volumique de l'air avec la clé `air rho`, qui est nécessaire pour tous les modèles aérodynamiques. Cette donnée est optionelle en l'absence de modèles aérodynamiques. 
+De plus on peut y ajouter la masse volumique de l'air avec la clé `air rho`, qui est nécessaire pour tous les modèles aérodynamiques. Cette donnée est optionelle en l'absence de modèles aérodynamiques.
 
 Ces quatre constantes sont l'ensemble de toutes les constantes environnementales
 actuellement utilisées par les modèles d'xdyn.
 
-Comme expliqué dans [une section
-précédente](#remarques-sur-les-unit%C3%A9s), les
+Comme expliqué dans [une section précédente](#remarques-sur-les-unit%C3%A9s), les
 dimensions physiques ne sont pas vérifiées et simplement converties en unités
 du système international. Si xdyn rencontre une unité inconnue, il produit un
 message d'erreur du type :
 
-~~~~~{.bash}
+```bash
 unknow unit : hhm
-~~~~~
+```
 
 ## Modèles de houle
 
@@ -48,11 +47,11 @@ unknow unit : hhm
 Pour simuler une surface libre parfaitement plane, on opère de la façon
 suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
     environment models:
       - model: no waves
         constant sea elevation in NED frame: {value: 0, unit: m}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 `model: no waves` indique que l'on souhaite une surface libre horizontale et
 `constant sea elevation in NED frame` représente l'élévation de la surface
@@ -458,7 +457,7 @@ en plusieurs points de la surface libre dans le plan (X,Z) :
 
 Les spectres directionnels de houle d'Airy sont paramétrés de la façon suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: airy
   depth: {value: 100, unit: m}
   seed of the random data generator: 0
@@ -473,7 +472,7 @@ Les spectres directionnels de houle d'Airy sont paramétrés de la façon suivan
      Hs: {value: 5, unit: m}
      Tp: {value: 15, unit: s}
      gamma: 1.2
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - `model` : actuellement, ne peut valoir qu'`airy`.
 - `stretching` : voir le paragraphe ci-dessous.
@@ -520,12 +519,12 @@ Le signal temporel correspondant a l'allure suivante :
 
 Le paramétrage de ce spectre est :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 spectral density:
     type: dirac
     Hs: {value: 5, unit: m}
     omega0: {value: 15, unit: rad/s}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 La hauteur de houle est donnée par `Hs` et sa pulsation par `omega0`.
 L'amplitude de la houle sera égale à `Hs/2`.
@@ -607,12 +606,12 @@ Ce spectre a l'allure suivante :
 
 Sa paramétrisation dans xdyn est réalisée au moyen du YAML suivant :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 spectral density:
     type: bretschneider
     Hs: {value: 5, unit: m}
     Tp: {value: 15, unit: s}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 #### Pierson-Moskowitz
 
@@ -703,12 +702,12 @@ Ce spectre a l'allure suivante :
 
 Sa paramétrisation dans xdyn est réalisée au moyen du YAML suivant :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 spectral density:
     type: pierson-moskowitz
     Hs: {value: 5, unit: m}
     Tp: {value: 15, unit: s}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 #### JONSWAP
 
@@ -744,13 +743,13 @@ Ce spectre a l'allure suivante :
 
 Sa paramétrisation dans xdyn est réalisée au moyen du YAML suivant :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 spectral density:
     type: jonswap
     Hs: {value: 5, unit: m}
     Tp: {value: 15, unit: s}
     gamma: 1.2
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 ### Étalements directionnels
 
@@ -758,11 +757,11 @@ spectral density:
 
 Lorsque cet étalement est choisi, la houle est mono-directionnelle.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 directional spreading:
     type: dirac
     waves propagating to: {value: 90, unit: deg}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 La direction de propagation est donnée par `waves propagating to`, dans le
 repère NED (0° correspond à des vagues se propageant du Sud vers le Nord, 45° à
@@ -786,12 +785,12 @@ cet angle (outre la taille maximale des flottants).
 
 Cet étalement est paramétré de la façon suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 directional spreading:
     type: cos2s
     s: 2
     waves propagating to: {value: 90, unit: deg}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 La direction de propagation $`\gamma_0`$ est donnée par `waves propagating to`.
 
@@ -809,7 +808,7 @@ prendre comme référence non pas le plan $`z=0`$ mais la surface libre déform�
 
 Pour mémoire, la paramétrisation du modèle de houle est effectuée par un YAML du type :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: airy
   depth: {value: 100, unit: m}
   seed of the random data generator: 0
@@ -824,7 +823,7 @@ Pour mémoire, la paramétrisation du modèle de houle est effectuée par un YAM
      Hs: {value: 5, unit: m}
      Tp: {value: 15, unit: s}
      gamma: 1.2
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Dans xdyn, le stretching est renseigné dans la section `stretching` des modèles de houle.
 Le seul modèle de stretching implémenté est le [delta-stretching](#delta-stretching) et ses dérivés (absence de stretching, extrapolation linéaire et modèle de Wheeler).
@@ -1118,7 +1117,7 @@ des appendices, etc.), peuvent être affectées par des composantes peu
 
 La discrétisation est paramétrée de la façon suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 discretization:
     nfreq: 128
     ndir: 8
@@ -1126,7 +1125,7 @@ discretization:
     omega max: {value: 6, unit: rad/s}
     energy fraction: 0.999
     equal energy bins: true
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - `nfreq` : nombre de fréquences
 - `ndir` : nombre de directions
@@ -1159,7 +1158,7 @@ simulation de houle, sans corps, tel que décrit dans le
 On définit un maillage (cartésien) sur lequel sera calculée la houle (dans la
 section `environment/model/output`). Par exemple :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 output:
     frame of reference: NED
     mesh:
@@ -1169,7 +1168,7 @@ output:
         ymin: {value: 1, unit: m}
         ymax: {value: 2, unit: m}
         ny: 2
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - `frame of reference` : nom du repère dans lequel sont exprimées les
   coordonnées des points du maillage.
@@ -1192,7 +1191,7 @@ repère est fixe, il est inutile de répéter les coordonnées `x` et `y`.
 
 Dans le cas d'un repère fixe, on obtient une sortie de la forme :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 waves:
   x: [1,2,3,4,5,1,2,3,4,5]
   y: [1,1,1,1,1,2,2,2,2,2]
@@ -1201,7 +1200,7 @@ waves:
     - z: [-4.60386,-4.60388,-4.6039,-4.60392,-4.60393,-4.6553,-4.65531,-4.65533,-4.65535,-4.65537]
     - t: 1
     - z: [-3.60794,-3.60793,-3.60793,-3.60792,-3.60791,-3.68851,-3.6885,-3.6885,-3.68849,-3.68849]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 `x` et `y` désignent les coordonnées (exprimées en mètres) dans le repère choisi
 (ici il s'agit du NED) des points du maillage.
@@ -1213,7 +1212,7 @@ valeur au-dessus de z=0 (bosse).
 
 Si le repère de sortie est mobile, on obtient plutôt un résultat de la forme :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 waves:
   timesteps:
     - t: 0
@@ -1224,7 +1223,7 @@ waves:
       x: [2,4,5,6,7,2,4,5,6,7]
       y: [1,1,1,1,1,2,2,2,2,2]
     - z: [-3.60794,-3.60793,-3.60793,-3.60792,-3.60791,-3.68851,-3.6885,-3.6885,-3.68849,-3.68849]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 ### Utilisation d'un modèle de houle distant
 
@@ -1269,17 +1268,17 @@ utiliser depuis xdyn un modèle de houle existant satisfaisant cette interface.
 Un modèle sans paramètre tournant sur un serveur accessible à l'adresse
 http://localhost:50001 est paramétré comme suit :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: grpc
   url: http://localhost:50001
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Si le modèle de houle contient des paramètres, ceux-ci doivent figurer à la suite
 dans le fichier YAML d'xdyn et ils sont transmis directement au serveur sans être
 interprêtés par xdyn. Par exemple, un modèle d'Airy unidirectionnel avec un spectre
 de JONSWAP pourrait être paramétré de la façon suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: grpc
   url: http://localhost:50001
   Hs: 5
@@ -1287,7 +1286,7 @@ de JONSWAP pourrait être paramétré de la façon suivante :
   gamma: 1.2
   seed of the random data generator: 0
   waves propagating to: 90
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 #### Exemple d'utilisation
 
@@ -1317,9 +1316,9 @@ Les seuls modèles de vent actuellement implémentés dans Xdyn sont des modèle
 
 Pour lancer une simulation sans vent, il suffit de spécifier le modèle `no wind` dans la section `environmental models`, comme suit :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
   - model: no wind
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 À noter que ce modèle est le modèle de vent par défaut. Il sera donc présent dans tous les cas si aucun autre modèle de vent n'est défini.
 
@@ -1327,11 +1326,11 @@ Pour lancer une simulation sans vent, il suffit de spécifier le modèle `no win
 
 Le modèle de vent le plus simple est le modèle de vent uniforme, qui résulte en une vitesse identique en tout point de l'espace et constante dans le  temps. Un tel modèle se paramètre de la façon suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
   - model: uniform wind
     velocity: {unit: m/s, value: 8}
     direction: {unit: deg, value: 135}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 La direction du vent suit la [même convention que pour la houle](#section_Direction_houle).
 
@@ -1351,13 +1350,13 @@ où $`U_r`$ est la vitesse moyenne de référence donnée à l'altitude $`z_r`$,
 
 Le profil de vitesse de vent en loi de puissance se paramètre de la façon suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
   - model: power law wind profile
     velocity: {unit: m/s, value: 8}
     direction: {unit: deg, value: 135}
     reference height: {unit: m, value: 10}
     alpha: 0.11
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 ### Profil logarithmique
 
@@ -1384,13 +1383,13 @@ La longueur de rugosité peut $`z_0`$ être reliée à la vitesse de friction $`
 
 Le profil de vitesse de vent logarithmique se paramètre de la façon suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
   - model: power law wind profile
     velocity: {unit: m/s, value: 8}
     direction: {unit: deg, value: 135}
     reference height: {unit: m, value: 10}
     roughness length: {unit: m, value: 0.002}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 ### Références
 - [*Wind profile power law*](https://en.wikipedia.org/wiki/Wind_profile_power_law), article Wikipedia en anglais, consulté le 18/12/2020.

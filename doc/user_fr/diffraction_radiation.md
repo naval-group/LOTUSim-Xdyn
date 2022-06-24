@@ -638,7 +638,7 @@ suivantes sont réalisées :
 
 Voici un exemple de mise en données utilisant un fichier HDB :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: radiation damping
   hdb: test_ship.hdb
   type of quadrature for cos transform: simpson
@@ -651,11 +651,11 @@ Voici un exemple de mise en données utilisant un fichier HDB :
   output Br and K: true
   remove constant speed: true
   forward speed correction: true
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Voici la même mise en données utilisant un fichier PRECAL_R :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 - model: radiation damping
   raodb: test_ship.ini
   type of quadrature for cos transform: simpson
@@ -668,7 +668,7 @@ Voici la même mise en données utilisant un fichier PRECAL_R :
   output Br and K: true
   remove constant speed: true
   forward speed correction: true
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Les sections utilisées des fichiers de sortie des codes de calcul potentiel sont :
 
@@ -879,4 +879,3 @@ est prise en compte (il s'agit de la matrice `total_added_mass_matrix_inf_freq_U
   page 18.
 
 - *Étude de la diffraction-radiation dans le cas d'un flotteur indéformable animé d'une vitesse moyenne constante et sollicité par une houle sinusoïdale de faible amplitude*, 1980, Jean Bougis, Thèse en vue d'obtenir le grade de Docteur-Ingénieur, Ecole Nationale Supérieure de Mécanique, Nantes, France.
-

@@ -39,7 +39,7 @@ utiliser à chaque instant sont alors connues par xdyn lors du lancement de la
 simulation. Voici un exemple de commandes pour le modèle hélice + safran dont
 la description complète est [ici](#h%C3%A9lice-et-safran).
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 commands:
   - name: port side propeller
     t: [1,3,10]
@@ -49,7 +49,7 @@ commands:
     t: [1,3,10]
     rpm: {unit: rpm, values: [3000, 3000, 4000]}
     P/D: {unit: 1, values: [0.7,0.7,0.8]}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 La valeur renseignée dans `name` doit correspondre à l'identifiant utilisé dans
 la section `external forces`. Pour chaque effort contrôlé (identifié par
@@ -90,8 +90,7 @@ doit être unique : deux contrôleurs ne peuvent pas avoir le même nom. Hormis
 `type`, `name` et `dt`, chaque type de contrôleur peut posséder sa propre
 paramétrisation.
 
-Deux types de contrôleur sont actuellement implémentés
-:
+Deux types de contrôleur sont actuellement implémentés :
 
 - le [régulateur `PID`](#r%C3%A9gulateur-pid)
 - les [contrôleurs externes](#contr%C3%B4leurs-externes) (appelés via une interface gRPC)
@@ -123,7 +122,7 @@ On peut définir plusieurs listes d'instants différents.
 
 Par exemple :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 setpoints:
     - t: [0, 500, 800, 1000]
       psi_co: {unit: deg, values: [30, 40, 50, 60]}
@@ -131,7 +130,7 @@ setpoints:
       u_co: {unit: knot, values: [0, 1]}
       v_co: {unit: knot, values: [0, 1]}
       w_co: {unit: knot, values: [0, 1]}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 ## Types de contrôleurs
 
@@ -152,7 +151,7 @@ un contrôleur PID calculant la commande attendue pour asservir l'angle de barre
 d'un modèle [hélice + safran](#h%C3%A9lices-wageningen-s%C3%A9rie-b) à un cap
 commandé `psi_co` :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 controllers:
   - name: port side propeller
     type: PID
@@ -165,7 +164,7 @@ controllers:
       Kp: -1
       Ki: 0
       Kd: -1
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - `name` est utilisé pour identifier le contrôleur, notamment s'il génère des sorties supplémentaires
 - `type` est le type de contrôleur (non-sensible à la casse) et vaut soit `grpc`, soit `pid`
@@ -176,11 +175,11 @@ controllers:
   Les noms d'états valides sont : `x`, `y`, `z`, `u`, `v`, `w`, `p`, `q`, `r`, `qr`, `qi`, `qj`, `qk`, `phi`, `theta` et `psi`.
   Par exemple, pour obtenir `x / 2 - y` :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 state weights:
     x: 0.5
     y: -1
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - `gains`, contient trois champs `Kp`, `Ki` et `Kd` correspondant respectivement aux gains proportionnel, intégral et dérivé.
 - `setpoint`, qui contient le nom de la consigne dont le contrôleur aura besoin,
@@ -203,13 +202,13 @@ donc être à pas variable).
 Un contrôleur externe n'ayant aucun paramètre pourrait donc être utilisé grâce
 à la section YAML suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 controllers:
   - name: some name
     type: grpc
     dt: 0.01
     url: localhost:9002
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Cependant, les contrôleurs ont en général besoin de paramètres (les gains
 notamment). C'est pourquoi il est possible de spécifier des paramètres
@@ -218,7 +217,7 @@ et le noeud YAML complet (avec tous ses enfants) sera envoyé tel quel au
 contrôleur. Voici un example de YAML pour utiliser un PID externe nécessitant
 les mêmes entrées YAML que le PID interne d'xdyn :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 controllers:
   - name: some name
     type: grpc
@@ -232,12 +231,12 @@ controllers:
       Kp: -1
       Ki: 0
       Kd: -1
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Dans cet exemple, lors de l'initialisation du contrôleur externe, la chaîne
 YAML suivante sera envoyée au contrôleur externe :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 name: some name
 type: grpc
 url: localhost:9002
@@ -250,7 +249,7 @@ gains:
   Kp: -1
   Ki: 0
   Kd: -1
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 L'interface gRPC utilisée par les contrôleurs est définie de la façon suivante (syntaxe .proto) :
 
@@ -294,7 +293,7 @@ doivent tous être distincts).
 
 Sa paramétrisation est la suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 controllers:
   - name: some unique name
     type: csv
@@ -305,7 +304,7 @@ controllers:
     commands:
         port side propeller(beta): beta_co
         port side propeller(rpm): rpm_co
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 - `name` est utilisé pour identifier les sorties du contrôleur (cf. section
   `outputs`).

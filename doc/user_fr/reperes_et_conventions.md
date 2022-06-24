@@ -281,13 +281,13 @@ mouvement. Ces états sont les suivants :
 La section `bodies` du fichier YAML contient une liste de corps, chacun
 commençant par un tiret :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 bodies:
     - name: ....
       ...
     - name: ....
       ...
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Chaque corps comprend :
 
@@ -304,7 +304,7 @@ Chaque corps comprend :
 
 ### Exemple complet
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 bodies: # All bodies have NED as parent frame
   - name: TestShip
     mesh: test_ship.stl
@@ -372,7 +372,7 @@ bodies: # All bodies have NED as parent frame
            t: [4.2]
            value: [5]
            interpolation: piecewise constant
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 ### Nommage du solide
 
@@ -402,9 +402,9 @@ Par exemple, si l'exécutable du simulateur est dans le répertoire `A/B/C`, que
 le maillage `m.stl` est dans `A` et qu'on lance l'exécutable depuis `B`, on
 écrira :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 mesh: ../m.stl
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 #### Convention d'orientation des maillages
 
@@ -421,7 +421,7 @@ $`\phi,\theta,\psi`$ définissent la rotation permettant de passer du repère
 maillage au [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) (suivant la convention choisie dans la [section
 `rotations`](#rotations)).
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 position of body frame relative to mesh:
     frame: mesh
     x: {value: 0, unit: m}
@@ -430,7 +430,7 @@ position of body frame relative to mesh:
     phi: {value: 1, unit: rad}
     theta: {value: 3, unit: rad}
     psi: {value: 2, unit: rad}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 ### Champs `dynamics`
 
@@ -450,13 +450,13 @@ de cinq sous-sections :
 
 La section `centre of inertia` a l'allure suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 centre of inertia:
     frame: TestShip
     x: {value: 0, unit: m}
     y: {value: 0, unit: m}
     z: {value: 0, unit: m}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Le champs `frame` doit contenir soit NED, soit un nom de solide, soit
 `mesh(<nom de solide>)` suivant le repère choisi pour exprimer les coordonnées
@@ -467,9 +467,9 @@ du centre de gravité.
 La section `mass` contient la masse du solide, utilisée notamment pour le
 modèle de gravité :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 mass: {value: 1000, unit: tonne}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Attention : si l'on spécifie `ton`, le système utilisera la tonne britannique
 qui vaut 907.185 kg.
@@ -479,7 +479,7 @@ qui vaut 907.185 kg.
 La matrice d'inertie n'est pas normalisée et on n'effectue pas de changement
 de repère.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 rigid body inertia matrix at the center of gravity and projected in the body frame:
     row 1: [253310,0,0,0,0,0]
     row 2: [0,253310,0,0,0,0]
@@ -487,7 +487,7 @@ rigid body inertia matrix at the center of gravity and projected in the body fra
     row 4: [0,0,0,1.522e6,0,0]
     row 5: [0,0,0,0,8.279e6,0]
     row 6: [0,0,0,0,0,7.676e6]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 
 Les calculs sont réalisés en supposant que les termes $`a_{ij}`$ de la matrice
@@ -502,7 +502,7 @@ d'inertie sont en unité SI, c'est-à-dire:
 
 La matrice de masse ajoutée est définie de la même façon :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 added mass matrix at the center of gravity and projected in the body frame:
     row 1: [3.519e4,0,0,0,0,0]
     row 2: [0,3.023e5,0,0,0,0]
@@ -510,7 +510,7 @@ added mass matrix at the center of gravity and projected in the body frame:
     row 4: [0,0,0,3.189e5,0,0]
     row 5: [0,0,0,0,8.866e6,0]
     row 6: [0,0,0,0,0,6.676e6]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Elle figure dans la section `dynamics` et non dans la section `external forces`
 (bien qu'il s'agisse d'un modèle d'effort, proportionnel à l'accélération)
@@ -530,20 +530,20 @@ Il est également possible d'extrapoler les masses ajoutées à pulsation infini
 à partir d'un [fichier HDB](#format-hdb). Pour cela, on écrit (pour lire depuis
 le fichier `test_ship.hdb`) :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 added mass matrix at the center of gravity and projected in the body frame:
     from hdb: test_ship.hdb
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 On peut également lire cette matrice depuis un fichier PRECAL_R. La section
 utilisée est `[added_mass_damping_matrix_inf_freq]`, présente à condition
 d'avoir activé la clef `calcAmasDampCoefInfFreq` (section `sim` > `parHYD` >
 `calcAmasDampCoefInfFreq` du fichier XML d'entrée de PRECAL_R) :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 added mass matrix at the center of gravity and projected in the body frame:
     from raodb: ONRT_SIMMAN.raodb.ini
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Dans le cas où les masses ajoutées proviennent d'un fichier (PRECAL_R ou
 AQUA+/DIODORE), il ne faut pas spécifier les clefs `frame` et `row` (le
@@ -579,7 +579,7 @@ le forçage des vitesses u, v, w, p, q, r ne présente pas ces difficultés.
 Pour forcer les degrés de liberté, on ajoute la section (facultative) suivante
 à la section `body` :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 blocked dof:
    from CSV:
      - state: u
@@ -592,7 +592,7 @@ blocked dof:
        t: [4.2]
        value: [5]
        interpolation: piecewise constant
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Soit les états sont donnés directement dans le fichier YAML, soit ils sont lus
 depuis un fichier CSV.
@@ -931,7 +931,7 @@ xdyn, leur grammaire EBNF a été déduite de l'analyse de plusieurs fichiers
 HDB qui nous ont été fournis jusqu'ici, peut être représentée comme suit (sans
 garantie d'exhaustivité) :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.bnf}
+```bnf
 ast                             = string-key
                                 | value-key
                                 | vector-section
@@ -957,7 +957,7 @@ character                       = "A" | "B" | "C" | "D" | "E" | "F" | "G"
                                 | "q" | "r" | "s" | "t" | "u" | "v" | "w"
                                 | "x" | "y" | "z" | "_";
 extended-char                   = character | "-" | "+"
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Les fichiers HDB sont donc constitués d'une liste d'éléments, ces éléments
 étant pouvant être de type `string-key`, `value-key`, `vector-section`,
@@ -968,28 +968,28 @@ d'éventuels autres outils utilisant les HDB).
 
 #### Exemple de "string-key"
 
-~~~~~~~~~~~~~~~~~~~~~ {.hdb}
+```hdb
  [SOFT] AQUA+
-~~~~~~~~~~~~~~~~~~~~~
+```
 
 #### Exemple de "value-key"
 
-~~~~~~~~~~~~~~~~~~~~~ {.hdb}
+```hdb
 [FORWARD_SPEED]   0.00
-~~~~~~~~~~~~~~~~~~~~~
+```
 
 #### Exemple de "vector-section"
 
-~~~~~~~~~~~~~~~~~~~~~ {.hdb}
+```hdb
  [List_calculated_periods]
    4.00
   64.00
  125.00
-~~~~~~~~~~~~~~~~~~~~~
+```
 
 #### Exemple de "matrix-section"
 
-~~~~~~~~~~~~~~~~~~~~~ {.hdb}
+```hdb
 [Mass_Inertia_matrix]
  8.635000E+06  0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+000.000000E+00
  0.000000E+00  8.635000E+06  0.000000E+00  0.000000E+00  0.000000E+000.000000E+00
@@ -997,11 +997,11 @@ d'éventuels autres outils utilisant les HDB).
  0.000000E+00  0.000000E+00  0.000000E+00  4.149000E+08  0.000000E+000.000000E+00
  0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+00  1.088000E+100.000000E+00
  0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+00  1.088000E+10
-~~~~~~~~~~~~~~~~~~~~~
+```
 
 #### Exemple de "list-of-matrix-sections"
 
-~~~~~~~~~~~~~~~~~~~~~ {.hdb}
+```hdb
 [Added_mass_Radiation_Damping]
 [ADDED_MASS_LINE_1]
    4.00  8.770898E+04  0.000000E+00  2.122348E+05  0.000000E+00  1.844677E+07  0.000000E+00
@@ -1011,11 +1011,11 @@ d'éventuels autres outils utilisant les HDB).
    4.00  0.000000E+00  2.406631E+06  0.000000E+00 -1.298266E+06  0.000000E+00  2.894931E+07
   64.00  0.000000E+00  7.130066E+06  0.000000E+00 -3.516670E+06  0.000000E+00  9.536960E+07
  125.00  0.000000E+00  7.100760E+06  0.000000E+00 -3.493418E+06  0.000000E+00  9.499156E+07
-~~~~~~~~~~~~~~~~~~~~~
+```
 
 #### Exemple de "list-of-matrix-sections-with-id"
 
-~~~~~~~~~~~~~~~~~~~~~ {.hdb}
+```hdb
 [FROUDE-KRYLOV_FORCES_AND_MOMENTS]
 [INCIDENCE_EFM_MOD_001]   0.000000
   4.00  6.452085E+04  0.000000E+00  3.775068E+05  0.000000E+00  2.630894E+07  0.000000E+00
@@ -1029,7 +1029,7 @@ d'éventuels autres outils utilisant les HDB).
   4.00  5.079494E-01  1.570796E+00  1.171722E+00  1.570796E+00  1.426003E+00  1.570796E+00
  64.00 -3.141362E+00  1.570796E+00 -1.576680E+00  1.570796E+00 -1.768797E+00  1.570796E+00
 125.00 -3.141476E+00  1.570796E+00 -1.572334E+00  1.570796E+00 -1.623406E+00  1.570796E+00
-~~~~~~~~~~~~~~~~~~~~~
+```
 
 ### Sections utilisées par xdyn
 
@@ -1059,12 +1059,12 @@ Ce point est, en général, distinct du centre de gravité et du centre de volum
 Il est défini dans la section `dynamics/hydrodynamic forces calculation point
 in body frame` du fichier YAML :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 hydrodynamic forces calculation point in body frame:
     x: {value: 0.696, unit: m}
     y: {value: 0, unit: m}
     z: {value: 1.418, unit: m}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 
 On note $`{}^{\textrm{local}}T_{\textrm{body}}`$ la transformation permettant de
@@ -1088,9 +1088,9 @@ La convention de rotation permet de retrouver la matrice de rotation d'un
 repère par rapport à un autre, étant donné un triplet $`(\phi, \theta, \psi)`$.
 La convention utilisée est décrite dans la section `rotations` :
 
-~~~~~~~~~~~~~~ {.yaml}
+```yaml
 rotations convention: [psi,theta',phi'']
-~~~~~~~~~~~~~~
+```
 
 Cette ligne s'interprète de la façon suivante : étant donné un triplet $(\phi,
 \theta, \psi)$, on construit les matrices de rotation en effectuant d'abord une
@@ -1100,9 +1100,9 @@ d'angle $`\phi`$ autour de l'axe X du repère ainsi obtenu.
 
 Si l'on avait noté :
 
-~~~~~~~~~~~~~~ {.yaml}
+```yaml
 rotations convention: [z,y',x'']
-~~~~~~~~~~~~~~
+```
 
 on aurait d'abord une rotation d'angle $`\phi`$ autour de l'axe Z, puis une
 rotation d'angle $`\theta`$ autour du nouvel axe Y, puis une rotation $`\psi`$
@@ -1123,17 +1123,17 @@ La convention des angles aéronautiques, fréquemment (et abusivement) dénotée
 "angles d'Euler" (lacet $`\psi`$, tangage $`\theta`$, roulis $`\phi`$), se définit de
 la façon suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 rotations convention: [psi, theta', phi'']
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 
 La convention d'orientation utilisée dans le logiciel
 [ParaView](http://www.paraview.org) est donnée par :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 rotations convention: [psi,phi',theta'']
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Pour plus de détails sur les conventions d'angles et d'axes, se référer à [la
 documentation détaillée](#conventions-dorientations).
@@ -1146,7 +1146,7 @@ La définition d'un repère dans xdyn s'effectue à partir d'un repère connu (N
 - `phi` ,`theta` ,`psi`, le triplet d'orientation dont l'interprétation en
    termes de matrices de rotations dépend de la convention d'orientation choisie
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
     frame: NED
     x: {value: 0, unit: m}
     y: {value: 0, unit: m}
@@ -1154,7 +1154,7 @@ La définition d'un repère dans xdyn s'effectue à partir d'un repère connu (N
     phi: {value: 0, unit: rad}
     theta: {value: 0, unit: rad}
     psi: {value: 0, unit: rad}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Cette description est en particulier utilisée pour définir le changement de coordonnées entre le repère du maillage et le repère du corps (par la clef [`position of body frame relative to mesh`](#passage-du-rep%C3%A8re-maillage-au-rep%C3%A8re-body)) et la position initiale du corps à simuler (clef [`initial position of body frame relative to NED`](#d%C3%A9finition-des-corps-simul%C3%A9s)).
 
