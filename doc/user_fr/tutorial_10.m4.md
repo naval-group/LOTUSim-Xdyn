@@ -1,3 +1,5 @@
+changequote(`{{', `}}')
+
 ## Tutoriel 10 : utilisation d'un modèle d'effort distant
 
 Ce tutoriel explique comment utiliser un modèle d'effort externe
@@ -52,7 +54,7 @@ print_yaml(yaml_data, 'bodies/0/external forces')
 
 Toutes les autres lignes sont envoyées au modèle d'effort en tant que paramètre, sans être interprétées par xdyn.
 Dans le cas présent, le modèle a deux paramètres $`k`$ et $`c`$ dont la valeur est donnée une fois pour toutes
-au début de la simulation. 
+au début de la simulation.
 
 
 ### Ecriture du modèle d'effort
@@ -75,36 +77,7 @@ d'xdyn.
 Dans un fichier Python (nommé `harmonic_oscillator.py` dans cet exemple) on écrit :
 
 ```python evaluate=False, results='hidden'
-"""Damped harmonic oscillator model."""
-
-import yaml
-import grpcforce
-
-
-class HarmonicOscillator(grpcforce.Model):
-    def __init__(self):
-        self.k = None
-        self.c = None
-
-    def model_needs_wave_outputs(self):
-        return False
-
-    def set_parameters(self, parameters):
-        param = yaml.safe_load(parameters)
-        self.k = param['k']
-        self.c = param['c']
-
-    def force(self, t, states, _, _, filtered_states):
-        # L'index entre parenthèses correspond à la position dans
-        # l'historique des états (en commençant par la valeur la
-        # plus récente) et l'instant correspondant est donné par
-        # states.t(i).
-        force = {'Fx': -self.k*states.x(0) - self.c*states.u(0), 'Fy': self.c*filtered_states.v(0), 'Fz': 0, 'Mx': 0, 'My': 0, 'Mz': 0}
-        return {'forces': forces, 'extra outputs': {}}
-
-
-if __name__ == '__main__':
-    grpcforce.serve(HarmonicOscillator())
+include({{forces/harmonic_oscillator.py}})
 ```
 
 ### Lancement de la simulation
