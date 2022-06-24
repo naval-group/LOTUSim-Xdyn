@@ -2899,9 +2899,8 @@ dans la section (optionnelle) `filtered states` du fichier YAML d'entrée.  Ces
 valeurs filtrées sont fournies aux modèles d'efforts distants. Si l'on utilise
 le framework Python du dépôt
 [`interfaces`](https://gitlab.com/sirehna_naval_group/sirehna/interfaces/-/blob/1795c55006d11ec46bf25a8cac410be00698a8ba/forces/force.py#L44),
-ces valeurs filtrées sont stockées dans le sixième argument de la méthode
-`grpcforce.Model.force(self, t, states, commands, wave_information,
-filtered_states)`.
+ces valeurs filtrées sont stockées dans le cinquième argument de la méthode
+`force.Model.force(self, states, commands, wave_information, filtered_states)`.
 
 ### Exemple d'utilisation
 
