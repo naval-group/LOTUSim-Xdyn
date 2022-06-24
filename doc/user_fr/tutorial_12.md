@@ -18,10 +18,10 @@ Si le fichier de sortie de PRECAL_R s'appelle `ONRT_SIMMAN.raodb.ini`, on
 utilise la section `bodies[0]/dynamics/added mass matrix at the center of
 gravity and projected in the body frame` suivante :
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.yaml}
+```yaml
 added mass matrix at the center of gravity and projected in the body frame:
     from PRECAL_R: ONRT_SIMMAN.raodb.ini
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 Voici le fichier d'exemple complet :
 
