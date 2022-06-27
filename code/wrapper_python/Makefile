@@ -40,6 +40,27 @@ ubuntu2004_py308_package: test_only
 ubuntu2204_py310_package: DOCKER_IMAGE_TEST=xdyn-python-ubuntu2204-py310-test
 ubuntu2204_py310_package: test_only
 
+xdyn.deb: ../../build_deb11_pywrapper/xdyn.deb
+	@cp $< $@
+
+create_docker_image_debian11_py309: xdyn.deb
+	docker build \
+		-f Dockerfile_deploy \
+		--build-arg DOCKER_BASE_IMAGE=debian:bullseye-slim \
+		--build-arg PYTHON_MAJOR_VERSION=3 \
+		--build-arg PYTHON_MINOR_VERSION=9 \
+		-t xdyn-debian11-py309 \
+		.
+
+create_docker_image_ubuntu2204_py310: xdyn.deb
+	docker build \
+		-f Dockerfile_deploy \
+		--build-arg DOCKER_BASE_IMAGE=ubuntu:22.04 \
+		--build-arg PYTHON_MAJOR_VERSION=3 \
+		--build-arg PYTHON_MINOR_VERSION=10 \
+		-t xdyn-ubuntu2204-py310 \
+		.
+
 test_additional_platforms_depending_on_debian: ubuntu2004_py308_package ubuntu2204_py310_package
 
 doc: ## Create documentation with Sphinx
@@ -88,6 +109,7 @@ clean: ## Removed all generated files
 	@rm -rf build
 	@rm -rf core
 	@rm -rf dist
+	@rm -rf proto
 	@rm -rf *.egg-info
 	@rm -rf *.whl
 	@rm -f *.coverage
@@ -96,6 +118,7 @@ clean: ## Removed all generated files
 	@rm -f unit_tests/*.coverage
 	@rm -f unit_tests/core
 	@rm -f unit_tests/nosetests.xml
+	@rm -f *.deb
 	@find . -type d -name __pycache__ -exec rm -rf {} \; || true
 
 .PHONY=xdyn-python-deb11-build
