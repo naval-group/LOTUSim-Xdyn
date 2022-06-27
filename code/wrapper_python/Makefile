@@ -49,7 +49,7 @@ create_docker_image_debian11_py309: xdyn.deb
 		--build-arg DOCKER_BASE_IMAGE=debian:bullseye-slim \
 		--build-arg PYTHON_MAJOR_VERSION=3 \
 		--build-arg PYTHON_MINOR_VERSION=9 \
-		-t sirehna/xdyn-debian11-py309 \
+		-t xdyn-debian11-py309 \
 		.
 
 create_docker_image_ubuntu2204_py310: xdyn.deb
@@ -58,7 +58,7 @@ create_docker_image_ubuntu2204_py310: xdyn.deb
 		--build-arg DOCKER_BASE_IMAGE=ubuntu:22.04 \
 		--build-arg PYTHON_MAJOR_VERSION=3 \
 		--build-arg PYTHON_MINOR_VERSION=10 \
-		-t sirehna/xdyn-ubuntu2204-py310 \
+		-t xdyn-ubuntu2204-py310 \
 		.
 
 test_additional_platforms_depending_on_debian: ubuntu2004_py308_package ubuntu2204_py310_package
