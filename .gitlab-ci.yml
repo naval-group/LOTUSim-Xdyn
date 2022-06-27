@@ -19,6 +19,9 @@ after_script:
   - make clean
   - docker ps
 
+variables:
+  DEPLOYED_DOCKER_IMAGES: xdyn xdyn-debian11-py309 xdyn-ubuntu2204-py310
+
 lint:
   stage: lint
   script:
@@ -82,6 +85,7 @@ build:debian11-release-python-all:
     - make NB_OF_PARALLEL_BUILDS="-j 1" debian_11_release_gcc_10_wrapper_python_all
     - mv build_deb11_pywrapper/xdyn.deb .
     - mv code/wrapper_python/*.whl .
+    - docker build . --tag xdyn
   artifacts:
     when: on_success
     paths:
@@ -164,11 +168,18 @@ pages:
 
 Deploy to test tag:
   stage: deploy
+  variables:
+    VERSION: test
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
   script:
-    - docker build --pull --cache-from "$CI_REGISTRY_IMAGE:test" --tag "$CI_REGISTRY_IMAGE:test" .
-    - docker push "$CI_REGISTRY_IMAGE:test"
+    - >
+      for DOCKER_IMAGE in ${DEPLOYED_DOCKER_IMAGES} ; do
+         echo "Tagging ${DOCKER_IMAGE} -> ${CI_REGISTRY}/sirehna/${DOCKER_IMAGE}:${VERSION}"
+         docker tag ${DOCKER_IMAGE} ${CI_REGISTRY}/sirehna/${DOCKER_IMAGE}:${VERSION}
+         echo "Pushing ${CI_REGISTRY}/sirehna/${DOCKER_IMAGE}:${VERSION}"
+         docker push ${CI_REGISTRY}/sirehna/${DOCKER_IMAGE}:${VERSION}
+      done
   only:
     variables:
       - $CI_REGISTRY_PASSWORD
@@ -178,11 +189,18 @@ Deploy to test tag:
 
 Deploy to beta:
   stage: deploy
+  variables:
+    VERSION: beta
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
   script:
-    - docker build --pull --cache-from "$CI_REGISTRY_IMAGE:test" --tag "$CI_REGISTRY_IMAGE:beta" .
-    - docker push "$CI_REGISTRY_IMAGE:beta"
+    - >
+      for DOCKER_IMAGE in ${DEPLOYED_DOCKER_IMAGES} ; do
+         echo "Tagging ${DOCKER_IMAGE} -> ${CI_REGISTRY}/sirehna/${DOCKER_IMAGE}:${VERSION}"
+         docker tag ${DOCKER_IMAGE} ${CI_REGISTRY}/sirehna/${DOCKER_IMAGE}:${VERSION}
+         echo "Pushing ${CI_REGISTRY}/sirehna/${DOCKER_IMAGE}:${VERSION}"
+         docker push ${CI_REGISTRY}/sirehna/${DOCKER_IMAGE}:${VERSION}
+      done
   only:
     variables:
       - $CI_REGISTRY_PASSWORD
@@ -193,12 +211,19 @@ Deploy to beta:
 
 Deploy tagged version:
   stage: deploy
+  variables:
+    VERSION: $CI_COMMIT_REF_SLUG
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
   script:
-    - docker build --pull --cache-from "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" --tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" .
-    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
-    - docker push "$CI_REGISTRY_IMAGE"
+    - >
+      for DOCKER_IMAGE in ${DEPLOYED_DOCKER_IMAGES} ; do
+         echo "Tagging ${DOCKER_IMAGE} -> ${CI_REGISTRY}/sirehna/${DOCKER_IMAGE}:${VERSION}"
+         docker tag ${DOCKER_IMAGE} ${CI_REGISTRY}/sirehna/${DOCKER_IMAGE}:${VERSION}
+         echo "Pushing ${CI_REGISTRY}/sirehna/${DOCKER_IMAGE}:${VERSION}"
+         docker push ${CI_REGISTRY}/sirehna/${DOCKER_IMAGE}:${VERSION}
+         docker push ${CI_REGISTRY}/sirehna/${DOCKER_IMAGE}
+      done
   only:
     variables:
       - $CI_REGISTRY_PASSWORD
