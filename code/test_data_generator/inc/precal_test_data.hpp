@@ -5,7 +5,11 @@
 
 namespace test_data
 {
+    /**\brief Return an example of a Precal file with kilo units*/
     std::string precal();
+
+    /**\brief Return an example of a Precal file with SI units*/
+    std::string precal_with_si_unit();
 }
 
 std::string glossary_of_terms();

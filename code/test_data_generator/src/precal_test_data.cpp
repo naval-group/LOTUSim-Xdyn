@@ -1,4 +1,5 @@
 #include "precal_test_data.hpp"
+#include <boost/algorithm/string.hpp>
 
 std::string test_data::precal()
 {
@@ -6,6 +7,22 @@ std::string test_data::precal()
            + ship_particulars() + mass_properties() + mass_matrix() + restoring_matrix()
            + natural_periods_and_frequencies() + added_mass_damping_matrix_inf_freq()
            + hull_properties() + roll_damping() + labels() + dimensions() + signals() + raos();
+}
+
+std::string test_data::precal_with_si_unit()
+{
+    /* Replace kilo with SI unit by removing prefix `k` in units from `signals` and `raos` functions*/
+    std::string signals_si(signals());
+    std::string raos_si(raos());
+    for (const auto& unit: {"N", "N/m", "N.m/m", "N.m/m2", "N/m2"})
+    {
+        boost::replace_all(signals_si, std::string("k") + unit, unit);
+        boost::replace_all(raos_si, std::string("k") + unit, unit);
+    }
+    return glossary_of_terms() + general() + constants() + simulation() + exports()
+           + ship_particulars() + mass_properties() + mass_matrix() + restoring_matrix()
+           + natural_periods_and_frequencies() + added_mass_damping_matrix_inf_freq()
+           + hull_properties() + roll_damping() + labels() + dimensions() + signals_si + raos_si;
 }
 
 std::string glossary_of_terms()
