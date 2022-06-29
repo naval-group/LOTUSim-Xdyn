@@ -445,8 +445,8 @@ void PrecalParser::init_froude_krylov_tables()
 {
     try
     {
-        froude_krylov_module = retrieve_tables("F_inc_m", "Froude-Krylov", "sim > parRES > expIncWaveFrc", ModuleOrPhase::MODULE);;
-        froude_krylov_phase = retrieve_tables("F_inc_m", "Froude-Krylov", "sim > parRES > expIncWaveFrc", ModuleOrPhase::PHASE);;
+        froude_krylov_module = retrieve_tables("F_inc_m", "Froude-Krylov", "sim > parRES > expIncWaveFrc", ModuleOrPhase::MODULE);
+        froude_krylov_phase = retrieve_tables("F_inc_m", "Froude-Krylov", "sim > parRES > expIncWaveFrc", ModuleOrPhase::PHASE);
     }
     catch (const InvalidInputException& e)
     {
