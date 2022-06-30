@@ -176,6 +176,7 @@ void py_add_module_xdyn_data_test(py::module& m)
 
     py::module m_precal = m.def_submodule("precal");
     m_precal.def("precal", &test_data::precal);
+    m_precal.def("precal_with_si_unit", &test_data::precal_with_si_unit);
     m_precal.def("glossary_of_terms", &glossary_of_terms);
     m_precal.def("general", &general);
     m_precal.def("constants", &constants);
