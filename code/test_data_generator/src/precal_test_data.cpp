@@ -14,7 +14,7 @@ std::string test_data::precal_with_si_unit()
     /* Replace kilo with SI unit by removing prefix `k` in units from `signals` and `raos` functions*/
     std::string signals_si(signals());
     std::string raos_si(raos());
-    for (const auto& unit: {"N", "N/m", "N.m/m", "N.m/m2", "N/m2"})
+    for (const auto& unit: {"N", "N/m", "N.m/m", "N.m/m2", "N/m2", "N.s", "N.s2", "N.s/m", "N.s2/m", "N.m.s2", "N.m.s"})
     {
         boost::replace_all(signals_si, std::string("k") + unit, unit);
         boost::replace_all(raos_si, std::string("k") + unit, unit);
