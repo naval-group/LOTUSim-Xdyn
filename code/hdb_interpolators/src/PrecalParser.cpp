@@ -317,15 +317,15 @@ void PrecalParser::fill_periods_directions_and_values(RAOData& rao, const std::v
         frequencies.size(), std::vector<double>(directions.size(), 0)));
 }
 
-void fill_module_values(RAOData& ret, const RAO& rao, const std::vector<std::pair<size_t, double> >& frequencies, const size_t mode_idx, const size_t psi_idx);
-void fill_module_values(RAOData& ret, const RAO& rao, const std::vector<std::pair<size_t, double> >& frequencies, const size_t mode_idx, const size_t psi_idx)
+void fill_module_values(RAOData& ret, const RAO& rao, const std::vector<std::pair<size_t, double> >& frequencies, const size_t mode_idx, const size_t psi_idx, const double scale_to_si);
+void fill_module_values(RAOData& ret, const RAO& rao, const std::vector<std::pair<size_t, double> >& frequencies, const size_t mode_idx, const size_t psi_idx, const double scale_to_si)
 {
     for (size_t frequency_idx = 0; frequency_idx < frequencies.size(); ++frequency_idx)
     {
         const size_t frequency_idx_in_input_file
             = frequencies.at(frequency_idx).first;
         ret.values.at(mode_idx).at(frequency_idx).at(psi_idx)
-            = rao.left_column.at(frequency_idx_in_input_file) * 1e3;
+            = rao.left_column.at(frequency_idx_in_input_file) * scale_to_si;
     }
 }
 
@@ -339,6 +339,19 @@ void fill_phase_values(RAOData& ret, const RAO& rao, const std::vector<std::pair
         ret.values.at(mode_idx).at(frequency_idx).at(psi_idx)
             = rao.right_column.at(frequency_idx_in_input_file) * DEG2RAD;
     }
+}
+
+bool is_unit_name_accepted(const std::string& actual_unit, const std::vector<std::string>& expected_units);
+bool is_unit_name_accepted(const std::string& actual_unit, const std::vector<std::string>& expected_units)
+{
+    for (const auto& expected_unit:expected_units)
+    {
+        if (actual_unit == expected_unit)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 void check_units(const std::string& pretty_name, const std::string& actual_unit, const std::vector<std::string>& expected_units);
@@ -358,6 +371,23 @@ void check_units(const std::string& pretty_name, const std::string& actual_unit,
         "in PRECAL_R's output file. Known units:" << ss.str() << ".");
 }
 
+void throw_error(const std::string& pretty_name, const std::string& actual_unit, const std::vector<std::vector<std::string>>& vector_of_expected_units);
+void throw_error(const std::string& pretty_name, const std::string& actual_unit, const std::vector<std::vector<std::string>>& vector_of_expected_units)
+{
+    std::stringstream ss;
+    for (const auto& expected_units:vector_of_expected_units)
+    {
+        for (const auto& expected_unit:expected_units)
+        {
+            ss << " " << expected_unit;
+        }
+    }
+    THROW(__PRETTY_FUNCTION__, InvalidInputException,
+        "Unknown unit '" << actual_unit << "' for " << pretty_name << " RAO "
+        "in PRECAL_R's output file. Known units:" << ss.str() << ".");
+
+}
+
 RAOData PrecalParser::retrieve_tables(const std::string& signal_basename, const std::string& pretty_name, const std::string& path_to_boolean_parameter, const ModuleOrPhase module_or_phase) const
 {
     RAOData ret;
@@ -372,8 +402,20 @@ RAOData PrecalParser::retrieve_tables(const std::string& signal_basename, const 
             const RAO rao = find_rao(signal_name, path_to_boolean_parameter, directions.at(psi_idx), sorted_indexed_frequencies.size());
             if (module_or_phase == ModuleOrPhase::MODULE)
             {
-                check_units(pretty_name, rao.attributes.amplitude_unit, {"kN/m", "kN.m/m", "kN.m/m2", "kN/m2"});
-                fill_module_values(ret, rao, sorted_indexed_frequencies, mode_idx, psi_idx);
+                const std::vector<std::string> unit_si{"N", "N/m", "N.m/m", "N.m/m2", "N/m2"};
+                const std::vector<std::string> unit_kilo_si{"kN", "kN/m", "kN.m/m", "kN.m/m2", "kN/m2"};
+                if (is_unit_name_accepted(rao.attributes.amplitude_unit, unit_kilo_si))
+                {
+                    fill_module_values(ret, rao, sorted_indexed_frequencies, mode_idx, psi_idx, 1e3);
+                }
+                else if (is_unit_name_accepted(rao.attributes.amplitude_unit, unit_si))
+                {
+                    fill_module_values(ret, rao, sorted_indexed_frequencies, mode_idx, psi_idx, 1.0);
+                }
+                else
+                {
+                    throw_error(pretty_name, rao.attributes.amplitude_unit, {unit_si, unit_kilo_si});
+                }
             }
             else
             {
@@ -403,8 +445,8 @@ void PrecalParser::init_froude_krylov_tables()
 {
     try
     {
-        froude_krylov_module = retrieve_tables("F_inc_m", "Froude-Krylov", "sim > parRES > expIncWaveFrc", ModuleOrPhase::MODULE);;
-        froude_krylov_phase = retrieve_tables("F_inc_m", "Froude-Krylov", "sim > parRES > expIncWaveFrc", ModuleOrPhase::PHASE);;
+        froude_krylov_module = retrieve_tables("F_inc_m", "Froude-Krylov", "sim > parRES > expIncWaveFrc", ModuleOrPhase::MODULE);
+        froude_krylov_phase = retrieve_tables("F_inc_m", "Froude-Krylov", "sim > parRES > expIncWaveFrc", ModuleOrPhase::PHASE);
     }
     catch (const InvalidInputException& e)
     {
@@ -590,6 +632,33 @@ std::string coeff_name(const std::string& prefix, const size_t i , const size_t 
     return prefix + "_m" + std::to_string(i+1) + "m" + std::to_string(j+1);
 }
 
+double get_si_scaling_factor(const std::string& amplitude_unit);
+double get_si_scaling_factor(const std::string& amplitude_unit)
+{
+    const std::vector<std::string> unit_si{"N", "N/m", "N.m/m", "N.m/m2", "N/m2", "N.s", "N.s2", "N.s/m", "N.s2/m", "N.m.s2", "N.m.s"};
+    const std::vector<std::string> unit_kilo_si{"kN", "kN/m", "kN.m/m", "kN.m/m2", "kN/m2", "kN.s", "kN.s2", "kN.s/m", "kN.s2/m", "kN.m.s2", "kN.m.s"};
+    if (is_unit_name_accepted(amplitude_unit, unit_kilo_si))
+    {
+        return 1e3;
+    }
+    else if (is_unit_name_accepted(amplitude_unit, unit_si))
+    {
+        return 1.0;
+    }
+    THROW(__PRETTY_FUNCTION__, InvalidInputException, "Unable to find scaling unit for " << amplitude_unit);
+}
+
+std::vector<double> scale_vector_of_doubles(const std::vector<double>& input, const double scale);
+std::vector<double> scale_vector_of_doubles(const std::vector<double>& input, const double scale)
+{
+    std::vector<double> result(input);
+    if (scale!=1.0)
+    {
+        std::transform(result.begin(), result.end(), result.begin(), [&scale](double& c){return scale*c;});
+    }
+    return result;
+}
+
 std::vector<double> PrecalParser::extract_matrix_coeff(const std::string& short_name, const std::string& long_name, const size_t i, const size_t j) const
 {
     bool found_signal = false;
@@ -602,7 +671,7 @@ std::vector<double> PrecalParser::extract_matrix_coeff(const std::string& short_
             found_signal = true;
             if (rao.attributes.U == 0)
             {
-                return rao.left_column;
+                return scale_vector_of_doubles(rao.left_column, get_si_scaling_factor(rao.attributes.amplitude_unit));
             }
             else
             {

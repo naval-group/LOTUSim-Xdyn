@@ -78,12 +78,12 @@ def check_froude_krylov_module_periods(results):
 
 def check_froude_krylov_phase_periods(results):
     assert results['FKTp0(TestShip)'] == '6.283185e+00', results['FKTp0(TestShip)']
-    assert results['FKTp1(TestShip)'] == '6.981317e+00', results['FKTp1(TestShip)'] 
+    assert results['FKTp1(TestShip)'] == '6.981317e+00', results['FKTp1(TestShip)']
     assert results['FKTp2(TestShip)'] == '7.853982e+00', results['FKTp2(TestShip)']
     print("✓ Froude-Krylov phase periods test passed!")
 
 def check_froude_krylov_module_psis(results):
-    assert results['FKpsi0(TestShip)'] == '1.570796e+00', results['FKpsi0(TestShip)'] 
+    assert results['FKpsi0(TestShip)'] == '1.570796e+00', results['FKpsi0(TestShip)']
     assert results['FKpsi1(TestShip)'] == '3.141593e+00', results['FKpsi1(TestShip)']
     print("✓ Froude-Krylov module incidence test passed!")
 
@@ -99,23 +99,23 @@ def check_angular_frequencies(results):
     print("✓ Angular frequencies test passed!")
 
 def check_added_mass_coeff(results):
-    assert results['Ma000(TestShip)'] == '2.755600e+02', results['Ma000(TestShip)']
-    assert results['Ma001(TestShip)'] == '2.714980e+02', results['Ma001(TestShip)']
-    assert results['Ma002(TestShip)'] == '2.338420e+02', results['Ma002(TestShip)']
-    assert results['Ma110(TestShip)'] == '8.305330e+03', results['Ma110(TestShip)']
-    assert results['Ma111(TestShip)'] == '8.924980e+03', results['Ma111(TestShip)']
-    assert results['Ma112(TestShip)'] == '9.331230e+03', results['Ma112(TestShip)']
+    assert results['Ma000(TestShip)'] == '2.755600e+05', results['Ma000(TestShip)']
+    assert results['Ma001(TestShip)'] == '2.714980e+05', results['Ma001(TestShip)']
+    assert results['Ma002(TestShip)'] == '2.338420e+05', results['Ma002(TestShip)']
+    assert results['Ma110(TestShip)'] == '8.305330e+06', results['Ma110(TestShip)']
+    assert results['Ma111(TestShip)'] == '8.924980e+06', results['Ma111(TestShip)']
+    assert results['Ma112(TestShip)'] == '9.331230e+06', results['Ma112(TestShip)']
     print("✓ Added mass coefficient test passed!")
 
 def check_radiation_damping_coeff(results):
-    assert results['Br_0_0_0(TestShip)']  == '1.744400e+01', results['Br_0_0_0(TestShip)']
-    assert results['Br_0_0_6(TestShip)'] == '1.081630e+02', results['Br_0_0_6(TestShip)']
-    assert results['Br_5_0_0(TestShip)']  == '1.880490e-03', results['Br_5_0_0(TestShip)']
-    assert results['Br_5_0_6(TestShip)'] == '5.640630e-03', results['Br_5_0_6(TestShip)']
-    assert results['Br_0_5_0(TestShip)']  == '-1.886460e-04', results['Br_0_5_0(TestShip)']
-    assert results['Br_0_5_6(TestShip)'] == '-6.570310e-03', results['Br_0_5_6(TestShip)']
-    assert results['Br_5_5_0(TestShip)']  == '1.192720e+04', results['Br_5_5_0(TestShip)']
-    assert results['Br_5_5_6(TestShip)'] == '7.054820e+06', results['Br_5_5_6(TestShip)']
+    assert results['Br_0_0_0(TestShip)'] == '1.744400e+04', results['Br_0_0_0(TestShip)']
+    assert results['Br_0_0_6(TestShip)'] == '1.081630e+05', results['Br_0_0_6(TestShip)']
+    assert results['Br_5_0_0(TestShip)'] == '1.880490e+00', results['Br_5_0_0(TestShip)']
+    assert results['Br_5_0_6(TestShip)'] == '5.640630e+00', results['Br_5_0_6(TestShip)']
+    assert results['Br_0_5_0(TestShip)'] == '-1.886460e-01', results['Br_0_5_0(TestShip)']
+    assert results['Br_0_5_6(TestShip)'] == '-6.570310e+00', results['Br_0_5_6(TestShip)']
+    assert results['Br_5_5_0(TestShip)'] == '1.192720e+07', results['Br_5_5_0(TestShip)']
+    assert results['Br_5_5_6(TestShip)'] == '7.054820e+09', results['Br_5_5_6(TestShip)']
     print("✓ Radiation damping coefficient test passed!")
 
 def check_wave_drift_forces(results):

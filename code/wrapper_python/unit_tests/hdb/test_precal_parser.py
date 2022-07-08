@@ -9,6 +9,7 @@ from xdyn.data.test.precal import (
     added_mass_damping_matrix_inf_freq,
     general,
     precal,
+    precal_with_si_unit,
     raos,
     ship_particulars,
 )
@@ -274,6 +275,18 @@ class PrecalParserTest(unittest.TestCase):
         data = PrecalParser.from_string(precal())
         A_11 = data.get_added_mass_coeff(0, 0)
         self.assertEqual(7, len(A_11))
+        self.assertEqual(0.275560e03 * 1e3, A_11[0])
+        self.assertEqual(0.271498e03 * 1e3, A_11[1])
+        self.assertEqual(0.233842e03 * 1e3, A_11[2])
+        self.assertEqual(0.183239e03 * 1e3, A_11[3])
+        self.assertEqual(0.147226e03 * 1e3, A_11[4])
+        self.assertEqual(0.128148e03 * 1e3, A_11[5])
+        self.assertEqual(0.114148e03 * 1e3, A_11[6])
+
+    def test_can_get_added_mass_coefficients_for_each_frequency_with_si_unit(self):
+        data = PrecalParser.from_string(precal_with_si_unit())
+        A_11 = data.get_added_mass_coeff(0, 0)
+        self.assertEqual(7, len(A_11))
         self.assertEqual(0.275560e03, A_11[0])
         self.assertEqual(0.271498e03, A_11[1])
         self.assertEqual(0.233842e03, A_11[2])
@@ -286,11 +299,23 @@ class PrecalParserTest(unittest.TestCase):
         data = PrecalParser.from_string(precal())
         Br_34 = data.get_radiation_damping_coeff(2, 3)
         self.assertEqual(7, len(Br_34))
+        self.assertEqual(-0.223749e-03 * 1e3, Br_34[0])
+        self.assertEqual(-0.214409e-03 * 1e3, Br_34[1])
+        self.assertEqual(+0.123597e-02 * 1e3, Br_34[2])
+        self.assertEqual(+0.176562e-02 * 1e3, Br_34[3])
+        self.assertEqual(+0.260162e-03 * 1e3, Br_34[4])
+        self.assertEqual(-0.352648e-03 * 1e3, Br_34[5])
+        self.assertEqual(-0.102490e-02 * 1e3, Br_34[6])
+
+    def test_can_get_radiation_damping_matrix_coefficients_for_each_frequency_with_si_unit(self):
+        data = PrecalParser.from_string(precal_with_si_unit())
+        Br_34 = data.get_radiation_damping_coeff(2, 3)
+        self.assertEqual(7, len(Br_34))
         self.assertEqual(-0.223749e-03, Br_34[0])
         self.assertEqual(-0.214409e-03, Br_34[1])
-        self.assertEqual(0.123597e-02, Br_34[2])
-        self.assertEqual(0.176562e-02, Br_34[3])
-        self.assertEqual(0.260162e-03, Br_34[4])
+        self.assertEqual(+0.123597e-02, Br_34[2])
+        self.assertEqual(+0.176562e-02, Br_34[3])
+        self.assertEqual(+0.260162e-03, Br_34[4])
         self.assertEqual(-0.352648e-03, Br_34[5])
         self.assertEqual(-0.102490e-02, Br_34[6])
 
