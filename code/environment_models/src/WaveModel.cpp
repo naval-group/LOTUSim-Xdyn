@@ -55,6 +55,11 @@ DiscreteDirectionalWaveSpectrum add_random_phases(DiscreteDirectionalWaveSpectru
     return spectrum;
 }
 
+WaveModel::WaveModel(const DiscreteDirectionalWaveSpectrum& spectrum_): spectrum(spectrum_), flat_spectrum(flatten(spectrum))
+{
+    check_sizes();
+}
+
 WaveModel::WaveModel(const DiscreteDirectionalWaveSpectrum& spectrum_, const double constant_phase) : spectrum(add_constant_phases(spectrum_, constant_phase)), flat_spectrum(flatten(spectrum))
 {
     check_sizes();
