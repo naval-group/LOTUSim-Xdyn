@@ -34,6 +34,7 @@ struct DiscreteDirectionalWaveSpectrum
 
     std::function<double(double,double,double)> pdyn_factor;    //!< Factor used when computing the dynamic pressure (no unit)
     std::function<double(double,double,double)> pdyn_factor_sh; //!< Factor used when computing the orbital velocity (no unit)
+    void check_sizes() const;
 };
 
 /** \brief Used by the wave models (eg. Airy, Stokes, etc.)
