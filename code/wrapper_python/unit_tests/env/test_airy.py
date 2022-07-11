@@ -802,6 +802,38 @@ class AiryTest(unittest.TestCase):
         # res =  BretschneiderSpectrum(Hs, Tp) + DiracSpectralDensity(omega0, Hs0)
 
 
+
+class AiryPythonOnlyTest(unittest.TestCase):
+    """Test class for Airy"""
+    def test_to_see_if_one_can_impose_everyhting_for_discrete_directional_wave_spectrum(self):
+        Tp = 12
+        omega = 2 * np.pi / Tp
+        phi = 0.123456789
+        psi0 = 42 / 180 * np.pi
+        k = omega * omega / 9.81
+        Si = 0.1475
+        xdyn_spectrum = DiscreteDirectionalWaveSpectrum()
+        xdyn_spectrum.Si = [Si]
+        xdyn_spectrum.Dj = [1]
+        xdyn_spectrum.omega = [omega]
+        xdyn_spectrum.psi = [psi0]
+        xdyn_spectrum.k = [k]
+        xdyn_spectrum.phase = [[phi]]
+        wave = Airy(spectrum=xdyn_spectrum)
+        t = 666.0
+        x = [11.0]
+        y = [17.0]
+        amplitude = np.sqrt(2 * Si)
+        self.assertAlmostEqual(
+            -amplitude
+            * np.sin(
+                -2 * np.pi / Tp * t + k * (x[0] * np.cos(psi0) + y[0] * np.sin(psi0)) + phi
+            ),
+            wave.get_elevation(x, y, t)[0],
+            delta=1e-6,
+        )
+
+
 if __name__ == "__main__":
 
     unittest.main()
