@@ -220,6 +220,7 @@ Deploy tagged version:
       for DOCKER_IMAGE in ${DEPLOYED_DOCKER_IMAGES} ; do
          echo "Tagging ${DOCKER_IMAGE} -> ${CI_REGISTRY}/sirehna/${DOCKER_IMAGE}:${VERSION}"
          docker tag ${DOCKER_IMAGE} ${CI_REGISTRY}/sirehna/${DOCKER_IMAGE}:${VERSION}
+         docker tag ${DOCKER_IMAGE} ${CI_REGISTRY}/sirehna/${DOCKER_IMAGE}
          echo "Pushing ${CI_REGISTRY}/sirehna/${DOCKER_IMAGE}:${VERSION}"
          docker push ${CI_REGISTRY}/sirehna/${DOCKER_IMAGE}:${VERSION}
          docker push ${CI_REGISTRY}/sirehna/${DOCKER_IMAGE}
