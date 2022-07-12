@@ -14,6 +14,9 @@
 #include <ssc/macros.hpp>
 
 
+Airy::Airy(const DiscreteDirectionalWaveSpectrum& spectrum_): WaveModel(spectrum_)
+{
+}
 
 Airy::Airy(const DiscreteDirectionalWaveSpectrum& spectrum_, const double constant_random_phase) : WaveModel(spectrum_, constant_random_phase)
 {
@@ -114,7 +117,7 @@ std::vector<double> Airy::dynamic_pressure(
             }
             p[j] *= rho * g;
         }
-        
+
     }
     return p;
 }
@@ -131,7 +134,7 @@ ssc::kinematics::PointMatrix Airy::orbital_velocity(
     ssc::kinematics::PointMatrix M("NED", x.size());
     for (size_t point_index = 0; point_index < x.size(); ++point_index) {
 
-        if (z.at(point_index) < eta.at(point_index)) 
+        if (z.at(point_index) < eta.at(point_index))
         {
             M.m(0, point_index) = 0;
             M.m(1, point_index) = 0;

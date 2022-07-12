@@ -146,18 +146,18 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
 
     py::class_<DiscreteDirectionalWaveSpectrum>(m_env, "DiscreteDirectionalWaveSpectrum")
         .def(py::init<>())
-        .def_readwrite("Si", &DiscreteDirectionalWaveSpectrum::Si, "Discretized spectral density (in s m^2/rad)")
+        .def_readwrite("Si", &DiscreteDirectionalWaveSpectrum::Si, "Discretized spectral density (in m^2.s")
         .def_readwrite("Dj", &DiscreteDirectionalWaveSpectrum::Dj, "Spatial spreading (in 1/rad)")
         .def_readwrite("omega", &DiscreteDirectionalWaveSpectrum::omega, "Angular frequencies the spectrum was discretized at (in rad/s)")
         .def_readwrite("psi", &DiscreteDirectionalWaveSpectrum::psi, "Directions between 0 & 2pi the spatial spreading was discretized at (in rad)")
-        .def_readwrite("k", &DiscreteDirectionalWaveSpectrum::k, "Discretized wave number (for each frequency) in rad/m")
+        .def_readwrite("k", &DiscreteDirectionalWaveSpectrum::k, "Discretized wave number (for each frequency) (in 1/m)")
         .def_readwrite("phase", &DiscreteDirectionalWaveSpectrum::phase, "Random phases, for each (frequency, direction) couple (but time invariant) in radian phases *phase[i_freq][i_dir]*")
         ;
 
     py::class_<FlatDiscreteDirectionalWaveSpectrum>(m_env, "FlatDiscreteDirectionalWaveSpectrum")
         .def(py::init<>())
         .def_readwrite("a", &FlatDiscreteDirectionalWaveSpectrum::a,
-            "Amplitude (in m².s), for each angular frequency omega, and direction")
+            "Amplitude (in m), for each angular frequency omega, and direction")
         .def_readwrite("omega", &FlatDiscreteDirectionalWaveSpectrum::omega,
             "Angular frequencies the spectrum was discretized at (in rad/s), for each angular frequency omega, and direction")
         .def_readwrite("psi", &FlatDiscreteDirectionalWaveSpectrum::psi,
@@ -167,7 +167,7 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
         .def_readwrite("sin_psi", &FlatDiscreteDirectionalWaveSpectrum::sin_psi,
             "Sinus directions between 0 & 2pi the spatial spreading was discretized at (so we do not compute it each time), for each angular frequency omega, and direction")
         .def_readwrite("k", &FlatDiscreteDirectionalWaveSpectrum::k,
-            "Discretized wave number (for each frequency) in rad/m, for each angular frequency omega, i.e. same size as omega")
+            "Discretized wave number (for each frequency) (in 1/m), for each angular frequency omega, i.e. same size as omega")
         .def_readwrite("phase", &FlatDiscreteDirectionalWaveSpectrum::phase,
             "Random phases, for each (frequency, direction) couple (but time invariant) in radian, for each angular frequency omega, and direction")
         ;
@@ -248,6 +248,8 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
     py::class_<WaveModelPtr>(m_env, "WaveModelPtr");
 
     py::class_<Airy, WaveModel>(m_env, "Airy")
+        .def(py::init<const DiscreteDirectionalWaveSpectrum& /*spectrum*/>(),
+            py::arg("spectrum"))
         .def(py::init<const DiscreteDirectionalWaveSpectrum& /*spectrum*/, const double /*constant_random_phase*/>(),
             py::arg("spectrum"), py::arg("constant_random_phase"))
         .def(py::init<const DiscreteDirectionalWaveSpectrum& /*spectrum*/, const int /*random_number_generator_seed*/>(),

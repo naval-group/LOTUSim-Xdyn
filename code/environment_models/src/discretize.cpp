@@ -120,6 +120,7 @@ FlatDiscreteDirectionalWaveSpectrum flatten(
         )
 {
     FlatDiscreteDirectionalWaveSpectrum ret;
+    spectrum.check_sizes();
     const size_t nOmega = spectrum.omega.size();
     const size_t nPsi = spectrum.psi.size();
     double domega = 1;
