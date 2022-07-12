@@ -1,3 +1,21 @@
+# v6.0.3 (2022-07-12)
+
+- #262 Create a wavemodel instance from discretedirectionalwavespectrum with imposed phase
+- #256 Parser precal_r seacal units
+- #257 Create a docker image to deploy with xdyn python xdyn wheel and also proto file
+- #260 Updated documentation on grpc attribute for force models
+- #259 Fix python unit test tolerance
+- #258 Merge doc directories and add fr suffix to the doc directory
+- #255 Fix sphinx documentation build due to automatic upgrade of sphinx
+
+
+# v6.0.2 (2022-05-31)
+
+- #253 Add python grpc interface code to xdyn container
+- #252 Fix ci build due to grpc library update
+- #69 Update code so that it compiles with ubuntu 22 04 and gcc 11
+
+
 # v6.0.1 (2022-05-20)
 
 - #144 Utilisation modele hydrostatic avec houle
@@ -29,13 +47,14 @@
 - #233 Fix broken documentation generation
 - #229 Clearer error message on parse error for hydro polar model
 - #222 Wrong exception when the wrong key is set in yaml file
-
-
-# v5.1.0 (2022-03-03)
-
 - #226 Update changelog due to new version 5 0 1 5 1
 - #224 Update python code in documentation that does not work
 - #60 Flettner rotor force model is not known by xdyn
+
+
+# v5.1.0 (2022-02-28)
+
+- #224 Update python code in documentation that does not work
 - #223 Fix grpc directional_spectra method that contains an indice bug
 - #59 Flettner rotor force model
 - #221 Fix title section in documentation
