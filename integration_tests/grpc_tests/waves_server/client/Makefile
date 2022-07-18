@@ -11,10 +11,10 @@ DOCKER_RUN_BASH:= ${DOCKER_RUN} \
     ${DOCKER_IMAGE} -c
 
 wave_grpc.proto:
-	@cp ../../../../interfaces/$@ .
+	@cp ../../../../interfaces/proto/$@ .
 
 wave_types.proto:
-	@cp ../../../../interfaces/$@ .
+	@cp ../../../../interfaces/proto/$@ .
 
 waves.py:
 	@cp ../../../../interfaces/waves/python/client/$@ .

@@ -60,7 +60,7 @@ INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS}) # For MeshIntersector
 INCLUDE_DIRECTORIES(${hdb_interpolators_INCLUDE_DIRS}) # For History
 
 # gRPC
-SET(wave_proto_types ${CMAKE_CURRENT_SOURCE_DIR}/../../interfaces/wave_types.proto)
+SET(wave_proto_types ${CMAKE_CURRENT_SOURCE_DIR}/../../interfaces/proto/wave_types.proto)
 GET_FILENAME_COMPONENT(proto_path "${wave_proto_types}" ABSOLUTE)
 GET_FILENAME_COMPONENT(proto_path "${proto_path}" DIRECTORY)
 
@@ -78,7 +78,7 @@ ADD_CUSTOM_COMMAND(
            "wave_types.proto"
       DEPENDS "${waves_proto_types}")
 
-SET(wave_proto_grpc ${CMAKE_CURRENT_SOURCE_DIR}/../../interfaces/wave_grpc.proto)
+SET(wave_proto_grpc ${CMAKE_CURRENT_SOURCE_DIR}/../../interfaces/proto/wave_grpc.proto)
 SET(wave_proto_srcs_g "${CMAKE_CURRENT_BINARY_DIR}/wave_grpc.pb.cc")
 SET(wave_proto_hdrs_g "${CMAKE_CURRENT_BINARY_DIR}/wave_grpc.pb.h")
 SET(wave_grpc_srcs_g "${CMAKE_CURRENT_BINARY_DIR}/wave_grpc.grpc.pb.cc")
@@ -93,7 +93,7 @@ ADD_CUSTOM_COMMAND(
            "wave_grpc.proto"
       DEPENDS "${wave_proto_grpc}")
 
-SET(force_proto ${CMAKE_CURRENT_SOURCE_DIR}/../../interfaces/force.proto)
+SET(force_proto ${CMAKE_CURRENT_SOURCE_DIR}/../../interfaces/proto/force.proto)
 SET(force_proto_srcs "${CMAKE_CURRENT_BINARY_DIR}/force.pb.cc")
 SET(force_proto_hdrs "${CMAKE_CURRENT_BINARY_DIR}/force.pb.h")
 SET(force_grpc_srcs "${CMAKE_CURRENT_BINARY_DIR}/force.grpc.pb.cc")
@@ -108,7 +108,7 @@ ADD_CUSTOM_COMMAND(
            "force.proto"
       DEPENDS "${force_proto}")
 
-SET(controller_proto ${CMAKE_CURRENT_SOURCE_DIR}/../../interfaces/controller.proto)
+SET(controller_proto ${CMAKE_CURRENT_SOURCE_DIR}/../../interfaces/proto/controller.proto)
 SET(controller_proto_srcs "${CMAKE_CURRENT_BINARY_DIR}/controller.pb.cc")
 SET(controller_proto_hdrs "${CMAKE_CURRENT_BINARY_DIR}/controller.pb.h")
 SET(controller_grpc_srcs "${CMAKE_CURRENT_BINARY_DIR}/controller.grpc.pb.cc")

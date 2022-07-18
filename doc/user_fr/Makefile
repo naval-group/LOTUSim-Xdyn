@@ -67,11 +67,11 @@ tutorial_14.md: tutorial_14.m4.md tuto_execution/filtered_states.csv
 
 interfaces_utilisateur.md: \
         interfaces_utilisateur.m4.md \
-        $(ROOT_DIRECTORY)/interfaces/cosimulation.proto \
-        $(ROOT_DIRECTORY)/interfaces/model_exchange.proto
+        $(ROOT_DIRECTORY)/interfaces/proto/cosimulation.proto \
+        $(ROOT_DIRECTORY)/interfaces/proto/model_exchange.proto
 	$(m4) -I/interfaces $< > $@
 
-controleurs.md: controleurs.m4.md $(ROOT_DIRECTORY)/interfaces/controller.proto
+controleurs.md: controleurs.m4.md $(ROOT_DIRECTORY)/interfaces/proto/controller.proto
 	$(m4) -I/interfaces $< > $@
 
 xdyn-pweave := docker run -t \
