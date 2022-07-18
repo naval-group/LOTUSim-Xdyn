@@ -10,11 +10,13 @@ services:
   client:
     build: client
     depends_on:
-    - waves-server
+      - waves-server
     user: ${CURRENT_UID}
     volumes:
-    - ./client:/data
+      - ./client:/data
     working_dir: /data
     environment:
-    - no_proxy
-    entrypoint: wait-for-it waves-server:50051 -s -t 20 -- python3 tests.py
+      - no_proxy
+    entrypoint: >
+      wait-for-it waves-server:50051 -s -t 20 --
+      python3 tests.py
