@@ -34,4 +34,5 @@ cube.stl:
 
 clean:
 	rm -f tutorial_09_gRPC_wave_model.yml test_ship.hdb cube.stl
+	@rm -rf __pycache__
 	@$(DOCKER_COMPOSE) down --remove-orphans
