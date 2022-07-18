@@ -4,8 +4,8 @@ import logging
 import os
 import unittest
 import grpc
-from cosimulation_pb2 import CosimulationRequestEuler
-import cosimulation_pb2_grpc
+from xdyngrpc._proto.cosimulation_pb2 import CosimulationRequestEuler
+from xdyngrpc._proto import cosimulation_pb2_grpc
 
 SERVICE_NAME = "xdyn-client"
 
@@ -169,3 +169,7 @@ class Tests(unittest.TestCase):
         request.states.p[:] = [0]
         request.states.q[:] = [0]
         self.cosim.xdyn_stub.step_euler_321(request)  # This should succeed
+
+
+if __name__ == '__main__':
+    unittest.main()
