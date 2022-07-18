@@ -5,16 +5,18 @@ services:
     command: hdb_force_model.py
     working_dir: /work
     volumes:
-    - .:/work
+      - .:/work
     user: ${CURRENT_UID}
   xdyn:
     image: xdyn
     working_dir: /data
-    entrypoint: ./wait-for-it.sh force-model:9002 -s -t 20 -- xdyn tutorial_13_hdb_force_model.yml --dt 1 --tend 0 -o out.csv
+    entrypoint: >
+      ./wait-for-it.sh force-model:9002 -s -t 20 --
+      xdyn tutorial_13_hdb_force_model.yml --dt 1 --tend 0 -o out.csv
     volumes:
-    - .:/data
+      - .:/data
     user: ${CURRENT_UID}
     depends_on:
-    - force-model
+      - force-model
     environment:
-    - no_proxy
+      - no_proxy
