@@ -7,8 +7,8 @@ import math
 import os
 import unittest
 import grpc
-from model_exchange_pb2 import ModelExchangeRequestEuler
-import model_exchange_pb2_grpc
+from xdyngrpc._proto.model_exchange_pb2 import ModelExchangeRequestEuler
+from xdyngrpc._proto import model_exchange_pb2_grpc
 
 SERVICE_NAME = "xdyn-test-client"
 
@@ -109,3 +109,6 @@ class Tests(unittest.TestCase):
         assert self.d_dt(state1)['extra_observations']['GM(TestShip)'] != \
         gm_t0, "GM should have changed."
 
+
+if __name__ == "__main__":
+    unittest.main()
