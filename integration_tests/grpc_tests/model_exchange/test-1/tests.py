@@ -5,8 +5,8 @@ import logging
 import os
 import unittest
 import grpc
-from model_exchange_pb2 import ModelExchangeRequestEuler
-import model_exchange_pb2_grpc
+from xdyngrpc._proto.model_exchange_pb2 import ModelExchangeRequestEuler
+from xdyngrpc._proto import model_exchange_pb2_grpc
 
 SERVICE_NAME = "xdyn-client"
 
@@ -137,3 +137,7 @@ class Tests(unittest.TestCase):
         request.states.p[:] = [0]
         request.states.q[:] = [0]
         self.xdyn.xdyn_stub.dx_dt_euler_321(request)  # This should succeed
+
+
+if __name__ == "__main__":
+    unittest.main()

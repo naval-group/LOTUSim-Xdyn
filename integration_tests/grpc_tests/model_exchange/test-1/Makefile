@@ -17,16 +17,13 @@ DOCKER_COMPOSE:=COMPOSE_PROJECT_NAME=$(COMPOSE_PROJECT_NAME) CURRENT_UID=$(shell
 
 all: run clean
 
-run: model_exchange.proto tutorial_01_falling_ball.yml
+run: tutorial_01_falling_ball.yml
 	@$(DOCKER_COMPOSE) up -t 0 --exit-code-from test --abort-on-container-exit --build --remove-orphans
 
 tutorial_01_falling_ball.yml:
 	@echo "Copying $@ from xdyn's Docker container..."
 	@$(DOCKER_RUN_BASH) "cp /usr/demos/$@ /xdyn_demos/"
 
-model_exchange.proto: ../../../../interfaces/proto/model_exchange.proto
-	cp $< $@
-
 clean:
-	rm -f model_exchange.proto tutorial_01_falling_ball.yml
+	rm -f tutorial_01_falling_ball.yml
 	@$(DOCKER_COMPOSE) down --remove-orphans

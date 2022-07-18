@@ -2,15 +2,21 @@ version: '3'
 services:
   xdyn:
     image: xdyn
-    working_dir: /data
     entrypoint: xdyn-for-me tutorial_01_falling_ball.yml --grpc -p 9002
+    working_dir: /data
     volumes:
      - .:/data
     user: ${CURRENT_UID}
     environment:
       - no_proxy
   test:
-    build: .
+    image: xdyngrpc-python
+    entrypoint: >
+      wait-for-it xdyn:9002 -s -t 20 --
+      python3 tests.py
+    working_dir: /data
+    volumes:
+      - .:/data
     user: ${CURRENT_UID}
     depends_on:
       - xdyn
