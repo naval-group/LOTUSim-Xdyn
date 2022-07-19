@@ -4,9 +4,7 @@ import logging
 import os
 import unittest
 import grpc
-from xdyngrpc._proto.cosimulation_pb2 import CosimulationRequestEuler
-from xdyngrpc._proto import cosimulation_pb2_grpc
-from xdyngrpc.cosimulation import CosimulationEuler
+from xdyngrpc.cosimulation import CosimulationEuler, CosimulationRequestEuler
 
 SERVICE_NAME = "xdyn-client"
 

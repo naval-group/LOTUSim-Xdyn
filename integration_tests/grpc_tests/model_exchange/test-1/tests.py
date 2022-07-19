@@ -6,8 +6,7 @@ import os
 import unittest
 
 import grpc
-from xdyngrpc._proto.model_exchange_pb2 import ModelExchangeRequestEuler
-from xdyngrpc.modelexchange import ModelExchangeEuler
+from xdyngrpc.modelexchange import ModelExchangeEuler, ModelExchangeRequestEuler
 
 SERVICE_NAME = "xdyn-client"
 
