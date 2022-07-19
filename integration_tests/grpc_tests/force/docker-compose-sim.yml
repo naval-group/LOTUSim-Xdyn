@@ -1,7 +1,7 @@
 version: '3'
 services:
   force-model:
-    image: xdyn-grpc-force:python-test
+    image: xdyngrpc-python
     command: harmonic_oscillator.py
     working_dir: /work
     volumes:
@@ -11,7 +11,7 @@ services:
     image: xdyn
     working_dir: /data
     entrypoint: >
-      ./wait-for-it.sh force-model:9002 -s -t 20 --
+      wait-for-it force-model:9002 -s -t 20 --
       xdyn tutorial_10_gRPC_force_model.yml tutorial_10_gRPC_force_model_commands.yml --dt 0.1 --tend 0.2 -o out.csv
     volumes:
       - .:/data

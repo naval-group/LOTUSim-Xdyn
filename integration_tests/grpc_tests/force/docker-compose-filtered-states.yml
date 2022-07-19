@@ -1,7 +1,7 @@
 version: '3'
 services:
   force-model:
-    image: xdyn-grpc-force:python-test
+    image: xdyngrpc-python
     command: filtered_force.py
     working_dir: /work
     volumes:
@@ -11,7 +11,7 @@ services:
     image: xdyn
     working_dir: /data
     entrypoint: >
-      ./wait-for-it.sh force-model:9002 -s -t 20 --
+      wait-for-it force-model:9002 -s -t 20 --
       xdyn tutorial_14_filtered_states.yml --dt 0.1 --tend 40
     volumes:
       - .:/data

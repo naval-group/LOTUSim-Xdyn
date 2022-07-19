@@ -1,11 +1,12 @@
 """Damped harmonic oscillator model."""
 
-import yaml
-import force
 from typing import Any, Dict
 
+import yaml
+from xdyngrpc.forces import force
 
-class HarmonicOscillator(force.Model):
+
+class HarmonicOscillator(force.AbstractForceModel):
     """Restoring force F proportional to the displacement x."""
 
     def __init__(self, parameters: str, body_name: str, _):
@@ -14,8 +15,8 @@ class HarmonicOscillator(force.Model):
         Parameter k is stiffness and c is damping
         """
         param = yaml.safe_load(parameters)
-        self.k = param['k']
-        self.c = param['c']
+        self.k = param["k"]
+        self.c = param["c"]
         self.body_name = body_name
 
     def get_parameters(self) -> Dict[str, Any]:
@@ -42,21 +43,32 @@ class HarmonicOscillator(force.Model):
         convention chosen in the 'rotations convention' section of xdyn's input file.
         See xdyn's documentation for details.
         """
-        return {'max_history_length': 0, 'needs_wave_outputs': False,
-                'frame': self.body_name, 'x': 0, 'y': 0, 'z': 0, 'phi': 0,
-                'theta': 0, 'psi': 0, 'required_commands': ['omega']}
+        return {
+            "max_history_length": 0,
+            "needs_wave_outputs": False,
+            "frame": self.body_name,
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "phi": 0,
+            "theta": 0,
+            "psi": 0,
+            "required_commands": ["omega"],
+        }
 
     def force(self, states, commands, _, __):
         """Force model."""
-        omega = commands['omega']
-        return {'Fx': omega*(-self.k*states.x[0] - self.c*states.u[0]),
-                'Fy': 0,
-                'Fz': 0,
-                'Mx': 0,
-                'My': 0,
-                'Mz': 0,
-                'extra_observations': {'k': 2, 'harmonic_oscillator_time': states.t[0]}}
+        omega = commands["omega"]
+        return {
+            "Fx": omega * (-self.k * states.x[0] - self.c * states.u[0]),
+            "Fy": 0,
+            "Fz": 0,
+            "Mx": 0,
+            "My": 0,
+            "Mz": 0,
+            "extra_observations": {"k": 2, "harmonic_oscillator_time": states.t[0]},
+        }
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     force.serve(HarmonicOscillator)
