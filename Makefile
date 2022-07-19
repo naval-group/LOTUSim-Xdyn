@@ -407,15 +407,11 @@ xdyn.deb: build_deb11/xdyn.deb
 build_deb11/xdyn.deb:
 	@echo "Run ./ninja_debian.sh package"
 
-docker_grpc_force_model:
-	make -C interfaces docker-images
+docker_xdyngrpc:
+	make -C interfaces build
 
-docker_grpc_waves_model:
-	make -C interfaces/waves/python/server CONTAINER_NAME=xdyn-waves-grpc:python3
-
-all_docker_images: docker-ci docker_grpc_force_model docker_grpc_waves_model
-	echo "Built all docker images after having run 'make debian'"
-
+all_docker_images: docker-ci docker_xdyngrpc
+	@echo "Built all docker images after having run 'make debian'"
 
 doc: BUILD_TYPE = Release
 doc: BUILD_DIR = build_deb11
