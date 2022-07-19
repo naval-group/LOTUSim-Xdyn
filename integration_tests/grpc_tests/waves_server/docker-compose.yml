@@ -8,12 +8,12 @@ services:
       - ./:/data:ro
     user: ${CURRENT_UID}
   client:
-    build: client
+    image: xdyngrpc-python
     depends_on:
       - waves-server
     user: ${CURRENT_UID}
     volumes:
-      - ./client:/data
+      - .:/data:ro
     working_dir: /data
     environment:
       - no_proxy

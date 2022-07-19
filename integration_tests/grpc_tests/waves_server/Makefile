@@ -6,9 +6,7 @@ SLUG:=$(subst $(DASH),$(UNDERSCORE),$(CI_PROJECT_PATH_SLUG))
 COMPOSE_PROJECT_NAME:=$(shell basename `pwd`)${SLUG}${CI_PIPELINE_ID}
 DOCKER_COMPOSE:=COMPOSE_PROJECT_NAME=$(COMPOSE_PROJECT_NAME) CURRENT_UID=$(shell id -u):$(shell id -g) docker-compose
 
-all:
-	make -C client
-	make test
+all: test
 
 test:
 	@${DOCKER_COMPOSE} up \
@@ -19,5 +17,4 @@ test:
 		--remove-orphans
 
 clean:
-	@make --silent -C client clean
 	@$(DOCKER_COMPOSE) down --remove-orphans

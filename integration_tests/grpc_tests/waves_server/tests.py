@@ -2,7 +2,7 @@ import unittest
 import grpc
 import numpy as np
 
-from waves import LOGGER, Waves
+from xdyngrpc.waves.client.waves import LOGGER, Waves
 
 DATA_NO_ENV = """
 rotations convention: [psi, theta', phi'']
