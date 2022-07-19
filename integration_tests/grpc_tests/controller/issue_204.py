@@ -9,10 +9,11 @@ import logging
 SERVICE_NAME = "pid-controller"
 
 logging.basicConfig(
-    format='%(asctime)s,%(msecs)d ['
+    format="%(asctime)s,%(msecs)d ["
     + SERVICE_NAME
-    + '] - %(levelname)-4s [%(filename)s:%(lineno)d] %(message)s',
-    datefmt='%d-%m-%Y:%H:%M:%S')
+    + "] - %(levelname)-4s [%(filename)s:%(lineno)d] %(message)s",
+    datefmt="%d-%m-%Y:%H:%M:%S",
+)
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.INFO)
 
@@ -33,7 +34,7 @@ class PIDController(controller.Model):
         self.previous_error = 0
         self.integral = 0
         self.can_use_integrator_and_derivative = False
-        super(PIDController, self).__init__(t0, param['dt'])
+        super(PIDController, self).__init__(t0, param["dt"])
 
     def get_angle_representation(self) -> str:
         """Which method should we call to get the commands computed by the controller?
@@ -41,7 +42,7 @@ class PIDController(controller.Model):
         'QUATERNION' -> get_commands_quaternion
         'EULER_321' -> get_commands_euler_321
         """
-        return 'EULER_321'
+        return "EULER_321"
 
     def get_command_names(self) -> List[str]:
         """Return the name(s) of the controller outputs (commands).
@@ -54,7 +55,6 @@ class PIDController(controller.Model):
         - commands (List[str]): commands computed by this controller
         """
         return [self.command_name]
-
 
     def get_setpoint_names(self) -> List[str]:
         """Return the name(s) of the controller inputs (setpoints).
@@ -92,20 +92,20 @@ class PIDController(controller.Model):
         setpoints: List[float],
     ) -> Dict[str, float]:
         """Calculate the commands using angles in Rned2body = Rz(ψ).Ry(θ).Rx(ϕ)
-            rotation convention
+        rotation convention
 
-            Parameters
-            ----------
-            - states (StatesEuler): latest ship states
-            - dstates_dt (StatesEuler): ship states derivative at the
-                                             previous timestep
-            - setpoints (List[float]): controller inputs (setpoints)
+        Parameters
+        ----------
+        - states (StatesEuler): latest ship states
+        - dstates_dt (StatesEuler): ship states derivative at the
+                                         previous timestep
+        - setpoints (List[float]): controller inputs (setpoints)
 
-            Returns
-            -------
-            - commands (Dict[str,float]): commands used by xdyn's controlled
-                                          forces
-            """
+        Returns
+        -------
+        - commands (Dict[str,float]): commands used by xdyn's controlled
+                                      forces
+        """
         error = setpoints[0] - self.get_plant_output(states)
         # Proportional term
         proportional_term = self.proportional_gain * error
@@ -120,10 +120,7 @@ class PIDController(controller.Model):
             integral_term = self.integral_gain * self.integral
 
             # Derivative term
-            derivative_term = (
-                self.derivative_gain *
-                (error - self.previous_error) / self.dt
-            )
+            derivative_term = self.derivative_gain * (error - self.previous_error) / self.dt
 
         # Store error for next time step
         self.previous_error = error
@@ -131,14 +128,10 @@ class PIDController(controller.Model):
         # As integrator and derivative have been initialized, we can now use
         # them
         self.can_use_integrator_and_derivative = True
-        return {
-            self.command_name: proportional_term
-            + integral_term
-            + derivative_term
-        }
+        return {self.command_name: proportional_term + integral_term + derivative_term}
 
 
 # Start the gRPC server loop
 if __name__ == "__main__":
-    LOGGER.info('Starting gRPC PID controller')
+    LOGGER.info("Starting gRPC PID controller")
     controller.serve(PIDController)
