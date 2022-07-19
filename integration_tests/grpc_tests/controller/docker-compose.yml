@@ -1,7 +1,7 @@
 version: '3'
 services:
   pid:
-    image: xdyn-grpc-controller:python-test
+    image: xdyngrpc-python
     user: ${CURRENT_UID}
     environment:
       - no_proxy
