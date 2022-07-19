@@ -1,6 +1,6 @@
 .PHONY: all_docker_images cmake-debian debian docker cmake-windows windows doc update-submodules
 
-all: update-submodules windows debian debug doc all_docker_images
+all: update-submodules generate_proto windows debian debug doc all_docker_images
 
 DOCKER_AS_ROOT:=docker run -t --rm -w /opt/share -v $(shell pwd):/opt/share
 DOCKER_AS_USER:=$(DOCKER_AS_ROOT) -u $(shell id -u):$(shell id -g)
@@ -46,6 +46,9 @@ ${HEADERS}:
 	@git submodule sync --recursive
 	@git submodule update --init --recursive
 	@cd code/ssc/ssc && sh generate_module_header.sh && cd ../../..
+
+generate_proto:
+	make -C interfaces build
 
 cmake-debian: BUILD_TYPE = Release
 cmake-debian: BUILD_DIR = build_deb11

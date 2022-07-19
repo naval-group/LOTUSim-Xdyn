@@ -4,6 +4,7 @@ services:
 
 stages:
   - lint
+  - build-dependency
   - build
   - test
   - doc
@@ -27,6 +28,11 @@ lint:
   stage: lint
   script:
     - make lint
+
+build-dependency:
+  stage: build-dependency
+  script:
+    - make generate_proto
 
 build:windows:
   stage: build
