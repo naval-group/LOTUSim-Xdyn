@@ -76,7 +76,6 @@ controleurs.md: controleurs.m4.md $(ROOT_DIRECTORY)/interfaces/proto/controller.
 
 xdyn-pweave := docker run -t \
     -v $(shell pwd):/work \
-    -v $(shell pwd)/$(ROOT_DIRECTORY)/interfaces/waves:/waves \
     -w /work \
     -u $(shell id -u):$(shell id -g) \
     --entrypoint /usr/bin/xdyn-weave \
