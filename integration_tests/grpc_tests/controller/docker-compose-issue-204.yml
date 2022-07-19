@@ -20,5 +20,5 @@ services:
     depends_on:
       - python-controller
     entrypoint: >
-      ./wait-for-it.sh python-controller:9002 -s -t 20 -- xdyn xdyn_param_issue_204.yml
-      --dt 0.1 --tend -5.0 --tstart -10.0
+      wait-for-it python-controller:9002 -s -t 20 --
+      xdyn xdyn_param_issue_204.yml --dt 0.1 --tend -5.0 --tstart -10.0
