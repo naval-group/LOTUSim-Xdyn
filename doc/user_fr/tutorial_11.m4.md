@@ -58,7 +58,7 @@ Toutes les autres lignes sont envoyées au contrôleur en tant que paramètre,
 sans être interprétées par xdyn.  Dans le cas présent, le modèle a des gains et
 des poids affectés aux états (même paramétrisation que le modèle PID d'xdyn).
 
-### Ecriture du contrôleur
+### Écriture du contrôleur
 
 Dans un fichier Python (nommé `pid_controller.py` dans cet exemple) on écrit :
 
@@ -81,8 +81,8 @@ include({{docker-compose.yml}})
 ```
 
 Ce fichier a été créé pour être utilisé dans le dossier source d'xdyn et donc
-le chemin est à adapter en remplaçant `context: ../../interfaces` par `context:
-interfaces`.
+le chemin est à adapter en remplaçant `context: ../../interfaces` par
+`context: interfaces`.
 
 On peut alors lancer la simulation comme suit :
 
