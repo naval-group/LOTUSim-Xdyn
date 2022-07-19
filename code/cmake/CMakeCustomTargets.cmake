@@ -13,12 +13,7 @@ INSTALL(FILES "${PROJECT_SOURCE_DIR}/../interfaces/proto/cosimulation.proto" DES
 INSTALL(FILES "${PROJECT_SOURCE_DIR}/../interfaces/proto/model_exchange.proto" DESTINATION "proto")
 INSTALL(FILES "${PROJECT_SOURCE_DIR}/../interfaces/proto/force.proto" DESTINATION "proto")
 INSTALL(FILES "${PROJECT_SOURCE_DIR}/../interfaces/proto/wave_grpc.proto" DESTINATION "proto")
-INSTALL(FILES "${PROJECT_SOURCE_DIR}/../interfaces/proto/wave_types.proto" DESTINATION "proto")
-INSTALL(FILES "${PROJECT_SOURCE_DIR}/../interfaces/controllers/controller.py" DESTINATION "grpc_python")
-INSTALL(FILES "${PROJECT_SOURCE_DIR}/../interfaces/forces/force.py" DESTINATION "grpc_python")
-INSTALL(FILES "${PROJECT_SOURCE_DIR}/../interfaces/forces/grpc_force_types_marshalling.py" DESTINATION "grpc_python")
-INSTALL(FILES "${PROJECT_SOURCE_DIR}/../interfaces/forces/grpc_force_types.py" DESTINATION "grpc_python")
-INSTALL(FILES "${PROJECT_SOURCE_DIR}/../interfaces/waves/python/client/waves.py" DESTINATION "grpc_python")
+INSTALL(DIRECTORY "${PROJECT_SOURCE_DIR}/../interfaces/xdyngrpc" DESTINATION "xdyngrpc")
 
 FILE(GLOB script ${CMAKE_SOURCE_DIR}/integration_tests.py)
 ADD_CUSTOM_TARGET(python_script)
