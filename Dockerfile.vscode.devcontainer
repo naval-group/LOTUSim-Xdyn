@@ -49,9 +49,4 @@ RUN python3 -m grpc_tools.protoc -I . --python_out=/usr/python --grpc_python_out
     force.proto \
     controller.proto \
  && protoc --plugin=protoc-gen-grpc=`which grpc_cpp_plugin` -I . --cpp_out=/opt --grpc_out=/opt controller.proto
-ADD interfaces/forces/force.py \
-    interfaces/forces/grpc_force_client.py\
-    interfaces/forces/grpc_force_types.py\
-    interfaces/forces/grpc_force_types_marshalling.py\
-    interfaces/controllers/controller.py \
-    /usr/python/
+ADD interfaces/xdyngrpc /usr/python/.
