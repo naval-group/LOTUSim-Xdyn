@@ -1,14 +1,11 @@
 version: '3'
 services:
   python-controller:
-    image: xdyn-grpc-controller:python-test
+    image: xdyngrpc-python
+    command: -m xdyngrpc.controllers.pid_controller
     user: ${CURRENT_UID}
     environment:
       - no_proxy
-    working_dir: /data
-    volumes:
-      - ./:/data:ro
-    command: issue_204.py
   test:
     image: xdyn
     user: ${CURRENT_UID}
