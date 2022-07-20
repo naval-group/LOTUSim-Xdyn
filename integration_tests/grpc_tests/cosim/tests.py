@@ -1,22 +1,9 @@
 """Integration tests for gRPC cosimulation."""
 
-import logging
 import os
 import unittest
 import grpc
 from xdyngrpc.cosimulation import CosimulationEuler, CosimulationRequestEuler
-
-SERVICE_NAME = "xdyn-client"
-
-logging.basicConfig(
-    format='%(asctime)s,%(msecs)d ['
-    + SERVICE_NAME
-    + '] - %(levelname)-4s [%(filename)s:%(lineno)d] %(message)s',
-    datefmt='%d-%m-%Y:%H:%M:%S')
-LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.INFO)
-
-
 
 EPS = 1E-6
 
