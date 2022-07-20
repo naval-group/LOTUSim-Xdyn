@@ -50,7 +50,7 @@ m4 :=  docker run -t --rm \
     sirehna/pandoc@sha256:cc4ec54f6e09cda3cc57c6a125764bc0bb12712511e3f0560a69de6f762761e7
 
 tutorial_10.md: tutorial_10.m4.md
-	$(m4) -I/interfaces $< > $@
+	$(m4) -I/force $< > $@
 
 tutorial_11.md: tutorial_11.m4.md
 	$(m4) -I/controller $< > $@
@@ -69,10 +69,10 @@ interfaces_utilisateur.md: \
         interfaces_utilisateur.m4.md \
         $(ROOT_DIRECTORY)/interfaces/proto/cosimulation.proto \
         $(ROOT_DIRECTORY)/interfaces/proto/model_exchange.proto
-	$(m4) -I/interfaces $< > $@
+	$(m4) -I/interfaces/proto $< > $@
 
 controleurs.md: controleurs.m4.md $(ROOT_DIRECTORY)/interfaces/proto/controller.proto
-	$(m4) -I/interfaces $< > $@
+	$(m4) -I/interfaces/proto $< > $@
 
 xdyn-pweave := docker run -t \
     -v $(shell pwd):/work \
