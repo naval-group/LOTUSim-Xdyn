@@ -3,6 +3,7 @@ services:
   force-model:
     image: xdyngrpc-python
     command: harmonic_oscillator.py
+    # command: -m xdyngrpc.forces.harmonic_oscillator
     working_dir: /work
     volumes:
       - .:/work
