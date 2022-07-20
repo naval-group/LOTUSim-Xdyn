@@ -45,6 +45,7 @@ xdyn.deb: ../../build_deb11_pywrapper/xdyn.deb
 
 .PHONY=xdyngrpc
 xdyngrpc:
+	make -C ../../interfaces build
 	@cp ../../interfaces/xdyngrpc*.whl .
 
 create_docker_image_debian11_py309: xdyn.deb xdyngrpc
