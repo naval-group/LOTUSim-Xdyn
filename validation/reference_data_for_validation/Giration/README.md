@@ -1,24 +1,24 @@
-Les girations réalisées en essai ont été utilisées pour extraire les valeurs de
+Les girations rÃ©alisÃ©es en essai ont Ã©tÃ© utilisÃ©es pour extraire les valeurs de
 rayon de giration et vitesse Vx et Vy en fonction de l'angle de barre
-(3 différents) et du rpm (3 différents).
+(3 diffÃ©rents) et du rpm (3 diffÃ©rents).
 
-La mise en données du simulateur est similaire à ce qui avait été fait pour SOS :
-concaténation des différents cas en 1 seule simulation -> 9 couples (angle de
-barre, rpm) différents.
+La mise en donnÃ©es du simulateur est similaire Ã  ce qui avait Ã©tÃ© fait pour SOS :
+concatÃ©nation des diffÃ©rents cas en 1 seule simulation -> 9 couples (angle de
+barre, rpm) diffÃ©rents.
 
 Dans l'ordre :
 
-- barre à 10°, 5tr/s
-- barre à 20°, 5tr/s
-- barre à 20°, 5tr/s
-- barre à 10°, 3.5tr/s
-- barre à 20°, 3.5tr/s
-- barre à 30°, 3.5tr/s
-- barre à 10°, 2.5tr/s
-- barre à 20°, 2.5tr/s
-- barre à 30°, 2.5tr/s
+- barre Ã  10Â°, 5tr/s
+- barre Ã  20Â°, 5tr/s
+- barre Ã  20Â°, 5tr/s
+- barre Ã  10Â°, 3.5tr/s
+- barre Ã  20Â°, 3.5tr/s
+- barre Ã  30Â°, 3.5tr/s
+- barre Ã  10Â°, 2.5tr/s
+- barre Ã  20Â°, 2.5tr/s
+- barre Ã  30Â°, 2.5tr/s
 
-À réaliser : comparaison des 6 vitesses et 6 déplacements entre simulateur SOS 
+Ã€ rÃ©aliser : comparaison des 6 vitesses et 6 dÃ©placements entre simulateur SOS
 voir fichier Excel, onglet "SOS") et X-Dyn.
 
-Pas de résultats d'essais (post-traitement difficile).
+Pas de rÃ©sultats d'essais (post-traitement difficile).
