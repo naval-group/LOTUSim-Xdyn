@@ -158,9 +158,10 @@ TEST_F(HDBParserTest, can_retrieve_vectors_for_each_element_in_radiation_damping
 
 TEST_F(HDBParserTest, can_retrieve_vector_of_vectors_for_RAOs)
 {
-    HDBParser data = HDBParser::from_string(test_data::test_ship_hdb());
-    const std::array<std::vector<std::vector<double> >,6 > module = data.get_total_excitation_force_module_tables();
-    const std::array<std::vector<std::vector<double> >,6 > phase = data.get_total_excitation_force_phase_tables();
+    const HDBParser data = HDBParser::from_string(test_data::test_ship_hdb());
+    const std::array<std::vector<std::vector<double> >,6 > module = data.get_froude_krylov_module_tables();
+    const std::array<std::vector<std::vector<double> >,6 > phase = data.get_froude_krylov_phase_tables();
+    const std::array<std::vector<std::vector<double> >,6 > drift = data.get_wave_drift_tables();
     ASSERT_EQ(6,std::get<0>(module).size());
     ASSERT_EQ(6,std::get<1>(module).size());
     ASSERT_EQ(6,std::get<2>(module).size());
@@ -173,12 +174,19 @@ TEST_F(HDBParserTest, can_retrieve_vector_of_vectors_for_RAOs)
     ASSERT_EQ(6,std::get<3>(phase).size());
     ASSERT_EQ(6,std::get<4>(phase).size());
     ASSERT_EQ(6,std::get<5>(phase).size());
+    ASSERT_EQ(6,std::get<0>(drift).size());
+    ASSERT_EQ(6,std::get<1>(drift).size());
+    ASSERT_EQ(6,std::get<2>(drift).size());
+    ASSERT_EQ(6,std::get<3>(drift).size());
+    ASSERT_EQ(6,std::get<4>(drift).size());
+    ASSERT_EQ(6,std::get<5>(drift).size());
     for (size_t i = 0 ; i < 6 ; ++i)
     {
         for (size_t j = 0 ; j < 6 ; ++j)
         {
             ASSERT_EQ(13, module.at(i).at(j).size());
             ASSERT_EQ(13, phase.at(i).at(j).size());
+            ASSERT_EQ(13, drift.at(i).at(j).size());
         }
     }
     ASSERT_DOUBLE_EQ(3.098978E5,module.at(2).at(4).at(3));
@@ -187,13 +195,15 @@ TEST_F(HDBParserTest, can_retrieve_vector_of_vectors_for_RAOs)
     ASSERT_DOUBLE_EQ(-2.004334,phase.at(2).at(4).at(3));
     ASSERT_DOUBLE_EQ(3.041773,phase.at(1).at(3).at(2));
     ASSERT_DOUBLE_EQ(8.036613E-3,phase.at(5).at(2).at(6));
+    ASSERT_DOUBLE_EQ(3.847296E+04,drift.at(0).at(0).at(0));
 }
 
 TEST_F(HDBParserTest, can_retrieve_omegas_for_RAOs)
 {
-    HDBParser data = HDBParser::from_string(test_data::test_ship_hdb());
-    const std::vector<double> Tps1 = data.get_total_excitation_force_phase_periods();
-    const std::vector<double> Tps2 = data.get_total_excitation_force_module_periods();
+    const HDBParser data = HDBParser::from_string(test_data::test_ship_hdb());
+    const std::vector<double> Tps1 = data.get_froude_krylov_module_periods();
+    const std::vector<double> Tps2 = data.get_froude_krylov_phase_periods();
+    const std::vector<double> Tps3 = data.get_wave_drift_periods();
     ASSERT_EQ(6, Tps1.size());
     ASSERT_EQ(6, Tps2.size());
     ASSERT_DOUBLE_EQ(1., Tps1[0]);
@@ -209,19 +219,29 @@ TEST_F(HDBParserTest, can_retrieve_omegas_for_RAOs)
     ASSERT_DOUBLE_EQ(3.5, Tps2[3]);
     ASSERT_DOUBLE_EQ(3.8, Tps2[4]);
     ASSERT_DOUBLE_EQ(4., Tps2[5]);
+
+    ASSERT_DOUBLE_EQ(1., Tps3[0]);
+    ASSERT_DOUBLE_EQ(2., Tps3[1]);
+    ASSERT_DOUBLE_EQ(3., Tps3[2]);
+    ASSERT_DOUBLE_EQ(3.5, Tps3[3]);
+    ASSERT_DOUBLE_EQ(3.8, Tps3[4]);
+    ASSERT_DOUBLE_EQ(4., Tps3[5]);
 }
 
 TEST_F(HDBParserTest, can_retrieve_psis_for_RAOs)
 {
-    HDBParser data = HDBParser::from_string(test_data::test_ship_hdb());
-    const std::vector<double> psi1 = data.get_total_excitation_force_phase_psis();
-    const std::vector<double> psi2 = data.get_total_excitation_force_module_psis();
+    const HDBParser data = HDBParser::from_string(test_data::test_ship_hdb());
+    const std::vector<double> psi1 = data.get_froude_krylov_module_psis();
+    const std::vector<double> psi2 = data.get_froude_krylov_phase_psis();
+    const std::vector<double> psi3 = data.get_wave_drift_psis();
     ASSERT_EQ(13, psi1.size());
     ASSERT_EQ(13, psi2.size());
+    ASSERT_EQ(13, psi3.size());
     for (size_t i = 0 ; i < 13 ; ++i)
     {
         ASSERT_DOUBLE_EQ(PI/180.*15.*(double)i, psi1[i]);
         ASSERT_DOUBLE_EQ(PI/180.*15.*(double)i, psi2[i]);
+        ASSERT_DOUBLE_EQ(PI/180.*15.*(double)i, psi3[i]);
     }
 }
 
@@ -234,19 +254,18 @@ TEST_F(HDBParserTest, bug_3238)
 
 TEST_F(HDBParserTest, can_get_forward_speed)
 {
-    HDBParser data = HDBParser::from_string(test_data::test_ship_hdb());
+    const HDBParser data = HDBParser::from_string(test_data::test_ship_hdb());
     ASSERT_DOUBLE_EQ(data.get_forward_speed(), 0.);
 }
 
 TEST_F(HDBParserTest, should_be_able_to_have_different_periods_for_added_mass_and_List_calculated_periods)
 {
-    HDBParser::from_string(test_data::hdb_issue_184());
     ASSERT_NO_THROW(HDBParser::from_string(test_data::hdb_issue_184()));
 }
 
 TEST_F(HDBParserTest, can_retrieve_froude_krylov_modules_and_phases)
 {
-    HDBParser data = HDBParser::from_string(test_data::big_hdb());
+    const HDBParser data = HDBParser::from_string(test_data::big_hdb());
     const std::array<std::vector<std::vector<double> >,6 > module = data.get_froude_krylov_module_tables();
     const std::array<std::vector<std::vector<double> >,6 > phase = data.get_froude_krylov_phase_tables();
     ASSERT_EQ(47,std::get<0>(module).size());

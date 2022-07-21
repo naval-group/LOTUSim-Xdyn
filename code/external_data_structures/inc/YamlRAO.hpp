@@ -3,8 +3,8 @@
  *
  */
 
-#ifndef YAMLDIFFRACTION_HPP_
-#define YAMLDIFFRACTION_HPP_
+#ifndef YAMLRAO_HPP_
+#define YAMLRAO_HPP_
 
 #include <string>
 #include <boost/optional.hpp>
@@ -12,7 +12,7 @@
 #include "YamlCoordinates.hpp"
 /*
  *     ss << "model: diffraction\n"
-       << "hdb: anthineas.hdb\n"
+       << "hdb: test_ship.hdb\n"
        << "calculation point in body frame:\n"
        << "    x: {value: 0.696, unit: m}\n"
        << "    y: {value: 0, unit: m}\n"
@@ -31,4 +31,4 @@ struct YamlRAO
     TypeOfRao             type_of_rao;
 };
 
-#endif /* YAMLDIFFRACTION_HPP_ */
+#endif /* YAMLRAO_HPP_ */

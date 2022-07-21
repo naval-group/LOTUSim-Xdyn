@@ -511,10 +511,10 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_and_no_incidence_no_in
     const auto states = get_whole_body_state_with_psi_equal_to(0, "body");
     const double t = 0;
     const auto tau = F(states, t, env);
-    // Line in HDB corresponding to module (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_MOD_001]   0.000000):
+    // Line in HDB corresponding to module (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_DFFM_MOD_001]   0.000000):
     // 5.084407E+04  0.000000E+00  3.997774E+05  0.000000E+00  3.209051E+07  0.000000E+00
     const std::vector<double> module = {5.084407E+04,  0.000000E+00,  3.997774E+05,  0.000000E+00,  3.209051E+07,  0.000000E+00};
-    // Line in HDB corresponding to phase (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_PH_001]   0.000000)
+    // Line in HDB corresponding to phase (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_DFFM_PH_001]   0.000000)
     // -1.135123E+00  1.570796E+00 -8.389206E-01  1.570796E+00 -8.356066E-01  1.570796E+00
     const std::vector<double> phase = {-1.135123E+00,  1.570796E+00,  -8.389206E-01,  1.570796E+00,  -8.356066E-01,  1.570796E+00};
 
@@ -535,10 +535,10 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_but_incidence_30_no_in
     const auto states = get_whole_body_state_with_psi_equal_to(0, "body");
     const double t = 0;
     const auto tau = F(states, t, env);
-    // Line in HDB corresponding to module (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_MOD_001]   30.00000):
+    // Line in HDB corresponding to module (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_DFFM_MOD_001]   30.00000):
     // 8.567009E+04  3.284304E+05  5.820626E+05  1.460688E+06  3.140660E+07  2.301511E+07
     const std::vector<double> module = {8.567009E+04,  3.284304E+05,  5.820626E+05,  1.460688E+06,  3.140660E+07,  2.301511E+07};
-    // Line in HDB corresponding to phase (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_PH_001]   30.00000)
+    // Line in HDB corresponding to phase (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_DFFM_PH_001]   30.00000)
     // 2.077326E+00 -5.459499E-01  1.525810E+00 -6.670656E-01  1.375271E+00 -5.846877E-01
     const std::vector<double> phase = {2.077326E+00, -5.459499E-01,  1.525810E+00, -6.670656E-01,  1.375271E+00, -5.846877E-01};
     ASSERT_DOUBLE_EQ( module[0]*sin(-phase[0]), tau.X());
@@ -637,10 +637,10 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_no_interpolation_in_pe
     const auto states = get_whole_body_state_with_psi_equal_to(0, "body");
     const double t = 0;
     const auto tau = F(states, t, env);
-    // Line in HDB corresponding to module (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_MOD_001]   0.000000):
+    // Line in HDB corresponding to module (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_DFFM_MOD_001]   0.000000):
     // 5.084407E+04  0.000000E+00  3.997774E+05  0.000000E+00  3.209051E+07  0.000000E+00
     const std::vector<double> module = {5.084407E+04,  0.000000E+00,  3.997774E+05,  0.000000E+00,  3.209051E+07,  0.000000E+00};
-    // Line in HDB corresponding to phase (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_PH_001]   0.000000)
+    // Line in HDB corresponding to phase (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_DFFM_PH_001]   0.000000)
     // -1.135123E+00  1.570796E+00 -8.389206E-01  1.570796E+00 -8.356066E-01  1.570796E+00
     const std::vector<double> phase = {-1.135123E+00,  1.570796E+00,  -8.389206E-01,  1.570796E+00,  -8.356066E-01,  1.570796E+00};
     const double k = (2*PI/4)*(2*PI/4)/9.81;
@@ -662,10 +662,10 @@ TEST_F(ForceTests, bug_3210_no_interpolation_in_incidence_no_interpolation_in_pe
     const auto states = get_whole_body_state_with_psi_equal_to(0, "body");
     const double t = 5;
     const auto tau = F(states, t, env);
-    // Line in HDB corresponding to module (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_MOD_001]   0.000000):
+    // Line in HDB corresponding to module (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_DFFM_MOD_001]   0.000000):
     // 5.084407E+04  0.000000E+00  3.997774E+05  0.000000E+00  3.209051E+07  0.000000E+00
     const std::vector<double> module = {5.084407E+04,  0.000000E+00,  3.997774E+05,  0.000000E+00,  3.209051E+07,  0.000000E+00};
-    // Line in HDB corresponding to phase (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_EFM_PH_001]   0.000000)
+    // Line in HDB corresponding to phase (first line of section [DIFFRACTION_FORCES_AND_MOMENTS]/[INCIDENCE_DFFM_PH_001]   0.000000)
     // -1.135123E+00  1.570796E+00 -8.389206E-01  1.570796E+00 -8.356066E-01  1.570796E+00
     const std::vector<double> phase = {-1.135123E+00,  1.570796E+00,  -8.389206E-01,  1.570796E+00,  -8.356066E-01,  1.570796E+00};
     const double k = (2*PI/4)*(2*PI/4)/9.81;
