@@ -15,6 +15,9 @@ environment models:
       - model: airy
         depth: {value: 100, unit: m}
         seed of the random data generator: 0
+        stretching:
+          delta: 1
+          h: {unit: m, value: 0}
         directional spreading:
            type: dirac
            waves propagating to: {value: 90, unit: deg}
