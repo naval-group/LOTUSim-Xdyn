@@ -19,7 +19,6 @@
 #define PI M_PI
 
 #include <boost/algorithm/string/predicate.hpp>
-#include <boost/lexical_cast.hpp>
 #include <boost/variant.hpp>
 
 #include <ssc/interpolation.hpp>
@@ -218,7 +217,7 @@ class HDBParser::Impl
                     {
                         for (size_t i = 0 ; i < 6 ; ++i)
                         {
-                            if (that_section->header == matrix + "_" + boost::lexical_cast<std::string>(i+1))
+                            if (that_section->header == matrix + "_" + std::to_string(i+1))
                             {
                                 fill(ret, i, that_section->values);
                                 found_line[i] = true;
