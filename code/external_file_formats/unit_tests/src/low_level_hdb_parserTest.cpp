@@ -71,13 +71,14 @@ TEST_F(low_level_hdb_parserTest, can_parse_key)
 TEST_F(low_level_hdb_parserTest, can_parse_section)
 {
     hdb::grammar g;
-    const std::string s = " [List_calculated_periods]\n"
-                          "   1.00\n"
-                          "   2.00\n"
-                          "   3.00\n"
-                          "   3.50\n"
-                          "   3.80\n"
-                          "   4.00\n";
+    const std::string s = R"( [List_calculated_periods]
+                               1.00
+                               2.00
+                               3.00
+                               3.50
+                               3.80
+                               4.00
+                            )";
     hdb::VectorSection section;
     qi::phrase_parse(s.begin(), s.end(), g.vector_section,blank,section);
 
@@ -94,27 +95,28 @@ TEST_F(low_level_hdb_parserTest, can_parse_section)
 TEST_F(low_level_hdb_parserTest, can_parse_two_sections)
 {
     hdb::grammar g;
-    const std::string s = " [List_calculated_periods]\n"
-                          "   1.00\n"
-                          "   2.00\n"
-                          "   3.00\n"
-                          "   3.50\n"
-                          "   3.80\n"
-                          "   4.00\n"
-                          " [List_calculated_headings]\n"
-                          "   0.000000    \n"
-                          "   15.00000    \n"
-                          "   30.00000    \n"
-                          "   45.00000    \n"
-                          "   60.00000    \n"
-                          "   75.00000    \n"
-                          "   90.00000    \n"
-                          "   105.0000    \n"
-                          "   120.0000    \n"
-                          "   135.0000    \n"
-                          "   150.0000    \n"
-                          "   165.0000    \n"
-                          "   180.0000    \n";
+    const std::string s = R"( [List_calculated_periods]
+                                1.0
+                                2.0
+                                3.0
+                                3.5
+                                3.8
+                                4.0
+                              [List_calculated_headings]
+                                0.000000
+                                15.00000
+                                30.00000
+                                45.00000
+                                60.00000
+                                75.00000
+                                90.00000
+                                105.0000
+                                120.0000
+                                135.0000
+                                150.0000
+                                165.0000
+                                180.0000
+                            )";
     std::vector<hdb::VectorSection> sections;
     qi::phrase_parse(s.begin(), s.end(), *(g.vector_section),blank,sections);
     ASSERT_EQ(2,sections.size());
@@ -163,14 +165,14 @@ TEST_F(low_level_hdb_parserTest, can_parse_several_string_keys)
 TEST_F(low_level_hdb_parserTest, can_parse_a_matrix_section)
 {
     hdb::grammar g;
-    const std::string s = " [ADDED_MASS_LINE_1]\n"
-                          "    1.00  1.097184E+04 -4.534383E+01  1.489058E+04 -6.476872E+01  1.887115E+05  9.087353E+00\n"
-                          "    2.00  9.377615E+03 -8.511539E+01  1.576359E+04  3.108509E+00  1.619423E+05  3.926564E+02\n"
-                          "    3.00  1.426635E+04 -1.940786E+01  1.841663E+04 -3.755692E+01  1.900012E+05  3.589405E+02\n"
-                          "    3.50  1.765988E+04 -2.229278E+01  1.878402E+04 -4.122345E+01  2.292613E+05  3.676993E+02\n"
-                          "    3.80  2.066126E+04 -2.218779E+01  1.939457E+04 -4.426564E+01  2.686258E+05  3.974906E+02\n"
-                          "    4.00  2.287093E+04 -2.404940E+01  1.989585E+04 -4.781980E+01  2.971014E+05  4.187755E+02\n";
-
+    const std::string s = R"( [ADDED_MASS_LINE_1]
+                              1.00  1.097184E+04 -4.534383E+01  1.489058E+04 -6.476872E+01  1.887115E+05  9.087353E+00
+                              2.00  9.377615E+03 -8.511539E+01  1.576359E+04  3.108509E+00  1.619423E+05  3.926564E+02
+                              3.00  1.426635E+04 -1.940786E+01  1.841663E+04 -3.755692E+01  1.900012E+05  3.589405E+02
+                              3.50  1.765988E+04 -2.229278E+01  1.878402E+04 -4.122345E+01  2.292613E+05  3.676993E+02
+                              3.80  2.066126E+04 -2.218779E+01  1.939457E+04 -4.426564E+01  2.686258E+05  3.974906E+02
+                              4.00  2.287093E+04 -2.404940E+01  1.989585E+04 -4.781980E+01  2.971014E+05  4.187755E+02
+                            )";
     hdb::MatrixSection m;
     qi::phrase_parse(s.begin(), s.end(), g.matrix_section,blank,m);
     ASSERT_EQ("ADDED_MASS_LINE_1", m.header);
@@ -196,21 +198,22 @@ TEST_F(low_level_hdb_parserTest, can_parse_a_matrix_section)
 TEST_F(low_level_hdb_parserTest, can_parse_a_list_of_matrix_sections)
 {
     hdb::grammar g;
-    const std::string s = " [Added_mass_Radiation_Damping]\n"
-                          " [ADDED_MASS_LINE_1]\n"
-                          "    1.00  1.097184E+04 -4.534383E+01  1.489058E+04 -6.476872E+01  1.887115E+05  9.087353E+00\n"
-                          "    2.00  9.377615E+03 -8.511539E+01  1.576359E+04  3.108509E+00  1.619423E+05  3.926564E+02\n"
-                          "    3.00  1.426635E+04 -1.940786E+01  1.841663E+04 -3.755692E+01  1.900012E+05  3.589405E+02\n"
-                          "    3.50  1.765988E+04 -2.229278E+01  1.878402E+04 -4.122345E+01  2.292613E+05  3.676993E+02\n"
-                          "    3.80  2.066126E+04 -2.218779E+01  1.939457E+04 -4.426564E+01  2.686258E+05  3.974906E+02\n"
-                          "    4.00  2.287093E+04 -2.404940E+01  1.989585E+04 -4.781980E+01  2.971014E+05  4.187755E+02\n"
-                          " [ADDED_MASS_LINE_2]\n"
-                          "    1.00  5.372426E+00  1.039658E+05 -1.038983E+01  1.798326E+04  1.127642E+02  6.116315E+04\n"
-                          "    2.00 -2.935182E+01  7.581280E+04  1.907894E+01  2.102286E+04 -2.443126E+02  2.305457E+04\n"
-                          "    3.00  8.574823E+00  1.019513E+05  1.553684E+01  2.051240E+04  2.377617E+02  1.078476E+05\n"
-                          "    3.50  4.355995E+00  1.434086E+05  1.251381E+00  9.963283E+03  2.165019E+02  1.510785E+05\n"
-                          "    3.80  2.883454E+00  1.810525E+05 -1.780741E+01  4.558459E+02  1.719431E+02  1.801648E+05\n"
-                          "    4.00  2.647226E+00  2.104009E+05 -2.568808E+01 -8.096014E+03  1.758119E+02  2.022041E+05\n";
+    const std::string s = R"( [Added_mass_Radiation_Damping]
+                              [ADDED_MASS_LINE_1]
+                                 1.00  1.097184E+04 -4.534383E+01  1.489058E+04 -6.476872E+01  1.887115E+05  9.087353E+00
+                                 2.00  9.377615E+03 -8.511539E+01  1.576359E+04  3.108509E+00  1.619423E+05  3.926564E+02
+                                 3.00  1.426635E+04 -1.940786E+01  1.841663E+04 -3.755692E+01  1.900012E+05  3.589405E+02
+                                 3.50  1.765988E+04 -2.229278E+01  1.878402E+04 -4.122345E+01  2.292613E+05  3.676993E+02
+                                 3.80  2.066126E+04 -2.218779E+01  1.939457E+04 -4.426564E+01  2.686258E+05  3.974906E+02
+                                 4.00  2.287093E+04 -2.404940E+01  1.989585E+04 -4.781980E+01  2.971014E+05  4.187755E+02
+                              [ADDED_MASS_LINE_2]
+                                 1.00  5.372426E+00  1.039658E+05 -1.038983E+01  1.798326E+04  1.127642E+02  6.116315E+04
+                                 2.00 -2.935182E+01  7.581280E+04  1.907894E+01  2.102286E+04 -2.443126E+02  2.305457E+04
+                                 3.00  8.574823E+00  1.019513E+05  1.553684E+01  2.051240E+04  2.377617E+02  1.078476E+05
+                                 3.50  4.355995E+00  1.434086E+05  1.251381E+00  9.963283E+03  2.165019E+02  1.510785E+05
+                                 3.80  2.883454E+00  1.810525E+05 -1.780741E+01  4.558459E+02  1.719431E+02  1.801648E+05
+                                 4.00  2.647226E+00  2.104009E+05 -2.568808E+01 -8.096014E+03  1.758119E+02  2.022041E+05
+                            )";
     std::vector<hdb::ListOfMatrixSections> lists_of_sections;
     qi::phrase_parse(s.begin(), s.end(), g.list_of_matrix_sections,blank,lists_of_sections);
 
@@ -251,14 +254,15 @@ TEST_F(low_level_hdb_parserTest, can_parse_a_list_of_matrix_sections)
 TEST_F(low_level_hdb_parserTest, can_parse_a_list_of_matrix_sections_with_just_one_matrix)
 {
     hdb::grammar g;
-    const std::string s = " [Added_mass_Radiation_Damping]\n"
-                          " [ADDED_MASS_LINE_1]\n"
-                          "    1.00  1.097184E+04 -4.534383E+01  1.489058E+04 -6.476872E+01  1.887115E+05  9.087353E+00\n"
-                          "    2.00  9.377615E+03 -8.511539E+01  1.576359E+04  3.108509E+00  1.619423E+05  3.926564E+02\n"
-                          "    3.00  1.426635E+04 -1.940786E+01  1.841663E+04 -3.755692E+01  1.900012E+05  3.589405E+02\n"
-                          "    3.50  1.765988E+04 -2.229278E+01  1.878402E+04 -4.122345E+01  2.292613E+05  3.676993E+02\n"
-                          "    3.80  2.066126E+04 -2.218779E+01  1.939457E+04 -4.426564E+01  2.686258E+05  3.974906E+02\n"
-                          "    4.00  2.287093E+04 -2.404940E+01  1.989585E+04 -4.781980E+01  2.971014E+05  4.187755E+02\n";
+    const std::string s = R"( [Added_mass_Radiation_Damping]
+                              [ADDED_MASS_LINE_1]
+                                 1.00  1.097184E+04 -4.534383E+01  1.489058E+04 -6.476872E+01  1.887115E+05  9.087353E+00
+                                 2.00  9.377615E+03 -8.511539E+01  1.576359E+04  3.108509E+00  1.619423E+05  3.926564E+02
+                                 3.00  1.426635E+04 -1.940786E+01  1.841663E+04 -3.755692E+01  1.900012E+05  3.589405E+02
+                                 3.50  1.765988E+04 -2.229278E+01  1.878402E+04 -4.122345E+01  2.292613E+05  3.676993E+02
+                                 3.80  2.066126E+04 -2.218779E+01  1.939457E+04 -4.426564E+01  2.686258E+05  3.974906E+02
+                                 4.00  2.287093E+04 -2.404940E+01  1.989585E+04 -4.781980E+01  2.971014E+05  4.187755E+02
+                            )";
     std::vector<hdb::ListOfMatrixSections> lists_of_sections;
     qi::phrase_parse(s.begin(), s.end(), g.list_of_matrix_sections,blank,lists_of_sections);
     ASSERT_EQ(1,lists_of_sections.size());
@@ -321,13 +325,14 @@ TEST_F(low_level_hdb_parserTest, vector_rule_should_not_parse_value)
 TEST_F(low_level_hdb_parserTest, vector_rule_should_not_parse_matrix)
 {
     hdb::grammar g;
-    const std::string s =   " [Mass_Inertia_matrix]\n"
-                            "   2.533000E+05  0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+00\n"
-                            "   0.000000E+00  2.533000E+05  0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+00\n"
-                            "   0.000000E+00  0.000000E+00  2.533000E+05  0.000000E+00  0.000000E+00  0.000000E+00\n"
-                            "   0.000000E+00  0.000000E+00  0.000000E+00  1.538000E+06  0.000000E+00  0.000000E+00\n"
-                            "   0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+00  8.295000E+06  0.000000E+00\n"
-                            "   0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+00  8.295000E+06\n";
+    const std::string s = R"( [Mass_Inertia_matrix]
+                                2.533000E+05  0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+00
+                                0.000000E+00  2.533000E+05  0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+00
+                                0.000000E+00  0.000000E+00  2.533000E+05  0.000000E+00  0.000000E+00  0.000000E+00
+                                0.000000E+00  0.000000E+00  0.000000E+00  1.538000E+06  0.000000E+00  0.000000E+00
+                                0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+00  8.295000E+06  0.000000E+00
+                                0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+00  8.295000E+06
+                            )";
     EXPECT_FALSE(qi::phrase_parse(s.begin(), s.end(), g.vector_section, blank));
 }
 
@@ -345,5 +350,4 @@ TEST_F(low_level_hdb_parserTest, can_parse_file_to_internal_data_structure)
     ASSERT_EQ(1, hdb_file.lists_of_matrix_sections.size());
     ASSERT_EQ(3, hdb_file.lists_of_matrix_sections_with_id.size());
     ASSERT_EQ(2, hdb_file.vector_sections.size());
-
 }
