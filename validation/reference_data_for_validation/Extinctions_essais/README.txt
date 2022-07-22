@@ -1,6 +1,6 @@
 Extinction en roulis
-A réaliser : comparaison de l'angle de roulis entre essais maquette à l'échelle 1/11ème (voir fichier Excel "extinctions_TestShipEssaisECN.xlsx", onglet "Roulis", colonnes "Essais") et X-Dyn.
+A rÃ©aliser : comparaison de l'angle de roulis entre essais maquette Ã  l'Ã©chelle 1/11Ã¨me (voir fichier Excel "extinctions_TestShipEssaisECN.xlsx", onglet "Roulis", colonnes "Essais") et X-Dyn.
 
 Extinction en tangage
-A réaliser : comparaison de l'angle de tangage entre essais maquette à l'échelle 1/11ème (voir fichier Excel "extinctions_TestShipEssaisECN.xlsx", onglet "Tangage", colonnes "Essais") et X-Dyn.
-Attention : incertitudes sur les mesures réalisées lors des essais en tangage (conditions, élastiques non-reproduits dans le simulateur).
+A rÃ©aliser : comparaison de l'angle de tangage entre essais maquette Ã  l'Ã©chelle 1/11Ã¨me (voir fichier Excel "extinctions_TestShipEssaisECN.xlsx", onglet "Tangage", colonnes "Essais") et X-Dyn.
+Attention : incertitudes sur les mesures rÃ©alisÃ©es lors des essais en tangage (conditions, Ã©lastiques non-reproduits dans le simulateur).

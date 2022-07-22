@@ -13,7 +13,6 @@
 #include "stl_writer.hpp"
 #include "TriMeshTestData.hpp"
 #include <google/protobuf/stubs/common.h>
-#include <fstream>
 
 int main(int argc, const char* argv[])
 {

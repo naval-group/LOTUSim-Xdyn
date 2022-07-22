@@ -122,8 +122,8 @@ class HDBParserTest(unittest.TestCase):
 
     def test_can_retrieve_vector_of_vectors_for_RAOs(self):
         data = HDBParser.from_string(test_ship_hdb())
-        module = data.get_total_excitation_force_module_tables()
-        phase = data.get_total_excitation_force_phase_tables()
+        module = data.get_froude_krylov_module_tables()
+        phase = data.get_froude_krylov_phase_tables()
         self.assertEqual(6, len(module[0]))
         self.assertEqual(6, len(module[1]))
         self.assertEqual(6, len(module[2]))
@@ -149,8 +149,8 @@ class HDBParserTest(unittest.TestCase):
 
     def test_can_retrieve_omegas_for_RAOs(self):
         data = HDBParser.from_string(test_ship_hdb())
-        Tps1 = data.get_total_excitation_force_phase_periods()
-        Tps2 = data.get_total_excitation_force_module_periods()
+        Tps1 = data.get_froude_krylov_module_periods()
+        Tps2 = data.get_froude_krylov_phase_periods()
         self.assertEqual(6, len(Tps1))
         self.assertEqual(6, len(Tps2))
         self.assertEqual(1.0, Tps1[0])
@@ -169,8 +169,8 @@ class HDBParserTest(unittest.TestCase):
 
     def test_can_retrieve_psis_for_RAOs(self):
         data = HDBParser.from_string(test_ship_hdb())
-        psi1 = data.get_total_excitation_force_phase_psis()
-        psi2 = data.get_total_excitation_force_module_psis()
+        psi1 = data.get_froude_krylov_module_psis()
+        psi2 = data.get_froude_krylov_phase_psis()
         self.assertEqual(13, len(psi1))
         self.assertEqual(13, len(psi2))
         for i in range(13):

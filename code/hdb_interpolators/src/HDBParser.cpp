@@ -7,18 +7,18 @@
 
 #include "HDBParser.hpp"
 
+#include <algorithm>
+#include <functional>
+#include <limits>
 #include <list>
 #include <set>
 #include <sstream>
-#include <limits>
-#include <algorithm>
-#include <functional>
 
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
 
-#include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string/predicate.hpp>
 #include <boost/variant.hpp>
 
 #include <ssc/interpolation.hpp>
@@ -32,7 +32,7 @@
 class HDBParser::Impl
 {
     public:
-        Impl() 
+        Impl()
         : omega_rad()
         , tree()
         , M()
@@ -217,7 +217,7 @@ class HDBParser::Impl
                     {
                         for (size_t i = 0 ; i < 6 ; ++i)
                         {
-                            if (that_section->header == matrix + "_" + boost::lexical_cast<std::string>(i+1))
+                            if (that_section->header == matrix + "_" + std::to_string(i+1))
                             {
                                 fill(ret, i, that_section->values);
                                 found_line[i] = true;
@@ -250,7 +250,7 @@ class HDBParser::Impl
                     size_t psi_idx = 0;
                     for (auto s:ms.sections_with_id)
                     {
-                        if (s.header == subsection_name)
+                        if (boost::algorithm::starts_with(s.header, subsection_name))
                         {
                             found_relevant_rao_subsection = true;
                             psi.insert(s.id*PI/180.);
@@ -297,37 +297,37 @@ class HDBParser::Impl
 
         boost::variant<RAOData,std::string> get_diffraction_module() const
         {
-            return get_rao("DIFFRACTION_FORCES_AND_MOMENTS", "INCIDENCE_EFM_MOD_001");
+            return get_rao("DIFFRACTION_FORCES_AND_MOMENTS", "INCIDENCE_DFFM_MOD_");
         }
 
         boost::variant<RAOData,std::string> get_diffraction_phase() const
         {
-            return get_rao("DIFFRACTION_FORCES_AND_MOMENTS", "INCIDENCE_EFM_PH_001");
+            return get_rao("DIFFRACTION_FORCES_AND_MOMENTS", "INCIDENCE_DFFM_PH_");
         }
 
         boost::variant<RAOData,std::string> get_froude_krylov_module() const
         {
-            return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_FKFM_MOD_001");
+            return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_FKFM_MOD_");
         }
 
         boost::variant<RAOData,std::string> get_froude_krylov_phase() const
         {
-            return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_FKFM_PH_001");
+            return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_FKFM_PH_");
         }
 
         boost::variant<RAOData,std::string> get_wave_drift_forces() const
         {
-            return get_rao("DRIFT_FORCES_AND_MOMENTS", "INCIDENCE_DFM_001");
+            return get_rao("DRIFT_FORCES_AND_MOMENTS", "INCIDENCE_DFM_");
         }
 
         boost::variant<RAOData,std::string> get_total_excitation_forces_module() const
         {
-            return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_EFM_MOD_001");
+            return get_rao("EXCITATION_FORCES_AND_MOMENTS", "INCIDENCE_EFM_MOD_");
         }
 
         boost::variant<RAOData,std::string> get_total_excitation_forces_phase() const
         {
-            return get_rao("FROUDE-KRYLOV_FORCES_AND_MOMENTS", "INCIDENCE_EFM_PH_001");
+            return get_rao("EXCITATION_FORCES_AND_MOMENTS", "INCIDENCE_EFM_PH_");
         }
 
         std::array<std::vector<std::vector<double> >,6 > get_diffraction_module_tables() const
