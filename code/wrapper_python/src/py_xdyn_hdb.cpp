@@ -183,13 +183,6 @@ void py_add_module_xdyn_hdb(py::module&m)
                 - `data` (HydroDBParser): Data read from the HDB or Precal_R file
                 - `diffraction_yaml` (YamlRAO): Contents of the force model's parsed YAML data
             )")
-        .def("get_phases_cartesian", &RaoInterpolator::get_phases_cartesian,
-            py::arg("k"),
-            R"(Interpolates the RAO's phase for the values of omega & psi in the wave spectrum
-             Input:
-             - `k` (int): Axis index (0 for Fx, 1 for Fy, 2 for Fz, 3 for Mx, 4 for My and 5 for Mz)
-             Return RAO_phase[i][j], where i is frequency index & j direction index
-             )")
         .def("interpolate_module", &RaoInterpolator::interpolate_module,
             py::arg("axis"),
             py::arg("Tp"),
