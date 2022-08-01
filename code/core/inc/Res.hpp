@@ -12,7 +12,7 @@
 #include <string>
 #include "StateMacros.hpp"
 
-/** \author cec
+/** \author cady
  *  \date Jul 1, 2014, 9:28:53 AM
  *  \brief Stores simulation results (states & instant)
  *  \details This structure will be outputted at each simulation step.
