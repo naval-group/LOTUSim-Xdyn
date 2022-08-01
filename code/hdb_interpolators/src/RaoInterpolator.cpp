@@ -110,22 +110,6 @@ std::vector<double> RaoInterpolator::get_module_periods() const
     return rao.module_periods;
 }
 
-std::vector<std::vector<double> > RaoInterpolator::get_array_cartesian(Interpolator& i) const
-{
-    std::vector<std::vector<double> > ret;
-    for (auto omega:omegas)
-    {
-        std::vector<double> v;
-        for (auto psi:psis)
-        {
-            if (mirror and (psi>PI)) v.push_back(i.f(2*PI/omega, 2*PI-psi));
-            else                     v.push_back(i.f(2*PI/omega, psi));
-        }
-        ret.push_back(v);
-    }
-    return ret;
-}
-
 double RaoInterpolator::interpolate_module(const size_t axis, const double Tp, double beta)
 {
     double ret = 0;

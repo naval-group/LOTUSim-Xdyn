@@ -48,7 +48,6 @@ class RaoInterpolator
 
     private:
         RaoInterpolator();
-        std::vector<std::vector<double> > get_array_cartesian(Interpolator& i) const;
         struct RAO
         {
             RAO() = delete;
