@@ -11,7 +11,7 @@
 #include <functional>
 #include <vector>
 
-/** \author cec
+/** \author cady
  *  \date Jul 31, 2014, 1:08:15 PM
  *  \brief Used by 'discretize'
  *  \ingroup wave_models
