@@ -23,7 +23,7 @@ class RaoInterpolator
         RaoInterpolator(
             const HydroDBParser& data, //<! Data read from the HDB or Precal_R file
             const YamlRAO& diffraction_yaml //<! Contents of the force model's parsed YAML data
-        );
+            );
         virtual ~RaoInterpolator();
 
         /**
@@ -31,8 +31,9 @@ class RaoInterpolator
          * \returns RAO_module[i][j], where i is frequency index & j direction index
          * \snippet hdb_interpolators/unit_tests/src/RadiationInterpolatorTest.cpp RadiationInterpolatorTest method_example
          */
-        std::vector<std::vector<double> > get_modules_cartesian(const size_t k //<! Axis index (0 for Fx, 1 for Fy, 2 for Fz, 3 for Mx, 4 for My and 5 for Mz)
-                                                                );
+        std::vector<std::vector<double> > get_modules_cartesian(
+            const size_t k //<! Axis index (0 for Fx, 1 for Fy, 2 for Fz, 3 for Mx, 4 for My and 5 for Mz)
+            );
 
         /**
          * \brief Interpolates the RAO's phase for the values of omega & psi in the wave spectrum
