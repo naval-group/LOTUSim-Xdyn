@@ -15,7 +15,7 @@
 #include <ssc/macros/tr1_macros.hpp>
 #include TR1INC(memory)
 
-/** \author cec
+/** \author cady
  *  \date 24 avr. 2014, 10:28:25
  *  \brief Interface to wave models
  *  \details It is this base class' responsibility to change the reference frame of the input point.
@@ -72,7 +72,7 @@ class SurfaceElevationInterface
                                                           const double t,                //!< Current time instant (in seconds)
                                                           const std::vector<double>& eta //!< Wave elevations at (x,y) in the NED frame (in meters)
                                                          ) const;
-        
+
         virtual std::vector<std::vector<double> > get_wave_directions_for_each_model() const;
         virtual std::vector<std::vector<double> > get_wave_angular_frequency_for_each_model() const;
 
@@ -164,7 +164,7 @@ class SurfaceElevationInterface
                                                 const double t                //!< Current instant (in seconds)
                                                 ) const = 0;
 
-        /**  \author cec
+        /**  \author cady
           *  \date Feb 3, 2015, 10:06:45 AM
           *  \brief Orbital velocity
           *  \returns Velocity of the fluid at given points & instant, in m/s
