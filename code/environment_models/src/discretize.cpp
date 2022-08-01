@@ -70,7 +70,7 @@ DiscreteDirectionalWaveSpectrum discretize(
     return ret;
 }
 
-/**  \author cec
+/**  \author cady
   *  \date Aug 1, 2014, 5:04:24 PM
   *  \brief Discretize a wave spectrum
   *  \details Finite depth hypothesis (for the wave number)
