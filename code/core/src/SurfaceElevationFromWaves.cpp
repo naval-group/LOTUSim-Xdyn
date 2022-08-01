@@ -11,11 +11,11 @@
 
 
 SurfaceElevationFromWaves::SurfaceElevationFromWaves(
-        const std::vector<WaveModelPtr>& models_,
-        const std::pair<std::size_t,std::size_t> output_mesh_size_,
-        const ssc::kinematics::PointMatrixPtr& output_mesh_) :
-                SurfaceElevationInterface(output_mesh_, output_mesh_size_),
-                directional_spectra(models_)
+    const std::vector<WaveModelPtr>& models_,
+    const std::pair<std::size_t,std::size_t> output_mesh_size_,
+    const ssc::kinematics::PointMatrixPtr& output_mesh_) :
+        SurfaceElevationInterface(output_mesh_, output_mesh_size_),
+        directional_spectra(models_)
 {
     if(output_mesh_size_.first*output_mesh_size_.second != (std::size_t)output_mesh_->m.cols())
     {
@@ -24,11 +24,11 @@ SurfaceElevationFromWaves::SurfaceElevationFromWaves(
 }
 
 SurfaceElevationFromWaves::SurfaceElevationFromWaves(
-        const WaveModelPtr& model,
-        const std::pair<std::size_t,std::size_t> output_mesh_size_,
-        const ssc::kinematics::PointMatrixPtr& output_mesh_) :
-                SurfaceElevationInterface(output_mesh_, output_mesh_size_),
-                directional_spectra(std::vector<WaveModelPtr>(1,model))
+    const WaveModelPtr& model,
+    const std::pair<std::size_t,std::size_t> output_mesh_size_,
+    const ssc::kinematics::PointMatrixPtr& output_mesh_) :
+        SurfaceElevationInterface(output_mesh_, output_mesh_size_),
+        directional_spectra(std::vector<WaveModelPtr>(1,model))
 {
     if(output_mesh_size_.first*output_mesh_size_.second != (std::size_t)output_mesh_->m.cols())
     {
@@ -36,10 +36,11 @@ SurfaceElevationFromWaves::SurfaceElevationFromWaves(
     }
 }
 
-std::vector<double> SurfaceElevationFromWaves::wave_height(const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
-                                                           const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
-                                                           const double t                //!< Current instant (in seconds)
-                                                           ) const
+std::vector<double> SurfaceElevationFromWaves::wave_height(
+    const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+    const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+    const double t                //!< Current instant (in seconds)
+) const
 {
     std::vector<double> zwave(x.size(), 0);
 
@@ -101,14 +102,15 @@ std::vector<std::vector<double> > SurfaceElevationFromWaves::get_wave_angular_fr
     return ret;
 }
 
-std::vector<double> SurfaceElevationFromWaves::dynamic_pressure(const double rho,               //!< water density (in kg/m^3)
-                                                                const double g,                 //!< gravity (in m/s^2)
-                                                                const std::vector<double> &x,   //!< x-positions in the NED frame (in meters)
-                                                                const std::vector<double> &y,   //!< y-positions in the NED frame (in meters)
-                                                                const std::vector<double> &z,   //!< z-positions in the NED frame (in meters)
-                                                                const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
-                                                                const double t                  //!< Current time instant (in seconds)
-                                                                ) const
+std::vector<double> SurfaceElevationFromWaves::dynamic_pressure(
+    const double rho,               //!< water density (in kg/m^3)
+    const double g,                 //!< gravity (in m/s^2)
+    const std::vector<double> &x,   //!< x-positions in the NED frame (in meters)
+    const std::vector<double> &y,   //!< y-positions in the NED frame (in meters)
+    const std::vector<double> &z,   //!< z-positions in the NED frame (in meters)
+    const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
+    const double t                  //!< Current time instant (in seconds)
+) const
 {
     std::vector<double> pdyn(x.size(), 0);
     for (const auto& spectrum : directional_spectra)
@@ -122,13 +124,14 @@ std::vector<double> SurfaceElevationFromWaves::dynamic_pressure(const double rho
     return pdyn;
 }
 
-ssc::kinematics::PointMatrix SurfaceElevationFromWaves::orbital_velocity(const double g,                //!< gravity (in m/s^2)
-                                                                         const std::vector<double>& x,  //!< x-positions in the NED frame (in meters)
-                                                                         const std::vector<double>& y,  //!< y-positions in the NED frame (in meters)
-                                                                         const std::vector<double>& z,  //!< z-positions in the NED frame (in meters)
-                                                                         const double t,                //!< Current time instant (in seconds)
-                                                                         const std::vector<double>& eta //!< Wave elevations at (x,y) in the NED frame (in meters)
-                                                                        ) const
+ssc::kinematics::PointMatrix SurfaceElevationFromWaves::orbital_velocity(
+    const double g,                //!< gravity (in m/s^2)
+    const std::vector<double>& x,  //!< x-positions in the NED frame (in meters)
+    const std::vector<double>& y,  //!< y-positions in the NED frame (in meters)
+    const std::vector<double>& z,  //!< z-positions in the NED frame (in meters)
+    const double t,                //!< Current time instant (in seconds)
+    const std::vector<double>& eta //!< Wave elevations at (x,y) in the NED frame (in meters)
+) const
 {
     ssc::kinematics::PointMatrix Vwaves(ssc::kinematics::Matrix3Xd::Zero(3,x.size()), "NED");
     for (const auto& spectrum:directional_spectra)
