@@ -43,7 +43,7 @@ class DefaultSurfaceElevation : public SurfaceElevationInterface
                                         const double t                //!< Current instant (in seconds)
                                         ) const;
 
-        /**  \author cec
+        /**  \author cady
           *  \date Feb 3, 2015, 10:06:45 AM
           *  \brief Orbital velocity
           *  \returns Velocity of the fluid at given points & instant, in m/s
