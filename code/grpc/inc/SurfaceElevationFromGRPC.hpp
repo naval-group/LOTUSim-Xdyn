@@ -77,7 +77,7 @@ class SurfaceElevationFromGRPC : public SurfaceElevationInterface
           *  \see "Seakeeping: ship behaviour in rough weather", 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, page 75
           *  \see "The dynamic of marine craft", 2004, Lewandoski, page 148
           */
-        /**  \author cec
+        /**  \author cady
           *  \date Feb 3, 2015, 10:06:45 AM
           *  \brief Orbital velocity
           *  \returns Velocity of the fluid at a given point & instant, in m/s
@@ -89,7 +89,7 @@ class SurfaceElevationFromGRPC : public SurfaceElevationInterface
                                                         const double t,   //!< z-position in the NED frame (in meters)
                                                         const double eta  //!< Wave elevation at (x,y) in the NED frame (in meters)
                                                        ) const;
-        /**  \author cec
+        /**  \author cady
           *  \date Feb 3, 2015, 10:06:45 AM
           *  \brief Orbital velocity
           *  \returns Velocity of the fluid at given points & instant, in m/s
