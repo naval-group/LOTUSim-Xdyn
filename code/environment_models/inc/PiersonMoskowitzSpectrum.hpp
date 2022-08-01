@@ -11,7 +11,7 @@
 
 #include "JonswapSpectrum.hpp"
 
-/** \author cec
+/** \author cady
  *  \date Jul 30, 2014, 12:46:03 PM
  *  \brief
  *  \details
@@ -26,7 +26,7 @@
 class PiersonMoskowitzSpectrum : public JonswapSpectrum
 {
     public:
-        /**  \author cec
+        /**  \author cady
           *  \date Jul 30, 2014, 10:04:59 AM
           *  \brief PiersonMoskowitzSpectrum only constructor
           *  \details Default constructor was disabled by making it private & providing no implementation
