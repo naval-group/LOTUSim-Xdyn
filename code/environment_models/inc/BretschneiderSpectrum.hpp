@@ -10,7 +10,7 @@
 
 #include "WaveSpectralDensity.hpp"
 
-/** \author cec
+/** \author cady
  *  \date Jul 30, 2014, 2:25:11 PM
  *  \ingroup wave_models
  *  \section ex1 Example
@@ -21,7 +21,7 @@
 class BretschneiderSpectrum : public WaveSpectralDensity
 {
     public:
-        /**  \author cec
+        /**  \author cady
           *  \date Jul 30, 2014, 10:04:59 AM
           *  \brief BretschneiderSpectrum only constructor
           *  \details Default constructor was disabled by making it private & providing no implementation
@@ -30,7 +30,7 @@ class BretschneiderSpectrum : public WaveSpectralDensity
                               const double Tp    //!< Mean wave period (in seconds)
                         );
 
-        /**  \author cec
+        /**  \author cady
           *  \date Jul 30, 2014, 9:40:33 AM
           *  \brief Computes the amplitude of the power spectrum at a given angular frequency
           *  \returns Amplitude of the power spectrum (in m^2 s)
