@@ -12,7 +12,7 @@
 #include "MeshIntersector.hpp"
 
 
-/**  \author cec
+/**  \author cady
   *  \date May 20, 2014, 8:47:20 AM
   *  \brief Returns the polygon's unit normal vector
   *  \details Assumes the points are in the same plane & are given in direct order (right-hand rule)
@@ -22,7 +22,7 @@
 Eigen::Vector3d unit_normal(const Matrix3x& polygon //!< Polygon for which the unit normal vector is computed
                            );
 
-/**  \author cec
+/**  \author cady
   *  \date May 20, 2014, 8:47:20 AM
   *  \brief Returns the polygon's unit normal vector
   *  \details Assumes the points are in the same plane & are given in direct order (right-hand rule)
@@ -33,7 +33,7 @@ Eigen::Vector3d unit_normal(const Matrix3x& polygon, //!< Polygon for which the 
                             const std::vector<size_t> &vertex_index
                            );
 
-/**  \author cec
+/**  \author cady
   *  \date May 20, 2014, 8:47:20 AM
   *  \brief Computes the iso-braycenter of a list of points
   *  \returns The iso-barycenter of the points
@@ -54,7 +54,7 @@ Eigen::Vector3d barycenter(const Matrix3x& p, const std::vector<size_t> &vertex_
 Eigen::Vector3d barycenter(const VectorOfVectorOfPoints& points //!< List of points
                           );
 
-/**  \author cec
+/**  \author cady
   *  \date May 20, 2014, 8:47:20 AM
   *  \brief Computes the area of a polygon.
   *  \details Decomposes the polygon in triangles & sums the areas
@@ -70,7 +70,7 @@ double area(const Matrix3x& polygon //!< Polygon for which the area is computed
   */
 double area(const Matrix3x& points, const std::vector<size_t> &vertex_index);
 
-/**  \author cec
+/**  \author cady
   *  \date May 21, 2014, 10:39:36 AM
   *  \brief Calculates the area of a triangle
   *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest triangle_area_example
@@ -81,7 +81,7 @@ double area(const Matrix3x& points, //!< Matrix containing (amongst others), the
             const int idxC          //!< Index of the column containing the third point
             );
 
-/**  \author cec
+/**  \author cady
   *  \date May 20, 2014, 10:55:32 AM
   *  \brief Computes the position of the centre of gravity of a polygon
   *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest centre_of_gravity_example
@@ -136,7 +136,7 @@ Eigen::Matrix3d inertia_of_polygon(
         const Matrix3x& verticesInR1  //!< polygon with vertices expressed in inertia frame R1
         );
 
-/**  \author cec
+/**  \author cady
   *  \date Apr 30, 2014, 10:10:40 AM
   *  \brief Computes average relative immersion of three points
   *  \details Needs the indices of those points & a vector of relative heights.
