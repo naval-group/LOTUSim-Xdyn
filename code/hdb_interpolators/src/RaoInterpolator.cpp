@@ -66,20 +66,21 @@ RaoInterpolator::RAO RaoInterpolator::RAO::get(const YamlRAO::TypeOfRao& type_of
 }
 
 
-RaoInterpolator::RaoInterpolator(const HydroDBParser& parser, //!< Data read from the HDB or Precal_R file
-                                 const std::vector<double>& omega, //!< Angular frequencies in the wave spectrum (points at which to interpolate the HDB data)
-                                 const std::vector<double>& psi, //!< Wave directions (points at which to interpolate the HDB data)
-                                 const YamlRAO& yaml_rao //<! Contents of the force model's parsed YAML data
-        )
-        : module()
-        , phase()
-        , mirror(yaml_rao.mirror)
-        , omegas(omega)
-        , psis(psi)
-        , period_bounds()
-        , rao(RAO::get(yaml_rao.type_of_rao, parser))
-        , rao_calculation_point(yaml_rao.calculation_point.x,yaml_rao.calculation_point.y,yaml_rao.calculation_point.z)
-        , use_encounter_period(false)
+RaoInterpolator::RaoInterpolator(
+    const HydroDBParser& parser, //!< Data read from the HDB or Precal_R file
+    const std::vector<double>& omega, //!< Angular frequencies in the wave spectrum (points at which to interpolate the HDB data)
+    const std::vector<double>& psi, //!< Wave directions (points at which to interpolate the HDB data)
+    const YamlRAO& yaml_rao //<! Contents of the force model's parsed YAML data
+    )
+    : module()
+    , phase()
+    , mirror(yaml_rao.mirror)
+    , omegas(omega)
+    , psis(psi)
+    , period_bounds()
+    , rao(RAO::get(yaml_rao.type_of_rao, parser))
+    , rao_calculation_point(yaml_rao.calculation_point.x,yaml_rao.calculation_point.y,yaml_rao.calculation_point.z)
+    , use_encounter_period(false)
 {
     std::reverse(omegas.begin(),omegas.end());
     period_bounds.first = *std::min_element(rao.module_periods.begin(), rao.module_periods.end());
