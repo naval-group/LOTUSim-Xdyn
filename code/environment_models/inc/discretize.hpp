@@ -30,7 +30,7 @@ FlatDiscreteDirectionalWaveSpectrum filter(
     const double energy_ratio = 1.0//!< Between 0 & 1: where should we cut off the spectra? 0 -> Removes all rays, 1 -> Keeps all rays
     );
 
-/**  \author cec
+/**  \author cady
   *  \date Aug 1, 2014, 5:04:24 PM
   *  \brief Discretize a wave spectrum
   *  \details Infinite depth hypothesis (for the wave number)
@@ -50,7 +50,7 @@ DiscreteDirectionalWaveSpectrum discretize(
     const bool equal_energy_bins       //!< Choose omegas so the integral of S between two successive omegas is constant
     );
 
-/**  \author cec
+/**  \author cady
   *  \date Aug 1, 2014, 5:04:24 PM
   *  \brief Discretize a wave spectrum
   *  \details Finite depth hypothesis (for the wave number)
