@@ -91,9 +91,9 @@ ssc::kinematics::Vector6d PhaseModuleRAOEvaluator::evaluate(const BodyStates& st
     {
         try
         {
+            const auto directional_spectra = env.w->get_flat_directional_spectra(x(0), x(1), t);
             for (size_t degree_of_freedom_idx = 0 ; degree_of_freedom_idx < 6 ; ++degree_of_freedom_idx) // For each degree of freedom (X, Y, Z, K, M, N)
             {
-                const auto directional_spectra = env.w->get_flat_directional_spectra(x(0), x(1), t);
                 for (const auto spectrum:directional_spectra) // For each directional spectrum
                 {
                     const size_t nb_of_period_incidence_pairs = spectrum.omega.size();
