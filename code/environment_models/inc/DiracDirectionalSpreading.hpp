@@ -23,7 +23,7 @@ class DiracDirectionalSpreading : public WaveDirectionalSpreading
         DiracDirectionalSpreading(const double psi0 //!< Primary wave direction (NED, "coming from") in radians
                                  );
 
-        /**  \author cec
+        /**  \author cady
           *  \date Jul 31, 2014, 12:20:52 PM
           *  \brief Wave density by direction.
           *  \details Equals one if psi=psi0 & 0 otherwise.
@@ -34,7 +34,7 @@ class DiracDirectionalSpreading : public WaveDirectionalSpreading
 
         WaveDirectionalSpreading* clone() const;
 
-        /**  \author cec
+        /**  \author cady
           *  \date Jul 31, 2014, 12:20:52 PM
           *  \details Returns a vector containing only psi0
           *  \snippet environment_models/unit_tests/src/WaveSpectralDensityTest.cpp WaveSpectralDensityTest get_omega0_example
