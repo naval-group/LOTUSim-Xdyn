@@ -11,11 +11,6 @@
 
 RaoInterpolator::~RaoInterpolator(){}
 
-RaoInterpolator::RaoInterpolator(const HydroDBParser& data, //!< Data read from the HDB or Precal_R file
-                                 const YamlRAO& diffraction_yaml //<! Contents of the force model's parsed YAML data
-        ) : RaoInterpolator(data, {}, {}, diffraction_yaml)
-{}
-
 RaoInterpolator::RAO RaoInterpolator::RAO::for_diffraction(const HydroDBParser& parser)
 {
     return RaoInterpolator::RAO(parser.get_diffraction_module_tables(),
@@ -68,21 +63,16 @@ RaoInterpolator::RAO RaoInterpolator::RAO::get(const YamlRAO::TypeOfRao& type_of
 
 RaoInterpolator::RaoInterpolator(
     const HydroDBParser& parser, //!< Data read from the HDB or Precal_R file
-    const std::vector<double>& omega, //!< Angular frequencies in the wave spectrum (points at which to interpolate the HDB data)
-    const std::vector<double>& psi, //!< Wave directions (points at which to interpolate the HDB data)
     const YamlRAO& yaml_rao //<! Contents of the force model's parsed YAML data
     )
     : module()
     , phase()
     , mirror(yaml_rao.mirror)
-    , omegas(omega)
-    , psis(psi)
     , period_bounds()
     , rao(RAO::get(yaml_rao.type_of_rao, parser))
     , rao_calculation_point(yaml_rao.calculation_point.x,yaml_rao.calculation_point.y,yaml_rao.calculation_point.z)
     , use_encounter_period(false)
 {
-    std::reverse(omegas.begin(),omegas.end());
     period_bounds.first = *std::min_element(rao.module_periods.begin(), rao.module_periods.end());
     period_bounds.second = *std::max_element(rao.module_periods.begin(), rao.module_periods.end());
 

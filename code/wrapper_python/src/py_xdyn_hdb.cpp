@@ -162,20 +162,6 @@ void py_add_module_xdyn_hdb(py::module&m)
         ;
 
     py::class_<RaoInterpolator>(m_hdb_interpolators, "RaoInterpolator")
-        .def(py::init<const HydroDBParser& /*data*/,
-                      const std::vector<double>& /*omega*/,
-                      const std::vector<double>& /*psi*/,
-                      const YamlRAO& /*diffraction_yaml*/>(),
-            py::arg("data"),
-            py::arg("omega"),
-            py::arg("psi"),
-            py::arg("diffraction_yaml"),
-            R"(
-                - `data` (HydroDBParser): Data read from the HDB or Precal_R file
-                - `omega` (List[float]): Angular frequencies in the wave spectrum (points at which to interpolate the HDB data)
-                - `psi` (List[float]): Wave directions (points at which to interpolate the HDB data)
-                - `diffraction_yaml` (YamlRAO): Contents of the force model's parsed YAML data
-            )")
         .def(py::init<const HydroDBParser& /*data*/, const YamlRAO& /*diffraction_yaml*/>(),
             py::arg("data"),
             py::arg("diffraction_yaml"),
@@ -205,8 +191,6 @@ void py_add_module_xdyn_hdb(py::module&m)
         .def("get_rao_calculation_point", &RaoInterpolator::get_rao_calculation_point)
         .def("using_encounter_period", &RaoInterpolator::using_encounter_period, "Return boolean")
         ;
-
-
 
     /* Code below expose internal function / class that be should be kept private*/
     /* Maybe inside a submodule named _internal ?*/

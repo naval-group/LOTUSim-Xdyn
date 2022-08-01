@@ -16,12 +16,6 @@ class RaoInterpolator
     public:
         RaoInterpolator(
             const HydroDBParser& data, //<! Data read from the HDB or Precal_R file
-            const std::vector<double>& omega, //<! Angular frequencies in the wave spectrum (points at which to interpolate the HDB data)
-            const std::vector<double>& psi, //<! Wave directions (points at which to interpolate the HDB data)
-            const YamlRAO& diffraction_yaml //<! Contents of the force model's parsed YAML data
-            );
-        RaoInterpolator(
-            const HydroDBParser& data, //<! Data read from the HDB or Precal_R file
             const YamlRAO& diffraction_yaml //<! Contents of the force model's parsed YAML data
             );
         virtual ~RaoInterpolator();
@@ -74,8 +68,6 @@ class RaoInterpolator
         std::array<Interpolator,6> module; //!< 2D spline interpolation function (omega,psi) for RAO's module
         std::array<Interpolator,6> phase; //!< 2D spline interpolation function (omega,psi) for RAO's phase
         bool mirror;
-        std::vector<double> omegas;
-        std::vector<double> psis;
         std::pair<double, double> period_bounds;
         RAO rao;
         Eigen::Vector3d rao_calculation_point;
