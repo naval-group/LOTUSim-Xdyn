@@ -10,7 +10,7 @@
 
 #include <tuple>
 
-/** \author cec
+/** \author cady
  *  \date Jul 31, 2014, 4:25:23 PM
  *  \brief This is the functor used to solve the dispersion relation to compute
  *         the wave number
