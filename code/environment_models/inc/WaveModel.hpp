@@ -14,7 +14,7 @@
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 
-/** \author cec
+/** \author cady
  *  \date Aug 1, 2014, 3:15:04 PM
  *  \brief Interface to wave models.
  *  \details Should at least provide elevation.
@@ -96,7 +96,7 @@ class WaveModel
         WaveModel(); // Disabled
         void check_sizes() const;
 
-        /**  \author cec
+        /**  \author cady
           *  \date Aug 1, 2014, 3:24:45 PM
           *  \brief Surface elevation
           *  \returns Elevations of a list of points at a given instant, in meters.
@@ -108,7 +108,7 @@ class WaveModel
             const double t                //!< Current time instant (in seconds)
             ) const = 0;
 
-        /**  \author cec
+        /**  \author cady
           *  \date Feb 3, 2015, 10:06:45 AM
           *  \brief Orbital velocity
           *  \returns Velocities of the fluid at given points & instant, in m/s
