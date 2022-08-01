@@ -2,7 +2,7 @@
  * RadiationDampingForceModel.hpp
  *
  *  Created on: Dec 1, 2014
- *      Author: cec
+ *      Author: cady
  */
 
 #ifndef RadiationDampingForceModel_HPP_
