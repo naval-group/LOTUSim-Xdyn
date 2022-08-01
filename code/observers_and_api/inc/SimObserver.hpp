@@ -15,7 +15,7 @@
 
 class Sim;
 
-/** \author cec
+/** \author cady
  *  \date Jun 17, 2014, 8:23:16 AM
  *  \brief
  *  \details
