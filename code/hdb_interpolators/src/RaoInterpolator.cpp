@@ -126,13 +126,6 @@ std::vector<std::vector<double> > RaoInterpolator::get_array_cartesian(Interpola
     return ret;
 }
 
-std::vector<std::vector<double> > RaoInterpolator::get_modules_cartesian(
-    const size_t k //!< Axis index (0 for Fx, 1 for Fy, 2 for Fz, 3 for Mx, 4 for My and 5 for Mz)
-    )
-{
-    return get_array_cartesian(module.at(k));
-}
-
 std::vector<std::vector<double> > RaoInterpolator::get_phases_cartesian(
     const size_t k //!< Axis index (0 for Fx, 1 for Fy, 2 for Fz, 3 for Mx, 4 for My and 5 for Mz)
     )
