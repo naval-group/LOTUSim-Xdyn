@@ -340,31 +340,29 @@ class SurfaceElevationFromGRPC::Impl
             throw_if_invalid_status("spectrum", status);
             check_sizes(response);
             std::vector<DiscreteDirectionalWaveSpectrum> ret;
+            for (int i = 0 ; i < response.spectrum_size() ; ++i)
             {
-                for (int i = 0 ; i < response.spectrum_size() ; ++i)
+                DiscreteDirectionalWaveSpectrum s;
+                s.Si.reserve(response.spectrum(i).si_size());
+                std::copy(response.spectrum(i).si().begin(), response.spectrum(i).si().end(), std::back_inserter(s.Si));
+                s.Dj.reserve(response.spectrum(i).dj_size());
+                std::copy(response.spectrum(i).dj().begin(), response.spectrum(i).dj().end(), std::back_inserter(s.Dj));
+                s.omega.reserve(response.spectrum(i).omega_size());
+                std::copy(response.spectrum(i).omega().begin(), response.spectrum(i).omega().end(), std::back_inserter(s.omega));
+                s.psi.reserve(response.spectrum(i).psi_size());
+                std::copy(response.spectrum(i).psi().begin(), response.spectrum(i).psi().end(), std::back_inserter(s.psi));
+                s.k.reserve(response.spectrum(i).k_size());
+                std::copy(response.spectrum(i).k().begin(), response.spectrum(i).k().end(), std::back_inserter(s.k));
+                if (response.spectrum(i).phase_size())
                 {
-                    DiscreteDirectionalWaveSpectrum s;
-                    s.Si.reserve(response.spectrum(i).si_size());
-                    std::copy(response.spectrum(i).si().begin(), response.spectrum(i).si().end(), std::back_inserter(s.Si));
-                    s.Dj.reserve(response.spectrum(i).dj_size());
-                    std::copy(response.spectrum(i).dj().begin(), response.spectrum(i).dj().end(), std::back_inserter(s.Dj));
-                    s.omega.reserve(response.spectrum(i).omega_size());
-                    std::copy(response.spectrum(i).omega().begin(), response.spectrum(i).omega().end(), std::back_inserter(s.omega));
-                    s.psi.reserve(response.spectrum(i).psi_size());
-                    std::copy(response.spectrum(i).psi().begin(), response.spectrum(i).psi().end(), std::back_inserter(s.psi));
-                    s.k.reserve(response.spectrum(i).k_size());
-                    std::copy(response.spectrum(i).k().begin(), response.spectrum(i).k().end(), std::back_inserter(s.k));
-                    if (response.spectrum(i).phase_size())
+                    s.phase.resize(response.spectrum(i).phase_size());
+                    for (int j = 0 ; j < response.spectrum(i).phase_size() ; ++j)
                     {
-                        s.phase.resize(response.spectrum(i).phase_size());
-                        for (int j = 0 ; j < response.spectrum(i).phase_size() ; ++j)
-                        {
-                            s.phase.at(j).reserve(response.spectrum(i).phase(j).phase_size());
-                            std::copy(response.spectrum(i).phase(j).phase().begin(), response.spectrum(i).phase(j).phase().end(), std::back_inserter(s.phase.at(j)));
-                        }
+                        s.phase.at(j).reserve(response.spectrum(i).phase(j).phase_size());
+                        std::copy(response.spectrum(i).phase(j).phase().begin(), response.spectrum(i).phase(j).phase().end(), std::back_inserter(s.phase.at(j)));
                     }
-                    ret.push_back(s);
                 }
+                ret.push_back(s);
             }
             return ret;
         }
