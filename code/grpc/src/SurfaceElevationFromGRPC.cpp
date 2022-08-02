@@ -137,6 +137,27 @@ class SurfaceElevationFromGRPC::Impl
             }
         }
 
+        void check_sizes(const FlatSpectrumResponse& response) const
+        {
+            const std::string rpc_method = "flat_spectrum";
+            if (response.omega_size() != response.a_size())
+            {
+                throw_invalid_size_error(rpc_method, "FlatSpectrum", "a", response.omega_size(), response.a_size());
+            }
+            if (response.omega_size() != response.psi_size())
+            {
+                throw_invalid_size_error(rpc_method, "FlatSpectrum", "psi", response.omega_size(), response.psi_size());
+            }
+            if (response.omega_size() != response.k_size())
+            {
+                throw_invalid_size_error(rpc_method, "FlatSpectrum", "k", response.omega_size(), response.k_size());
+            }
+            if (response.omega_size() != response.phase_size())
+            {
+                throw_invalid_size_error(rpc_method, "FlatSpectrum", "phase", response.omega_size(), response.phase_size());
+            }
+        }
+
         void throw_if_invalid_status(const std::string& rpc_method, const grpc::Status& status) const
         {
             const std::string base_error_msg = "an error occurred when using the distant wave model defined via gRPC (method '" + rpc_method + "').\n";
