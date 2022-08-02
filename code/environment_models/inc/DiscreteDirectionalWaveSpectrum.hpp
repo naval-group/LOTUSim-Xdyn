@@ -57,6 +57,7 @@ struct FlatDiscreteDirectionalWaveSpectrum
     std::vector<double> phase;   //!< Random phases, for each (frequency, direction) couple (but time invariant) in radian, for each angular frequency omega, and direction
     std::function<double(double,double,double)> pdyn_factor;    //!< Factor used when computing the dynamic pressure (no unit)
     std::function<double(double,double,double)> pdyn_factor_sh; //!< Factor used when computing the orbital velocity (no unit)
+    std::vector<double> get_periods() const;
 };
 
 #endif /* DISCRETEDIRECTIONALWAVESPECTRUM_HPP_ */
