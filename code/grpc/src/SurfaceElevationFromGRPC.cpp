@@ -367,6 +367,40 @@ class SurfaceElevationFromGRPC::Impl
             return ret;
         }
 
+        std::vector<FlatDiscreteDirectionalWaveSpectrum> flat_directional_spectra(const double x, const double y, const double t)
+        {
+            SpectrumRequest request;
+            request.set_x(x);
+            request.set_y(y);
+            request.set_t(t);
+            grpc::ClientContext context;
+            FlatSpectrumResponse response;
+            const grpc::Status status = stub->flat_spectrum(&context, request, &response);
+            throw_if_invalid_status("flat_spectrum", status);
+            check_sizes(response);
+            FlatDiscreteDirectionalWaveSpectrum s;
+            s.a.reserve(response.a_size());
+            std::copy(response.a().begin(), response.a().end(), std::back_inserter(s.a));
+            s.omega.reserve(response.omega_size());
+            std::copy(response.omega().begin(), response.omega().end(), std::back_inserter(s.omega));
+            s.psi.reserve(response.psi_size());
+            std::copy(response.psi().begin(), response.psi().end(), std::back_inserter(s.psi));
+            s.cos_psi.reserve(response.psi_size());
+            s.sin_psi.reserve(response.psi_size());
+            for (size_t i = 0 ; i < s.psi.size() ; ++i)
+            {
+                s.cos_psi.push_back(cos(s.psi.at(i)));
+                s.sin_psi.push_back(sin(s.psi.at(i)));
+            }
+            s.k.reserve(response.k_size());
+            std::copy(response.k().begin(), response.k().end(), std::back_inserter(s.k));
+            s.phase.reserve(response.phase_size());
+            std::copy(response.phase().begin(), response.phase().end(), std::back_inserter(s.phase));
+            std::vector<FlatDiscreteDirectionalWaveSpectrum> ret;
+            ret.push_back(s);
+            return ret;
+        }
+
         std::vector<std::vector<double> > get_wave_directions_for_each_model()
         {
             DirectionsRequest request;
