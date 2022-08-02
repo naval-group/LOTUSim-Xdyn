@@ -29,19 +29,20 @@ class SurfaceElevationInterface
 {
     public:
         SurfaceElevationInterface(
-                const ssc::kinematics::PointMatrixPtr& output_mesh,
-                const std::pair<std::size_t,std::size_t>& output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0)
-        );
+            const ssc::kinematics::PointMatrixPtr& output_mesh,
+            const std::pair<std::size_t,std::size_t>& output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0)
+            );
 
         virtual ~SurfaceElevationInterface();
 
         /**  \brief Computes surface elevation for each point on mesh.
           *  \details Updates the absolute surface elevation & the relative wave height.
           */
-        void update_surface_elevation(const ssc::kinematics::PointMatrixPtr& M,     //!< Points for which to compute the relative wave height
-                                      const ssc::kinematics::KinematicsPtr& k,      //!< Object used to compute the transforms to the NED frame
-                                      const double t                                //!< Current instant (in seconds)
-                                     );
+        void update_surface_elevation(
+            const ssc::kinematics::PointMatrixPtr& M,     //!< Points for which to compute the relative wave height
+            const ssc::kinematics::KinematicsPtr& k,      //!< Object used to compute the transforms to the NED frame
+            const double t                                //!< Current instant (in seconds)
+            );
 
         /**  \brief Returns the relative wave height computed by update_surface_elevation
           *  \returns zwave - z for each point in mesh.
@@ -65,13 +66,14 @@ class SurfaceElevationInterface
         /**  \brief Computes the orbital velocity at given points.
           *  \returns Velocity of the fluid at given points & instant, in m/s
           */
-        ssc::kinematics::PointMatrix get_and_check_orbital_velocity(const double g,                //!< gravity (in m/s^2)
-                                                          const std::vector<double>& x,  //!< x-positions in the NED frame (in meters)
-                                                          const std::vector<double>& y,  //!< y-positions in the NED frame (in meters)
-                                                          const std::vector<double>& z,  //!< z-positions in the NED frame (in meters)
-                                                          const double t,                //!< Current time instant (in seconds)
-                                                          const std::vector<double>& eta //!< Wave elevations at (x,y) in the NED frame (in meters)
-                                                         ) const;
+        ssc::kinematics::PointMatrix get_and_check_orbital_velocity(
+            const double g,                //!< gravity (in m/s^2)
+            const std::vector<double>& x,  //!< x-positions in the NED frame (in meters)
+            const std::vector<double>& y,  //!< y-positions in the NED frame (in meters)
+            const std::vector<double>& z,  //!< z-positions in the NED frame (in meters)
+            const double t,                //!< Current time instant (in seconds)
+            const std::vector<double>& eta //!< Wave elevations at (x,y) in the NED frame (in meters)
+            ) const;
 
         virtual std::vector<std::vector<double> > get_wave_directions_for_each_model() const;
         virtual std::vector<std::vector<double> > get_wave_angular_frequency_for_each_model() const;
@@ -83,21 +85,24 @@ class SurfaceElevationInterface
           *  \returns Pdyn (in Pascal)
           *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_example
           */
-        std::vector<double> get_dynamic_pressure(const double rho,                        //!< Water density (in kg/m^3)
-                                                 const double g,                          //!< Gravity (in m/s^2)
-                                                 const ssc::kinematics::PointMatrix& P,   //!< Positions of points P, relative to the centre of the NED frame, but projected in any frame
-                                                 const ssc::kinematics::KinematicsPtr& k, //!< Object used to compute the transforms to the NED frame
-                                                 const std::vector<double>& eta,          //!< Wave elevation at P in the NED frame (in meters)
-                                                 const double t                           //!< Current instant (in seconds)
-                                                 ) const;
-        std::vector<double> get_and_check_dynamic_pressure(const double rho,               //!< water density (in kg/m^3)
-                                                           const double g,                 //!< gravity (in m/s^2)
-                                                           const std::vector<double> &x,   //!< x-positions in the NED frame (in meters)
-                                                           const std::vector<double> &y,   //!< y-positions in the NED frame (in meters)
-                                                           const std::vector<double> &z,   //!< z-positions in the NED frame (in meters)
-                                                           const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
-                                                           const double t                  //!< Current time instant (in seconds)
-                                                           ) const;
+        std::vector<double> get_dynamic_pressure(
+            const double rho,                        //!< Water density (in kg/m^3)
+            const double g,                          //!< Gravity (in m/s^2)
+            const ssc::kinematics::PointMatrix& P,   //!< Positions of points P, relative to the centre of the NED frame, but projected in any frame
+            const ssc::kinematics::KinematicsPtr& k, //!< Object used to compute the transforms to the NED frame
+            const std::vector<double>& eta,          //!< Wave elevation at P in the NED frame (in meters)
+            const double t                           //!< Current instant (in seconds)
+            ) const;
+
+        std::vector<double> get_and_check_dynamic_pressure(
+            const double rho,               //!< water density (in kg/m^3)
+            const double g,                 //!< gravity (in m/s^2)
+            const std::vector<double> &x,   //!< x-positions in the NED frame (in meters)
+            const std::vector<double> &y,   //!< y-positions in the NED frame (in meters)
+            const std::vector<double> &z,   //!< z-positions in the NED frame (in meters)
+            const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
+            const double t                  //!< Current time instant (in seconds)
+            ) const;
 
         /**  \brief Computes the wave heights at the points given in the 'output' section of the YAML file.
           *  \returns Vector of coordinates on the free surface (in the NED frame),
@@ -106,9 +111,9 @@ class SurfaceElevationInterface
           *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest method_example
           */
         ssc::kinematics::PointMatrix get_waves_on_mesh(
-                const ssc::kinematics::KinematicsPtr& k, //!< Object used to compute the transforms to the NED frame
-                const double t                           //!< Current instant (in seconds)
-                ) const;
+            const ssc::kinematics::KinematicsPtr& k, //!< Object used to compute the transforms to the NED frame
+            const double t                           //!< Current instant (in seconds)
+            ) const;
 
         /**  \brief Computes the wave heights at the points given in the 'output' section of the YAML file.
           *  \returns a structure containing vector \a x, vector \a y and
@@ -119,9 +124,9 @@ class SurfaceElevationInterface
           *           the NED frame.
           */
         SurfaceElevationGrid get_waves_on_mesh_as_a_grid(
-                const ssc::kinematics::KinematicsPtr& k,    //!< Object used to compute the transforms to the NED frame
-                const double t                              //!< Current instant (in seconds)
-                ) const;
+            const ssc::kinematics::KinematicsPtr& k,    //!< Object used to compute the transforms to the NED frame
+            const double t                              //!< Current instant (in seconds)
+            ) const;
 
         /**  \brief Computes the wave heights on a mesh. Used by get_waves_on_mesh
           *  \returns Vector of coordinates on the free surface (in the NED frame),
@@ -130,18 +135,19 @@ class SurfaceElevationInterface
           *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest method_example
           */
         ssc::kinematics::PointMatrix get_points_on_free_surface(
-                const double t,                               //!< Current instant (in seconds)
-                const ssc::kinematics::PointMatrixPtr& Mned   //!< Output mesh in NED frame
-                ) const;
+            const double t,                               //!< Current instant (in seconds)
+            const ssc::kinematics::PointMatrixPtr& Mned   //!< Output mesh in NED frame
+            ) const;
 
         /**  \brief Computes the surface elevation at given points.
           *  \returns Surface elevations of a list of points at a given instant, in meters.
           *  \returns zwave - z
           */
-        std::vector<double> get_and_check_wave_height(const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
-                                            const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
-                                            const double t                //!< Current instant (in seconds)
-                                           ) const;
+        std::vector<double> get_and_check_wave_height(
+            const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+            const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+            const double t                //!< Current instant (in seconds)
+            ) const;
 
         virtual void serialize_wave_spectra_before_simulation(ObserverPtr& observer) const;
 
@@ -159,23 +165,25 @@ class SurfaceElevationInterface
           *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.20, page 125
           *  \returns zwave - z
           */
-        virtual std::vector<double> wave_height(const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
-                                                const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
-                                                const double t                //!< Current instant (in seconds)
-                                                ) const = 0;
+        virtual std::vector<double> wave_height(
+            const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+            const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+            const double t                //!< Current instant (in seconds)
+            ) const = 0;
 
         /**  \author cady
           *  \date Feb 3, 2015, 10:06:45 AM
           *  \brief Orbital velocity
           *  \returns Velocity of the fluid at given points & instant, in m/s
           */
-        virtual ssc::kinematics::PointMatrix orbital_velocity(const double g,                //!< gravity (in m/s^2)
-                                                              const std::vector<double>& x,  //!< x-positions in the NED frame (in meters)
-                                                              const std::vector<double>& y,  //!< y-positions in the NED frame (in meters)
-                                                              const std::vector<double>& z,  //!< z-positions in the NED frame (in meters)
-                                                              const double t,                //!< Current time instant (in seconds)
-                                                              const std::vector<double>& eta //!< Wave elevations at (x,y) in the NED frame (in meters)
-                                                             ) const = 0;
+        virtual ssc::kinematics::PointMatrix orbital_velocity(
+            const double g,                //!< gravity (in m/s^2)
+            const std::vector<double>& x,  //!< x-positions in the NED frame (in meters)
+            const std::vector<double>& y,  //!< y-positions in the NED frame (in meters)
+            const std::vector<double>& z,  //!< z-positions in the NED frame (in meters)
+            const double t,                //!< Current time instant (in seconds)
+            const std::vector<double>& eta //!< Wave elevations at (x,y) in the NED frame (in meters)
+            ) const = 0;
 
         /**  \brief Unsteady pressure field induced by undisturbed waves. Used to compute the Froude-Krylov forces.
           *  \details Also called "subsurface pressure" (DNV), "unsteady pressure" (Faltinsen) or constant pressure contour (Lloyd)
@@ -189,14 +197,15 @@ class SurfaceElevationInterface
           *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation VI.34, page 183
           *  \see "Seakeeping: ship behaviour in rough weather", 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, page 68
           */
-        virtual std::vector<double> dynamic_pressure(const double rho,               //!< water density (in kg/m^3)
-                                                     const double g,                 //!< gravity (in m/s^2)
-                                                     const std::vector<double> &x,   //!< x-positions in the NED frame (in meters)
-                                                     const std::vector<double> &y,   //!< y-positions in the NED frame (in meters)
-                                                     const std::vector<double> &z,   //!< z-positions in the NED frame (in meters)
-                                                     const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
-                                                     const double t                  //!< Current time instant (in seconds)
-                                                     ) const = 0;
+        virtual std::vector<double> dynamic_pressure(
+            const double rho,               //!< water density (in kg/m^3)
+            const double g,                 //!< gravity (in m/s^2)
+            const std::vector<double> &x,   //!< x-positions in the NED frame (in meters)
+            const std::vector<double> &y,   //!< y-positions in the NED frame (in meters)
+            const std::vector<double> &z,   //!< z-positions in the NED frame (in meters)
+            const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
+            const double t                  //!< Current time instant (in seconds)
+            ) const = 0;
         ssc::kinematics::PointMatrixPtr get_output_mesh_in_NED_frame(const ssc::kinematics::KinematicsPtr& k //!< Object used to compute the transforms to the NED frame
                                                                     ) const;
 
