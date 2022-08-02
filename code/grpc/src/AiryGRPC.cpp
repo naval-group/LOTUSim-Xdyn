@@ -130,6 +130,14 @@ class WavesImpl final : public Waves::Service {
             spectrum_response_from_discrete_directional_wave_spectra(spectra, spectrum_response);
             return Status::OK;
         }
+
+        // rpc flat_spectrum(SpectrumRequest) returns (FlatSpectrumResponse);
+        Status flat_spectrum(ServerContext* /*context*/, const SpectrumRequest* request, FlatSpectrumResponse* spectrum_response) override
+        {
+            const std::vector<FlatDiscreteDirectionalWaveSpectrum> spectra = env.w->get_flat_directional_spectra(request->x(), request->y(), request->t());
+            flat_spectrum_response_from_vector_of_flat_discrete_directional_wave_spectra(spectra, spectrum_response);
+            return Status::OK;
+        }
     private:
         EnvironmentAndFrames env;
 };
