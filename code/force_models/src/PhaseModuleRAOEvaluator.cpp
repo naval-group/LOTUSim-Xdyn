@@ -67,9 +67,12 @@ PhaseModuleRAOEvaluator::PhaseModuleRAOEvaluator(
              * Replaced env.w->get_wave_angular_frequency_for_each_model with get_flat_directional_spectra called at origin
              * so that we do not rely on any specific (cartesian) spectrum discretization
              */
-            const auto directional_spectra = env.w->get_flat_directional_spectra(0, 0, 0);
-            const std::vector<double> spectrum_periods = directional_spectra.at(0).get_periods();
-            check_all_omegas_are_within_bounds(periods.front(), spectrum_periods, periods.back());
+            const std::vector<FlatDiscreteDirectionalWaveSpectrum> directional_spectra = env.w->get_flat_directional_spectra(0, 0, 0);
+            for (const auto& directional_spectrum: directional_spectra)
+            {
+                const std::vector<double> spectrum_periods = directional_spectrum.get_periods();
+                check_all_omegas_are_within_bounds(periods.front(), spectrum_periods, periods.back());
+            }
         }
     }
     else
