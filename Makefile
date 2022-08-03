@@ -18,7 +18,6 @@ HEADERS=code/ssc/ssc/check_ssc_version.hpp\
         code/ssc/ssc/kinematics.hpp\
         code/ssc/ssc/macros.hpp\
         code/ssc/ssc/numeric.hpp\
-        code/ssc/ssc/optimizer.hpp\
         code/ssc/ssc/random_data_generator.hpp\
         code/ssc/ssc/solver.hpp\
         code/ssc/ssc/text_file_reader.hpp\
