@@ -19,7 +19,6 @@ HEADERS=code/ssc/ssc/check_ssc_version.hpp\
         code/ssc/ssc/json.hpp\
         code/ssc/ssc/kinematics.hpp\
         code/ssc/ssc/macros.hpp\
-        code/ssc/ssc/matrix_and_vector_classes.hpp\
         code/ssc/ssc/numeric.hpp\
         code/ssc/ssc/optimizer.hpp\
         code/ssc/ssc/pimpl_idiom.hpp\

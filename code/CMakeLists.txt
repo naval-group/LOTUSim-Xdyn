@@ -102,7 +102,6 @@ ADD_SUBDIRECTORY(ssc/ssc/kinematics)
 ADD_SUBDIRECTORY(ssc/ssc/interpolation)
 ADD_SUBDIRECTORY(ssc/ssc/csv_file_reader)
 ADD_SUBDIRECTORY(ssc/ssc/csv_writer)
-ADD_SUBDIRECTORY(ssc/ssc/matrix_and_vector_classes)
 ADD_SUBDIRECTORY(ssc/ssc/functors_for_optimizer)
 ADD_SUBDIRECTORY(ssc/ssc/websocket)
 ADD_SUBDIRECTORY(ssc/ssc/json)
@@ -122,9 +121,6 @@ ADD_LIBRARY(${PROJECT_NAME} ${STATICORSHARED}
     $<TARGET_OBJECTS:kinematics_object>
     $<TARGET_OBJECTS:interpolation_object>
     $<TARGET_OBJECTS:csv_file_reader_object>
-    $<TARGET_OBJECTS:csv_writer_object>
-    $<TARGET_OBJECTS:matrix_and_vector_classes_object>
-    $<TARGET_OBJECTS:functors_for_optimizer_object>
     $<TARGET_OBJECTS:websocket_object>
     $<TARGET_OBJECTS:f2c_object>
     $<TARGET_OBJECTS:json_object>
