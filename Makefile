@@ -7,7 +7,6 @@ DOCKER_AS_USER:=$(DOCKER_AS_ROOT) -u $(shell id -u):$(shell id -g)
 
 HEADERS=code/ssc/ssc/check_ssc_version.hpp\
         code/ssc/ssc/csv_file_reader.hpp\
-        code/ssc/ssc/csv_writer.hpp\
         code/ssc/ssc/data_source.hpp\
         code/ssc/ssc/decode_unit.hpp\
         code/ssc/ssc/exception_handling.hpp\
