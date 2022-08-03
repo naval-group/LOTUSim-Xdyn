@@ -5,19 +5,6 @@
 
 #define TWOPI 6.283185307179586232
 
-std::vector<std::vector<double> > convert_to_periods(std::vector<std::vector<double> > angular_frequencies);
-std::vector<std::vector<double> > convert_to_periods(std::vector<std::vector<double> > angular_frequencies)
-{
-    for (auto& omegas:angular_frequencies)
-    {
-        for (auto& omega:omegas)
-        {
-            omega = TWOPI/omega;
-        }
-    }
-    return angular_frequencies;
-}
-
 void check_all_omegas_are_within_bounds(const double min_bound, const std::vector<double>& vector_to_check, const double max_bound);
 void check_all_omegas_are_within_bounds(const double min_bound, const std::vector<double>& vector_to_check, const double max_bound)
 {
