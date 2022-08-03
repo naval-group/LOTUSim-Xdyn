@@ -90,10 +90,10 @@ std::vector<double> SurfaceElevationInterface::get_surface_elevation() const
 }
 
 void SurfaceElevationInterface::update_surface_elevation(
-        const ssc::kinematics::PointMatrixPtr& P,       //!< Points for which to compute the relative wave height
-        const ssc::kinematics::KinematicsPtr& k,        //!< Object used to compute the transforms to the NED frame
-        const double t                                  //!< Current instant (in seconds)
-        )
+    const ssc::kinematics::PointMatrixPtr& P,       //!< Points for which to compute the relative wave height
+    const ssc::kinematics::KinematicsPtr& k,        //!< Object used to compute the transforms to the NED frame
+    const double t                                  //!< Current instant (in seconds)
+    )
 {
     const size_t n = (size_t)P->m.cols();
     if (n<=0) return;
@@ -113,10 +113,11 @@ void SurfaceElevationInterface::update_surface_elevation(
     }
 }
 
-std::vector<double> SurfaceElevationInterface::get_and_check_wave_height(const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
-                                                               const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
-                                                               const double t                //!< Current instant (in seconds)
-                                                              ) const
+std::vector<double> SurfaceElevationInterface::get_and_check_wave_height(
+    const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+    const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+    const double t                //!< Current instant (in seconds)
+    ) const
 {
     if (x.size() != y.size())
     {
@@ -207,25 +208,26 @@ std::vector<double> SurfaceElevationInterface::get_dynamic_pressure(
 }
 
 ssc::kinematics::PointMatrixPtr SurfaceElevationInterface::get_output_mesh_in_NED_frame(
-        const ssc::kinematics::KinematicsPtr& k) const
+    const ssc::kinematics::KinematicsPtr& k
+    ) const
 {
     using namespace ssc::kinematics;
     return PointMatrixPtr(new PointMatrix(compute_position_in_NED_frame(*output_mesh,k)));
 }
 
 ssc::kinematics::PointMatrix SurfaceElevationInterface::get_waves_on_mesh(
-        const ssc::kinematics::KinematicsPtr& k, //!< Object used to compute the transforms to the NED frame
-        const double t                           //!< Current instant (in seconds)
-        ) const
+    const ssc::kinematics::KinematicsPtr& k, //!< Object used to compute the transforms to the NED frame
+    const double t                           //!< Current instant (in seconds)
+    ) const
 {
     if (output_mesh->m.cols()==0) return ssc::kinematics::PointMatrix("NED",0);
     return get_points_on_free_surface(t, get_output_mesh_in_NED_frame(k));
 }
 
 SurfaceElevationGrid SurfaceElevationInterface::get_waves_on_mesh_as_a_grid(
-        const ssc::kinematics::KinematicsPtr& k,    //!< Object used to compute the transforms to the NED frame
-        const double t                              //!< Current instant (in seconds)
-        ) const
+    const ssc::kinematics::KinematicsPtr& k,    //!< Object used to compute the transforms to the NED frame
+    const double t                              //!< Current instant (in seconds)
+    ) const
 {
     ssc::kinematics::PointMatrix res = get_waves_on_mesh(k,t);
     const size_t nPoints = (size_t)res.m.cols();
