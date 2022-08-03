@@ -11,7 +11,6 @@ HEADERS=code/ssc/ssc/check_ssc_version.hpp\
         code/ssc/ssc/data_source.hpp\
         code/ssc/ssc/decode_unit.hpp\
         code/ssc/ssc/exception_handling.hpp\
-        code/ssc/ssc/functors_for_optimizer.hpp\
         code/ssc/ssc/geometry.hpp\
         code/ssc/ssc/integrate.hpp\
         code/ssc/ssc/interpolation.hpp\
