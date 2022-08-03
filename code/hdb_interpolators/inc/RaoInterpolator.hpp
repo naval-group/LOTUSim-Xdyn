@@ -1,11 +1,10 @@
 #ifndef _RAOINTERPOLATORHPP_
 #define _RAOINTERPOLATORHPP_
 
-#include <cstdlib> // For size_t
-#include <vector>
-#include <Eigen/Dense>
-#include <ssc/interpolation.hpp>
 #include "YamlRAO.hpp"
+#include <ssc/interpolation.hpp>
+#include <Eigen/Dense>
+#include <vector>
 
 typedef ssc::interpolation::TwoDimensionalInterpolationVariableStep Interpolator;
 class HydroDBParser;
