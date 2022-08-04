@@ -20,7 +20,7 @@
 #include "Mesh.hpp"
 
 class Sim;
-class SurfaceElevationGrid;
+struct SurfaceElevationGrid;
 
 struct DataAddressing
 {
