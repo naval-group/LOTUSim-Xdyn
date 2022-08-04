@@ -2487,10 +2487,16 @@ std::string signals()
            "\n";
 }
 
-std::string raos()
+std::string raos_header();
+std::string raos_header()
 {
-    return "[RAOs]\n"
-           "; Signal 1: surge motion at (70.015,0.000,7.510), h=-1.000m, phi_a=0.500deg, "
+    return "[RAOs]\n";
+}
+
+std::string raos_signals_001_019();
+std::string raos_signals_001_019()
+{
+    return "; Signal 1: surge motion at (70.015,0.000,7.510), h=-1.000m, phi_a=0.500deg, "
            "U=0.000kn, mu=180.000deg (amplitude unit = m/m, phase unit = deg)\n"
            "   0.847405E+00      90.620987\n"
            "   0.684189E+00      89.927368\n"
@@ -3515,8 +3521,13 @@ std::string raos()
            "   0.603145E+03\n"
            "   0.767533E+03\n"
            "   0.880650E+03\n"
-           "   0.915950E+03\n"
-           "; Signal 20: F_drift_m3_c4 at (70.015,0.000,7.510), h=-1.000m, phi_a=0.500deg, "
+           "   0.915950E+03\n";
+}
+
+std::string raos_signals_020_039();
+std::string raos_signals_020_039()
+{
+    return "; Signal 20: F_drift_m3_c4 at (70.015,0.000,7.510), h=-1.000m, phi_a=0.500deg, "
            "U=0.000kn, mu=180.000deg (amplitude unit = kN/m2, phase unit = N.A.)\n"
            "  -0.883094E+01\n"
            "  -0.150852E+02\n"
@@ -4595,8 +4606,13 @@ std::string raos()
            "   0.168186E+05       0.000001\n"
            "   0.155148E+05       0.000006\n"
            "   0.140552E+05       0.000002\n"
-           "   0.124583E+05       0.000003\n"
-           "; Signal 40: F_inc_m4 at (70.015,0.000,7.510), h=-1.000m, phi_a=0.500deg, U=0.000kn, "
+           "   0.124583E+05       0.000003\n";
+}
+
+std::string raos_signals_040_059();
+std::string raos_signals_040_059()
+{
+    return "; Signal 40: F_inc_m4 at (70.015,0.000,7.510), h=-1.000m, phi_a=0.500deg, U=0.000kn, "
            "mu=180.000deg (amplitude unit = kN.m/m, phase unit = deg)\n"
            "   0.133654E-01     -39.368153\n"
            "   0.151260E-01      30.094563\n"
@@ -5675,8 +5691,13 @@ std::string raos()
            "   0.545693E+03\n"
            "   0.429188E+03\n"
            "   0.372716E+03\n"
-           "   0.323817E+03\n"
-           "; Signal 60: B_m1m3 at (70.015,0.000,7.510), h=-1.000m, phi_a=0.500deg, U=0.000kn, "
+           "   0.323817E+03\n";
+}
+
+std::string raos_signals_060_079();
+std::string raos_signals_060_079()
+{
+    return "; Signal 60: B_m1m3 at (70.015,0.000,7.510), h=-1.000m, phi_a=0.500deg, U=0.000kn, "
            "mu=180.000deg (amplitude unit = kN.s/m, phase unit = N.A.)\n"
            "  -0.954452E+01\n"
            "   0.139703E+02\n"
@@ -6755,8 +6776,13 @@ std::string raos()
            "  -0.198356E+03\n"
            "  -0.102238E+03\n"
            "  -0.320490E+02\n"
-           "   0.542434E+01\n"
-           "; Signal 80: B_m3m1 at (70.015,0.000,7.510), h=-1.000m, phi_a=0.500deg, U=0.000kn, "
+           "   0.542434E+01\n";
+}
+
+std::string raos_signals_080_099();
+std::string raos_signals_080_099()
+{
+    return "; Signal 80: B_m3m1 at (70.015,0.000,7.510), h=-1.000m, phi_a=0.500deg, U=0.000kn, "
            "mu=180.000deg (amplitude unit = kN.s/m, phase unit = N.A.)\n"
            "  -0.790899E+01\n"
            "   0.161509E+02\n"
@@ -7835,8 +7861,13 @@ std::string raos()
            "  -0.102679E-01\n"
            "  -0.556396E-01\n"
            "   0.782504E-01\n"
-           "   0.423438E-01\n"
-           "; Signal 100: B_m4m5 at (70.015,0.000,7.510), h=-1.000m, phi_a=0.500deg, U=0.000kn, "
+           "   0.423438E-01\n";
+}
+
+std::string raos_signals_100_119();
+std::string raos_signals_100_119()
+{
+    return "; Signal 100: B_m4m5 at (70.015,0.000,7.510), h=-1.000m, phi_a=0.500deg, U=0.000kn, "
            "mu=180.000deg (amplitude unit = kN.m.s, phase unit = N.A.)\n"
            "  -0.903198E-02\n"
            "  -0.108438E-01\n"
@@ -8915,8 +8946,13 @@ std::string raos()
            "   0.167451E-01\n"
            "  -0.407288E-01\n"
            "  -0.251688E-01\n"
-           "  -0.189746E-01\n"
-           "; Signal 120: B_m6m3 at (70.015,0.000,7.510), h=-1.000m, phi_a=0.500deg, U=0.000kn, "
+           "  -0.189746E-01\n";
+}
+
+std::string raos_signals_120_139();
+std::string raos_signals_120_139()
+{
+    return "; Signal 120: B_m6m3 at (70.015,0.000,7.510), h=-1.000m, phi_a=0.500deg, U=0.000kn, "
            "mu=180.000deg (amplitude unit = kN.s, phase unit = N.A.)\n"
            "  -0.166016E-03\n"
            "  -0.942188E-02\n"
@@ -9834,4 +9870,17 @@ std::string raos()
            "   0.206885E+05\n"
            "   0.285169E+05\n"
            "   0.384757E+05\n";
+}
+
+std::string raos()
+{
+    return
+        raos_header() +
+        raos_signals_001_019() +
+        raos_signals_020_039() +
+        raos_signals_040_059() +
+        raos_signals_060_079() +
+        raos_signals_080_099() +
+        raos_signals_100_119() +
+        raos_signals_120_139();
 }
