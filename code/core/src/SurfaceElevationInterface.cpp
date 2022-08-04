@@ -68,13 +68,13 @@ ssc::kinematics::PointMatrix SurfaceElevationInterface::get_points_on_free_surfa
     std::vector<double> x(n), y(n);
     for (size_t i = 0; i < n; ++i)
     {
-        x[i] = (double)ret.m(0, i);
-        y[i] = (double)ret.m(1, i);
+        x[i] = ret.m(0, static_cast<Eigen::Index>(i));
+        y[i] = ret.m(1, static_cast<Eigen::Index>(i));
     }
     const std::vector<double> wave_height_ = get_and_check_wave_height(x, y, t);
     for (size_t i = 0; i < n; ++i)
     {
-        ret.m(2, i) = wave_height_.at(i);
+        ret.m(2, static_cast<Eigen::Index>(i)) = wave_height_.at(i);
     }
     return ret;
 }
@@ -103,13 +103,13 @@ void SurfaceElevationInterface::update_surface_elevation(
     std::vector<double> x(n), y(n);
     for (size_t i = 0; i < n; ++i)
     {
-        x[i] = (double)OP.m(0, i);
-        y[i] = (double)OP.m(1, i);
+        x[i] = OP.m(0, static_cast<Eigen::Index>(i));
+        y[i] = OP.m(1, static_cast<Eigen::Index>(i));
     }
     surface_elevation_for_each_point_in_mesh = get_and_check_wave_height(x, y, t);
     for (size_t i = 0; i < n; ++i)
     {
-        relative_wave_height_for_each_point_in_mesh[i] = (double)OP.m(2, i) - surface_elevation_for_each_point_in_mesh.at(i);
+        relative_wave_height_for_each_point_in_mesh[i] = OP.m(2, static_cast<Eigen::Index>(i)) - surface_elevation_for_each_point_in_mesh.at(i);
     }
 }
 
@@ -201,9 +201,9 @@ std::vector<double> SurfaceElevationInterface::get_dynamic_pressure(
     const ssc::kinematics::PointMatrix OP = compute_position_in_NED_frame(P, k);
     std::vector<double> x(n), y(n), z(n);
     for (size_t i = 0; i < n; ++i) {;
-        x.at(i) = OP.m(0, i);
-        y.at(i) = OP.m(1, i);
-        z.at(i) = OP.m(2, i);
+        x.at(i) = OP.m(0, static_cast<Eigen::Index>(i));
+        y.at(i) = OP.m(1, static_cast<Eigen::Index>(i));
+        z.at(i) = OP.m(2, static_cast<Eigen::Index>(i));
     }
     return dynamic_pressure(rho, g, x, y, z, eta, t);
 }
@@ -231,35 +231,35 @@ SurfaceElevationGrid SurfaceElevationInterface::get_waves_on_mesh_as_a_grid(
     ) const
 {
     ssc::kinematics::PointMatrix res = get_waves_on_mesh(k,t);
-    const size_t nPoints = (size_t)res.m.cols();
-    if (nPoints==0) return SurfaceElevationGrid(t);
-    const size_t nx = output_mesh_size.first;
-    const size_t ny = output_mesh_size.second;
-    if ((nx*ny)!=nPoints)
+    const Eigen::Index nb_points = res.m.cols();
+    if (nb_points==0) return SurfaceElevationGrid(t);
+    const Eigen::Index nx = static_cast<Eigen::Index>(output_mesh_size.first);
+    const Eigen::Index ny = static_cast<Eigen::Index>(output_mesh_size.second);
+    if ((nx*ny)!=nb_points)
     {
         std::stringstream ss;
         ss << "SurfaceElevation Problem : " <<std::endl
            << "nx*ny = "<<nx << "*"<<ny <<"="<<nx*ny
-           <<" should be equal to res.size() = "<<nPoints<<std::endl<<std::endl
+           <<" should be equal to res.size() = "<<nb_points<<std::endl<<std::endl
            <<" Make sure your 'environment models' are correctly defined for waves"<<std::endl
            <<" For example, if one declares a 'no waves' model, one should not have an 'output' section"<<std::endl;
         THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception,ss.str());
     }
     SurfaceElevationGrid s(nx,ny,t);
-    for(long i=0;i<(long)nx;++i)
+    for(Eigen::Index i=0; i<nx; ++i)
     {
         s.x(i) = res.m(0,i);
     }
-    for(long j=0; j<(long)ny; ++j)
+    for(Eigen::Index j=0; j<ny; ++j)
     {
-        s.y(j) = res.m(1,j*((long)nx));
+        s.y(j) = res.m(1,j*nx);
     }
-    long idx = 0;
-    for(long j=0;j<(long)ny;++j)
+    Eigen::Index idx = 0;
+    for(Eigen::Index j=0; j<ny; ++j)
     {
-        for(long i = 0;i<(long)nx;++i)
+        for(Eigen::Index i = 0; i<nx; ++i)
         {
-            s.z(i,j) = res.m(2,idx++);
+            s.z(i,j) = res.m(2, idx++);
         }
     }
     return s;
