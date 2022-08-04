@@ -29,13 +29,13 @@ class Airy : public WaveModel
         /**  \brief Calculate radiation forces using first order force RAO
           *  \returns Force (or torque), depending on the RAO
           */
-        double evaluate_rao(const double x, //!< x-position of the RAO's calculation point in the NED frame (in meters)
-                            const double y, //!< y-position of the RAO's calculation point in the NED frame (in meters)
-                            const double t, //!< Current time instant (in seconds)
-                            const std::vector<double>& rao_module, //!< Module of the RAO
-                            const std::vector<double>& rao_phase //!< Phase of the RAO
-                             ) const;
-
+        double evaluate_rao(
+            const double x, //!< x-position of the RAO's calculation point in the NED frame (in meters)
+            const double y, //!< y-position of the RAO's calculation point in the NED frame (in meters)
+            const double t, //!< Current time instant (in seconds)
+            const std::vector<double>& rao_module, //!< Module of the RAO
+            const std::vector<double>& rao_phase //!< Phase of the RAO
+            ) const;
 
     private:
         Airy(); // Disabled
@@ -48,10 +48,11 @@ class Airy : public WaveModel
           *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.20, page 125
           *  \snippet environment_models/unit_tests/src/AiryTest.cpp AiryTest elevation_example
           */
-        std::vector<double> elevation(const std::vector<double> &x, //!< x-positions in the NED frame (in meters)
-                                      const std::vector<double> &y,            //!< y-positions in the NED frame (in meters)
-                                      const double t                           //!< Current time instant (in seconds)
-                                      ) const;
+        std::vector<double> elevation(
+            const std::vector<double> &x, //!< x-positions in the NED frame (in meters)
+            const std::vector<double> &y,            //!< y-positions in the NED frame (in meters)
+            const double t                           //!< Current time instant (in seconds)
+            ) const;
 
         /**  \brief Wave velocity (projected in the NED frame, at points (x,y,z)).
           *  \returns Orbital velocities in m/s
@@ -61,13 +62,14 @@ class Airy : public WaveModel
           *  \see "Seakeeping: ship behaviour in rough weather", 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, page 75
           *  \see "The dynamic of marine craft", 2004, Lewandoski, page 148
           */
-        ssc::kinematics::PointMatrix orbital_velocity(const double g,                //!< gravity (in m/s^2)
-                                                      const std::vector<double>& x,  //!< x-positions in the NED frame (in meters)
-                                                      const std::vector<double>& y,  //!< y-positions in the NED frame (in meters)
-                                                      const std::vector<double>& z,  //!< z-positions in the NED frame (in meters)
-                                                      const double t,                //!< Current time instant (in seconds)
-                                                      const std::vector<double>& eta //!< Wave heights at x,y,t (in meters)
-                                                     ) const;
+        ssc::kinematics::PointMatrix orbital_velocity(
+            const double g,                //!< gravity (in m/s^2)
+            const std::vector<double>& x,  //!< x-positions in the NED frame (in meters)
+            const std::vector<double>& y,  //!< y-positions in the NED frame (in meters)
+            const std::vector<double>& z,  //!< z-positions in the NED frame (in meters)
+            const double t,                //!< Current time instant (in seconds)
+            const std::vector<double>& eta //!< Wave heights at x,y,t (in meters)
+            ) const;
 
         /**  \brief Unsteady pressure field induced by undisturbed waves. Used to compute the Froude-Krylov forces.
           *  \details Also called "subsurface pressure" (by DNV), "unsteady pressure" (by Faltinsen) or constant pressure contour (by Lloyd)
@@ -83,14 +85,15 @@ class Airy : public WaveModel
           *  \see "The dynamic of marine craft", 2004, Lewandoski, page 148
           *  \snippet environment_models/unit_tests/src/AiryTest.cpp AiryTest elevation_example
           */
-        std::vector<double> dynamic_pressure(const double rho,               //!< water density (in kg/m^3)
-                                             const double g,                 //!< gravity (in m/s^2)
-                                             const std::vector<double> &x,   //!< x-positions in the NED frame (in meters)
-                                             const std::vector<double> &y,   //!< y-positions in the NED frame (in meters)
-                                             const std::vector<double> &z,   //!< z-positions in the NED frame (in meters)
-                                             const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
-                                             const double t                  //!< Current time instant (in seconds)
-                                            ) const;
+        std::vector<double> dynamic_pressure(
+            const double rho,               //!< water density (in kg/m^3)
+            const double g,                 //!< gravity (in m/s^2)
+            const std::vector<double> &x,   //!< x-positions in the NED frame (in meters)
+            const std::vector<double> &y,   //!< y-positions in the NED frame (in meters)
+            const std::vector<double> &z,   //!< z-positions in the NED frame (in meters)
+            const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
+            const double t                  //!< Current time instant (in seconds)
+            ) const;
 };
 
 #endif /* AIRY_HPP_ */
