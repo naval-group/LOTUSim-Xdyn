@@ -133,7 +133,8 @@ ssc::kinematics::PointMatrix SurfaceElevationFromWaves::orbital_velocity(
     const std::vector<double>& eta //!< Wave elevations at (x,y) in the NED frame (in meters)
 ) const
 {
-    ssc::kinematics::PointMatrix Vwaves(ssc::kinematics::Matrix3Xd::Zero(3,x.size()), "NED");
+    const Eigen::Index n_cols = static_cast<Eigen::Index>(x.size());
+    ssc::kinematics::PointMatrix Vwaves(ssc::kinematics::Matrix3Xd::Zero(3, n_cols), "NED");
     for (const auto& spectrum:directional_spectra)
     {
         Vwaves.m += spectrum->get_orbital_velocity(g, x, y, z, t, eta).m;
