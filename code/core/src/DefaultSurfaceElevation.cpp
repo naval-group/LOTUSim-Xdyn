@@ -33,7 +33,8 @@ ssc::kinematics::PointMatrix DefaultSurfaceElevation::orbital_velocity(
     const std::vector<double>&    //!< Wave elevations at (x,y) in the NED frame (in meters)
     ) const
 {
-    return ssc::kinematics::PointMatrix(ssc::kinematics::Matrix3Xd::Zero(3,x.size()), "NED");
+    const Eigen::Index nb_points = static_cast<Eigen::Index>(x.size());
+    return ssc::kinematics::PointMatrix(ssc::kinematics::Matrix3Xd::Zero(3, nb_points), "NED");
 }
 
 std::vector<double> DefaultSurfaceElevation::dynamic_pressure(
