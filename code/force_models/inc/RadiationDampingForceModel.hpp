@@ -31,7 +31,7 @@ class RadiationDampingForceModel : public ForceModel
         Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const override;
         static Input parse(const std::string& yaml, const bool parse_hdb=true);
         static std::string model_name();
-        double get_Tmax() const;
+        double get_Tmax() const override;
 
     private:
         RadiationDampingForceModel();
