@@ -58,7 +58,7 @@ class Memoization
 
     private:
         bool is_cached(const double t, const std::vector<double>& states, const std::vector<double>& current_command_values) const;
-        double date_of_latest_force_in_body_frame; 
+        double date_of_latest_force_in_body_frame;
         std::vector<double> state_used_for_last_evaluation;
         std::vector<double> commands_used_for_last_evaluation;
         std::function<Wrench(const BodyStates&, const double, const EnvironmentAndFrames&, const std::map<std::string,double>&)> callback;
@@ -70,9 +70,9 @@ class Memoization
  *  \addtogroup model_wrappers
  *  \ingroup model_wrappers
  *  \section ex1 Example
- *  \snippet model_wrappers/unit_tests/src/ForceModelTest.cpp ForceModelTest example
+ *  \snippet core/unit_tests/src/ForceModelTest.cpp ForceModelTest example
  *  \section ex2 Expected output
- *  \snippet model_wrappers/unit_tests/src/ForceModelTest.cpp ForceModelTest expected output
+ *  \snippet core/unit_tests/src/ForceModelTest.cpp ForceModelTest expected output
  */
 class ForceModel
 {
@@ -154,7 +154,7 @@ class ForceModel
         std::string known_reference_frame;
         ssc::kinematics::Wrench latest_force_in_body_frame;
         Memoization memo;
-        
+
 };
 
 #endif /* FORCEMODEL_HPP_ */
