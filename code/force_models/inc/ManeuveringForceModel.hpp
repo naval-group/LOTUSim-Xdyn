@@ -8,17 +8,18 @@
 #ifndef MANEUVERINGFORCEMODEL_HPP_
 #define MANEUVERINGFORCEMODEL_HPP_
 
-#include <map>
-
-#include <ssc/data_source.hpp>
-#include <ssc/macros.hpp>
-
+#include "ForceModel.hpp"
 #include "YamlPosition.hpp"
 #include "ManeuveringInternal.hpp"
 
-
+#include <ssc/data_source.hpp>
+#include <ssc/macros.hpp>
 #include TR1INC(memory)
-#include "ForceModel.hpp"
+
+#include <map>
+#include <string>
+#include <vector>
+
 
 class ManeuveringForceModel : public ForceModel
 {
