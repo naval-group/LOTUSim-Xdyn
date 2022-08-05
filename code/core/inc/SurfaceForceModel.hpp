@@ -77,7 +77,7 @@ class SurfaceForceModel : public ForceModel
       */
         double potential_energy(const BodyStates& states, const std::vector<double>& x, const EnvironmentAndFrames& env) const;
 
-        bool is_a_surface_force_model() const;
+        bool is_a_surface_force_model() const override;
 
     private:
         SurfaceForceModel();
