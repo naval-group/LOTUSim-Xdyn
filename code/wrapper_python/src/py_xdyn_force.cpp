@@ -627,7 +627,6 @@ void py_add_module_xdyn_force(py::module& m0)
             )
         .def("get_force", &RudderForceModel::get_force)
         .def("get_rudder_force", &RudderForceModel::get_rudder_force)
-        .def("get_ship_speed", &RudderForceModel::get_ship_speed)
         .def_static("parse", &RudderForceModel::parse, py::arg("yaml"))
         .def_static("model_name", &RudderForceModel::model_name,
             "Returns model name \"propeller+rudder\"")
