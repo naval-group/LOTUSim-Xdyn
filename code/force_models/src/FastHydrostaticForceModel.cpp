@@ -18,7 +18,7 @@ FastHydrostaticForceModel::FastHydrostaticForceModel(const std::string& body_nam
 {
     if (env.w.use_count()==0)
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Force model '" << model_name << "' needs a wave model, even if it's 'no waves'");
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Force model '" + model_name() + "' needs a wave model, even if it's 'no waves'");
     }
 }
 
