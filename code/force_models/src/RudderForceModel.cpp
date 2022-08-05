@@ -233,7 +233,7 @@ ssc::kinematics::Point RudderForceModel::get_ship_speed(const BodyStates& states
 {
     const auto Tbody2ned = env.k->get(rudder_position.get_frame(),"NED");
     const ssc::kinematics::Point P_ = Tbody2ned*rudder_position;
-    const ssc::kinematics::Point P("NED", -P.v);
+    const ssc::kinematics::Point P("NED", -P_.v);
     const std::vector<double> x{P.x()};
     const std::vector<double> y{P.y()};
     const std::vector<double> z{P.z()};
