@@ -9,7 +9,6 @@
 #define HDB_GRAMMAR_HPP_
 
 #include "boost_spirit_hdb_adapters.hpp"
-#include <boost/spirit/include/phoenix_core.hpp>
 
 typedef ascii::blank_type SpaceType;
 
