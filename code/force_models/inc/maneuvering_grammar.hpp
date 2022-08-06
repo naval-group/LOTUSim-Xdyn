@@ -10,7 +10,6 @@
 #define MANEUVERING_GRAMMAR_HPP_
 
 #include "boost_spirit_includes.hpp"
-#include <boost/spirit/include/phoenix_core.hpp>
 
 namespace maneuvering
 {
