@@ -282,7 +282,7 @@ class SurfaceElevationFromGRPC::Impl
             throw_if_invalid_status("elevations", status);
             check_sizes(response);
             std::vector<double> ret;
-            ret.reserve(response.z_size());
+            ret.reserve(static_cast<size_t>(response.z_size()));
             std::copy(response.z().begin(), response.z().end(), std::back_inserter(ret));
             return ret;
         }
@@ -304,7 +304,7 @@ class SurfaceElevationFromGRPC::Impl
             }
             check_sizes(response);
             std::vector<double> ret;
-            ret.reserve(response.pdyn_size());
+            ret.reserve(static_cast<size_t>(response.pdyn_size()));
             std::copy(response.pdyn().begin(), response.pdyn().end(), std::back_inserter(ret));
             return ret;
         }
@@ -334,9 +334,9 @@ class SurfaceElevationFromGRPC::Impl
                 THROW(__PRETTY_FUNCTION__, GRPCError, "An error has occurred when using a distant wave model defined via gRPC. The model is defined in the YAML by:\n" + yaml + "\nxdyn managed to contact the wave server but during initialization (set_parameters), the server returned the following error message:\n" << "Was only expecting one orbital velocity for x, but got a vector of size " << response.vz_size());
             }
             std::vector<double> vx, vy, vz;
-            vx.reserve(response.vx_size());
-            vy.reserve(response.vy_size());
-            vz.reserve(response.vz_size());
+            vx.reserve(static_cast<size_t>(response.vx_size()));
+            vy.reserve(static_cast<size_t>(response.vy_size()));
+            vz.reserve(static_cast<size_t>(response.vz_size()));
             std::copy(response.vx().begin(), response.vx().end(), std::back_inserter(vx));
             std::copy(response.vy().begin(), response.vy().end(), std::back_inserter(vy));
             std::copy(response.vz().begin(), response.vz().end(), std::back_inserter(vz));
@@ -365,19 +365,19 @@ class SurfaceElevationFromGRPC::Impl
             for (int i = 0 ; i < response.spectrum_size() ; ++i)
             {
                 DiscreteDirectionalWaveSpectrum s;
-                s.Si.reserve(response.spectrum(i).si_size());
+                s.Si.reserve(static_cast<size_t>(response.spectrum(i).si_size()));
                 std::copy(response.spectrum(i).si().begin(), response.spectrum(i).si().end(), std::back_inserter(s.Si));
-                s.Dj.reserve(response.spectrum(i).dj_size());
+                s.Dj.reserve(static_cast<size_t>(response.spectrum(i).dj_size()));
                 std::copy(response.spectrum(i).dj().begin(), response.spectrum(i).dj().end(), std::back_inserter(s.Dj));
-                s.omega.reserve(response.spectrum(i).omega_size());
+                s.omega.reserve(static_cast<size_t>(response.spectrum(i).omega_size()));
                 std::copy(response.spectrum(i).omega().begin(), response.spectrum(i).omega().end(), std::back_inserter(s.omega));
-                s.psi.reserve(response.spectrum(i).psi_size());
+                s.psi.reserve(static_cast<size_t>(response.spectrum(i).psi_size()));
                 std::copy(response.spectrum(i).psi().begin(), response.spectrum(i).psi().end(), std::back_inserter(s.psi));
-                s.k.reserve(response.spectrum(i).k_size());
+                s.k.reserve(static_cast<size_t>(response.spectrum(i).k_size()));
                 std::copy(response.spectrum(i).k().begin(), response.spectrum(i).k().end(), std::back_inserter(s.k));
                 if (response.spectrum(i).phase_size())
                 {
-                    s.phase.resize(response.spectrum(i).phase_size());
+                    s.phase.resize(static_cast<size_t>(response.spectrum(i).phase_size()));
                     for (int j = 0 ; j < response.spectrum(i).phase_size() ; ++j)
                     {
                         s.phase.at(j).reserve(response.spectrum(i).phase(j).phase_size());
@@ -401,22 +401,22 @@ class SurfaceElevationFromGRPC::Impl
             throw_if_invalid_status("flat_spectrum", status);
             check_sizes(response);
             FlatDiscreteDirectionalWaveSpectrum s;
-            s.a.reserve(response.a_size());
+            s.a.reserve(static_cast<size_t>(response.a_size()));
             std::copy(response.a().begin(), response.a().end(), std::back_inserter(s.a));
-            s.omega.reserve(response.omega_size());
+            s.omega.reserve(static_cast<size_t>(response.omega_size()));
             std::copy(response.omega().begin(), response.omega().end(), std::back_inserter(s.omega));
-            s.psi.reserve(response.psi_size());
+            s.psi.reserve(static_cast<size_t>(response.psi_size()));
             std::copy(response.psi().begin(), response.psi().end(), std::back_inserter(s.psi));
-            s.cos_psi.reserve(response.psi_size());
-            s.sin_psi.reserve(response.psi_size());
+            s.cos_psi.reserve(static_cast<size_t>(response.psi_size()));
+            s.sin_psi.reserve(static_cast<size_t>(response.psi_size()));
             for (size_t i = 0 ; i < s.psi.size() ; ++i)
             {
                 s.cos_psi.push_back(cos(s.psi.at(i)));
                 s.sin_psi.push_back(sin(s.psi.at(i)));
             }
-            s.k.reserve(response.k_size());
+            s.k.reserve(static_cast<size_t>(response.k_size()));
             std::copy(response.k().begin(), response.k().end(), std::back_inserter(s.k));
-            s.phase.reserve(response.phase_size());
+            s.phase.reserve(static_cast<size_t>(response.phase_size()));
             std::copy(response.phase().begin(), response.phase().end(), std::back_inserter(s.phase));
             std::vector<FlatDiscreteDirectionalWaveSpectrum> ret;
             ret.push_back(s);
@@ -433,10 +433,10 @@ class SurfaceElevationFromGRPC::Impl
             std::vector<std::vector<double> > wave_directions;
             if (response.directions_size())
             {
-                wave_directions.resize(response.directions_size());
+                wave_directions.resize(static_cast<size_t>(response.directions_size()));
                 for (int i = 0 ; i < response.directions_size() ; ++i)
                 {
-                    wave_directions[i].reserve(response.directions(i).psis_size());
+                    wave_directions[i].reserve(static_cast<size_t>(response.directions(i).psis_size()));
                     std::copy(response.directions(i).psis().begin(), response.directions(i).psis().end(), std::back_inserter(wave_directions[i]));
                 }
 
@@ -454,10 +454,10 @@ class SurfaceElevationFromGRPC::Impl
             std::vector<std::vector<double> > omegas;
             if (response.angular_frequencies_size())
             {
-                omegas.resize(response.angular_frequencies_size());
+                omegas.resize(static_cast<size_t>(response.angular_frequencies_size()));
                 for (int i = 0 ; i < response.angular_frequencies_size() ; ++i)
                 {
-                    omegas[i].reserve(response.angular_frequencies(i).omegas_size());
+                    omegas[i].reserve(static_cast<size_t>(response.angular_frequencies(i).omegas_size()));
                     std::copy(response.angular_frequencies(i).omegas().begin(), response.angular_frequencies(i).omegas().end(), std::back_inserter(omegas[i]));
                 }
             }
