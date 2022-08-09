@@ -436,8 +436,8 @@ class SurfaceElevationFromGRPC::Impl
                 wave_directions.resize(static_cast<size_t>(response.directions_size()));
                 for (int i = 0 ; i < response.directions_size() ; ++i)
                 {
-                    wave_directions[i].reserve(static_cast<size_t>(response.directions(i).psis_size()));
-                    std::copy(response.directions(i).psis().begin(), response.directions(i).psis().end(), std::back_inserter(wave_directions[i]));
+                    wave_directions[static_cast<size_t>(i)].reserve(static_cast<size_t>(response.directions(i).psis_size()));
+                    std::copy(response.directions(i).psis().begin(), response.directions(i).psis().end(), std::back_inserter(wave_directions[static_cast<size_t>(i)]));
                 }
 
             }
@@ -457,8 +457,8 @@ class SurfaceElevationFromGRPC::Impl
                 omegas.resize(static_cast<size_t>(response.angular_frequencies_size()));
                 for (int i = 0 ; i < response.angular_frequencies_size() ; ++i)
                 {
-                    omegas[i].reserve(static_cast<size_t>(response.angular_frequencies(i).omegas_size()));
-                    std::copy(response.angular_frequencies(i).omegas().begin(), response.angular_frequencies(i).omegas().end(), std::back_inserter(omegas[i]));
+                    omegas[static_cast<size_t>(i)].reserve(static_cast<size_t>(response.angular_frequencies(i).omegas_size()));
+                    std::copy(response.angular_frequencies(i).omegas().begin(), response.angular_frequencies(i).omegas().end(), std::back_inserter(omegas[static_cast<size_t>(i)]));
                 }
             }
             return omegas;
