@@ -137,6 +137,11 @@ add_library(${PROJECT_NAME} OBJECT
     )
 set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
 
+if ((${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang") OR (${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang"))
+    message(STATUS "Remove the -Wc++17-attribute-extensions option for ${PROJECT_NAME}")
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wno-c++17-extensions)
+endif()
+
 add_subdirectory(unit_tests)
 
 add_library(${PROJECT_NAME}_airy OBJECT src/AiryGRPC.cpp)
