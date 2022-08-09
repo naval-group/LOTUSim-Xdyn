@@ -5,6 +5,7 @@
  *      Author: cady
  */
 
+#include "GRPCForceModel.hpp"
 #include <memory> // std::make_shared
 #include <vector>
 #include "grpc_error_outputter.hpp"
@@ -18,7 +19,6 @@
 
 
 #include "Body.hpp"
-#include "GRPCForceModel.hpp"
 #include "GRPCTypes.hpp"
 #include "ToGRPC.hpp"
 #include "FromGRPC.hpp"
