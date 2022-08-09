@@ -380,8 +380,8 @@ class SurfaceElevationFromGRPC::Impl
                     s.phase.resize(static_cast<size_t>(response.spectrum(i).phase_size()));
                     for (int j = 0 ; j < response.spectrum(i).phase_size() ; ++j)
                     {
-                        s.phase.at(j).reserve(static_cast<size_t>(response.spectrum(i).phase(j).phase_size()));
-                        std::copy(response.spectrum(i).phase(j).phase().begin(), response.spectrum(i).phase(j).phase().end(), std::back_inserter(s.phase.at(j)));
+                        s.phase.at(static_cast<size_t>(j)).reserve(static_cast<size_t>(response.spectrum(i).phase(j).phase_size()));
+                        std::copy(response.spectrum(i).phase(j).phase().begin(), response.spectrum(i).phase(j).phase().end(), std::back_inserter(s.phase.at(static_cast<size_t>(j))));
                     }
                 }
                 ret.push_back(s);
