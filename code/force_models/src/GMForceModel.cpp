@@ -33,7 +33,7 @@ GMForceModel::GMForceModel(const Yaml& data, const std::string& body_name_, cons
 {
     if (env.w.use_count()==0)
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Force model '" << model_name << "' needs a wave model, even if it's 'no waves'");
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Force model '" << model_name() << "' needs a wave model, even if it's 'no waves'");
     }
     YamlModel data_for_hs;
     data_for_hs.index_of_first_line_in_global_yaml = data.index_of_first_line_in_global_yaml;
