@@ -34,7 +34,7 @@ public:
     };
     MMGManeuveringForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env);
     MMGManeuveringForceModel() = delete;
-    Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const;
+    Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const override;
     static Input parse(const std::string& yaml);
     static std::string model_name();
 
