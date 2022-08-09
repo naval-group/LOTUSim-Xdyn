@@ -44,7 +44,7 @@ class PIDController : public Controller
                       const std::string& yaml
                       );
 
-        std::vector<std::string> get_command_names() const;
+        std::vector<std::string> get_command_names() const override;
         const Yaml yaml; //!< Controller-specific yaml
 
     private:
