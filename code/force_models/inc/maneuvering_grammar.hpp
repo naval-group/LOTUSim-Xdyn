@@ -10,6 +10,7 @@
 #define MANEUVERING_GRAMMAR_HPP_
 
 #include "boost_spirit_includes.hpp"
+#include <boost/version.hpp>
 
 namespace maneuvering
 {
@@ -36,7 +37,11 @@ namespace maneuvering
     typedef boost::variant<
                     Nil
                   , boost::recursive_wrapper<Expr>
+#if BOOST_VERSION<=106200
                   , boost::recursive_wrapper<Atom>
+#else
+                  , Atom
+#endif
                 >
             Base;
 
