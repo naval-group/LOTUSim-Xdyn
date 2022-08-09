@@ -24,7 +24,7 @@ class SimpleHeadingKeepingController : public ForceModel
         static std::string model_name();
 
         SimpleHeadingKeepingController(const Yaml& input, const std::string& body_name, const EnvironmentAndFrames& env);
-        Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const;
+        Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const override;
 
     private:
         SimpleHeadingKeepingController();
