@@ -67,12 +67,14 @@ WaveInformation* ToGRPC::from_wave_information(const WaveRequest& wave_request, 
             }
             const ssc::kinematics::PointMatrix orbital_velocities = env.w->get_and_check_orbital_velocity(env.g, wave_request.orbital_velocities.x, wave_request.orbital_velocities.y, wave_request.orbital_velocities.z, t, eta);
 
-            std::vector<double> vx(orbital_velocities.m.cols()), vy(orbital_velocities.m.cols()), vz(orbital_velocities.m.cols());
+            std::vector<double> vx(static_cast<size_t>(orbital_velocities.m.cols()));
+            std::vector<double> vy(static_cast<size_t>(orbital_velocities.m.cols()));
+            std::vector<double> vz(static_cast<size_t>(orbital_velocities.m.cols()));
             for (int j = 0 ; j < orbital_velocities.m.cols() ; ++j)
             {
-                vx[j] = orbital_velocities.m(0,j);
-                vy[j] = orbital_velocities.m(1,j);
-                vz[j] = orbital_velocities.m(2,j);
+                vx[static_cast<size_t>(j)] = orbital_velocities.m(0, j);
+                vy[static_cast<size_t>(j)] = orbital_velocities.m(1, j);
+                vz[static_cast<size_t>(j)] = orbital_velocities.m(2, j);
             }
             copy_from_double_vector(vx, wave_information->mutable_orbital_velocities()->mutable_vx());
             copy_from_double_vector(vy, wave_information->mutable_orbital_velocities()->mutable_vy());
