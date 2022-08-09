@@ -50,7 +50,7 @@ class WavesImpl final : public Waves::Service {
             {
                 reply->add_x(request->x(index));
                 reply->add_y(request->y(index));
-                reply->add_z(res_elevations.at(index));
+                reply->add_z(res_elevations.at(static_cast<size_t>(index)));
             }
             return Status::OK;
         }
@@ -70,7 +70,7 @@ class WavesImpl final : public Waves::Service {
                 reply->add_x(request->x(index));
                 reply->add_y(request->y(index));
                 reply->add_z(request->z(index));
-                reply->add_pdyn(res_pdyn.at(index));
+                reply->add_pdyn(res_pdyn.at(static_cast<size_t>(index)));
             }
             return Status::OK;
         }
