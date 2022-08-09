@@ -1,13 +1,14 @@
 cmake_minimum_required(VERSION 2.8.8)
 project(grpc)
 
-set(SRC src/SurfaceElevationFromGRPC.cpp
-        src/GRPCForceModel.cpp
-        src/ToGRPC.cpp
-        src/ToGRPCCommon.cpp
-        src/FromGRPC.cpp
-        src/GrpcControllerInterface.cpp
-        )
+set(SRC
+    src/SurfaceElevationFromGRPC.cpp
+    src/GRPCForceModel.cpp
+    src/ToGRPC.cpp
+    src/ToGRPCCommon.cpp
+    src/FromGRPC.cpp
+    src/GrpcControllerInterface.cpp
+    )
 
 # Using C++ 2011
 # The -std=c++0x option causes g++ to go into 'strict ANSI' mode so it doesn't declare non-standard functions
@@ -123,17 +124,17 @@ ADD_CUSTOM_COMMAND(
             "controller.proto"
     DEPENDS "${controller_proto}")
 
-add_library (${PROJECT_NAME} OBJECT
-             ${SRC}
-             ${wave_proto_srcs_t}
-             ${wave_grpc_srcs_t}
-             ${wave_proto_srcs_g}
-             ${wave_grpc_srcs_g}
-             ${force_proto_srcs}
-             ${force_grpc_srcs}
-             ${controller_proto_srcs}
-             ${controller_grpc_srcs}
-             )
+add_library(${PROJECT_NAME} OBJECT
+    ${SRC}
+    ${wave_proto_srcs_t}
+    ${wave_grpc_srcs_t}
+    ${wave_proto_srcs_g}
+    ${wave_grpc_srcs_g}
+    ${force_proto_srcs}
+    ${force_grpc_srcs}
+    ${controller_proto_srcs}
+    ${controller_grpc_srcs}
+    )
 set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
 
 add_subdirectory(unit_tests)
