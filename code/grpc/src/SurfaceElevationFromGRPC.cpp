@@ -38,7 +38,7 @@ class SurfaceElevationFromGRPC::Impl
             throw_if_invalid_status("set_parameters", status);
         }
 
-        void throw_invalid_size_error(const std::string& rpc_method, const std::string& grpc_type, const std::string& field, const size_t expected_size, const size_t actual_size) const
+        void throw_invalid_size_error(const std::string& rpc_method, const std::string& grpc_type, const std::string& field, const int expected_size, const int actual_size) const
         {
             std::stringstream ss;
             ss << "An error occurred when using the distant wave model defined via gRPC (method '"
