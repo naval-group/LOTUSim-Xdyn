@@ -1,11 +1,11 @@
 #ifndef _PHASEMODULERAOEVALUATORHPP_
 #define _PHASEMODULERAOEVALUATORHPP_
 
-#include <ssc/kinematics.hpp>
 #include "RaoInterpolator.hpp"
+#include <ssc/kinematics.hpp>
 
 class BodyStates;
-class EnvironmentAndFrames;
+struct EnvironmentAndFrames;
 class PhaseModuleRAOEvaluator
 {
     public:
