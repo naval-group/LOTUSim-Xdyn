@@ -340,7 +340,7 @@ class SurfaceElevationFromGRPC::Impl
             std::copy(response.vx().begin(), response.vx().end(), std::back_inserter(vx));
             std::copy(response.vy().begin(), response.vy().end(), std::back_inserter(vy));
             std::copy(response.vz().begin(), response.vz().end(), std::back_inserter(vz));
-            ssc::kinematics::PointMatrix ret("NED", response.vx_size());
+            ssc::kinematics::PointMatrix ret("NED", static_cast<size_t>(response.vx_size()));
             for (int i = 0 ; i < response.vx_size() ; ++i)
             {
                 ret.m(0, i) = response.vx(i);
