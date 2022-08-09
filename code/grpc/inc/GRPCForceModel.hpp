@@ -29,7 +29,7 @@ class GRPCForceModel : public ForceModel
         double get_Tmax() const override;
 
     private:
-        void extra_observations(Observer& observer) const;
+        void extra_observations(Observer& observer) const override;
         GRPCForceModel(); // Disabled
         class Impl;
         TR1(shared_ptr)<Impl> pimpl;
