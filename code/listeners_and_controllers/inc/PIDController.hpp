@@ -55,7 +55,7 @@ class PIDController : public Controller
          * @param time Current simulation time (in seconds).
          * @param system The continuous system. Used to retrieve the continuous states.
          */
-        void update_discrete_states(const double time, ssc::solver::ContinuousSystem& system);
+        void update_discrete_states(const double time, ssc::solver::ContinuousSystem& system) override;
 
         /** \brief Gets the value of the controller measured input used by `compute_command` from the system states
          */
