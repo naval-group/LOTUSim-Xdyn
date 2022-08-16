@@ -70,7 +70,7 @@ CSVController::CSVController(const double tstart //!< Date of beginning of simul
 std::vector<std::string> CSVController::get_command_names() const
 {
     std::vector<std::string> ret(yaml.commands.size());
-    int i = 0;
+    size_t i = 0;
     for (const auto& kv:yaml.commands)
     {
         ret[i++] = kv.first;
