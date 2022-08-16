@@ -63,16 +63,16 @@ std::function<void()> DictObserver::get_initializer(const double, const DataAddr
 std::function<void()> DictObserver::get_serializer(const SurfaceElevationGrid& s, const DataAddressing&)
 {
     return [this,s](){
-        const size_t nx = (size_t)s.x.size();
-        const size_t ny = (size_t)s.y.size();
-        const size_t n = (size_t)s.z.size();
+        const Eigen::Index nx = s.x.size();
+        const Eigen::Index ny = s.y.size();
+        const Eigen::Index n = s.z.size();
         const double xmin = s.x[0];
         const double xmax = s.x[nx-1];
         const double ymin = s.y[0];
         const double ymax = s.y[ny-1];
-        std::vector<float> v(n,0.0);
+        std::vector<float> v(static_cast<size_t>(n), 0.0);
         double const * const data = s.z.data();
-        for (size_t i=0;i<n;++i) v[i] = (float)data[i];
+        for (Eigen::Index i=0;i<n;++i) v[static_cast<size_t>(i)] = (float)data[i];
         ssSurfaceElevationGrid.str(std::string());
         if (n>0) ssSurfaceElevationGrid << "\"waves\":{\"nx\":" << nx <<",\"ny\":" << ny
                                         << ",\"xmin\":"<< xmin << ",\"xmax\":"<< xmax
