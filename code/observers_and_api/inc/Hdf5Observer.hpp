@@ -31,18 +31,18 @@ class Hdf5Observer : public Observer
         void write_matlab_script_before_simulation() override;
         void write_python_script_before_simulation() override;
     private:
-        void flush_after_initialization();
-        void flush_after_write();
-        void flush_value_during_write();
+        void flush_after_initialization() override;
+        void flush_after_write() override;
+        void flush_value_during_write() override;
 
         using Observer::get_serializer;
         using Observer::get_initializer;
 
-        std::function<void()> get_serializer(const double val, const DataAddressing& address);
-        std::function<void()> get_initializer(const double val, const DataAddressing& address);
+        std::function<void()> get_serializer(const double val, const DataAddressing& address) override;
+        std::function<void()> get_initializer(const double val, const DataAddressing& address) override;
 
-        std::function<void()> get_serializer(const SurfaceElevationGrid& val, const DataAddressing& address);
-        std::function<void()> get_initializer(const SurfaceElevationGrid& val, const DataAddressing& address);
+        std::function<void()> get_serializer(const SurfaceElevationGrid& val, const DataAddressing& address) override;
+        std::function<void()> get_initializer(const SurfaceElevationGrid& val, const DataAddressing& address) override;
 
         H5::H5File h5File;
         std::string basename;

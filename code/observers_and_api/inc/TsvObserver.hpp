@@ -13,9 +13,9 @@ class TsvObserver : public Observer
         ~TsvObserver();
 
     private:
-        void flush_after_initialization();
-        void flush_after_write();
-        void flush_value_during_write();
+        void flush_after_initialization() override;
+        void flush_after_write() override;
+        void flush_value_during_write() override;
 
         bool output_to_file;
         std::ostream& os;
@@ -24,8 +24,8 @@ class TsvObserver : public Observer
         using Observer::get_serializer;
         using Observer::get_initializer;
 
-        std::function<void()> get_serializer(const double val, const DataAddressing& address);
-        std::function<void()> get_initializer(const double val, const DataAddressing& address);
+        std::function<void()> get_serializer(const double val, const DataAddressing& address) override;
+        std::function<void()> get_initializer(const double val, const DataAddressing& address) override;
 };
 
 #endif /* TSVOBSERVER_HPP_ */
