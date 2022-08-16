@@ -57,7 +57,7 @@ std::function<void()> DictObserver::get_serializer(const double val, const DataA
 
 std::function<void()> DictObserver::get_initializer(const double, const DataAddressing&)
 {
-    return [this](){};
+    return [](){};
 }
 
 std::function<void()> DictObserver::get_serializer(const SurfaceElevationGrid& s, const DataAddressing&)
@@ -83,7 +83,7 @@ std::function<void()> DictObserver::get_serializer(const SurfaceElevationGrid& s
 
 std::function<void()> DictObserver::get_initializer(const SurfaceElevationGrid&, const DataAddressing&)
 {
-    return [this](){};
+    return [](){};
 }
 
 void flushMap(std::ostream& os, const std::map<std::string,double>& stuff_to_write, bool addBraces);
