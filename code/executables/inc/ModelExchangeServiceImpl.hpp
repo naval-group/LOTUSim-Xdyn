@@ -8,12 +8,13 @@
 #ifndef EXECUTABLES_INC_MODELEXCHANGESERVICEIMPL_HPP_
 #define EXECUTABLES_INC_MODELEXCHANGESERVICEIMPL_HPP_
 
-#include <grpcpp/grpcpp.h>
+#include "YamlSimServerInputs.hpp"
 #include "model_exchange.grpc.pb.h"
 #include "model_exchange.pb.h"
 #include "XdynForME.hpp"
 #include "ErrorReporter.hpp"
 #include "gRPCChecks.hpp"
+#include <grpcpp/grpcpp.h>
 
 
 YamlSimServerInputs from_grpc(grpc::ServerContext* context, const ModelExchangeRequestEuler* request);
@@ -22,9 +23,7 @@ grpc::Status to_grpc(grpc::ServerContext* context, const YamlState& state_deriva
 template <typename Request> void check_states_size(const Request* request);
 template <> void check_states_size<ModelExchangeRequestEuler>(const ModelExchangeRequestEuler* request);
 template <> void check_states_size<ModelExchangeRequestQuaternion>(const ModelExchangeRequestQuaternion* request);
-/*
- *
- */
+
 class ModelExchangeServiceImpl final : public ModelExchange::Service {
     public:
         explicit ModelExchangeServiceImpl(const XdynForME& xdyn, ErrorReporter& error_outputter);

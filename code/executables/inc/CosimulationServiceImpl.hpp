@@ -8,12 +8,13 @@
 #ifndef EXECUTABLES_INC_XDYNFORCSGRPC_HPP_
 #define EXECUTABLES_INC_XDYNFORCSGRPC_HPP_
 
-#include <grpcpp/grpcpp.h>
+#include "YamlSimServerInputs.hpp"
 #include "cosimulation.grpc.pb.h"
 #include "cosimulation.pb.h"
 #include "XdynForCS.hpp"
 #include "ErrorReporter.hpp"
 #include "gRPCChecks.hpp"
+#include <grpcpp/grpcpp.h>
 
 template <typename Request> void check_states_size(const Request* request);
 template <> void check_states_size<CosimulationRequestEuler>(const CosimulationRequestEuler* request);
