@@ -198,11 +198,12 @@ TARGET_LINK_LIBRARIES(${TEST_EXE}
         gtest      # static
         gmock_main # static
         binary_stl_data_static
-        ${Boost_FILESYSTEM_LIBRARY}
-        ${Boost_LOCALE_LIBRARY}
         ${PROJECT_NAME}
         ${GRPC_GRPCPP_UNSECURE}
         ${PROTOBUF_LIBPROTOBUF}
+        ${Boost_FILESYSTEM_LIBRARY}
+        ${Boost_LOCALE_LIBRARY}
+        ${Boost_SYSTEM_LIBRARY}
         ${Boost_REGEX_LIBRARY}
         ${Boost_THREAD_LIBRARY}
         )
