@@ -43,7 +43,12 @@ ubuntu2204_py310_package: test_only
 xdyn.deb: ../../build_deb11_pywrapper/xdyn.deb
 	@cp $< $@
 
-create_docker_image_debian11_py309: xdyn.deb
+.PHONY=xdyngrpc
+xdyngrpc:
+	make -C ../../interfaces build
+	@cp ../../interfaces/xdyngrpc*.whl .
+
+create_docker_image_debian11_py309: xdyn.deb xdyngrpc
 	docker build \
 		-f Dockerfile_deploy \
 		--build-arg DOCKER_BASE_IMAGE=debian:bullseye-slim \
@@ -52,7 +57,7 @@ create_docker_image_debian11_py309: xdyn.deb
 		-t xdyn-debian11-py309 \
 		.
 
-create_docker_image_ubuntu2204_py310: xdyn.deb
+create_docker_image_ubuntu2204_py310: xdyn.deb xdyngrpc
 	docker build \
 		-f Dockerfile_deploy \
 		--build-arg DOCKER_BASE_IMAGE=ubuntu:22.04 \
@@ -119,6 +124,7 @@ clean: ## Removed all generated files
 	@rm -f unit_tests/core
 	@rm -f unit_tests/nosetests.xml
 	@rm -f *.deb
+	@rm -f *.whl
 	@find . -type d -name __pycache__ -exec rm -rf {} \; || true
 
 .PHONY=xdyn-python-deb11-build

@@ -57,7 +57,7 @@ Dans le cas présent, le modèle a deux paramètres $`k`$ et $`c`$ dont la valeu
 au début de la simulation.
 
 
-### Ecriture du modèle d'effort
+### Écriture du modèle d'effort
 
 Il s'agit ici d'un modèle d'[oscillateur harmonique amorti](https://en.wikipedia.org/wiki/Harmonic_oscillator#Damped_harmonic_oscillator):
 
@@ -77,12 +77,12 @@ d'xdyn.
 Dans un fichier Python (nommé `harmonic_oscillator.py` dans cet exemple) on écrit :
 
 ```python evaluate=False, results='hidden'
-include({{forces/harmonic_oscillator.py}})
+include({{harmonic_oscillator.py}})
 ```
 
 ### Lancement de la simulation
 
-On commence par récupérer l'exemple de modèle de houle :
+On commence par récupérer l'exemple du modèle:
 
 ```bash
 git clone git@gitlab.sirehna.com:root/xdyn.git
@@ -91,23 +91,7 @@ git clone git@gitlab.sirehna.com:root/xdyn.git
 On écrit ensuite un fichier `docker-compose.yml` :
 
 ```yaml
-version: '3'
-services:
-  force-model:
-    build: xdyn/grpc_force_python_server
-    entrypoint: ["/bin/bash", "/entrypoint.sh", "/work/harmonic_oscillator.py"]
-    working_dir: /work
-    volumes:
-    - .:/work
-    - ./xdyn:/proto
-  xdyn:
-    image: sirehna/xdyn
-    working_dir: /data
-    entrypoint: xdyn tutorial_10_gRPC_force_model.yml tutorial_10_gRPC_force_model_commands.yml --dt 0.1 --tend 1 -o tsv
-    volumes:
-    - .:/data
-    depends_on:
-    - force-model
+include({{docker-compose-sim.yml}})
 ```
 
 On peut alors lancer la simulation comme suit :
@@ -118,7 +102,7 @@ docker-compose up
 
 ### Sans Docker
 
-Si l'on n'utilise pas Docker, il faut lancer le serveur de houle manuellement:
+Si l'on n'utilise pas Docker, il faut lancer le serveur de force manuellement:
 
 ```shell
 python3 harmonic_oscillator.py

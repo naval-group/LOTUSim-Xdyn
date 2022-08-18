@@ -1,2 +1,0 @@
-nose2
-websocket_client==0.56.0

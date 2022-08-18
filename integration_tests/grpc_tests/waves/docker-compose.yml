@@ -1,27 +1,35 @@
 version: '3'
 services:
   waves-server:
-    image: xdyn-grpc-wave:python-test
+    image: xdyngrpc-python
     user: ${CURRENT_UID}
-    command: airy.py
+    command: -m xdyngrpc.waves.server.airy
     working_dir: /work
     volumes:
-    - .:/work
+      - .:/work
   xdyn:
     image: xdyn
     working_dir: /data
-    entrypoint: ./wait-for-it.sh waves-server:50051 -s -t 20 -- xdyn-for-cs tutorial_09_gRPC_wave_model.yml --dt 0.1 -p 9002
+    entrypoint: >
+      wait-for-it waves-server:50051 -s -t 20 --
+      xdyn-for-cs tutorial_09_gRPC_wave_model.yml -g --dt 1 -p 9002
     volumes:
-    - .:/data
+      - .:/data
     user: ${CURRENT_UID}
     depends_on:
-    - waves-server
+      - waves-server
     environment:
       - no_proxy
   test:
-    build: .
+    image: xdyngrpc-python
+    entrypoint: >
+      wait-for-it xdyn:9002 -s -t 20 --
+      python3 tests.py
+    working_dir: /data
+    volumes:
+      - .:/data
     user: ${CURRENT_UID}
     depends_on:
-    - xdyn
+      - xdyn
     environment:
       - no_proxy

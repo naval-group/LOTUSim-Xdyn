@@ -44,7 +44,7 @@ class SurfaceElevationFromGRPC::Impl
                << rpc_method
                << "'): the structure returned by the gRPC wave server is invalid because some of its fields do not have the right size." << std::endl
                << "The method returns type '" << grpc_type << "' which has a field named '" << field << "'." << std::endl
-               << "The definition of this type can be found here: https://gitlab.com/sirehna_naval_group/sirehna/interfaces/-/blob/master/wave_types.proto" << std::endl
+               << "The definition of this type can be found here: https://gitlab.com/sirehna_naval_group/sirehna/interfaces/-/blob/master/proto/wave_types.proto" << std::endl
                << "This field is a 'repeated' field in the protobuf sense (see https://developers.google.com/protocol-buffers/docs/proto#specifying-field-rules)" << std::endl
                << "and its size should be " << expected_size << " to match the other fields, but it was " << actual_size << ". Simulation cannot continue without crashing." << std::endl
                << "Please note this is a problem with the gRPC wave server itself and not xdyn.";

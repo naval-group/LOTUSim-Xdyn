@@ -1,6 +1,6 @@
 .PHONY: all_docker_images cmake-debian debian docker cmake-windows windows doc update-submodules
 
-all: update-submodules windows debian debug doc all_docker_images
+all: update-submodules generate_proto windows debian debug doc all_docker_images
 
 DOCKER_AS_ROOT:=docker run -t --rm -w /opt/share -v $(shell pwd):/opt/share
 DOCKER_AS_USER:=$(DOCKER_AS_ROOT) -u $(shell id -u):$(shell id -g)
@@ -46,6 +46,9 @@ ${HEADERS}:
 	@git submodule sync --recursive
 	@git submodule update --init --recursive
 	@cd code/ssc/ssc && sh generate_module_header.sh && cd ../../..
+
+generate_proto:
+	make -C interfaces build
 
 cmake-debian: BUILD_TYPE = Release
 cmake-debian: BUILD_DIR = build_deb11
@@ -404,15 +407,11 @@ xdyn.deb: build_deb11/xdyn.deb
 build_deb11/xdyn.deb:
 	@echo "Run ./ninja_debian.sh package"
 
-docker_grpc_force_model:
-	make -C interfaces docker-images
+docker_xdyngrpc:
+	make -C interfaces build
 
-docker_grpc_waves_model:
-	make -C interfaces/waves/python/server CONTAINER_NAME=xdyn-waves-grpc:python3
-
-all_docker_images: docker-ci docker_grpc_force_model docker_grpc_waves_model
-	echo "Built all docker images after having run 'make debian'"
-
+all_docker_images: docker-ci docker_xdyngrpc
+	@echo "Built all docker images after having run 'make debian'"
 
 doc: BUILD_TYPE = Release
 doc: BUILD_DIR = build_deb11

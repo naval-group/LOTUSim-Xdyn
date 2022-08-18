@@ -2,8 +2,7 @@
 
 from typing import Dict, List
 import yaml
-from controller import StatesEuler
-import controller
+from xdyngrpc.controllers.controller import AbstractControllerModel, StatesEuler, serve
 import logging
 
 SERVICE_NAME = "pid-controller"
@@ -17,7 +16,7 @@ LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.INFO)
 
 
-class PIDController(controller.Model):
+class PIDController(AbstractControllerModel):
     """Restoring force F proportional to the displacement x."""
 
     def __init__(self, parameters: str, t0: float):
@@ -155,4 +154,4 @@ class PIDController(controller.Model):
 # Start the gRPC server loop
 if __name__ == "__main__":
     LOGGER.info('Starting gRPC PID controller')
-    controller.serve(PIDController)
+    serve(PIDController)

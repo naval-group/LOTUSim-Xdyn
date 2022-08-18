@@ -18,6 +18,7 @@ after_script:
   - docker ps
   - make clean
   - docker ps
+  - docker images
 
 variables:
   DEPLOYED_DOCKER_IMAGES: xdyn xdyn-debian11-py309 xdyn-ubuntu2204-py310

@@ -34,23 +34,19 @@ RUN wget https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/jobs/1234304260/a
  && dpkg -i xdyn.deb \
  && rm -rf xdyn.zip xdyn.deb
 
-ADD interfaces/forces/requirements.txt .
-RUN pip3 install wheel
-RUN pip3 install -r requirements.txt && \
+ADD interfaces/requirements.txt .
+RUN pip3 install wheel \
+ && pip3 install -r requirements.txt && \
     mkdir -p /usr/python && \
     chmod a+rwx /usr/python
 ENV PYTHONPATH /usr/python
-ADD interfaces/force.proto\
-    interfaces/controller.proto\
-    interfaces/wave_grpc.proto\
-    interfaces/wave_types.proto ./
-RUN python3 -m grpc_tools.protoc -I . --python_out=/usr/python --grpc_python_out=/usr/python/ wave_types.proto && \
-    python3 -m grpc_tools.protoc -I . --python_out=/usr/python --grpc_python_out=/usr/python/ force.proto && \
-    python3 -m grpc_tools.protoc -I . --python_out=/usr/python --grpc_python_out=/usr/python/ controller.proto && \
-    protoc --plugin=protoc-gen-grpc=`which grpc_cpp_plugin` -I . --cpp_out=/opt --grpc_out=/opt controller.proto
-ADD interfaces/forces/force.py \
-    interfaces/forces/grpc_force_client.py\
-    interfaces/forces/grpc_force_types.py\
-    interfaces/forces/grpc_force_types_marshalling.py\
-    interfaces/controllers/controller.py \
-    /usr/python/
+ADD interfaces/proto/force.proto\
+    interfaces/proto/controller.proto\
+    interfaces/proto/wave_grpc.proto\
+    interfaces/proto/wave_types.proto ./
+RUN python3 -m grpc_tools.protoc -I . --python_out=/usr/python --grpc_python_out=/usr/python/ \
+    wave_types.proto \
+    force.proto \
+    controller.proto \
+ && protoc --plugin=protoc-gen-grpc=`which grpc_cpp_plugin` -I . --cpp_out=/opt --grpc_out=/opt controller.proto
+ADD interfaces/xdyngrpc /usr/python/.

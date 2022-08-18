@@ -1,23 +1,21 @@
 version: '3'
 services:
   python-controller:
-    image: xdyn-grpc-controller:python-test
+    image: xdyngrpc-python
+    command: -m xdyngrpc.controllers.pid_controller
     user: ${CURRENT_UID}
     environment:
-    - no_proxy
-    working_dir: /data
-    volumes:
-        - ./:/data:ro
-    command: issue_204.py
+      - no_proxy
   test:
     image: xdyn
     user: ${CURRENT_UID}
     volumes:
-    - ./:/opt/share
+      - ./:/opt/share
     working_dir: /opt/share
     environment:
-    - no_proxy
+      - no_proxy
     depends_on:
-    - python-controller
-    entrypoint: ./wait-for-it.sh python-controller:9002 -s -t 20 -- xdyn xdyn_param_issue_204.yml
-      --dt 0.1 --tend -5.0 --tstart -10.0 
+      - python-controller
+    entrypoint: >
+      wait-for-it python-controller:9002 -s -t 20 --
+      xdyn xdyn_param_issue_204.yml --dt 0.1 --tend -5.0 --tstart -10.0

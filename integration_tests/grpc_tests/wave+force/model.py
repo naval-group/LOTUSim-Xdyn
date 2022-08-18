@@ -1,6 +1,6 @@
 """Extra observation model"""
 
-import force
+from xdyngrpc.forces import force
 import logging
 from typing import Any, Dict
 SERVICE_NAME = "model.py"
@@ -14,7 +14,7 @@ LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.INFO)
 
 
-class Model(force.Model):
+class Model(force.AbstractForceModel):
     """
     """
     def __init__(self, _, body_name: str, __):

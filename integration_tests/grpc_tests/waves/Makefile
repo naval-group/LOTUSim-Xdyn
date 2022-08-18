@@ -17,7 +17,7 @@ DOCKER_COMPOSE:=COMPOSE_PROJECT_NAME=$(COMPOSE_PROJECT_NAME) CURRENT_UID=$(shell
 
 all: run clean
 
-run: tutorial_09_gRPC_wave_model.yml test_ship.hdb
+run: tutorial_09_gRPC_wave_model.yml test_ship.hdb cube.stl
 	@$(DOCKER_COMPOSE) up -t 0 --exit-code-from test --abort-on-container-exit --build
 
 tutorial_09_gRPC_wave_model.yml:
@@ -28,6 +28,11 @@ test_ship.hdb:
 	@echo "Copying tutorial files from xdyn's Docker container..."
 	@$(DOCKER_RUN_BASH) "cp /usr/demos/$@ /xdyn_demos/"
 
+cube.stl:
+	@echo "Copying tutorial files from xdyn's Docker container..."
+	@$(DOCKER_RUN_BASH) "cp /usr/demos/$@ /xdyn_demos/"
+
 clean:
-	rm -f tutorial_09_gRPC_wave_model.yml test_ship.hdb
+	rm -f tutorial_09_gRPC_wave_model.yml test_ship.hdb cube.stl
+	@rm -rf __pycache__
 	@$(DOCKER_COMPOSE) down --remove-orphans
