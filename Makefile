@@ -28,6 +28,7 @@ headers: ${HEADERS}
 windows: ${HEADERS} windows_gccx_posix
 debian11: ${HEADERS} debian_11_release_gcc_10
 debian: ${HEADERS} debian_11_release_gcc_10
+debian11_clang: ${HEADERS} debian_11_release_clang_14
 debug: ${HEADERS} debian_11_debug_gcc_10
 ubuntu1804-intel: ${HEADERS} ubuntu_18_04_release_intel_compiler
 
@@ -215,6 +216,16 @@ debian_11_release_gcc_10_wrapper_python_all:
 	@echo " - Linux x86-64 Debian 11 with Python 3.9 (default Python version)"
 	@echo " - Linux x86-64 Debian 11 with Python 3.10"
 	@echo " - Linux x86-64 Ubuntu 20.04 with Python 3.8, using the Debian 11 generated wheel"
+
+debian_11_release_clang_14: BUILD_TYPE = Release
+debian_11_release_clang_14: BUILD_DIR = build_deb11_clang14
+debian_11_release_clang_14: CPACK_GENERATOR = DEB
+debian_11_release_clang_14: DOCKER_IMAGE = gjacquenot/xdynclang
+debian_11_release_clang_14: BOOST_ROOT = /opt/boost
+debian_11_release_clang_14: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_11_release_clang_14: BUILD_PYTHON_WRAPPER = False
+debian_11_release_clang_14: ADDITIONAL_CMAKE_PARAMETERS=-D CMAKE_CXX_COMPILER=clang++ -D CMAKE_C_COMPILER=clang
+debian_11_release_clang_14: cmake-debian-target build-debian test-debian
 
 build-docker-python-image:
 	make -C code/wrapper_python ${DOCKER_IMAGE}
