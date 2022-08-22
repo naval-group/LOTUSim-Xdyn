@@ -74,7 +74,7 @@ TEST_F(parse_time_seriesTest, setpoints_example)
     std::vector<YamlTimeSeries> setpoints = parse_setpoint_yaml(test_data::setpoints());
     ASSERT_EQ(2, setpoints.size());
 
-    ASSERT_EQ("propeller", setpoints[0].name);
+    ASSERT_EQ("", setpoints[0].name);
     ASSERT_EQ(4, setpoints[0].t.size());
     ASSERT_DOUBLE_EQ(0, setpoints[0].t[0]);
     ASSERT_DOUBLE_EQ(1, setpoints[0].t[1]);
@@ -92,7 +92,7 @@ TEST_F(parse_time_seriesTest, setpoints_example)
     ASSERT_DOUBLE_EQ(1.064935, setpoints[0].values["P/D"][2]);
     ASSERT_DOUBLE_EQ(1.064935, setpoints[0].values["P/D"][3]);
 
-    ASSERT_EQ("controller", setpoints[1].name);
+    ASSERT_EQ("", setpoints[1].name);
     ASSERT_EQ(1, setpoints[1].t.size());
     ASSERT_DOUBLE_EQ(4.2, setpoints[1].t[0]);
     ASSERT_EQ(1, setpoints[1].values.size());
@@ -100,4 +100,3 @@ TEST_F(parse_time_seriesTest, setpoints_example)
     ASSERT_DOUBLE_EQ(2.5, setpoints[1].values["psi_co"][0]);
 //! [parse_setpoint_yaml example]
 }
-
