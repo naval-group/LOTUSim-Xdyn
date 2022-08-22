@@ -356,7 +356,8 @@ test-debian:
 	    gprof run_all_tests gmon.out > gprof_res.txt 2> gprof_res.err;\
 	    bash codecov_bash.sh && \
 	    rm codecov_bash.sh;\
-	    fi"
+	    fi && \
+	    ldd run_all_tests"
 
 cmake-ubuntu-intel-target: code/yaml-cpp/CMakeLists.txt
 	docker pull $(DOCKER_IMAGE) || true
