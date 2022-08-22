@@ -211,9 +211,9 @@ TEST_F(ResultantForceComputerTest, DISABLED_can_compute_K)
     GZ::ResultantForceComputer cube(sim);
     const auto K =  cube.K(Eigen::Vector3d(0,0,0));
 
-    ASSERT_NEAR(0, (double)K(0,1), BIG_EPS);
-    ASSERT_NEAR(0, (double)K(1,0), BIG_EPS);
+    ASSERT_NEAR(0, K(0,1), BIG_EPS);
+    ASSERT_NEAR(0, K(1,0), BIG_EPS);
 
-    ASSERT_NEAR(-10065.060000670201, (double)K(0,0), BIG_EPS);
-    ASSERT_NEAR(  419.3774999700085, (double)K(1,1), BIG_EPS);
+    ASSERT_NEAR(-10065.060000670201, K(0,0), BIG_EPS);
+    ASSERT_NEAR(  419.3774999700085, K(1,1), BIG_EPS);
 }
