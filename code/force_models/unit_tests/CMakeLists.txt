@@ -1,42 +1,42 @@
 # ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
 SET(MODULE_UNDER_TEST force_models)
 PROJECT(${MODULE_UNDER_TEST}_tests)
-FILE(GLOB SRC src/QuadraticDampingForceModelTest.cpp
-              src/DefaultSurfaceElevationTest.cpp
-              src/GravityForceModelTest.cpp
-              src/HydrostaticForceModelTest.cpp
-              src/FroudeKrylovForceModelTest.cpp
-              src/LinearDampingForceModelTest.cpp
-              src/WageningenControlledForceModelTest.cpp
-              src/ResistanceCurveForceModelTest.cpp
-              src/RadiationDampingForceModelTest.cpp
-              src/HDBParserForTests.cpp
-              src/DiffractionForceModelTest.cpp
-              src/SimpleHeadingKeepingControllerTest.cpp
-              src/ManeuveringForceModelTest.cpp
-              src/maneuvering_parserTest.cpp
-              src/maneuvering_compilerTest.cpp
-              src/NumericalEvaluator.cpp
-              src/StringEvaluator.cpp
-              src/maneuvering_DataSource_builderTest.cpp
-              src/SimpleStationKeepingControllerTest.cpp
-              src/RudderForceModelTest.cpp
-              src/env_for_tests.cpp
-              src/KtKqForceModelTest.cpp
-              src/LinearHydrostaticForceModelTest.cpp
-              src/ConstantForceModelTest.cpp
-              src/HoltropMennenForceModelTest.cpp
-              src/AeroPolarForceModelTest.cpp
-              src/HydroPolarForceModelTest.cpp
-              src/LinearFroudeKrylovForceModelTest.cpp
-              src/MMGManeuveringForceModelTest.cpp
-              src/LinearStiffnessForceModelTest.cpp
-              src/FlettnerRotorForceModelTest.cpp
-              )
+SET(SRC
+    QuadraticDampingForceModelTest.cpp
+    DefaultSurfaceElevationTest.cpp
+    GravityForceModelTest.cpp
+    HydrostaticForceModelTest.cpp
+    FroudeKrylovForceModelTest.cpp
+    LinearDampingForceModelTest.cpp
+    WageningenControlledForceModelTest.cpp
+    ResistanceCurveForceModelTest.cpp
+    RadiationDampingForceModelTest.cpp
+    HDBParserForTests.cpp
+    DiffractionForceModelTest.cpp
+    SimpleHeadingKeepingControllerTest.cpp
+    ManeuveringForceModelTest.cpp
+    maneuvering_parserTest.cpp
+    maneuvering_compilerTest.cpp
+    NumericalEvaluator.cpp
+    StringEvaluator.cpp
+    maneuvering_DataSource_builderTest.cpp
+    SimpleStationKeepingControllerTest.cpp
+    RudderForceModelTest.cpp
+    env_for_tests.cpp
+    KtKqForceModelTest.cpp
+    LinearHydrostaticForceModelTest.cpp
+    ConstantForceModelTest.cpp
+    HoltropMennenForceModelTest.cpp
+    AeroPolarForceModelTest.cpp
+    HydroPolarForceModelTest.cpp
+    LinearFroudeKrylovForceModelTest.cpp
+    MMGManeuveringForceModelTest.cpp
+    LinearStiffnessForceModelTest.cpp
+    FlettnerRotorForceModelTest.cpp
+    )
 # ------8<---------------------------------------------->8-----
 
 # Include directories
-INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(${${MODULE_UNDER_TEST}_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${GTEST_INCLUDE_DIRS})
@@ -45,9 +45,9 @@ INCLUDE_DIRECTORIES(${test_data_generator_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${external_file_formats_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${simulator_INCLUDE_DIRS}/../unit_tests/inc)
-include_directories(${external_file_formats_INCLUDE_DIRS})
-include_directories(${hdb_interpolators_INCLUDE_DIRS})
-include_directories(${hdb_interpolators_INCLUDE_DIRS}/../unit_tests/inc)
-include_directories(${core_INCLUDE_DIRS}/../unit_tests/inc)
+INCLUDE_DIRECTORIES(${external_file_formats_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${hdb_interpolators_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${hdb_interpolators_INCLUDE_DIRS}/../unit_tests/inc)
+INCLUDE_DIRECTORIES(${core_INCLUDE_DIRS}/../unit_tests/inc)
 
 ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})

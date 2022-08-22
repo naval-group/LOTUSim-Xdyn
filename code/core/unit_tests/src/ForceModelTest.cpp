@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "../inc/ForceModelTest.hpp"
+#include "ForceModelTest.hpp"
 #include "ForceModel.hpp"
 
 #include <ssc/data_source.hpp>
@@ -82,4 +82,3 @@ TEST_F(ForceModelTest, bug_2838)
     ASSERT_NEAR((states.G - w.get_point()).norm(), 0, 1E-10);
 //! [ForceModelTest expected output]
 }
-
