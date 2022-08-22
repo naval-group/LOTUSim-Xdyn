@@ -48,15 +48,6 @@ IF(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang") OR ("${CMAKE_CXX_COMPILER_ID}" 
     ENDIF()
 ENDIF()
 
-
-# Using C++ 2011
-# The -std=c++0x option causes g++ to go into 'strict ANSI' mode so it doesn't declare non-standard functions
-# (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
-# Use -std=gnu++0x instead.
-IF (NOT(MSVC))
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
-ENDIF()
-
 include_directories(inc)
 include_directories(${ssc_INCLUDE_DIRS})
 include_directories(${exceptions_INCLUDE_DIRS})
