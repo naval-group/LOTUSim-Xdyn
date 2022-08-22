@@ -29,7 +29,7 @@
 #include "force_models/inc/SimpleHeadingKeepingController.hpp"
 #include "force_models/inc/SimpleStationKeepingController.hpp"
 #include "force_models/inc/WageningenControlledForceModel.hpp"
-#include "force_models/unit_tests/inc/HDBParserForTests.hpp"
+#include "force_models/unit_tests/HDBParserForTests.hpp"
 #include "hdb_interpolators/inc/HDBParser.hpp"
 #include "ssc/ssc/data_source/DataSource.hpp"
 #include "ssc/ssc/kinematics/Point.hpp"

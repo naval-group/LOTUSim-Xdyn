@@ -1,6 +1,6 @@
 #include "py_xdyn_hdb.hpp"
 #include "py_pybind_additions.hpp"
-#include "force_models/unit_tests/inc/HDBParserForTests.hpp"
+#include "force_models/unit_tests/HDBParserForTests.hpp"
 #include "hdb_interpolators/inc/History.hpp"
 #include "hdb_interpolators/inc/HydroDBParser.hpp"
 #include "hdb_interpolators/inc/HDBParser.hpp"
