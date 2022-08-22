@@ -1,10 +1,7 @@
-# ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
 SET(MODULE_UNDER_TEST interface_hdf5)
 PROJECT(${MODULE_UNDER_TEST}_tests)
-FILE(GLOB SRC src/h5_interface_tests.cpp)
-# ------8<---------------------------------------------->8-----
-
-# Include directories
+SET(SRC
+    h5_interface_tests.cpp)
 INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(${${MODULE_UNDER_TEST}_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${GTEST_INCLUDE_DIRS})
