@@ -19,10 +19,10 @@ XY<Range> get_min_max(const Eigen::Matrix3Xd& M)
         range.y.max = M(1,0);
         for (int j = 0 ; j < M.cols() ; ++j)
         {
-            range.x.min = std::min(range.x.min, (double)M(0,j));
-            range.x.max = std::max(range.x.max, (double)M(0,j));
-            range.y.min = std::min(range.y.min, (double)M(1,j));
-            range.y.max = std::max(range.y.max, (double)M(1,j));
+            range.x.min = std::min(range.x.min, M(0,j));
+            range.x.max = std::max(range.x.max, M(0,j));
+            range.y.min = std::min(range.y.min, M(1,j));
+            range.y.max = std::max(range.y.max, M(1,j));
         }
     }
     return range;
