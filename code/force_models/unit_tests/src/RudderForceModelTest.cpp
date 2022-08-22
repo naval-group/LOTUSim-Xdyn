@@ -130,12 +130,12 @@ TEST_F(RudderForceModelTest, get_force)
     const double lift = 200;
     const double angle = -PI/3;
     ssc::kinematics::Vector6d v = riw.get_force(drag, lift, angle);
-    ASSERT_DOUBLE_EQ(-91.339745962155646, (double)v(0));
-    ASSERT_DOUBLE_EQ(178.20508075688772, (double)v(1));
-    ASSERT_DOUBLE_EQ(0, (double)v(2));
-    ASSERT_DOUBLE_EQ(0, (double)v(3));
-    ASSERT_DOUBLE_EQ(0, (double)v(4));
-    ASSERT_DOUBLE_EQ(0, (double)v(5));
+    ASSERT_DOUBLE_EQ(-91.339745962155646, v(0));
+    ASSERT_DOUBLE_EQ(178.20508075688772, v(1));
+    ASSERT_DOUBLE_EQ(0, v(2));
+    ASSERT_DOUBLE_EQ(0, v(3));
+    ASSERT_DOUBLE_EQ(0, v(4));
+    ASSERT_DOUBLE_EQ(0, v(5));
 }
 
 TEST_F(RudderForceModelTest, get_wrench)
@@ -153,12 +153,12 @@ TEST_F(RudderForceModelTest, get_wrench)
     const double angle = -PI/3;
     const double area = 1.467;
     ssc::kinematics::Vector6d v = riw.get_wrench(3,4,0.5,area);
-    ASSERT_DOUBLE_EQ(-2021.4412785509464, (double)v(0));
-    ASSERT_DOUBLE_EQ(1757.2988992064641, (double)v(1));
-    ASSERT_DOUBLE_EQ(0, (double)v(2));
-    ASSERT_DOUBLE_EQ(0, (double)v(3));
-    ASSERT_DOUBLE_EQ(0, (double)v(4));
-    ASSERT_DOUBLE_EQ(0, (double)v(5));
+    ASSERT_DOUBLE_EQ(-2021.4412785509464, v(0));
+    ASSERT_DOUBLE_EQ(1757.2988992064641, v(1));
+    ASSERT_DOUBLE_EQ(0, v(2));
+    ASSERT_DOUBLE_EQ(0, v(3));
+    ASSERT_DOUBLE_EQ(0, v(4));
+    ASSERT_DOUBLE_EQ(0, v(5));
 }
 
 TEST_F(RudderForceModelTest, get_Ar)
@@ -196,8 +196,8 @@ TEST_F(RudderForceModelTest, get_Vs)
     parameters.diameter = 3.6;
     RudderForceModel::RudderModel riw(parameters,1024,a.random<double>());
     const auto vs = riw.get_vs(1.5,12,6,12e4);
-    ASSERT_DOUBLE_EQ(12.007932248435861, (double)vs.in_wake.v.norm());
-    ASSERT_DOUBLE_EQ(13.416407864998739, (double)vs.outside_wake.v.norm());
+    ASSERT_DOUBLE_EQ(12.007932248435861, vs.in_wake.v.norm());
+    ASSERT_DOUBLE_EQ(13.416407864998739, vs.outside_wake.v.norm());
 }
 
 TEST_F(RudderForceModelTest, get_fluid_angle)
@@ -285,10 +285,10 @@ TEST_F(RudderForceModelTest, force_and_torque)
     commands["beta"] = PI/6;
 
     const auto F = rudder.get_force(states, t, env, commands);
-    ASSERT_DOUBLE_EQ(2208573.9553180891, (double)F.X());
-    ASSERT_DOUBLE_EQ(777997.67996840423, (double)F.Y());
-    ASSERT_DOUBLE_EQ(0, (double)F.Z());
-    ASSERT_DOUBLE_EQ(-2793416.1021430148, (double)F.K());
-    ASSERT_DOUBLE_EQ(0, (double)F.M());
-    ASSERT_DOUBLE_EQ(-855797.44796524453, (double)F.N());
+    ASSERT_DOUBLE_EQ(2208573.9553180891, F.X());
+    ASSERT_DOUBLE_EQ(777997.67996840423, F.Y());
+    ASSERT_DOUBLE_EQ(0, F.Z());
+    ASSERT_DOUBLE_EQ(-2793416.1021430148, F.K());
+    ASSERT_DOUBLE_EQ(0, F.M());
+    ASSERT_DOUBLE_EQ(-855797.44796524453, F.N());
 }
