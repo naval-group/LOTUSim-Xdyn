@@ -6,7 +6,6 @@ SET(SRC
     BretschneiderSpectrumTest.cpp
     DiracDirectionalSpreadingTest.cpp
     Cos2sDirectionalSpreadingTest.cpp
-    DiscreteDirectionalWaveSpectrumTest.cpp
     DiracSpectralDensityTest.cpp
     WaveNumberFunctorTest.cpp
     AiryTest.cpp
