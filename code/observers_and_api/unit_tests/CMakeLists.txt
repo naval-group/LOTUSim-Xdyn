@@ -1,25 +1,25 @@
 SET(MODULE_UNDER_TEST observers_and_api)
 PROJECT(${MODULE_UNDER_TEST}_tests)
 SET(SRC
-    ListOfObserversTest.cpp
-    Hdf5ObserverTest.cpp
-    Hdf5WaveObserverTest.cpp
-    Hdf5WaveObserverBuilderTest.cpp
-    JsonObserverTest.cpp
-    SimTest.cpp
+    ConfBuilderTest.cpp
+    CSVControllerTest.cpp # because it needs a Sim instance, which requires the observers_and_api include directory.
+    EverythingObserverTest.cpp
     ForceTester.cpp
     ForceTests.cpp
+    Hdf5ObserverTest.cpp
+    Hdf5WaveObserverBuilderTest.cpp
+    Hdf5WaveObserverTest.cpp
+    JsonObserverTest.cpp
+    JSONSerializerTest.cpp
+    listenersTest.cpp
+    ListOfObserversTest.cpp
     MapObserverTest.cpp
     ObserverTests.cpp
     PIDControllerTest.cpp # because it needs a Sim instance, which requires the observers_and_api include directory.
-    CSVControllerTest.cpp # because it needs a Sim instance, which requires the observers_and_api include directory.
-    ConfBuilderTest.cpp
+    SimTest.cpp
+    SimulationServerObserverTest.cpp
     XdynForCSTest.cpp
     XdynForMETest.cpp
-    EverythingObserverTest.cpp
-    JSONSerializerTest.cpp
-    CoSimulationObserverTest.cpp
-    listenersTest.cpp
     )
 
 INCLUDE_DIRECTORIES(${${MODULE_UNDER_TEST}_INCLUDE_DIRS})
