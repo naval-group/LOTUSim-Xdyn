@@ -1,8 +1,7 @@
 #!/bin/sh
 mkdir -p $1/inc
 mkdir -p $1/src
-mkdir -p $1/unit_tests/inc
-mkdir -p $1/unit_tests/src
+mkdir -p $1/unit_tests
 echo "cmake_minimum_required(VERSION 2.8.8)" >> $1/CMakeLists.txt
 echo "project($1)" >> $1/CMakeLists.txt
 echo "" >> $1/CMakeLists.txt
