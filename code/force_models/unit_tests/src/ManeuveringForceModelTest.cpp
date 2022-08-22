@@ -579,12 +579,12 @@ TEST_F(ManeuveringForceModelTest, can_use_euler_angles_in_maneuvering_with_same_
 
     ManeuveringForceModel force(data,"TestShip", env);
     const auto F = force(states, t, env, command_listener);
-    ASSERT_DOUBLE_EQ(angles.phi, (double)F.X());
-    ASSERT_DOUBLE_EQ(angles.theta, (double)F.Y());
-    ASSERT_DOUBLE_EQ(angles.psi, (double)F.Z());
-    ASSERT_DOUBLE_EQ(states.qr(), (double)F.K());
-    ASSERT_DOUBLE_EQ(states.qi(), (double)F.M());
-    ASSERT_DOUBLE_EQ(states.qj()+states.qk(), (double)F.N());
+    ASSERT_DOUBLE_EQ(angles.phi, F.X());
+    ASSERT_DOUBLE_EQ(angles.theta, F.Y());
+    ASSERT_DOUBLE_EQ(angles.psi, F.Z());
+    ASSERT_DOUBLE_EQ(states.qr(), F.K());
+    ASSERT_DOUBLE_EQ(states.qi(), F.M());
+    ASSERT_DOUBLE_EQ(states.qj()+states.qk(), F.N());
 }
 
 /*  The following test data was generated using this Python code (the input quaternion should be normalized):
@@ -652,12 +652,12 @@ TEST_F(ManeuveringForceModelTest, can_use_euler_angles_in_maneuvering)
 
     ManeuveringForceModel force(data,"TestShip", env);
     const auto F = force(states, t, env, command_listener);
-    ASSERT_NEAR(1.917565962059328, (double)F.X(), 1e-14);
-    ASSERT_NEAR(-0.8788836899394064, (double)F.Y(), 1e-14);
-    ASSERT_NEAR(-0.8088077018359574, (double)F.Z(), 1e-14);
-    ASSERT_NEAR(1.8988663216207913, (double)F.K(), 1e-14);
-    ASSERT_NEAR(2.8450652134487004, (double)F.M(), 1e-14);
-    ASSERT_NEAR(-1.5654434261669063, (double)F.N(), 1e-14);
+    ASSERT_NEAR(1.917565962059328, F.X(), 1e-14);
+    ASSERT_NEAR(-0.8788836899394064, F.Y(), 1e-14);
+    ASSERT_NEAR(-0.8088077018359574, F.Z(), 1e-14);
+    ASSERT_NEAR(1.8988663216207913, F.K(), 1e-14);
+    ASSERT_NEAR(2.8450652134487004, F.M(), 1e-14);
+    ASSERT_NEAR(-1.5654434261669063, F.N(), 1e-14);
 }
 
 TEST_F(ManeuveringForceModelTest, can_get_Tmax)
