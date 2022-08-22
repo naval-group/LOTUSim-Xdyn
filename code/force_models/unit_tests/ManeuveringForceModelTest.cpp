@@ -391,6 +391,10 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model_with_same_
     states.p.record(t, 7);
     states.q.record(t, 8);
     states.r.record(t, 9);
+    states.qr.record(t, 1.0);
+    states.qi.record(t, 0.0);
+    states.qj.record(t, 0.0);
+    states.qk.record(t, 0.0);
 
     ssc::data_source::DataSource command_listener;
     command_listener.set("test(a)", 0.);
@@ -424,6 +428,10 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model_with_same_
     states.p.record(t, 0.23);
     states.q.record(t, 0);
     states.r.record(t, 0.38);
+    states.qr.record(t, 1.0);
+    states.qi.record(t, 0.0);
+    states.qj.record(t, 0.0);
+    states.qk.record(t, 0.0);
 
     ssc::data_source::DataSource command_listener;
     command_listener.set("test(a)", 0.);
@@ -482,6 +490,10 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model)
     states.p.record(t, 7);
     states.q.record(t, 8);
     states.r.record(t, 9);
+    states.qr.record(t, 1.0);
+    states.qi.record(t, 0.0);
+    states.qj.record(t, 0.0);
+    states.qk.record(t, 0.0);
 
     ssc::data_source::DataSource command_listener;
     command_listener.set("test(a)", 0.);
@@ -515,6 +527,10 @@ TEST_F(ManeuveringForceModelTest, can_evaluate_full_maneuvering_model2)
     states.p.record(t, 0.23);
     states.q.record(t, 0);
     states.r.record(t, 0.38);
+    states.qr.record(t, 1.0);
+    states.qi.record(t, 0.0);
+    states.qj.record(t, 0.0);
+    states.qk.record(t, 0.0);
 
     ssc::data_source::DataSource command_listener;
     command_listener.set("test(a)", 0.);
