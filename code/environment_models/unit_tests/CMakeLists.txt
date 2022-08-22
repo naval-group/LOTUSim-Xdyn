@@ -1,32 +1,29 @@
-# ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
-set(MODULE_UNDER_TEST environment_models)
-project(${MODULE_UNDER_TEST}_tests)
-FILE(GLOB SRC src/JonswapSpectrumTest.cpp
-              src/PiersonMoskowitzSpectrumTest.cpp
-              src/BretschneiderSpectrumTest.cpp
-              src/DiracDirectionalSpreadingTest.cpp
-              src/Cos2sDirectionalSpreadingTest.cpp
-              src/DiscreteDirectionalWaveSpectrumTest.cpp
-              src/DiracSpectralDensityTest.cpp
-              src/WaveNumberFunctorTest.cpp
-              src/AiryTest.cpp
-              src/discretizeTest.cpp
-              src/WaveSpectralDensityTest.cpp
-              src/StretchingTest.cpp
-              src/DefaultWindModelTest.cpp
-              src/WindMeanVelocityProfileTest.cpp
-              )
-# ------8<---------------------------------------------->8-----
+SET(MODULE_UNDER_TEST environment_models)
+PROJECT(${MODULE_UNDER_TEST}_tests)
+SET(SRC
+    JonswapSpectrumTest.cpp
+    PiersonMoskowitzSpectrumTest.cpp
+    BretschneiderSpectrumTest.cpp
+    DiracDirectionalSpreadingTest.cpp
+    Cos2sDirectionalSpreadingTest.cpp
+    DiscreteDirectionalWaveSpectrumTest.cpp
+    DiracSpectralDensityTest.cpp
+    WaveNumberFunctorTest.cpp
+    AiryTest.cpp
+    discretizeTest.cpp
+    WaveSpectralDensityTest.cpp
+    StretchingTest.cpp
+    DefaultWindModelTest.cpp
+    WindMeanVelocityProfileTest.cpp
+    )
 
-# Include directories
-include_directories(inc)
-include_directories(${${MODULE_UNDER_TEST}_INCLUDE_DIRS})
-include_directories(${ssc_INCLUDE_DIRS})
-include_directories(${exceptions_INCLUDE_DIRS})
-include_directories(${test_macros_SOURCE_DIR})
-include_directories(${external_data_structures_INCLUDE_DIRS})
-include_directories(SYSTEM ${GTEST_INCLUDE_DIRS})
-include_directories(SYSTEM ${GTEST_INCLUDE_DIRS})
-include_directories(SYSTEM ${kissfft_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${${MODULE_UNDER_TEST}_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${exceptions_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${test_macros_SOURCE_DIR})
+INCLUDE_DIRECTORIES(${external_data_structures_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${GTEST_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${GTEST_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${kissfft_INCLUDE_DIRS})
 
-add_library(${PROJECT_NAME} OBJECT ${SRC})
+ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
