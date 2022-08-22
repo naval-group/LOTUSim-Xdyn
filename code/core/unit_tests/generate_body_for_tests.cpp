@@ -1,5 +1,5 @@
 /*
- * simulator_test.cpp
+ * generate_body_for_tests.cpp
  *
  *  Created on: Jun 17, 2014
  *      Author: cady
