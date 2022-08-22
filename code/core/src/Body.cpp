@@ -184,10 +184,10 @@ void Body::calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_for
                                        *_QK(x,idx));
     const Eigen::Quaternion<double> q2(0,*_P(x,idx),*_Q(x,idx),*_R(x,idx));
     const Eigen::Quaternion<double>& dq_dt = q1*q2;
-    *_QR(dx_dt,idx) = 0.5*(double)dq_dt.w();
-    *_QI(dx_dt,idx) = 0.5*(double)dq_dt.x();
-    *_QJ(dx_dt,idx) = 0.5*(double)dq_dt.y();
-    *_QK(dx_dt,idx) = 0.5*(double)dq_dt.z();
+    *_QR(dx_dt,idx) = 0.5 * dq_dt.w();
+    *_QI(dx_dt,idx) = 0.5 * dq_dt.x();
+    *_QJ(dx_dt,idx) = 0.5 * dq_dt.y();
+    *_QK(dx_dt,idx) = 0.5 * dq_dt.z();
 
     blocked_states.force_state_derivatives(dx_dt, t);
 }
