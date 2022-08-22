@@ -1,41 +1,37 @@
-# ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
-set(MODULE_UNDER_TEST observers_and_api)
-project(${MODULE_UNDER_TEST}_tests)
-FILE(GLOB SRC
-        src/ListOfObserversTest.cpp
-        src/Hdf5ObserverTest.cpp
-        src/Hdf5WaveObserverTest.cpp
-        src/Hdf5WaveObserverBuilderTest.cpp
-        src/JsonObserverTest.cpp
-        src/SimTest.cpp
-        src/ForceTester.cpp
-        src/ForceTests.cpp
-        src/MapObserverTest.cpp
-        src/ObserverTests.cpp
-        src/PIDControllerTest.cpp # because it needs a Sim instance, which requires the observers_and_api include directory.
-        src/CSVControllerTest.cpp # because it needs a Sim instance, which requires the observers_and_api include directory.
-        src/ConfBuilderTest.cpp
-        src/XdynForCSTest.cpp
-        src/XdynForMETest.cpp
-        src/EverythingObserverTest.cpp
-        src/JSONSerializerTest.cpp
-        src/CoSimulationObserverTest.cpp
-        src/listenersTest.cpp
-        )
-# ------8<---------------------------------------------->8-----
+SET(MODULE_UNDER_TEST observers_and_api)
+PROJECT(${MODULE_UNDER_TEST}_tests)
+SET(SRC
+    ListOfObserversTest.cpp
+    Hdf5ObserverTest.cpp
+    Hdf5WaveObserverTest.cpp
+    Hdf5WaveObserverBuilderTest.cpp
+    JsonObserverTest.cpp
+    SimTest.cpp
+    ForceTester.cpp
+    ForceTests.cpp
+    MapObserverTest.cpp
+    ObserverTests.cpp
+    PIDControllerTest.cpp # because it needs a Sim instance, which requires the observers_and_api include directory.
+    CSVControllerTest.cpp # because it needs a Sim instance, which requires the observers_and_api include directory.
+    ConfBuilderTest.cpp
+    XdynForCSTest.cpp
+    XdynForMETest.cpp
+    EverythingObserverTest.cpp
+    JSONSerializerTest.cpp
+    CoSimulationObserverTest.cpp
+    listenersTest.cpp
+    )
 
-# Include directories
-include_directories(inc)
-include_directories(${${MODULE_UNDER_TEST}_INCLUDE_DIRS})
-include_directories(${ssc_INCLUDE_DIRS})
-include_directories(SYSTEM ${GTEST_INCLUDE_DIRS})
-include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
-include_directories(${core_INCLUDE_DIRS})
-include_directories(${mesh_INCLUDE_DIRS})
-include_directories(${environment_models_INCLUDE_DIRS})
-include_directories(${test_data_generator_INCLUDE_DIRS})
-include_directories(${binary_stl_data_INCLUDE_DIRS})
-include_directories(${hdb_interpolators_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${${MODULE_UNDER_TEST}_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${GTEST_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${core_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${environment_models_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${test_data_generator_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${binary_stl_data_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${hdb_interpolators_INCLUDE_DIRS})
 
 IF(WIN32)
     IF(${CMAKE_SYSTEM_VERSION} STRLESS 6.0)
@@ -50,4 +46,4 @@ IF(WIN32)
     ENDIF()
 ENDIF()
 
-add_library(${PROJECT_NAME} OBJECT ${SRC})
+ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
