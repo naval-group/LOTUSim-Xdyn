@@ -1,12 +1,12 @@
 SET(MODULE_UNDER_TEST yaml_parser)
 PROJECT(${MODULE_UNDER_TEST}_tests)
 SET(SRC
-    SimulatorYamlParserTest.cpp
     environment_parsersTest.cpp
-    parse_controllersTest.cpp
-    parse_commandsTest.cpp
-    parse_outputTest.cpp
     parse_addressTest.cpp
+    parse_controllersTest.cpp
+    parse_outputTest.cpp
+    parse_time_seriesTest.cpp
+    SimulatorYamlParserTest.cpp
     )
 INCLUDE_DIRECTORIES(${${MODULE_UNDER_TEST}_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
