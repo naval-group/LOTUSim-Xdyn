@@ -149,7 +149,7 @@ TEST_F(RudderForceModelTest, get_wrench)
     parameters.effective_aspect_ratio_factor = 2.3;
     RudderForceModel::RudderModel riw(parameters,1024,0.75);
     const double drag = 10;
-    const double lift = 200;
+    // const double lift = 200;
     const double angle = -PI/3;
     const double area = 1.467;
     ssc::kinematics::Vector6d v = riw.get_wrench(3,4,0.5,area);
