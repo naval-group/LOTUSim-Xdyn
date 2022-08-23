@@ -5,8 +5,8 @@
 
 #define TWOPI 6.283185307179586232
 
-void check_all_omegas_are_within_bounds(const double min_bound, const std::vector<double>& vector_to_check, const double max_bound);
-void check_all_omegas_are_within_bounds(const double min_bound, const std::vector<double>& vector_to_check, const double max_bound)
+void check_all_values_are_within_bounds(const double min_bound, const std::vector<double>& vector_to_check, const double max_bound);
+void check_all_values_are_within_bounds(const double min_bound, const std::vector<double>& vector_to_check, const double max_bound)
 {
     const double eps = 0.01; // We don't care if we're above or below the bounds by 0.01 s: those are wave frequencies so not very precise.
     for (auto Tp:vector_to_check)
@@ -29,12 +29,12 @@ void check_all_omegas_are_within_bounds(const double min_bound, const std::vecto
 }
 
 
-void check_all_omegas_are_within_bounds(const double min_bound, const std::vector<std::vector<double> >& vector_to_check, const double max_bound);
-void check_all_omegas_are_within_bounds(const double min_bound, const std::vector<std::vector<double> >& vector_to_check, const double max_bound)
+void check_all_values_are_within_bounds(const double min_bound, const std::vector<std::vector<double> >& vector_to_check, const double max_bound);
+void check_all_values_are_within_bounds(const double min_bound, const std::vector<std::vector<double> >& vector_to_check, const double max_bound)
 {
     for (const auto& t: vector_to_check)
     {
-        check_all_omegas_are_within_bounds(min_bound, t, max_bound);
+        check_all_values_are_within_bounds(min_bound, t, max_bound);
     }
 }
 
@@ -71,7 +71,7 @@ PhaseModuleRAOEvaluator::PhaseModuleRAOEvaluator(
             for (const auto& directional_spectrum: directional_spectra)
             {
                 const std::vector<double> spectrum_periods = directional_spectrum.get_periods();
-                check_all_omegas_are_within_bounds(periods.front(), spectrum_periods, periods.back());
+                check_all_values_are_within_bounds(periods.front(), spectrum_periods, periods.back());
             }
         }
     }
