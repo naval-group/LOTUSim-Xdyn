@@ -1,49 +1,15 @@
-cmake_minimum_required(VERSION 2.8.8)
-project(grpc)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
+PROJECT(grpc)
 
-set(SRC
-    src/SurfaceElevationFromGRPC.cpp
-    src/GRPCForceModel.cpp
-    src/ToGRPC.cpp
-    src/ToGRPCCommon.cpp
-    src/FromGRPC.cpp
-    src/GrpcControllerInterface.cpp
+SET(SRC
+    SurfaceElevationFromGRPC.cpp
+    GRPCForceModel.cpp
+    ToGRPC.cpp
+    ToGRPCCommon.cpp
+    FromGRPC.cpp
+    GrpcControllerInterface.cpp
     )
 
-# Using C++ 2011
-# The -std=c++0x option causes g++ to go into 'strict ANSI' mode so it doesn't declare non-standard functions
-# (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
-# Use -std=gnu++0x instead.
-IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    UNSET(CMAKE_CXX_FLAGS)
-    SET(CMAKE_CXX_FLAGS "-std=gnu++0x")
-    IF(MINGW)
-        # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -pedantic -pedantic-errors -Wextra -Wall -Wfatal-errors ")
-        # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused-function -Wunused-label -Wunused-parameter -Wunused-value -Wunused-variable ")
-        # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-common -Wformat=2 -Winit-self -Wpacked -Wp,-D_FORTIFY_SOURCE=2 ")
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wpointer-arith -Wmissing-format-attribute -Wsign-compare -Wundef ")
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Woverloaded-virtual -Wwrite-strings -Wno-deprecated -Wvariadic-macros")
-    ELSE()
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -pedantic -pedantic-errors -Wextra -Wall -Wunused-function")
-        # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused-label -Wunused-parameter -Wunused-value -Wunused-variable ")
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-common -Wformat=2 -Winit-self -Wpacked -Wp,-D_FORTIFY_SOURCE=2 ")
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wpointer-arith -Wmissing-format-attribute -Wsign-compare -Wundef ")
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Woverloaded-virtual -Wwrite-strings -Wfatal-errors -Wno-deprecated -Wvariadic-macros")
-        IF(CMAKE_SIZEOF_VOID_P EQUAL 8) # If on a 64 bit machine
-            IF(UNIX AND NOT WIN32) # If on Linux
-                SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-                # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wmissing-declarations")
-                # SET(REQUIRED_GCC_VERSION_FOR_FLAG_STRICT_ALIASING 8.0.0)
-                # IF(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL ${REQUIRED_GCC_VERSION_FOR_FLAG_STRICT_ALIASING})
-                #     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wstrict-aliasing=2")
-                #     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wstrict-aliasing=2")
-                # ENDIF()
-            ENDIF()
-        ENDIF()
-    ENDIF()
-ENDIF()
-
-INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${exceptions_INCLUDE_DIRS})
@@ -70,14 +36,14 @@ SET(wave_proto_hdrs_t "${CMAKE_CURRENT_BINARY_DIR}/wave_types.pb.h")
 SET(wave_grpc_srcs_t "${CMAKE_CURRENT_BINARY_DIR}/wave_types.grpc.pb.cc")
 SET(wave_grpc_hdrs_t "${CMAKE_CURRENT_BINARY_DIR}/wave_types.grpc.pb.h")
 ADD_CUSTOM_COMMAND(
-      OUTPUT "${wave_proto_srcs_t}" "${wave_proto_hdrs_t}" "${wave_grpc_srcs_t}" "${wave_grpc_hdrs_t}"
-      COMMAND ${PROTOBUF_PROTOC}
-      ARGS --grpc_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
-           --cpp_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
-           -I "${PROTOC_PREFIX}${proto_path}"
-           --plugin=protoc-gen-grpc="${GRPC_CPP_PLUGIN_EXECUTABLE}"
-           "wave_types.proto"
-      DEPENDS "${waves_proto_types}")
+    OUTPUT "${wave_proto_srcs_t}" "${wave_proto_hdrs_t}" "${wave_grpc_srcs_t}" "${wave_grpc_hdrs_t}"
+    COMMAND ${PROTOBUF_PROTOC}
+    ARGS --grpc_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
+         --cpp_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
+         -I "${PROTOC_PREFIX}${proto_path}"
+         --plugin=protoc-gen-grpc="${GRPC_CPP_PLUGIN_EXECUTABLE}"
+         "wave_types.proto"
+    DEPENDS "${waves_proto_types}")
 
 SET(wave_proto_grpc ${CMAKE_CURRENT_SOURCE_DIR}/../../interfaces/proto/wave_grpc.proto)
 SET(wave_proto_srcs_g "${CMAKE_CURRENT_BINARY_DIR}/wave_grpc.pb.cc")
@@ -85,14 +51,14 @@ SET(wave_proto_hdrs_g "${CMAKE_CURRENT_BINARY_DIR}/wave_grpc.pb.h")
 SET(wave_grpc_srcs_g "${CMAKE_CURRENT_BINARY_DIR}/wave_grpc.grpc.pb.cc")
 SET(wave_grpc_hdrs_g "${CMAKE_CURRENT_BINARY_DIR}/wave_grpc.grpc.pb.h")
 ADD_CUSTOM_COMMAND(
-      OUTPUT "${wave_proto_srcs_g}" "${wave_proto_hdrs_g}" "${wave_grpc_srcs_g}" "${wave_grpc_hdrs_g}"
-      COMMAND ${PROTOBUF_PROTOC}
-      ARGS --grpc_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
-           --cpp_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
-           -I "${PROTOC_PREFIX}${proto_path}"
-           --plugin=protoc-gen-grpc="${GRPC_CPP_PLUGIN_EXECUTABLE}"
-           "wave_grpc.proto"
-      DEPENDS "${wave_proto_grpc}")
+    OUTPUT "${wave_proto_srcs_g}" "${wave_proto_hdrs_g}" "${wave_grpc_srcs_g}" "${wave_grpc_hdrs_g}"
+    COMMAND ${PROTOBUF_PROTOC}
+    ARGS --grpc_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
+         --cpp_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
+         -I "${PROTOC_PREFIX}${proto_path}"
+         --plugin=protoc-gen-grpc="${GRPC_CPP_PLUGIN_EXECUTABLE}"
+         "wave_grpc.proto"
+    DEPENDS "${wave_proto_grpc}")
 
 SET(force_proto ${CMAKE_CURRENT_SOURCE_DIR}/../../interfaces/proto/force.proto)
 SET(force_proto_srcs "${CMAKE_CURRENT_BINARY_DIR}/force.pb.cc")
@@ -100,14 +66,14 @@ SET(force_proto_hdrs "${CMAKE_CURRENT_BINARY_DIR}/force.pb.h")
 SET(force_grpc_srcs "${CMAKE_CURRENT_BINARY_DIR}/force.grpc.pb.cc")
 SET(force_grpc_hdrs "${CMAKE_CURRENT_BINARY_DIR}/force.grpc.pb.h")
 ADD_CUSTOM_COMMAND(
-      OUTPUT "${force_proto_srcs}" "${force_proto_hdrs}" "${force_grpc_srcs}" "${force_grpc_hdrs}"
-      COMMAND ${PROTOBUF_PROTOC}
-      ARGS --grpc_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
-           --cpp_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
-           -I "${PROTOC_PREFIX}${proto_path}"
-           --plugin=protoc-gen-grpc="${GRPC_CPP_PLUGIN_EXECUTABLE}"
-           "force.proto"
-      DEPENDS "${force_proto}")
+    OUTPUT "${force_proto_srcs}" "${force_proto_hdrs}" "${force_grpc_srcs}" "${force_grpc_hdrs}"
+    COMMAND ${PROTOBUF_PROTOC}
+    ARGS --grpc_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
+         --cpp_out "${PROTOC_PREFIX}${CMAKE_CURRENT_BINARY_DIR}"
+         -I "${PROTOC_PREFIX}${proto_path}"
+         --plugin=protoc-gen-grpc="${GRPC_CPP_PLUGIN_EXECUTABLE}"
+         "force.proto"
+    DEPENDS "${force_proto}")
 
 SET(controller_proto ${CMAKE_CURRENT_SOURCE_DIR}/../../interfaces/proto/controller.proto)
 SET(controller_proto_srcs "${CMAKE_CURRENT_BINARY_DIR}/controller.pb.cc")
@@ -135,21 +101,21 @@ add_library(${PROJECT_NAME} OBJECT
     ${controller_proto_srcs}
     ${controller_grpc_srcs}
     )
-set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
+SET(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
 
-if ((${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang") OR (${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang"))
-    message(STATUS "Remove the -Wc++17-attribute-extensions option for ${PROJECT_NAME}")
-    target_compile_options(${PROJECT_NAME} PRIVATE -Wno-c++17-extensions)
+IF((${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang") OR (${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang"))
+    MESSAGE(STATUS "Remove the -Wc++17-attribute-extensions option for ${PROJECT_NAME}")
+    TARGET_COMPILE_OPTIONS(${PROJECT_NAME} PRIVATE -Wno-c++17-extensions)
     # gRPC code: fatal error: implicit conversion changes signedness: 'unsigned int' to 'int' [-Wsign-conversion]
-    target_compile_options(${PROJECT_NAME} PRIVATE -Wno-sign-conversion)
-endif()
+    TARGET_COMPILE_OPTIONS(${PROJECT_NAME} PRIVATE -Wno-sign-conversion)
+ENDIF()
 
-add_subdirectory(unit_tests)
+ADD_SUBDIRECTORY(unit_tests)
 
-add_library(${PROJECT_NAME}_airy OBJECT src/AiryGRPC.cpp)
-add_custom_target(genhdr_grpc_airy DEPENDS
+ADD_LIBRARY(${PROJECT_NAME}_airy OBJECT AiryGRPC.cpp)
+ADD_CUSTOM_TARGET(genhdr_grpc_airy DEPENDS
     ${wave_proto_hdrs_t}
     ${wave_grpc_hdrs_t}
     ${wave_proto_hdrs_g}
     ${wave_grpc_hdrs_g})
-add_dependencies(${PROJECT_NAME}_airy genhdr_grpc_airy)
+ADD_DEPENDENCIES(${PROJECT_NAME}_airy genhdr_grpc_airy)
