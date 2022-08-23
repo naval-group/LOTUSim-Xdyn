@@ -168,7 +168,6 @@ double HoltropMennenForceModel::Rw(const BodyStates& states, const EnvironmentAn
 {
     const double Fn = states.u() / std::sqrt(env.g * input.Lwl);
     double m4 = derived.c15 * 0.4 * std::exp(-0.034 * std::pow(Fn, -3.29));
-    double Rw;
 
     if(Fn == 0)
     {
