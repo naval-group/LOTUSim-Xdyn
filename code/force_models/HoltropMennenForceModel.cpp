@@ -128,7 +128,7 @@ double HoltropMennenForceModel::Rw_b(const double Fn, const double m4) const
     return derived.c17*derived.c2*derived.c5*gravity_force*std::exp(derived.m3*std::pow(Fn,d)+m4*cos(derived.lambda*std::pow(Fn,-2.)));
 }
 
-Wrench HoltropMennenForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
+Wrench HoltropMennenForceModel::get_force(const BodyStates& states, const double /*t*/, const EnvironmentAndFrames& env, const std::map<std::string,double>& /*commands*/) const
 {
     Wrench tau(states.hydrodynamic_forces_calculation_point, body_name);
     if(states.u() > 0)
