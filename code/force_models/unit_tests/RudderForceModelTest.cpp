@@ -124,7 +124,6 @@ TEST_F(RudderForceModelTest, get_drag)
 
 TEST_F(RudderForceModelTest, get_force)
 {
-//! [RudderForceModelTest get_alpha_example]
     RudderForceModel::RudderModel riw(a.random<RudderForceModel::Yaml>(),a.random<double>(),a.random<double>());
     const double drag = 10;
     const double lift = 200;
@@ -140,7 +139,6 @@ TEST_F(RudderForceModelTest, get_force)
 
 TEST_F(RudderForceModelTest, get_wrench)
 {
-//! [RudderForceModelTest get_alpha_example]
     RudderForceModel::Yaml parameters;
     parameters.Ar = 10;
     parameters.drag_coeff = 2;
