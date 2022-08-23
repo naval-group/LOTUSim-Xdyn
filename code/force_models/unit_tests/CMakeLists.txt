@@ -1,4 +1,3 @@
-# ------8<---[LINES TO MODIFY WHEN CHANGING MODULE]----->8-----
 SET(MODULE_UNDER_TEST force_models)
 PROJECT(${MODULE_UNDER_TEST}_tests)
 SET(SRC
@@ -34,9 +33,7 @@ SET(SRC
     LinearStiffnessForceModelTest.cpp
     FlettnerRotorForceModelTest.cpp
     )
-# ------8<---------------------------------------------->8-----
 
-# Include directories
 INCLUDE_DIRECTORIES(${${MODULE_UNDER_TEST}_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${GTEST_INCLUDE_DIRS})
@@ -44,10 +41,10 @@ INCLUDE_DIRECTORIES(SYSTEM ${GMOCK_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${test_data_generator_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${external_file_formats_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${simulator_INCLUDE_DIRS}/../unit_tests)
+INCLUDE_DIRECTORIES(${simulator_INCLUDE_DIRS}/unit_tests)
 INCLUDE_DIRECTORIES(${external_file_formats_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${hdb_interpolators_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${hdb_interpolators_INCLUDE_DIRS}/../unit_tests)
-INCLUDE_DIRECTORIES(${core_INCLUDE_DIRS}/../unit_tests)
+INCLUDE_DIRECTORIES(${hdb_interpolators_INCLUDE_DIRS}/unit_tests)
+INCLUDE_DIRECTORIES(${core_INCLUDE_DIRS}/unit_tests)
 
 ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
