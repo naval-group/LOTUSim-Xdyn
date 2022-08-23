@@ -66,33 +66,6 @@ ClosingFacetComputer::ClosingFacetComputer(const Eigen::Matrix3Xd& mesh_, const 
     node_idx_in_mesh = extract_nodes(edges);
     node_to_connected_edges = get_node_to_connected_edges(edges);
 }
-
-ClosingFacetComputer::ClosingFacetComputer(const Eigen::Matrix3Xd* mesh_, const ListOfEdges& edges_, std::vector<size_t> index_of_relevant_edges) :
-        mesh(mesh_),
-        edges(),
-        node_idx_in_mesh(),
-        node_to_connected_edges(),
-        original_edge_index(),
-        xmin(),
-        xmax(),
-        ymin(),
-        ymax()
-{
-    if (index_of_relevant_edges.empty()) for (size_t i = 0 ; i < edges_.size() ; ++i) index_of_relevant_edges.push_back(i);
-    xmin = (double)mesh->operator()(0,(long)edges_.at(0).first);
-    xmax = (double)mesh->operator()(0,(long)edges_.at(0).first);
-    ymin = (double)mesh->operator()(1,(long)edges_.at(0).first);
-    ymin = (double)mesh->operator()(1,(long)edges_.at(0).first);
-    for (const auto idx:index_of_relevant_edges)
-    {
-        edges.push_back(edges_.at(idx));
-        original_edge_index.push_back(idx);
-        const auto j1 = edges.back().first;
-        const auto j2 = edges.back().second;
-        xmin = std::min(std::min(xmin, (double)mesh->operator()(0,(long)j1)),(double)mesh->operator()(0,(long)j2));
-        xmax = std::max(std::max(xmax, (double)mesh->operator()(0,(long)j1)),(double)mesh->operator()(0,(long)j2));
-        ymin = std::min(std::min(ymin, (double)mesh->operator()(1,(long)j1)),(double)mesh->operator()(1,(long)j2));
-        ymax = std::max(std::max(ymax, (double)mesh->operator()(1,(long)j1)),(double)mesh->operator()(1,(long)j2));
     }
     node_idx_in_mesh = extract_nodes(edges);
     node_to_connected_edges = get_node_to_connected_edges(edges);
