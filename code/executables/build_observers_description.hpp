@@ -6,7 +6,7 @@
 #include "YamlOutput.hpp"
 #include "ListOfObservers.hpp"
 
-class XdynCommandLineArguments;
+struct XdynCommandLineArguments;
 
 std::vector<YamlOutput> build_observers_description(const std::string& yaml);
 
