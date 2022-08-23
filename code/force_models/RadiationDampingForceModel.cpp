@@ -371,7 +371,7 @@ double RadiationDampingForceModel::get_Tmax() const
     return pimpl->get_Tmax();
 }
 
-Wrench RadiationDampingForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames&, const std::map<std::string,double>&) const
+Wrench RadiationDampingForceModel::get_force(const BodyStates& states, const double /*t*/, const EnvironmentAndFrames&, const std::map<std::string,double>&) const
 {
     return pimpl->get_wrench(states);
 }
