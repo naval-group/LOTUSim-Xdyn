@@ -49,7 +49,7 @@ SimpleStationKeepingController::SimpleStationKeepingController(const Yaml& input
 
 }
 
-Wrench SimpleStationKeepingController::get_force(const BodyStates& states, const double, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
+Wrench SimpleStationKeepingController::get_force(const BodyStates& states, const double, const EnvironmentAndFrames& /*env*/, const std::map<std::string,double>& commands) const
 {
     Wrench ret(ssc::kinematics::Point(body_name,0,0,0), body_name);
 
@@ -71,4 +71,3 @@ Wrench SimpleStationKeepingController::get_force(const BodyStates& states, const
     ret.N() = K_psi*delta_psi - K_r*states.r();
     return ret;
 }
-
