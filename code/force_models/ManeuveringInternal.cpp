@@ -403,7 +403,7 @@ Time::Time()
 
 Function Time::get_lambda() const
 {
-    return [this](const BodyStates& , ssc::data_source::DataSource& , const double t)
+    return [](const BodyStates& , ssc::data_source::DataSource& , const double t)
             {
                 return t;
             };
