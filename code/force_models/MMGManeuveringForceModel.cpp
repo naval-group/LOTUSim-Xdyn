@@ -49,7 +49,7 @@ MMGManeuveringForceModel::Input MMGManeuveringForceModel::parse(const std::strin
     return ret;
 }
 
-Wrench MMGManeuveringForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
+Wrench MMGManeuveringForceModel::get_force(const BodyStates& states, const double /*t*/, const EnvironmentAndFrames& env, const std::map<std::string,double>& /*commands*/) const
 {
     ssc::kinematics::Vector6d tau = ssc::kinematics::Vector6d::Zero();
     const double v = states.v();
