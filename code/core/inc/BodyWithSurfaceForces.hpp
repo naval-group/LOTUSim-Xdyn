@@ -17,9 +17,7 @@ class BodyWithSurfaceForces : public Body
         BodyWithSurfaceForces(const BodyStates& states, const size_t idx, const BlockedDOF& blocked_states, const YamlFilteredStates& filtered_states);
         BodyWithSurfaceForces(const size_t idx, const BlockedDOF& blocked_states, const StatesFilter& states_filter);
         BodyWithSurfaceForces(const BodyStates& states, const size_t idx, const BlockedDOF& blocked_states, const StatesFilter& states_filter);
-        void update_intersection_with_free_surface(const EnvironmentAndFrames& env,
-                                                           const double t
-                                                          );
+        void update_intersection_with_free_surface(const EnvironmentAndFrames& env, const double t);
 };
 
 #endif /* BODYWITHSURFACEFORCES_HPP_ */
