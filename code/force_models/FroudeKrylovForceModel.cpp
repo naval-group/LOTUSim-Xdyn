@@ -62,9 +62,9 @@ std::function<SurfaceForceModel::DF(const FacetIterator &, const size_t, const E
 
     return [pdyn](const FacetIterator &that_facet,
                   const size_t that_facet_index,
-                  const EnvironmentAndFrames &env,
+                  const EnvironmentAndFrames & /*env*/,
                   const BodyStates &states,
-                  const double t)
+                  const double /*t*/)
     {
         // Calculate facet area and centre of gravity
         const EPoint dS = that_facet->area * that_facet->unit_normal;
