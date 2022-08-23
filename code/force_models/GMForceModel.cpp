@@ -104,7 +104,7 @@ double GMForceModel::get_gz_for_shifted_states(const BodyStates& states, const d
     return calculate_gz(env.k->get("NED", body_name), ssc::kinematics::Wrench(hs_force_in_NED.get_point(), hs_force_in_NED.to_vector()));
 }
 
-Wrench GMForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
+Wrench GMForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& /*commands*/) const
 {
     const auto ret = underlying_hs_force_model->get_force(states, t, env, {});
     const auto hydrostatic_force_in_NED = ret.change_point_and_frame(ssc::kinematics::Point("NED",0,0,0),"NED",env.k);
@@ -143,7 +143,7 @@ std::function<GMForceModel::DF(const FacetIterator &, const size_t, const Enviro
               const size_t,
               const EnvironmentAndFrames &,
               const BodyStates &,
-              const double t)
+              const double /*t*/)
     {
         return GMForceModel::DF(EPoint(), EPoint());
     };
