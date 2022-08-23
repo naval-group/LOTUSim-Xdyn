@@ -82,7 +82,7 @@ Wrench ManeuveringForceModel::get_force(const BodyStates& states, const double t
     ds->set("rho", env.rho);
     ds->set("states", states);
     ds->set("t", t);
-    for (const auto command:commands) ds->set(command.first, command.second);
+    for (const auto& command: commands) ds->set(command.first, command.second);
 
     ssc::kinematics::Vector6d tau = ssc::kinematics::Vector6d::Zero();
     tau(0) = ds->get<double>("X");
