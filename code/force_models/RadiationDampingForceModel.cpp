@@ -272,7 +272,7 @@ class RadiationDampingForceModel::Impl
             {
                 for (size_t j = 0 ; j < 6 ; ++j)
                 {
-                    ret(i) += get_convolution(i, j, states, average_velocities);
+                    ret(static_cast<Eigen::Index>(i)) += get_convolution(i, j, states, average_velocities);
                 }
             }
             return ret;
@@ -293,7 +293,7 @@ class RadiationDampingForceModel::Impl
             Eigen::Matrix<double, 6, 1> ret;
             for (size_t i = 0 ; i < 6 ; i++)
             {
-                ret(i) = get_velocity_history_from_index(i, states)() - average_velocities[i];
+                ret(static_cast<Eigen::Index>(i)) = get_velocity_history_from_index(i, states)() - average_velocities[i];
             }
             return ret;
         }
