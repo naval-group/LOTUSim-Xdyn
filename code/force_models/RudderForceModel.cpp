@@ -96,7 +96,7 @@ double RudderForceModel::RudderModel::get_lift(const double Vs,//!< Norm of the 
 
 double RudderForceModel::RudderModel::get_drag(const double Vs,//!< Norm of the speed of the ship relative to the fluid
                                                const double Cl,//!< Rudder lift coefficient (non-dimensional)
-                                               const double alpha, //!< Angle between the propeller's wake & the rudder (in radian)
+                                               const double /*alpha*/, //TODO GJ CHECK Why is this parameter not used //!< Angle between the propeller's wake & the rudder (in radian)
                                                const double area   //!< Rudder area (in or outside wake) in m^2
                                                ) const
 {
