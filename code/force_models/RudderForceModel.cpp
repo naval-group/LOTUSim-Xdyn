@@ -202,7 +202,7 @@ RudderForceModel::RudderForceModel(const Yaml& input_, const std::string& body_n
 {
 }
 
-ssc::kinematics::Vector6d RudderForceModel::get_rudder_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands, const double T) const
+ssc::kinematics::Vector6d RudderForceModel::get_rudder_force(const BodyStates& states, const double /*t*/, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands, const double T) const
 {
     const double Va = states.u()*(1-w); // Cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag p. 96, eq. 1.2.41
     const double DVa = model.get_D()*Va;
