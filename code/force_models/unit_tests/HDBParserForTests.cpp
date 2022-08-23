@@ -73,7 +73,7 @@ Eigen::Matrix<double, 6, 6> HDBParserForTests::get_added_mass() const
     {
         for(size_t j = 0 ; j < 6 ; j++)
         {
-            ret(i, j) = get_added_mass_coeff(i, j).back();
+            ret(static_cast<Eigen::Index>(i), static_cast<Eigen::Index>(j)) = get_added_mass_coeff(i, j).back();
         }
     }
     return ret;
