@@ -1,7 +1,8 @@
-#include <iomanip>
 #include "PhaseModuleRAOEvaluator.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "InvalidInputException.hpp"
+#include <algorithm>
+#include <iomanip>
 
 #define TWOPI 6.283185307179586232
 
@@ -27,7 +28,6 @@ void check_all_values_are_within_bounds(const double min_bound, const std::vecto
         }
     }
 }
-
 
 void check_all_values_are_within_bounds(const double min_bound, const std::vector<std::vector<double> >& vector_to_check, const double max_bound);
 void check_all_values_are_within_bounds(const double min_bound, const std::vector<std::vector<double> >& vector_to_check, const double max_bound)
@@ -67,11 +67,13 @@ PhaseModuleRAOEvaluator::PhaseModuleRAOEvaluator(
              * Replaced env.w->get_wave_angular_frequency_for_each_model with get_flat_directional_spectra called at origin
              * so that we do not rely on any specific (cartesian) spectrum discretization
              */
+            const double period_min = *std::min_element(periods.begin(), periods.end());
+            const double period_max = *std::max_element(periods.begin(), periods.end());
             const std::vector<FlatDiscreteDirectionalWaveSpectrum> directional_spectra = env.w->get_flat_directional_spectra(0, 0, 0);
             for (const auto& directional_spectrum: directional_spectra)
             {
                 const std::vector<double> spectrum_periods = directional_spectrum.get_periods();
-                check_all_values_are_within_bounds(periods.front(), spectrum_periods, periods.back());
+                check_all_values_are_within_bounds(period_min, spectrum_periods, period_max);
             }
         }
     }
