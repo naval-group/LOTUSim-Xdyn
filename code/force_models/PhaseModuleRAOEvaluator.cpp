@@ -108,7 +108,7 @@ ssc::kinematics::Vector6d PhaseModuleRAOEvaluator::evaluate(const BodyStates& st
             check_spectra_periods_are_in_rao_period_bounds(directional_spectra);
             for (size_t degree_of_freedom_idx = 0 ; degree_of_freedom_idx < 6 ; ++degree_of_freedom_idx) // For each degree of freedom (X, Y, Z, K, M, N)
             {
-                for (const auto spectrum:directional_spectra) // For each directional spectrum
+                for (const auto& spectrum:directional_spectra) // For each directional spectrum
                 {
                     const size_t nb_of_period_incidence_pairs = spectrum.omega.size();
                     for (size_t omega_beta_idx = 0 ; omega_beta_idx < nb_of_period_incidence_pairs ; ++omega_beta_idx) // For each incidence and each period (omega[i[omega_beta_idx]], beta[j[omega_beta_idx]])
