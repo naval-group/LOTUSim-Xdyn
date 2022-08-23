@@ -205,7 +205,7 @@ std::pair<size_t,size_t> ClosingFacetComputer::find_extreme_nodes() const
     size_t idx_xmin = 0;
     double xmin = mesh->operator()(0,0);
     size_t idx_ymax = 0;
-    double ymax = mesh->operator()(0,0);
+    double ymax = mesh->operator()(1,0);
     for (size_t i = 1 ; i < node_idx_in_mesh.size() ; ++i)
     {
         const double xval = mesh->operator()(0,(long)node_idx_in_mesh.at(i));
