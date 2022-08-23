@@ -143,9 +143,8 @@ TEST_F(RadiationDampingForceModelTest, example)
     states.name = body_name;
 //! [RadiationDampingForceModelTest example]
 //! [RadiationDampingForceModelTest expected output]
-    const auto T = 10;
-    const auto t = record_sine(states, 0, T, 10, 100);
-
+    const double T = 10.0;
+    record_sine(states, 0, T, 10, 100);
     const auto K = test_data::analytical_K;
     std::function<double(double)> g = [K, T](double t){return K(t)*sin(-2*PI*t/T);};
     const double Fexpected = -ssc::integrate::ClenshawCurtisCosine(g,0).integrate_f(yaml.tau_min,yaml.tau_max);
@@ -430,8 +429,8 @@ TEST_F(RadiationDampingForceModelTest, can_use_data_from_precal_r)
     RadiationDampingForceModel F(input, body_name, env);
     BodyStates states(100);
     states.name = body_name;
-    const auto T = 10;
-    const auto t = record_sine(states, 0, T, 10, 100);
+    const double T = 10.0;
+    record_sine(states, 0, T, 10, 100);
     const auto Frad = F.get_force(states, 0, env, {});
     ASSERT_NE(0, Frad.X());
 }
