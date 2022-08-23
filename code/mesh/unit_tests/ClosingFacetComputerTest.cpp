@@ -61,17 +61,31 @@ TEST_F(ClosingFacetComputerTest, can_extract_relevant_nodes)
 TEST_F(ClosingFacetComputerTest, can_find_extreme_node_using_xmin_strategy)
 {
     ASSERT_EQ(13, make(case_0()).find_extreme_nodes().first);
+    ASSERT_EQ(11, make(case_0()).find_extreme_nodes().second);
     ASSERT_EQ(0,  make(case_1()).find_extreme_nodes().first);
+    ASSERT_EQ(2,  make(case_1()).find_extreme_nodes().second);
     ASSERT_EQ(0,  make(case_2()).find_extreme_nodes().first);
+    ASSERT_EQ(3,  make(case_2()).find_extreme_nodes().second);
     ASSERT_EQ(0,  make(case_3()).find_extreme_nodes().first);
+    ASSERT_EQ(2,  make(case_3()).find_extreme_nodes().second);
     ASSERT_EQ(0,  make(case_4()).find_extreme_nodes().first);
+    ASSERT_EQ(3,  make(case_4()).find_extreme_nodes().second);
     ASSERT_EQ(0,  make(case_5()).find_extreme_nodes().first);
+    ASSERT_EQ(3,  make(case_5()).find_extreme_nodes().second);
     ASSERT_EQ(0,  make(case_6()).find_extreme_nodes().first);
+    ASSERT_EQ(3,  make(case_6()).find_extreme_nodes().second);
     ASSERT_EQ(0,  make(case_7()).find_extreme_nodes().first);
+    ASSERT_EQ(3,  make(case_7()).find_extreme_nodes().second);
     ASSERT_EQ(0,  make(case_8()).find_extreme_nodes().first);
+    ASSERT_EQ(3,  make(case_8()).find_extreme_nodes().second);
     ASSERT_EQ(0,  make(case_9()).find_extreme_nodes().first);
+    ASSERT_EQ(3,  make(case_9()).find_extreme_nodes().second);
     ASSERT_EQ(0,  make(case_10()).find_extreme_nodes().first);
+    ASSERT_EQ(4,  make(case_10()).find_extreme_nodes().second);
     ASSERT_EQ(7,  make(case_11()).find_extreme_nodes().first);
+    ASSERT_EQ(4,  make(case_11()).find_extreme_nodes().second);
+    ASSERT_EQ(0,  make(case_22()).find_extreme_nodes().first);
+    ASSERT_EQ(1,  make(case_22()).find_extreme_nodes().second);
 }
 
 TEST_F(ClosingFacetComputerTest, can_retrieve_angle_between_two_edges)
