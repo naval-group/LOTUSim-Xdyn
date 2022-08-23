@@ -35,8 +35,8 @@ struct EnvironmentAndFrames
     void set_rho_air (const double value);
     double get_rho_air () const;
 
-  private:
-    boost::optional<double> rho_air;
+    private:
+        boost::optional<double> rho_air;
 };
 
 #endif /* ENVIRONMENTANDFRAMES_HPP_ */
