@@ -1,5 +1,5 @@
 /*
- * YamlInertiaMatrix.cpp
+ * YamlDynamics6x6Matrix.cpp
  *
  *  Created on: 16 avr. 2014
  *      Author: cady
