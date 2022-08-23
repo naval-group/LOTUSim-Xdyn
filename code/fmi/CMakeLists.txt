@@ -1,7 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
 PROJECT(fmi_simulator)
 
-INCLUDE_DIRECTORIES(inc)
 INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${get_git_sha_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${listeners_and_controllers_INCLUDE_DIRS})
@@ -15,29 +14,31 @@ INCLUDE_DIRECTORIES(${observers_and_api_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${environment_models_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
-include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
-include_directories(${exceptions_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${exceptions_INCLUDE_DIRS})
 
-CONFIGURE_FILE(src/get_sha.cpp "${CMAKE_CURRENT_BINARY_DIR}/get_sha.cpp" @ONLY)
+CONFIGURE_FILE(get_sha.cpp "${CMAKE_CURRENT_BINARY_DIR}/get_sha.cpp" @ONLY)
 
-set(SRC src/FMI.cpp
-        ${CMAKE_CURRENT_BINARY_DIR}/get_sha.cpp
-        src/Sha.cpp
-        src/FMIXml.cpp
-        src/ParseFMIXml.cpp
-        src/EmitFMIXml.cpp
-        )
+SET(SRC
+    ${CMAKE_CURRENT_BINARY_DIR}/get_sha.cpp
+    FMI.cpp
+    Sha.cpp
+    FMIXml.cpp
+    ParseFMIXml.cpp
+    EmitFMIXml.cpp
+    )
 
 ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
 
-SET(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
+SET(${PROJECT_NAME}_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
 
-CONFIGURE_FILE(src/generate_fmi_xml.cpp "${CMAKE_CURRENT_BINARY_DIR}/generate_fmi_xml.cpp" @ONLY)
+CONFIGURE_FILE(generate_fmi_xml.cpp "${CMAKE_CURRENT_BINARY_DIR}/generate_fmi_xml.cpp" @ONLY)
 ADD_EXECUTABLE(generate_fmi_xml ${CMAKE_CURRENT_BINARY_DIR}/generate_fmi_xml.cpp)
 
-TARGET_LINK_LIBRARIES(generate_fmi_xml x-dyn
-                      ${GRPC_GRPCPP_UNSECURE}
-                      ${PROTOBUF_LIBPROTOBUF})
+TARGET_LINK_LIBRARIES(generate_fmi_xml
+    x-dyn
+    ${GRPC_GRPCPP_UNSECURE}
+    ${PROTOBUF_LIBPROTOBUF})
 
 INSTALL(TARGETS generate_fmi_xml
         DESTINATION ${RUNTIME_OUTPUT_DIRECTORY})
