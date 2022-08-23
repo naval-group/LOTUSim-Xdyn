@@ -13,7 +13,7 @@ template <> double NumericalEvaluator::operator()(const double& d) const
     return d;
 }
 
-template <> double NumericalEvaluator::operator()(const maneuvering::Identifier& d) const
+template <> double NumericalEvaluator::operator()(const maneuvering::Identifier& /*d*/) const
 {
     return std::nan("");
 }
