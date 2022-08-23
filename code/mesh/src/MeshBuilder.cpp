@@ -1,8 +1,9 @@
+#include "MeshBuilder.hpp"
+
+#include "mesh_manipulations.hpp"
+
 #include <algorithm>
 #include <iostream>
-
-#include "MeshBuilder.hpp"
-#include "mesh_manipulations.hpp"
 
 MeshBuilder::MeshBuilder(const VectorOfVectorOfPoints& v_, const bool check_orientation) : v(v_),
                                                                    xyzMap(Vector3dMap()),
