@@ -55,16 +55,17 @@ ssc::kinematics::Point FastHydrostaticForceModel::get_centre_of_buoyancy() const
 }
 
 std::function<SurfaceForceModel::DF(const FacetIterator &, const size_t, const EnvironmentAndFrames &, const BodyStates &, const double)>
-    FastHydrostaticForceModel::get_dF(const FacetIterator& begin_facet,
-                                      const FacetIterator& end_facet,
-                                      const EnvironmentAndFrames& env,
-                                      const BodyStates& states,
-                                      const double t) const
+    FastHydrostaticForceModel::get_dF(const FacetIterator& /*begin_facet*/,
+                                      const FacetIterator& /*end_facet*/,
+                                      const EnvironmentAndFrames& /*env*/,
+                                      const BodyStates& /*states*/,
+                                      const double /*t*/) const
 {
     return [this](const FacetIterator &that_facet,
+                  const size_t,
                   const EnvironmentAndFrames &env,
                   const BodyStates &states,
-                  const double t)
+                  const double /*t*/)
     {
         if (that_facet->area == 0) return DF(EPoint(0,0,0),EPoint(0,0,0));
         const double zG = zg_calculator->get_zG_in_NED(that_facet->centre_of_gravity);
