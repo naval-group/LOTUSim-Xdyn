@@ -52,7 +52,7 @@ AbstractRaoForceModel::AbstractRaoForceModel(const Input& yaml_rao, const std::s
 {
 }
 
-Wrench AbstractRaoForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
+Wrench AbstractRaoForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& /*commands*/) const
 {
     return Wrench(ssc::kinematics::Point(body_name, pimpl->get_application_point()), body_name, pimpl->evaluate(states, t, env));
 }
