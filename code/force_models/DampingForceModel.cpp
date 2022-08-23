@@ -17,7 +17,7 @@ DampingForceModel::DampingForceModel(const std::string& name_, const std::string
 {
 }
 
-Wrench DampingForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
+Wrench DampingForceModel::get_force(const BodyStates& states, const double /*t*/, const EnvironmentAndFrames& /*env*/, const std::map<std::string,double>& /*commands*/) const
 {
     Eigen::Matrix<double, 6, 1> W;
     W <<states.u(),
