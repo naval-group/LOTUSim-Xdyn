@@ -43,7 +43,7 @@ SimpleHeadingKeepingController::SimpleHeadingKeepingController(const Yaml& input
 {
 }
 
-Wrench SimpleHeadingKeepingController::get_force(const BodyStates& states, const double, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
+Wrench SimpleHeadingKeepingController::get_force(const BodyStates& states, const double, const EnvironmentAndFrames& /*env*/, const std::map<std::string,double>& commands) const
 {
     Wrench ret(ssc::kinematics::Point(body_name,0,0,0), body_name);
 
