@@ -11,7 +11,7 @@ size_t getNumberOfTriangles(const std::vector<Facet>& vvP);
 size_t getNumberOfPoints(const VectorOfVectorOfPoints& vvP)
 {
     size_t nPoints = 0;
-    for (const auto vP:vvP)
+    for (const auto& vP:vvP)
     {
         const size_t nbPointForCurrentPolygon = vP.size();
         nPoints+=nbPointForCurrentPolygon;
@@ -22,7 +22,7 @@ size_t getNumberOfPoints(const VectorOfVectorOfPoints& vvP)
 size_t getNumberOfTriangles(const VectorOfVectorOfPoints& vvP)
 {
     size_t nTriangles = 0;
-    for (const auto vP:vvP)
+    for (const auto& vP:vvP)
     {
         const size_t nbPointForCurrentPolygon = vP.size();
         nTriangles+=(nbPointForCurrentPolygon-2);
@@ -33,7 +33,7 @@ size_t getNumberOfTriangles(const VectorOfVectorOfPoints& vvP)
 size_t getNumberOfTriangles(const std::vector<Facet>& vvP)
 {
     size_t nTriangles = 0;
-    for (const auto vP:vvP)
+    for (const auto& vP:vvP)
     {
         const size_t nbPointForCurrentPolygon = vP.vertex_index.size();
         nTriangles+=(nbPointForCurrentPolygon-2);
@@ -54,7 +54,7 @@ std::vector<double> SVectorOfVectorOfPoints::concatenatePoints() const
     {
         for (const auto& p:vP)
         {
-            for (size_t k = 0; k<3 ; ++k)
+            for (Eigen::Index k = 0; k<3 ; ++k)
             {
                 res.push_back(p(k));
             }
@@ -124,17 +124,17 @@ void writeMeshToHdf5File(
         const Matrix3x& nodes,
         const std::vector<Facet>& facets)
 {
-    const size_t nPoints = nodes.cols();
+    const Eigen::Index nPoints = nodes.cols();
     std::vector<double> points;
-    points.reserve(nodes.rows()*3);
-    for (size_t k = 0; k<nPoints ; ++k)
+    points.reserve(static_cast<size_t>(3 * nodes.rows()));
+    for (Eigen::Index k = 0; k<nPoints ; ++k)
     {
-        points.push_back(nodes(0,k));
-        points.push_back(nodes(1,k));
-        points.push_back(nodes(2,k));
+        points.push_back(nodes(0, k));
+        points.push_back(nodes(1, k));
+        points.push_back(nodes(2, k));
     }
     H5::DataType doubleType(H5::PredType::NATIVE_DOUBLE);
-    const hsize_t sPoints[2] = {nPoints,3};
+    const hsize_t sPoints[2] = {static_cast<hsize_t>(nPoints), 3};
     H5::DataSpace pointsSpace(2, sPoints);
     H5::DataSet dP = H5_Tools::createDataSet(file, datasetName+"/points", doubleType, pointsSpace);
     dP.write((void*)points.data(), doubleType);
@@ -174,15 +174,16 @@ VectorOfVectorOfPoints readMeshFromHdf5File(
     Eigen::Matrix<uint64_t, Eigen::Dynamic, Eigen::Dynamic> faces;
     EigenHDF5::load(file, datasetName+"/points", points);
     EigenHDF5::load(file, datasetName+"/faces", faces);
-    for (size_t i=0;i<faces.rows();++i)
+    for (Eigen::Index i=0;i<faces.rows();++i)
     {
         std::vector<EPoint> vv;
-        for (size_t j=0;j<faces.cols();++j)
+        for (Eigen::Index j=0;j<faces.cols();++j)
         {
+            const Eigen::Index id_face = static_cast<Eigen::Index>(faces(i,j)) - 1;
             vv.push_back(EPoint(
-                            points(faces(i,j)-1,0),
-                            points(faces(i,j)-1,1),
-                            points(faces(i,j)-1,2)));
+                            points(id_face, 0),
+                            points(id_face, 1),
+                            points(id_face, 2)));
         }
         v.push_back(vv);
     }

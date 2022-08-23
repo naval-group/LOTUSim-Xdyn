@@ -52,7 +52,8 @@ TEST_F(low_level_hdb_parserTest, can_parse_list_of_doubles)
     const std::string s = "12.1 12.3456789";
     std::string::const_iterator b = s.begin(), e = s.end();
     std::vector<double> d;
-    const bool match = qi::phrase_parse(b, e, g.values,blank,d);
+    const bool match = qi::phrase_parse(b, e, g.values, blank, d);
+    ASSERT_TRUE(match);
     ASSERT_EQ(2,d.size());
     ASSERT_DOUBLE_EQ(12.1,d.front());
     ASSERT_DOUBLE_EQ(12.3456789,d.back());
@@ -292,7 +293,8 @@ TEST_F(low_level_hdb_parserTest, can_parse_a_list_of_matrix_sections_with_id)
                             )";
     hdb::ListOfMatrixSectionsWithId l;
     std::string::const_iterator b = s.begin(), e = s.end();
-    const bool res = qi::phrase_parse(b, e, g.list_of_matrix_sections_with_id,blank,l);
+    const bool res = qi::phrase_parse(b, e, g.list_of_matrix_sections_with_id, blank, l);
+    ASSERT_TRUE(res);
     EXPECT_EQ("FROUDE-KRYLOV_FORCES_AND_MOMENTS", l.header);
     EXPECT_EQ(2, l.sections_with_id.size());
     ASSERT_FALSE(l.sections_with_id.empty());

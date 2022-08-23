@@ -169,7 +169,7 @@ VectorOfVectorOfPoints read_stl(const std::string& input)
  *
  * UINT8[80]    – Header                 -     80 bytes
  * UINT32       – Number of triangles    -      4 bytes
- * 
+ *
  * foreach triangle                      - 50 bytes:
  *     REAL32[3] – Normal vector             - 12 bytes
  *     REAL32[3] – Vertex 1                  - 12 bytes
@@ -265,7 +265,9 @@ bool file_size_is_a_valid_binary_stl_file_size(const std::string& input)
 {
     const size_t header_size = 80;
     const size_t nb_of_bytes_for_nb_of_triangles = 4;
-    const size_t expected_binary_stl_size = header_size+nb_of_bytes_for_nb_of_triangles+50*get_nb_of_triangles(input);
+    const size_t expected_binary_stl_size = header_size +
+        + nb_of_bytes_for_nb_of_triangles
+        + 50 * static_cast<size_t>(get_nb_of_triangles(input));
     return input.size() == expected_binary_stl_size;
 }
 
@@ -297,4 +299,3 @@ StlType identify_stl(const std::string& input)
     THROW(__PRETTY_FUNCTION__, MeshException, "Unable to determine if mesh is a binary or an ASCII STL: file did not contain the 'solid' keyword (so it can't be an ASCII STL), and its size is not 84 + 50*n (where n is the number of triangles at bytes 81,82,83,84) so it can't be a binary STL either.")
     return StlType::UNKNOWN;
 }
-

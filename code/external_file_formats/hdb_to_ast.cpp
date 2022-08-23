@@ -57,7 +57,7 @@ hdb::AST hdb::parse(const std::string& contents)
 
     std::vector<hdb::Ast> tree;
 
-    const bool bb = qi::phrase_parse(contents.begin(), contents.end(), *(g.ast), blank, tree);
+    qi::phrase_parse(contents.begin(), contents.end(), *(g.ast), blank, tree);
 
     Ast_visitor visitor(ast);
     for (auto it = tree.begin() ; it != tree.end() ; ++it)
