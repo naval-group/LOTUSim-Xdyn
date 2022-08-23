@@ -47,7 +47,7 @@ class WageningenControlledForceModel : public AbstractWageningen
     private:
         WageningenControlledForceModel();
         void check(const double P_D, const double J) const;
-        double Z;
+        size_t Z;
         double AE_A0;
 
         const double ct[NB_COEFF_KT]; //!< Interpolation coefficient for Kt for the Wageningen B-series
