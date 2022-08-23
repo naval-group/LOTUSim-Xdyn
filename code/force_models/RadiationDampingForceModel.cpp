@@ -138,7 +138,7 @@ class RadiationDampingForceModel::Impl
                 for (size_t j = 0 ; j < 6 ; ++j)
                 {
                     const auto Ma = get_Ma(i,j);
-                    Ka[i][j] = get_K(Ma - A(i,j));
+                    Ka[i][j] = get_K(Ma - A(static_cast<Eigen::Index>(i), static_cast<Eigen::Index>(j)));
                     const auto Br = get_Br(i,j);
                     Kb[i][j] = get_K(Br);
                     if (yaml.output_Br_and_K)
