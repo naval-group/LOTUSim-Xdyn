@@ -1,3 +1,14 @@
+#include "ClosingFacetComputer.hpp"
+#include "InternalErrorException.hpp"
+
+#include <ssc/macros.hpp>
+#include TR1INC(unordered_map)
+
+#include <ssc/macros/SerializeMapsSetsAndVectors.hpp>
+
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/connected_components.hpp>
+
 #include <algorithm> // std::copy_if
 #include <iterator> // std::back_inserter
 #include <set>
@@ -6,17 +17,6 @@
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
-
-#include <boost/graph/adjacency_list.hpp>
-#include <boost/graph/connected_components.hpp>
-
-#include "ClosingFacetComputer.hpp"
-#include "InternalErrorException.hpp"
-
-#include <ssc/macros.hpp>
-#include TR1INC(unordered_map)
-
-#include <ssc/macros/SerializeMapsSetsAndVectors.hpp>
 
 void check_edge_index(const size_t idx, const ClosingFacetComputer::ListOfEdges& edges, const std::string& function, const size_t line);
 void check_edge_index(const size_t idx, const ClosingFacetComputer::ListOfEdges& edges, const std::string& function, const size_t line)
