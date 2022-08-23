@@ -62,7 +62,6 @@ std::function<SurfaceForceModel::DF(const FacetIterator &, const size_t, const E
                                       const double t) const
 {
     return [this](const FacetIterator &that_facet,
-                  const size_t that_facet_index,
                   const EnvironmentAndFrames &env,
                   const BodyStates &states,
                   const double t)
