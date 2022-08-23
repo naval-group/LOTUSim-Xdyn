@@ -59,7 +59,6 @@ Wrench MMGManeuveringForceModel::get_force(const BodyStates& states, const doubl
     const double U = hypot(states.u(), vm);
     if (U!=0)
     {
-        const double u_ = states.u()/U;
         const double vm_ = vm/U;
         const double r_ = r*input.Lpp/U;
         const double X = input.Xvv*vm_*vm_ + input.Xrr*r_*r_ + input.Xvr*vm_*r_ + input.Xvvvv*vm_*vm_*vm_*vm_;
