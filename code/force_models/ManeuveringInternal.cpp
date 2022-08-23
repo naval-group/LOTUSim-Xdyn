@@ -685,7 +685,7 @@ namespace maneuvering
     void FindTmax::visit(const UnknownIdentifier& )
     {
     }
-    void FindTmax::visit(const Time& f) {}
+    void FindTmax::visit(const Time& /*f*/) {}
     void FindTmax::visit(const State<StateType::X>& f)
     {
         const auto op = f.get_operand();
