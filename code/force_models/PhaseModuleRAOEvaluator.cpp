@@ -44,7 +44,7 @@ void check_all_values_are_within_bounds(const double min_bound, const std::vecto
 PhaseModuleRAOEvaluator::PhaseModuleRAOEvaluator(
     const RaoInterpolator& rao_interpolator_,
     const EnvironmentAndFrames& env,
-    const std::string& body_name,
+    const std::string& /*body_name*/,
     const std::string& force_model_name):
                 rao_interpolator(rao_interpolator_),
                 H0(rao_interpolator.get_rao_calculation_point()),
