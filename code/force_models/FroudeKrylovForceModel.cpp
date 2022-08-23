@@ -41,13 +41,13 @@ std::function<SurfaceForceModel::DF(const FacetIterator &, const size_t, const E
     }
 
     ssc::kinematics::PointMatrix M(states.M->get_frame(), average_eta_per_facet.size());
-    size_t that_facet_index = 0;
+    Eigen::Index index_that_facet(0);
     for (auto that_facet = begin_facet; that_facet != end_facet; ++that_facet)
     {
-        M.m(0, that_facet_index) = that_facet->centre_of_gravity.x();
-        M.m(1, that_facet_index) = that_facet->centre_of_gravity.y();
-        M.m(2, that_facet_index) = that_facet->centre_of_gravity.z();
-        ++that_facet_index;
+        M.m(0, index_that_facet) = that_facet->centre_of_gravity.x();
+        M.m(1, index_that_facet) = that_facet->centre_of_gravity.y();
+        M.m(2, index_that_facet) = that_facet->centre_of_gravity.z();
+        ++index_that_facet;
     }
     // Compute dynamic pressure for all facets
     std::vector<double> pdyn;
