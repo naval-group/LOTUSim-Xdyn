@@ -45,7 +45,7 @@ LinearHydrostaticForceModel::LinearHydrostaticForceModel(const Input& input, con
     K(2,2) = input.K3.at(2);
 }
 
-Wrench LinearHydrostaticForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>&) const
+Wrench LinearHydrostaticForceModel::get_force(const BodyStates& states, const double /*t*/, const EnvironmentAndFrames& env, const std::map<std::string,double>& /*commands*/) const
 {
     const auto angles = states.get_angles(env.rot);
     const Eigen::Vector3d v(states.z() - z_eq, angles.phi - phi_eq, angles.theta - theta_eq);
