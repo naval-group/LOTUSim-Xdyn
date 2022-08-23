@@ -1,12 +1,12 @@
 /*
- * boost_spirit_adapters.hpp
+ * boost_spirit_hdb_adapters.hpp
  *
  *  Created on: Nov 7, 2014
  *      Author: cady
  */
 
-#ifndef BOOST_SPIRIT_ADAPTERS_HPP_
-#define BOOST_SPIRIT_ADAPTERS_HPP_
+#ifndef BOOST_SPIRIT_HDB_ADAPTERS_HPP_
+#define BOOST_SPIRIT_HDB_ADAPTERS_HPP_
 
 #include "boost_spirit_includes.hpp"
 #include "hdb_parser_internal_data_structures.hpp"
@@ -121,4 +121,4 @@ namespace boost { namespace spirit { namespace traits {
                     };
 }}}
 
-#endif /* BOOST_SPIRIT_ADAPTERS_HPP_ */
+#endif
