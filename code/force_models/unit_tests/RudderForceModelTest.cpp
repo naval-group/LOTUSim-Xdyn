@@ -220,8 +220,6 @@ TR1(shared_ptr)<WaveModel> RudderForceModelTest::get_wave_model() const
     const double omega0 = 2*PI/Tp;
     double psi = 0;
     double phi = 5.8268;
-    double t = 0;
-
     const double omega_min = a.random<double>().greater_than(0);
     const double omega_max = a.random<double>().greater_than(omega_min);
     const size_t nfreq = a.random<size_t>().between(2,100);
