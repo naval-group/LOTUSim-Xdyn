@@ -33,7 +33,7 @@ void FastHydrostaticForceModel::calculations_after_surface_integration(const Bod
 
     if (C.all_facets_are_in_same_plane) C.volume = 0;
 
-    for (size_t i = 0 ; i < 3 ; ++i) centre_of_buoyancy->operator()(i) = C.G(i);
+    for (Eigen::Index i = 0 ; i < 3 ; ++i) centre_of_buoyancy->operator()(i) = C.G(i);
 }
 
 
@@ -82,4 +82,3 @@ double FastHydrostaticForceModel::pe(const BodyStates& states, const std::vector
     const double immersed_volume = G.volume;
     return -env.rho*env.g*immersed_volume*zC;
 }
-
