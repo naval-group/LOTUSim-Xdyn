@@ -56,7 +56,7 @@ class RudderForceModel : public ForceModel
             /**  \brief Calculates the angle between the propeller's wake & the rudder
               *  \details When positive, the wake is coming towards the rudder's port side
               *  \returns Angle of attack (in radian)
-              *  \snippet force_models/unit_tests/src/RudderForceModelTest.cpp RudderForceModelTest get_alpha_example
+              *  \snippet force_models/unit_tests/RudderForceModelTest.cpp RudderForceModelTest get_alpha_example
               */
             double get_angle_of_attack(const double rudder_angle, //!< Rudder angle (in radian): positive if rudder on port side
                                        const double fluid_angle   //!< Angle of the fluid in the ship's reference frame (0 if the fluid is propagating along -X, positive if fluid is coming from starboard)
