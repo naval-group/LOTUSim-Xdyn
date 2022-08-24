@@ -15,9 +15,9 @@
  *  \addtogroup model_wrappers
  *  \ingroup model_wrappers
  *  \section ex1 Example
- *  \snippet model_wrappers/unit_tests/src/ExactHydrostaticForceModelTest.cpp ExactHydrostaticForceModelTest example
+ *  \snippet model_wrappers/unit_tests/ExactHydrostaticForceModelTest.cpp ExactHydrostaticForceModelTest example
  *  \section ex2 Expected output
- *  \snippet model_wrappers/unit_tests/src/ExactHydrostaticForceModelTest.cpp ExactHydrostaticForceModelTest expected output
+ *  \snippet model_wrappers/unit_tests/ExactHydrostaticForceModelTest.cpp ExactHydrostaticForceModelTest expected output
  */
 class ExactHydrostaticForceModel : public FastHydrostaticForceModel
 {
