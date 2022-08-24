@@ -19,7 +19,9 @@ namespace maneuvering
             {
             }
 
-            Module(const Module& rhs, ssc::data_source::DataSource* const data_source) : ssc::data_source::DataSourceModule(rhs, data_source)
+            Module(const Module& rhs, ssc::data_source::DataSource* const data_source) : ssc::data_source::DataSourceModule(rhs, data_source),
+                f(),
+                output_var()
             {
             }
 
