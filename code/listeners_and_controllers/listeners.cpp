@@ -126,7 +126,7 @@ void check_no_controller_outputs_are_defined_in_a_command(const Controller* cont
 
 /**  \brief Initializes the given controllers commands in Sim datasource and
   * adds their callbacks to the scheduler.
-  *  \snippet observers_and_api/unit_tests/src/PIDControllerTest.cpp controllersTest initialize_controllers
+  *  \snippet observers_and_api/unit_tests/PIDControllerTest.cpp controllersTest initialize_controllers
   */
 void initialize_controllers(const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& controllers,
                             ssc::solver::Scheduler& scheduler,
@@ -168,7 +168,7 @@ std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > get_initialized_contr
 
 
 /*
- * Tests concerning 'initialize_controllers' are found in `observers_and_api/unit_tests/src/PIDControllerTest.cpp`
+ * Tests concerning 'initialize_controllers' are found in `observers_and_api/unit_tests/PIDControllerTest.cpp`
  * because these tests need a Sim instance, which requires the observers_and_api include directory.
  * To avoid cross-dependencies, the corresponding unit tests are moved to observers_and_api/unit_tests.
  */
