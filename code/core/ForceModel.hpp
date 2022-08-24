@@ -70,9 +70,9 @@ class Memoization
  *  \addtogroup model_wrappers
  *  \ingroup model_wrappers
  *  \section ex1 Example
- *  \snippet core/unit_tests/src/ForceModelTest.cpp ForceModelTest example
+ *  \snippet core/unit_tests/ForceModelTest.cpp ForceModelTest example
  *  \section ex2 Expected output
- *  \snippet core/unit_tests/src/ForceModelTest.cpp ForceModelTest expected output
+ *  \snippet core/unit_tests/ForceModelTest.cpp ForceModelTest expected output
  */
 class ForceModel
 {
