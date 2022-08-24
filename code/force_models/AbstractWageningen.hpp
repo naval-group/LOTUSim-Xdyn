@@ -14,9 +14,9 @@
  *  \addtogroup module
  *  \ingroup module
  *  \section ex1 Example
- *  \snippet module/unit_tests/src/AbstractWageningenTest.cpp AbstractWageningenTest example
+ *  \snippet module/unit_tests/AbstractWageningenTest.cpp AbstractWageningenTest example
  *  \section ex2 Expected output
- *  \snippet module/unit_tests/src/AbstractWageningenTest.cpp AbstractWageningenTest expected output
+ *  \snippet module/unit_tests/AbstractWageningenTest.cpp AbstractWageningenTest expected output
  */
 class AbstractWageningen : public ForceModel
 {
