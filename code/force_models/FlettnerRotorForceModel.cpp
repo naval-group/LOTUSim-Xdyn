@@ -1,18 +1,24 @@
-#include <string>
-#include <cmath>
+#include "FlettnerRotorForceModel.hpp"
+#include "ForceModel.hpp"
+#include "BodyStates.hpp"
+#include "external_data_structures_parsers.hpp"
+#include "yaml.h"
 #include <Eigen/Dense>
 #include <ssc/yaml_parser.hpp>
 #include <ssc/kinematics.hpp>
 #include <ssc/interpolation.hpp>
+#include <cmath>
+#include <string>
 
-#include "ForceModel.hpp"
-#include "BodyStates.hpp"
-#include "yaml.h"
-#include "external_data_structures_parsers.hpp"
-
-#include "FlettnerRotorForceModel.hpp"
-
-#define PI M_PI
+FlettnerRotorForceModel::Input::Input():
+    name(""),
+    calculation_point_in_body_frame(YamlCoordinates()),
+    diameter(0.0),
+    length(0.0),
+    spin_ratio(std::vector<double>()),
+    lift_coefficient(std::vector<double>()),
+    drag_coefficient(std::vector<double>())
+{}
 
 std::string FlettnerRotorForceModel::model_name() {return "Flettner rotor";}
 
