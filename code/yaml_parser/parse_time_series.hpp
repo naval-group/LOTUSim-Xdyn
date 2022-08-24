@@ -12,13 +12,13 @@
 #include "yaml.h"
 
 /**  \brief Parses the commands for use by controlled forces.
-  *  \snippet simulator_yaml_parser/unit_tests/src/parse_time_seriesTest.cpp parse_command_yaml example
+  *  \snippet simulator_yaml_parser/unit_tests/parse_time_seriesTest.cpp parse_command_yaml example
   */
 std::vector<YamlTimeSeries> parse_command_yaml(const std::string& yaml //!< YAML data
                                             );
 
 /**  \brief Parses the setpoints for use by the controllers (for controlled forces).
-  *  \snippet simulator_yaml_parser/unit_tests/src/parse_setpointsTest.cpp parse_setpoint_yaml example
+  *  \snippet simulator_yaml_parser/unit_tests/parse_setpointsTest.cpp parse_setpoint_yaml example
   */
 std::vector<YamlTimeSeries> parse_setpoint_yaml(const std::string& yaml //!< YAML data
                                            );
