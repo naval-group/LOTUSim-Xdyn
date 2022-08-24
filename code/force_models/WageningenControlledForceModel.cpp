@@ -15,6 +15,8 @@
 
 #include "yaml.h"
 
+WageningenControlledForceModel::Yaml::Yaml(): number_of_blades(0), blade_area_ratio(0.0){}
+
 std::string WageningenControlledForceModel::model_name() {return "wageningen B-series";}
 
 WageningenControlledForceModel::Yaml::Yaml(const AbstractWageningen::Yaml& y) :
@@ -123,4 +125,3 @@ WageningenControlledForceModel::Yaml WageningenControlledForceModel::parse(const
     ret.number_of_blades = try_to_parse_positive_integer(node,"number of blades");
     return ret;
 }
-
