@@ -18,9 +18,9 @@ struct YamlStretching;
  *           The function is \f$z\mapsto z$\f for \f$z>h_{\Delta}$\f and \f$z\mapsto (z-h_{\Delta})\frac{\Delta\eta-h_{\Delta}}{\eta-h_{\Delta}}+h_{\Delta}$\f otherwise
  *  \ingroup wave_models
  *  \section ex1 Example
- *  \snippet environment_models/unit_tests/src/StretchingTest.cpp StretchingTest example
+ *  \snippet environment_models/unit_tests/StretchingTest.cpp StretchingTest example
  *  \section ex2 Expected output
- *  \snippet environment_models/unit_tests/src/StretchingTest.cpp StretchingTest expected output
+ *  \snippet environment_models/unit_tests/StretchingTest.cpp StretchingTest expected output
  */
 class Stretching
 {
