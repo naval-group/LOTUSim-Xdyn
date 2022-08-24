@@ -48,7 +48,7 @@ class RadiationDampingBuilder
                 ) const;
         /**  \brief Computes the convolution of a function with state history, over a certain time
           *  \returns \f$\int_0^T h(t-\tau)*f(\tau) d\tau\f$
-          *  \snippet hdb_interpolators/unit_tests/src/RadiationDampingBuilderTest.cpp RadiationDampingBuilderTest method_example
+          *  \snippet hdb_interpolators/unit_tests/RadiationDampingBuilderTest.cpp RadiationDampingBuilderTest method_example
           */
         double convolution(const std::function<double(double)>& h, //!< State reverse history
                            const std::function<double(double)>& f, //!< Function to convolute with
@@ -86,7 +86,7 @@ class RadiationDampingBuilder
           *  \details Uses TOMS Algorithm 748 to compute the minimum bound \f$\omega_0\f$ such that
           *  \f$int_{\omega_{\mbox{min}}}^{\omega_0} f(\omega) d\omega = (1-eps) int_{\omega_{\mbox{min}}}^{\omega_{\mbox{max}}}\f$
           *  \returns Upper integration bound
-          *  \snippet hdb_interpolators/unit_tests/src/RadiationDampingBuilderTest.cpp RadiationDampingBuilderTest find_integration_bound_example
+          *  \snippet hdb_interpolators/unit_tests/RadiationDampingBuilderTest.cpp RadiationDampingBuilderTest find_integration_bound_example
           */
         double find_integration_bound(
                 const std::function<double(double)>& f, //!< Function to integrate
