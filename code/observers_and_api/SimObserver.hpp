@@ -21,9 +21,9 @@ class Sim;
  *  \details
  *  \ingroup simulator
  *  \section ex1 Example
- *  \snippet simulator/unit_tests/src/SimObserverTest.cpp SimObserverTest example
+ *  \snippet simulator/unit_tests/SimObserverTest.cpp SimObserverTest example
  *  \section ex2 Expected output
- *  \snippet simulator/unit_tests/src/SimObserverTest.cpp SimObserverTest expected output
+ *  \snippet simulator/unit_tests/SimObserverTest.cpp SimObserverTest expected output
  */
 class SimObserver
 {
