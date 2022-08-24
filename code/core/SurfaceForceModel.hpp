@@ -41,9 +41,9 @@ class ZGCalculator
  *  \addtogroup model_wrappers
  *  \ingroup model_wrappers
  *  \section ex1 Example
- *  \snippet model_wrappers/unit_tests/src/SurfaceForceModelTest.cpp SurfaceForceModelTest example
+ *  \snippet model_wrappers/unit_tests/SurfaceForceModelTest.cpp SurfaceForceModelTest example
  *  \section ex2 Expected output
- *  \snippet model_wrappers/unit_tests/src/SurfaceForceModelTest.cpp SurfaceForceModelTest expected output
+ *  \snippet model_wrappers/unit_tests/SurfaceForceModelTest.cpp SurfaceForceModelTest expected output
  */
 class SurfaceForceModel : public ForceModel
 {
