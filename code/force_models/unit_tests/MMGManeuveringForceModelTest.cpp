@@ -10,6 +10,7 @@ MMGManeuveringForceModelTest::~MMGManeuveringForceModelTest()
 {
 }
 
+std::string get_input();
 std::string get_input()
 {
     std::stringstream ss;
@@ -64,6 +65,7 @@ TEST_F(MMGManeuveringForceModelTest, can_parse)
     ASSERT_DOUBLE_EQ(data.Nrrr, -0.013);
 }
 
+BodyStates get_states();
 BodyStates get_states()
 {
     BodyStates states(0);
