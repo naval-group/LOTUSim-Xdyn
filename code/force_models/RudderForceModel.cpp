@@ -96,7 +96,6 @@ double RudderForceModel::RudderModel::get_lift(const double Vs,//!< Norm of the 
 
 double RudderForceModel::RudderModel::get_drag(const double Vs,//!< Norm of the speed of the ship relative to the fluid
                                                const double Cl,//!< Rudder lift coefficient (non-dimensional)
-                                               const double /*alpha*/, //TODO GJ CHECK Why is this parameter not used //!< Angle between the propeller's wake & the rudder (in radian)
                                                const double area   //!< Rudder area (in or outside wake) in m^2
                                                ) const
 {
@@ -173,7 +172,7 @@ ssc::kinematics::Vector6d RudderForceModel::RudderModel::get_wrench(const double
     const double Cl = get_Cl(alpha);
     const double lift = get_lift(Vs, Cl, alpha, area);
     const double Cd = get_Cd(Vs, Cl);
-    const double drag = get_drag(Vs, Cd, alpha, area);
+    const double drag = get_drag(Vs, Cd, area);
     return get_force(lift, drag, fluid_angle);
 }
 

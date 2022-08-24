@@ -117,9 +117,8 @@ TEST_F(RudderForceModelTest, get_drag)
 
     const double Vs = 12;
     const double Cl = 1.3;
-    const double alpha = PI/4;
     const double Ar = 1.4;
-    ASSERT_DOUBLE_EQ(268369.91999999998, riw.get_drag(Vs,Cl,alpha,Ar));
+    ASSERT_DOUBLE_EQ(268369.91999999998, riw.get_drag(Vs,Cl,Ar));
 }
 
 TEST_F(RudderForceModelTest, get_force)

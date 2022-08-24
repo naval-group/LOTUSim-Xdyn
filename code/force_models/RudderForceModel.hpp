@@ -73,10 +73,11 @@ class RudderForceModel : public ForceModel
 
             /**  \brief Calculates the norm of the drag force acting on the rudder
               *  \returns Drag force (in Newton)
+              *  \note While the lift is multiply by cos(aoa) (aka cos(alpha)) to take into
+              *        account the reduced lift for high angle, the drag should not.
               */
             double get_drag(const double Vs,    //!< Norm of the speed of the ship relative to the fluid
                             const double Cl,    //!< Rudder lift coefficient (non-dimensional)
-                            const double alpha, //!< Angle between the propeller's wake & the rudder (in radian)
                             const double area   //!< Rudder area (in or outside wake) in m^2
                             ) const;
 

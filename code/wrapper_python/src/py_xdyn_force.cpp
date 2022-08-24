@@ -701,7 +701,6 @@ void py_add_module_xdyn_force(py::module& m0)
         .def("get_drag", &RudderForceModel::RudderModel::get_drag,
             py::arg("Vs"),
             py::arg("Cl"),
-            py::arg("alpha"),
             py::arg("area"),
             R"(Calculates the norm of the drag force acting on the rudder
 
@@ -709,7 +708,6 @@ void py_add_module_xdyn_force(py::module& m0)
 
                - `Vs` (float) Norm of the speed of the ship relative to the fluid
                - `Cl` (float) Rudder lift coefficient (non-dimensional)
-               - `alpha` (float) Angle between the propeller's wake & the rudder (in radian)
                - `area` (float) Rudder area (in or outside wake) in m^2
 
                Return
