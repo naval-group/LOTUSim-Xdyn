@@ -19,9 +19,9 @@
  *  \addtogroup hydro_models
  *  \ingroup hydro_models
  *  \section ex1 Example
- *  \snippet hydro_models/unit_tests/src/DefaultWaveModelTest.cpp DefaultWaveModelTest example
+ *  \snippet hydro_models/unit_tests/DefaultWaveModelTest.cpp DefaultWaveModelTest example
  *  \section ex2 Expected output
- *  \snippet hydro_models/unit_tests/src/DefaultWaveModelTest.cpp DefaultWaveModelTest expected output
+ *  \snippet hydro_models/unit_tests/DefaultWaveModelTest.cpp DefaultWaveModelTest expected output
  */
 class SurfaceElevationFromWaves: public SurfaceElevationInterface
 {
@@ -50,9 +50,9 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
 
         /**
          *  \section ex1 Example
-         *  \snippet core/unit_tests/src/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest relative_wave_height example
+         *  \snippet core/unit_tests/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest relative_wave_height example
          *  \section ex2 Expected output
-         *  \snippet core/unit_tests/src/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest relative_wave_height expected output
+         *  \snippet core/unit_tests/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest relative_wave_height expected output
          *  */
         std::vector<double> wave_height(const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
                                         const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
@@ -84,9 +84,9 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
           *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation VI.34, page 183
           *  \see "Seakeeping: ship behaviour in rough weather", 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, page 68
          *  \section ex1 Example
-         *  \snippet core/unit_tests/src/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest dynamic_pressure example
+         *  \snippet core/unit_tests/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest dynamic_pressure example
          *  \section ex2 Expected output
-         *  \snippet core/unit_tests/src/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest dynamic_pressure expected output
+         *  \snippet core/unit_tests/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest dynamic_pressure expected output
          *  */
         std::vector<double> dynamic_pressure(const double rho,               //!< water density (in kg/m^3)
                                              const double g,                 //!< gravity (in m/s^2)
