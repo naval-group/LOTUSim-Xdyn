@@ -18,9 +18,9 @@
  *  \addtogroup waves
  *  \ingroup waves
  *  \section ex1 Example
- *  \snippet waves/unit_tests/src/SumOfWaveDirectionalSpreadingsTest.cpp SumOfWaveDirectionalSpreadingsTest example
+ *  \snippet waves/unit_tests/SumOfWaveDirectionalSpreadingsTest.cpp SumOfWaveDirectionalSpreadingsTest example
  *  \section ex2 Expected output
- *  \snippet waves/unit_tests/src/SumOfWaveDirectionalSpreadingsTest.cpp SumOfWaveDirectionalSpreadingsTest expected output
+ *  \snippet waves/unit_tests/SumOfWaveDirectionalSpreadingsTest.cpp SumOfWaveDirectionalSpreadingsTest expected output
  */
 class SumOfWaveDirectionalSpreadings : public WaveDirectionalSpreading
 {
