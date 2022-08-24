@@ -1,15 +1,35 @@
-#include <Eigen/Dense>
+#include "MMGManeuveringForceModel.hpp"
 #include "Body.hpp"
-#include <ssc/yaml_parser.hpp>
-#include <ssc/kinematics.hpp>
-#include <cmath>
-
-#include "yaml.h"
 #include "EnvironmentAndFrames.hpp"
 #include "YamlPosition.hpp"
 #include "BodyStates.hpp"
+#include "yaml.h"
+#include <ssc/yaml_parser.hpp>
+#include <ssc/kinematics.hpp>
+#include <Eigen/Dense>
+#include <cmath>
 
-#include "MMGManeuveringForceModel.hpp"
+MMGManeuveringForceModel::Input::Input():
+        application_point(YamlCoordinates()),
+        Lpp(0.0),
+        T(0.0),
+        Xvv(0.0),
+        Xrr(0.0),
+        Xvr(0.0),
+        Xvvvv(0.0),
+        Yv(0.0),
+        Yr(0.0),
+        Yvvv(0.0),
+        Yrvv(0.0),
+        Yvrr(0.0),
+        Yrrr(0.0),
+        Nv(0.0),
+        Nr(0.0),
+        Nvvv(0.0),
+        Nrvv(0.0),
+        Nvrr(0.0),
+        Nrrr(0.0)
+{}
 
 std::string MMGManeuveringForceModel::model_name() {return "MMG maneuvering";}
 
