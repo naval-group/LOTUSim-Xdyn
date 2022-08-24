@@ -12,6 +12,8 @@
 #include <ssc/yaml_parser.hpp>
 #include "yaml.h"
 
+ResistanceCurveForceModel::Yaml::Yaml(): Va(), R() {}
+
 std::string ResistanceCurveForceModel::model_name() {return "resistance curve";}
 
 class ResistanceCurveForceModel::Impl
