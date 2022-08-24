@@ -17,7 +17,7 @@
   *  \brief Returns the polygon's unit normal vector
   *  \details Assumes the points are in the same plane & are given in direct order (right-hand rule)
   *  \returns A unit vector orthogonal to the plane in which the polygon lies, & oriented by the right-hand rule (if oriented_clockwise==false)
-  *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest unit_normal_example
+  *  \snippet mesh/unit_tests/mesh_manipulationsTest.cpp mesh_manipulationsTest unit_normal_example
   */
 Eigen::Vector3d unit_normal(const Matrix3x& polygon //!< Polygon for which the unit normal vector is computed
                            );
@@ -27,7 +27,7 @@ Eigen::Vector3d unit_normal(const Matrix3x& polygon //!< Polygon for which the u
   *  \brief Returns the polygon's unit normal vector
   *  \details Assumes the points are in the same plane & are given in direct order (right-hand rule)
   *  \returns A unit vector orthogonal to the plane in which the polygon lies, & oriented by the right-hand rule (if oriented_clockwise==false)
-  *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest unit_normal_example
+  *  \snippet mesh/unit_tests/mesh_manipulationsTest.cpp mesh_manipulationsTest unit_normal_example
   */
 Eigen::Vector3d unit_normal(const Matrix3x& polygon, //!< Polygon for which the unit normal vector is computed
                             const std::vector<size_t> &vertex_index
@@ -37,7 +37,7 @@ Eigen::Vector3d unit_normal(const Matrix3x& polygon, //!< Polygon for which the 
   *  \date May 20, 2014, 8:47:20 AM
   *  \brief Computes the iso-braycenter of a list of points
   *  \returns The iso-barycenter of the points
-  *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest barycenter_example
+  *  \snippet mesh/unit_tests/mesh_manipulationsTest.cpp mesh_manipulationsTest barycenter_example
   */
 Eigen::Vector3d barycenter(const Matrix3x& points //!< List of points
                           );
@@ -49,7 +49,7 @@ Eigen::Vector3d barycenter(const Matrix3x& p, const std::vector<size_t> &vertex_
 
 /**  \brief Computes the iso-braycenter of a list of points
   *  \returns The iso-barycenter of the points
-  *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest barycenter_example
+  *  \snippet mesh/unit_tests/mesh_manipulationsTest.cpp mesh_manipulationsTest barycenter_example
   */
 Eigen::Vector3d barycenter(const VectorOfVectorOfPoints& points //!< List of points
                           );
@@ -59,7 +59,7 @@ Eigen::Vector3d barycenter(const VectorOfVectorOfPoints& points //!< List of poi
   *  \brief Computes the area of a polygon.
   *  \details Decomposes the polygon in triangles & sums the areas
   *  \returns The area of the polygon
-  *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest area_example
+  *  \snippet mesh/unit_tests/mesh_manipulationsTest.cpp mesh_manipulationsTest area_example
   */
 double area(const Matrix3x& polygon //!< Polygon for which the area is computed
         );
@@ -73,7 +73,7 @@ double area(const Matrix3x& points, const std::vector<size_t> &vertex_index);
 /**  \author cady
   *  \date May 21, 2014, 10:39:36 AM
   *  \brief Calculates the area of a triangle
-  *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest triangle_area_example
+  *  \snippet mesh/unit_tests/mesh_manipulationsTest.cpp mesh_manipulationsTest triangle_area_example
   */
 double area(const Matrix3x& points, //!< Matrix containing (amongst others), the points of interest
             const int idxA,         //!< Index of the column containing the first point
@@ -84,7 +84,7 @@ double area(const Matrix3x& points, //!< Matrix containing (amongst others), the
 /**  \author cady
   *  \date May 20, 2014, 10:55:32 AM
   *  \brief Computes the position of the centre of gravity of a polygon
-  *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest centre_of_gravity_example
+  *  \snippet mesh/unit_tests/mesh_manipulationsTest.cpp mesh_manipulationsTest centre_of_gravity_example
   */
 Eigen::Vector3d centre_of_gravity(const Matrix3x& polygon //!< Polygon we wish to compute the centre of gravity of
                                  );
@@ -95,7 +95,7 @@ Eigen::Vector3d centre_of_gravity(const Matrix3x& polygon, const std::vector<siz
 
 /**  \brief Convert a VectorOfPoints to an Eigen::Matrix3s
   *  \details Each line corresponds to a coordinate & each column to a point.
-  *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest convert_example
+  *  \snippet mesh/unit_tests/mesh_manipulationsTest.cpp mesh_manipulationsTest convert_example
   */
 Matrix3x convert(const VectorOfPoints& v //!< Points to convert
                 );
@@ -141,7 +141,7 @@ Eigen::Matrix3d inertia_of_polygon(
   *  \brief Computes average relative immersion of three points
   *  \details Needs the indices of those points & a vector of relative heights.
   *  \returns Average relative immersion
-  *  \snippet hydro_models/unit_tests/src/hydrostaticTest.cpp hydrostaticTest average_immersion_example
+  *  \snippet hydro_models/unit_tests/hydrostaticTest.cpp hydrostaticTest average_immersion_example
   */
 double average_immersion(const std::vector<size_t>& idx,     //!< Indices of the points
                          const std::vector<double>& delta_z  //!< Vector of relative wave heights (in metres) of all nodes (positive if point is immerged)
