@@ -17,9 +17,9 @@
  *  \addtogroup hdb_interpolators
  *  \ingroup hdb_interpolators
  *  \section ex1 Example
- *  \snippet hdb_interpolators/unit_tests/src/HistoryTest.cpp HistoryTest example
+ *  \snippet hdb_interpolators/unit_tests/HistoryTest.cpp HistoryTest example
  *  \section ex2 Expected output
- *  \snippet hdb_interpolators/unit_tests/src/HistoryTest.cpp HistoryTest expected output
+ *  \snippet hdb_interpolators/unit_tests/HistoryTest.cpp HistoryTest expected output
  */
 class History
 {
@@ -30,13 +30,13 @@ class History
         /**  \brief Returns the average value integrated between t-length and t, t being the current instant.
          *   \details A trapezoidal integration is used.
           *  \returns Value at t-tau in history
-          *  \snippet hdb_interpolator/unit_tests/src/HistoryTest.cpp HistoryTest get_example
+          *  \snippet hdb_interpolator/unit_tests/HistoryTest.cpp HistoryTest get_example
           */
         double average(double length) const;
 
         /**  \brief Returns the value at t-tau, t being the current instant
           *  \returns Value at t-tau in history
-          *  \snippet hdb_interpolator/unit_tests/src/HistoryTest.cpp HistoryTest get_example
+          *  \snippet hdb_interpolator/unit_tests/HistoryTest.cpp HistoryTest get_example
           */
         double operator()(double tau = 0//!< How far back in history do we need to go (in seconds)?
                          ) const;
@@ -44,27 +44,27 @@ class History
 
         /**  \brief Adds a value to history
           *  \details
-          *  \snippet hdb_interpolators/unit_tests/src/HistoryTest.cpp HistoryTest record_example
+          *  \snippet hdb_interpolators/unit_tests/HistoryTest.cpp HistoryTest record_example
           */
         void record(double t, //!< Instant corresponding to the value being added
                     const double val //!< Value to add
                     );
 
         /**  \brief Number of points in history
-          *  \snippet hdb_interpolator/unit_tests/src/HistoryTest.cpp HistoryTest size_example
+          *  \snippet hdb_interpolator/unit_tests/HistoryTest.cpp HistoryTest size_example
           */
         size_t size() const;
 
         /**  \brief Accessor for Tmax
          *   \returns Tmax (in seconds)
-          *  \snippet hdb_interpolator/unit_tests/src/HistoryTest.cpp HistoryTest get_Tmax_example
+          *  \snippet hdb_interpolator/unit_tests/HistoryTest.cpp HistoryTest get_Tmax_example
           */
         double get_Tmax() const;
 
         /**  \brief How far back in history can we currently go
          *   \details Maximum value is Tmax, but during initialization it can be less.
          *   \returns Difference between last & first instants in L.
-          *  \snippet hdb_interpolator/unit_tests/src/HistoryTest.cpp HistoryTest get_length_example
+          *  \snippet hdb_interpolator/unit_tests/HistoryTest.cpp HistoryTest get_length_example
           */
         double get_duration() const;
 
