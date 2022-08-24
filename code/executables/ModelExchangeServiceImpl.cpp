@@ -1,17 +1,17 @@
 /*
- * XdynForCSgrpc.cpp
+ * ModelExchangeServiceImpl.cpp
  *
  *  Created on: Oct 20, 2020
  *      Author: cady
  */
-#include <cmath>
-#include <sstream>
-#include <tuple>
-#include "BodyStates.hpp"
 #include "ModelExchangeServiceImpl.hpp"
+#include "BodyStates.hpp"
 #include "SimServerInputs.hpp"
 #include "YamlSimServerInputs.hpp"
 #include "ErrorReporter.hpp"
+#include <cmath>
+#include <sstream>
+#include <tuple>
 
 ModelExchangeServiceImpl::ModelExchangeServiceImpl(const XdynForME& xdyn_, ErrorReporter& error_outputter_):
 simserver(xdyn_),
@@ -32,22 +32,23 @@ YamlSimServerInputs from_grpc(grpc::ServerContext* , const ModelExchangeRequestE
         std::map<std::string, double> commands(request->commands().begin(),
                 request->commands().end());
         server_inputs.commands = commands;
-        const size_t n = request->states().t_size();
+        const size_t n = static_cast<size_t>(request->states().t_size());
         server_inputs.states.resize(n);
         for (size_t i = 0 ; i < n ; ++i)
         {
-            server_inputs.states[i].x = request->states().x(i);
-            server_inputs.states[i].y = request->states().y(i);
-            server_inputs.states[i].z = request->states().z(i);
-            server_inputs.states[i].u = request->states().u(i);
-            server_inputs.states[i].v = request->states().v(i);
-            server_inputs.states[i].w = request->states().w(i);
-            server_inputs.states[i].p = request->states().p(i);
-            server_inputs.states[i].q = request->states().q(i);
-            server_inputs.states[i].r = request->states().r(i);
-            angles.phi = request->states().phi(i);
-            angles.theta = request->states().theta(i);
-            angles.psi = request->states().psi(i);
+            const int int_i = static_cast<int>(i);
+            server_inputs.states[i].x = request->states().x(int_i);
+            server_inputs.states[i].y = request->states().y(int_i);
+            server_inputs.states[i].z = request->states().z(int_i);
+            server_inputs.states[i].u = request->states().u(int_i);
+            server_inputs.states[i].v = request->states().v(int_i);
+            server_inputs.states[i].w = request->states().w(int_i);
+            server_inputs.states[i].p = request->states().p(int_i);
+            server_inputs.states[i].q = request->states().q(int_i);
+            server_inputs.states[i].r = request->states().r(int_i);
+            angles.phi = request->states().phi(int_i);
+            angles.theta = request->states().theta(int_i);
+            angles.psi = request->states().psi(int_i);
             const auto quaternion = BodyStates::convert(angles, rot);
             server_inputs.states[i].qr = std::get<0>(quaternion);
             server_inputs.states[i].qi = std::get<1>(quaternion);
@@ -70,23 +71,24 @@ YamlSimServerInputs from_grpc(grpc::ServerContext* , const ModelExchangeRequestQ
         std::map<std::string, double> commands(request->commands().begin(),
                 request->commands().end());
         server_inputs.commands = commands;
-        const size_t n = request->states().t_size();
+        const size_t n = static_cast<size_t>(request->states().t_size());
         server_inputs.states.resize(n);
         for (size_t i = 0 ; i < n ; ++i)
         {
-            server_inputs.states[i].x = request->states().x(i);
-            server_inputs.states[i].y = request->states().y(i);
-            server_inputs.states[i].z = request->states().z(i);
-            server_inputs.states[i].u = request->states().u(i);
-            server_inputs.states[i].v = request->states().v(i);
-            server_inputs.states[i].w = request->states().w(i);
-            server_inputs.states[i].p = request->states().p(i);
-            server_inputs.states[i].q = request->states().q(i);
-            server_inputs.states[i].r = request->states().r(i);
-            server_inputs.states[i].qr = request->states().qr(i);
-            server_inputs.states[i].qi = request->states().qi(i);
-            server_inputs.states[i].qj = request->states().qj(i);
-            server_inputs.states[i].qk = request->states().qk(i);
+            const int int_i = static_cast<int>(i);
+            server_inputs.states[i].x = request->states().x(int_i);
+            server_inputs.states[i].y = request->states().y(int_i);
+            server_inputs.states[i].z = request->states().z(int_i);
+            server_inputs.states[i].u = request->states().u(int_i);
+            server_inputs.states[i].v = request->states().v(int_i);
+            server_inputs.states[i].w = request->states().w(int_i);
+            server_inputs.states[i].p = request->states().p(int_i);
+            server_inputs.states[i].q = request->states().q(int_i);
+            server_inputs.states[i].r = request->states().r(int_i);
+            server_inputs.states[i].qr = request->states().qr(int_i);
+            server_inputs.states[i].qi = request->states().qi(int_i);
+            server_inputs.states[i].qj = request->states().qj(int_i);
+            server_inputs.states[i].qk = request->states().qk(int_i);
         }
         server_inputs.requested_output = std::vector<std::string>(request->requested_output().begin(),
                                                                   request->requested_output().end());
