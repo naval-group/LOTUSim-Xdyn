@@ -55,6 +55,7 @@ bool invalid(const XdynGrpcAiryCommandLineArguments& input)
     return false;
 }
 
+int parse_command_line_for_xdyn_grpc_airy(int argc, char **argv, XdynGrpcAiryCommandLineArguments& input_data);
 int parse_command_line_for_xdyn_grpc_airy(int argc, char **argv, XdynGrpcAiryCommandLineArguments& input_data)
 {
     const po::options_description desc = attach_command_line_arguments_to_options_description(input_data);
@@ -101,6 +102,7 @@ int run(const XdynGrpcAiryCommandLineArguments& input_data, ErrorReporter& error
     return EXIT_SUCCESS;
 }
 
+int display_help(char *argv, XdynGrpcAiryCommandLineArguments& input_data);
 int display_help(char *argv, XdynGrpcAiryCommandLineArguments& input_data)
 {
     const po::options_description desc = attach_command_line_arguments_to_options_description(input_data);
