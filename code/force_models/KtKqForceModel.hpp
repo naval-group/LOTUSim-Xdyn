@@ -14,9 +14,9 @@
  *  \addtogroup module
  *  \ingroup module
  *  \section ex1 Example
- *  \snippet module/unit_tests/src/KtKqForceModelTest.cpp KtKqForceModelTest example
+ *  \snippet module/unit_tests/KtKqForceModelTest.cpp KtKqForceModelTest example
  *  \section ex2 Expected output
- *  \snippet module/unit_tests/src/KtKqForceModelTest.cpp KtKqForceModelTest expected output
+ *  \snippet module/unit_tests/KtKqForceModelTest.cpp KtKqForceModelTest expected output
  */
 class KtKqForceModel : public AbstractWageningen
 {
