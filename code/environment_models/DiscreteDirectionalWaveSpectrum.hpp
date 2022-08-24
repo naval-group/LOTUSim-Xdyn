@@ -16,9 +16,9 @@
  *  \brief Used by 'discretize'
  *  \ingroup wave_models
  *  \section ex1 Example
- *  \snippet environment_models/unit_tests/src/DirectionalWaveSpectrumTest.cpp DirectionalWaveSpectrumTest example
+ *  \snippet environment_models/unit_tests/DirectionalWaveSpectrumTest.cpp DirectionalWaveSpectrumTest example
  *  \section ex2 Expected output
- *  \snippet environment_models/unit_tests/src/DirectionalWaveSpectrumTest.cpp DirectionalWaveSpectrumTest expected output
+ *  \snippet environment_models/unit_tests/DirectionalWaveSpectrumTest.cpp DirectionalWaveSpectrumTest expected output
  */
 struct DiscreteDirectionalWaveSpectrum
 {
@@ -41,9 +41,9 @@ struct DiscreteDirectionalWaveSpectrum
  *  \details Avoids having to double loop on frequency and direction. All vectors should have the same size as each element corresponds to a (direction, omega) pair: that way we only need one loop (over, say, i) to go over all possible (omega[i], psi[i]).
  *  \ingroup wave_models
  *  \section ex1 Example
- *  \snippet environment_models/unit_tests/src/DirectionalWaveSpectrumTest.cpp DirectionalWaveSpectrumTest example
+ *  \snippet environment_models/unit_tests/DirectionalWaveSpectrumTest.cpp DirectionalWaveSpectrumTest example
  *  \section ex2 Expected output
- *  \snippet environment_models/unit_tests/src/DirectionalWaveSpectrumTest.cpp DirectionalWaveSpectrumTest expected output
+ *  \snippet environment_models/unit_tests/DirectionalWaveSpectrumTest.cpp DirectionalWaveSpectrumTest expected output
  */
 struct FlatDiscreteDirectionalWaveSpectrum
 {
