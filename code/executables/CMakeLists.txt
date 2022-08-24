@@ -221,6 +221,28 @@ TARGET_LINK_LIBRARIES(xdyn-for-me
     ${Boost_THREAD_LIBRARY}
     )
 
+IF((${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU") AND WIN32 AND MINGW)
+    # We are cross compiling and we fix a bug with protoc 3.7.0
+    # that does not define PROTOBUF_MIN_PROTOC_VERSION macro
+    #
+    # Thus we define this macro in file CMakeProtoBuf.cmake, and
+    # add it to the compilation
+    #
+    # cat /opt/ProtoBuf/include/google/protobuf/port_def.inc
+    #define GOOGLE_PROTOBUF_MIN_LIBRARY_VERSION 3007000
+    #define PROTOBUF_VERSION 3007000
+    #define PROTOBUF_MIN_HEADER_VERSION_FOR_PROTOC 3007000
+    #define GOOGLE_PROTOBUF_MIN_LIBRARY_VERSION 3007000
+    TARGET_COMPILE_DEFINITIONS(xdyn-for-me PUBLIC PROTOBUF_MIN_PROTOC_VERSION=${PROTOBUF_MIN_PROTOC_VERSION})
+    TARGET_COMPILE_OPTIONS(xdyn-for-me PRIVATE -Wno-strict-aliasing)
+    TARGET_COMPILE_OPTIONS(xdyn-for-me PRIVATE -Wno-missing-declarations)
+    TARGET_COMPILE_OPTIONS(xdyn-for-me PRIVATE -Wno-unused-variable)
+    TARGET_COMPILE_DEFINITIONS(xdyn-for-cs PUBLIC PROTOBUF_MIN_PROTOC_VERSION=${PROTOBUF_MIN_PROTOC_VERSION})
+    TARGET_COMPILE_OPTIONS(xdyn-for-cs PRIVATE -Wno-strict-aliasing)
+    TARGET_COMPILE_OPTIONS(xdyn-for-cs PRIVATE -Wno-missing-declarations)
+    TARGET_COMPILE_OPTIONS(xdyn-for-cs PRIVATE -Wno-unused-variable)
+ENDIF()
+
 IF((${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang") OR (${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang"))
     # MESSAGE(STATUS "Remove the -Wc++17-attribute-extensions option for ${PROJECT_NAME}")
     # fatal error: use of the 'nodiscard' attribute is a C++17 extension [-Wc++17-attribute-extensions]

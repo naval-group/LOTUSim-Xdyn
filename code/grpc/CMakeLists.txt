@@ -127,6 +127,25 @@ ENDIF()
 IF((${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU"))
     TARGET_COMPILE_OPTIONS(${PROJECT_NAME}_gen PRIVATE -Wno-effc++)
 ENDIF()
+IF((${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU") AND WIN32 AND MINGW)
+    # We are cross compiling and we fix a bug with protoc 3.7.0
+    # that does not define PROTOBUF_MIN_PROTOC_VERSION macro
+    #
+    # Thus we define this macro in file CMakeProtoBuf.cmake, and
+    # add it to the compilation
+    #
+    # cat /opt/ProtoBuf/include/google/protobuf/port_def.inc
+    #define GOOGLE_PROTOBUF_MIN_LIBRARY_VERSION 3007000
+    #define PROTOBUF_VERSION 3007000
+    #define PROTOBUF_MIN_HEADER_VERSION_FOR_PROTOC 3007000
+    #define GOOGLE_PROTOBUF_MIN_LIBRARY_VERSION 3007000
+    TARGET_COMPILE_DEFINITIONS(${PROJECT_NAME} PUBLIC PROTOBUF_MIN_PROTOC_VERSION=${PROTOBUF_MIN_PROTOC_VERSION})
+    TARGET_COMPILE_DEFINITIONS(${PROJECT_NAME}_gen PUBLIC PROTOBUF_MIN_PROTOC_VERSION=${PROTOBUF_MIN_PROTOC_VERSION})
+    # Disabled some checks on generated code
+    TARGET_COMPILE_OPTIONS(${PROJECT_NAME}_gen PRIVATE -Wno-strict-aliasing)
+    TARGET_COMPILE_OPTIONS(${PROJECT_NAME}_gen PRIVATE -Wno-missing-declarations)
+    TARGET_COMPILE_OPTIONS(${PROJECT_NAME}_gen PRIVATE -Wno-unused-variable)
+ENDIF()
 
 ADD_SUBDIRECTORY(unit_tests)
 
