@@ -1,11 +1,20 @@
-#include <algorithm>
-#include <cmath>
+#include "AeroPolarForceModel.hpp"
+#include "external_data_structures_parsers.hpp"
+#include "yaml.h"
 #include <ssc/yaml_parser.hpp>
 #include <ssc/kinematics.hpp>
-#include "yaml.h"
+#include <algorithm>
+#include <cmath>
 
-#include "external_data_structures_parsers.hpp"
-#include "AeroPolarForceModel.hpp"
+AeroPolarForceModel::Input::Input():
+    name(),
+    calculation_point_in_body_frame(),
+    apparent_wind_angle(),
+    lift_coefficient(),
+    drag_coefficient(),
+    reference_area(0.0),
+    angle_command()
+{}
 
 std::string AeroPolarForceModel::model_name()
 {
