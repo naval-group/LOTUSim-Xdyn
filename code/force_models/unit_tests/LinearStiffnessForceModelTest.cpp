@@ -89,6 +89,7 @@ TEST_F(LinearStiffnessForceModelTest, can_parse_optional)
     ASSERT_DOUBLE_EQ(input.equilibrium_position.get().angle.psi, 6);
 }
 
+BodyStates get_position_states(const double x, const double y, const double z, const double phi, const double theta, const double psi);
 BodyStates get_position_states(const double x, const double y, const double z, const double phi, const double theta, const double psi)
 {
     BodyStates states(0);
