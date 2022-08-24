@@ -10,21 +10,25 @@ void check_all_values_are_within_bounds(const double min_bound, const std::vecto
 void check_all_values_are_within_bounds(const double min_bound, const std::vector<double>& vector_to_check, const double max_bound)
 {
     const double eps = 0.01; // We don't care if we're above or below the bounds by 0.01 s: those are wave frequencies so not very precise.
-    for (auto Tp:vector_to_check)
+    for (auto period:vector_to_check)
     {
-        if (Tp<(min_bound-eps))
+        if (period<(min_bound-eps))
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "HDB used by DiffractionForceModel only defines the RAO for wave period Tp within [" << min_bound << "," << max_bound << "]"
-                    << " s, but wave spectrum discretization contains Tp = " << Tp
-                    << " s which is below the min bound by " << min_bound-Tp << " s: you need to modify the section 'environment models/model: waves/discretization' in the YAML file or the 'spectrum' section or change the HDB file ")
-            ;
+            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                "HDB used by DiffractionForceModel only defines the RAO for wave period T within [" << min_bound << "," << max_bound << "]"
+                << " s, but wave spectrum discretization contains T = " << period
+                << " s which is below the min bound by " << min_bound-period
+                << " s: you need to modify the section 'environment models/model: waves/discretization'"
+                << " in the YAML file or the 'spectrum' section or change the HDB file");
         }
-        if (Tp>(max_bound+eps))
+        if (period>(max_bound+eps))
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "HDB used by DiffractionForceModel only defines the RAO for wave period Tp within [" << min_bound << "," << max_bound << "]"
-                    << " s, but wave spectrum discretization contains Tp = " << Tp
-                    << " s which is above the max bound by " << Tp-max_bound << " s: you need to modify the section 'environment models/model: waves/discretization' in the YAML file or the 'spectrum' section or change the HDB file ")
-            ;
+            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                "HDB used by DiffractionForceModel only defines the RAO for wave period T within [" << min_bound << "," << max_bound << "]"
+                << " s, but wave spectrum discretization contains T = " << period
+                << " s which is above the max bound by " << period-max_bound
+                << " s: you need to modify the section 'environment models/model: waves/discretization'"
+                << " in the YAML file or the 'spectrum' section or change the HDB file");
         }
     }
 }
