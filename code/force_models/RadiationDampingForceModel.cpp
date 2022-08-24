@@ -92,21 +92,25 @@ class CSVWriter
 
 };
 
+std::function<double(double)> operator*(const double a, const std::function<double(double)>& f);
 std::function<double(double)> operator*(const double a, const std::function<double(double)>& f)
 {
     return [a, f](double x){return a*f(x);};
 }
 
+std::function<double(double)> operator+(const std::function<double(double)>& f, const std::function<double(double)>& g);
 std::function<double(double)> operator+(const std::function<double(double)>& f, const std::function<double(double)>& g)
 {
     return [f, g](double x){return f(x) + g(x);};
 }
 
+std::function<double(double)> operator-(const std::function<double(double)>& f, const std::function<double(double)>& g);
 std::function<double(double)> operator-(const std::function<double(double)>& f, const std::function<double(double)>& g)
 {
     return [f, g](double x){return f(x) - g(x);};
 }
 
+std::function<double(double)> operator-(const std::function<double(double)>& f, const double a);
 std::function<double(double)> operator-(const std::function<double(double)>& f, const double a)
 {
     return [&f, a](double x){return f(x) - a;};
