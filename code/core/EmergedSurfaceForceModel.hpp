@@ -14,9 +14,9 @@
  *  \addtogroup mesh_wrappers
  *  \ingroup mesh_wrappers
  *  \section ex1 Example
- *  \snippet mesh_wrappers/unit_tests/src/ImmersedSurfaceForceModelTest.cpp ImmersedSurfaceForceModelTest example
+ *  \snippet mesh_wrappers/unit_tests/ImmersedSurfaceForceModelTest.cpp ImmersedSurfaceForceModelTest example
  *  \section ex2 Expected output
- *  \snippet mesh_wrappers/unit_tests/src/ImmersedSurfaceForceModelTest.cpp ImmersedSurfaceForceModelTest expected output
+ *  \snippet mesh_wrappers/unit_tests/ImmersedSurfaceForceModelTest.cpp ImmersedSurfaceForceModelTest expected output
  */
 class EmergedSurfaceForceModel : public SurfaceForceModel
 {
