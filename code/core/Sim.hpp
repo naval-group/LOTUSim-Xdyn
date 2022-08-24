@@ -43,7 +43,7 @@ class Sim : public ssc::solver::ContinuousSystem
           *  wave data on a mesh surrounding the ship for visualization purposes.
           *  \returns Vector of coordinates on the free surface (in the NED frame),
           *           the z coordinate being the wave height (in meters)
-          *  \snippet simulator/unit_tests/src/SimTest.cpp SimTest get_waves_example
+          *  \snippet simulator/unit_tests/SimTest.cpp SimTest get_waves_example
           */
         ssc::kinematics::PointMatrix get_waves(const double t            //!< Current instant
                                               ) const;
@@ -63,12 +63,12 @@ class Sim : public ssc::solver::ContinuousSystem
          */
         void set_discrete_state(const std::string &state_name, const double value);
         /** \brief Gets the value of the given input from the datasource
-         * 
+         *
          * Used by controllers to get the inputs they need (setpoints or commands) to compute a command.
          */
         double get_input_value(const std::string &name) const;
         /** \brief Gets the value of a Sim state ("x", "u", "qr", "phi", ...)
-         * 
+         *
          * Used by controllers to get the states they need to compute a command.
          */
         double get_state_value(const std::string &name) const;
