@@ -36,12 +36,17 @@ int main(int , char** )
     YamlStretching ys;
     ys.h = 20;//10;
     ys.delta = 1;//0;
-    const double h = 20;
+    const size_t ndir = 20;
     const Stretching stretching(ys);
-    const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, h, stretching, false);
-    const double random_phase = a.random<double>().between(-PI,PI);
+    const DiscreteDirectionalWaveSpectrum A = discretize(
+        DiracSpectralDensity(omega0, Hs),
+        DiracDirectionalSpreading(psi),
+        omega_min,
+        omega_max,
+        nfreq,
+        ndir, stretching, false);
+    const double random_phase = a.random<double>().between(-PI, +PI);
     const Airy wave(A, random_phase);
-
 
     const double xmin = -20;
     const double xmax = 20;
@@ -77,18 +82,18 @@ int main(int , char** )
     const ssc::kinematics::PointMatrix Vsurf = wave.get_orbital_velocity(g, x, y, eta, t, eta);
     for (size_t i = 0; i < nx; ++i)
     {
-        usurf.at(i) = Vsurf.m(0, i);
-        wsurf.at(i) = Vsurf.m(2, i);
+        usurf.at(i) = Vsurf.m(0, static_cast<Eigen::Index>(i));
+        wsurf.at(i) = Vsurf.m(2, static_cast<Eigen::Index>(i));
 
         const std::vector<double> pdyn_i = wave.get_dynamic_pressure(rho, g, std::vector<double>(nz, x.at(i)), std::vector<double>(nz, y.at(i)), z, std::vector<double>(nz, eta.at(i)), t);
-        pdyn.insert(pdyn.begin() + nz * i, pdyn_i.begin(), pdyn_i.end());
-        
+        pdyn.insert(pdyn.begin() + static_cast<int>(nz * i), pdyn_i.begin(), pdyn_i.end());
+
         const ssc::kinematics::PointMatrix V = wave.get_orbital_velocity(g, std::vector<double>(nz, x.at(i)), std::vector<double>(nz, y.at(i)), z, t, std::vector<double>(nz, eta.at(i)));
         for (size_t j = 0 ; j < nz ; ++j)
         {
-            uorb.at(nz*i+j) = V.m(0, j);
-            vorb.at(nz*i+j) = V.m(1, j);
-            worb.at(nz*i+j) = V.m(2, j);
+            uorb.at(nz*i+j) = V.m(0, static_cast<Eigen::Index>(j));
+            vorb.at(nz*i+j) = V.m(1, static_cast<Eigen::Index>(j));
+            worb.at(nz*i+j) = V.m(2, static_cast<Eigen::Index>(j));
         }
     }
 
@@ -103,7 +108,7 @@ int main(int , char** )
               << ", \"worb\": " << worb
               << ", \"usurf\": " << usurf
               << ", \"wsurf\": " << wsurf
-              << ", \"depth\": " << h
+              << ", \"depth\": " << ys.h
               << ", \"Hs\": " << Hs
               << ", \"psi\": " << psi*180/PI
               << ", \"Tp\": " << Tp
