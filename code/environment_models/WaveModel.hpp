@@ -20,9 +20,9 @@
  *  \details Should at least provide elevation.
  *  \ingroup wave_models
  *  \section ex1 Example
- *  \snippet environment_models/unit_tests/src/WaveModelTest.cpp WaveModelTest example
+ *  \snippet environment_models/unit_tests/WaveModelTest.cpp WaveModelTest example
  *  \section ex2 Expected output
- *  \snippet environment_models/unit_tests/src/WaveModelTest.cpp WaveModelTest expected output
+ *  \snippet environment_models/unit_tests/WaveModelTest.cpp WaveModelTest expected output
  */
 class WaveModel
 {
@@ -45,7 +45,7 @@ class WaveModel
 
         /**  \brief Computes the surface elevations at given points.
           *  \returns Elevations of a list of points at a given instant, in meters.
-          *  \snippet environment_models/unit_tests/src/WaveModelTest.cpp WaveModelTest method_example
+          *  \snippet environment_models/unit_tests/WaveModelTest.cpp WaveModelTest method_example
           */
         std::vector<double> get_elevation(
             const std::vector<double> &x, //!< x-positions in the NED frame (in meters)
@@ -67,7 +67,7 @@ class WaveModel
 
         /**  \brief Computes the dynamic pressure at a given point.
           *  \returns Pressure (in Pa) induced by the waves, at given points in the fluid
-          *  \snippet environment_models/unit_tests/src/AiryTest.cpp AiryTest elevation_example
+          *  \snippet environment_models/unit_tests/AiryTest.cpp AiryTest elevation_example
           */
         std::vector<double> get_dynamic_pressure(
             const double rho,               //!< water density (in kg/m^3)
@@ -100,7 +100,7 @@ class WaveModel
           *  \date Aug 1, 2014, 3:24:45 PM
           *  \brief Surface elevation
           *  \returns Elevations of a list of points at a given instant, in meters.
-          *  \snippet environment_models/unit_tests/src/WaveModelTest.cpp WaveModelTest method_example
+          *  \snippet environment_models/unit_tests/WaveModelTest.cpp WaveModelTest method_example
           */
         virtual std::vector<double> elevation(
             const std::vector<double> &x, //!< x-positions in the NED frame (in meters)
@@ -127,7 +127,7 @@ class WaveModel
           *  \see "Environmental Conditions and Environmental Loads", April 2014, DNV-RP-C205, Det Norske Veritas AS, page 47
           *  \see "Sea Loads on Ships and Offshore Structures", 1990, O.M. Faltinsen, Cambridge Ocean Technology Series, page 16
           *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation IV.20, page 125
-          *  \snippet environment_models/unit_tests/src/AiryTest.cpp AiryTest elevation_example
+          *  \snippet environment_models/unit_tests/AiryTest.cpp AiryTest elevation_example
           */
         virtual std::vector<double> dynamic_pressure(
             const double rho,               //!< water density (in kg/m^3)
