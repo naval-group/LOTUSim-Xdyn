@@ -13,9 +13,9 @@
  *  \addtogroup model_wrappers
  *  \ingroup model_wrappers
  *  \section ex1 Example
- *  \snippet model_wrappers/unit_tests/src/DiffractionForceModelTest.cpp DiffractionForceModelTest example
+ *  \snippet model_wrappers/unit_tests/DiffractionForceModelTest.cpp DiffractionForceModelTest example
  *  \section ex2 Expected output
- *  \snippet model_wrappers/unit_tests/src/DiffractionForceModelTest.cpp DiffractionForceModelTest expected output
+ *  \snippet model_wrappers/unit_tests/DiffractionForceModelTest.cpp DiffractionForceModelTest expected output
  */
 class DiffractionForceModel : public AbstractRaoForceModel
 {
