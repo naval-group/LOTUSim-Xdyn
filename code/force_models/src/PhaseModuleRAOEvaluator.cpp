@@ -33,15 +33,6 @@ void check_all_values_are_within_bounds(const double min_bound, const std::vecto
     }
 }
 
-void check_all_values_are_within_bounds(const double min_bound, const std::vector<std::vector<double> >& vector_to_check, const double max_bound);
-void check_all_values_are_within_bounds(const double min_bound, const std::vector<std::vector<double> >& vector_to_check, const double max_bound)
-{
-    for (const auto& t: vector_to_check)
-    {
-        check_all_values_are_within_bounds(min_bound, t, max_bound);
-    }
-}
-
 PhaseModuleRAOEvaluator::PhaseModuleRAOEvaluator(
     const RaoInterpolator& rao_interpolator_,
     const EnvironmentAndFrames& env,
