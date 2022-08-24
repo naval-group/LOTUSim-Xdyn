@@ -50,7 +50,7 @@ WaveDirectionalSpreading* SumOfWaveDirectionalSpreadings::clone() const
 
 /**  \brief Returns n angular frequencies between omega_min (included)
   *         and omega_max (also included)
-  *  \snippet environment_models/unit_tests/src/WaveSpectralDensityTest.cpp WaveSpectralDensityTest get_omega0_example
+  *  \snippet environment_models/unit_tests/WaveSpectralDensityTest.cpp WaveSpectralDensityTest get_omega0_example
   */
 std::vector<double> SumOfWaveDirectionalSpreadings::get_directions(const size_t n) const
 {
@@ -64,5 +64,3 @@ std::vector<double> SumOfWaveDirectionalSpreadings::get_directions(const size_t 
     L.sort();
     return std::vector<double>(L.begin(), L.end());
 }
-
-
