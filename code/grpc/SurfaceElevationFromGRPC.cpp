@@ -507,7 +507,7 @@ std::vector<double> SurfaceElevationFromGRPC::wave_height(
   *  \see "Hydrodynamique navale : théorie et modèles", 2009, Alain Bovis, Les Presses de l'ENSTA, equation VI.34, page 183
   *  \see "Seakeeping: ship behaviour in rough weather", 1989, A. R. J. M. Lloyd, Ellis Horwood Series in Marine Technology, page 68
   *  \see "The dynamic of marine craft", 2004, Lewandoski, page 148
-  *  \snippet environment_models/unit_tests/src/AiryTest.cpp AiryTest elevation_example
+  *  \snippet environment_models/unit_tests/AiryTest.cpp AiryTest elevation_example
   */
 std::vector<double> SurfaceElevationFromGRPC::dynamic_pressure(const double , //!< water density (in kg/m^3) (not used for gRPC)
         const double ,   //!< gravity (in m/s^2) (not used for gRPC)
