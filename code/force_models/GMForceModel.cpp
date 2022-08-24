@@ -5,8 +5,8 @@
  *      Author: cady
  */
 
-#include "calculate_gz.hpp"
 #include "GMForceModel.hpp"
+#include "calculate_gz.hpp"
 #include "yaml.h"
 #include <ssc/yaml_parser.hpp>
 #include "environment_parsers.hpp"
@@ -19,7 +19,7 @@
 
 std::string GMForceModel::model_name(){return "GM";}
 
-GMForceModel::Yaml::Yaml() : name_of_hydrostatic_force_model(), roll_step(0)
+GMForceModel::Yaml::Yaml() : name_of_hydrostatic_force_model(), roll_step(0), try_to_parse(ForceParser())
 {
 }
 
