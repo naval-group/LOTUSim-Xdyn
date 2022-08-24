@@ -20,9 +20,9 @@
  *  \addtogroup model_wrappers
  *  \ingroup model_wrappers
  *  \section ex1 Example
- *  \snippet model_wrappers/unit_tests/src/WageningenControlledForceModelTest.cpp WageningenControlledForceModelTest example
+ *  \snippet model_wrappers/unit_tests/WageningenControlledForceModelTest.cpp WageningenControlledForceModelTest example
  *  \section ex2 Expected output
- *  \snippet model_wrappers/unit_tests/src/WageningenControlledForceModelTest.cpp WageningenControlledForceModelTest expected output
+ *  \snippet model_wrappers/unit_tests/WageningenControlledForceModelTest.cpp WageningenControlledForceModelTest expected output
  */
 class WageningenControlledForceModel : public AbstractWageningen
 {
