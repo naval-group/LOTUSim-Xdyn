@@ -201,7 +201,7 @@ class MeshIntersector
 
         /**  \brief Computes the volume inside a closed mesh, for the points under the free surface.
           *  \returns Volume of the STL file (in m^3 if the unit in the STL data is m)
-          *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest volume_example
+          *  \snippet mesh/unit_tests/mesh_manipulationsTest.cpp mesh_manipulationsTest volume_example
           *  \see admesh-0.95
           *  \see Efficient feature extraction for 2D/3D objects in mesh representation, Cha Zhang and Tsuhan Chen, Dept. of Electrical and Computer Engineering, Carnegie Mellon University
           */
@@ -209,7 +209,7 @@ class MeshIntersector
 
         /**  \brief Computes the volume inside a closed mesh, for the points above the free surface.
           *  \returns Volume of the STL file (in m^3 if the unit in the STL data is m)
-          *  \snippet mesh/unit_tests/src/mesh_manipulationsTest.cpp mesh_manipulationsTest volume_example
+          *  \snippet mesh/unit_tests/mesh_manipulationsTest.cpp mesh_manipulationsTest volume_example
           *  \see admesh-0.95
           *  \see Efficient feature extraction for 2D/3D objects in mesh representation, Cha Zhang and Tsuhan Chen, Dept. of Electrical and Computer Engineering, Carnegie Mellon University
           */
@@ -218,7 +218,7 @@ class MeshIntersector
         /**  \brief Detect if a facet already exists in mesh.
           *  \details Only compares the indices (not the barycenter or unit normal or area).
           *  \returns True if facet exists, 0 otherwise.
-          *  \snippet mesh/unit_tests/src/MeshIntersectorTest.cpp MeshIntersectorTest has_example
+          *  \snippet mesh/unit_tests/MeshIntersectorTest.cpp MeshIntersectorTest has_example
           */
         bool has(const Facet& f //!< Facet to check
                  ) const;
