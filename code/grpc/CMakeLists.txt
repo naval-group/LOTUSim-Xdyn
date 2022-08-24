@@ -91,6 +91,21 @@ ADD_CUSTOM_COMMAND(
     DEPENDS "${controller_proto}")
 
 ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
+ADD_CUSTOM_TARGET(genhdr_grpc_wave DEPENDS
+    ${wave_proto_hdrs_t}
+    ${wave_grpc_hdrs_t}
+    ${wave_proto_hdrs_g}
+    ${wave_grpc_hdrs_g})
+ADD_DEPENDENCIES(${PROJECT_NAME} genhdr_grpc_wave)
+ADD_CUSTOM_TARGET(genhdr_grpc_controller DEPENDS
+    ${controller_proto_hdrs}
+    ${controller_grpc_hdrs})
+ADD_DEPENDENCIES(${PROJECT_NAME} genhdr_grpc_controller)
+ADD_CUSTOM_TARGET(genhdr_grpc_force DEPENDS
+    ${force_proto_hdrs}
+    ${force_grpc_hdrs})
+ADD_DEPENDENCIES(${PROJECT_NAME} genhdr_grpc_force)
+
 ADD_LIBRARY(${PROJECT_NAME}_gen OBJECT
     ${wave_proto_srcs_t}
     ${wave_grpc_srcs_t}
@@ -116,9 +131,4 @@ ENDIF()
 ADD_SUBDIRECTORY(unit_tests)
 
 ADD_LIBRARY(${PROJECT_NAME}_airy OBJECT AiryGRPC.cpp)
-ADD_CUSTOM_TARGET(genhdr_grpc_airy DEPENDS
-    ${wave_proto_hdrs_t}
-    ${wave_grpc_hdrs_t}
-    ${wave_proto_hdrs_g}
-    ${wave_grpc_hdrs_g})
-ADD_DEPENDENCIES(${PROJECT_NAME}_airy genhdr_grpc_airy)
+ADD_DEPENDENCIES(${PROJECT_NAME}_airy genhdr_grpc_wave)
