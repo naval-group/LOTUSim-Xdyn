@@ -5,14 +5,21 @@
  *      Author: cady
  */
 
+#include "ManeuveringForceModel.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "external_data_structures_parsers.hpp"
-#include "ManeuveringForceModel.hpp"
 #include "maneuvering_compiler.hpp"
 #include "maneuvering_DataSource_builder.hpp"
 #include "yaml.h"
 #include "yaml2eigen.hpp"
 #include "InvalidInputException.hpp"
+
+ManeuveringForceModel::Yaml::Yaml():
+    name(),
+    frame_of_reference(),
+    commands(),
+    var2expr()
+{}
 
 std::string ManeuveringForceModel::model_name() {return "maneuvering";}
 
