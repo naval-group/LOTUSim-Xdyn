@@ -1,14 +1,14 @@
 #include "py_xdyn_data.hpp"
 #include "py_pybind_additions.hpp"
-#include "test_data_generator/inc/TriMeshTestData.hpp"
-#include "test_data_generator/inc/hdb_data.hpp"
-#include "test_data_generator/inc/yaml_data.hpp"
-#include "test_data_generator/inc/precal_test_data.hpp"
-#include "core/inc/Body.hpp"
-#include "core/inc/BodyBuilder.hpp"
+#include "test_data_generator/TriMeshTestData.hpp"
+#include "test_data_generator/hdb_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
+#include "test_data_generator/precal_test_data.hpp"
+#include "core/Body.hpp"
+#include "core/BodyBuilder.hpp"
 #include <string>
 
-// Duplicated code from core/unit_tests and executables/src/test_hs.cpp
+// Duplicated code from core/unit_tests and executables/test_hs.cpp
 BodyPtr get_body(const std::string& name, const VectorOfVectorOfPoints& points);
 BodyPtr get_body(const std::string& name, const VectorOfVectorOfPoints& points)
 {
