@@ -20,9 +20,9 @@ struct YamlAngle;
  *  \brief Builds a Body object from the YAML & STL describing it
  *  \ingroup simulator
  *  \section ex1 Example
- *  \snippet simulator/unit_tests/src/BodyBuilderTest.cpp BodyBuilderTest example
+ *  \snippet simulator/unit_tests/BodyBuilderTest.cpp BodyBuilderTest example
  *  \section ex2 Expected output
- *  \snippet simulator/unit_tests/src/BodyBuilderTest.cpp BodyBuilderTest expected output
+ *  \snippet simulator/unit_tests/BodyBuilderTest.cpp BodyBuilderTest expected output
  */
 class BodyBuilder
 {
