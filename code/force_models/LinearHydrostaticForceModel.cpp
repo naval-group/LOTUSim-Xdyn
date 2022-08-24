@@ -9,6 +9,15 @@
 #include <ssc/exception_handling.hpp>
 #include <ssc/yaml_parser.hpp>
 
+LinearHydrostaticForceModel::Input::Input():
+    z_eq(0.0),
+    theta_eq(0.0),
+    phi_eq(0.0),
+    K1(),
+    K2(),
+    K3()
+{}
+
 std::string LinearHydrostaticForceModel::model_name() {return "linear hydrostatics";}
 
 LinearHydrostaticForceModel::Input LinearHydrostaticForceModel::parse(const std::string& yaml)
