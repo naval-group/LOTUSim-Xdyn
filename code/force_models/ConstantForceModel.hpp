@@ -1,5 +1,5 @@
 /*
- * ConstantForce.hpp
+ * ConstantForceModel.hpp
  *
  *  Created on: Sep 7, 2018
  *      Author: cady
@@ -17,17 +17,17 @@ class ConstantForceModel : public ForceModel
     public:
         struct Input
         {
-            Input() = default;
-            std::string frame;
-            double x;
-            double y;
-            double z;
-            double X;
-            double Y;
-            double Z;
-            double K;
-            double M;
-            double N;
+            Input();
+            std::string frame {};
+            double x {};
+            double y {};
+            double z {};
+            double X {};
+            double Y {};
+            double Z {};
+            double K {};
+            double M {};
+            double N {};
         };
 
         ConstantForceModel(const Input& input, const std::string& body_name, const EnvironmentAndFrames& env);
@@ -40,7 +40,5 @@ class ConstantForceModel : public ForceModel
         Eigen::Matrix<double, 3, 1> force;
         Eigen::Matrix<double, 3, 1> torque;
 };
-
-
 
 #endif /* FORCE_MODELS_INC_CONSTANTFORCEMODEL_HPP_ */

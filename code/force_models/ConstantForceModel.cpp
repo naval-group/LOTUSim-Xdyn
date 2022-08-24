@@ -1,5 +1,5 @@
 /*
- * ConstantForce.cpp
+ * ConstantForceModel.cpp
  *
  *  Created on: Sep 7, 2018
  *      Author: cady
@@ -16,6 +16,19 @@
 #include <ssc/kinematics.hpp>
 
 std::string ConstantForceModel::model_name() {return "constant force";}
+
+ConstantForceModel::Input::Input():
+    frame(),
+    x(0.0),
+    y(0.0),
+    z(0.0),
+    X(0.0),
+    Y(0.0),
+    Z(0.0),
+    K(0.0),
+    M(0.0),
+    N(0.0)
+{}
 
 ConstantForceModel::Input ConstantForceModel::parse(const std::string& yaml)
 {
@@ -54,4 +67,3 @@ Wrench ConstantForceModel::get_force(const BodyStates&, const double, const Envi
 {
     return Wrench(ssc::kinematics::Point(name,0,0,0), name, force, torque);
 }
-
