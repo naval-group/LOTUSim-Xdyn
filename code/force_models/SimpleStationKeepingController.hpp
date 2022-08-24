@@ -15,7 +15,7 @@ class SimpleStationKeepingController : public ForceModel
     public:
         struct Yaml
         {
-            Yaml() = default;
+            Yaml();
             std::string name;
             double ksi_x;
             double T_x;

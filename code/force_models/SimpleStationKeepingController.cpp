@@ -17,6 +17,18 @@
 #include <cmath>
 #define PI M_PI
 
+
+
+SimpleStationKeepingController::Yaml::Yaml():
+    name(),
+    ksi_x(0.0),
+    T_x(0.0),
+    ksi_y(0.0),
+    T_y(0.0),
+    ksi_psi(0.0),
+    T_psi(0.0)
+{}
+
 std::string SimpleStationKeepingController::model_name() {return "simple station-keeping controller";}
 
 SimpleStationKeepingController::Yaml SimpleStationKeepingController::parse(const std::string& yaml)
