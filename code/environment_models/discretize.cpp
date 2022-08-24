@@ -74,7 +74,7 @@ DiscreteDirectionalWaveSpectrum discretize(
   *  \date Aug 1, 2014, 5:04:24 PM
   *  \brief Discretize a wave spectrum
   *  \details Finite depth hypothesis (for the wave number)
-  *  \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest discretize_example
+  *  \snippet environment_models/unit_tests/discretizeTest.cpp discretizeTest discretize_example
   */
 DiscreteDirectionalWaveSpectrum discretize(
         const WaveSpectralDensity& S,      //!< Frequency spectrum
@@ -193,7 +193,7 @@ FlatDiscreteDirectionalWaveSpectrum flatten(
  *  the most important ones (i.e. those representing a given ratio of the total
  *  energy in the spectrum).
  * \returns A flat spectrum (i.e. one where the freq & direct. loops have been unrolled)
- * \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest flatten_example
+ * \snippet environment_models/unit_tests/discretizeTest.cpp discretizeTest flatten_example
  */
 FlatDiscreteDirectionalWaveSpectrum filter(
         const FlatDiscreteDirectionalWaveSpectrum& spectrum, //!< Spectrum to filter
