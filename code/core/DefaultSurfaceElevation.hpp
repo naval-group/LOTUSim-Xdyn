@@ -20,9 +20,9 @@
  *  \addtogroup hydro_models
  *  \ingroup hydro_models
  *  \section ex1 Example
- *  \snippet hydro_models/unit_tests/src/DefaultWaveModelTest.cpp DefaultWaveModelTest example
+ *  \snippet hydro_models/unit_tests/DefaultWaveModelTest.cpp DefaultWaveModelTest example
  *  \section ex2 Expected output
- *  \snippet hydro_models/unit_tests/src/DefaultWaveModelTest.cpp DefaultWaveModelTest expected output
+ *  \snippet hydro_models/unit_tests/DefaultWaveModelTest.cpp DefaultWaveModelTest expected output
  */
 class DefaultSurfaceElevation : public SurfaceElevationInterface
 {
@@ -37,7 +37,7 @@ class DefaultSurfaceElevation : public SurfaceElevationInterface
 
         /**  \brief Flat sea surface model.
           *  \returns zwave;
-          *  \snippet hydro_models/unit_tests/src/DefaultWaveModelTest.cpp DefaultWaveModelTest wave_height_example
+          *  \snippet hydro_models/unit_tests/DefaultWaveModelTest.cpp DefaultWaveModelTest wave_height_example
           */
         std::vector<double> wave_height(
             const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
