@@ -10,6 +10,11 @@
 
 #include "boost_spirit_hdb_adapters.hpp"
 
+// Explicitly disabled efficient C++ flag so that the following line compiles
+// hdb_grammar() : hdb_grammar::base_type(ast) is not compliant with effc++
+// error: 'hdb::hdb_grammar<>::ast' should be initialized in the member initialization list [-Werror=effc++]
+#pragma GCC diagnostic ignored "-Weffc++"
+
 typedef ascii::blank_type SpaceType;
 
 namespace hdb
