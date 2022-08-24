@@ -1,11 +1,23 @@
-#include <algorithm>
-#include <cmath>
+#include "HydroPolarForceModel.hpp"
+#include "external_data_structures_parsers.hpp"
+#include "yaml.h"
 #include <ssc/yaml_parser.hpp>
 #include <ssc/kinematics.hpp>
-#include "yaml.h"
+#include <algorithm>
+#include <cmath>
 
-#include "external_data_structures_parsers.hpp"
-#include "HydroPolarForceModel.hpp"
+HydroPolarForceModel::Input::Input():
+    name(),
+    internal_frame(),
+    angle_of_attack(),
+    lift_coefficient(),
+    drag_coefficient(),
+    moment_coefficient(),
+    reference_area(0.0),
+    chord_length(),
+    use_waves_velocity(false),
+    angle_command()
+{}
 
 std::string HydroPolarForceModel::model_name()
 {
