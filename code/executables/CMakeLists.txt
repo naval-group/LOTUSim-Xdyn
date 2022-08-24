@@ -186,6 +186,17 @@ TARGET_LINK_LIBRARIES(xdyn-for-cs
     ${Boost_THREAD_LIBRARY}
     )
 
+IF((${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang") OR (${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang"))
+    # MESSAGE(STATUS "Remove the -Wc++17-attribute-extensions option for ${PROJECT_NAME}")
+    # fatal error: use of the 'nodiscard' attribute is a C++17 extension [-Wc++17-attribute-extensions]
+    # PROTOBUF_NODISCARD ::CosimulationStatesQuaternion* release_states();
+    # google/protobuf/port_def.inc:463:30: note: expanded from macro 'PROTOBUF_NODISCARD'
+    #define PROTOBUF_NODISCARD [[nodiscard]]
+    TARGET_COMPILE_OPTIONS(xdyn-for-cs PRIVATE -Wno-c++17-extensions)
+    # gRPC code: fatal error: implicit conversion changes signedness: 'unsigned int' to 'int' [-Wsign-conversion]
+    TARGET_COMPILE_OPTIONS(xdyn-for-cs PRIVATE -Wno-sign-conversion)
+ENDIF()
+
 ADD_EXECUTABLE(xdyn-for-me
     display_command_line_arguments.cpp
     parse_XdynForMECommandLineArguments.cpp
@@ -206,6 +217,17 @@ TARGET_LINK_LIBRARIES(xdyn-for-me
     ${PROTOBUF_LIBPROTOBUF}
     ${Boost_THREAD_LIBRARY}
     )
+
+IF((${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang") OR (${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang"))
+    # MESSAGE(STATUS "Remove the -Wc++17-attribute-extensions option for ${PROJECT_NAME}")
+    # fatal error: use of the 'nodiscard' attribute is a C++17 extension [-Wc++17-attribute-extensions]
+    # PROTOBUF_NODISCARD ::CosimulationStatesQuaternion* release_states();
+    # google/protobuf/port_def.inc:463:30: note: expanded from macro 'PROTOBUF_NODISCARD'
+    #define PROTOBUF_NODISCARD [[nodiscard]]
+    TARGET_COMPILE_OPTIONS(xdyn-for-me PRIVATE -Wno-c++17-extensions)
+    # gRPC code: fatal error: implicit conversion changes signedness: 'unsigned int' to 'int' [-Wsign-conversion]
+    TARGET_COMPILE_OPTIONS(xdyn-for-me PRIVATE -Wno-sign-conversion)
+ENDIF()
 
 ADD_EXECUTABLE(xdyn-grpc-airy
     xdyn_grpc_airy.cpp
