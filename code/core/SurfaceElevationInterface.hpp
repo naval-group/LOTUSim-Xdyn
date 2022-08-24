@@ -21,9 +21,9 @@
  *  \details It is this base class' responsibility to change the reference frame of the input point.
  *  \ingroup hydro_models
  *  \section ex1 Example
- *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest example
+ *  \snippet hydro_models/unit_tests/WaveModelInterfaceTest.cpp WaveModelInterfaceTest example
  *  \section ex2 Expected output
- *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest expected output
+ *  \snippet hydro_models/unit_tests/WaveModelInterfaceTest.cpp WaveModelInterfaceTest expected output
  */
 class SurfaceElevationInterface
 {
@@ -46,7 +46,7 @@ class SurfaceElevationInterface
 
         /**  \brief Returns the relative wave height computed by update_surface_elevation
           *  \returns zwave - z for each point in mesh.
-          *  \snippet hydro_model/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_matrix_example
+          *  \snippet hydro_model/unit_tests/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_matrix_example
           */
         std::vector<double> get_relative_wave_height() const;
 
@@ -83,7 +83,7 @@ class SurfaceElevationInterface
           *           frame: this method will request a transform from a
           *           Kinematics object to express it in the NED frame.
           *  \returns Pdyn (in Pascal)
-          *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_example
+          *  \snippet hydro_models/unit_tests/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_example
           */
         std::vector<double> get_dynamic_pressure(
             const double rho,                        //!< Water density (in kg/m^3)
@@ -108,7 +108,7 @@ class SurfaceElevationInterface
           *  \returns Vector of coordinates on the free surface (in the NED frame),
           *           the z coordinate being the wave height (in meters), for each
           *           point in output_mesh
-          *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest method_example
+          *  \snippet hydro_models/unit_tests/WaveModelInterfaceTest.cpp WaveModelInterfaceTest method_example
           */
         ssc::kinematics::PointMatrix get_waves_on_mesh(
             const ssc::kinematics::KinematicsPtr& k, //!< Object used to compute the transforms to the NED frame
@@ -132,7 +132,7 @@ class SurfaceElevationInterface
           *  \returns Vector of coordinates on the free surface (in the NED frame),
           *           the z coordinate being the wave height (in meters), for each
           *           point in P
-          *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest method_example
+          *  \snippet hydro_models/unit_tests/WaveModelInterfaceTest.cpp WaveModelInterfaceTest method_example
           */
         ssc::kinematics::PointMatrix get_points_on_free_surface(
             const double t,                               //!< Current instant (in seconds)
