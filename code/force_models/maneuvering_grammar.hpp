@@ -12,6 +12,11 @@
 #include "boost_spirit_includes.hpp"
 #include <boost/version.hpp>
 
+// Explicitly disabled efficient C++ flag so that the following line compiles
+// ArithmeticGrammar() : ArithmeticGrammar::base_type(expr) is not compliant with effc++
+// error: 'hdb::hdb_grammar<>::ast' should be initialized in the member initialization list [-Werror=effc++]
+#pragma GCC diagnostic ignored "-Weffc++"
+
 namespace maneuvering
 {
     typedef ascii::blank_type SpaceType;
