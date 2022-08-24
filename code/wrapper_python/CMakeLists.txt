@@ -30,9 +30,9 @@ pybind11_add_module(${PYTHON_PACKAGE_NAME}
     src/py_xdyn_env.cpp
     src/py_xdyn_force.cpp
     src/py_xdyn_hdb.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../executables/src/XdynCommandLineArguments.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../executables/src/ErrorReporter.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../executables/src/build_observers_description.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../executables/XdynCommandLineArguments.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../executables/ErrorReporter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../executables/build_observers_description.cpp
     )
 set_target_properties(${PYTHON_PACKAGE_NAME} PROPERTIES OUTPUT_NAME "xdyn")
 
