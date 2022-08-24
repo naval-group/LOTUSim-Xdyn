@@ -15,7 +15,7 @@ void check_all_values_are_within_bounds(const double min_bound, const std::vecto
         if (period<(min_bound-eps))
         {
             THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                "HDB used by DiffractionForceModel only defines the RAO for wave period T within [" << min_bound << "," << max_bound << "]"
+                "HDB used by PhaseModuleRAOEvaluator only defines the RAO for wave period T within [" << min_bound << "," << max_bound << "]"
                 << " s, but wave spectrum discretization contains T = " << period
                 << " s which is below the min bound by " << min_bound-period
                 << " s: you need to modify the section 'environment models/model: waves/discretization'"
@@ -24,7 +24,7 @@ void check_all_values_are_within_bounds(const double min_bound, const std::vecto
         if (period>(max_bound+eps))
         {
             THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                "HDB used by DiffractionForceModel only defines the RAO for wave period T within [" << min_bound << "," << max_bound << "]"
+                "HDB used by PhaseModuleRAOEvaluator only defines the RAO for wave period T within [" << min_bound << "," << max_bound << "]"
                 << " s, but wave spectrum discretization contains T = " << period
                 << " s which is above the max bound by " << period-max_bound
                 << " s: you need to modify the section 'environment models/model: waves/discretization'"
