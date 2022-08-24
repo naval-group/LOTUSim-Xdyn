@@ -1,14 +1,14 @@
-#include <string>
-#include <sstream>
-#include <vector>
+#include "HoltropMennenForceModelTest.hpp"
 
 #include "HoltropMennenForceModel.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "BodyStates.hpp"
 
-#include "HoltropMennenForceModelTest.hpp"
+#include <string>
+#include <sstream>
+#include <vector>
 
-HoltropMennenForceModelTest::HoltropMennenForceModelTest() : a(ssc::random_data_generator::DataGenerator(45454))
+HoltropMennenForceModelTest::HoltropMennenForceModelTest() : a(ssc::random_data_generator::DataGenerator(45454)), env()
 {
     env.rho = 1025;
     env.nu = 1.18e-6;
@@ -27,6 +27,7 @@ void HoltropMennenForceModelTest::TearDown()
 {
 }
 
+std::string get_yaml_input_with_optional();
 std::string get_yaml_input_with_optional()
 {
     std::stringstream ss;
@@ -38,6 +39,7 @@ std::string get_yaml_input_with_optional()
     return ss.str();
 }
 
+std::string get_yaml_input_without_optional();
 std::string get_yaml_input_without_optional()
 {
     std::stringstream ss;
@@ -48,6 +50,7 @@ std::string get_yaml_input_without_optional()
     return ss.str();
 }
 
+HoltropMennenForceModel::Input get_Holtrop_Mennen_1982_input();
 HoltropMennenForceModel::Input get_Holtrop_Mennen_1982_input()
 {
     HoltropMennenForceModel::Input input;
@@ -69,6 +72,7 @@ HoltropMennenForceModel::Input get_Holtrop_Mennen_1982_input()
     return input;
 }
 
+HoltropMennenForceModel::Input get_Holtrop_1984_input();
 HoltropMennenForceModel::Input get_Holtrop_1984_input()
 {
     HoltropMennenForceModel::Input input;
@@ -92,7 +96,8 @@ HoltropMennenForceModel::Input get_Holtrop_1984_input()
     return input;
 }
 
-BodyStates get_steady_forward_speed_states(double u = 0., const std::string& body_name = "body")
+BodyStates get_steady_forward_speed_states(double u = 0., const std::string& body_name = "body");
+BodyStates get_steady_forward_speed_states(double u, const std::string& body_name)
 {
     BodyStates states;
     states.x.record(0, 0);
