@@ -1,9 +1,9 @@
-#include <ssc/kinematics.hpp>
-
-#include "yaml.h"
-#include "external_data_structures_parsers.hpp"
-
 #include "LinearStiffnessForceModel.hpp"
+#include "external_data_structures_parsers.hpp"
+#include <ssc/kinematics.hpp>
+#include "yaml.h"
+
+LinearStiffnessForceModel::Input::Input(): name(), K(), equilibrium_position() {}
 
 std::string LinearStiffnessForceModel::model_name() {return "linear stiffness";}
 
