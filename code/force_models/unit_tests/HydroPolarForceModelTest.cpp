@@ -8,6 +8,7 @@ HydroPolarForceModelTest::HydroPolarForceModelTest()
 {
 }
 
+std::string get_yaml_input();
 std::string get_yaml_input()
 {
     std::stringstream ss;
