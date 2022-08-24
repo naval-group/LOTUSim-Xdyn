@@ -7,7 +7,7 @@
 
 #include "CenterOfMass.hpp"
 
-CenterOfMass::CenterOfMass(const EPoint& G_, const double v_) : G(G_), volume(v_)
+CenterOfMass::CenterOfMass(const EPoint& G_, const double v_) : G(G_), volume(v_), all_facets_are_in_same_plane(false)
 {
 }
 
