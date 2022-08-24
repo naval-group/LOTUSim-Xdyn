@@ -149,14 +149,17 @@ bool MeshBuilder::point_is_in_map(const EPoint& xyz)
     return itMap != xyzMap.end();
 }
 
-MeshBuilder::MeshBuilder(const Matrix3x& tri) : v(VectorOfVectorOfPoints()),
-                                                xyzMap(Vector3dMap()),
-                                                edgeMap(EdgeMap()),
-                                                index(0),
-                                                edgeIndex(0),
-                                                nodes(Matrix3x()),
-                                                edges(std::vector<Edge>()),
-                                                facets(std::vector<Facet>())
+MeshBuilder::MeshBuilder(const Matrix3x& tri):
+        v(VectorOfVectorOfPoints()),
+        xyzMap(Vector3dMap()),
+        edgeMap(EdgeMap()),
+        index(0),
+        edgeIndex(0),
+        nodes(Matrix3x()),
+        edges(std::vector<Edge>()),
+        facets(std::vector<Facet>()),
+        facetsPerEdge(std::vector<std::vector<size_t> >()),
+        orientedEdgesPerFacet(std::vector<std::vector<size_t> >())
 {
     VectorOfPoints vv;
     for (int i = 0 ; i < tri.cols() ; ++i)
