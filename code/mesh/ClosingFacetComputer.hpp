@@ -9,13 +9,17 @@
 #ifndef CLOSINGFACETCOMPUTER_HPP_
 #define CLOSINGFACETCOMPUTER_HPP_
 
+#include <Eigen/Dense>
+
 #include <cstdlib> // size_t
 #include <map>
 #include <utility> // std::pair
 #include <set>
 #include <vector>
 
-#include <Eigen/Dense>
+// Explicitly disabled efficient C++ flag so that the following line compiles
+// error: 'class ClosingFacetComputer' has pointer data members [-Werror=effc++]
+#pragma GCC diagnostic ignored "-Weffc++"
 
 template <typename T,typename U> bool has(const U& map_or_set, const T idx)
 {
