@@ -15,9 +15,9 @@
  *  \addtogroup model_wrappers
  *  \ingroup model_wrappers
  *  \section ex1 Example
- *  \snippet model_wrappers/unit_tests/src/FroudeKrylovForceModelTest.cpp FroudeKrylovForceModelTest example
+ *  \snippet model_wrappers/unit_tests/FroudeKrylovForceModelTest.cpp FroudeKrylovForceModelTest example
  *  \section ex2 Expected output
- *  \snippet model_wrappers/unit_tests/src/FroudeKrylovForceModelTest.cpp FroudeKrylovForceModelTest expected output
+ *  \snippet model_wrappers/unit_tests/FroudeKrylovForceModelTest.cpp FroudeKrylovForceModelTest expected output
  */
 class FroudeKrylovForceModel : public ImmersedSurfaceForceModel
 {
