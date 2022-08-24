@@ -22,7 +22,7 @@ class RaoInterpolator
         /**
          * \brief Interpolates the RAO's module for a given axis, a wave period (*not* an encounter period)
          * and an incidence (between 0 and π for waves propagating towards port side, π and 2π for waves propagating towards starboard
-         * 0 for waves propagating from aft to fore (heading waves), pi for waves propagating from fore to aft (facing waves))
+         * 0 for waves propagating from aft to fore (following waves), pi for waves propagating from fore to aft (head waves))
          * \returns module of the rao for the axis, the frequency and the incidence
          */
         double interpolate_module(const size_t axis, const double Tp, double beta);
@@ -30,7 +30,7 @@ class RaoInterpolator
         /**
          * \brief Interpolates the RAO's phase for a given axis, a wave period (*not* an encounter period)
          * and an incidence (between 0 and π for waves propagating towards port side, π and 2π for waves propagating towards starboard
-         * 0 for waves propagating from aft to fore (heading waves), pi for waves propagating from fore to aft (facing waves))
+         * 0 for waves propagating from aft to fore (following waves), pi for waves propagating from fore to aft (head waves))
          * \returns module of the rao for the axis, the frequency and the incidence
          */
         double interpolate_phase(const size_t axis, const double Tp, double beta);
