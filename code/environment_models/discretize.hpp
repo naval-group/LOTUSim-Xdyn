@@ -23,7 +23,7 @@ FlatDiscreteDirectionalWaveSpectrum flatten(
   *  the most important ones (i.e. those representing a given ratio of the total
   *  energy in the spectrum.
   *  \returns A flat spectrum (i.e. one where the freq & direct. loops have been unrolled)
-  *  \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest flatten_example
+  *  \snippet environment_models/unit_tests/discretizeTest.cpp discretizeTest flatten_example
   */
 FlatDiscreteDirectionalWaveSpectrum filter(
     const FlatDiscreteDirectionalWaveSpectrum& spectrum, //!< Spectrum to filter
@@ -35,9 +35,9 @@ FlatDiscreteDirectionalWaveSpectrum filter(
   *  \brief Discretize a wave spectrum
   *  \details Infinite depth hypothesis (for the wave number)
   *  \section ex1 Example
-  *  \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest example
+  *  \snippet environment_models/unit_tests/discretizeTest.cpp discretizeTest example
   *  \section ex1 Expected output
-  *  \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest expected output
+  *  \snippet environment_models/unit_tests/discretizeTest.cpp discretizeTest expected output
   */
 DiscreteDirectionalWaveSpectrum discretize(
     const WaveSpectralDensity& S,      //!< Frequency spectrum
@@ -54,7 +54,7 @@ DiscreteDirectionalWaveSpectrum discretize(
   *  \date Aug 1, 2014, 5:04:24 PM
   *  \brief Discretize a wave spectrum
   *  \details Finite depth hypothesis (for the wave number)
-  *  \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest discretize_example
+  *  \snippet environment_models/unit_tests/discretizeTest.cpp discretizeTest discretize_example
   */
 DiscreteDirectionalWaveSpectrum discretize(
     const WaveSpectralDensity& S,      //!< Frequency spectrum
@@ -79,9 +79,9 @@ DiscreteDirectionalWaveSpectrum discretize(
 * returns a list of increasing `x`-values such that integrating f between x[i-1]
 * and x[i] will give a constant value, for each i between 1 and n-1.
   *  \section ex1 Example
-  *  \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest equal_area_abscissae_example
+  *  \snippet environment_models/unit_tests/discretizeTest.cpp discretizeTest equal_area_abscissae_example
   *  \section ex1 Expected output
-  *  \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest equal_area_abscissae_expected_output
+  *  \snippet environment_models/unit_tests/discretizeTest.cpp discretizeTest equal_area_abscissae_expected_output
 */
 std::vector<double> equal_area_abscissae(
     const std::vector<double>& xs, //!< Input abscissae at which the function is defined
@@ -116,7 +116,7 @@ double find_integration_bound_yielding_target_area(
 
 /**  \brief Utility function used by the discretize function. Infinite depth approximation. This is where the stretching is taken into account.
   *  \returns Factor \f$f(k,z)\f$ such that \f$p_{\mbox{dyn}}=\rho g \eta_a f(k,z)\f$ (no unit), infinite depth approximation
-  *  \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest dynamic_pressure_factor example
+  *  \snippet environment_models/unit_tests/discretizeTest.cpp discretizeTest dynamic_pressure_factor example
   */
 double dynamic_pressure_factor(
     const double k,              //!< Wave number (in 1/m)
@@ -127,7 +127,7 @@ double dynamic_pressure_factor(
 
 /**  \brief Utility function used by the discretize function. Finite depth. This is where the stretching is taken into account.
   *  \returns Factor \f$f(k,z,h)\f$ such that \f$p_{\mbox{dyn}}=\rho g \eta_a f(k,z,h)\f$ (no unit), finite depth.
-  *  \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest dynamic_pressure_factor example
+  *  \snippet environment_models/unit_tests/discretizeTest.cpp discretizeTest dynamic_pressure_factor example
   */
 double dynamic_pressure_factor(
     const double k,              //!< Wave number (in 1/m)
@@ -139,7 +139,7 @@ double dynamic_pressure_factor(
 
 /**  \brief Utility function used by the discretize function. Finite depth.
   *  \returns Factor \f$f(k,z,h)\f$ such that \f$p_{\mbox{dyn}}=\rho g \eta_a f(k,z,h)\f$ (no unit), finite depth.
-  *  \snippet environment_models/unit_tests/src/discretizeTest.cpp discretizeTest dynamic_pressure_factor example
+  *  \snippet environment_models/unit_tests/discretizeTest.cpp discretizeTest dynamic_pressure_factor example
   */
 double dynamic_pressure_factor_sh(
     const double k,              //!< Wave number (in 1/m)
