@@ -29,6 +29,14 @@ template <> std::string get_type_of_service<GRPCForceModel>()
     return "force model";
 }
 
+GRPCForceModel::Input::Input():
+    url(),
+    name(),
+    yaml(),
+    hdb_filename(),
+    precal_filename()
+{}
+
 class GRPCForceModel::Impl
 {
     public:

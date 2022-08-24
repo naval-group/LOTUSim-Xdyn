@@ -92,6 +92,7 @@ target_link_libraries(${PYTHON_PACKAGE_NAME} PRIVATE
     $<TARGET_OBJECTS:interface_hdf5>
     $<TARGET_OBJECTS:gz_curves>
     $<TARGET_OBJECTS:grpc>
+    $<TARGET_OBJECTS:grpc_gen>
     $<TARGET_OBJECTS:test_data_generator>
     )
 

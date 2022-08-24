@@ -10,21 +10,21 @@ SET(SRC
     GrpcControllerInterface.cpp
     )
 
-INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${exceptions_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${external_data_structures_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${core_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${environment_models_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${hdb_interpolators_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${listeners_and_controllers_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS}) # For MeshIntersector
+INCLUDE_DIRECTORIES(${hdb_interpolators_INCLUDE_DIRS}) # For History
+INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${PROTOBUF_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(SYSTEM ${GRPC_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(SYSTEM ${CMAKE_CURRENT_BINARY_DIR})
 INCLUDE_DIRECTORIES(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS}) # For MeshIntersector
-INCLUDE_DIRECTORIES(${hdb_interpolators_INCLUDE_DIRS}) # For History
 
 # gRPC
 SET(wave_proto_types ${CMAKE_CURRENT_SOURCE_DIR}/../../interfaces/proto/wave_types.proto)
@@ -90,8 +90,8 @@ ADD_CUSTOM_COMMAND(
             "controller.proto"
     DEPENDS "${controller_proto}")
 
-add_library(${PROJECT_NAME} OBJECT
-    ${SRC}
+ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
+ADD_LIBRARY(${PROJECT_NAME}_gen OBJECT
     ${wave_proto_srcs_t}
     ${wave_grpc_srcs_t}
     ${wave_proto_srcs_g}
@@ -105,9 +105,12 @@ SET(${PROJECT_NAME}_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH "Path to
 
 IF((${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang") OR (${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang"))
     MESSAGE(STATUS "Remove the -Wc++17-attribute-extensions option for ${PROJECT_NAME}")
-    TARGET_COMPILE_OPTIONS(${PROJECT_NAME} PRIVATE -Wno-c++17-extensions)
+    TARGET_COMPILE_OPTIONS(${PROJECT_NAME}_gen PRIVATE -Wno-c++17-extensions)
     # gRPC code: fatal error: implicit conversion changes signedness: 'unsigned int' to 'int' [-Wsign-conversion]
-    TARGET_COMPILE_OPTIONS(${PROJECT_NAME} PRIVATE -Wno-sign-conversion)
+    TARGET_COMPILE_OPTIONS(${PROJECT_NAME}_gen PRIVATE -Wno-sign-conversion)
+ENDIF()
+IF((${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU"))
+    TARGET_COMPILE_OPTIONS(${PROJECT_NAME}_gen PRIVATE -Wno-effc++)
 ENDIF()
 
 ADD_SUBDIRECTORY(unit_tests)

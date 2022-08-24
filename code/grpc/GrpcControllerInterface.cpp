@@ -111,6 +111,17 @@ ControllerRequestEuler build_euler321_request(const double t, const std::vector<
     return ret;
 }
 
+/*
+GrpcSetParametersResponse::GrpcSetParametersResponse():
+    date_of_first_callback(0.0),
+    angle_representation(AngleRepresentation::QUATERNION),
+    dt(0.0),
+    command_names()
+{}
+*/
+GrpcControllerResponse::GrpcControllerResponse(): commands(), next_call(0.0){}
+
+GrpcControllerInterface::Input::Input ():url(), name(), yaml(){}
 
 struct GrpcControllerInterface::Impl
 {

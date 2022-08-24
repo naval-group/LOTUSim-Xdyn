@@ -141,6 +141,7 @@ ADD_LIBRARY(${PROJECT_NAME} ${STATICORSHARED}
         $<TARGET_OBJECTS:interface_hdf5>
         $<TARGET_OBJECTS:gz_curves>
         $<TARGET_OBJECTS:grpc>
+        $<TARGET_OBJECTS:grpc_gen>
         )
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE yaml-cpp)

@@ -34,14 +34,13 @@ struct XYT
 
 struct WaveRequest
 {
-    XYTs elevations;
-    XYZTs dynamic_pressures;
-    XYZTs orbital_velocities;
-    XYT spectrum;
-    bool angular_frequencies_for_rao;
-    bool directions_for_rao;
-    bool need_spectrum;
+    XYTs elevations {};
+    XYZTs dynamic_pressures {};
+    XYZTs orbital_velocities {};
+    XYT spectrum {};
+    bool angular_frequencies_for_rao {};
+    bool directions_for_rao {};
+    bool need_spectrum {};
 };
-
 
 #endif /* GRPC_INC_GRPCTYPES_HPP_ */
