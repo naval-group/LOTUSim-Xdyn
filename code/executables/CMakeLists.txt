@@ -196,6 +196,9 @@ IF((${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang") OR (${CMAKE_CXX_COMPILER_ID} STRE
     # gRPC code: fatal error: implicit conversion changes signedness: 'unsigned int' to 'int' [-Wsign-conversion]
     TARGET_COMPILE_OPTIONS(xdyn-for-cs PRIVATE -Wno-sign-conversion)
 ENDIF()
+IF((${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU"))
+    TARGET_COMPILE_OPTIONS(xdyn-for-cs PRIVATE -Wno-effc++)
+ENDIF()
 
 ADD_EXECUTABLE(xdyn-for-me
     display_command_line_arguments.cpp
@@ -227,6 +230,9 @@ IF((${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang") OR (${CMAKE_CXX_COMPILER_ID} STRE
     TARGET_COMPILE_OPTIONS(xdyn-for-me PRIVATE -Wno-c++17-extensions)
     # gRPC code: fatal error: implicit conversion changes signedness: 'unsigned int' to 'int' [-Wsign-conversion]
     TARGET_COMPILE_OPTIONS(xdyn-for-me PRIVATE -Wno-sign-conversion)
+ENDIF()
+IF((${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU"))
+    TARGET_COMPILE_OPTIONS(xdyn-for-me PRIVATE -Wno-effc++)
 ENDIF()
 
 ADD_EXECUTABLE(xdyn-grpc-airy
