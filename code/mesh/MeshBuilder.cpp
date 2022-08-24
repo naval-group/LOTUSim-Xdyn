@@ -12,7 +12,9 @@ MeshBuilder::MeshBuilder(const VectorOfVectorOfPoints& v_, const bool check_orie
                                                                    edgeIndex(0),
                                                                    nodes(Matrix3x()),
                                                                    edges(std::vector<Edge>()),
-                                                                   facets(std::vector<Facet>())
+                                                                   facets(std::vector<Facet>()),
+                                                                   facetsPerEdge(std::vector<std::vector<size_t> >()),
+                                                                   orientedEdgesPerFacet(std::vector<std::vector<size_t> >())
 {
     if(check_orientation)
     {
