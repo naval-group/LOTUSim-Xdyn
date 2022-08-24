@@ -1,11 +1,9 @@
-#include <cmath>
-#include "yaml.h"
+#include "HoltropMennenForceModel.hpp"
+#include "EnvironmentAndFrames.hpp"
 #include <ssc/yaml_parser.hpp>
 #include <ssc/exception_handling.hpp>
-
-#include "EnvironmentAndFrames.hpp"
-
-#include "HoltropMennenForceModel.hpp"
+#include "yaml.h"
+#include <cmath>
 
 std::string HoltropMennenForceModel::model_name()
 {
@@ -114,6 +112,7 @@ HoltropMennenForceModel::HoltropMennenForceModel(const Input& data, const std::s
         d(-0.9),
         input(data),
         derived(data),
+        apply_on_ship_speed_direction(false),
         gravity_force(input.Vol*env.rho*env.g)
 {
 }
