@@ -20,9 +20,9 @@ typedef TR1(shared_ptr)<WaveSpectralDensity> WaveSpectralDensityPtr;
  *  \addtogroup waves
  *  \ingroup waves
  *  \section ex1 Example
- *  \snippet waves/unit_tests/src/SumOfWaveSpectralDensitiesTest.cpp SumOfWaveSpectralDensitiesTest example
+ *  \snippet waves/unit_tests/SumOfWaveSpectralDensitiesTest.cpp SumOfWaveSpectralDensitiesTest example
  *  \section ex2 Expected output
- *  \snippet waves/unit_tests/src/SumOfWaveSpectralDensitiesTest.cpp SumOfWaveSpectralDensitiesTest expected output
+ *  \snippet waves/unit_tests/SumOfWaveSpectralDensitiesTest.cpp SumOfWaveSpectralDensitiesTest expected output
  */
 class SumOfWaveSpectralDensities : public WaveSpectralDensity
 {
@@ -38,7 +38,7 @@ class SumOfWaveSpectralDensities : public WaveSpectralDensity
 
         /**  \brief Returns n angular frequencies between omega_min (included)
           *         and omega_max (also included)
-          *  \snippet environment_models/unit_tests/src/WaveSpectralDensityTest.cpp WaveSpectralDensityTest get_omega0_example
+          *  \snippet environment_models/unit_tests/WaveSpectralDensityTest.cpp WaveSpectralDensityTest get_omega0_example
           */
         std::vector<double> get_angular_frequencies(const double omega_min, //!< Minimum angular frequency (in rad/s)
                                                     const double omega_max, //!< Maximum angular frequency (in rad/s)
