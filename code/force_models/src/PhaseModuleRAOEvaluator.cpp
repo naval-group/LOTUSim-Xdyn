@@ -6,6 +6,14 @@
 
 #define TWOPI 6.283185307179586232
 
+ssc::kinematics::Vector6d express_aquaplus_wrench_in_xdyn_coordinates(ssc::kinematics::Vector6d v);
+ssc::kinematics::Vector6d express_aquaplus_wrench_in_xdyn_coordinates(ssc::kinematics::Vector6d v)
+{
+    v(0) *= -1;
+    v(3) *= -1;
+    return v;
+}
+
 void check_all_values_are_within_bounds(const double min_bound, const std::vector<double>& vector_to_check, const double max_bound);
 void check_all_values_are_within_bounds(const double min_bound, const std::vector<double>& vector_to_check, const double max_bound)
 {
@@ -56,26 +64,31 @@ PhaseModuleRAOEvaluator::PhaseModuleRAOEvaluator(
                     "results of the HDB or PRECAL_R file. When querying the periods for the diffraction "
                     "forces, the following problem occurred:\n" << e.get_message());
         }
-        if (not(periods.empty()))
-        {
-            /*
-             * Replaced env.w->get_wave_angular_frequency_for_each_model with get_flat_directional_spectra called at origin
-             * so that we do not rely on any specific (cartesian) spectrum discretization
-             */
-            const double period_min = *std::min_element(periods.begin(), periods.end());
-            const double period_max = *std::max_element(periods.begin(), periods.end());
-            const std::vector<FlatDiscreteDirectionalWaveSpectrum> directional_spectra = env.w->get_flat_directional_spectra(0, 0, 0);
-            for (const auto& directional_spectrum: directional_spectra)
-            {
-                const std::vector<double> spectrum_periods = directional_spectrum.get_periods();
-                check_all_values_are_within_bounds(period_min, spectrum_periods, period_max);
-            }
-        }
     }
     else
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "Force model '"
                 << force_model_name << "' needs a wave model, even if it's 'no waves'");
+    }
+}
+
+void PhaseModuleRAOEvaluator::check_spectra_periods_are_in_rao_period_bounds(const std::vector<FlatDiscreteDirectionalWaveSpectrum>& spectra) const
+{
+    // When calling this method, `rao_interpolator.get_module_periods` vector is defined
+    const std::vector<double>& periods = rao_interpolator.get_module_periods();
+    if (not(periods.empty()))
+    {
+        /*
+         * Replaced env.w->get_wave_angular_frequency_for_each_model with get_flat_directional_spectra called at origin
+         * so that we do not rely on any specific (cartesian) spectrum discretization
+         */
+        const double period_min = *std::min_element(periods.begin(), periods.end());
+        const double period_max = *std::max_element(periods.begin(), periods.end());
+        for (const auto& spectrum: spectra)
+        {
+            const std::vector<double> spectrum_periods = spectrum.get_periods();
+            check_all_values_are_within_bounds(period_min, spectrum_periods, period_max);
+        }
     }
 }
 
@@ -92,6 +105,7 @@ ssc::kinematics::Vector6d PhaseModuleRAOEvaluator::evaluate(const BodyStates& st
         try
         {
             const auto directional_spectra = env.w->get_flat_directional_spectra(x(0), x(1), t);
+            check_spectra_periods_are_in_rao_period_bounds(directional_spectra);
             for (size_t degree_of_freedom_idx = 0 ; degree_of_freedom_idx < 6 ; ++degree_of_freedom_idx) // For each degree of freedom (X, Y, Z, K, M, N)
             {
                 for (const auto spectrum:directional_spectra) // For each directional spectrum
@@ -152,13 +166,6 @@ double PhaseModuleRAOEvaluator::get_interpolation_period(const double wave_angul
         encounter_period = TWOPI/wave_angular_frequency;
     }
     return encounter_period;
-}
-
-ssc::kinematics::Vector6d PhaseModuleRAOEvaluator::express_aquaplus_wrench_in_xdyn_coordinates(ssc::kinematics::Vector6d v) const
-{
-    v(0) *= -1;
-    v(3) *= -1;
-    return v;
 }
 
 Eigen::Vector3d PhaseModuleRAOEvaluator::get_application_point() const
