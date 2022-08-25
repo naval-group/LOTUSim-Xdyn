@@ -8,6 +8,10 @@
 #include "DiscreteDirectionalWaveSpectrum.hpp"
 #include "InvalidInputException.hpp"
 
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
+
 FlatDiscreteDirectionalWaveSpectrum::FlatDiscreteDirectionalWaveSpectrum() :
     a(),
     omega(),
@@ -19,6 +23,16 @@ FlatDiscreteDirectionalWaveSpectrum::FlatDiscreteDirectionalWaveSpectrum() :
     pdyn_factor(),
     pdyn_factor_sh()
 {
+}
+std::vector<double> FlatDiscreteDirectionalWaveSpectrum::get_periods() const
+{
+    std::vector<double> periods;
+    periods.reserve(omega.size());
+    for (size_t i=0;i<omega.size();++i)
+    {
+        periods.push_back(2.0 * PI / omega.at(i));
+    }
+    return periods;
 }
 
 DiscreteDirectionalWaveSpectrum::DiscreteDirectionalWaveSpectrum() :

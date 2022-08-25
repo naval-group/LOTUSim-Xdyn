@@ -137,6 +137,27 @@ class SurfaceElevationFromGRPC::Impl
             }
         }
 
+        void check_sizes(const FlatSpectrumResponse& response) const
+        {
+            const std::string rpc_method = "flat_spectrum";
+            if (response.omega_size() != response.a_size())
+            {
+                throw_invalid_size_error(rpc_method, "FlatSpectrum", "a", response.omega_size(), response.a_size());
+            }
+            if (response.omega_size() != response.psi_size())
+            {
+                throw_invalid_size_error(rpc_method, "FlatSpectrum", "psi", response.omega_size(), response.psi_size());
+            }
+            if (response.omega_size() != response.k_size())
+            {
+                throw_invalid_size_error(rpc_method, "FlatSpectrum", "k", response.omega_size(), response.k_size());
+            }
+            if (response.omega_size() != response.phase_size())
+            {
+                throw_invalid_size_error(rpc_method, "FlatSpectrum", "phase", response.omega_size(), response.phase_size());
+            }
+        }
+
         void throw_if_invalid_status(const std::string& rpc_method, const grpc::Status& status) const
         {
             const std::string base_error_msg = "an error occurred when using the distant wave model defined via gRPC (method '" + rpc_method + "').\n";
@@ -340,32 +361,64 @@ class SurfaceElevationFromGRPC::Impl
             throw_if_invalid_status("spectrum", status);
             check_sizes(response);
             std::vector<DiscreteDirectionalWaveSpectrum> ret;
+            for (int i = 0 ; i < response.spectrum_size() ; ++i)
             {
-                for (int i = 0 ; i < response.spectrum_size() ; ++i)
+                DiscreteDirectionalWaveSpectrum s;
+                s.Si.reserve(response.spectrum(i).si_size());
+                std::copy(response.spectrum(i).si().begin(), response.spectrum(i).si().end(), std::back_inserter(s.Si));
+                s.Dj.reserve(response.spectrum(i).dj_size());
+                std::copy(response.spectrum(i).dj().begin(), response.spectrum(i).dj().end(), std::back_inserter(s.Dj));
+                s.omega.reserve(response.spectrum(i).omega_size());
+                std::copy(response.spectrum(i).omega().begin(), response.spectrum(i).omega().end(), std::back_inserter(s.omega));
+                s.psi.reserve(response.spectrum(i).psi_size());
+                std::copy(response.spectrum(i).psi().begin(), response.spectrum(i).psi().end(), std::back_inserter(s.psi));
+                s.k.reserve(response.spectrum(i).k_size());
+                std::copy(response.spectrum(i).k().begin(), response.spectrum(i).k().end(), std::back_inserter(s.k));
+                if (response.spectrum(i).phase_size())
                 {
-                    DiscreteDirectionalWaveSpectrum s;
-                    s.Si.reserve(response.spectrum(i).si_size());
-                    std::copy(response.spectrum(i).si().begin(), response.spectrum(i).si().end(), std::back_inserter(s.Si));
-                    s.Dj.reserve(response.spectrum(i).dj_size());
-                    std::copy(response.spectrum(i).dj().begin(), response.spectrum(i).dj().end(), std::back_inserter(s.Dj));
-                    s.omega.reserve(response.spectrum(i).omega_size());
-                    std::copy(response.spectrum(i).omega().begin(), response.spectrum(i).omega().end(), std::back_inserter(s.omega));
-                    s.psi.reserve(response.spectrum(i).psi_size());
-                    std::copy(response.spectrum(i).psi().begin(), response.spectrum(i).psi().end(), std::back_inserter(s.psi));
-                    s.k.reserve(response.spectrum(i).k_size());
-                    std::copy(response.spectrum(i).k().begin(), response.spectrum(i).k().end(), std::back_inserter(s.k));
-                    if (response.spectrum(i).phase_size())
+                    s.phase.resize(response.spectrum(i).phase_size());
+                    for (int j = 0 ; j < response.spectrum(i).phase_size() ; ++j)
                     {
-                        s.phase.resize(response.spectrum(i).phase_size());
-                        for (int j = 0 ; j < response.spectrum(i).phase_size() ; ++j)
-                        {
-                            s.phase.at(j).reserve(response.spectrum(i).phase(j).phase_size());
-                            std::copy(response.spectrum(i).phase(j).phase().begin(), response.spectrum(i).phase(j).phase().end(), std::back_inserter(s.phase.at(j)));
-                        }
+                        s.phase.at(j).reserve(response.spectrum(i).phase(j).phase_size());
+                        std::copy(response.spectrum(i).phase(j).phase().begin(), response.spectrum(i).phase(j).phase().end(), std::back_inserter(s.phase.at(j)));
                     }
-                    ret.push_back(s);
                 }
+                ret.push_back(s);
             }
+            return ret;
+        }
+
+        std::vector<FlatDiscreteDirectionalWaveSpectrum> flat_directional_spectra(const double x, const double y, const double t)
+        {
+            SpectrumRequest request;
+            request.set_x(x);
+            request.set_y(y);
+            request.set_t(t);
+            grpc::ClientContext context;
+            FlatSpectrumResponse response;
+            const grpc::Status status = stub->flat_spectrum(&context, request, &response);
+            throw_if_invalid_status("flat_spectrum", status);
+            check_sizes(response);
+            FlatDiscreteDirectionalWaveSpectrum s;
+            s.a.reserve(response.a_size());
+            std::copy(response.a().begin(), response.a().end(), std::back_inserter(s.a));
+            s.omega.reserve(response.omega_size());
+            std::copy(response.omega().begin(), response.omega().end(), std::back_inserter(s.omega));
+            s.psi.reserve(response.psi_size());
+            std::copy(response.psi().begin(), response.psi().end(), std::back_inserter(s.psi));
+            s.cos_psi.reserve(response.psi_size());
+            s.sin_psi.reserve(response.psi_size());
+            for (size_t i = 0 ; i < s.psi.size() ; ++i)
+            {
+                s.cos_psi.push_back(cos(s.psi.at(i)));
+                s.sin_psi.push_back(sin(s.psi.at(i)));
+            }
+            s.k.reserve(response.k_size());
+            std::copy(response.k().begin(), response.k().end(), std::back_inserter(s.k));
+            s.phase.reserve(response.phase_size());
+            std::copy(response.phase().begin(), response.phase().end(), std::back_inserter(s.phase));
+            std::vector<FlatDiscreteDirectionalWaveSpectrum> ret;
+            ret.push_back(s);
             return ret;
         }
 

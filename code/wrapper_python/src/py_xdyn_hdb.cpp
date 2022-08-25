@@ -162,20 +162,6 @@ void py_add_module_xdyn_hdb(py::module&m)
         ;
 
     py::class_<RaoInterpolator>(m_hdb_interpolators, "RaoInterpolator")
-        .def(py::init<const HydroDBParser& /*data*/,
-                      const std::vector<double>& /*omega*/,
-                      const std::vector<double>& /*psi*/,
-                      const YamlRAO& /*diffraction_yaml*/>(),
-            py::arg("data"),
-            py::arg("omega"),
-            py::arg("psi"),
-            py::arg("diffraction_yaml"),
-            R"(
-                - `data` (HydroDBParser): Data read from the HDB or Precal_R file
-                - `omega` (List[float]): Angular frequencies in the wave spectrum (points at which to interpolate the HDB data)
-                - `psi` (List[float]): Wave directions (points at which to interpolate the HDB data)
-                - `diffraction_yaml` (YamlRAO): Contents of the force model's parsed YAML data
-            )")
         .def(py::init<const HydroDBParser& /*data*/, const YamlRAO& /*diffraction_yaml*/>(),
             py::arg("data"),
             py::arg("diffraction_yaml"),
@@ -183,20 +169,6 @@ void py_add_module_xdyn_hdb(py::module&m)
                 - `data` (HydroDBParser): Data read from the HDB or Precal_R file
                 - `diffraction_yaml` (YamlRAO): Contents of the force model's parsed YAML data
             )")
-        .def("get_modules_cartesian", &RaoInterpolator::get_modules_cartesian,
-            py::arg("k"),
-            R"(Interpolates the RAO's module for the values of omega & psi in the wave spectrum
-             Input:
-             - `k` (int): Axis index (0 for Fx, 1 for Fy, 2 for Fz, 3 for Mx, 4 for My and 5 for Mz)
-             Return RAO_module[i][j], where i is frequency index & j direction index
-             )")
-        .def("get_phases_cartesian", &RaoInterpolator::get_phases_cartesian,
-            py::arg("k"),
-            R"(Interpolates the RAO's phase for the values of omega & psi in the wave spectrum
-             Input:
-             - `k` (int): Axis index (0 for Fx, 1 for Fy, 2 for Fz, 3 for Mx, 4 for My and 5 for Mz)
-             Return RAO_phase[i][j], where i is frequency index & j direction index
-             )")
         .def("interpolate_module", &RaoInterpolator::interpolate_module,
             py::arg("axis"),
             py::arg("Tp"),
@@ -219,8 +191,6 @@ void py_add_module_xdyn_hdb(py::module&m)
         .def("get_rao_calculation_point", &RaoInterpolator::get_rao_calculation_point)
         .def("using_encounter_period", &RaoInterpolator::using_encounter_period, "Return boolean")
         ;
-
-
 
     /* Code below expose internal function / class that be should be kept private*/
     /* Maybe inside a submodule named _internal ?*/
