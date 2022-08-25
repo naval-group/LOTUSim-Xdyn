@@ -90,11 +90,9 @@ class AiryTest(unittest.TestCase):
         self.assertEqual(type(A), DiscreteDirectionalWaveSpectrum)
         random_seed = 0
         wave = Airy(A, random_seed)
-        serialized_spectrum = wave.get_spectrum()
+        serialized_spectrum = wave.get_flat_spectrum()
         self.assertEqual(1, len(serialized_spectrum.phase))
-        for phase in serialized_spectrum.phase:
-            self.assertEqual(1, len(phase))
-            self.assertNotEqual(0, phase[0])
+        self.assertNotEqual(0, serialized_spectrum.phase[0])
 
     def test_two_frequencies_single_direction_at_one_point(self):
         psi0 = np.pi / 4

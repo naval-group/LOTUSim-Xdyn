@@ -10,8 +10,6 @@
 WaveRequest FromGRPC::to_wave_request(const RequiredWaveInformationResponse& response) const
 {
     WaveRequest ret;
-    ret.angular_frequencies_for_rao = response.angular_frequencies_for_rao();
-    ret.directions_for_rao = response.directions_for_rao();
     ret.dynamic_pressures.t = response.dynamic_pressures().t();
     ret.dynamic_pressures.x.reserve(static_cast<size_t>(response.dynamic_pressures().x_size()));
     std::copy(response.dynamic_pressures().x().begin(), response.dynamic_pressures().x().end(), std::back_inserter(ret.dynamic_pressures.x));

@@ -242,7 +242,6 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             Needed by the RAOs (RadiationForceModel)
             )")
         .def("get_flat_spectrum", &WaveModel::get_flat_spectrum)
-        .def("get_spectrum", &WaveModel::get_spectrum)
         ;
 
     py::class_<WaveModelPtr>(m_env, "WaveModelPtr");

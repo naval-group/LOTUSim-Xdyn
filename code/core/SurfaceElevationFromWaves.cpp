@@ -70,11 +70,8 @@ std::vector<FlatDiscreteDirectionalWaveSpectrum> SurfaceElevationFromWaves::get_
 std::vector<DiscreteDirectionalWaveSpectrum> SurfaceElevationFromWaves::get_directional_spectra(const double, const double, const double) const
 {
     std::vector<DiscreteDirectionalWaveSpectrum> ret;
-    ret.reserve(directional_spectra.size());
-    for (const auto& spectrum:directional_spectra)
-    {
-        ret.push_back(spectrum->get_spectrum());
-    }
+    THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception,
+        "Deprecated call: xdyn no longer returns directional spectra: We return a flattened version of the spectrum");
     return ret;
 }
 

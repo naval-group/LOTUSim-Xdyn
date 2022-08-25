@@ -27,6 +27,7 @@
 class WaveModel
 {
     public:
+        WaveModel(const FlatDiscreteDirectionalWaveSpectrum& spectrum);
         WaveModel(const DiscreteDirectionalWaveSpectrum& spectrum);
         WaveModel(const DiscreteDirectionalWaveSpectrum& spectrum, const double constant_random_phase);
         WaveModel(const DiscreteDirectionalWaveSpectrum& spectrum, const int random_number_generator_seed);
@@ -90,7 +91,6 @@ class WaveModel
         std::vector<double> get_psis() const;
 
         FlatDiscreteDirectionalWaveSpectrum get_flat_spectrum() const {return flat_spectrum;};
-        DiscreteDirectionalWaveSpectrum get_spectrum() const {return spectrum;};
 
     private:
         WaveModel(); // Disabled
@@ -137,10 +137,9 @@ class WaveModel
             const std::vector<double> &z,   //!< z-positions in the NED frame (in meters)
             const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
             const double t                  //!< Current time instant (in seconds)
-          ) const = 0;
+            ) const = 0;
 
     protected:
-        DiscreteDirectionalWaveSpectrum spectrum;
         FlatDiscreteDirectionalWaveSpectrum flat_spectrum;
 };
 
