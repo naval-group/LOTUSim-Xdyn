@@ -8,7 +8,6 @@
 #include "Airy.hpp"
 #include "InternalErrorException.hpp"
 #include "InvalidInputException.hpp"
-#include "discretize.hpp"
 
 #include <ssc/macros.hpp>
 #include <Eigen/Dense>
