@@ -4,22 +4,9 @@
  *  Created on: Jun 16, 2014
  *      Author: cady
  */
-#include <math.h> // isnan
-
-#define _USE_MATH_DEFINE
-#include <cmath>
-#define PI M_PI
-
-#include <fstream>
-
-#include <boost/algorithm/string.hpp> // replace in string
-
-#include <ssc/data_source.hpp>
-
 #include "SimObserver.hpp"
 #include "Sim.hpp"
 #include "SimTest.hpp"
-#include "YamlSimulatorInput.hpp"
 #include "yaml_data.hpp"
 #include "InternalErrorException.hpp"
 #include "SimulatorYamlParser.hpp"
@@ -34,6 +21,14 @@
 #include "ListOfObservers.hpp"
 #include "MapObserverTest.hpp"
 #include "precal_test_data.hpp"
+
+#include <ssc/data_source.hpp>
+#include <boost/algorithm/string.hpp> // replace in string
+#include <fstream>
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
+#include <math.h> // isnan
 
 #define EPS (1E-10)
 #define SQUARE(x) ((x)*(x))
