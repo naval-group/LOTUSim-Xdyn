@@ -6,14 +6,15 @@
  */
 #include "SurfaceElevationFromGRPC.hpp"
 
-#include <grpcpp/grpcpp.h>
 #include "wave_grpc.grpc.pb.h"
 #include "wave_types.grpc.pb.h"
 
-#include "discretize.hpp"
 #include "InternalErrorException.hpp"
 #include "GRPCError.hpp"
 #include "YamlGRPC.hpp"
+#include "discretize.hpp"
+
+#include <grpcpp/grpcpp.h>
 
 #include <algorithm>
 #include <cmath> // For cos, sin
