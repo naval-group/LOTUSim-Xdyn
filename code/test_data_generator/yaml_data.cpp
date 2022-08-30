@@ -1252,6 +1252,33 @@ std::string test_data::waves_for_parser_validation_only()
     return ss.str();
 }
 
+std::string test_data::waves_from_file_for_parser_validation_only()
+{
+    std::stringstream ss;
+    ss << rotation_convention()
+       << "spectra:\n"
+       << "  - model: airy\n"
+       << "    stretching:\n"
+       << "       delta: 123\n"
+       << "       h: {unit: m, value: 100}\n"
+       << "    depth: {value: 1.7, unit: km}\n"
+       << "  - model: airy\n"
+       << "    depth: {value: 12, unit: m}\n"
+       << "    stretching:\n"
+       << "       delta: 456\n"
+       << "       h: {unit: m, value: 101}\n"
+       << "output:\n"
+       << "    frame of reference: NED\n"
+       << "    mesh:\n"
+       << "       xmin: {value: -10, unit: m}\n"
+       << "       xmax: {value: 1, unit: km}\n"
+       << "       nx: 10\n"
+       << "       ymin: {value: -20, unit: m}\n"
+       << "       ymax: {value: 3, unit: km}\n"
+       << "       ny: 20\n";
+    return ss.str();
+}
+
 std::string test_data::cube_in_waves()
 {
     std::stringstream ss;

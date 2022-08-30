@@ -24,4 +24,14 @@ class environment_parsersTest : public ::testing::Test
         static const YamlWaveModel yaml;
 };
 
+class environment_parsers_from_file_Test : public ::testing::Test
+{
+    protected:
+        environment_parsers_from_file_Test();
+        virtual ~environment_parsers_from_file_Test();
+        virtual void SetUp();
+        virtual void TearDown();
+        ssc::random_data_generator::DataGenerator a;
+        static const YamlWaveFromRaysModel yaml;
+};
 #endif  /* ENVIRONMENT_PARSERSTEST_HPP_ */

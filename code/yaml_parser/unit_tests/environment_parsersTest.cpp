@@ -245,3 +245,37 @@ TEST_F(environment_parsersTest, can_parse_equal_energy_bins_parameter)
     const auto res = parse_waves(wave_yaml);
     ASSERT_FALSE(res.discretization.equal_energy_bins);
 }
+
+const YamlWaveFromRaysModel environment_parsers_from_file_Test::yaml = 
+    parse_waves_from_list_of_rays(test_data::waves_from_file_for_parser_validation_only());
+
+environment_parsers_from_file_Test::environment_parsers_from_file_Test() : a(ssc::random_data_generator::DataGenerator(1212))
+{
+}
+
+environment_parsers_from_file_Test::~environment_parsers_from_file_Test()
+{
+}
+
+void environment_parsers_from_file_Test::SetUp()
+{
+}
+
+void environment_parsers_from_file_Test::TearDown()
+{
+}
+
+TEST_F(environment_parsers_from_file_Test, can_parse_depth_for_wave_models)
+{
+    ASSERT_EQ(2,yaml.spectra.size());
+    ASSERT_DOUBLE_EQ(1700, yaml.spectra[0].depth);
+    ASSERT_DOUBLE_EQ(12, yaml.spectra[1].depth);
+}
+
+TEST_F(environment_parsers_from_file_Test, can_parse_stretching_data)
+{
+    ASSERT_DOUBLE_EQ(123, yaml.spectra.at(0).stretching.delta);
+    ASSERT_DOUBLE_EQ(100, yaml.spectra.at(0).stretching.h);
+    ASSERT_DOUBLE_EQ(456, yaml.spectra.at(1).stretching.delta);
+    ASSERT_DOUBLE_EQ(101, yaml.spectra.at(1).stretching.h);
+}
