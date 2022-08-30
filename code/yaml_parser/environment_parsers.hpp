@@ -15,16 +15,17 @@
 #include <string>
 #include <boost/optional/optional_io.hpp>
 
-YamlDefaultWaveModel parse_default_wave_model(const std::string& yaml);
-YamlWaveModel        parse_waves(const std::string& yaml);
-YamlDiscretization   parse_discretization(const std::string& yaml);
-YamlDiracDirection   parse_wave_dirac_direction(const std::string& yaml);
-YamlDiracSpectrum    parse_wave_dirac_spectrum(const std::string& yaml);
-YamlJonswap          parse_jonswap(const std::string& yaml);
-YamlPiersonMoskowitz parse_pierson_moskowitz(const std::string& yaml);
-YamlBretschneider    parse_bretschneider(const std::string& yaml);
-YamlCos2s            parse_cos2s(const std::string& yaml);
-boost::optional<int> parse_seed_of_random_number_generator(const std::string& yaml);
-YamlGRPC             parse_grpc(const std::string& yaml);
+YamlDefaultWaveModel  parse_default_wave_model(const std::string& yaml);
+YamlWaveModel         parse_waves(const std::string& yaml);
+YamlWaveFromRaysModel parse_waves_from_list_of_rays(const std::string& yaml);
+YamlDiscretization    parse_discretization(const std::string& yaml);
+YamlDiracDirection    parse_wave_dirac_direction(const std::string& yaml);
+YamlDiracSpectrum     parse_wave_dirac_spectrum(const std::string& yaml);
+YamlJonswap           parse_jonswap(const std::string& yaml);
+YamlPiersonMoskowitz  parse_pierson_moskowitz(const std::string& yaml);
+YamlBretschneider     parse_bretschneider(const std::string& yaml);
+YamlCos2s             parse_cos2s(const std::string& yaml);
+boost::optional<int>  parse_seed_of_random_number_generator(const std::string& yaml);
+YamlGRPC              parse_grpc(const std::string& yaml);
 
 #endif  /* ENVIRONMENT_PARSERS_HPP_ */

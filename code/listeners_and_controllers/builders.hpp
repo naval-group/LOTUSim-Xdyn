@@ -35,6 +35,7 @@ class SurfaceElevationBuilder<DefaultSurfaceElevation> : public SurfaceElevation
 
 struct YamlDiscretization;
 struct YamlSpectrum;
+struct YamlSpectrumFromRays;
 
 template <>
 class SurfaceElevationBuilder<SurfaceElevationFromWaves> : public SurfaceElevationBuilderInterface
@@ -47,7 +48,9 @@ class SurfaceElevationBuilder<SurfaceElevationFromWaves> : public SurfaceElevati
     private:
         SurfaceElevationBuilder();
         WaveModelPtr parse_wave_model(const YamlDiscretization& discretization, const YamlSpectrum& spectrum) const;
+        WaveModelPtr parse_wave_model(const YamlSpectrumFromRays& spectrum) const;
         DiscreteDirectionalWaveSpectrum parse_directional_spectrum(const YamlDiscretization& discretization, const YamlSpectrum& spectrum) const;
+        FlatDiscreteDirectionalWaveSpectrum parse_flat_spectrum(const YamlSpectrumFromRays& spectrum) const;
         WaveSpectralDensityPtr parse_spectral_density(const YamlSpectrum& spectrum) const;
         WaveDirectionalSpreadingPtr parse_directional_spreading(const YamlSpectrum& spectrum) const;
 };
@@ -67,6 +70,7 @@ class WaveModelBuilder<Airy> : public WaveModelBuilderInterface
     public:
         WaveModelBuilder();
         boost::optional<WaveModelPtr> try_to_parse(const std::string& model, const DiscreteDirectionalWaveSpectrum& spectrum, const std::string& yaml) const;
+        boost::optional<WaveModelPtr> try_to_parse(const std::string& model, const FlatDiscreteDirectionalWaveSpectrum& spectrum, const std::string& yaml) const;
 };
 
 template <>

@@ -32,6 +32,18 @@ YamlWaveModel::YamlWaveModel():
     output()
 {}
 
+YamlSpectrumFromRays::YamlSpectrumFromRays():
+    model(),
+    model_yaml(),
+    depth(0.0),
+    stretching()
+{}
+
+YamlWaveFromRaysModel::YamlWaveFromRaysModel():
+    spectra(),
+    output()
+{}
+
 YamlJonswap::YamlJonswap():
     Hs(0),
     Tp(0),

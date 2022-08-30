@@ -50,6 +50,16 @@ boost::optional<WaveModelPtr> WaveModelBuilder<Airy>::try_to_parse(const std::st
     return ret;
 }
 
+boost::optional<WaveModelPtr> WaveModelBuilder<Airy>::try_to_parse(const std::string& model, const FlatDiscreteDirectionalWaveSpectrum& spectrum, const std::string&) const
+{
+    boost::optional<WaveModelPtr> ret;
+    if (model == "airy")
+    {
+        ret.reset(WaveModelPtr(new Airy(spectrum)));
+    }
+    return ret;
+}
+
 WaveSpectralDensityPtr SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse_spectral_density(const YamlSpectrum& spectrum) const
 {
     for (auto that_parser = spectrum_parsers->begin() ; that_parser != spectrum_parsers->end() ; ++that_parser)
@@ -113,6 +123,28 @@ WaveModelPtr SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse_wave_mode
     return WaveModelPtr();
 }
 
+FlatDiscreteDirectionalWaveSpectrum SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse_flat_spectrum(const YamlSpectrumFromRays& spectrum) const
+{
+    FlatDiscreteDirectionalWaveSpectrum f;
+    f.a = std::vector<double>(1, 0.0);
+    std::cout << spectrum.model << std::endl;
+    return f;
+}
+
+WaveModelPtr SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse_wave_model(const YamlSpectrumFromRays& spectrum) const
+{
+    const FlatDiscreteDirectionalWaveSpectrum flat_spectrum = parse_flat_spectrum(spectrum);
+    for (auto that_parser = wave_parsers->begin() ; that_parser != wave_parsers->end() ; ++that_parser)
+    {
+        boost::optional<WaveModelPtr> w = (*that_parser)->try_to_parse(spectrum.model, flat_spectrum, spectrum.model_yaml);
+        if (w) return w.get();
+    }
+    THROW(__PRETTY_FUNCTION__,
+          InvalidInputException,
+          "The wave model specified in the YAML file is not understood by the simulator ('" << spectrum.model << "'): either it is misspelt or this simulator version is outdated.");
+    return WaveModelPtr();
+}
+
 boost::optional<SurfaceElevationInterfacePtr> SurfaceElevationBuilder<SurfaceElevationFromWaves>::try_to_parse(const std::string& model, const std::string& yaml) const
 {
     boost::optional<SurfaceElevationInterfacePtr> ret;
@@ -123,6 +155,14 @@ boost::optional<SurfaceElevationInterfacePtr> SurfaceElevationBuilder<SurfaceEle
         std::vector<WaveModelPtr> models;
         for (const auto& spectrum: input.spectra) models.push_back(parse_wave_model(input.discretization, spectrum));
         ret.reset(SurfaceElevationInterfacePtr(new SurfaceElevationFromWaves(models,get_wave_mesh_size(input.output),output_mesh)));
+    }
+    else if (model == "waves from list of rays") // The "model" key is always "waves" for xdyn's internal wave models, except for the default wave model "no waves"
+    {
+        const YamlWaveFromRaysModel input = parse_waves_from_list_of_rays(yaml);
+        const auto output_mesh = make_wave_mesh(input.output);
+        std::vector<WaveModelPtr> models;
+        for (const auto& spectrum: input.spectra) models.push_back(parse_wave_model(spectrum));
+        ret.reset(SurfaceElevationInterfacePtr(new SurfaceElevationFromWaves(models, get_wave_mesh_size(input.output), output_mesh)));
     }
     return ret;
 }

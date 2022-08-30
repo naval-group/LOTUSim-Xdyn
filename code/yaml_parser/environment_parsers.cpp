@@ -16,6 +16,7 @@
 
 void operator >> (const YAML::Node& node, YamlDiscretization& g);
 void operator >> (const YAML::Node& node, YamlSpectrum& g);
+void operator >> (const YAML::Node& node, YamlSpectrumFromRays& g);
 void operator >> (const YAML::Node& node, YamlWaveOutput& g);
 void operator >> (const YAML::Node& node, YamlStretching& g);
 
@@ -83,6 +84,39 @@ YamlWaveModel parse_waves(const std::string& yaml)
         try
         {
             node["output"]         >> ret.output;
+        }
+        catch(std::exception& e)
+        {
+            std::stringstream ss;
+            ss << "Error parsing section wave/output: " << e.what();
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
+        }
+    }
+    return ret;
+}
+
+YamlWaveFromRaysModel parse_waves_from_list_of_rays(const std::string& yaml)
+{
+    YamlWaveFromRaysModel ret;
+    std::stringstream stream(yaml);
+    YAML::Parser parser(stream);
+    YAML::Node node;
+    parser.GetNextDocument(node);
+    try
+    {
+        node["spectra"] >> ret.spectra;
+    }
+    catch(std::exception& e)
+    {
+        std::stringstream ss;
+        ss << "Error parsing section wave/spectra: " << e.what();
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
+    }
+    if (node.FindValue("output"))
+    {
+        try
+        {
+            node["output"] >> ret.output;
         }
         catch(std::exception& e)
         {
@@ -172,6 +206,14 @@ void operator >> (const YAML::Node& node, YamlSpectrum& g)
     ssc::yaml_parser::parse_uv(node["depth"], g.depth);
 }
 
+void operator >> (const YAML::Node& node, YamlSpectrumFromRays& g)
+{
+    node["model"] >> g.model;
+    get_yaml(node, g.model_yaml);
+    node["stretching"] >> g.stretching;
+    ssc::yaml_parser::parse_uv(node["depth"], g.depth);
+}
+
 void operator >> (const YAML::Node& node, YamlWaveOutput& g)
 {
     node["frame of reference"] >> g.frame_of_reference;
@@ -184,7 +226,7 @@ void operator >> (const YAML::Node& node, YamlWaveOutput& g)
 }
 
 
-YamlDiracDirection   parse_wave_dirac_direction(const std::string& yaml)
+YamlDiracDirection parse_wave_dirac_direction(const std::string& yaml)
 {
     YamlDiracDirection ret;
     try
