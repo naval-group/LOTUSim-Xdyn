@@ -27,12 +27,13 @@ class WavesImpl final : public Waves::Service {
     public:
         explicit WavesImpl(const EnvironmentAndFrames& _env): env(_env) {}
 
-        // rpc elevations(XYTGrid) returns (XYZTGrid);
+        // rpc set_parameters(SetParameterRequest) returns (SetParameterResponse);
         Status set_parameters(ServerContext* /*context*/, const SetParameterRequest* request, SetParameterResponse* /*reply*/) override
         {
             const std::function<void()> f = [this, &request]()
             {
                 const std::string yaml_data(request->parameters());
+                std::cout << "Receiving this input YAML:" << std::endl;
                 std::cout << yaml_data << std::endl;
                 this->env = get_environment_for_wave_queries(yaml_data);
             };
