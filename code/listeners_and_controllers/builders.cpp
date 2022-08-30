@@ -101,9 +101,9 @@ DiscreteDirectionalWaveSpectrum SurfaceElevationBuilder<SurfaceElevationFromWave
 
 WaveModelPtr SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse_wave_model(const YamlDiscretization& discretization, const YamlSpectra& spectrum) const
 {
+    const DiscreteDirectionalWaveSpectrum discrete_spectrum = parse_directional_spectrum(discretization, spectrum);
     for (auto that_parser = wave_parsers->begin() ; that_parser != wave_parsers->end() ; ++that_parser)
     {
-        const DiscreteDirectionalWaveSpectrum discrete_spectrum = parse_directional_spectrum(discretization, spectrum);
         boost::optional<WaveModelPtr> w = (*that_parser)->try_to_parse(spectrum.model, discrete_spectrum, spectrum.model_yaml);
         if (w) return w.get();
     }
