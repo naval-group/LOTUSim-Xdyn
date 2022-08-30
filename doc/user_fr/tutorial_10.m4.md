@@ -82,12 +82,6 @@ include({{harmonic_oscillator.py}})
 
 ### Lancement de la simulation
 
-On commence par récupérer l'exemple du modèle:
-
-```bash
-git clone git@gitlab.sirehna.com:root/xdyn.git
-```
-
 On écrit ensuite un fichier `docker-compose.yml` :
 
 ```yaml
