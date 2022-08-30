@@ -34,7 +34,7 @@ class SurfaceElevationBuilder<DefaultSurfaceElevation> : public SurfaceElevation
 };
 
 struct YamlDiscretization;
-struct YamlSpectra;
+struct YamlSpectrum;
 
 template <>
 class SurfaceElevationBuilder<SurfaceElevationFromWaves> : public SurfaceElevationBuilderInterface
@@ -46,10 +46,10 @@ class SurfaceElevationBuilder<SurfaceElevationFromWaves> : public SurfaceElevati
 
     private:
         SurfaceElevationBuilder();
-        WaveModelPtr parse_wave_model(const YamlDiscretization& discretization, const YamlSpectra& spectrum) const;
-        DiscreteDirectionalWaveSpectrum parse_directional_spectrum(const YamlDiscretization& discretization, const YamlSpectra& spectrum) const;
-        WaveSpectralDensityPtr parse_spectral_density(const YamlSpectra& spectrum) const;
-        WaveDirectionalSpreadingPtr parse_directional_spreading(const YamlSpectra& spectrum) const;
+        WaveModelPtr parse_wave_model(const YamlDiscretization& discretization, const YamlSpectrum& spectrum) const;
+        DiscreteDirectionalWaveSpectrum parse_directional_spectrum(const YamlDiscretization& discretization, const YamlSpectrum& spectrum) const;
+        WaveSpectralDensityPtr parse_spectral_density(const YamlSpectrum& spectrum) const;
+        WaveDirectionalSpreadingPtr parse_directional_spreading(const YamlSpectrum& spectrum) const;
 };
 
 class SurfaceElevationFromGRPC;

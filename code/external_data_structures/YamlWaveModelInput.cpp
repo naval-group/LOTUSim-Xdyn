@@ -10,7 +10,7 @@
 YamlDiscretization::YamlDiscretization() : nfreq(0), ndir(0), omega_min(0), omega_max(0), energy_fraction(0),equal_energy_bins(false)
 {}
 
-YamlSpectra::YamlSpectra():
+YamlSpectrum::YamlSpectrum():
     model(std::string()),
     model_yaml(std::string()),
     directional_spreading_type(std::string()),

@@ -50,7 +50,7 @@ boost::optional<WaveModelPtr> WaveModelBuilder<Airy>::try_to_parse(const std::st
     return ret;
 }
 
-WaveSpectralDensityPtr SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse_spectral_density(const YamlSpectra& spectrum) const
+WaveSpectralDensityPtr SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse_spectral_density(const YamlSpectrum& spectrum) const
 {
     for (auto that_parser = spectrum_parsers->begin() ; that_parser != spectrum_parsers->end() ; ++that_parser)
     {
@@ -69,7 +69,7 @@ WaveSpectralDensityPtr SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse
     return WaveSpectralDensityPtr();
 }
 
-WaveDirectionalSpreadingPtr SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse_directional_spreading(const YamlSpectra& spectrum) const
+WaveDirectionalSpreadingPtr SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse_directional_spreading(const YamlSpectrum& spectrum) const
 {
     for (auto that_parser = directional_spreading_parsers->begin() ; that_parser != directional_spreading_parsers->end() ; ++that_parser)
     {
@@ -88,7 +88,7 @@ WaveDirectionalSpreadingPtr SurfaceElevationBuilder<SurfaceElevationFromWaves>::
     return WaveDirectionalSpreadingPtr ();
 }
 
-DiscreteDirectionalWaveSpectrum SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse_directional_spectrum(const YamlDiscretization& discretization, const YamlSpectra& spectrum) const
+DiscreteDirectionalWaveSpectrum SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse_directional_spectrum(const YamlDiscretization& discretization, const YamlSpectrum& spectrum) const
 {
     WaveSpectralDensityPtr spectral_density = parse_spectral_density(spectrum);
     WaveDirectionalSpreadingPtr directional_spreading = parse_directional_spreading(spectrum);
@@ -99,7 +99,7 @@ DiscreteDirectionalWaveSpectrum SurfaceElevationBuilder<SurfaceElevationFromWave
     return discretize(*spectral_density, *directional_spreading, discretization.omega_min, discretization.omega_max, discretization.nfreq, discretization.ndir, spectrum.depth, Stretching(spectrum.stretching), discretization.equal_energy_bins);
 }
 
-WaveModelPtr SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse_wave_model(const YamlDiscretization& discretization, const YamlSpectra& spectrum) const
+WaveModelPtr SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse_wave_model(const YamlDiscretization& discretization, const YamlSpectrum& spectrum) const
 {
     const DiscreteDirectionalWaveSpectrum discrete_spectrum = parse_directional_spectrum(discretization, spectrum);
     for (auto that_parser = wave_parsers->begin() ; that_parser != wave_parsers->end() ; ++that_parser)
