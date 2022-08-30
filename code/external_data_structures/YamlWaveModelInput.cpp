@@ -11,25 +11,25 @@ YamlDiscretization::YamlDiscretization() : nfreq(0), ndir(0), omega_min(0), omeg
 {}
 
 YamlSpectra::YamlSpectra():
-model(std::string()),
-model_yaml(std::string()),
-directional_spreading_type(std::string()),
-directional_spreading_yaml(std::string()),
-spectral_density_type(std::string()),
-spectral_density_yaml(std::string()),
-depth(0),
-stretching()
+    model(std::string()),
+    model_yaml(std::string()),
+    directional_spreading_type(std::string()),
+    directional_spreading_yaml(std::string()),
+    spectral_density_type(std::string()),
+    spectral_density_yaml(std::string()),
+    depth(0),
+    stretching()
 {}
 
 YamlStretching::YamlStretching():
-        delta(0),
-        h(0)
+    delta(0),
+    h(0)
 {}
 
-YamlWaveModel::YamlWaveModel()
-:discretization()
-,spectra()
-,output()
+YamlWaveModel::YamlWaveModel():
+    discretization(),
+    spectra(),
+    output()
 {}
 
 YamlJonswap::YamlJonswap():
@@ -45,7 +45,7 @@ YamlBretschneider::YamlBretschneider():
 
 YamlCos2s::YamlCos2s():
     psi0(0),
-   s(0)
+    s(0)
 {}
 
 YamlDiracDirection::YamlDiracDirection():
