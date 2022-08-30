@@ -155,6 +155,7 @@ Un exemple de simulation de solide soumis uniquement à la gravité (chute libre
 est disponible dans les [tutoriels](#tutoriel-1-balle-en-chute-libre).
 
 ### Références
+
 - *Physics v. 1*, 2001, D. Halliday, R. Resnick and K. S. Krane, John Wiley and Sons, ISBN 0-471-32057-9
 - *Physique théorique*, Lev Landau et Evgueni Lifchits, éd. MIR, Moscou
 
@@ -2682,6 +2683,7 @@ coefficients de portance et traînée :
 ```math
 F_l = \frac{1}{2} \rho_{air} C_l(S_R) D L U^2
 ```
+
 ```math
 F_d = \frac{1}{2} \rho_{air} C_d(S_R) D L U^2
 ```
@@ -2810,7 +2812,7 @@ modèle d'effort (valeur de retour de la méthode `set_parameters`). Si l'on
 utilise le framework Python du dépôt [`interfaces`](https://gitlab.com/sirehna_naval_group/sirehna/interfaces/-/blob/1795c55006d11ec46bf25a8cac410be00698a8ba/forces/force.py#L44), ces résultats sont
 stockés dans le troisième argument du constructeur :
 
-```python
+```python echo=True, evaluate=False
 class HDBForceModel(force.Model):
     """Outputs data from HDB in extra_observations."""
 
