@@ -32,7 +32,7 @@ print_yaml(yaml_data)
 
 ### Écriture du modèle de houle
 
-Dans un fichier Python (nommé `airy.py` dans cet exemple), on écrit :
+Un example de modèle Python (nommé `airy.py` dans cet exemple), on écrit :
 
 ```python echo=False, evaluate=True, results='raw'
 print("```python")
@@ -42,6 +42,11 @@ print(content)
 print("```")
 ```
 
+Cet exemple est contenu dans le paquet Python `xdyngrpc`.
+
+Le projet `xdyn` contient aussi un serveur de houle gRPC de type Airy,
+nommé `xdyn-grpc-airy`.
+
 ### Lancement de la simulation
 
 On écrit ensuite un fichier `docker-compose.yml` :
@@ -50,16 +55,14 @@ On écrit ensuite un fichier `docker-compose.yml` :
 version: '3'
 services:
   waves-server:
-    build: waves_grpc/python_server
-    entrypoint: ["/bin/bash", "/entrypoint.sh", "/work/airy.py"]
-    working_dir: /work
-    volumes:
-    - .:/work
-    - ./waves_grpc:/proto
+    user: ${CURRENT_UID}
+    image: sirehna/xdyngrpc-python:test
+    command: -m xdyngrpc.waves.server.airy
   xdyn:
-    image: sirehna/xdyn
+    user: ${CURRENT_UID}
+    image: sirehna/xdyn:test
+    entrypoint: xdyn tutorial_09_gRPC_wave_model.yml --solver rk4 --dt 0.1 --tend 0.2 -o tsv
     working_dir: /data
-    entrypoint: xdyn tutorial_09_gRPC_wave_model.yml --dt 0.1 --tend 1 -o tsv
     volumes:
     - .:/data
     depends_on:
@@ -69,7 +72,7 @@ services:
 On peut alors lancer la simulation comme suit :
 
 ```bash
-docker-compose up
+docker-compose up --exit-code-from xdyn
 ```
 
 ### Sans Docker
