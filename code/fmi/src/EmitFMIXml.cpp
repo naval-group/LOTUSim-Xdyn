@@ -24,12 +24,12 @@ fmi::DateTime now()
     std::time_t t = time(0);   // get time now
     struct tm * now = localtime( & t );
     fmi::DateTime ret;
-    ret.year = now->tm_year + 1900;
-    ret.month = now->tm_mon + 1;
-    ret.day = now->tm_mday;
-    ret.hours = now->tm_hour;
-    ret.minutes = now->tm_min;
-    ret.seconds = now->tm_sec;
+    ret.year = static_cast<size_t>(now->tm_year + 1900);
+    ret.month = static_cast<size_t>(now->tm_mon + 1);
+    ret.day = static_cast<size_t>(now->tm_mday);
+    ret.hours = static_cast<size_t>(now->tm_hour);
+    ret.minutes = static_cast<size_t>(now->tm_min);
+    ret.seconds = static_cast<size_t>(now->tm_sec);
     return ret;
 }
 

@@ -143,7 +143,7 @@ std::string test_data::cube()
 // Cf. https://gitlab.sirehna.com/sirehna/xdyn/-/merge_requests/166#note_115836
 std::string test_data::cube_for_gm_test()
 {
-    return R"(
+    const std::string part1 = R"(
 solid OBJECT
   facet normal 0 0 1
     outer loop
@@ -1524,6 +1524,8 @@ solid OBJECT
       vertex 0.071428596973419189 0.5 0
     endloop
   endfacet
+)";
+    const std::string part2 = R"(
   facet normal -0 0 -1
     outer loop
       vertex 0.21428570151329041 0.3571428656578064 0
@@ -2847,6 +2849,8 @@ solid OBJECT
       vertex -0.071428552269935608 0.21428570151329041 0
     endloop
   endfacet
+)";
+    const std::string part3 = R"(
   facet normal 0 0 -1
     outer loop
       vertex -0.21428570151329041 0.21428570151329041 0
@@ -4263,6 +4267,7 @@ solid OBJECT
   endfacet
 endsolid OBJECT
 )";
+    return part1 + part2 + part3;
 }
 
 std::string test_data::big_cube()

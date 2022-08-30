@@ -8,17 +8,18 @@
 #ifndef MANEUVERINGFORCEMODEL_HPP_
 #define MANEUVERINGFORCEMODEL_HPP_
 
-#include <map>
-
-#include <ssc/data_source.hpp>
-#include <ssc/macros.hpp>
-
+#include "ForceModel.hpp"
 #include "YamlPosition.hpp"
 #include "ManeuveringInternal.hpp"
 
-
+#include <ssc/data_source.hpp>
+#include <ssc/macros.hpp>
 #include TR1INC(memory)
-#include "ForceModel.hpp"
+
+#include <map>
+#include <string>
+#include <vector>
+
 
 class ManeuveringForceModel : public ForceModel
 {
@@ -34,10 +35,10 @@ class ManeuveringForceModel : public ForceModel
         };
         ManeuveringForceModel(const Yaml& data, const std::string& body_name, const EnvironmentAndFrames& env);
         static Yaml parse(const std::string& yaml);
-        Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const;
+        Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const override;
         static std::string model_name();
 
-        double get_Tmax() const;
+        double get_Tmax() const override;
 
     private:
         ManeuveringForceModel();

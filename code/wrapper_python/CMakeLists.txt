@@ -73,9 +73,6 @@ target_link_libraries(${PYTHON_PACKAGE_NAME} PRIVATE
     $<TARGET_OBJECTS:kinematics_object>
     $<TARGET_OBJECTS:interpolation_object>
     $<TARGET_OBJECTS:csv_file_reader_object>
-    $<TARGET_OBJECTS:csv_writer_object>
-    $<TARGET_OBJECTS:matrix_and_vector_classes_object>
-    $<TARGET_OBJECTS:functors_for_optimizer_object>
     $<TARGET_OBJECTS:websocket_object>
     $<TARGET_OBJECTS:f2c_object>
     $<TARGET_OBJECTS:json_object>

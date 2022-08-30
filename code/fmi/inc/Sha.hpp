@@ -11,7 +11,13 @@
 #include "YamlCoordinates.hpp"
 #include "YamlSimulatorInput.hpp"
 
+#include <boost/version.hpp>
+#if BOOST_VERSION<=106500
 #include <boost/uuid/sha1.hpp>
+#else
+#include <boost/uuid/detail/sha1.hpp>
+#endif
+
 #include <vector>
 #include <string>
 #include <iostream>

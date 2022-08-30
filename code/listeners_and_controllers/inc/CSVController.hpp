@@ -40,7 +40,7 @@ class CSVController : public Controller
     CSVController(const double tstart //!< Date of beginning of simulation (usually 0): this is needed by the parent class, but the date of the first call can only be known after reading the first line of the CSV file (or if shift_time_column is true)
                 , const std::string& name, const std::string& yaml);
 
-    std::vector<std::string> get_command_names() const;
+    std::vector<std::string> get_command_names() const override;
 
     const Yaml yaml; //!< Controller-specific yaml
 
@@ -52,7 +52,7 @@ class CSVController : public Controller
      * @param time Current simulation time (in seconds).
      * @param system The continuous system. Used to retrieve the continuous states.
      */
-    void update_discrete_states(const double time, ssc::solver::ContinuousSystem& system);
+    void update_discrete_states(const double time, ssc::solver::ContinuousSystem& system) override;
 
     /**
      * @brief Get the date of next discrete state update (next line in CSV file)

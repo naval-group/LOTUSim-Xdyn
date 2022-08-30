@@ -4,8 +4,17 @@
  *  Created on: Nov 13, 2014
  *      Author: cady
  */
-
 #include "HDBParser.hpp"
+
+#include "hdb_parser_internal_data_structures.hpp"
+#include "InvalidInputException.hpp"
+#include "hdb_to_ast.hpp"
+
+#include <ssc/interpolation.hpp>
+#include <ssc/text_file_reader.hpp>
+
+#include <boost/algorithm/string/predicate.hpp>
+#include <boost/variant.hpp>
 
 #include <algorithm>
 #include <functional>
@@ -17,17 +26,6 @@
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
-
-#include <boost/algorithm/string/predicate.hpp>
-#include <boost/variant.hpp>
-
-#include <ssc/interpolation.hpp>
-#include <ssc/text_file_reader.hpp>
-#include "hdb_parser_internal_data_structures.hpp"
-#include "InvalidInputException.hpp"
-#include "hdb_to_ast.hpp"
-
-
 
 class HDBParser::Impl
 {

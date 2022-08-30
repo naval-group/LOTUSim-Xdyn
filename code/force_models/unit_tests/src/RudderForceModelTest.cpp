@@ -130,12 +130,12 @@ TEST_F(RudderForceModelTest, get_force)
     const double lift = 200;
     const double angle = -PI/3;
     ssc::kinematics::Vector6d v = riw.get_force(drag, lift, angle);
-    ASSERT_DOUBLE_EQ(-91.339745962155646, (double)v(0));
-    ASSERT_DOUBLE_EQ(178.20508075688772, (double)v(1));
-    ASSERT_DOUBLE_EQ(0, (double)v(2));
-    ASSERT_DOUBLE_EQ(0, (double)v(3));
-    ASSERT_DOUBLE_EQ(0, (double)v(4));
-    ASSERT_DOUBLE_EQ(0, (double)v(5));
+    ASSERT_DOUBLE_EQ(-91.339745962155646, v(0));
+    ASSERT_DOUBLE_EQ(178.20508075688772, v(1));
+    ASSERT_DOUBLE_EQ(0, v(2));
+    ASSERT_DOUBLE_EQ(0, v(3));
+    ASSERT_DOUBLE_EQ(0, v(4));
+    ASSERT_DOUBLE_EQ(0, v(5));
 }
 
 TEST_F(RudderForceModelTest, get_wrench)
@@ -153,12 +153,12 @@ TEST_F(RudderForceModelTest, get_wrench)
     const double angle = -PI/3;
     const double area = 1.467;
     ssc::kinematics::Vector6d v = riw.get_wrench(3,4,0.5,area);
-    ASSERT_DOUBLE_EQ(-2021.4412785509464, (double)v(0));
-    ASSERT_DOUBLE_EQ(1757.2988992064641, (double)v(1));
-    ASSERT_DOUBLE_EQ(0, (double)v(2));
-    ASSERT_DOUBLE_EQ(0, (double)v(3));
-    ASSERT_DOUBLE_EQ(0, (double)v(4));
-    ASSERT_DOUBLE_EQ(0, (double)v(5));
+    ASSERT_DOUBLE_EQ(-2021.4412785509464, v(0));
+    ASSERT_DOUBLE_EQ(1757.2988992064641, v(1));
+    ASSERT_DOUBLE_EQ(0, v(2));
+    ASSERT_DOUBLE_EQ(0, v(3));
+    ASSERT_DOUBLE_EQ(0, v(4));
+    ASSERT_DOUBLE_EQ(0, v(5));
 }
 
 TEST_F(RudderForceModelTest, get_Ar)
@@ -196,8 +196,8 @@ TEST_F(RudderForceModelTest, get_Vs)
     parameters.diameter = 3.6;
     RudderForceModel::RudderModel riw(parameters,1024,a.random<double>());
     const auto vs = riw.get_vs(1.5,12,6,12e4);
-    ASSERT_DOUBLE_EQ(12.007932248435861, (double)vs.in_wake.v.norm());
-    ASSERT_DOUBLE_EQ(13.416407864998739, (double)vs.outside_wake.v.norm());
+    ASSERT_DOUBLE_EQ(12.007932248435861, vs.in_wake.v.norm());
+    ASSERT_DOUBLE_EQ(13.416407864998739, vs.outside_wake.v.norm());
 }
 
 TEST_F(RudderForceModelTest, get_fluid_angle)
@@ -235,31 +235,6 @@ TR1(shared_ptr)<WaveModel> RudderForceModelTest::get_wave_model() const
     const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ndir, ss, false);
 
     return TR1(shared_ptr)<WaveModel>(new Airy(A, phi));
-}
-
-TEST_F(RudderForceModelTest, DISABLED_ship_speed_relative_to_the_fluid)
-{
-    EnvironmentAndFrames env = get_environment_and_frames(get_wave_model());
-    RudderForceModel::Yaml parameters = a.random<RudderForceModel::Yaml>();
-    parameters.number_of_blades = 3;
-    parameters.blade_area_ratio = 0.5;
-    parameters.position_of_propeller_frame.frame = "body";
-    const RudderForceModel F(parameters, a.random<std::string>(), env);
-    BodyStates states;
-    std::vector<double> s = {1,2,3,4,5,6,0,0,0,1,0,0,0};
-    const double t = 24;
-    states.u.record(t, s[2]);
-    states.v.record(t, s[3]);
-    states.w.record(t, s[4]);
-    states.name = "body";
-    BodyWithoutSurfaceForces b(states,0,BlockedDOF(""), YamlFilteredStates());
-    b.update_kinematics(s, env.k);
-
-    ssc::kinematics::Point Vship_water = F.get_ship_speed(states, t, env);
-
-    ASSERT_DOUBLE_EQ(3.0621974344648351, Vship_water.x());
-    ASSERT_DOUBLE_EQ(4, Vship_water.y());
-    ASSERT_DOUBLE_EQ(5.0089062285187547, Vship_water.z());
 }
 
 TEST_F(RudderForceModelTest, parser)
@@ -310,10 +285,10 @@ TEST_F(RudderForceModelTest, force_and_torque)
     commands["beta"] = PI/6;
 
     const auto F = rudder.get_force(states, t, env, commands);
-    ASSERT_DOUBLE_EQ(2208573.9553180891, (double)F.X());
-    ASSERT_DOUBLE_EQ(777997.67996840423, (double)F.Y());
-    ASSERT_DOUBLE_EQ(0, (double)F.Z());
-    ASSERT_DOUBLE_EQ(-2793416.1021430148, (double)F.K());
-    ASSERT_DOUBLE_EQ(0, (double)F.M());
-    ASSERT_DOUBLE_EQ(-855797.44796524453, (double)F.N());
+    ASSERT_DOUBLE_EQ(2208573.9553180891, F.X());
+    ASSERT_DOUBLE_EQ(777997.67996840423, F.Y());
+    ASSERT_DOUBLE_EQ(0, F.Z());
+    ASSERT_DOUBLE_EQ(-2793416.1021430148, F.K());
+    ASSERT_DOUBLE_EQ(0, F.M());
+    ASSERT_DOUBLE_EQ(-855797.44796524453, F.N());
 }

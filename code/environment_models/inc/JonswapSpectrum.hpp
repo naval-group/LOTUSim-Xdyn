@@ -10,7 +10,7 @@
 
 #include "WaveSpectralDensity.hpp"
 
-/** \author cec
+/** \author cady
  *  \date Jul 30, 2014, 10:03:54 AM
  *  \ingroup wave_models
  *  \section ex1 Example
@@ -23,7 +23,7 @@
 class JonswapSpectrum : public WaveSpectralDensity
 {
     public:
-        /**  \author cec
+        /**  \author cady
           *  \date Jul 30, 2014, 10:04:59 AM
           *  \brief JonswapSpectrum's only constructor
           *  \details Default constructor was disabled by making it private & providing no implementation
@@ -33,7 +33,7 @@ class JonswapSpectrum : public WaveSpectralDensity
                         const double gamma //!< Non-dimensional peak shape parameter
                         );
 
-        /**  \author cec
+        /**  \author cady
           *  \date Jul 30, 2014, 9:40:33 AM
           *  \brief Computes the amplitude of the power spectrum at a given angular frequency
           *  \returns Amplitude of the power spectrum (in m^2 s)

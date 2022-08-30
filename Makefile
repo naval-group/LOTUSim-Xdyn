@@ -7,11 +7,9 @@ DOCKER_AS_USER:=$(DOCKER_AS_ROOT) -u $(shell id -u):$(shell id -g)
 
 HEADERS=code/ssc/ssc/check_ssc_version.hpp\
         code/ssc/ssc/csv_file_reader.hpp\
-        code/ssc/ssc/csv_writer.hpp\
         code/ssc/ssc/data_source.hpp\
         code/ssc/ssc/decode_unit.hpp\
         code/ssc/ssc/exception_handling.hpp\
-        code/ssc/ssc/functors_for_optimizer.hpp\
         code/ssc/ssc/geometry.hpp\
         code/ssc/ssc/integrate.hpp\
         code/ssc/ssc/interpolation.hpp\
@@ -19,10 +17,7 @@ HEADERS=code/ssc/ssc/check_ssc_version.hpp\
         code/ssc/ssc/json.hpp\
         code/ssc/ssc/kinematics.hpp\
         code/ssc/ssc/macros.hpp\
-        code/ssc/ssc/matrix_and_vector_classes.hpp\
         code/ssc/ssc/numeric.hpp\
-        code/ssc/ssc/optimizer.hpp\
-        code/ssc/ssc/pimpl_idiom.hpp\
         code/ssc/ssc/random_data_generator.hpp\
         code/ssc/ssc/solver.hpp\
         code/ssc/ssc/text_file_reader.hpp\
@@ -33,6 +28,7 @@ headers: ${HEADERS}
 windows: ${HEADERS} windows_gccx_posix
 debian11: ${HEADERS} debian_11_release_gcc_10
 debian: ${HEADERS} debian_11_release_gcc_10
+debian11_clang: ${HEADERS} debian_11_release_clang_14
 debug: ${HEADERS} debian_11_debug_gcc_10
 ubuntu1804-intel: ${HEADERS} ubuntu_18_04_release_intel_compiler
 
@@ -221,6 +217,16 @@ debian_11_release_gcc_10_wrapper_python_all:
 	@echo " - Linux x86-64 Debian 11 with Python 3.10"
 	@echo " - Linux x86-64 Ubuntu 20.04 with Python 3.8, using the Debian 11 generated wheel"
 
+debian_11_release_clang_14: BUILD_TYPE = Release
+debian_11_release_clang_14: BUILD_DIR = build_deb11_clang14
+debian_11_release_clang_14: CPACK_GENERATOR = DEB
+debian_11_release_clang_14: DOCKER_IMAGE = sirehna/base-image-debian11-clang14:2022-08-25
+debian_11_release_clang_14: BOOST_ROOT = /opt/boost
+debian_11_release_clang_14: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_11_release_clang_14: BUILD_PYTHON_WRAPPER = False
+debian_11_release_clang_14: ADDITIONAL_CMAKE_PARAMETERS=-D CMAKE_CXX_COMPILER=clang++ -D CMAKE_C_COMPILER=clang
+debian_11_release_clang_14: cmake-debian-target build-debian test-debian
+
 build-docker-python-image:
 	make -C code/wrapper_python ${DOCKER_IMAGE}
 
@@ -350,7 +356,8 @@ test-debian:
 	    gprof run_all_tests gmon.out > gprof_res.txt 2> gprof_res.err;\
 	    bash codecov_bash.sh && \
 	    rm codecov_bash.sh;\
-	    fi"
+	    fi && \
+	    ldd run_all_tests"
 
 cmake-ubuntu-intel-target: code/yaml-cpp/CMakeLists.txt
 	docker pull $(DOCKER_IMAGE) || true

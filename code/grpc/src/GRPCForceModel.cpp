@@ -5,6 +5,7 @@
  *      Author: cady
  */
 
+#include "GRPCForceModel.hpp"
 #include <memory> // std::make_shared
 #include <vector>
 #include "grpc_error_outputter.hpp"
@@ -18,7 +19,6 @@
 
 
 #include "Body.hpp"
-#include "GRPCForceModel.hpp"
 #include "GRPCTypes.hpp"
 #include "ToGRPC.hpp"
 #include "FromGRPC.hpp"
@@ -61,7 +61,7 @@ class GRPCForceModel::Impl
             throw_if_invalid_status<Input,GRPCForceModel>(input, "set_parameters", status);
             needs_wave_outputs = response.needs_wave_outputs();
             max_history_length = response.max_history_length();
-            commands.reserve(response.commands_size());
+            commands.reserve(static_cast<size_t>(response.commands_size()));
             std::copy(response.commands().begin(), response.commands().end(), std::back_inserter(commands));
             force_frame.frame = response.frame();
             force_frame.angle.phi = response.phi();
@@ -180,7 +180,6 @@ GRPCForceModel::GRPCForceModel(const GRPCForceModel::Input& input, const std::st
 GRPCForceModel::GRPCForceModel(const TR1(shared_ptr)<Impl>& pimpl_, const std::string& body_name_, const EnvironmentAndFrames& env) :
         ForceModel(pimpl_->get_input().name, pimpl_->get_commands(), pimpl_->get_transformation_to_model_frame(), body_name_, env),
         pimpl(pimpl_)
-
 {
 }
 

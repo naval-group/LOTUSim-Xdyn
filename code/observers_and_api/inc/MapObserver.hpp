@@ -23,11 +23,11 @@ class MapObserver : public Observer
     private:
         using Observer::get_serializer;
         using Observer::get_initializer;
-        std::function<void()> get_serializer(const double val, const DataAddressing& address);
-        std::function<void()> get_initializer(const double val, const DataAddressing& address);
-        void flush_after_initialization();
-        void flush_after_write();
-        void flush_value_during_write();
+        std::function<void()> get_serializer(const double val, const DataAddressing& address) override;
+        std::function<void()> get_initializer(const double val, const DataAddressing& address) override;
+        void flush_after_initialization() override;
+        void flush_after_write() override;
+        void flush_value_during_write() override;
 };
 
 #endif /* MAPOBSERVER_HPP_ */

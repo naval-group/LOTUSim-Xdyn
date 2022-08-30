@@ -227,30 +227,6 @@ class RudderForceModelTest(unittest.TestCase):
         self.assertEqual(1.1071487177940904, vs.in_wake)
         self.assertEqual(-3 * np.pi / 4, vs.outside_wake)
 
-    def _disabled_test_ship_speed_relative_to_the_fluid(self):
-        # This test is disabled as in the C++ code
-        A, phi, _ = self.get_wave_model()
-        env = get_environment_and_frames(A, phi)
-        parameters = self.random_rudder_force_model_input()
-        parameters.number_of_blades = 3
-        parameters.blade_area_ratio = 0.5
-        parameters.position_of_propeller_frame.frame = "body"
-        F = RudderForceModel(parameters, self.random_string(), env)
-        states = BodyStates()
-        s = [1, 2, 3, 4, 5, 6, 0, 0, 0, 1, 0, 0, 0]
-        t = 24
-        states.u.record(t, s[2])
-        states.v.record(t, s[3])
-        states.w.record(t, s[4])
-        states.name = "body"
-        b = BodyWithoutSurfaceForces(states, 0, BlockedDOF(""), YamlFilteredStates())
-        b.update_kinematics(s, env.k)
-        Vship_water = F.get_ship_speed(states, t, env)
-        self.assertEqual(type(Vship_water), SscPoint)
-        self.assertEqual(3.0621974344648351, Vship_water.x())
-        self.assertEqual(4, Vship_water.y())
-        self.assertEqual(5.0089062285187547, Vship_water.z())
-
     def test_parser(self):
         w = RudderForceModel.parse(rudder())
         self.assertEqual(0.5, w.blade_area_ratio)

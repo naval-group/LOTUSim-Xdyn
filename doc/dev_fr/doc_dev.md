@@ -856,11 +856,11 @@ Considérons l'exemple de la sérialisation en CSV définie dans la classe
 implémenter les méthodes virtuelles suivantes :
 
 ~~~~~~ {.cpp}
-void flush_after_initialization();
-void flush_after_write();
-void flush_value_during_write();
-std::function<void()> get_serializer(const double val, const DataAddressing& address);
-std::function<void()> get_initializer(const double val, const DataAddressing& address);
+void flush_after_initialization() override;
+void flush_after_write() override;
+void flush_value_during_write() override;
+std::function<void()> get_serializer(const double val, const DataAddressing& address) override;
+std::function<void()> get_initializer(const double val, const DataAddressing& address) override;
 ~~~~~~
 
 Dans la déclaration de la classe, pour éviter les phénomènes de masquage par la

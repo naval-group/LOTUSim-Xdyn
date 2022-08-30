@@ -150,9 +150,9 @@ struct GrpcControllerInterface::Impl
                 break;
         }
         ret.date_of_first_callback = response.date_of_first_callback();
-        ret.setpoint_names.reserve(response.setpoint_names_size());
+        ret.setpoint_names.reserve(static_cast<size_t>(response.setpoint_names_size()));
         std::copy(response.setpoint_names().begin(), response.setpoint_names().end(), std::back_inserter(ret.setpoint_names));
-        ret.command_names.reserve(response.command_names_size());
+        ret.command_names.reserve(static_cast<size_t>(response.command_names_size()));
         std::copy(response.command_names().begin(), response.command_names().end(), std::back_inserter(ret.command_names));
         ret.dt = response.dt();
         if (ret.dt <= 0)

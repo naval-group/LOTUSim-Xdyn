@@ -179,7 +179,7 @@ CSVLineByLineReader::DateValues CSVLineByLineReader::read_next_line()
 
     std::stringstream line_stream(line);
     std::string buffer;
-    int i = 0;
+    size_t i = 0;
     has_more_values = false;
     DateValues ret;
     // Loop on the values in the line, splitting by the separator character

@@ -24,7 +24,7 @@ DiscreteDirectionalWaveSpectrum common(
         const double omega_min,            //!< Lower bound of the angular frequency range (in rad/s)
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
         const size_t nfreq,                //!< Number of frequencies in discrete spectrum
-        const size_t ndir,                //!< Number of directions in discrete spectrum
+        const size_t ndir,                 //!< Number of directions in discrete spectrum
         const bool equal_energy_bins       //!< Choose omegas so that integral of S between two successive omegas is constant
         );
 DiscreteDirectionalWaveSpectrum common(
@@ -33,7 +33,7 @@ DiscreteDirectionalWaveSpectrum common(
         const double omega_min,            //!< Lower bound of the angular frequency range (in rad/s)
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
         const size_t nfreq,                //!< Number of frequencies in discrete spectrum
-        const size_t ndir,                //!< Number of directions in discrete spectrum
+        const size_t ndir,                 //!< Number of directions in discrete spectrum
         const bool equal_energy_bins       //!< Choose omegas so that integral of S between two successive omegas is constant
         )
 {
@@ -57,7 +57,7 @@ DiscreteDirectionalWaveSpectrum discretize(
         const double omega_min,            //!< Lower bound of the angular frequency range (in rad/s)
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
         const size_t nfreq,                //!< Number of frequencies in discrete spectrum
-        const size_t ndir,                //!< Number of directions in discrete spectrum
+        const size_t ndir,                 //!< Number of directions in discrete spectrum
         const Stretching& stretching,      //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
         const bool equal_energy_bins       //!< Choose omegas so the integral of S between two successive omegas is constant
         )
@@ -70,7 +70,7 @@ DiscreteDirectionalWaveSpectrum discretize(
     return ret;
 }
 
-/**  \author cec
+/**  \author cady
   *  \date Aug 1, 2014, 5:04:24 PM
   *  \brief Discretize a wave spectrum
   *  \details Finite depth hypothesis (for the wave number)

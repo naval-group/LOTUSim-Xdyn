@@ -127,10 +127,11 @@ std::vector<double> WaveModel::get_psis() const
     return flat_spectrum.psi;
 }
 
-std::vector<double> WaveModel::get_elevation(const std::vector<double> &x, //!< x-positions in the NED frame (in meters)
-                                             const std::vector<double> &y, //!< y-positions in the NED frame (in meters)
-                                             const double t                //!< Current time instant (in seconds)
-                                            ) const
+std::vector<double> WaveModel::get_elevation(
+    const std::vector<double> &x, //!< x-positions in the NED frame (in meters)
+    const std::vector<double> &y, //!< y-positions in the NED frame (in meters)
+    const double t                //!< Current time instant (in seconds)
+    ) const
 {
     if (x.size() != y.size())
     {
@@ -141,13 +142,13 @@ std::vector<double> WaveModel::get_elevation(const std::vector<double> &x, //!< 
 }
 
 ssc::kinematics::PointMatrix WaveModel::get_orbital_velocity(
-        const double g,                //!< gravity (in m/s^2)
-        const std::vector<double>& x,  //!< x-positions in the NED frame (in meters)
-        const std::vector<double>& y,  //!< y-positions in the NED frame (in meters)
-        const std::vector<double>& z,  //!< z-positions in the NED frame (in meters)
-        const double t,                //!< Current time instant (in seconds)
-        const std::vector<double>& eta //!< Wave heights at x,y,t (in meters)
-        ) const
+    const double g,                //!< gravity (in m/s^2)
+    const std::vector<double>& x,  //!< x-positions in the NED frame (in meters)
+    const std::vector<double>& y,  //!< y-positions in the NED frame (in meters)
+    const std::vector<double>& z,  //!< z-positions in the NED frame (in meters)
+    const double t,                //!< Current time instant (in seconds)
+    const std::vector<double>& eta //!< Wave heights at x,y,t (in meters)
+    ) const
 {
     if (x.size() != y.size() || x.size() != z.size() || x.size() != eta.size())
     {
@@ -157,14 +158,15 @@ ssc::kinematics::PointMatrix WaveModel::get_orbital_velocity(
     return orbital_velocity(g, x, y, z, t, eta);
 }
 
-std::vector<double> WaveModel::get_dynamic_pressure(const double rho,               //!< water density (in kg/m^3)
-                                                    const double g,                 //!< gravity (in m/s^2)
-                                                    const std::vector<double> &x,   //!< x-positions in the NED frame (in meters)
-                                                    const std::vector<double> &y,   //!< y-positions in the NED frame (in meters)
-                                                    const std::vector<double> &z,   //!< z-positions in the NED frame (in meters)
-                                                    const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
-                                                    const double t                  //!< Current time instant (in seconds)
-                                                   ) const
+std::vector<double> WaveModel::get_dynamic_pressure(
+    const double rho,               //!< water density (in kg/m^3)
+    const double g,                 //!< gravity (in m/s^2)
+    const std::vector<double> &x,   //!< x-positions in the NED frame (in meters)
+    const std::vector<double> &y,   //!< y-positions in the NED frame (in meters)
+    const std::vector<double> &z,   //!< z-positions in the NED frame (in meters)
+    const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
+    const double t                  //!< Current time instant (in seconds)
+    ) const
 {
     if (x.size() != y.size() || x.size() != z.size() || x.size() != eta.size())
     {

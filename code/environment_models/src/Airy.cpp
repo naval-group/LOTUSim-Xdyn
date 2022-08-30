@@ -10,9 +10,9 @@
 #include "InvalidInputException.hpp"
 #include "discretize.hpp"
 
-#include <vector>
 #include <ssc/macros.hpp>
-
+#include <Eigen/Dense>
+#include <vector>
 
 Airy::Airy(const DiscreteDirectionalWaveSpectrum& spectrum_): WaveModel(spectrum_)
 {
@@ -117,7 +117,6 @@ std::vector<double> Airy::dynamic_pressure(
             }
             p[j] *= rho * g;
         }
-
     }
     return p;
 }
@@ -133,12 +132,11 @@ ssc::kinematics::PointMatrix Airy::orbital_velocity(
 {
     ssc::kinematics::PointMatrix M("NED", x.size());
     for (size_t point_index = 0; point_index < x.size(); ++point_index) {
-
         if (z.at(point_index) < eta.at(point_index))
         {
-            M.m(0, point_index) = 0;
-            M.m(1, point_index) = 0;
-            M.m(2, point_index) = 0;
+            M.m(0, static_cast<Eigen::Index>(point_index)) = 0;
+            M.m(1, static_cast<Eigen::Index>(point_index)) = 0;
+            M.m(2, static_cast<Eigen::Index>(point_index)) = 0;
         } else {
             const size_t n = flat_spectrum.psi.size();
             double u = 0;
@@ -160,11 +158,10 @@ ssc::kinematics::PointMatrix Airy::orbital_velocity(
                 v += a_k_omega_pdyn_factor_sin_theta * flat_spectrum.sin_psi[i];
                 w += a_k_omega * pdyn_factor_sh * cos_theta;
             }
-            M.m(0, point_index) = u * g;
-            M.m(1, point_index) = v * g;
-            M.m(2, point_index) = w * g;
+            M.m(0, static_cast<Eigen::Index>(point_index)) = u * g;
+            M.m(1, static_cast<Eigen::Index>(point_index)) = v * g;
+            M.m(2, static_cast<Eigen::Index>(point_index)) = w * g;
         }
     }
     return M;
-
 }

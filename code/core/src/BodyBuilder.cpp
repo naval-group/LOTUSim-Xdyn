@@ -17,14 +17,15 @@
 #include "yaml2eigen.hpp"
 
 #include <ssc/kinematics.hpp>
+#include <Eigen/Dense>
 
 bool isSymmetric(const Eigen::MatrixXd& m)
 {
     const double tol = 1e-10;
     if (m.rows()!=m.cols()) return false;
-    const size_t n = m.rows();
-    for (size_t i = 0;i<n;++i)
-        for (size_t j = i+1;j<n;++j)
+    const Eigen::Index n = m.rows();
+    for (Eigen::Index i = 0;i<n;++i)
+        for (Eigen::Index j = i+1;j<n;++j)
             if (std::abs(m(i,j)-m(j,i))>tol) return false;
     return true;
 }
@@ -34,8 +35,8 @@ bool isSymmetric(const Eigen::MatrixXd& m)
 bool isSymmetricDefinitePositive(const Eigen::MatrixXd& m)
 {
     if (!isSymmetric(m)) return false;
-    const size_t n = m.rows();
-    for (size_t i = 1;i<=n;++i)
+    const Eigen::Index n = m.rows();
+    for (Eigen::Index i = 1;i<=n;++i)
     {
         if (m.block(0, 0, i, i).determinant()<=0.0)
         {
@@ -162,12 +163,12 @@ Eigen::Matrix<double,6,6> BodyBuilder::convert(const YamlDynamics6x6Matrix& M) c
     Eigen::Matrix<double,6,6> ret;
     for (size_t j = 0 ; j < 6 ; ++j)
     {
-        ret(0,(int)j) = M.row_1.at(j);
-        ret(1,(int)j) = M.row_2.at(j);
-        ret(2,(int)j) = M.row_3.at(j);
-        ret(3,(int)j) = M.row_4.at(j);
-        ret(4,(int)j) = M.row_5.at(j);
-        ret(5,(int)j) = M.row_6.at(j);
+        ret(0, static_cast<Eigen::Index>(j)) = M.row_1.at(j);
+        ret(1, static_cast<Eigen::Index>(j)) = M.row_2.at(j);
+        ret(2, static_cast<Eigen::Index>(j)) = M.row_3.at(j);
+        ret(3, static_cast<Eigen::Index>(j)) = M.row_4.at(j);
+        ret(4, static_cast<Eigen::Index>(j)) = M.row_5.at(j);
+        ret(5, static_cast<Eigen::Index>(j)) = M.row_6.at(j);
     }
     return ret;
 }

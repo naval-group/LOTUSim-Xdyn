@@ -552,7 +552,7 @@ TEST_F(SimTest, linear_hydrostatics_without_waves)
     const double omega = sqrt(k/m);
     const double zeq = -0.099;
 
-    auto z = [k,m,z0,w0,omega,zeq](const double t){return (z0-zeq)*cos(omega*t) + w0/omega*sin(omega*t) + zeq;};
+    auto z = [z0,w0,omega,zeq](const double t){return (z0-zeq)*cos(omega*t) + w0/omega*sin(omega*t) + zeq;};
     const double eps = 1E-5;
     for (size_t i = 0 ; i < res.size() ; ++i)
     {

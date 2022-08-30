@@ -143,7 +143,7 @@ std::string helpful_error_message_on_missing_requested_serialization(const std::
     std::stringstream ss;
     ss << "Available output variables are: ";
     if (!available_variables.empty()) ss << available_variables.front();
-    for (int i = 1 ; i < (int)available_variables.size() ; ++i)
+    for (size_t i = 1 ; i < available_variables.size() ; ++i)
     {
         ss << ", '" << available_variables[i] << "'";
     }

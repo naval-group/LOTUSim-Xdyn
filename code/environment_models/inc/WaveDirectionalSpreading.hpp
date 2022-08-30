@@ -13,7 +13,7 @@
 
 class SumOfWaveDirectionalSpreadings;
 
-/** \author cec
+/** \author cady
  *  \date Jul 31, 2014, 11:59:52 AM
  *  \brief Distribution of the wave height by direction.
  *  \details Used with WaveSpectralDensity to construct a DirectionalWaveSpectrum
@@ -35,7 +35,7 @@ class WaveDirectionalSpreading
                                 );
         virtual ~WaveDirectionalSpreading();
 
-        /**  \author cec
+        /**  \author cady
           *  \date Jul 31, 2014, 12:03:19 PM
           *  \brief Wave density by direction.
           *  \details Its integral should evaluate to one (because it is a probability density)
@@ -50,7 +50,7 @@ class WaveDirectionalSpreading
 
         virtual WaveDirectionalSpreading* clone() const = 0;
 
-        /**  \author cec
+        /**  \author cady
           *  \date Jul 31, 2014, 12:03:19 PM
           *  \details Returns n directions between 0 (included) and 2 pi (excluded)
           *  \snippet environment_models/unit_tests/src/WaveSpectralDensityTest.cpp WaveSpectralDensityTest get_omega0_example

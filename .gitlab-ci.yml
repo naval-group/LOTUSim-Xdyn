@@ -93,6 +93,16 @@ build:debian11-release-python-all:
       - xdyn.deb
       - xdyn*.whl
 
+build:debian11-release-clang14:
+  stage: build
+  script:
+    - make NB_OF_PARALLEL_BUILDS="-j 1" debian11_clang
+    - mv build_deb11_clang14/xdyn.deb .
+  artifacts:
+    when: on_success
+    paths:
+      - xdyn.deb
+
 build:debian11-debug:
   stage: build
   script:

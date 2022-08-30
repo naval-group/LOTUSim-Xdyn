@@ -251,12 +251,12 @@ void Sim::output(const StateType& x, Observer& obs, const double t, const std::v
     {
         body->feed(normalized_x, obs, pimpl->env.rot);
         auto dF = body->get_delta_F(pimpl->_dx_dt,pimpl->sum_of_forces_in_body_frame[body->get_name()]);
-        obs.write_before_solver_step((double)dF(0),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"Fx"},std::string("Fx(blocked states,")+body->get_name()+","+body->get_name()+")"));
-        obs.write_before_solver_step((double)dF(1),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"Fy"},std::string("Fy(blocked states,")+body->get_name()+","+body->get_name()+")"));
-        obs.write_before_solver_step((double)dF(2),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"Fz"},std::string("Fz(blocked states,")+body->get_name()+","+body->get_name()+")"));
-        obs.write_before_solver_step((double)dF(3),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"Mx"},std::string("Mx(blocked states,")+body->get_name()+","+body->get_name()+")"));
-        obs.write_before_solver_step((double)dF(4),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"My"},std::string("My(blocked states,")+body->get_name()+","+body->get_name()+")"));
-        obs.write_before_solver_step((double)dF(5),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"Mz"},std::string("Mz(blocked states,")+body->get_name()+","+body->get_name()+")"));
+        obs.write_before_solver_step(dF(0),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"Fx"},std::string("Fx(blocked states,")+body->get_name()+","+body->get_name()+")"));
+        obs.write_before_solver_step(dF(1),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"Fy"},std::string("Fy(blocked states,")+body->get_name()+","+body->get_name()+")"));
+        obs.write_before_solver_step(dF(2),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"Fz"},std::string("Fz(blocked states,")+body->get_name()+","+body->get_name()+")"));
+        obs.write_before_solver_step(dF(3),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"Mx"},std::string("Mx(blocked states,")+body->get_name()+","+body->get_name()+")"));
+        obs.write_before_solver_step(dF(4),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"My"},std::string("My(blocked states,")+body->get_name()+","+body->get_name()+")"));
+        obs.write_before_solver_step(dF(5),DataAddressing(std::vector<std::string>{"efforts",body->get_name(),"blocked states",body->get_name(),"Mz"},std::string("Mz(blocked states,")+body->get_name()+","+body->get_name()+")"));
     }
     pimpl->env.feed(obs, t, pimpl->bodies, normalized_x);
     for (auto body:pimpl->bodies)

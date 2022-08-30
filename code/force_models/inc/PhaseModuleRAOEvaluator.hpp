@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-class BodyStates;
+struct BodyStates;
 struct EnvironmentAndFrames;
 struct FlatDiscreteDirectionalWaveSpectrum;
 

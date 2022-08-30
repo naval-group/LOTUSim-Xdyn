@@ -2,7 +2,7 @@
  * HydrostaticForceTest.cpp
  *
  *  Created on: 31 mars 2014
- *      Author: cec
+ *      Author: cady
  */
 
 #include "DefaultSurfaceElevationTest.hpp"

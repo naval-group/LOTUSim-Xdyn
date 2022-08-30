@@ -5,31 +5,17 @@
  *      Author: cady
  */
 
+#include "ParseFMIXml.hpp"
+
 #include <limits> // std::numeric_limits
 
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 
 #include "FMIException.hpp"
-#include "ParseFMIXml.hpp"
 #include <ssc/macros.hpp>
 
 using boost::property_tree::ptree;
-
-template <typename T> typename std::vector<T> parse_vector(const boost::property_tree::ptree& tree, const std::string& name)
-{
-    std::vector<T> ret;
-    for (auto it = tree.begin() ; it != tree.end() ; ++it)
-    {
-        if (it->first == name)
-        {
-            T b;
-            it->second >> b;
-            ret.push_back(b);
-        }
-    }
-    return ret;
-}
 
 void operator>>(const boost::property_tree::ptree& tree, fmi::Xml& out);
 void operator>>(const boost::property_tree::ptree& tree, fmi::DateTime& out);
@@ -45,6 +31,20 @@ void operator>>(const boost::property_tree::ptree& tree, fmi::RealAttributes& ou
 void operator>>(const boost::property_tree::ptree& tree, fmi::ScalarVariable<fmi::RealAttributes>& out);
 void operator>>(const boost::property_tree::ptree& tree, fmi::NamingConvention& out);
 
+template <typename T> typename std::vector<T> parse_vector(const boost::property_tree::ptree& tree, const std::string& name)
+{
+    std::vector<T> ret;
+    for (auto it = tree.begin() ; it != tree.end() ; ++it)
+    {
+        if (it->first == name)
+        {
+            T b;
+            it->second >> b;
+            ret.push_back(b);
+        }
+    }
+    return ret;
+}
 
 void operator>>(const boost::property_tree::ptree& tree, fmi::Xml& xml)
 {

@@ -15,7 +15,7 @@
 struct YamlDynamics6x6Matrix;
 struct YamlAngle;
 
-/** \author cec
+/** \author cady
  *  \date Jun 17, 2014, 12:39:59 PM
  *  \brief Builds a Body object from the YAML & STL describing it
  *  \ingroup simulator

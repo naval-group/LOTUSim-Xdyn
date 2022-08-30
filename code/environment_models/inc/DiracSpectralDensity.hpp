@@ -10,7 +10,7 @@
 
 #include "WaveSpectralDensity.hpp"
 
-/** \author cec
+/** \author cady
  *  \date Jul 31, 2014, 2:30:28 PM
  *  \brief Only one harmonic (cosine wave)
  *  \details
@@ -27,7 +27,7 @@ class DiracSpectralDensity : public WaveSpectralDensity
                              const double Hs      //!< Significant wave height (in meters)
                              );
 
-        /**  \author cec
+        /**  \author cady
           *  \date Jul 31, 2014, 2:30:28 PM
           *  \brief Computes the amplitude of the power spectrum at a given angular frequency
           *  \returns Amplitude of the power spectrum (in m^2 s)
@@ -36,7 +36,7 @@ class DiracSpectralDensity : public WaveSpectralDensity
         double operator()(const double omega //!< Angular frequency (\f$2\pi f\f$) in rad/s of the significant wave height
                           ) const;
 
-        /**  \author cec
+        /**  \author cady
           *  \date Jul 31, 2014, 2:41:16 PM
           *  \brief A vector containing only omega0 (in rad/s)
           *  \snippet environment_models/unit_tests/src/DiracSpectralDensityTest.cpp DiracSpectralDensityTest get_omega0_example

@@ -63,10 +63,10 @@ TEST_F(SimpleHeadingKeepingControllerTest, force_and_torque)
 
     const auto F = w.get_force(states, a.random<double>(), env, commands);
 
-    ASSERT_NEAR(0, (double)F.X(), EPS);
-    ASSERT_NEAR(0, (double)F.Y(), EPS);
-    ASSERT_NEAR(0, (double)F.Z(), EPS);
-    ASSERT_NEAR(0, (double)F.K(), EPS);
-    ASSERT_NEAR(0, (double)F.M(), EPS);
-    ASSERT_NEAR(4*1*(5-psi)-2*0.9*4*1*10, (double)F.N(), EPS);
+    ASSERT_NEAR(0, F.X(), EPS);
+    ASSERT_NEAR(0, F.Y(), EPS);
+    ASSERT_NEAR(0, F.Z(), EPS);
+    ASSERT_NEAR(0, F.K(), EPS);
+    ASSERT_NEAR(0, F.M(), EPS);
+    ASSERT_NEAR(4*1*(5-psi)-2*0.9*4*1*10, F.N(), EPS);
 }

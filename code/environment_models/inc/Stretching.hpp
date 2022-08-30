@@ -11,7 +11,7 @@
 
 struct YamlStretching;
 
-/** \author cec
+/** \author cady
  *  \date Dec 20, 2016, 12:21 PM
  *  \brief Rescale the z-axis with delta stretching model (used to compute orbital velocities)
  *  \details Prevents non-physical orbital velocities above the mean surface level

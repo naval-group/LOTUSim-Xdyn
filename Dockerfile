@@ -5,18 +5,19 @@
 # docker build . -f Dockerfile --tag sirehna/xdyn
 # docker run sirehna/xdyn --help
 FROM debian:bullseye-slim
-RUN apt-get update -yq && \
-    apt-get install \
+RUN apt-get update -yq \
+ && apt-get install \
         --yes \
         --no-install-recommends \
         wait-for-it \
         libgfortran5 \
-        libquadmath0 && \
-    apt-get autoclean && \
-    apt-get autoremove && \
-    apt-get clean && \
-    rm -rf /tmp/* /var/tmp/* && \
-    rm -rf /var/lib/apt/lists
+        libquadmath0 \
+        libicu67 \
+ && apt-get autoclean \
+ && apt-get autoremove \
+ && apt-get clean \
+ && rm -rf /tmp/* /var/tmp/* \
+ && rm -rf /var/lib/apt/lists
 
 ADD xdyn.deb /
 RUN dpkg -r xdyn && \
@@ -55,7 +56,5 @@ RUN echo "#!/bin/sh" > /usr/bin/xdyn_cli.sh && \
     echo "    /usr/bin/xdyn \$@" >> /usr/bin/xdyn_cli.sh && \
     echo "fi" >> /usr/bin/xdyn_cli.sh && \
     chmod a+x /usr/bin/xdyn_cli.sh
-
-
 
 ENTRYPOINT ["/usr/bin/xdyn_cli.sh"]

@@ -191,7 +191,7 @@ Eigen::Matrix<double, 6, 6> PrecalParser::get_added_mass() const
     {
         for (size_t j = 0; j < 6; ++j)
         {
-            Ma(i, j) = values.at(6 * i + j);
+            Ma(static_cast<Eigen::Index>(i), static_cast<Eigen::Index>(j)) = values.at(6 * i + j);
         }
     }
     convert_matrix_to_xdyn_frame(Ma);

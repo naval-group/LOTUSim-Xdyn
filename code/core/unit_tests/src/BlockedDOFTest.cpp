@@ -262,18 +262,18 @@ TEST_F(BlockedDOFTest, force_delta)
                      5, 6, 7, 8, 9, 0,
                      1, 2, 3, 4, 5, 6;
     Eigen::Vector3d F,T;
-    F(0) = 50;
-    F(1) = 51;
-    F(2) = 52;
-    T(0) = 60;
-    T(1) = 61;
-    T(2) = 62;
+    F(0) = 50.0;
+    F(1) = 51.0;
+    F(2) = 52.0;
+    T(0) = 60.0;
+    T(1) = 61.0;
+    T(2) = 62.0;
     ssc::kinematics::Wrench sum_of_other_forces(ssc::kinematics::Point("d",1,2,3),F,T);
     const auto delta_F = blocker.get_delta_F(dx_dt,total_inertia,sum_of_other_forces);
-    EXPECT_DOUBLE_EQ(293, (double)delta_F(0));
-    EXPECT_DOUBLE_EQ(340, (double)delta_F(1));
-    EXPECT_DOUBLE_EQ(477, (double)delta_F(2));
-    EXPECT_DOUBLE_EQ(227, (double)delta_F(3));
-    EXPECT_DOUBLE_EQ(474, (double)delta_F(4));
-    EXPECT_DOUBLE_EQ(281, (double)delta_F(5));
+    EXPECT_DOUBLE_EQ(293.0, delta_F(0));
+    EXPECT_DOUBLE_EQ(340.0, delta_F(1));
+    EXPECT_DOUBLE_EQ(477.0, delta_F(2));
+    EXPECT_DOUBLE_EQ(227.0, delta_F(3));
+    EXPECT_DOUBLE_EQ(474.0, delta_F(4));
+    EXPECT_DOUBLE_EQ(281.0, delta_F(5));
 }
