@@ -8,7 +8,7 @@ RUN apt-get update -yq \
     python3-pip \
  && python3 -m pip install -U pip \
  && python3 -m pip install \
-    sphinx==4.5.0 \
+    sphinx==5.1.1 \
     sphinx-autopackagesummary==1.3 \
     myst-parser==0.18.0
 ADD xdyn*39*-linux_x86_64.whl /
