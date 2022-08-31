@@ -12,15 +12,15 @@
 #include "generate_body_for_tests.hpp"
 #include "TriMeshTestData.hpp"
 #include "MeshIntersector.hpp"
-#include <ssc/kinematics.hpp>
 #include "DiracSpectralDensity.hpp"
 #include "DiracDirectionalSpreading.hpp"
 #include "discretize.hpp"
 #include "Airy.hpp"
-#include "SurfaceElevationFromWaves.hpp"
 #include "env_for_tests.hpp"
 #include "YamlWaveModelInput.hpp"
 #include "Stretching.hpp"
+
+#include <ssc/kinematics.hpp>
 
 #define _USE_MATH_DEFINE
 #include <cmath>
@@ -134,7 +134,7 @@ TEST_F(FroudeKrylovForceModelTest, validate_formula_against_sos_stab)
     const std::vector<double> y{0, 0, -0.1, 0.1, 0, 0};
     const std::vector<double> z{0.2, 0.2, 0.2, 0.2, 0.1, 0.3};
     const std::vector<double> eta = wave.get_elevation(x,y,t);
-    
+
     const double F1 = rho*g*dS*Hs/2*exp(-k*(z.at(0)-eta.at(0)))*cos(omega0*t-k*(x.at(0)*cos(psi)+y.at(0)*sin(psi))+phi);
     const double F2 = rho*g*dS*Hs/2*exp(-k*(z.at(1)-eta.at(1)))*cos(omega0*t-k*(x.at(1)*cos(psi)+y.at(1)*sin(psi))+phi);
     const double F3 = rho*g*dS*Hs/2*exp(-k*(z.at(2)-eta.at(2)))*cos(omega0*t-k*(x.at(2)*cos(psi)+y.at(2)*sin(psi))+phi);

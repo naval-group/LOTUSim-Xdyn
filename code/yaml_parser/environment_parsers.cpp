@@ -15,7 +15,7 @@
 #include <sstream>
 
 void operator >> (const YAML::Node& node, YamlDiscretization& g);
-void operator >> (const YAML::Node& node, YamlSpectra& g);
+void operator >> (const YAML::Node& node, YamlSpectrum& g);
 void operator >> (const YAML::Node& node, YamlWaveOutput& g);
 void operator >> (const YAML::Node& node, YamlStretching& g);
 
@@ -157,7 +157,7 @@ void get_yaml(const YAML::Node& node, std::string& out)
     out = e.c_str();
 }
 
-void operator >> (const YAML::Node& node, YamlSpectra& g)
+void operator >> (const YAML::Node& node, YamlSpectrum& g)
 {
     node["model"] >> g.model;
     get_yaml(node, g.model_yaml);

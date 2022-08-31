@@ -22,15 +22,14 @@
 
 #include "EnvironmentAndFrames.hpp"
 #include "GeometricTypes3d.hpp"
-
-#include <map>
-#include <boost/utility/enable_if.hpp>
-#include <boost/type_traits/is_base_of.hpp>
+#include "WindModel.hpp"
 
 #include <ssc/data_source.hpp>
 #include <ssc/kinematics.hpp>
 
-#include "WindModel.hpp"
+#include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/is_base_of.hpp>
+#include <map>
 
 class BodyBuilder;
 typedef std::map<std::string, VectorOfVectorOfPoints> MeshMap;

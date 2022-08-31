@@ -10,11 +10,11 @@
 #include "InternalErrorException.hpp"
 #include "TriMeshTestData.hpp"
 #include "generate_body_for_tests.hpp"
-#include <ssc/kinematics.hpp>
 #include "DefaultSurfaceElevation.hpp"
 #include "DefaultWindModel.hpp"
 #include "SimulatorYamlParser.hpp"
 #include "yaml_data.hpp"
+#include <ssc/kinematics.hpp>
 
 const YamlSimulatorInput SimulatorBuilderTest::input = SimulatorYamlParser(test_data::full_example()).parse();
 

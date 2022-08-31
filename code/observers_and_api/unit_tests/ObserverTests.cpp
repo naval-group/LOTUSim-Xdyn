@@ -5,23 +5,18 @@
  *      Author: cady
  */
 
-#include <ssc/websocket.hpp>
-
 #include "ObserverTests.hpp"
-#include "SimObserver.hpp"
 #include "Sim.hpp"
-#include "SimTest.hpp"
-#include "YamlSimulatorInput.hpp"
 #include "yaml_data.hpp"
-#include "SimulatorYamlParser.hpp"
 #include "stl_data.hpp"
 #include "simulator_api.hpp"
-#include <ssc/solver/steppers.hpp>
 #include "TriMeshTestData.hpp"
 #include "parse_output.hpp"
 #include "ListOfObservers.hpp"
-#include "simulator_api.hpp"
 #include "MapObserver.hpp"
+
+#include <ssc/solver/steppers.hpp>
+#include <ssc/websocket.hpp>
 
 #include <unistd.h> // usleep
 
@@ -87,7 +82,7 @@ TEST_F(ObserverTests, can_observe_using_a_websocket)
 
 TEST_F(ObserverTests, can_output_all_results)
 {
-    // This is to test Observer 
+    // This is to test Observer
     const auto yaml = test_data::oscillating_cube_example();
     const auto mesh = test_data::cube();
     Sim sys = get_system(yaml, mesh, 0);
@@ -136,4 +131,3 @@ TEST_F(ObserverTests, can_output_all_results)
     ASSERT_TRUE(results.find("My(non-linear hydrostatic (fast),cube,NED)")!= results.end());
     ASSERT_TRUE(results.find("Mz(non-linear hydrostatic (fast),cube,NED)")!= results.end());
 }
-

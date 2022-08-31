@@ -30,9 +30,9 @@ struct YamlStretching
     double h; //!< Depth (in meters) over which the stretching is taken into account. Should usually be equal to "depth" (or 0 for no stretching)
 };
 
-struct YamlSpectra
+struct YamlSpectrum
 {
-    YamlSpectra();
+    YamlSpectrum();
     std::string model;                      //!< Wave model (eg. airy)
     std::string model_yaml;                 //!< Model data in YAML format
     std::string directional_spreading_type; //!< Spreading type (eg. cos2s)
@@ -47,7 +47,7 @@ struct YamlWaveModel
 {
     YamlWaveModel();
     YamlDiscretization discretization; //!< Spectral discretization parameters
-    std::vector<YamlSpectra> spectra;  //!< Wave spectra to generate
+    std::vector<YamlSpectrum> spectra;  //!< Wave spectra to generate
     YamlWaveOutput output;             //!< Defines what wave data is outputted during the simulation & how it is generated
 };
 
