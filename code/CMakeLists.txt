@@ -11,6 +11,8 @@ IF(NOT DEFINED CMAKE_BUILD_TYPE)
     SET(CMAKE_BUILD_TYPE Debug)
 ENDIF()
 
+SET(CMAKE_CXX_STANDARD 11)
+
 IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
    SET(ARCH64_BITS TRUE)
 ELSE()
@@ -139,6 +141,7 @@ ADD_LIBRARY(${PROJECT_NAME} ${STATICORSHARED}
         $<TARGET_OBJECTS:interface_hdf5>
         $<TARGET_OBJECTS:gz_curves>
         $<TARGET_OBJECTS:grpc>
+        $<TARGET_OBJECTS:grpc_gen>
         )
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} PRIVATE yaml-cpp)
@@ -176,7 +179,7 @@ SET(TEST_EXE run_all_tests)
 INCLUDE_DIRECTORIES(SYSTEM ${PROTOBUF_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(SYSTEM ${GRPC_INCLUDE_DIR})
 ADD_EXECUTABLE(${TEST_EXE}
-        executables/src/run_all_tests.cpp
+        executables/run_all_tests.cpp
         $<TARGET_OBJECTS:mesh_tests>
         $<TARGET_OBJECTS:yaml_parser_tests>
         $<TARGET_OBJECTS:external_file_formats_tests>

@@ -143,9 +143,8 @@ class RudderForceModelTest(unittest.TestCase):
         riw = RudderModel(parameters, 1024, self.random_double())
         Vs = 12
         Cl = 1.3
-        alpha = np.pi / 4
         Ar = 1.4
-        self.assertEqual(268369.91999999998, riw.get_drag(Vs, Cl, alpha, Ar))
+        self.assertEqual(268369.91999999998, riw.get_drag(Vs, Cl, Ar))
 
     def test_get_force(self):
         riw = RudderModel(

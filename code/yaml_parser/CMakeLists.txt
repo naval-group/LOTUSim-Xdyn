@@ -1,34 +1,26 @@
-cmake_minimum_required(VERSION 2.8.8)
-project(yaml_parser)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
+PROJECT(yaml_parser)
 
-set(SRC src/SimulatorYamlParser.cpp
-        src/environment_parsers.cpp
-        src/check_input_yaml.cpp
-        src/external_data_structures_parsers.cpp
-        src/parse_controllers.cpp
-        src/parse_output.cpp
-        src/parse_time_series.cpp
-        src/parse_address.cpp
-        )
+SET(SRC
+    SimulatorYamlParser.cpp
+    environment_parsers.cpp
+    check_input_yaml.cpp
+    external_data_structures_parsers.cpp
+    parse_controllers.cpp
+    parse_output.cpp
+    parse_time_series.cpp
+    parse_address.cpp
+    )
 
-# Using C++ 2011
-# The -std=c++0x option causes g++ to go into 'strict ANSI' mode so it doesn't declare non-standard functions
-# (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
-# Use -std=gnu++0x instead.
-if(NOT(MSVC))
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
-endif()
+INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${exceptions_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${external_data_structures_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${environment_models_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
 
-include_directories(inc)
-include_directories(${ssc_INCLUDE_DIRS})
-include_directories(${exceptions_INCLUDE_DIRS})
-include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
-include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
-include_directories(${external_data_structures_INCLUDE_DIRS})
-include_directories(${environment_models_INCLUDE_DIRS})
-include_directories(..)
+ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
 
-add_library(${PROJECT_NAME} OBJECT ${SRC})
-set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
+SET(${PROJECT_NAME}_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
 
-add_subdirectory(unit_tests)
+ADD_SUBDIRECTORY(unit_tests)

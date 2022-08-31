@@ -1,67 +1,59 @@
-cmake_minimum_required(VERSION 2.8.8)
-project(observers_and_api)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
+PROJECT(observers_and_api)
 
-include(CMakeListsGenerateDemoMatLab.txt)
-include(CMakeListsGenerateDemoPython.txt)
+INCLUDE(CMakeListsGenerateDemoMatLab.txt)
+INCLUDE(CMakeListsGenerateDemoPython.txt)
 
-set(SRC src/simulator_api.cpp
-        src/ListOfObservers.cpp
-        src/Hdf5Observer.cpp
-        src/Hdf5WaveObserver.cpp
-        src/Hdf5WaveObserverBuilder.cpp
-        src/Hdf5WaveSpectrumObserver.cpp
-        src/SimObserver.cpp
-        src/CsvObserver.cpp
-        src/DictObserver.cpp
-        src/TsvObserver.cpp
-        src/JsonObserver.cpp
-        src/WebSocketObserver.cpp
-        ${CMAKE_BINARY_DIR}/demoMatLab.cpp
-        ${CMAKE_BINARY_DIR}/demoPython.cpp
-        src/MapObserver.cpp
-        src/ConfBuilder.cpp
-        src/JSONSerializer.cpp
-        src/XdynForCS.cpp
-        src/XdynForME.cpp
-        src/SimServerInputs.cpp
-        src/EverythingObserver.cpp
-        src/gRPCProtoBufServer.cpp
-        src/SimulationServerObserver.cpp
-        src/CoSimulationObserver.cpp
-        )
+SET(SRC
+    simulator_api.cpp
+    ListOfObservers.cpp
+    Hdf5Observer.cpp
+    Hdf5WaveObserver.cpp
+    Hdf5WaveObserverBuilder.cpp
+    Hdf5WaveSpectrumObserver.cpp
+    SimObserver.cpp
+    CsvObserver.cpp
+    DictObserver.cpp
+    TsvObserver.cpp
+    JsonObserver.cpp
+    WebSocketObserver.cpp
+    ${CMAKE_BINARY_DIR}/demoMatLab.cpp
+    ${CMAKE_BINARY_DIR}/demoPython.cpp
+    MapObserver.cpp
+    ConfBuilder.cpp
+    JSONSerializer.cpp
+    XdynForCS.cpp
+    XdynForME.cpp
+    SimServerInputs.cpp
+    EverythingObserver.cpp
+    gRPCProtoBufServer.cpp
+    SimulationServerObserver.cpp
+    CoSimulationObserver.cpp
+    )
 
-# Using C++ 2011
-# The -std=c++0x option causes g++ to go into 'strict ANSI' mode so it doesn't declare non-standard functions
-# (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
-# Use -std=gnu++0x instead.
-if(NOT(MSVC))
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
-endif()
-
-include_directories(inc)
-include_directories(SYSTEM ${HDF5_INCLUDE_DIR})
-include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
-include_directories(SYSTEM ${eigen_hdf5_INCLUDE_DIRS})
-include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
-include_directories(SYSTEM ${base91x_INCLUDE_DIRS})
-include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
-include_directories(${exceptions_INCLUDE_DIRS})
-include_directories(${ssc_INCLUDE_DIRS})
-include_directories(${CMAKE_BINARY_DIR})
-include_directories(${interface_hdf5_INCLUDE_DIRS})
-include_directories(${external_data_structures_INCLUDE_DIRS})
-include_directories(${core_INCLUDE_DIRS})
-include_directories(${hdb_interpolators_INCLUDE_DIRS})
-include_directories(${force_models_INCLUDE_DIRS})
-include_directories(${mesh_INCLUDE_DIRS})
-include_directories(${yaml_parser_INCLUDE_DIRS})
-include_directories(${environment_models_INCLUDE_DIRS})
-include_directories(${external_file_formats_INCLUDE_DIRS})
-include_directories(${listeners_and_controllers_INCLUDE_DIRS})
-include_directories(${grpc_INCLUDE_DIRS}) # For the code/grpc folder
+INCLUDE_DIRECTORIES(${exceptions_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR})
+INCLUDE_DIRECTORIES(${interface_hdf5_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${external_data_structures_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${core_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${hdb_interpolators_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${force_models_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${yaml_parser_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${environment_models_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${external_file_formats_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${listeners_and_controllers_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${grpc_INCLUDE_DIRS}) # For the code/grpc folder
 INCLUDE_DIRECTORIES(SYSTEM ${GRPC_INCLUDE_DIR}) # For the gRPC library
+INCLUDE_DIRECTORIES(SYSTEM ${HDF5_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${eigen_hdf5_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${base91x_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
 
-add_library(${PROJECT_NAME} OBJECT ${SRC})
-set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
+ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
+SET(${PROJECT_NAME}_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
 
-add_subdirectory(unit_tests)
+ADD_SUBDIRECTORY(unit_tests)

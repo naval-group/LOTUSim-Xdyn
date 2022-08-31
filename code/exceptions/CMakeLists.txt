@@ -1,8 +1,6 @@
-cmake_minimum_required(VERSION 2.8.8)
-project(exceptions)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
+PROJECT(exceptions)
 
-include_directories(inc)
-include_directories(${ssc_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 
-set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
-
+SET(${PROJECT_NAME}_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH "Path to ${PROJECT_NAME}'s include directory")

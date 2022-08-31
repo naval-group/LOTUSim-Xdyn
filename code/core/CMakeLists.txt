@@ -1,58 +1,50 @@
-cmake_minimum_required(VERSION 2.8.8)
-project(core)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
+PROJECT(core)
 
-set(SRC src/update_kinematics.cpp
-        src/Sim.cpp
-        src/SimulatorBuilder.cpp
-        src/Res.cpp
-        src/SurfaceElevationBuilder.cpp
-        src/Body.cpp
-        src/BodyWithSurfaceForces.cpp
-        src/BodyWithoutSurfaceForces.cpp
-        src/BodyStates.cpp
-        src/BodyBuilder.cpp
-        src/EnvironmentAndFrames.cpp
-        src/ForceModel.cpp
-        src/SurfaceElevationFromWaves.cpp
-        src/SurfaceElevationInterface.cpp
-        src/SurfaceForceModel.cpp
-        src/ImmersedSurfaceForceModel.cpp
-        src/EmergedSurfaceForceModel.cpp
-        src/yaml2eigen.cpp
-        src/DefaultSurfaceElevation.cpp
-        src/BodyStates.cpp
-        src/Observer.cpp
-        src/BlockedDOF.cpp
-        src/State.cpp
-        src/Wrench.cpp
-        src/StatesFilter.cpp
-        )
+SET(SRC
+    BlockedDOF.cpp
+    BodyBuilder.cpp
+    Body.cpp
+    BodyStates.cpp
+    BodyStates.cpp
+    BodyWithoutSurfaceForces.cpp
+    BodyWithSurfaceForces.cpp
+    DefaultSurfaceElevation.cpp
+    EmergedSurfaceForceModel.cpp
+    EnvironmentAndFrames.cpp
+    ForceModel.cpp
+    ImmersedSurfaceForceModel.cpp
+    Observer.cpp
+    Res.cpp
+    Sim.cpp
+    SimulatorBuilder.cpp
+    State.cpp
+    StatesFilter.cpp
+    SurfaceElevationBuilder.cpp
+    SurfaceElevationFromWaves.cpp
+    SurfaceElevationInterface.cpp
+    SurfaceForceModel.cpp
+    update_kinematics.cpp
+    Wrench.cpp
+    yaml2eigen.cpp
+)
 
-# Using C++ 2011
-# The -std=c++0x option causes g++ to go into 'strict ANSI' mode so it doesn't declare non-standard functions
-# (and _stricmp() is non-standard - it's just a version of strcmp() that's case-insensitive).
-# Use -std=gnu++0x instead.
-IF (NOT(MSVC))
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
-ENDIF()
+INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${exceptions_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${external_data_structures_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${external_file_formats_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${ds_integration_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${yaml_parser_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${environment_models_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${listeners_and_controllers_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${hdb_interpolators_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
 
-include_directories(inc)
-include_directories(${ssc_INCLUDE_DIRS})
-include_directories(${exceptions_INCLUDE_DIRS})
-include_directories(${external_data_structures_INCLUDE_DIRS})
-include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
-include_directories(SYSTEM ${eigen_INCLUDE_DIRS})
-include_directories(${external_file_formats_INCLUDE_DIRS})
-include_directories(${ds_integration_INCLUDE_DIRS})
-include_directories(${yaml_parser_INCLUDE_DIRS})
-include_directories(${environment_models_INCLUDE_DIRS})
-include_directories(${listeners_and_controllers_INCLUDE_DIRS})
-include_directories(${mesh_INCLUDE_DIRS})
-include_directories(${hdb_interpolators_INCLUDE_DIRS})
-include_directories(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
+ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
 
-add_library(${PROJECT_NAME} OBJECT ${SRC})
+SET(${PROJECT_NAME}_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
 
-set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_SOURCE_DIR}/inc CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
-
-add_subdirectory(unit_tests)
+ADD_SUBDIRECTORY(unit_tests)

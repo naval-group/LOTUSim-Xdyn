@@ -1,40 +1,40 @@
 #include "py_xdyn_core.hpp"
 #include "py_pybind_additions.hpp"
-#include "core/inc/BlockedDOF.hpp"
-#include "core/inc/Body.hpp"
-#include "core/inc/BodyBuilder.hpp"
-#include "core/inc/BodyStates.hpp"
-#include "core/inc/BodyWithoutSurfaceForces.hpp"
-#include "core/inc/BodyWithSurfaceForces.hpp"
-#include "core/inc/EnvironmentAndFrames.hpp"
-#include "core/inc/DefaultSurfaceElevation.hpp"
-#include "core/inc/Wrench.hpp"
-#include "core/inc/StatesFilter.hpp"
-#include "core/inc/SurfaceElevationInterface.hpp"
-#include "core/inc/SurfaceElevationFromWaves.hpp"
-#include "core/inc/yaml2eigen.hpp"
-#include "environment_models/inc/Airy.hpp"
-#include "environment_models/inc/DiscreteDirectionalWaveSpectrum.hpp"
-#include "environment_models/inc/UniformWindVelocityProfile.hpp"
-#include "exceptions/inc/ConnexionError.hpp"
-#include "exceptions/inc/GRPCError.hpp"
-#include "exceptions/inc/InternalErrorException.hpp"
-#include "exceptions/inc/InvalidInputException.hpp"
-#include "exceptions/inc/MeshException.hpp"
-#include "exceptions/inc/NumericalErrorException.hpp"
-#include "external_data_structures/inc/YamlAngle.hpp"
-#include "external_data_structures/inc/YamlBody.hpp"
-#include "external_data_structures/inc/YamlController.hpp"
-#include "external_data_structures/inc/YamlCoordinates.hpp"
-#include "external_data_structures/inc/YamlDynamics.hpp"
-#include "external_data_structures/inc/YamlPoint.hpp"
-#include "external_data_structures/inc/YamlPosition.hpp"
-#include "external_data_structures/inc/YamlRAO.hpp"
-#include "external_data_structures/inc/YamlRadiationDamping.hpp"
-#include "external_data_structures/inc/YamlRotation.hpp"
-#include "external_data_structures/inc/YamlSpeed.hpp"
-#include "external_data_structures/inc/YamlWaveOutput.hpp"
-#include "external_data_structures/inc/YamlWaveModelInput.hpp"
+#include "core/BlockedDOF.hpp"
+#include "core/Body.hpp"
+#include "core/BodyBuilder.hpp"
+#include "core/BodyStates.hpp"
+#include "core/BodyWithoutSurfaceForces.hpp"
+#include "core/BodyWithSurfaceForces.hpp"
+#include "core/EnvironmentAndFrames.hpp"
+#include "core/DefaultSurfaceElevation.hpp"
+#include "core/Wrench.hpp"
+#include "core/StatesFilter.hpp"
+#include "core/SurfaceElevationInterface.hpp"
+#include "core/SurfaceElevationFromWaves.hpp"
+#include "core/yaml2eigen.hpp"
+#include "environment_models/Airy.hpp"
+#include "environment_models/DiscreteDirectionalWaveSpectrum.hpp"
+#include "environment_models/UniformWindVelocityProfile.hpp"
+#include "exceptions/ConnexionError.hpp"
+#include "exceptions/GRPCError.hpp"
+#include "exceptions/InternalErrorException.hpp"
+#include "exceptions/InvalidInputException.hpp"
+#include "exceptions/MeshException.hpp"
+#include "exceptions/NumericalErrorException.hpp"
+#include "external_data_structures/YamlAngle.hpp"
+#include "external_data_structures/YamlBody.hpp"
+#include "external_data_structures/YamlController.hpp"
+#include "external_data_structures/YamlCoordinates.hpp"
+#include "external_data_structures/YamlDynamics.hpp"
+#include "external_data_structures/YamlPoint.hpp"
+#include "external_data_structures/YamlPosition.hpp"
+#include "external_data_structures/YamlRAO.hpp"
+#include "external_data_structures/YamlRadiationDamping.hpp"
+#include "external_data_structures/YamlRotation.hpp"
+#include "external_data_structures/YamlSpeed.hpp"
+#include "external_data_structures/YamlWaveOutput.hpp"
+#include "external_data_structures/YamlWaveModelInput.hpp"
 
 namespace py = pybind11;
 
@@ -719,7 +719,7 @@ void py_add_module_xdyn_core(py::module& m0)
 //          *           frame: this method will request a transform from a
 //          *           Kinematics object to express it in the NED frame.
 //          *  \returns Pdyn (in Pascal)
-//          *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_example
+//          *  \snippet hydro_models/unit_tests/WaveModelInterfaceTest.cpp WaveModelInterfaceTest get_relative_wave_height_example
 //          */
 //        std::vector<double> get_dynamic_pressure(
 //            const double rho,                        //!< Water density (in kg/m^3)
@@ -743,7 +743,7 @@ void py_add_module_xdyn_core(py::module& m0)
 //          *  \returns Vector of coordinates on the free surface (in the NED frame),
 //          *           the z coordinate being the wave height (in meters), for each
 //          *           point in output_mesh
-//          *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest method_example
+//          *  \snippet hydro_models/unit_tests/WaveModelInterfaceTest.cpp WaveModelInterfaceTest method_example
 //          */
 //        ssc::kinematics::PointMatrix get_waves_on_mesh(
 //                const ssc::kinematics::KinematicsPtr& k, //!< Object used to compute the transforms to the NED frame
@@ -767,7 +767,7 @@ void py_add_module_xdyn_core(py::module& m0)
 //          *  \returns Vector of coordinates on the free surface (in the NED frame),
 //          *           the z coordinate being the wave height (in meters), for each
 //          *           point in P
-//          *  \snippet hydro_models/unit_tests/src/WaveModelInterfaceTest.cpp WaveModelInterfaceTest method_example
+//          *  \snippet hydro_models/unit_tests/WaveModelInterfaceTest.cpp WaveModelInterfaceTest method_example
 //          */
 //        ssc::kinematics::PointMatrix get_points_on_free_surface(
 //                const double t,                               //!< Current instant (in seconds)

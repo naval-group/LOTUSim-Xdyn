@@ -1,0 +1,17 @@
+#ifndef UTILITIES_FOR_SIMULATOR_HPP_
+#define UTILITIES_FOR_SIMULATOR_HPP_
+
+#include <string>
+#include <vector>
+#include "YamlOutput.hpp"
+#include "ListOfObservers.hpp"
+
+struct XdynCommandLineArguments;
+
+std::vector<YamlOutput> build_observers_description(const std::string& yaml);
+
+void add_observers_from_cli(const XdynCommandLineArguments& input_data, ListOfObservers& out);
+void add_wave_spectra(ObserverPtr& observer, const Sim& sys);
+std::string serialize_command(const XdynCommandLineArguments& inputData);
+
+#endif
