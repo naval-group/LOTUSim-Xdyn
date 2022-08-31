@@ -63,28 +63,6 @@ void py_add_module_xdyn_force(py::module& m0)
     py::class_<ConstantForceModel::Input>(m, "ConstantForceModelInput",
         "Input for ConstantForceModel")
         .def(py::init<>())
-        // .def(py::init<
-        //     const std::string& /*frame*/,
-        //     const double /*x*/,
-        //     const double /*y*/,
-        //     const double /*z*/,
-        //     const double /*X*/,
-        //     const double /*Y*/,
-        //     const double /*Z*/,
-        //     const double /*K*/,
-        //     const double /*M*/,
-        //     const double /*N*/>(),
-        //     py::arg("frame") = "",
-        //     py::arg("x") = 0.0,
-        //     py::arg("y") = 0.0,
-        //     py::arg("z") = 0.0,
-        //     py::arg("X") = 0.0,
-        //     py::arg("Y") = 0.0,
-        //     py::arg("Z") = 0.0,
-        //     py::arg("K") = 0.0,
-        //     py::arg("M") = 0.0,
-        //     py::arg("N") = 0.0
-        // )
         .def_readwrite("frame", &ConstantForceModel::Input::frame)
         .def_readwrite("x", &ConstantForceModel::Input::x)
         .def_readwrite("y", &ConstantForceModel::Input::y)
@@ -131,13 +109,6 @@ void py_add_module_xdyn_force(py::module& m0)
 
     py::class_<ResistanceCurveForceModel::Yaml>(m, "ResistanceCurveForceModelInput")
         .def(py::init<>())
-        // .def(py::init<
-        //     const std::vector<double>& /*Va*/,
-        //     const std::vector<double>& /*R*/
-        //     >(),
-        //     py::arg("Va") = std::vector<double>(),
-        //     py::arg("R") = std::vector<double>()
-        // )
         .def_readwrite("Va", &ResistanceCurveForceModel::Yaml::Va)
         .def_readwrite("R", &ResistanceCurveForceModel::Yaml::R)
         ;
@@ -197,15 +168,6 @@ void py_add_module_xdyn_force(py::module& m0)
 
     py::class_<LinearStiffnessForceModel::Input>(m, "LinearStiffnessForceModelInput")
         .def(py::init<>())
-        // .def(py::init<
-        //     const std::string& /*name*/,
-        //     const Eigen::Matrix<double,6,6>& /*K*/,
-        //     const boost::optional<YamlPosition>& /*equilibrium_position*/
-        // >(),
-        //     py::arg("name") = "",
-        //     py::arg("K") = Eigen::Matrix<double,6,6>::Zero(),
-        //     py::arg("equilibrium_position") = boost::optional<YamlPosition>()
-        // )
         .def_readwrite("name", &LinearStiffnessForceModel::Input::name)
         .def_readwrite("K", &LinearStiffnessForceModel::Input::K)
         .def_readwrite("equilibrium_position", &LinearStiffnessForceModel::Input::equilibrium_position)
@@ -231,47 +193,6 @@ void py_add_module_xdyn_force(py::module& m0)
     py::class_<MMGManeuveringForceModel::Input>(m, "MMGManeuveringForceModelInput",
         "Input for MMGManeuveringForceModel")
         .def(py::init<>())
-        //.def(py::init<
-        //    const YamlCoordinates& /*application_point*/,
-        //    const double /*Lpp*/,
-        //    const double /*T*/,
-        //    const double /*Xvv*/,
-        //    const double /*Xrr*/,
-        //    const double /*Xvr*/,
-        //    const double /*Xvvvv*/,
-        //    const double /*Yv*/,
-        //    const double /*Yr*/,
-        //    const double /*Yvvv*/,
-        //    const double /*Yrvv*/,
-        //    const double /*Yvrr*/,
-        //    const double /*Yrrr*/,
-        //    const double /*Nv*/,
-        //    const double /*Nr*/,
-        //    const double /*Nvvv*/,
-        //    const double /*Nrvv*/,
-        //    const double /*Nvrr*/,
-        //    const double /*Nrr*/
-        //    >(),
-        //    py::arg("application_point") = YamlCoordinates(),
-        //    py::arg("Lpp") = 0.0,
-        //    py::arg("T") = 0.0,
-        //    py::arg("Xvv") = 0.0,
-        //    py::arg("Xrr") = 0.0,
-        //    py::arg("Xvr") = 0.0,
-        //    py::arg("Xvvvv") = 0.0,
-        //    py::arg("Yv") = 0.0,
-        //    py::arg("Yr") = 0.0,
-        //    py::arg("Yvvv") = 0.0,
-        //    py::arg("Yrvv") = 0.0,
-        //    py::arg("Yvrr") = 0.0,
-        //    py::arg("Yrrr") = 0.0,
-        //    py::arg("Nv") = 0.0,
-        //    py::arg("Nr") = 0.0,
-        //    py::arg("Nvvv") = 0.0,
-        //    py::arg("Nrvv") = 0.0,
-        //    py::arg("Nvrr") = 0.0,
-        //    py::arg("Nrrr") = 0.0
-        //    )
         .def_readwrite("application_point", &MMGManeuveringForceModel::Input::application_point)
         .def_readwrite("Lpp", &MMGManeuveringForceModel::Input::Lpp)
         .def_readwrite("T", &MMGManeuveringForceModel::Input::T)
@@ -313,28 +234,6 @@ void py_add_module_xdyn_force(py::module& m0)
     py::class_<HydroPolarForceModel::Input>(m, "HydroPolarForceModelInput",
         "Input for HydroPolarForceModel")
         .def(py::init<>())
-        //.def(py::init<
-        //    const std::string& /*name*/,
-        //    const YamlPosition& /*internal_frame*/,
-        //    const std::vector<double>& /*angle_of_attack*/,
-        //    const std::vector<double>& /*lift_coefficient*/,
-        //    const std::vector<double>& /*drag_coefficient*/,
-        //    const boost::optional<std::vector<double>>& /*moment_coefficient*/,
-        //    const double /*reference_area*/,
-        //    const boost::optional<double>& /*chord_length*/,
-        //    const bool /*use_waves_velocity*/,
-        //    const boost::optional<std::string>& /*angle_command*/>(),
-        //    py::arg("name") = "",
-        //    py::arg("internal_frame") = YamlPosition(),
-        //    py::arg("angle_of_attack") = std::vector<double>(),
-        //    py::arg("lift_coefficient") = std::vector<double>(),
-        //    py::arg("drag_coefficient") = std::vector<double>(),
-        //    py::arg("moment_coefficient") = boost::optional<std::vector<double>>(),
-        //    py::arg("reference_area") = 0.0,
-        //    py::arg("chord_length") = boost::optional<double>(),
-        //    py::arg("use_waves_velocity") = false,
-        //    py::arg("angle_command") = boost::optional<std::string>()
-        //    )
         .def_readwrite("name", &HydroPolarForceModel::Input::name)
         .def_readwrite("internal_frame", &HydroPolarForceModel::Input::internal_frame)
         .def_readwrite("angle_of_attack", &HydroPolarForceModel::Input::angle_of_attack)
@@ -371,23 +270,6 @@ void py_add_module_xdyn_force(py::module& m0)
     py::class_<AeroPolarForceModel::Input>(m, "AeroPolarForceModelInput",
         "Input for AeroPolarForceModel")
         .def(py::init<>())
-        //.def(py::init<
-        //    const std::string& /*name*/,
-        //    const YamlCoordinates& /*calculation_point_in_body_frame*/,
-        //    const std::vector<double>& /*apparent_wind_angle*/,
-        //    const std::vector<double>& /*lift_coefficient*/,
-        //    const std::vector<double>& /*drag_coefficient*/,
-        //    const double /*reference_area*/,
-        //    const boost::optional<std::string>& /*angle_command*/
-        //    >(),
-        //    py::arg("name") = "",
-        //    py::arg("calculation_point_in_body_frame") = YamlCoordinates(),
-        //    py::arg("apparent_wind_angle") = std::vector<double>(),
-        //    py::arg("lift_coefficient") = std::vector<double>(),
-        //    py::arg("drag_coefficient") = std::vector<double>(),
-        //    py::arg("reference_area") = 0.0,
-        //    py::arg("angle_command") = boost::optional<std::string>()
-        //    )
         .def_readwrite("name", &AeroPolarForceModel::Input::name)
         .def_readwrite("calculation_point_in_body_frame", &AeroPolarForceModel::Input::calculation_point_in_body_frame)
         .def_readwrite("apparent_wind_angle", &AeroPolarForceModel::Input::apparent_wind_angle)
@@ -420,23 +302,6 @@ void py_add_module_xdyn_force(py::module& m0)
     py::class_<FlettnerRotorForceModel::Input>(m, "FlettnerRotorForceModelInput",
         "Input for FlettnerRotorForceModel")
         .def(py::init<>())
-        //.def(py::init<
-        //    const std::string& /*name*/,
-        //    const YamlCoordinates& /*calculation_point_in_body_frame*/,
-        //    double /*diameter*/,
-        //    double /*length*/,
-        //    std::vector<double> /*spin_ratio*/,
-        //    std::vector<double> /*lift_coefficient*/,
-        //    std::vector<double> /*drag_coefficient*/
-        //    >(),
-        //    py::arg("name") = "",
-        //    py::arg("calculation_point_in_body_frame") = YamlCoordinates(),
-        //    py::arg("diameter") = 0.0,
-        //    py::arg("length") = 0.0,
-        //    py::arg("spin_ratio") = std::vector<double>(),
-        //    py::arg("lift_coefficient") = std::vector<double>(),
-        //    py::arg("drag_coefficient") = std::vector<double>()
-        //    )
         .def_readwrite("name", &FlettnerRotorForceModel::Input::name)
         .def_readwrite("calculation_point_in_body_frame", &FlettnerRotorForceModel::Input::calculation_point_in_body_frame)
         .def_readwrite("diameter", &FlettnerRotorForceModel::Input::diameter)
@@ -476,7 +341,7 @@ void py_add_module_xdyn_force(py::module& m0)
         ;
 
     py::class_<AbstractWageningen, ForceModel>(m, "AbstractWageningen")
-    //    .def(py::init<const AbstractWageningen::Yaml& /*input*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>())
+        // .def(py::init<const AbstractWageningen::Yaml& /*input*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>())
         .def_static("parse", &AbstractWageningen::parse, py::arg("yaml"))
         .def("advance_ratio", &AbstractWageningen::advance_ratio)
         // Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const;
@@ -996,21 +861,6 @@ void py_add_module_xdyn_force(py::module& m0)
     py::class_<LinearHydrostaticForceModel::Input>(m, "LinearHydrostaticForceModelInput",
         "Input for LinearHydrostaticForceModel")
         .def(py::init<>())
-        //.def(py::init<
-        //    const double& /*z_eq*/,
-        //    const double& /*theta_eq*/,
-        //    const double& /*phi_eq*/,
-        //    const std::vector<double>& /*K1*/,
-        //    const std::vector<double>& /*K2*/,
-        //    const std::vector<double>& /*K3*/
-        //    >(),
-        //    py::arg("z_eq") = 0.0,
-        //    py::arg("theta_eq") = 0.0,
-        //    py::arg("phi_eq") = 0.0,
-        //    py::arg("K1") = std::vector<double>(),
-        //    py::arg("K2") = std::vector<double>(),
-        //    py::arg("K3") = std::vector<double>()
-        //    )
         .def_readwrite("z_eq", &LinearHydrostaticForceModel::Input::z_eq)
         .def_readwrite("theta_eq", &LinearHydrostaticForceModel::Input::theta_eq)
         .def_readwrite("phi_eq", &LinearHydrostaticForceModel::Input::phi_eq)
@@ -1089,17 +939,6 @@ void py_add_module_xdyn_force(py::module& m0)
     py::class_<ManeuveringForceModel::Yaml>(m, "ManeuveringForceModelInput",
         "Input for ManeuveringForceModel")
         .def(py::init<>())
-        //.def(py::init<
-        //    const std::string& /*name*/,
-        //    const YamlPosition& /*frame_of_reference*/,
-        //    const std::vector<std::string>& /*commands*/,
-        //    const std::map<std::string, std::string> /*var2expr*/
-        //>(),
-        //    py::arg("name") = "",
-        //    py::arg("frame_of_reference") = YamlPosition(),
-        //    py::arg("commands") = std::vector<std::string>(),
-        //    py::arg("var2expr") = std::map<std::string, std::string>()
-        //    )
         .def_readwrite("name", &ManeuveringForceModel::Yaml::name)
         .def_readwrite("frame_of_reference", &ManeuveringForceModel::Yaml::frame_of_reference)
         .def_readwrite("commands", &ManeuveringForceModel::Yaml::commands)
