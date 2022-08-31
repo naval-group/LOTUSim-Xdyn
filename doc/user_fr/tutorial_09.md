@@ -60,7 +60,7 @@ services:
     command: -m xdyngrpc.waves.server.airy
   xdyn:
     user: ${CURRENT_UID}
-    image: sirehna/xdyn:test
+    image: sirehna/xdyn
     entrypoint: xdyn tutorial_09_gRPC_wave_model.yml --solver rk4 --dt 0.1 --tend 0.2 -o tsv
     working_dir: /data
     volumes:
