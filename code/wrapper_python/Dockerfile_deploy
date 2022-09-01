@@ -20,7 +20,7 @@ RUN apt-get update -yq \
  && rm -rf /var/lib/apt/lists
 
 ADD xdyngrpc*.whl /
-RUN python3 -m pip install /xdyngrpc*.whl \
+RUN python3 -m pip install --find-links / xdyngrpc \
  && python3 -c 'import xdyngrpc; print(dir(xdyngrpc)); print(xdyngrpc.__version__)'
 ADD xdyn.deb /
 RUN dpkg -i /xdyn.deb
