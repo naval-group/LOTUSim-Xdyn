@@ -196,7 +196,8 @@ debian_11_release_gcc_10_wrapper_py310: build-docker-python-image cmake-debian-t
 
 debian_11_release_gcc_10_wrapper_python_all:
 	@echo "Create Python3 wheels for Python 3.7, 3.8, 3.9 and 3.10"
-	@echo "The Python 3.10 wheel can be installed on Ubuntu 20.04"
+	@echo "The Python 3.08 wheel can be installed on Ubuntu 20.04"
+	@echo "The Python 3.10 wheel can be installed on Ubuntu 22.04"
 	@echo "A docker image based on Debian11, with xdyn, Python3, all proto files and the Python generated code is created"
 	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.7
 	make debian_11_release_gcc_10_wrapper_py307
