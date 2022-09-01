@@ -75,9 +75,6 @@ class SurfaceElevationInterface
             const std::vector<double>& eta //!< Wave elevations at (x,y) in the NED frame (in meters)
             ) const;
 
-        virtual std::vector<std::vector<double> > get_wave_directions_for_each_model() const;
-        virtual std::vector<std::vector<double> > get_wave_angular_frequency_for_each_model() const;
-
         /**  \brief Computes the dynamic pressure at given points.
           *  \details The input point matrix P can be projected into any reference
           *           frame: this method will request a transform from a
@@ -152,7 +149,6 @@ class SurfaceElevationInterface
         virtual void serialize_wave_spectra_before_simulation(ObserverPtr& observer) const;
 
         virtual std::vector<FlatDiscreteDirectionalWaveSpectrum> get_flat_directional_spectra(const double x, const double y, const double t) const = 0;
-        virtual std::vector<DiscreteDirectionalWaveSpectrum> get_directional_spectra(const double x, const double y, const double t) const = 0;
         /**  \brief If the wave output mesh is not defined in NED, use Kinematics to update its x-y coordinates
           */
 

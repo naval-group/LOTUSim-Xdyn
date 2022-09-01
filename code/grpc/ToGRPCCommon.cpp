@@ -1,55 +1,14 @@
 #include "ToGRPCCommon.hpp"
 #include <ssc/exception_handling/Exception.hpp>
 
-void spectrum_response_from_discrete_directional_wave_spectra(const std::vector<DiscreteDirectionalWaveSpectrum>& spectra, SpectrumResponse* spectrum_response)
+void flat_spectrum_response_from_vector_of_flat_discrete_directional_wave_spectra(
+    const std::vector<FlatDiscreteDirectionalWaveSpectrum>& spectra,
+    SpectrumResponse* spectrum_response)
 {
     if (spectrum_response==nullptr)
     {
         THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception,
         "Null pointer passed as input for SpectrumResponse in from_discrete_directional_wave_spectra");
-    }
-    for (const auto& spectrum:spectra)
-    {
-        const auto s = spectrum_response->add_spectrum();
-        for (const auto& Si:spectrum.Si)
-        {
-            s->add_si(Si);
-        }
-        for (const auto& Dj:spectrum.Dj)
-        {
-            s->add_dj(Dj);
-        }
-        for (const auto& omega:spectrum.omega)
-        {
-            s->add_omega(omega);
-        }
-        for (const auto& psi:spectrum.psi)
-        {
-            s->add_psi(psi);
-        }
-        for (const auto& k:spectrum.k)
-        {
-            s->add_k(k);
-        }
-        for (const auto& phases:spectrum.phase)
-        {
-            const auto p = s->add_phase();
-            for (const auto& phase:phases)
-            {
-                p->add_phase(phase);
-            }
-        }
-    }
-}
-
-void flat_spectrum_response_from_vector_of_flat_discrete_directional_wave_spectra(
-    const std::vector<FlatDiscreteDirectionalWaveSpectrum>& spectra,
-    FlatSpectrumResponse* spectrum_response)
-{
-    if (spectrum_response==nullptr)
-    {
-        THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception,
-        "Null pointer passed as input for FlatSpectrumResponse in from_discrete_directional_wave_spectra");
     }
     for (const auto& spectrum:spectra)
     {

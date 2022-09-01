@@ -62,39 +62,7 @@ std::vector<FlatDiscreteDirectionalWaveSpectrum> SurfaceElevationFromWaves::get_
     ret.reserve(directional_spectra.size());
     for (const auto& spectrum:directional_spectra)
     {
-        ret.push_back(spectrum->get_flat_spectrum());
-    }
-    return ret;
-}
-
-std::vector<DiscreteDirectionalWaveSpectrum> SurfaceElevationFromWaves::get_directional_spectra(const double, const double, const double) const
-{
-    std::vector<DiscreteDirectionalWaveSpectrum> ret;
-    THROW(__PRETTY_FUNCTION__, ssc::exception_handling::Exception,
-        "Deprecated call: xdyn no longer returns directional spectra: We return a flattened version of the spectrum");
-    return ret;
-}
-
-// For each spectrum, the wave propagation directions
-// Usually, a vector of vectors of size 1: {{psi_1},{psi_2},...,{psi_n}}
-std::vector<std::vector<double> > SurfaceElevationFromWaves::get_wave_directions_for_each_model() const
-{
-    std::vector<std::vector<double> > ret;
-    for (auto& model:directional_spectra)
-    {
-        ret.push_back(model->get_psis());
-    }
-    return ret;
-}
-
-// For each directional spectrum (i.e. for each direction), the wave angular frequencies the spectrum was discretized at.
-// v[direction][omega]
-std::vector<std::vector<double> > SurfaceElevationFromWaves::get_wave_angular_frequency_for_each_model() const
-{
-    std::vector<std::vector<double> > ret;
-    for (auto& model:directional_spectra)
-    {
-        ret.push_back(model->get_omegas());
+        ret.push_back(spectrum->get_spectrum());
     }
     return ret;
 }
@@ -143,7 +111,7 @@ void SurfaceElevationFromWaves::serialize_wave_spectra_before_simulation(Observe
 {
     std::vector<FlatDiscreteDirectionalWaveSpectrum> spectra;
     spectra.reserve(directional_spectra.size());
-    for (const auto& spectrum:directional_spectra) spectra.push_back(spectrum->get_flat_spectrum());
+    for (const auto& spectrum:directional_spectra) spectra.push_back(spectrum->get_spectrum());
     const DataAddressing address;
     observer->write_before_simulation(spectra, address);
 }

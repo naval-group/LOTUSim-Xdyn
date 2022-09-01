@@ -79,18 +79,7 @@ class WaveModel
             const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
             const double t                  //!< Current time instant (in seconds)
             ) const;
-
-        /**  \returns List of angular frequencies for which the spectra will be calculated.
-          *  \details Needed by the RAOs (RadiationForceModel)
-          */
-        std::vector<double> get_omegas() const;
-
-        /**  \returns List of incidences for which the spectra will be calculated.
-          *  \details Needed by the RAOs (RadiationForceModel)
-          */
-        std::vector<double> get_psis() const;
-
-        FlatDiscreteDirectionalWaveSpectrum get_flat_spectrum() const {return flat_spectrum;};
+        FlatDiscreteDirectionalWaveSpectrum get_spectrum() const {return flat_spectrum;};
 
     private:
         WaveModel(); // Disabled

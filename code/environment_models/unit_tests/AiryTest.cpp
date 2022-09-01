@@ -91,7 +91,7 @@ TEST_F(AiryTest, serialized_spectrum_should_have_all_the_information_we_need)
         DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi0), omega_min, omega_max, nfreq, ndir, s, false);
     int random_seed = 0;
     const Airy wave(A, random_seed);
-    const FlatDiscreteDirectionalWaveSpectrum serialized_spectrum = wave.get_flat_spectrum();
+    const FlatDiscreteDirectionalWaveSpectrum serialized_spectrum = wave.get_spectrum();
     ASSERT_FALSE(serialized_spectrum.phase.empty());
     ASSERT_EQ(1, serialized_spectrum.phase.size());
     ASSERT_NE(0, serialized_spectrum.phase.front());
@@ -552,7 +552,7 @@ TEST_F(AiryTest, should_respect_dirac_inputs)
     const Stretching ss(ys);
     const DiscreteDirectionalWaveSpectrum A = discretize(DiracSpectralDensity(omega0, Hs), DiracDirectionalSpreading(psi), omega_min, omega_max, nfreq, ndir, ss, false);
     const Airy wave(A, 0.0);
-    FlatDiscreteDirectionalWaveSpectrum s = wave.get_flat_spectrum();
+    const FlatDiscreteDirectionalWaveSpectrum s = wave.get_spectrum();
     ASSERT_EQ(1, s.a.size());
     ASSERT_EQ(1, s.omega.size());
     ASSERT_EQ(1, s.psi.size());

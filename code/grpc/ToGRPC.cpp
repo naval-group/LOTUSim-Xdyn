@@ -25,20 +25,12 @@ RequiredWaveInformationRequest ToGRPC::from_required_wave_information(const doub
     return request;
 }
 
-SpectrumResponse* ToGRPC::from_discrete_directional_wave_spectra(const std::vector<DiscreteDirectionalWaveSpectrum>& spectra) const
+SpectrumResponse* ToGRPC::from_flat_discrete_directional_wave_spectra(const std::vector<FlatDiscreteDirectionalWaveSpectrum>& spectra) const
 {
     SpectrumResponse* spectrum_response = new SpectrumResponse();
-    spectrum_response_from_discrete_directional_wave_spectra(spectra, spectrum_response);
-    return spectrum_response;
-}
-
-FlatSpectrumResponse* ToGRPC::from_flat_discrete_directional_wave_spectra(const std::vector<FlatDiscreteDirectionalWaveSpectrum>& spectra) const
-{
-    FlatSpectrumResponse* spectrum_response = new FlatSpectrumResponse();
     flat_spectrum_response_from_vector_of_flat_discrete_directional_wave_spectra(spectra, spectrum_response);
     return spectrum_response;
 }
-
 
 WaveInformation* ToGRPC::from_wave_information(const WaveRequest& wave_request, const double t, const EnvironmentAndFrames& env) const
 {

@@ -161,7 +161,10 @@ class AiryWaveGrpcServerTest(unittest.TestCase):
             for dynamic_pressure in dynamic_pressures:
                 assert np.allclose(dynamic_pressure["pdyn"], 0.0)
             spectrum = waves.spectrum()
-            assert spectrum == []
+            assert spectrum is not None
+            for key in ("a", "k", "omega", "psi", "phase"):
+                assert key in spectrum
+                assert spectrum[key] == []
 
     def test_02_monochromatic_spectrum(self):
         """Test all responses for a monochromatic wave spectrum
@@ -185,8 +188,11 @@ class AiryWaveGrpcServerTest(unittest.TestCase):
             dynamic_pressures = waves.dynamic_pressures(dynamic_pressures_request)
             for dynamic_pressure in dynamic_pressures:
                 assert not np.allclose(dynamic_pressure["pdyn"], 0.0)
-            spectrum = waves.flat_spectrum()
+            spectrum = waves.spectrum()
+            assert spectrum is not None
             LOGGER.info(spectrum)
+            for key in ("a", "k", "omega", "psi", "phase"):
+                assert key in spectrum
             assert len(spectrum["a"]) == 1
             assert len(spectrum["k"]) == 1
             assert len(spectrum["phase"]) == 1
@@ -221,8 +227,10 @@ class AiryWaveGrpcServerTest(unittest.TestCase):
             dynamic_pressures = waves.dynamic_pressures(dynamic_pressures_request)
             for dynamic_pressure in dynamic_pressures:
                 assert not np.allclose(dynamic_pressure["pdyn"], 0.0)
-            spectrum = waves.flat_spectrum()
+            spectrum = waves.spectrum()
             assert spectrum is not None
+            for key in ("a", "k", "omega", "psi", "phase"):
+                assert key in spectrum
 
 
 if __name__ == "__main__":

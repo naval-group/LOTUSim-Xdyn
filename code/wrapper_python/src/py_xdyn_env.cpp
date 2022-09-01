@@ -231,17 +231,7 @@ void py_add_module_xdyn_env_wave(py::module& m_env)
             - `eta` (List[float]): Wave heights at x,y,t (in meters),
             - `t` (float): Current time instant (in seconds),
             )")
-        .def("get_omegas", &WaveModel::get_omegas,
-            R"(
-            List of angular frequencies for which the spectra will be calculated.
-            Needed by the RAOs (RadiationForceModel)
-            )")
-        .def("get_psis", &WaveModel::get_psis,
-            R"(
-            List of incidences for which the spectra will be calculated.
-            Needed by the RAOs (RadiationForceModel)
-            )")
-        .def("get_flat_spectrum", &WaveModel::get_flat_spectrum)
+        .def("get_spectrum", &WaveModel::get_spectrum)
         ;
 
     py::class_<WaveModelPtr>(m_env, "WaveModelPtr");

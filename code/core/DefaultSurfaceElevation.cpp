@@ -54,8 +54,3 @@ std::vector<FlatDiscreteDirectionalWaveSpectrum> DefaultSurfaceElevation::get_fl
 {
     return std::vector<FlatDiscreteDirectionalWaveSpectrum>();
 }
-
-std::vector<DiscreteDirectionalWaveSpectrum> DefaultSurfaceElevation::get_directional_spectra(const double, const double, const double) const
-{
-    return std::vector<DiscreteDirectionalWaveSpectrum>();
-}
