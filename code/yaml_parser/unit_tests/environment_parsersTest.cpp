@@ -246,7 +246,7 @@ TEST_F(environment_parsersTest, can_parse_equal_energy_bins_parameter)
     ASSERT_FALSE(res.discretization.equal_energy_bins);
 }
 
-const YamlWaveFromRaysModel environment_parsers_from_file_Test::yaml = 
+const YamlWaveFromRaysModel environment_parsers_from_file_Test::yaml =
     parse_waves_from_list_of_rays(test_data::waves_from_file_for_parser_validation_only());
 
 environment_parsers_from_file_Test::environment_parsers_from_file_Test() : a(ssc::random_data_generator::DataGenerator(1212))
@@ -267,9 +267,9 @@ void environment_parsers_from_file_Test::TearDown()
 
 TEST_F(environment_parsers_from_file_Test, can_parse_depth_for_wave_models)
 {
-    ASSERT_EQ(2,yaml.spectra.size());
+    ASSERT_EQ(2, yaml.spectra.size());
     ASSERT_DOUBLE_EQ(1700, yaml.spectra[0].depth);
-    ASSERT_DOUBLE_EQ(12, yaml.spectra[1].depth);
+    ASSERT_DOUBLE_EQ(1000, yaml.spectra[1].depth);
 }
 
 TEST_F(environment_parsers_from_file_Test, can_parse_stretching_data)
@@ -278,4 +278,31 @@ TEST_F(environment_parsers_from_file_Test, can_parse_stretching_data)
     ASSERT_DOUBLE_EQ(100, yaml.spectra.at(0).stretching.h);
     ASSERT_DOUBLE_EQ(456, yaml.spectra.at(1).stretching.delta);
     ASSERT_DOUBLE_EQ(101, yaml.spectra.at(1).stretching.h);
+}
+
+TEST_F(environment_parsers_from_file_Test, can_parse_rays_for_wave_models)
+{
+    ASSERT_EQ(2, yaml.spectra.size());
+    ASSERT_EQ(2, yaml.spectra[0].rays.a.size());
+    ASSERT_DOUBLE_EQ(yaml.spectra[0].rays.a[0], 0.1);
+    ASSERT_DOUBLE_EQ(yaml.spectra[0].rays.a[1], 0.5);
+    ASSERT_DOUBLE_EQ(yaml.spectra[0].rays.psi[0], PI);
+    ASSERT_DOUBLE_EQ(yaml.spectra[0].rays.psi[1], PI);
+    ASSERT_DOUBLE_EQ(yaml.spectra[0].rays.omega[0], 0.628318);
+    ASSERT_DOUBLE_EQ(yaml.spectra[0].rays.omega[1], 0.785398);
+    ASSERT_DOUBLE_EQ(yaml.spectra[0].rays.k[0], 3.872832);
+    ASSERT_DOUBLE_EQ(yaml.spectra[0].rays.k[1], 6.051301);
+    ASSERT_DOUBLE_EQ(yaml.spectra[0].rays.phase[0], 50/180.0*PI);
+    ASSERT_DOUBLE_EQ(yaml.spectra[0].rays.phase[1], 90/180.0*PI);
+    ASSERT_EQ(2, yaml.spectra[1].rays.a.size());
+    ASSERT_DOUBLE_EQ(yaml.spectra[1].rays.a[0], 0.1);
+    ASSERT_DOUBLE_EQ(yaml.spectra[1].rays.a[1], 0.5);
+    ASSERT_DOUBLE_EQ(yaml.spectra[1].rays.psi[0], PI);
+    ASSERT_DOUBLE_EQ(yaml.spectra[1].rays.psi[1], PI);
+    ASSERT_DOUBLE_EQ(yaml.spectra[1].rays.omega[0], 0.523598);
+    ASSERT_DOUBLE_EQ(yaml.spectra[1].rays.omega[1], 0.628318);
+    ASSERT_DOUBLE_EQ(yaml.spectra[1].rays.k[0], 2.689467);
+    ASSERT_DOUBLE_EQ(yaml.spectra[1].rays.k[1], 3.872832);
+    ASSERT_DOUBLE_EQ(yaml.spectra[1].rays.phase[0], 110/180.0*PI);
+    ASSERT_DOUBLE_EQ(yaml.spectra[1].rays.phase[1], 130/180.0*PI);
 }
