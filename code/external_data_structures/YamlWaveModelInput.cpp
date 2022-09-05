@@ -32,9 +32,18 @@ YamlWaveModel::YamlWaveModel():
     output()
 {}
 
+YamlRays::YamlRays():
+    a(),
+    psi(),
+    omega(),
+    k(),
+    phase()
+{}
+
 YamlSpectrumFromRays::YamlSpectrumFromRays():
     model(),
     model_yaml(),
+    rays(),
     depth(0.0),
     stretching()
 {}

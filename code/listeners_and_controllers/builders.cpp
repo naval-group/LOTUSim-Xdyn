@@ -14,6 +14,8 @@
 #include "SurfaceElevationFromGRPC.hpp"
 #include "InvalidInputException.hpp"
 #include "YamlGRPC.hpp"
+#include <algorithm>
+
 
 boost::optional<SurfaceElevationInterfacePtr> SurfaceElevationBuilder<DefaultSurfaceElevation>::try_to_parse(const std::string& model, const std::string& yaml) const
 {
@@ -126,10 +128,63 @@ WaveModelPtr SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse_wave_mode
 FlatDiscreteDirectionalWaveSpectrum SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse_flat_spectrum(const YamlSpectrumFromRays& spectrum) const
 {
     FlatDiscreteDirectionalWaveSpectrum f;
-    f.a = std::vector<double>(1, 0.0);
-    std::cout << spectrum.model << std::endl;
+    std::copy(spectrum.rays.a.begin(), spectrum.rays.a.end(), std::back_inserter(f.a));
+    std::copy(spectrum.rays.psi.begin(), spectrum.rays.psi.end(), std::back_inserter(f.psi));
+    std::copy(spectrum.rays.omega.begin(), spectrum.rays.omega.end(), std::back_inserter(f.omega));
+    std::copy(spectrum.rays.k.begin(), spectrum.rays.k.end(), std::back_inserter(f.k));
+    std::copy(spectrum.rays.phase.begin(), spectrum.rays.phase.end(), std::back_inserter(f.phase));
+    for (const auto& psi: spectrum.rays.psi)
+    {
+        f.cos_psi.push_back(cos(psi));
+        f.sin_psi.push_back(sin(psi));
+    }
+    // TODO: Handle depth correctly: spectrum.depth
+    // Only infinite depth
+    const Stretching stretching(spectrum.stretching);
+    f.pdyn_factor = [stretching](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,eta,stretching);};
+    f.pdyn_factor_sh = [stretching](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,eta,stretching);};
     return f;
 }
+
+/* GJ
+AbstractRaoForceModel::Input AbstractRaoForceModel::parse(const std::string& yaml, const YamlRAO::TypeOfRao& type_of_rao)
+{
+    std::stringstream stream(yaml);
+    YAML::Parser parser(stream);
+    YAML::Node node;
+    parser.GetNextDocument(node);
+    YamlRAO ret;
+    ret.type_of_rao = type_of_rao;
+
+    if (node.FindValue("hdb"))
+    {
+        if (node.FindValue("raodb"))
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                  "cannot specify both an HDB filename and a PRECAL_R filename "
+                  "(both keys 'hdb' and 'raodb' were found in the YAML file).");
+        }
+        node["hdb"] >> ret.hdb_filename;
+        node["calculation point in body frame"] >> ret.calculation_point;
+    }
+    else if (node.FindValue("raodb"))
+    {
+        node["raodb"] >> ret.precal_filename;
+        ret.calculation_point = YamlCoordinates(0, 0, 0);
+    }
+    else
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+              "should specify either an HDB filename or a PRECAL_R filename "
+              "(no 'hdb' or 'raodb' keys were found in the YAML file).");
+    }
+
+    node["mirror for 180 to 360"]           >> ret.mirror;
+    parse_optional(node, "use encounter period", ret.use_encounter_period);
+    return ret;
+}
+
+*/
 
 WaveModelPtr SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse_wave_model(const YamlSpectrumFromRays& spectrum) const
 {
@@ -156,7 +211,7 @@ boost::optional<SurfaceElevationInterfacePtr> SurfaceElevationBuilder<SurfaceEle
         for (const auto& spectrum: input.spectra) models.push_back(parse_wave_model(input.discretization, spectrum));
         ret.reset(SurfaceElevationInterfacePtr(new SurfaceElevationFromWaves(models,get_wave_mesh_size(input.output),output_mesh)));
     }
-    else if (model == "waves from list of rays") // The "model" key is always "waves" for xdyn's internal wave models, except for the default wave model "no waves"
+    else if (model == "airy waves from a list of rays")
     {
         const YamlWaveFromRaysModel input = parse_waves_from_list_of_rays(yaml);
         const auto output_mesh = make_wave_mesh(input.output);

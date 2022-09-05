@@ -52,11 +52,22 @@ struct YamlWaveModel
     YamlWaveOutput output;             //!< Defines what wave data is outputted during the simulation & how it is generated
 };
 
+struct YamlRays
+{
+    YamlRays();
+    std::vector<double> a;
+    std::vector<double> psi;
+    std::vector<double> omega;
+    std::vector<double> k;
+    std::vector<double> phase;
+};
+
 struct YamlSpectrumFromRays
 {
     YamlSpectrumFromRays();
     std::string model;                      //!< Wave model (eg. airy)
     std::string model_yaml;                 //!< Model data in YAML format
+    YamlRays rays;                          //!< List of rays
     double depth;                           //!< Water depth (in meters): 0 for infinite depth
     YamlStretching stretching;              //!< Stretching model for orbital wave velocities (delta-stretching model)
 };
