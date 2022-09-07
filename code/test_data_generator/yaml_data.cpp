@@ -1255,8 +1255,7 @@ std::string test_data::waves_for_parser_validation_only()
 std::string test_data::waves_from_an_external_list_of_rays_for_parser_validation_only()
 {
     std::stringstream ss;
-    ss << rotation_convention()
-       << "spectra from a list of rays:\n"
+    ss << "spectra from a list of rays:\n"
        << "  - model: airy\n"
        << "    stretching:\n"
        << "       delta: 0.5\n"
@@ -1299,8 +1298,7 @@ std::string test_data::waves_from_an_external_list_of_rays_for_parser_validation
 std::string test_data::waves_from_a_list_of_rays_for_parser_validation_only()
 {
     std::stringstream ss;
-    ss << rotation_convention()
-       << "spectra from a list of rays:\n"
+    ss << "spectra from a list of rays:\n"
        << "  - model: airy\n"
        << "    stretching:\n"
        << "       delta: 0.5\n"
