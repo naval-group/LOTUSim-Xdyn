@@ -32,6 +32,6 @@ class environment_parsers_from_file_Test : public ::testing::Test
         virtual void SetUp();
         virtual void TearDown();
         ssc::random_data_generator::DataGenerator a;
-        static const YamlWaveFromRaysModel yaml;
+        static const YamlWaveModel yaml;
 };
 #endif  /* ENVIRONMENT_PARSERSTEST_HPP_ */

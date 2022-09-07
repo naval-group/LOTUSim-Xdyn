@@ -1256,8 +1256,8 @@ std::string test_data::waves_from_file_for_parser_validation_only()
 {
     std::stringstream ss;
     ss << rotation_convention()
-       << "spectra:\n"
-       << "  - model: airy waves from a list of rays\n"
+       << "spectra from a list of rays:\n"
+       << "  - model: airy\n"
        << "    stretching:\n"
        << "       delta: 123\n"
        << "       h: {unit: m, value: 100}\n"
@@ -1269,7 +1269,7 @@ std::string test_data::waves_from_file_for_parser_validation_only()
        << "      omega: {values: [0.628318, 0.785398], unit: rad/s}\n"
        << "      k: {values: [3.872832, 6.051301], unit: 1/m}\n"
        << "      phase: {values: [50, 90], unit: deg}\n"
-       << "  - model: airy waves from a list of rays\n"
+       << "  - model: airy\n"
        << "    rays:\n"
        << "      # Two rays with T=10s and T=12s\n"
        << "      a: {values: [0.1, 0.5], unit: m}\n"

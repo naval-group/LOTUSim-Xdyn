@@ -209,15 +209,8 @@ boost::optional<SurfaceElevationInterfacePtr> SurfaceElevationBuilder<SurfaceEle
         const auto output_mesh = make_wave_mesh(input.output);
         std::vector<WaveModelPtr> models;
         for (const auto& spectrum: input.spectra) models.push_back(parse_wave_model(input.discretization, spectrum));
-        ret.reset(SurfaceElevationInterfacePtr(new SurfaceElevationFromWaves(models,get_wave_mesh_size(input.output),output_mesh)));
-    }
-    else if (model == "airy waves from a list of rays")
-    {
-        const YamlWaveFromRaysModel input = parse_waves_from_list_of_rays(yaml);
-        const auto output_mesh = make_wave_mesh(input.output);
-        std::vector<WaveModelPtr> models;
-        for (const auto& spectrum: input.spectra) models.push_back(parse_wave_model(spectrum));
-        ret.reset(SurfaceElevationInterfacePtr(new SurfaceElevationFromWaves(models, get_wave_mesh_size(input.output), output_mesh)));
+        for (const auto& spectrum: input.spectra_from_rays) models.push_back(parse_wave_model(spectrum));
+        ret.reset(SurfaceElevationInterfacePtr(new SurfaceElevationFromWaves(models,get_wave_mesh_size(input.output), output_mesh)));
     }
     return ret;
 }

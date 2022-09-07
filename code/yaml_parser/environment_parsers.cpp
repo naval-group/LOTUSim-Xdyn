@@ -61,59 +61,47 @@ YamlWaveModel parse_waves(const std::string& yaml)
     YAML::Parser parser(stream);
     YAML::Node node;
     parser.GetNextDocument(node);
-
-    try
-    {
-        node["discretization"] >> ret.discretization;
-    }
-    catch(std::exception& e)
+    if ((not node.FindValue("spectra")) and (not node.FindValue("spectra from a list of rays")))
     {
         std::stringstream ss;
-        ss << "Error parsing section wave/discretization: " << e.what();
+        ss << "Error parsing section wave: One should define at least 'spectra' and/or 'spectra from a list of rays' ";
         THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
     }
-    try
-    {
-        node["spectra"]        >> ret.spectra;
-    }
-    catch(std::exception& e)
-    {
-        std::stringstream ss;
-        ss << "Error parsing section wave/spectra: " << e.what();
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
-    }
-    if (node.FindValue("output"))
+    if (node.FindValue("spectra"))
     {
         try
         {
-            node["output"]         >> ret.output;
+            node["spectra"] >> ret.spectra;
         }
         catch(std::exception& e)
         {
             std::stringstream ss;
-            ss << "Error parsing section wave/output: " << e.what();
+            ss << "Error parsing section wave/spectra: " << e.what();
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
+        }
+        try
+        {
+            node["discretization"] >> ret.discretization;
+        }
+        catch(std::exception& e)
+        {
+            std::stringstream ss;
+            ss << "Error parsing section wave/discretization: " << e.what();
             THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
         }
     }
-    return ret;
-}
-
-YamlWaveFromRaysModel parse_waves_from_list_of_rays(const std::string& yaml)
-{
-    YamlWaveFromRaysModel ret;
-    std::stringstream stream(yaml);
-    YAML::Parser parser(stream);
-    YAML::Node node;
-    parser.GetNextDocument(node);
-    try
+    if (node.FindValue("spectra from a list of rays"))
     {
-        node["spectra"] >> ret.spectra;
-    }
-    catch(std::exception& e)
-    {
-        std::stringstream ss;
-        ss << "Error parsing section wave/spectra: " << e.what();
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str()+yaml);
+        try
+        {
+            node["spectra from a list of rays"] >> ret.spectra_from_rays;
+        }
+        catch(std::exception& e)
+        {
+            std::stringstream ss;
+            ss << "Error parsing section wave/spectra from a list of rays: " << e.what();
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, ss.str());
+        }
     }
     if (node.FindValue("output"))
     {
