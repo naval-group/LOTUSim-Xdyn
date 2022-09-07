@@ -1252,7 +1252,51 @@ std::string test_data::waves_for_parser_validation_only()
     return ss.str();
 }
 
-std::string test_data::waves_from_file_for_parser_validation_only()
+std::string test_data::waves_from_an_external_list_of_rays_for_parser_validation_only()
+{
+    std::stringstream ss;
+    ss << rotation_convention()
+       << "spectra from a list of rays:\n"
+       << "  - model: airy\n"
+       << "    stretching:\n"
+       << "       delta: 123\n"
+       << "       h: {unit: m, value: 100}\n"
+       << "    depth: {value: 1.7, unit: km}\n"
+       << "    rays from file: rays.csv\n"
+       << "  - model: airy\n"
+       << "    rays:\n"
+       << "      # Two rays with T=10s and T=12s\n"
+       << "      a: {values: [0.1, 0.5], unit: m}\n"
+       << "      psi: {values: [180.0, 180.0], unit: deg}\n"
+       << "      omega: {values: [0.523598, 0.628318], unit: rad/s}\n"
+       << "      k: {values: [2.689467, 3.872832], unit: 1/m}\n"
+       << "      phase: {values: [110, 130], unit: deg}\n"
+       << "    depth: {value: 1000, unit: m}\n"
+       << "    stretching:\n"
+       << "       delta: 456\n"
+       << "       h: {unit: m, value: 101}\n"
+       << "output:\n"
+       << "    frame of reference: NED\n"
+       << "    mesh:\n"
+       << "       xmin: {value: -10, unit: m}\n"
+       << "       xmax: {value: 1, unit: km}\n"
+       << "       nx: 10\n"
+       << "       ymin: {value: -20, unit: m}\n"
+       << "       ymax: {value: 3, unit: km}\n"
+       << "       ny: 20\n";
+    return ss.str();
+}
+
+std::string test_data::waves_from_an_external_list_of_rays_for_parser_validation_only_csv()
+{
+    std::stringstream ss;
+    ss << "a,psi,omega,k,phase\n";
+    ss << "0.1,3.1415926535897931,0.628318,3.872832,0.8726646259971648\n";
+    ss << "0.5,3.1415926535897931,0.785398,6.051301,1.5707963267948966\n";
+    return ss.str();
+}
+
+std::string test_data::waves_from_a_list_of_rays_for_parser_validation_only()
 {
     std::stringstream ss;
     ss << rotation_convention()

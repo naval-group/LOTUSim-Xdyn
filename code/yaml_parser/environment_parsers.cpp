@@ -219,7 +219,7 @@ void operator >> (const YAML::Node& node, YamlSpectrumFromRays& g)
         if (extension == "csv")
         {
             const size_t expected_nb_of_columns = 5;
-            const char separator=',';
+            const char separator = ',';
             ssc::csv_file_reader::CSVFileReader csv_file_reader(rays_filename.c_str(), expected_nb_of_columns, separator);
             std::map<std::string,std::vector<double> > map = csv_file_reader.get_map();
             std::copy(map["a"].begin(), map["a"].end(), std::back_inserter(g.rays.a));
