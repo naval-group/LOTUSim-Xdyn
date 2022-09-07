@@ -50,6 +50,8 @@ TEST_F(EnvironmentTest, can_get_wave_elevation_with_waves_from_a_list_of_rays)
     auto waves = sim.get_env().w;
     std::vector<double> res = waves->get_and_check_wave_height(std::vector<double>{0.0}, std::vector<double>{0.0}, 0);
     ASSERT_EQ(res.size(), 1);
+    const double expected_value = -0.1 * sin(50.0/180.0*PI) - 0.5 * sin(90.0/180.0*PI) - 0.1 * sin(110.0/180.0*PI) - 0.5 * sin(130.0/180.0*PI);
+    ASSERT_NEAR(res[0], expected_value, 1e-9);
 }
 
 TEST_F(EnvironmentTest, check_that_system_can_be_generated_without_any_body)
