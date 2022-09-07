@@ -33,6 +33,7 @@ namespace test_data
     std::string waves();
     std::string simple_waves();
     std::string cube_in_waves();
+    std::string waves_from_a_list_of_rays();
     std::string waves_for_parser_validation_only();
     std::string waves_from_a_list_of_rays_for_parser_validation_only();
     std::string waves_from_an_external_list_of_rays_for_parser_validation_only();
