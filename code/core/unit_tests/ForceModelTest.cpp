@@ -32,16 +32,20 @@ class RandomForce : public ForceModel
         {
         }
 
-        Wrench get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
+        Wrench get_force(
+            const BodyStates& /*states*/,
+            const double /*t*/,
+            const EnvironmentAndFrames& /*env*/,
+            const std::map<std::string,double>& /*commands*/) const
         {
             ssc::kinematics::Vector6d ret;
-            ret(0) = a.random<double>().between(2,3);
-            ret(1) = a.random<double>().between(-3,-2);
-            ret(2) = a.random<double>().between(20,30);
-            ret(3) = a.random<double>().between(-30,-20);
-            ret(4) = a.random<double>().between(200,300);
-            ret(5) = a.random<double>().between(-300,-200);
-            return Wrench(ssc::kinematics::Point(name,0,0,0),name,ret);
+            ret(0) = a.random<double>().between(+2, +3);
+            ret(1) = a.random<double>().between(-3, -2);
+            ret(2) = a.random<double>().between(+20, +30);
+            ret(3) = a.random<double>().between(-30, -20);
+            ret(4) = a.random<double>().between(+200, +300);
+            ret(5) = a.random<double>().between(-300, -200);
+            return Wrench(ssc::kinematics::Point(name, 0, 0, 0), name, ret);
         }
 
     private:

@@ -165,7 +165,7 @@ TEST_F(SimulatorBuilderTest, wind_model_is_available_from_env)
     Eigen::Vector3d position;
     position << a.random<double>(), a.random<double>(), -abs(a.random<double>());
     double time(a.random<double>());
-    ASSERT_NO_THROW(Eigen::Vector3d wind = env.wind->get_wind(position, time));
+    ASSERT_NO_THROW(/*Eigen::Vector3d wind = */env.wind->get_wind(position, time));
 }
 
 TEST_F(SimulatorBuilderTest, can_get_rho_air)

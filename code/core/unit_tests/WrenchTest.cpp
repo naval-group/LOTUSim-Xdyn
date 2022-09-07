@@ -181,7 +181,6 @@ TEST_F(WrenchTest, addition_operator_throws_if_different_point_or_frame)
 TEST_F(WrenchTest, can_add_wrenches_in_different_frames_and_point_using_method_add_instead_of_plus_operator)
 {
     const ssc::kinematics::KinematicsPtr k(new ssc::kinematics::Kinematics);
-    const double psi = 30 * M_PI / 180;
     const YamlPosition position(YamlCoordinates(10,0,0), YamlAngle(0, 0, 90*M_PI/180), "frame1");
     YamlRotation rotation_convention("angle", { "z", "y'", "x''" });
     auto T_from_1_to_2 = make_transform(position, "frame2", rotation_convention);
