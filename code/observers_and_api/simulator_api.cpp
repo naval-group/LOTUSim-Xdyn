@@ -44,8 +44,7 @@
 #include "UniformWindVelocityProfile.hpp"
 #include "WageningenControlledForceModel.hpp"
 
-
-SimulatorBuilder get_builder(const YamlSimulatorInput& input, const double t0, const ssc::data_source::DataSource& command_listener);
+SimulatorBuilder get_builder(const YamlSimulatorInput& input, const double t0, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
 SimulatorBuilder get_builder(const YamlSimulatorInput& input, const double t0, const ssc::data_source::DataSource& command_listener)
 {
     SimulatorBuilder builder(input, t0, command_listener);
