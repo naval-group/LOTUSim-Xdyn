@@ -146,46 +146,6 @@ FlatDiscreteDirectionalWaveSpectrum SurfaceElevationBuilder<SurfaceElevationFrom
     return f;
 }
 
-/* GJ
-AbstractRaoForceModel::Input AbstractRaoForceModel::parse(const std::string& yaml, const YamlRAO::TypeOfRao& type_of_rao)
-{
-    std::stringstream stream(yaml);
-    YAML::Parser parser(stream);
-    YAML::Node node;
-    parser.GetNextDocument(node);
-    YamlRAO ret;
-    ret.type_of_rao = type_of_rao;
-
-    if (node.FindValue("hdb"))
-    {
-        if (node.FindValue("raodb"))
-        {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                  "cannot specify both an HDB filename and a PRECAL_R filename "
-                  "(both keys 'hdb' and 'raodb' were found in the YAML file).");
-        }
-        node["hdb"] >> ret.hdb_filename;
-        node["calculation point in body frame"] >> ret.calculation_point;
-    }
-    else if (node.FindValue("raodb"))
-    {
-        node["raodb"] >> ret.precal_filename;
-        ret.calculation_point = YamlCoordinates(0, 0, 0);
-    }
-    else
-    {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException,
-              "should specify either an HDB filename or a PRECAL_R filename "
-              "(no 'hdb' or 'raodb' keys were found in the YAML file).");
-    }
-
-    node["mirror for 180 to 360"]           >> ret.mirror;
-    parse_optional(node, "use encounter period", ret.use_encounter_period);
-    return ret;
-}
-
-*/
-
 WaveModelPtr SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse_wave_model(const YamlSpectrumFromRays& spectrum) const
 {
     const FlatDiscreteDirectionalWaveSpectrum flat_spectrum = parse_flat_spectrum(spectrum);
