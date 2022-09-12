@@ -1,11 +1,3 @@
-//const auto directional_spectra = env.w->get_and_check_wave_height
-//
-//.environment
-//const auto yaml = SimulatorYamlParser(test_data::full_example()).parse();
-//EnvironmentAndFrames SimulatorBuilder::build_environment_and_frames() const
-//YamlSimulatorInput
-//SimulatorBuilder(const YamlSimulatorInput& input, const double t0, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
-
 #include "EnvironmentTest.hpp"
 #include "EnvironmentAndFrames.hpp"
 #include "SimulatorYamlParser.hpp"
