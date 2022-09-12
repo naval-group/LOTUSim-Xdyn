@@ -1225,6 +1225,65 @@ waves:
     - z: [-3.60794,-3.60793,-3.60793,-3.60792,-3.60791,-3.68851,-3.6885,-3.6885,-3.68849,-3.68849]
 ```
 
+### Utilisation d'un modèle de houle de Airy décrit par une liste de raies
+
+xdyn permet d'utiliser un modèle de houle de Airy décrit par une liste de raies.
+L'intérêt est que l'on peut ainsi mettre en oeuvre des modèles de houle
+Pour utiliser cette modélisation, il faut déclarer une section
+`spectra from a list of rays` dans `model: waves`. Cette section a de nombreuses
+similarités avec la section `spectra`, avec les sections de profondeur (`depth`)
+et de streching (`streching`).
+
+La différence réside dans la présence:
+
+- soit de la clé `rays` indiquant dans le fichier YAML les caractéristiques des raies,
+- soit de la clé `rays from file` pointant vers un fichier CSV, contenant les caractéristiques des raies.
+
+```yaml
+environment models:
+  - model: waves
+    spectra from a list of rays:
+      - model: airy
+        stretching:
+           delta: 0.5
+           h: {unit: m, value: 100}
+        depth: {value: 1.7, unit: km}
+        rays:
+          # Two rays with T=8s and T=10s
+          a: {values: [0.1, 0.5], unit: m}
+          psi: {values: [180.0, 180.0], unit: deg}
+          omega: {values: [0.628318, 0.785398], unit: rad/s}
+          k: {values: [3.872832, 6.051301], unit: 1/m}
+          phase: {values: [50, 90], unit: deg}
+      - model: airy
+        stretching:
+           delta: 0.5
+           h: {unit: m, value: 100}
+        depth: {value: 1.7, unit: km}
+        rays from file: rays.csv
+```
+
+Les raies fournies dans un fichier CSV sont décrites en unite internationale avec
+5 colonnes, avec:
+
+- l'amplitude `a` en mètres,
+- la direction de propagation `psi` en rad,
+- la pulsation `omega` en rad/s,
+- le nombre d'onde `k` en rad/m,
+- la phase `a` en rad.
+
+Voici un exemple fichier CSV avec deux raies
+
+```
+a,psi,omega,k,phase
+0.1,3.1415926535897931,0.628318,3.872832,0.8726646259971648
+0.5,3.1415926535897931,0.785398,6.051301,1.5707963267948966
+```
+
+Les sections `spectra` et `spectra from a list of rays` peuvent être utilisées
+ensemble, résultant en la sommation des spectres.
+
+
 ### Utilisation d'un modèle de houle distant
 
 xdyn permet d'utiliser des modèles de houle sur un serveur distant. L'intérêt
