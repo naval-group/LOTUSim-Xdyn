@@ -138,11 +138,20 @@ FlatDiscreteDirectionalWaveSpectrum SurfaceElevationBuilder<SurfaceElevationFrom
         f.cos_psi.push_back(cos(psi));
         f.sin_psi.push_back(sin(psi));
     }
-    // TODO: Handle depth correctly: spectrum.depth
-    // Only infinite depth
     const Stretching stretching(spectrum.stretching);
-    f.pdyn_factor = [stretching](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,eta,stretching);};
-    f.pdyn_factor_sh = [stretching](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,eta,stretching);};
+    if (spectrum.depth==0.0)
+    {
+        // Infinite depth
+        f.pdyn_factor = [stretching](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,eta,stretching);};
+        f.pdyn_factor_sh = [stretching](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,eta,stretching);};
+    }
+    else
+    {
+        // Finite depth
+        const double h = spectrum.depth;
+        f.pdyn_factor = [h,stretching](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,h,eta,stretching);};
+        f.pdyn_factor_sh = [h,stretching](const double k, const double z, const double eta){return dynamic_pressure_factor_sh(k,z,h,eta,stretching);};
+    }
     return f;
 }
 
