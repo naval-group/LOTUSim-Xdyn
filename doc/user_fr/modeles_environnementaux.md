@@ -1228,7 +1228,8 @@ waves:
 ### Utilisation d'un modèle de houle de Airy décrit par une liste de raies
 
 xdyn permet d'utiliser un modèle de houle de Airy décrit par une liste de raies.
-L'intérêt est que l'on peut ainsi mettre en oeuvre des modèles de houle
+L'intérêt est que l'on peut ainsi mettre en œuvre des modèles de houle entièrement
+maîtrisés, notamment au niveau des phases.
 Pour utiliser cette modélisation, il faut déclarer une section
 `spectra from a list of rays` dans `model: waves`. Cette section a de nombreuses
 similarités avec la section `spectra`, avec les sections de profondeur (`depth`)
@@ -1287,7 +1288,7 @@ ensemble, résultant en la sommation des spectres.
 ### Utilisation d'un modèle de houle distant
 
 xdyn permet d'utiliser des modèles de houle sur un serveur distant. L'intérêt
-est que l'on peut ainsi mettre en oeuvre des modèles de houle qui ne sont pas
+est que l'on peut ainsi mettre en œuvre des modèles de houle qui ne sont pas
 implémentés dans le code d'xdyn. Ces modèles peuvent être implémentés dans le
 langage informatique que l'on souhaite (Python, Java, Go...) et utilisables
 comme les modèles de houle "internes" de xdyn.
