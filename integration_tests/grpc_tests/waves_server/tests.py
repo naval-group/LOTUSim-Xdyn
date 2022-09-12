@@ -203,7 +203,6 @@ class AiryWaveGrpcServerTest(unittest.TestCase):
             assert spectrum["psi"][0] == 0.0
             assert spectrum["omega"][0] == 0.5235987755982988
             assert spectrum["k"][0] == 0.5235987755982988**2 / 9.81
-            # assert spectrum["phase"][0] == 0.5235987755982988**2 / 9.81
 
     def test_03_two_spectra(self):
         """Test server works with two spectra, that every response has the
