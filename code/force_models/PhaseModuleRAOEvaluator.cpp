@@ -78,10 +78,6 @@ void PhaseModuleRAOEvaluator::check_spectra_periods_are_in_rao_period_bounds(con
     const std::vector<double>& periods = rao_interpolator.get_module_periods();
     if (not(periods.empty()))
     {
-        /*
-         * Replaced env.w->get_wave_angular_frequency_for_each_model with get_flat_directional_spectra called at origin
-         * so that we do not rely on any specific (cartesian) spectrum discretization
-         */
         const double period_min = *std::min_element(periods.begin(), periods.end());
         const double period_max = *std::max_element(periods.begin(), periods.end());
         for (const auto& spectrum: spectra)

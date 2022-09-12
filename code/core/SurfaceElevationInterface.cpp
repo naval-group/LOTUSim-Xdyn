@@ -172,16 +172,6 @@ ssc::kinematics::PointMatrix SurfaceElevationInterface::get_and_check_orbital_ve
     return orbital_velocity(g, x, y, z, t, eta);
 }
 
-std::vector<std::vector<double> > SurfaceElevationInterface::get_wave_directions_for_each_model() const
-{
-    return std::vector<std::vector<double> >();
-}
-
-std::vector<std::vector<double> > SurfaceElevationInterface::get_wave_angular_frequency_for_each_model() const
-{
-    return std::vector<std::vector<double> >();
-}
-
 std::vector<double> SurfaceElevationInterface::get_dynamic_pressure(
     const double rho,                        //!< Water density (in kg/m^3)
     const double g,                          //!< Gravity (in m/s^2)

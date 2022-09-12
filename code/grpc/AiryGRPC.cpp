@@ -98,42 +98,8 @@ class WavesImpl final : public Waves::Service {
             return Status::OK;
         }
 
-        // rpc angular_frequencies_for_rao(AngularFrequenciesRequest) returns (AngularFrequenciesResponse);
-        Status angular_frequencies_for_rao(ServerContext* /*context*/, const AngularFrequenciesRequest* /*request*/, AngularFrequenciesResponse* reply) override
-        {
-            std::vector<std::vector<double> > res = env.w->get_wave_angular_frequency_for_each_model();
-            for (size_t index = 0; index < res.size(); ++index)
-            {
-                AngularFrequencies * g = reply->add_angular_frequencies();
-                google::protobuf::RepeatedField<double> field{res[index].begin(), res[index].end()};
-                g->mutable_omegas()->Swap(&field);
-            }
-            return Status::OK;
-        }
-
-        // rpc directions_for_rao(DirectionsRequest) returns (DirectionsResponse);
-        Status directions_for_rao(ServerContext* /*context*/, const DirectionsRequest* /*request*/, DirectionsResponse* reply) override
-        {
-            const std::vector<std::vector<double> > res = env.w->get_wave_directions_for_each_model();
-            for (size_t index = 0; index < res.size(); ++index)
-            {
-                Directions * g = reply->add_directions();
-                google::protobuf::RepeatedField<double> field{res[index].begin(), res[index].end()};
-                g->mutable_psis()->Swap(&field);
-            }
-            return Status::OK;
-        }
-
         // rpc spectrum(SpectrumRequest) returns (SpectrumResponse);
         Status spectrum(ServerContext* /*context*/, const SpectrumRequest* request, SpectrumResponse* spectrum_response) override
-        {
-            const std::vector<DiscreteDirectionalWaveSpectrum> spectra = env.w->get_directional_spectra(request->x(), request->y(), request->t());
-            spectrum_response_from_discrete_directional_wave_spectra(spectra, spectrum_response);
-            return Status::OK;
-        }
-
-        // rpc flat_spectrum(SpectrumRequest) returns (FlatSpectrumResponse);
-        Status flat_spectrum(ServerContext* /*context*/, const SpectrumRequest* request, FlatSpectrumResponse* spectrum_response) override
         {
             const std::vector<FlatDiscreteDirectionalWaveSpectrum> spectra = env.w->get_flat_directional_spectra(request->x(), request->y(), request->t());
             flat_spectrum_response_from_vector_of_flat_discrete_directional_wave_spectra(spectra, spectrum_response);

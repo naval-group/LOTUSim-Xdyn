@@ -55,17 +55,22 @@ DiscreteDirectionalWaveSpectrum add_random_phases(DiscreteDirectionalWaveSpectru
     return spectrum;
 }
 
-WaveModel::WaveModel(const DiscreteDirectionalWaveSpectrum& spectrum_): spectrum(spectrum_), flat_spectrum(flatten(spectrum))
+WaveModel::WaveModel(const DiscreteDirectionalWaveSpectrum& spectrum): flat_spectrum(flatten(spectrum))
 {
     check_sizes();
 }
 
-WaveModel::WaveModel(const DiscreteDirectionalWaveSpectrum& spectrum_, const double constant_phase) : spectrum(add_constant_phases(spectrum_, constant_phase)), flat_spectrum(flatten(spectrum))
+WaveModel::WaveModel(const DiscreteDirectionalWaveSpectrum& spectrum, const double constant_phase): flat_spectrum(flatten(add_constant_phases(spectrum, constant_phase)))
 {
     check_sizes();
 }
 
-WaveModel::WaveModel(const DiscreteDirectionalWaveSpectrum& spectrum_, const int random_number_generator_seed) : spectrum(add_random_phases(spectrum_, random_number_generator_seed)), flat_spectrum(flatten(spectrum))
+WaveModel::WaveModel(const DiscreteDirectionalWaveSpectrum& spectrum, const int random_number_generator_seed) : flat_spectrum(flatten(add_random_phases(spectrum, random_number_generator_seed)))
+{
+    check_sizes();
+}
+
+WaveModel::WaveModel(const FlatDiscreteDirectionalWaveSpectrum& spectrum) : flat_spectrum(spectrum)
 {
     check_sizes();
 }
@@ -74,26 +79,26 @@ void WaveModel::check_sizes() const
 {
     if (flat_spectrum.omega.empty())
     {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'omega' values defined in DiscreteDirectionalWaveSpectrum");
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'omega' values defined in FlatDiscreteDirectionalWaveSpectrum");
     }
     if (flat_spectrum.a.empty())
     {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'a' values defined in DiscreteDirectionalWaveSpectrum");
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'a' values defined in FlatDiscreteDirectionalWaveSpectrum");
     }
     if (flat_spectrum.k.empty())
     {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'k' values defined in DiscreteDirectionalWaveSpectrum");
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'k' values defined in FlatDiscreteDirectionalWaveSpectrum");
     }
     if (flat_spectrum.phase.empty())
     {
-        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'phase' values defined in DiscreteDirectionalWaveSpectrum");
+        THROW(__PRETTY_FUNCTION__, InternalErrorException, "No 'phase' values defined in FlatDiscreteDirectionalWaveSpectrum");
     }
 
     for (const auto omega:flat_spectrum.omega)
     {
         if (std::isnan(omega))
         {
-            THROW(__PRETTY_FUNCTION__, InternalErrorException, "DiscreteDirectionalWaveSpectrum contains NaN values for omega: " << flat_spectrum.omega);
+            THROW(__PRETTY_FUNCTION__, InternalErrorException, "FlatDiscreteDirectionalWaveSpectrum contains NaN values for omega: " << flat_spectrum.omega);
         }
     }
 
@@ -101,30 +106,20 @@ void WaveModel::check_sizes() const
     {
         if (std::isnan(k))
         {
-            THROW(__PRETTY_FUNCTION__, InternalErrorException, "DiscreteDirectionalWaveSpectrum contains NaN values for k: " << flat_spectrum.k);
+            THROW(__PRETTY_FUNCTION__, InternalErrorException, "FlatDiscreteDirectionalWaveSpectrum contains NaN values for k: " << flat_spectrum.k);
         }
     }
-    for (const auto Si:flat_spectrum.a)
+    for (const auto a:flat_spectrum.a)
     {
-        if (std::isnan(Si))
+        if (std::isnan(a))
         {
-            THROW(__PRETTY_FUNCTION__, InternalErrorException, "DiscreteDirectionalWaveSpectrum contains NaN values for a: " << flat_spectrum.a);
+            THROW(__PRETTY_FUNCTION__, InternalErrorException, "FlatDiscreteDirectionalWaveSpectrum contains NaN values for a: " << flat_spectrum.a);
         }
     }
 }
 
 WaveModel::~WaveModel()
 {
-}
-
-std::vector<double> WaveModel::get_omegas() const
-{
-    return flat_spectrum.omega;
-}
-
-std::vector<double> WaveModel::get_psis() const
-{
-    return flat_spectrum.psi;
 }
 
 std::vector<double> WaveModel::get_elevation(

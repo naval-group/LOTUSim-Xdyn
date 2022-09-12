@@ -107,56 +107,25 @@ class SurfaceElevationFromGRPC::Impl
                 throw_invalid_size_error(rpc_method, "OrbitalVelocitiesResponse", "vz", response.vy_size(), response.vx_size());
             }
         }
+
         void check_sizes(const SpectrumResponse& response) const
         {
             const std::string rpc_method = "spectrum";
-            for (int i = 0 ; i < response.spectrum_size() ; ++i)
-            {
-                const auto spectrum = response.spectrum(i);
-                if (spectrum.omega_size() != spectrum.si_size())
-                {
-                    throw_invalid_size_error(rpc_method, "Spectrum", "Si", spectrum.omega_size(), spectrum.si_size());
-                }
-                if (spectrum.psi_size() != spectrum.dj_size())
-                {
-                    throw_invalid_size_error(rpc_method, "Spectrum", "Dj", spectrum.psi_size(), spectrum.dj_size());
-                }
-                if (spectrum.omega_size() != spectrum.k_size())
-                {
-                    throw_invalid_size_error(rpc_method, "Spectrum", "k", spectrum.omega_size(), spectrum.k_size());
-                }
-                if (spectrum.omega_size() != spectrum.phase_size())
-                {
-                    throw_invalid_size_error(rpc_method, "Spectrum", "phase", spectrum.omega_size(), spectrum.phase_size());
-                }
-                for (int j = 0 ; j < spectrum.phase_size() ; ++j)
-                {
-                    if (spectrum.phase(j).phase_size() != spectrum.psi_size())
-                    {
-                        throw_invalid_size_error(rpc_method, "PhasesForEachFrequency", "phase", spectrum.psi_size(), spectrum.phase(j).phase_size());
-                    }
-                }
-            }
-        }
-
-        void check_sizes(const FlatSpectrumResponse& response) const
-        {
-            const std::string rpc_method = "flat_spectrum";
             if (response.omega_size() != response.a_size())
             {
-                throw_invalid_size_error(rpc_method, "FlatSpectrum", "a", response.omega_size(), response.a_size());
+                throw_invalid_size_error(rpc_method, "Spectrum", "a", response.omega_size(), response.a_size());
             }
             if (response.omega_size() != response.psi_size())
             {
-                throw_invalid_size_error(rpc_method, "FlatSpectrum", "psi", response.omega_size(), response.psi_size());
+                throw_invalid_size_error(rpc_method, "Spectrum", "psi", response.omega_size(), response.psi_size());
             }
             if (response.omega_size() != response.k_size())
             {
-                throw_invalid_size_error(rpc_method, "FlatSpectrum", "k", response.omega_size(), response.k_size());
+                throw_invalid_size_error(rpc_method, "Spectrum", "k", response.omega_size(), response.k_size());
             }
             if (response.omega_size() != response.phase_size())
             {
-                throw_invalid_size_error(rpc_method, "FlatSpectrum", "phase", response.omega_size(), response.phase_size());
+                throw_invalid_size_error(rpc_method, "Spectrum", "phase", response.omega_size(), response.phase_size());
             }
         }
 
@@ -351,7 +320,7 @@ class SurfaceElevationFromGRPC::Impl
             return ret;
         }
 
-        std::vector<DiscreteDirectionalWaveSpectrum> directional_spectra(const double x, const double y, const double t)
+        std::vector<FlatDiscreteDirectionalWaveSpectrum> flat_directional_spectra(const double x, const double y, const double t)
         {
             SpectrumRequest request;
             request.set_x(x);
@@ -360,45 +329,6 @@ class SurfaceElevationFromGRPC::Impl
             grpc::ClientContext context;
             SpectrumResponse response;
             const grpc::Status status = stub->spectrum(&context, request, &response);
-            throw_if_invalid_status("spectrum", status);
-            check_sizes(response);
-            std::vector<DiscreteDirectionalWaveSpectrum> ret;
-            for (int i = 0 ; i < response.spectrum_size() ; ++i)
-            {
-                DiscreteDirectionalWaveSpectrum s;
-                s.Si.reserve(static_cast<size_t>(response.spectrum(i).si_size()));
-                std::copy(response.spectrum(i).si().begin(), response.spectrum(i).si().end(), std::back_inserter(s.Si));
-                s.Dj.reserve(static_cast<size_t>(response.spectrum(i).dj_size()));
-                std::copy(response.spectrum(i).dj().begin(), response.spectrum(i).dj().end(), std::back_inserter(s.Dj));
-                s.omega.reserve(static_cast<size_t>(response.spectrum(i).omega_size()));
-                std::copy(response.spectrum(i).omega().begin(), response.spectrum(i).omega().end(), std::back_inserter(s.omega));
-                s.psi.reserve(static_cast<size_t>(response.spectrum(i).psi_size()));
-                std::copy(response.spectrum(i).psi().begin(), response.spectrum(i).psi().end(), std::back_inserter(s.psi));
-                s.k.reserve(static_cast<size_t>(response.spectrum(i).k_size()));
-                std::copy(response.spectrum(i).k().begin(), response.spectrum(i).k().end(), std::back_inserter(s.k));
-                if (response.spectrum(i).phase_size())
-                {
-                    s.phase.resize(static_cast<size_t>(response.spectrum(i).phase_size()));
-                    for (int j = 0 ; j < response.spectrum(i).phase_size() ; ++j)
-                    {
-                        s.phase.at(static_cast<size_t>(j)).reserve(static_cast<size_t>(response.spectrum(i).phase(j).phase_size()));
-                        std::copy(response.spectrum(i).phase(j).phase().begin(), response.spectrum(i).phase(j).phase().end(), std::back_inserter(s.phase.at(static_cast<size_t>(j))));
-                    }
-                }
-                ret.push_back(s);
-            }
-            return ret;
-        }
-
-        std::vector<FlatDiscreteDirectionalWaveSpectrum> flat_directional_spectra(const double x, const double y, const double t)
-        {
-            SpectrumRequest request;
-            request.set_x(x);
-            request.set_y(y);
-            request.set_t(t);
-            grpc::ClientContext context;
-            FlatSpectrumResponse response;
-            const grpc::Status status = stub->flat_spectrum(&context, request, &response);
             throw_if_invalid_status("flat_spectrum", status);
             check_sizes(response);
             FlatDiscreteDirectionalWaveSpectrum s;
@@ -424,47 +354,6 @@ class SurfaceElevationFromGRPC::Impl
             return ret;
         }
 
-        std::vector<std::vector<double> > get_wave_directions_for_each_model()
-        {
-            DirectionsRequest request;
-            grpc::ClientContext context;
-            DirectionsResponse response;
-            const grpc::Status status = stub->directions_for_rao(&context, request, &response);
-            throw_if_invalid_status("directions_for_rao", status);
-            std::vector<std::vector<double> > wave_directions;
-            if (response.directions_size())
-            {
-                wave_directions.resize(static_cast<size_t>(response.directions_size()));
-                for (int i = 0 ; i < response.directions_size() ; ++i)
-                {
-                    wave_directions[static_cast<size_t>(i)].reserve(static_cast<size_t>(response.directions(i).psis_size()));
-                    std::copy(response.directions(i).psis().begin(), response.directions(i).psis().end(), std::back_inserter(wave_directions[static_cast<size_t>(i)]));
-                }
-
-            }
-            return wave_directions;
-        }
-
-        std::vector<std::vector<double> > get_wave_angular_frequency_for_each_model()
-        {
-            AngularFrequenciesRequest request;
-            grpc::ClientContext context;
-            AngularFrequenciesResponse response;
-            const grpc::Status status = stub->angular_frequencies_for_rao(&context, request, &response);
-            throw_if_invalid_status("angular_frequencies_for_rao", status);
-            std::vector<std::vector<double> > omegas;
-            if (response.angular_frequencies_size())
-            {
-                omegas.resize(static_cast<size_t>(response.angular_frequencies_size()));
-                for (int i = 0 ; i < response.angular_frequencies_size() ; ++i)
-                {
-                    omegas[static_cast<size_t>(i)].reserve(static_cast<size_t>(response.angular_frequencies(i).omegas_size()));
-                    std::copy(response.angular_frequencies(i).omegas().begin(), response.angular_frequencies(i).omegas().end(), std::back_inserter(omegas[static_cast<size_t>(i)]));
-                }
-            }
-            return omegas;
-        }
-
     private:
         Impl();
         std::string url;
@@ -475,16 +364,6 @@ class SurfaceElevationFromGRPC::Impl
 
 SurfaceElevationFromGRPC::SurfaceElevationFromGRPC(const YamlGRPC& yaml, const ssc::kinematics::PointMatrixPtr& output_mesh) : SurfaceElevationInterface(output_mesh), pimpl(new Impl(yaml.url, yaml.rest_of_the_yaml))
 {
-}
-
-std::vector<std::vector<double> > SurfaceElevationFromGRPC::get_wave_directions_for_each_model() const
-{
-    return pimpl->get_wave_directions_for_each_model();
-}
-
-std::vector<std::vector<double> > SurfaceElevationFromGRPC::get_wave_angular_frequency_for_each_model() const
-{
-    return pimpl->get_wave_angular_frequency_for_each_model();
 }
 
 std::vector<double> SurfaceElevationFromGRPC::wave_height(
@@ -557,16 +436,5 @@ ssc::kinematics::PointMatrix SurfaceElevationFromGRPC::orbital_velocity(
 
 std::vector<FlatDiscreteDirectionalWaveSpectrum> SurfaceElevationFromGRPC::get_flat_directional_spectra(const double x, const double y, const double t) const
 {
-    std::vector<FlatDiscreteDirectionalWaveSpectrum> ret;
-    const auto spectra = get_directional_spectra(x, y, t);
-    for (const auto& spectrum:spectra)
-    {
-        ret.push_back(flatten(spectrum));
-    }
-    return ret;
-}
-
-std::vector<DiscreteDirectionalWaveSpectrum> SurfaceElevationFromGRPC::get_directional_spectra(const double x, const double y, const double t) const
-{
-    return pimpl->directional_spectra(x, y, t);
+    return pimpl->flat_directional_spectra(x, y, t);
 }

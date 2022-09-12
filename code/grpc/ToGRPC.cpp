@@ -25,10 +25,10 @@ RequiredWaveInformationRequest ToGRPC::from_required_wave_information(const doub
     return request;
 }
 
-SpectrumResponse* ToGRPC::from_discrete_directional_wave_spectra(const std::vector<DiscreteDirectionalWaveSpectrum>& spectra) const
+SpectrumResponse* ToGRPC::from_flat_discrete_directional_wave_spectra(const std::vector<FlatDiscreteDirectionalWaveSpectrum>& spectra) const
 {
     SpectrumResponse* spectrum_response = new SpectrumResponse();
-    spectrum_response_from_discrete_directional_wave_spectra(spectra, spectrum_response);
+    flat_spectrum_response_from_vector_of_flat_discrete_directional_wave_spectra(spectra, spectrum_response);
     return spectrum_response;
 }
 
@@ -41,8 +41,8 @@ WaveInformation* ToGRPC::from_wave_information(const WaveRequest& wave_request, 
         {
             try
             {
-                const auto directional_spectra = env.w->get_directional_spectra(wave_request.spectrum.x, wave_request.spectrum.y, wave_request.spectrum.t);
-                auto spectrum = from_discrete_directional_wave_spectra(directional_spectra);
+                const auto directional_spectra = env.w->get_flat_directional_spectra(wave_request.spectrum.x, wave_request.spectrum.y, wave_request.spectrum.t);
+                auto spectrum = from_flat_discrete_directional_wave_spectra(directional_spectra);
                 wave_information->set_allocated_spectrum(spectrum);
             }
             catch (const ssc::exception_handling::Exception& e)

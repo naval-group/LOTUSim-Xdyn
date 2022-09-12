@@ -13,6 +13,10 @@
 #include <Eigen/Dense>
 #include <vector>
 
+Airy::Airy(const FlatDiscreteDirectionalWaveSpectrum& spectrum) : WaveModel(spectrum)
+{
+}
+
 Airy::Airy(const DiscreteDirectionalWaveSpectrum& spectrum_): WaveModel(spectrum_)
 {
 }

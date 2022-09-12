@@ -35,10 +35,6 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
                 const std::pair<std::size_t,std::size_t> output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0),
                 const ssc::kinematics::PointMatrixPtr& output_mesh = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix("NED", 0)));
 
-        std::vector<std::vector<double> > get_wave_directions_for_each_model() const;
-
-        std::vector<std::vector<double> > get_wave_angular_frequency_for_each_model() const;
-
         std::vector<WaveModelPtr> get_models() const {return directional_spectra;};
 
         void serialize_wave_spectra_before_simulation(ObserverPtr& observer) const;
@@ -46,7 +42,6 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
         SurfaceElevationFromWaves(); // Disabled
 
         std::vector<FlatDiscreteDirectionalWaveSpectrum> get_flat_directional_spectra(const double x, const double y, const double t) const;
-        std::vector<DiscreteDirectionalWaveSpectrum> get_directional_spectra(const double x, const double y, const double t) const;
 
         /**
          *  \section ex1 Example

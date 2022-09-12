@@ -3,7 +3,7 @@
 import logging
 import math
 
-from xdyngrpc.cosimulation import CosimulationEuler, CosimulationRequestEuler
+from xdyngrpc.cosimulation import CosimulationEuler
 
 SERVICE_NAME = "xdyn-client"
 

@@ -122,16 +122,9 @@ class Model(force.AbstractForceModel):
                   position at which we want the linearized wave spectrum
                 - t (double) Simulation time at which we want the linearized
                   wave spectrum
-            - angular_frequencies_for_rao (bool): True if the force model
-              requires the angular frequencies at which the wave spectrum is
-              discretized
-            - directions_for_rao (bool): True if the force mode requires the
-              incidences at which the wave spectrum is discretized
 
         """
-        return {'spectrum': {'t':t, 'x':x, 'y': y},
-                'angular_frequencies_for_rao': True,
-                'directions_for_rao': True}
+        return {'spectrum': {'t': t, 'x': x, 'y': y}}
 
     def force(self, _states, _commands, wave_information, _filtered_states):
         """Calculate the force & torque.
@@ -233,33 +226,19 @@ class Model(force.AbstractForceModel):
                 the velocity of each wave partical relative to the ground. In
                 meters per second. Same size and ordering as input from rpc
                 'required_wave_information' (orbital_velocities).
-            - spectrum (dict): Should contain the following fields:
-              - si (list of floats): Discretized spectral density for each
-                omega (should therefore be the same size as omega).
-                In s m^2/rad.
-              - dj (list of floats): Spatial spreading for each psi (should
-                therefore be the same size as psi. In 1/rad.
-              - omega (list of floats): Angular frequencies the spectrum was
-                discretized at. In rad/s.
-              - psi (list of floats): Directions between 0 & 2pi the spatial
-                spreading was discretized at. In rad.
-              - k (list of floats): Discretized wave number for each
-                frequency (should therefore be the same size as omega).
-                In rad/m.
-              - phase (list of dict): Random phases, for each
-                (direction,frequency) couple (but time invariant), should
-                have the same size as psi. In radian.
-                Each element is a dict containing the following fields:
-                - phase (list of floats): Random phase. Should have the same
-                  size as omega in parent dict. In radian.
-            - angular_frequencies_for_rao (list of floats):
-                Angular frequencies the spectrum was discretized at (in rad/s).
-                Used, for example, when interpolating the wave RAOs.
-            - directions_for_rao (list of floats):
-                Wave incidences the spectrum was discretized at (in rad).
-                0° is for waves coming from the South and propagating to the North.
-                90° is for waves coming from the West and propagating to the East.
-                Used, for example, when interpolating the wave RAOs.
+            - spectrum (dict): Dictionary with the following fields that are
+              all lists of floats with the same number of elements:
+                - a (list of floats): Amplitudes for each ray. In m.
+                - omega (list of floats): Angular frequencies the spectrum was
+                  discretized at. (In rad/s).
+                - psi (list of floats): Directions between 0 & 2pi the spatial
+                  spreading was discretized at. (In rad).
+                  0° is for waves coming from the South and propagating to the North.
+                  90° is for waves coming from the West and propagating to the East.
+                - k (list of floats): Discretized wave number for each
+                  frequency (should therefore be the same size as omega).
+                  (In rad/m).
+                - phase (list of floats): Random phases. (In rad).
         - filtered_states : class
             Should contain the following fields:
             - x (float): Current filtered projection on axis X of the NED frame of the
@@ -332,7 +311,7 @@ class Model(force.AbstractForceModel):
                 'Mx': 0.0,
                 'My': 0.0,
                 'Mz': 0.0,
-                'extra_observations': {'HF': 666.0, 'phase0': wave_information.spectrum.spectrum[0].phase[0].phase[0]}}
+                'extra_observations': {'HF': 666.0, 'phase0': wave_information.spectrum.phase[0]}}
 
 
 if __name__ == '__main__':

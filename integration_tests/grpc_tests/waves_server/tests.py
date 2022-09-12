@@ -161,11 +161,10 @@ class AiryWaveGrpcServerTest(unittest.TestCase):
             for dynamic_pressure in dynamic_pressures:
                 assert np.allclose(dynamic_pressure["pdyn"], 0.0)
             spectrum = waves.spectrum()
-            assert spectrum == []
-            angular_frequencies_for_rao = waves.angular_frequencies_for_rao()
-            assert angular_frequencies_for_rao == []
-            directions_for_rao = waves.directions_for_rao()
-            assert directions_for_rao == []
+            assert spectrum is not None
+            for key in ("a", "k", "omega", "psi", "phase"):
+                assert key in spectrum
+                assert spectrum[key] == []
 
     def test_02_monochromatic_spectrum(self):
         """Test all responses for a monochromatic wave spectrum
@@ -190,19 +189,20 @@ class AiryWaveGrpcServerTest(unittest.TestCase):
             for dynamic_pressure in dynamic_pressures:
                 assert not np.allclose(dynamic_pressure["pdyn"], 0.0)
             spectrum = waves.spectrum()
-            assert len(spectrum) == 1
+            assert spectrum is not None
             LOGGER.info(spectrum)
-            assert spectrum[0]["dj"][0] == 1.0
-            assert (2 * spectrum[0]["si"][0]) ** 0.5 == (0.5 * 5.0)
-            assert spectrum[0]["omega"] == [0.5235987755982988]
-            assert spectrum[0]["psi"] == [0.0]
-            assert spectrum[0]["k"] == [0.5235987755982988**2 / 9.81]
-            angular_frequencies_for_rao = waves.angular_frequencies_for_rao()
-            assert len(angular_frequencies_for_rao) == 1
-            assert angular_frequencies_for_rao[0] == [0.5235987755982988]
-            directions_for_rao = waves.directions_for_rao()
-            assert len(directions_for_rao) == 1
-            assert directions_for_rao[0] == [0]
+            for key in ("a", "k", "omega", "psi", "phase"):
+                assert key in spectrum
+            assert len(spectrum["a"]) == 1
+            assert len(spectrum["k"]) == 1
+            assert len(spectrum["phase"]) == 1
+            assert len(spectrum["omega"]) == 1
+            assert len(spectrum["psi"]) == 1
+
+            assert spectrum["a"][0] == (0.5 * 5.0)
+            assert spectrum["psi"][0] == 0.0
+            assert spectrum["omega"][0] == 0.5235987755982988
+            assert spectrum["k"][0] == 0.5235987755982988**2 / 9.81
 
     def test_03_two_spectra(self):
         """Test server works with two spectra, that every response has the
@@ -227,11 +227,9 @@ class AiryWaveGrpcServerTest(unittest.TestCase):
             for dynamic_pressure in dynamic_pressures:
                 assert not np.allclose(dynamic_pressure["pdyn"], 0.0)
             spectrum = waves.spectrum()
-            assert spectrum != []
-            angular_frequencies_for_rao = waves.angular_frequencies_for_rao()
-            assert angular_frequencies_for_rao != []
-            directions_for_rao = waves.directions_for_rao()
-            assert directions_for_rao != []
+            assert spectrum is not None
+            for key in ("a", "k", "omega", "psi", "phase"):
+                assert key in spectrum
 
 
 if __name__ == "__main__":
