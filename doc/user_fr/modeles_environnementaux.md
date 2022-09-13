@@ -1264,16 +1264,22 @@ environment models:
         rays from file: rays.csv
 ```
 
-Les raies fournies dans un fichier CSV sont décrites en unite internationale avec
+Les raies fournies dans un fichier CSV sont décrites en unité internationale avec
 5 colonnes, avec:
 
-- l'amplitude `a` en mètres,
+- l'amplitude `a` en mètres (qui permettra de générer les oscillations entre $`-a`$ et $`+a`$),
 - la direction de propagation `psi` en rad,
 - la pulsation `omega` en rad/s,
 - le nombre d'onde `k` en rad/m,
 - la phase `a` en rad.
 
-Voici un exemple fichier CSV avec deux raies
+D'après la convention de direction de propagation:
+
+- une houle de face sera représentée avec une direction de propagation égale à $`\pi`$, soit 3.1415926535897931.
+- une houle de l'arrière sera représentée avec une direction de propagation égale à 0.
+- une houle se propageant du Sud-Ouest au Nord-Est sera représentée avec à $`\pi/4`$, soit 0.7853981633974483.
+
+Voici un exemple fichier CSV avec deux raies (représentant une houle de )
 
 ```
 a,psi,omega,k,phase
