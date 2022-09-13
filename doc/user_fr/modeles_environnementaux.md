@@ -1279,7 +1279,7 @@ D'après la convention de direction de propagation:
 - une houle de l'arrière sera représentée avec une direction de propagation égale à 0.
 - une houle se propageant du Sud-Ouest au Nord-Est sera représentée avec à $`\pi/4`$, soit 0.7853981633974483.
 
-Voici un exemple fichier CSV avec deux raies (représentant une houle de )
+Voici un exemple fichier CSV avec deux raies (représentant une houle de face):
 
 ```
 a,psi,omega,k,phase
