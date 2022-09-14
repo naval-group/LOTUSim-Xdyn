@@ -29,7 +29,24 @@ YamlStretching::YamlStretching():
 YamlWaveModel::YamlWaveModel():
     discretization(),
     spectra(),
+    spectra_from_rays(),
     output()
+{}
+
+YamlRays::YamlRays():
+    a(),
+    psi(),
+    omega(),
+    k(),
+    phase()
+{}
+
+YamlSpectrumFromRays::YamlSpectrumFromRays():
+    model(),
+    model_yaml(),
+    rays(),
+    depth(0.0),
+    stretching()
 {}
 
 YamlJonswap::YamlJonswap():

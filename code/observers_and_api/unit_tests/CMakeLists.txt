@@ -3,6 +3,7 @@ PROJECT(${MODULE_UNDER_TEST}_tests)
 SET(SRC
     ConfBuilderTest.cpp
     CSVControllerTest.cpp # because it needs a Sim instance, which requires the observers_and_api include directory.
+    EnvironmentTest.cpp
     EverythingObserverTest.cpp
     ForceTester.cpp
     ForceTests.cpp

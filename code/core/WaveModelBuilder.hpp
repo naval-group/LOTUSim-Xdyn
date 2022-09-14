@@ -16,6 +16,7 @@
 
 class WaveModel;
 struct DiscreteDirectionalWaveSpectrum;
+struct FlatDiscreteDirectionalWaveSpectrum;
 
 /** \brief Interface to all WaveModelBuilder<T>. Used to build, eg. Airy
  *  \details Allows us to store WaveModelBuilders with different template
@@ -34,6 +35,7 @@ class WaveModelBuilderInterface
                 {}
         virtual ~WaveModelBuilderInterface() {}
         virtual boost::optional<TR1(shared_ptr)<WaveModel> > try_to_parse(const std::string& model, const DiscreteDirectionalWaveSpectrum& spectrum, const std::string& yaml) const = 0;
+        virtual boost::optional<TR1(shared_ptr)<WaveModel> > try_to_parse(const std::string& model, const FlatDiscreteDirectionalWaveSpectrum& spectrum, const std::string& yaml) const = 0;
 
     protected:
         TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> > directional_spreading_parsers;
@@ -47,6 +49,7 @@ template <typename T> class WaveModelBuilder : public WaveModelBuilderInterface
                          const TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >& spectrum_parsers_) : WaveModelBuilderInterface(directional_spreading_parsers_,spectrum_parsers_) {}
         ~WaveModelBuilder() {}
         boost::optional<TR1(shared_ptr)<WaveModel> > try_to_parse(const std::string& model, const DiscreteDirectionalWaveSpectrum& spectrum, const std::string& yaml) const;
+        boost::optional<TR1(shared_ptr)<WaveModel> > try_to_parse(const std::string& model, const FlatDiscreteDirectionalWaveSpectrum& spectrum, const std::string& yaml) const;
 };
 
 typedef TR1(shared_ptr)<WaveModelBuilderInterface> WaveModelBuilderPtr;

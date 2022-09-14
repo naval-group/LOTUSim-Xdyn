@@ -18,23 +18,12 @@
 #define PI M_PI
 #define DEG (180./PI)
 
+#include <fstream>
 #include <sstream>
 
 const YamlWaveModel environment_parsersTest::yaml = parse_waves(test_data::waves_for_parser_validation_only());
 
 environment_parsersTest::environment_parsersTest() : a(ssc::random_data_generator::DataGenerator(1212))
-{
-}
-
-environment_parsersTest::~environment_parsersTest()
-{
-}
-
-void environment_parsersTest::SetUp()
-{
-}
-
-void environment_parsersTest::TearDown()
 {
 }
 
@@ -102,14 +91,14 @@ TEST_F(environment_parsersTest, can_parse_wave_spreading_and_spectral_data)
     ASSERT_EQ("dirac",yaml.spectra.at(0).directional_spreading_type);
     ASSERT_EQ("type: dirac\nwaves propagating to:\n  unit: deg\n  value: 90",yaml.spectra.at(0).directional_spreading_yaml);
     ASSERT_EQ("airy",yaml.spectra.at(0).model);
-    ASSERT_EQ("depth:\n  unit: km\n  value: 1.7\ndirectional spreading:\n  type: dirac\n  waves propagating to:\n    unit: deg\n    value: 90\nmodel: airy\nseed of the random data generator: 0\nspectral density:\n  Hs:\n    unit: m\n    value: 5\n  Tp:\n    unit: s\n    value: 15\n  gamma: 1.2\n  type: jonswap\nstretching:\n  delta: 123\n  h:\n    unit: m\n    value: 100",yaml.spectra.at(0).model_yaml);
+    ASSERT_EQ("depth:\n  unit: km\n  value: 1.7\ndirectional spreading:\n  type: dirac\n  waves propagating to:\n    unit: deg\n    value: 90\nmodel: airy\nseed of the random data generator: 0\nspectral density:\n  Hs:\n    unit: m\n    value: 5\n  Tp:\n    unit: s\n    value: 15\n  gamma: 1.2\n  type: jonswap\nstretching:\n  delta: 0.5\n  h:\n    unit: m\n    value: 100",yaml.spectra.at(0).model_yaml);
     ASSERT_EQ("jonswap",yaml.spectra.at(0).spectral_density_type);
     ASSERT_EQ("Hs:\n  unit: m\n  value: 5\nTp:\n  unit: s\n  value: 15\ngamma: 1.2\ntype: jonswap",yaml.spectra.at(0).spectral_density_yaml);
 
     ASSERT_EQ("cos2s",yaml.spectra.at(1).directional_spreading_type);
     ASSERT_EQ("s: 2\ntype: cos2s\nwaves propagating to:\n  unit: deg\n  value: 90",yaml.spectra.at(1).directional_spreading_yaml);
     ASSERT_EQ("airy",yaml.spectra.at(1).model);
-    ASSERT_EQ("depth:\n  unit: m\n  value: 12\ndirectional spreading:\n  s: 2\n  type: cos2s\n  waves propagating to:\n    unit: deg\n    value: 90\nmodel: airy\nseed of the random data generator: 1872\nspectral density:\n  Hs:\n    unit: m\n    value: 5\n  Tp:\n    unit: s\n    value: 15\n  type: dirac\nstretching:\n  delta: 456\n  h:\n    unit: m\n    value: 101",yaml.spectra.at(1).model_yaml);
+    ASSERT_EQ("depth:\n  unit: m\n  value: 12\ndirectional spreading:\n  s: 2\n  type: cos2s\n  waves propagating to:\n    unit: deg\n    value: 90\nmodel: airy\nseed of the random data generator: 1872\nspectral density:\n  Hs:\n    unit: m\n    value: 5\n  Tp:\n    unit: s\n    value: 15\n  type: dirac\nstretching:\n  delta: 0.6\n  h:\n    unit: m\n    value: 101",yaml.spectra.at(1).model_yaml);
     ASSERT_EQ("dirac",yaml.spectra.at(1).spectral_density_type);
     ASSERT_EQ("Hs:\n  unit: m\n  value: 5\nTp:\n  unit: s\n  value: 15\ntype: dirac",yaml.spectra.at(1).spectral_density_yaml);
 }
@@ -189,6 +178,7 @@ TEST_F(environment_parsersTest, can_force_seed_to_zero)
 
 TEST_F(environment_parsersTest, can_parse_depth_for_wave_models)
 {
+    ASSERT_EQ(0,yaml.spectra_from_rays.size());
     ASSERT_EQ(2,yaml.spectra.size());
     ASSERT_DOUBLE_EQ(1700, yaml.spectra[0].depth);
     ASSERT_DOUBLE_EQ(12, yaml.spectra[1].depth);
@@ -196,9 +186,9 @@ TEST_F(environment_parsersTest, can_parse_depth_for_wave_models)
 
 TEST_F(environment_parsersTest, can_parse_stretching_data)
 {
-    ASSERT_DOUBLE_EQ(123, yaml.spectra.at(0).stretching.delta);
+    ASSERT_DOUBLE_EQ(0.5, yaml.spectra.at(0).stretching.delta);
     ASSERT_DOUBLE_EQ(100, yaml.spectra.at(0).stretching.h);
-    ASSERT_DOUBLE_EQ(456, yaml.spectra.at(1).stretching.delta);
+    ASSERT_DOUBLE_EQ(0.6, yaml.spectra.at(1).stretching.delta);
     ASSERT_DOUBLE_EQ(101, yaml.spectra.at(1).stretching.h);
 }
 
@@ -244,4 +234,96 @@ TEST_F(environment_parsersTest, can_parse_equal_energy_bins_parameter)
     boost::replace_all(wave_yaml, "equal energy bins: true", "equal energy bins: false");
     const auto res = parse_waves(wave_yaml);
     ASSERT_FALSE(res.discretization.equal_energy_bins);
+}
+
+const YamlWaveModel environment_parsers_from_list_of_rays_Test::yaml = parse_waves(test_data::waves_from_a_list_of_rays_for_parser_validation_only());
+
+environment_parsers_from_list_of_rays_Test::environment_parsers_from_list_of_rays_Test() : a(ssc::random_data_generator::DataGenerator(1212))
+{
+}
+
+TEST_F(environment_parsers_from_list_of_rays_Test, can_parse_depth_for_wave_models)
+{
+    ASSERT_EQ(0,yaml.spectra.size());
+    ASSERT_EQ(2, yaml.spectra_from_rays.size());
+    ASSERT_DOUBLE_EQ(1700, yaml.spectra_from_rays[0].depth);
+    ASSERT_DOUBLE_EQ(1000, yaml.spectra_from_rays[1].depth);
+}
+
+TEST_F(environment_parsers_from_list_of_rays_Test, can_parse_stretching_data)
+{
+    ASSERT_DOUBLE_EQ(0.5, yaml.spectra_from_rays.at(0).stretching.delta);
+    ASSERT_DOUBLE_EQ(100, yaml.spectra_from_rays.at(0).stretching.h);
+    ASSERT_DOUBLE_EQ(0.6, yaml.spectra_from_rays.at(1).stretching.delta);
+    ASSERT_DOUBLE_EQ(101, yaml.spectra_from_rays.at(1).stretching.h);
+}
+
+TEST_F(environment_parsers_from_list_of_rays_Test, can_parse_rays_for_wave_models)
+{
+    ASSERT_EQ(0, yaml.spectra.size());
+    ASSERT_EQ(2, yaml.spectra_from_rays.size());
+    ASSERT_EQ(2, yaml.spectra_from_rays[0].rays.a.size());
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[0].rays.a[0], 0.1);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[0].rays.a[1], 0.5);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[0].rays.psi[0], PI);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[0].rays.psi[1], PI);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[0].rays.omega[0], 0.628318);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[0].rays.omega[1], 0.785398);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[0].rays.k[0], 3.872832);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[0].rays.k[1], 6.051301);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[0].rays.phase[0], 50/180.0*PI);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[0].rays.phase[1], 90/180.0*PI);
+    ASSERT_EQ(2, yaml.spectra_from_rays[1].rays.a.size());
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[1].rays.a[0], 0.1);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[1].rays.a[1], 0.5);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[1].rays.psi[0], PI);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[1].rays.psi[1], PI);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[1].rays.omega[0], 0.523598);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[1].rays.omega[1], 0.628318);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[1].rays.k[0], 2.689467);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[1].rays.k[1], 3.872832);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[1].rays.phase[0], 110/180.0*PI);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[1].rays.phase[1], 130/180.0*PI);
+}
+
+TEST_F(environment_parsers_from_external_list_of_rays_Test, can_parse_all_data)
+{
+    const std::string filename("rays.csv");
+    std::ofstream file(filename);
+    file << test_data::waves_from_an_external_list_of_rays_for_parser_validation_only_csv();
+    file.close();
+    const YamlWaveModel yaml = parse_waves(test_data::waves_from_an_external_list_of_rays_for_parser_validation_only());
+    ASSERT_EQ(0,yaml.spectra.size());
+    ASSERT_EQ(2, yaml.spectra_from_rays.size());
+    ASSERT_DOUBLE_EQ(1700, yaml.spectra_from_rays[0].depth);
+    ASSERT_DOUBLE_EQ(1000, yaml.spectra_from_rays[1].depth);
+    ASSERT_DOUBLE_EQ(0.5, yaml.spectra_from_rays.at(0).stretching.delta);
+    ASSERT_DOUBLE_EQ(100, yaml.spectra_from_rays.at(0).stretching.h);
+    ASSERT_DOUBLE_EQ(0.6, yaml.spectra_from_rays.at(1).stretching.delta);
+    ASSERT_DOUBLE_EQ(101, yaml.spectra_from_rays.at(1).stretching.h);
+    ASSERT_EQ(0, yaml.spectra.size());
+    ASSERT_EQ(2, yaml.spectra_from_rays.size());
+    ASSERT_EQ(2, yaml.spectra_from_rays[0].rays.a.size());
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[0].rays.a[0], 0.1);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[0].rays.a[1], 0.5);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[0].rays.psi[0], PI);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[0].rays.psi[1], PI);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[0].rays.omega[0], 0.628318);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[0].rays.omega[1], 0.785398);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[0].rays.k[0], 3.872832);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[0].rays.k[1], 6.051301);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[0].rays.phase[0], 50/180.0*PI);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[0].rays.phase[1], 90/180.0*PI);
+    ASSERT_EQ(2, yaml.spectra_from_rays[1].rays.a.size());
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[1].rays.a[0], 0.1);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[1].rays.a[1], 0.5);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[1].rays.psi[0], PI);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[1].rays.psi[1], PI);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[1].rays.omega[0], 0.523598);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[1].rays.omega[1], 0.628318);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[1].rays.k[0], 2.689467);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[1].rays.k[1], 3.872832);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[1].rays.phase[0], 110/180.0*PI);
+    ASSERT_DOUBLE_EQ(yaml.spectra_from_rays[1].rays.phase[1], 130/180.0*PI);
+    EXPECT_EQ(0,remove(filename.c_str()));
 }

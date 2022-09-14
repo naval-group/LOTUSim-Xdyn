@@ -175,21 +175,17 @@ TEST_F(SurfaceElevationFromWavesTest, bug_detected_by_FS)
     ASSERT_EQ(50, grid.z.rows());
 
     const double EPS = 1E-6;
-    for (size_t i = 0 ; i < 1 ; ++i)
-    {
-        EXPECT_NEAR((double)grid.z(i,0),-0.46917699300305094,EPS);
-        EXPECT_NEAR((double)grid.z(i,1),-0.86869551138231271,EPS);
-        EXPECT_NEAR((double)grid.z(i,2),-1.1908530054573996,EPS);
-        EXPECT_NEAR((double)grid.z(i,3),-1.406959982302008,EPS);
-        EXPECT_NEAR((double)grid.z(i,4),-1.4977711979049479,EPS);
-        EXPECT_NEAR((double)grid.z(i,5),-1.4551995278764878,EPS);
-        EXPECT_NEAR((double)grid.z(i,6),-1.2830361602181635,EPS);
-    }
+    EXPECT_NEAR(grid.z(0, 0), -0.46917699300305094, EPS);
+    EXPECT_NEAR(grid.z(0, 1), -0.86869551138231271, EPS);
+    EXPECT_NEAR(grid.z(0, 2), -1.1908530054573996, EPS);
+    EXPECT_NEAR(grid.z(0, 3), -1.406959982302008, EPS);
+    EXPECT_NEAR(grid.z(0, 4), -1.4977711979049479, EPS);
+    EXPECT_NEAR(grid.z(0, 5), -1.4551995278764878, EPS);
+    EXPECT_NEAR(grid.z(0, 6), -1.2830361602181635, EPS);
 }
 
 TEST_F(SurfaceElevationFromWavesTest, dynamic_pressure_plus_hydrostatic)
 {
-    const double psi0 = 0;
     const double Hs = 2;
     const double k_ = 1;
     const double g = 9.81;

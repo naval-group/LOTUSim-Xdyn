@@ -1,6 +1,6 @@
+#include "stl_data.hpp"
 #include <sstream>
 #include <vector>
-#include "stl_data.hpp"
 
 std::string test_data::single_facet()
 {

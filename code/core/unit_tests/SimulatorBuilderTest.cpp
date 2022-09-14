@@ -15,6 +15,7 @@
 #include "SimulatorYamlParser.hpp"
 #include "yaml_data.hpp"
 #include <ssc/kinematics.hpp>
+#include <cmath>
 
 const YamlSimulatorInput SimulatorBuilderTest::input = SimulatorYamlParser(test_data::full_example()).parse();
 
@@ -163,9 +164,9 @@ TEST_F(SimulatorBuilderTest, wind_model_is_available_from_env)
     builder.can_parse<DefaultWindModel>();
     const auto env = builder.build_environment_and_frames();
     Eigen::Vector3d position;
-    position << a.random<double>(), a.random<double>(), -abs(a.random<double>());
+    position << a.random<double>(), a.random<double>(), -std::abs(a.random<double>());
     double time(a.random<double>());
-    ASSERT_NO_THROW(Eigen::Vector3d wind = env.wind->get_wind(position, time));
+    ASSERT_NO_THROW(/*Eigen::Vector3d wind = */env.wind->get_wind(position, time));
 }
 
 TEST_F(SimulatorBuilderTest, can_get_rho_air)

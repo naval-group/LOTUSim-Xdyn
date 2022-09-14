@@ -8,6 +8,7 @@
 #ifndef YAMLWAVEMODELINPUT_HPP_
 #define YAMLWAVEMODELINPUT_HPP_
 
+#include <string>
 #include <vector>
 
 #include "YamlWaveOutput.hpp"
@@ -43,12 +44,40 @@ struct YamlSpectrum
     YamlStretching stretching;              //!< Stretching model for orbital wave velocities (delta-stretching model)
 };
 
+struct YamlRays
+{
+    YamlRays();
+    std::vector<double> a;
+    std::vector<double> psi;
+    std::vector<double> omega;
+    std::vector<double> k;
+    std::vector<double> phase;
+};
+
+struct YamlSpectrumFromRays
+{
+    YamlSpectrumFromRays();
+    std::string model;                      //!< Wave model (eg. airy)
+    std::string model_yaml;                 //!< Model data in YAML format
+    YamlRays rays;                          //!< List of rays
+    double depth;                           //!< Water depth (in meters): 0 for infinite depth
+    YamlStretching stretching;              //!< Stretching model for orbital wave velocities (delta-stretching model)
+};
+
 struct YamlWaveModel
 {
     YamlWaveModel();
     YamlDiscretization discretization; //!< Spectral discretization parameters
-    std::vector<YamlSpectrum> spectra;  //!< Wave spectra to generate
+    std::vector<YamlSpectrum> spectra; //!< Wave spectra to generate
+    std::vector<YamlSpectrumFromRays> spectra_from_rays;  //!< Wave spectra to generate
     YamlWaveOutput output;             //!< Defines what wave data is outputted during the simulation & how it is generated
+};
+
+struct YamlWaveFromRaysModel
+{
+    YamlWaveFromRaysModel();
+    std::vector<YamlSpectrumFromRays> spectra;  //!< Wave spectra to generate
+    YamlWaveOutput output;                      //!< Defines what wave data is outputted during the simulation & how it is generated
 };
 
 struct YamlJonswap

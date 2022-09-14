@@ -14,6 +14,8 @@
 #include "SurfaceElevationFromGRPC.hpp"
 #include "InvalidInputException.hpp"
 #include "YamlGRPC.hpp"
+#include <algorithm>
+
 
 boost::optional<SurfaceElevationInterfacePtr> SurfaceElevationBuilder<DefaultSurfaceElevation>::try_to_parse(const std::string& model, const std::string& yaml) const
 {
@@ -46,6 +48,16 @@ boost::optional<WaveModelPtr> WaveModelBuilder<Airy>::try_to_parse(const std::st
         {
             ret.reset(WaveModelPtr(new Airy(spectrum,0.0)));
         }
+    }
+    return ret;
+}
+
+boost::optional<WaveModelPtr> WaveModelBuilder<Airy>::try_to_parse(const std::string& model, const FlatDiscreteDirectionalWaveSpectrum& spectrum, const std::string&) const
+{
+    boost::optional<WaveModelPtr> ret;
+    if (model == "airy")
+    {
+        ret.reset(WaveModelPtr(new Airy(spectrum)));
     }
     return ret;
 }
@@ -113,6 +125,50 @@ WaveModelPtr SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse_wave_mode
     return WaveModelPtr();
 }
 
+FlatDiscreteDirectionalWaveSpectrum SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse_flat_spectrum(const YamlSpectrumFromRays& spectrum) const
+{
+    FlatDiscreteDirectionalWaveSpectrum f;
+    std::copy(spectrum.rays.a.begin(), spectrum.rays.a.end(), std::back_inserter(f.a));
+    std::copy(spectrum.rays.psi.begin(), spectrum.rays.psi.end(), std::back_inserter(f.psi));
+    std::copy(spectrum.rays.omega.begin(), spectrum.rays.omega.end(), std::back_inserter(f.omega));
+    std::copy(spectrum.rays.k.begin(), spectrum.rays.k.end(), std::back_inserter(f.k));
+    std::copy(spectrum.rays.phase.begin(), spectrum.rays.phase.end(), std::back_inserter(f.phase));
+    for (const auto& psi: spectrum.rays.psi)
+    {
+        f.cos_psi.push_back(cos(psi));
+        f.sin_psi.push_back(sin(psi));
+    }
+    const Stretching stretching(spectrum.stretching);
+    if (spectrum.depth==0.0)
+    {
+        // Infinite depth
+        f.pdyn_factor = [stretching](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,eta,stretching);};
+        f.pdyn_factor_sh = [stretching](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,eta,stretching);};
+    }
+    else
+    {
+        // Finite depth
+        const double h = spectrum.depth;
+        f.pdyn_factor = [h,stretching](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,h,eta,stretching);};
+        f.pdyn_factor_sh = [h,stretching](const double k, const double z, const double eta){return dynamic_pressure_factor_sh(k,z,h,eta,stretching);};
+    }
+    return f;
+}
+
+WaveModelPtr SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse_wave_model(const YamlSpectrumFromRays& spectrum) const
+{
+    const FlatDiscreteDirectionalWaveSpectrum flat_spectrum = parse_flat_spectrum(spectrum);
+    for (auto that_parser = wave_parsers->begin() ; that_parser != wave_parsers->end() ; ++that_parser)
+    {
+        boost::optional<WaveModelPtr> w = (*that_parser)->try_to_parse(spectrum.model, flat_spectrum, spectrum.model_yaml);
+        if (w) return w.get();
+    }
+    THROW(__PRETTY_FUNCTION__,
+          InvalidInputException,
+          "The wave model specified in the YAML file is not understood by the simulator ('" << spectrum.model << "'): either it is misspelt or this simulator version is outdated.");
+    return WaveModelPtr();
+}
+
 boost::optional<SurfaceElevationInterfacePtr> SurfaceElevationBuilder<SurfaceElevationFromWaves>::try_to_parse(const std::string& model, const std::string& yaml) const
 {
     boost::optional<SurfaceElevationInterfacePtr> ret;
@@ -122,7 +178,8 @@ boost::optional<SurfaceElevationInterfacePtr> SurfaceElevationBuilder<SurfaceEle
         const auto output_mesh = make_wave_mesh(input.output);
         std::vector<WaveModelPtr> models;
         for (const auto& spectrum: input.spectra) models.push_back(parse_wave_model(input.discretization, spectrum));
-        ret.reset(SurfaceElevationInterfacePtr(new SurfaceElevationFromWaves(models,get_wave_mesh_size(input.output),output_mesh)));
+        for (const auto& spectrum: input.spectra_from_rays) models.push_back(parse_wave_model(spectrum));
+        ret.reset(SurfaceElevationInterfacePtr(new SurfaceElevationFromWaves(models,get_wave_mesh_size(input.output), output_mesh)));
     }
     return ret;
 }

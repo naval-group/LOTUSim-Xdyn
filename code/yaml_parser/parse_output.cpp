@@ -5,11 +5,11 @@
  *      Author: cady
  */
 
-#include <boost/algorithm/string/predicate.hpp>
-#include "yaml.h"
-#include "InvalidInputException.hpp"
-#include "parse_address.hpp"
 #include "parse_output.hpp"
+#include "parse_address.hpp"
+#include "InvalidInputException.hpp"
+#include "yaml.h"
+#include <boost/algorithm/string/predicate.hpp>
 
 void operator >> (const YAML::Node& node, YamlOutput& f);
 void operator >> (const YAML::Node& node, YamlOutput& f)

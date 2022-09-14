@@ -1215,7 +1215,7 @@ std::string test_data::waves_for_parser_validation_only()
        << "  - model: airy\n"
        << "    seed of the random data generator: 0\n"
        << "    stretching:\n"
-       << "       delta: 123\n"
+       << "       delta: 0.5\n"
        << "       h: {unit: m, value: 100}\n"
        << "    depth: {value: 1.7, unit: km}\n"
        << "    directional spreading:\n"
@@ -1230,7 +1230,7 @@ std::string test_data::waves_for_parser_validation_only()
        << "    depth: {value: 12, unit: m}\n"
        << "    seed of the random data generator: 1872\n"
        << "    stretching:\n"
-       << "         delta: 456\n"
+       << "         delta: 0.6\n"
        << "         h: {unit: m, value: 101}\n"
        << "    directional spreading:\n"
        << "       type: cos2s\n"
@@ -1250,6 +1250,135 @@ std::string test_data::waves_for_parser_validation_only()
        << "       ymax: {value: 3, unit: km}\n"
        << "       ny: 20\n";
     return ss.str();
+}
+
+std::string test_data::waves_from_an_external_list_of_rays_for_parser_validation_only()
+{
+    std::stringstream ss;
+    ss << "spectra from a list of rays:\n"
+       << "  - model: airy\n"
+       << "    stretching:\n"
+       << "       delta: 0.5\n"
+       << "       h: {unit: m, value: 100}\n"
+       << "    depth: {value: 1.7, unit: km}\n"
+       << "    rays from file: rays.csv\n"
+       << "  - model: airy\n"
+       << "    rays:\n"
+       << "      # Two rays with T=10s and T=12s\n"
+       << "      a: {values: [0.1, 0.5], unit: m}\n"
+       << "      psi: {values: [180.0, 180.0], unit: deg}\n"
+       << "      omega: {values: [0.523598, 0.628318], unit: rad/s}\n"
+       << "      k: {values: [2.689467, 3.872832], unit: 1/m}\n"
+       << "      phase: {values: [110, 130], unit: deg}\n"
+       << "    depth: {value: 1000, unit: m}\n"
+       << "    stretching:\n"
+       << "       delta: 0.6\n"
+       << "       h: {unit: m, value: 101}\n"
+       << "output:\n"
+       << "    frame of reference: NED\n"
+       << "    mesh:\n"
+       << "       xmin: {value: -10, unit: m}\n"
+       << "       xmax: {value: 1, unit: km}\n"
+       << "       nx: 10\n"
+       << "       ymin: {value: -20, unit: m}\n"
+       << "       ymax: {value: 3, unit: km}\n"
+       << "       ny: 20\n";
+    return ss.str();
+}
+
+std::string test_data::waves_from_an_external_list_of_rays_for_parser_validation_only_csv()
+{
+    std::stringstream ss;
+    ss << "a,psi,omega,k,phase\n";
+    ss << "0.1,3.1415926535897931,0.628318,3.872832,0.8726646259971648\n";
+    ss << "0.5,3.1415926535897931,0.785398,6.051301,1.5707963267948966\n";
+    return ss.str();
+}
+
+std::string test_data::waves_from_a_list_of_rays_for_parser_validation_only()
+{
+    std::stringstream ss;
+    ss << "spectra from a list of rays:\n"
+       << "  - model: airy\n"
+       << "    stretching:\n"
+       << "       delta: 0.5\n"
+       << "       h: {unit: m, value: 100}\n"
+       << "    depth: {value: 1.7, unit: km}\n"
+       << "    rays:\n"
+       << "      # Two rays with T=8s and T=10s\n"
+       << "      a: {values: [0.1, 0.5], unit: m}\n"
+       << "      psi: {values: [180.0, 180.0], unit: deg}\n"
+       << "      omega: {values: [0.628318, 0.785398], unit: rad/s}\n"
+       << "      k: {values: [3.872832, 6.051301], unit: 1/m}\n"
+       << "      phase: {values: [50, 90], unit: deg}\n"
+       << "  - model: airy\n"
+       << "    rays:\n"
+       << "      # Two rays with T=10s and T=12s\n"
+       << "      a: {values: [0.1, 0.5], unit: m}\n"
+       << "      psi: {values: [180.0, 180.0], unit: deg}\n"
+       << "      omega: {values: [0.523598, 0.628318], unit: rad/s}\n"
+       << "      k: {values: [2.689467, 3.872832], unit: 1/m}\n"
+       << "      phase: {values: [110, 130], unit: deg}\n"
+       << "    depth: {value: 1000, unit: m}\n"
+       << "    stretching:\n"
+       << "       delta: 0.6\n"
+       << "       h: {unit: m, value: 101}\n"
+       << "output:\n"
+       << "    frame of reference: NED\n"
+       << "    mesh:\n"
+       << "       xmin: {value: -10, unit: m}\n"
+       << "       xmax: {value: 1, unit: km}\n"
+       << "       nx: 10\n"
+       << "       ymin: {value: -20, unit: m}\n"
+       << "       ymax: {value: 3, unit: km}\n"
+       << "       ny: 20\n";
+    return ss.str();
+}
+
+std::string test_data::waves_from_a_list_of_rays()
+{
+    return rotation_convention()
+       + "\n"
+       + "environmental constants:\n"
+       + "    g: {value: 9.81, unit: m/s^2}\n"
+       + "    rho: {value: 1026, unit: kg/m^3}\n"
+       + "    nu: {value: 1.18e-6, unit: m^2/s}\n"
+       + "environment models:\n"
+       + "  - model: waves\n"
+       + "    spectra from a list of rays:\n"
+       + "      - model: airy\n"
+       + "        stretching:\n"
+       + "           delta: 0.5\n"
+       + "           h: {unit: m, value: 100}\n"
+       + "        depth: {value: 1.7, unit: km}\n"
+       + "        rays:\n"
+       + "          # Two rays with T=8s and T=10s\n"
+       + "          a: {values: [0.1, 0.5], unit: m}\n"
+       + "          psi: {values: [180.0, 180.0], unit: deg}\n"
+       + "          omega: {values: [0.628318, 0.785398], unit: rad/s}\n"
+       + "          k: {values: [3.872832, 6.051301], unit: 1/m}\n"
+       + "          phase: {values: [50, 90], unit: deg}\n"
+       + "      - model: airy\n"
+       + "        rays:\n"
+       + "          # Two rays with T=10s and T=12s\n"
+       + "          a: {values: [0.1, 0.5], unit: m}\n"
+       + "          psi: {values: [180.0, 180.0], unit: deg}\n"
+       + "          omega: {values: [0.523598, 0.628318], unit: rad/s}\n"
+       + "          k: {values: [2.689467, 3.872832], unit: 1/m}\n"
+       + "          phase: {values: [110, 130], unit: deg}\n"
+       + "        depth: {value: 1000, unit: m}\n"
+       + "        stretching:\n"
+       + "           delta: 0.6\n"
+       + "           h: {unit: m, value: 101}\n"
+       + "    output:\n"
+       + "        frame of reference: NED\n"
+       + "        mesh:\n"
+       + "           xmin: {value: -10, unit: m}\n"
+       + "           xmax: {value: 1, unit: km}\n"
+       + "           nx: 10\n"
+       + "           ymin: {value: -20, unit: m}\n"
+       + "           ymax: {value: 3, unit: km}\n"
+       + "           ny: 20\n";
 }
 
 std::string test_data::cube_in_waves()

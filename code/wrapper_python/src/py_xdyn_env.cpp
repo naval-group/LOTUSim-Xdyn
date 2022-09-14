@@ -70,10 +70,29 @@ void py_add_module_xdyn_env_wave_io(py::module& m)
         .def_readwrite("stretching", &YamlSpectrum::stretching, "Stretching model for orbital wave velocities (delta-stretching model)")
         ;
 
+    py::class_<YamlRays>(m, "YamlRays")
+        .def(py::init<>())
+        .def_readwrite("a", &YamlRays::a, "Amplitudes of each ray (in m).")
+        .def_readwrite("psi", &YamlRays::psi, "Directions between 0 & 2pi of each ray (in rad).")
+        .def_readwrite("omega", &YamlRays::omega, "Angular frequencies the spectrum was discretized at for each ray (in rad/s).")
+        .def_readwrite("k", &YamlRays::k, "Discretized wave numbers (should therefore be the same size as omega) for each ray (in rad/m).")
+        .def_readwrite("phase", &YamlRays::phase, "Random phases for each ray (in rad).")
+        ;
+
+    py::class_<YamlSpectrumFromRays>(m, "YamlSpectrumFromRays")
+        .def(py::init<>())
+        .def_readwrite("model", &YamlSpectrumFromRays::model, "Wave model (eg. airy)")
+        .def_readwrite("model_yaml", &YamlSpectrumFromRays::model_yaml, "Model data in YAML format")
+        .def_readwrite("rays", &YamlSpectrumFromRays::rays, "List of rays")
+        .def_readwrite("depth", &YamlSpectrumFromRays::depth, "Water depth (in meters): 0 for infinite depth")
+        .def_readwrite("stretching", &YamlSpectrumFromRays::stretching, "Stretching model for orbital wave velocities (delta-stretching model)")
+        ;
+
     py::class_<YamlWaveModel>(m, "YamlWaveModel")
         .def(py::init<>())
         .def_readwrite("discretization", &YamlWaveModel::discretization, "Spectral discretization parameters")
         .def_readwrite("spectra", &YamlWaveModel::spectra, "Wave spectra to generate")
+        .def_readwrite("spectra_from_rays", &YamlWaveModel::spectra_from_rays, "Wave spectra as a list of rays")
         .def_readwrite("output", &YamlWaveModel::output, "Defines what wave data is outputted during the simulation & how it is generated")
         ;
 
