@@ -16,7 +16,7 @@
 #include "Cos2sDirectionalSpreading.hpp"
 #include "environment_models/DiracSpectralDensity.hpp"
 #include "environment_models/DiracDirectionalSpreading.hpp"
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 #include "environment_models/Stretching.hpp"
 #include "external_data_structures/YamlWaveModelInput.hpp"
 #include <ssc/macros.hpp>

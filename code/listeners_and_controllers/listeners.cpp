@@ -9,7 +9,7 @@
 
 #include "check_input_yaml.hpp"
 #include "InterpolationModule.hpp"
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 #include "listeners.hpp"
 #include "PIDController.hpp"
 #include "GrpcController.hpp"

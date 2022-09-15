@@ -8,7 +8,7 @@
 #include "xdyn/core/Sim.hpp"
 #include "SimTest.hpp"
 #include "yaml_data.hpp"
-#include "exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 #include "yaml_parser/SimulatorYamlParser.hpp"
 #include "stl_data.hpp"
 #include "simulator_api.hpp"

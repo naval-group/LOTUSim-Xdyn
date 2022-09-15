@@ -1,8 +1,8 @@
 #include "yaml.h"
 #include "xdyn/core/BodyStates.hpp"
 #include "hdb_interpolators/History.hpp"
-#include "exceptions/InvalidInputException.hpp"
-#include "exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 #include "xdyn/core/StatesFilter.hpp"
 #include "external_data_structures/YamlBody.hpp"
 

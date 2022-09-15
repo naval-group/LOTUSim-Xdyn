@@ -7,7 +7,7 @@
 
 #include "environment_models/DiracSpectralDensity.hpp"
 
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 
 #include <cmath>
 #include <sstream>

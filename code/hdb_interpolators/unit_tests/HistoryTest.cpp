@@ -10,7 +10,7 @@
 
 #include "hdb_interpolators/History.hpp"
 #include "HistoryTest.hpp"
-#include "exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 
 HistoryTest::HistoryTest() : a(ssc::random_data_generator::DataGenerator(5422))
 {

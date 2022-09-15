@@ -7,7 +7,7 @@
 
 #include "environment_models/Stretching.hpp"
 #include "external_data_structures/YamlWaveModelInput.hpp"
-#include "exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 #include <ssc/macros.hpp>
 #include <cmath> // For isnan
 

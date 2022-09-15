@@ -1,6 +1,6 @@
 #include "h5_tools.hpp"
 
-#include "exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 #include "h5_tools.h"
 
 std::string H5_Tools::ensureStringStartsAndEndsWithAPattern(

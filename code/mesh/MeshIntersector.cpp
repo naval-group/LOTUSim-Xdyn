@@ -1,7 +1,7 @@
 #include "mesh/MeshIntersector.hpp"
 #include "ClosingFacetComputer.hpp"
 #include "mesh/MeshBuilder.hpp"
-#include "exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 #include "mesh_manipulations.hpp"
 #include "2DMeshDisplay.hpp"
 #include <ssc/macros/SerializeMapsSetsAndVectors.hpp>

@@ -1,8 +1,8 @@
 #include <cmath>
 #include <algorithm>
 
-#include "exceptions/InternalErrorException.hpp"
-#include "MeshException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/MeshException.hpp"
 #include "mesh/Mesh.hpp"
 #include "MeshBuilderTest.hpp"
 #include "TriMeshTestData.hpp"

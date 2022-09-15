@@ -11,7 +11,7 @@
 
 #include "Cos2sDirectionalSpreadingTest.hpp"
 #include "Cos2sDirectionalSpreading.hpp"
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 
 #define NB_TRIALS 10
 

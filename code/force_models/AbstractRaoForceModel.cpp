@@ -11,8 +11,8 @@
 #include "hdb_interpolators/HDBParser.hpp"
 #include "HydroDBParser.hpp"
 #include "hdb_interpolators/PrecalParser.hpp"
-#include "exceptions/InvalidInputException.hpp"
-#include "exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 #include "yaml.h"
 #include "yaml_parser/external_data_structures_parsers.hpp"
 

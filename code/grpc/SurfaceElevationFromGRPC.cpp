@@ -9,8 +9,8 @@
 #include "wave_grpc.grpc.pb.h"
 #include "wave_types.grpc.pb.h"
 
-#include "exceptions/InternalErrorException.hpp"
-#include "GRPCError.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/GRPCError.hpp"
 #include "external_data_structures/YamlGRPC.hpp"
 #include "environment_models/discretize.hpp"
 

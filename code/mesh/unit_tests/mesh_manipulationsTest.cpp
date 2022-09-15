@@ -9,7 +9,7 @@
 #include "external_data_structures/GeometricTypes3d.hpp"
 #include "mesh_manipulations.hpp"
 #include "TriMeshTestData.hpp"
-#include "MeshException.hpp"
+#include "xdyn/exceptions/MeshException.hpp"
 #include "mesh/MeshBuilder.hpp"
 
 #include <ssc/macros.hpp>

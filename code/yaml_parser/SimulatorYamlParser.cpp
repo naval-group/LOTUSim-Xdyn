@@ -7,7 +7,7 @@
 
 #include "yaml_parser/SimulatorYamlParser.hpp"
 #include "yaml.h"
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 #include <ssc/yaml_parser.hpp>
 #include "yaml_parser/external_data_structures_parsers.hpp"
 #include "parse_controllers.hpp"

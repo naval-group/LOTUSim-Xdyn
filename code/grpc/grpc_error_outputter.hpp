@@ -3,7 +3,7 @@
 
 #include <string>
 #include <grpcpp/grpcpp.h>
-#include "GRPCError.hpp"
+#include "xdyn/exceptions/GRPCError.hpp"
 
 template <typename ServiceType> std::string get_type_of_service();
 

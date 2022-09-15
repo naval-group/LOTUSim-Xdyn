@@ -8,7 +8,7 @@
 
 #include <algorithm>
 #include "xdyn/core/Observer.hpp"
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/core/Sim.hpp"
 #include "xdyn/core/SurfaceElevationGrid.hpp"
 

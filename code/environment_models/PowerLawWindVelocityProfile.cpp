@@ -9,7 +9,7 @@
 #include "yaml.h"
 #include <ssc/yaml_parser.hpp>
 
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 
 #include "PowerLawWindVelocityProfile.hpp"
 

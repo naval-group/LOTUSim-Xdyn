@@ -15,7 +15,7 @@
 #include "yaml-cpp/exceptions.h"
 
 #include "external_data_structures/YamlModel.hpp"
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 
 class WindModel;
 typedef std::shared_ptr<WindModel> WindModelPtr;

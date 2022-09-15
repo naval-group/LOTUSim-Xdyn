@@ -8,8 +8,8 @@
 #include "environment_models/discretize.hpp"
 #include "SumOfWaveSpectralDensities.hpp"
 #include "WaveNumberFunctor.hpp"
-#include "exceptions/InvalidInputException.hpp"
-#include "exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 #include <cmath> // For isnan
 
 #include <limits>

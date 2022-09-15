@@ -7,7 +7,7 @@
 
 #include "xdyn/core/SimulatorBuilder.hpp"
 
-#include "exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 #include "xdyn/core/update_kinematics.hpp"
 #include "external_file_formats/stl_reader.hpp"
 #include "xdyn/core/BodyBuilder.hpp"

@@ -12,7 +12,7 @@
 #include "maneuvering_DataSource_builder.hpp"
 #include "yaml.h"
 #include "xdyn/core/yaml2eigen.hpp"
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 
 ManeuveringForceModel::Yaml::Yaml():
     name(),

@@ -12,7 +12,7 @@
 #include "discretize.hpp"
 #include "environment_models/Stretching.hpp"
 #include "SurfaceElevationFromGRPC.hpp"
-#include "InvalidInputException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 #include "YamlGRPC.hpp"
 #include <algorithm>
 

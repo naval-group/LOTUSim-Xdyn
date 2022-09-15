@@ -6,8 +6,8 @@
  */
 
 #include "xdyn/core/BodyBuilder.hpp"
-#include "exceptions/InvalidInputException.hpp"
-#include "exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 #include "xdyn/core/BodyWithSurfaceForces.hpp"
 #include "xdyn/core/BodyWithoutSurfaceForces.hpp"
 #include "hdb_interpolators/HDBParser.hpp"

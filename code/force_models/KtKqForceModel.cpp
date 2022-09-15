@@ -7,7 +7,7 @@
 #include <ssc/yaml_parser.hpp>
 #include <ssc/interpolation.hpp>
 #include "yaml_parser/external_data_structures_parsers.hpp"
-#include "exceptions/NumericalErrorException.hpp"
+#include "xdyn/exceptions/NumericalErrorException.hpp"
 #include "KtKqForceModel.hpp"
 #include "yaml.h"
 

@@ -7,7 +7,7 @@
 
 #include "xdyn/core/yaml2eigen.hpp"
 
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 #include "external_data_structures/YamlAngle.hpp"
 #include "external_data_structures/YamlCoordinates.hpp"
 #include "external_data_structures/YamlPoint.hpp"

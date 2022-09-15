@@ -14,7 +14,7 @@
 #include "ExactHydrostaticForceModel.hpp"
 #include "FastHydrostaticForceModel.hpp"
 #include "xdyn/core/Observer.hpp"
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/core/BodyWithSurfaceForces.hpp"
 
 std::string GMForceModel::model_name(){return "GM";}

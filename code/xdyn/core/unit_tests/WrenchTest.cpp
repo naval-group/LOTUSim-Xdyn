@@ -6,7 +6,7 @@
 #include "external_data_structures/YamlPosition.hpp"
 #include "external_data_structures/YamlRotation.hpp"
 #include "xdyn/core/yaml2eigen.hpp"
-#include "exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 
 WrenchTest::WrenchTest(): a(ssc::random_data_generator::DataGenerator(267953))
 {

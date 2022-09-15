@@ -6,7 +6,7 @@
  */
 
 #include "Controller.hpp"
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 
 Controller::Controller(const double date_of_first_call_, const double dt, const std::string& name_)
 : ssc::solver::DiscreteSystem(date_of_first_call_, dt)

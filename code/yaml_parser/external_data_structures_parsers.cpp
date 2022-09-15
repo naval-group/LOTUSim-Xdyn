@@ -8,7 +8,7 @@
 #include "yaml_parser/external_data_structures_parsers.hpp"
 #include "yaml.h"
 #include "yaml-cpp/exceptions.h"
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 #include <ssc/yaml_parser.hpp>
 
 size_t try_to_parse_positive_integer(const YAML::Node& node, const std::string& key)

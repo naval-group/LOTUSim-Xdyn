@@ -7,7 +7,7 @@
 
 #include "GrpcController.hpp"
 #include "GrpcControllerTest.hpp"
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 #include "yaml_data.hpp"
 
 GrpcControllerTest::GrpcControllerTest () {}

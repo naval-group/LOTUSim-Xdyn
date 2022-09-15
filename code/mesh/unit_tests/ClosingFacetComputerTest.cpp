@@ -18,7 +18,7 @@
 #include "2DMeshDisplay.hpp"
 #include "ClosingFacetComputerTest.hpp"
 #include "ClosingFacetComputer.hpp"
-#include "exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 #include "TestMeshes.hpp"
 
 ClosingFacetComputerTest::ClosingFacetComputerTest() : a(ssc::random_data_generator::DataGenerator(21233))

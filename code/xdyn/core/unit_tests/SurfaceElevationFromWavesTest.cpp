@@ -15,7 +15,7 @@
 #include "external_data_structures/YamlWaveModelInput.hpp"
 #include "external_data_structures/YamlWaveModelInput.hpp"
 #include "environment_models/Stretching.hpp"
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 #include <ssc/kinematics.hpp>
 #define _USE_MATH_DEFINE
 #include <cmath>

@@ -8,7 +8,7 @@
 
 #include "yaml_parser/environment_parsers.hpp"
 #include "yaml_parser/external_data_structures_parsers.hpp"
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 #include "parse_output.hpp"
 #include "external_data_structures/YamlGRPC.hpp"
 #include "yaml.h"

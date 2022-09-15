@@ -7,7 +7,7 @@
 
 #include "xdyn/core/EnvironmentAndFrames.hpp"
 
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/core/SurfaceElevationInterface.hpp"
 #include "xdyn/core/Observer.hpp"
 

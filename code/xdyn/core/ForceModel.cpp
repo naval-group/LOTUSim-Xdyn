@@ -7,8 +7,8 @@
 
 #include "xdyn/core/ForceModel.hpp"
 
-#include "exceptions/InvalidInputException.hpp"
-#include "exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 #include "xdyn/core/Observer.hpp"
 #include "xdyn/core/yaml2eigen.hpp"
 

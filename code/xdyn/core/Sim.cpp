@@ -9,7 +9,7 @@
 #include "xdyn/core/Sim.hpp"
 #include "xdyn/core/Observer.hpp"
 #include "xdyn/core/update_kinematics.hpp"
-#include "exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 
 #include <ssc/kinematics.hpp>
 

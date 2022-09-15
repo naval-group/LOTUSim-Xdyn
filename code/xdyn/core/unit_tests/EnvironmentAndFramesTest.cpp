@@ -8,7 +8,7 @@
 #include "EnvironmentAndFramesTest.hpp"
 
 #include "xdyn/core/EnvironmentAndFrames.hpp"
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 
 EnvironmentAndFramesTest::EnvironmentAndFramesTest ()
 {}

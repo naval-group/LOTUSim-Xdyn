@@ -6,8 +6,8 @@
  */
 
 #include "environment_models/Airy.hpp"
-#include "exceptions/InternalErrorException.hpp"
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 
 #include <ssc/macros.hpp>
 #include <Eigen/Dense>

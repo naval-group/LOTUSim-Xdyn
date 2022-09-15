@@ -6,7 +6,7 @@
  */
 
 #include "xdyn/core/SurfaceElevationInterface.hpp"
-#include "exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 #include <ssc/exception_handling.hpp>
 #include <string>
 

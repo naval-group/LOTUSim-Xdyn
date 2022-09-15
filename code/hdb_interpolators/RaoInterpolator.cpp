@@ -1,5 +1,5 @@
 #include "RaoInterpolator.hpp"
-#include "exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI

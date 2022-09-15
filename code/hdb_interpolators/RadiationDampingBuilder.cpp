@@ -19,7 +19,7 @@ typedef TR1(shared_ptr)<ssc::interpolation::Interpolator> InterpolatorPtr;
 #define PI M_PI
 
 #include "hdb_interpolators/History.hpp"
-#include "exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 #include "RadiationDampingBuilder.hpp"
 
 RadiationDampingBuilder::RadiationDampingBuilder(const TypeOfQuadrature& type_of_quadrature_for_convolution_, //!< Gauss-Kronrod, rectangle, Simpson, trapezoidal, Burcher, Clenshaw-Curtis or Filon

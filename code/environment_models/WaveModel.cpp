@@ -6,7 +6,7 @@
  */
 
 #include "environment_models/WaveModel.hpp"
-#include "exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 #include "environment_models/discretize.hpp"
 #include <cmath> // For isnan
 #include <boost/random/mersenne_twister.hpp>

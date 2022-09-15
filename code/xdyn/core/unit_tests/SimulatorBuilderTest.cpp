@@ -7,7 +7,7 @@
 
 #include "SimulatorBuilderTest.hpp"
 #include "xdyn/core/SimulatorBuilder.hpp"
-#include "exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 #include "TriMeshTestData.hpp"
 #include "xdyn/core/unit_tests/generate_body_for_tests.hpp"
 #include "xdyn/core/DefaultSurfaceElevation.hpp"

@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "exceptions/NumericalErrorException.hpp"
+#include "xdyn/exceptions/NumericalErrorException.hpp"
 #include "KtKqForceModel.hpp"
 #include "KtKqForceModelTest.hpp"
 #include "yaml_data.hpp"

@@ -11,7 +11,7 @@
 #include <boost/filesystem.hpp> // For boost::filesystem::unique_path
 
 #include "xdyn/core/BlockedDOF.hpp"
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 #include "BlockedDOFTest.hpp"
 
 BlockedDOFTest::BlockedDOFTest() : a(ssc::random_data_generator::DataGenerator(854512))

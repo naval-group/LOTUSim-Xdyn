@@ -13,7 +13,7 @@
 #include "yaml_data.hpp"
 #include "WageningenControlledForceModel.hpp"
 #include "WageningenControlledForceModelTest.hpp"
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 
 #define EPS 1E-2
 #define NB_TRIALS 100

@@ -8,8 +8,8 @@
 #include "environment_models/WaveDirectionalSpreading.hpp"
 #include "environment_models/WaveSpectralDensity.hpp"
 #include "environment_models/Stretching.hpp"
-#include "exceptions/InternalErrorException.hpp"
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>

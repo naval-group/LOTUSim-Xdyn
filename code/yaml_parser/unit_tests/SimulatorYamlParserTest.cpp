@@ -12,7 +12,7 @@ using namespace testing; // So we can use 'ElementsAre' unqualified
 #include "SimulatorYamlParserTest.hpp"
 #include "yaml_data.hpp"
 #include "yaml_parser/SimulatorYamlParser.hpp"
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 #include "parse_controllers.hpp"
 #include "parse_time_series.hpp"
 #include "precal_test_data.hpp"

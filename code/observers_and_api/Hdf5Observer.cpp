@@ -9,7 +9,7 @@
 #include "demoPython.hpp"
 
 #include "Hdf5WaveObserver.hpp"
-#include "exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 #include "Hdf5WaveSpectrumObserver.hpp"
 
 Hdf5Addressing::Hdf5Addressing(

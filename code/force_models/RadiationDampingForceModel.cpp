@@ -12,8 +12,8 @@
 #include "hdb_interpolators/HDBParser.hpp"
 #include "hdb_interpolators/PrecalParser.hpp"
 #include "hdb_interpolators/History.hpp"
-#include "exceptions/InvalidInputException.hpp"
-#include "exceptions/InternalErrorException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 #include "RadiationDampingBuilder.hpp"
 #include "yaml_parser/external_data_structures_parsers.hpp"
 

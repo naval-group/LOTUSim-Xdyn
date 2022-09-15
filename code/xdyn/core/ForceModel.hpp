@@ -15,7 +15,7 @@
 #include <ssc/kinematics.hpp>
 
 #include "yaml-cpp/exceptions.h"
-#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 #include "external_data_structures/YamlBody.hpp"
 #include "xdyn/core/Wrench.hpp"
 
