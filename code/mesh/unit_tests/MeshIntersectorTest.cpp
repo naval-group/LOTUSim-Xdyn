@@ -12,7 +12,7 @@
 #include "stl_data.hpp"
 #include "stl_reader.hpp"
 #include "MeshIntersector.hpp"
-#include "generate_test_ship.hpp"
+#include "xdyn/binary_stl_data/generate_test_ship.hpp"
 
 #define EPS 1E-6
 

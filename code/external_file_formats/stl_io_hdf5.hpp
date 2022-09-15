@@ -2,7 +2,7 @@
 #define STL_IO_HDF5_CPP_
 
 #include "H5Cpp.h"
-#include "GeometricTypes3d.hpp"
+#include "external_data_structures/GeometricTypes3d.hpp"
 
 struct SVectorOfVectorOfPoints
 {

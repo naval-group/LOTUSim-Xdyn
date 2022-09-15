@@ -10,12 +10,7 @@ IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang") # Otherwise CLang generates fata
     SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Woverloaded-virtual -Weffc++ -Wwrite-strings -Wfatal-errors -Wno-deprecated -Wvariadic-macros")
 ENDIF()
 
-INCLUDE_DIRECTORIES(${exception_handling_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${test_macros_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${external_file_formats_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${external_data_structures_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${base91x_INCLUDE_DIRS})
 
-ADD_LIBRARY(${PROJECT_NAME}_static STATIC ${SRC})
-SET(${PROJECT_NAME}_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH "Path to ${PROJECT_NAME}'s include directory")
+ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})

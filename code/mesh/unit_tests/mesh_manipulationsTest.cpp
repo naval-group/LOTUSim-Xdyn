@@ -6,7 +6,7 @@
  */
 
 #include "mesh_manipulationsTest.hpp"
-#include "GeometricTypes3d.hpp"
+#include "external_data_structures/GeometricTypes3d.hpp"
 #include "mesh_manipulations.hpp"
 #include "TriMeshTestData.hpp"
 #include "MeshException.hpp"

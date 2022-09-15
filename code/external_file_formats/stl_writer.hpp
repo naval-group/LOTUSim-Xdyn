@@ -4,7 +4,7 @@
 #include <ostream>
 #include <string>
 
-#include "GeometricTypes3d.hpp"
+#include "external_data_structures/GeometricTypes3d.hpp"
 
 std::string write_stl(const VectorOfPoints& mesh);
 std::string write_stl(const VectorOfVectorOfPoints& mesh);

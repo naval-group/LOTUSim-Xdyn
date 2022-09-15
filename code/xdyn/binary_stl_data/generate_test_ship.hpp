@@ -7,7 +7,7 @@
 #ifndef GENERATE_TEST_SHIP_HPP_
 #define GENERATE_TEST_SHIP_HPP_
 
-#include "GeometricTypes3d.hpp"
+#include "external_data_structures/GeometricTypes3d.hpp"
 
 VectorOfVectorOfPoints test_ship();
 

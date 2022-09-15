@@ -15,7 +15,7 @@
 #include <ssc/solver/solve.hpp>
 #include <ssc/solver/steppers.hpp>
 #include "TriMeshTestData.hpp"
-#include "generate_test_ship.hpp"
+#include "xdyn/binary_stl_data/generate_test_ship.hpp"
 #include "hdb_data.hpp"
 #include "parse_output.hpp"
 #include "ListOfObservers.hpp"

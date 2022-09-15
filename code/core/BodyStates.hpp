@@ -16,7 +16,7 @@
 #include <Eigen/Dense>
 
 #include <ssc/kinematics.hpp>
-#include "GeometricTypes3d.hpp"
+#include "external_data_structures/GeometricTypes3d.hpp"
 #include "MeshIntersector.hpp"
 #include "StateMacros.hpp"
 #include "History.hpp"

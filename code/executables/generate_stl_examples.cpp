@@ -7,7 +7,7 @@
 
 
 #include "file_writer.hpp"
-#include "generate_test_ship.hpp"
+#include "xdyn/binary_stl_data/generate_test_ship.hpp"
 #include "hdb_data.hpp"
 #include "stl_data.hpp"
 #include "stl_writer.hpp"

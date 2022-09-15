@@ -104,7 +104,6 @@ ADD_EXECUTABLE(test_hs
 
 TARGET_LINK_LIBRARIES(test_hs
     x-dyn
-    binary_stl_data_static
     ${GRPC_GRPCPP_UNSECURE}
     ${PROTOBUF_LIBPROTOBUF}
     yaml-cpp
@@ -158,7 +157,6 @@ ADD_EXECUTABLE(generate_stl_examples
     $<TARGET_OBJECTS:test_data_generator>
     )
 TARGET_LINK_LIBRARIES(generate_stl_examples
-    binary_stl_data_static
     x-dyn
     ${GRPC_GRPCPP_UNSECURE}
     ${PROTOBUF_LIBPROTOBUF}

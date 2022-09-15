@@ -4,7 +4,7 @@
 #include <string>
 #include <istream>
 #include <ostream>
-#include "GeometricTypes3d.hpp"
+#include "external_data_structures/GeometricTypes3d.hpp"
 
 /**
  * \brief reads an STL (stereolithography) file.

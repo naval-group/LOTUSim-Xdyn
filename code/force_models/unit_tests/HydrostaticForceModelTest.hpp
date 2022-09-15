@@ -11,7 +11,7 @@
 #include "gtest/gtest.h"
 #include <ssc/random_data_generator.hpp>
 #include "EnvironmentAndFrames.hpp"
-#include "GeometricTypes3d.hpp"
+#include "external_data_structures/GeometricTypes3d.hpp"
 
 class HydrostaticForceModelTest : public ::testing::Test
 {

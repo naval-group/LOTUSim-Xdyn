@@ -8,7 +8,7 @@
 #ifndef SURFACELEVATIONINTERFACE_HPP_
 #define SURFACELEVATIONINTERFACE_HPP_
 
-#include "GeometricTypes3d.hpp"
+#include "external_data_structures/GeometricTypes3d.hpp"
 #include "SurfaceElevationGrid.hpp"
 #include "Observer.hpp"
 #include <ssc/kinematics.hpp>

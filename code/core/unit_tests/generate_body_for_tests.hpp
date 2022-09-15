@@ -11,7 +11,7 @@
 #include <string>
 
 #include "Body.hpp"
-#include "GeometricTypes3d.hpp"
+#include "external_data_structures/GeometricTypes3d.hpp"
 
 BodyPtr get_body(const std::string& names);
 BodyPtr get_body(const std::string& name, const VectorOfVectorOfPoints& points);

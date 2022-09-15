@@ -10,7 +10,7 @@
 
 #include "EnvironmentAndFrames.hpp"
 #include "ForceModel.hpp"
-#include "GeometricTypes3d.hpp"
+#include "external_data_structures/GeometricTypes3d.hpp"
 #include "MeshIntersector.hpp"
 
 

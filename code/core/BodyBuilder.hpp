@@ -10,7 +10,7 @@
 
 #include "Body.hpp"
 #include "YamlRotation.hpp"
-#include "GeometricTypes3d.hpp"
+#include "external_data_structures/GeometricTypes3d.hpp"
 
 struct YamlDynamics6x6Matrix;
 struct YamlAngle;

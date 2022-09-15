@@ -8,7 +8,7 @@
 #ifndef CENTEROFMASS_HPP_
 #define CENTEROFMASS_HPP_
 
-#include "GeometricTypes3d.hpp"
+#include "external_data_structures/GeometricTypes3d.hpp"
 
 struct CenterOfMass
 {

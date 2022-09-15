@@ -2,7 +2,7 @@
 #define MESH_HPP
 
 #include <vector>
-#include "GeometricTypes3d.hpp"
+#include "external_data_structures/GeometricTypes3d.hpp"
 
 #include <ssc/macros.hpp>
 #include TR1INC(memory)

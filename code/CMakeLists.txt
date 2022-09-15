@@ -64,14 +64,15 @@ SET(ssc_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/ssc" CACHE PATH "Path to SSC i
 SET(SSC_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/ssc" CACHE PATH "Path to SSC include directory")
 SET(F2C_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ssc/ssc/f2c" CACHE PATH "Path to f2c include directory")
 
-ADD_SUBDIRECTORY(get_git_sha)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 ADD_SUBDIRECTORY(base91x)
+ADD_SUBDIRECTORY(xdyn/binary_stl_data)
+ADD_SUBDIRECTORY(get_git_sha)
 ADD_SUBDIRECTORY(exceptions)
 ADD_SUBDIRECTORY(external_data_structures)
 ADD_SUBDIRECTORY(test_data_generator)
 ADD_SUBDIRECTORY(interface_hdf5)
 ADD_SUBDIRECTORY(external_file_formats)
-ADD_SUBDIRECTORY(binary_stl_data)
 ADD_SUBDIRECTORY(mesh)
 ADD_SUBDIRECTORY(environment_models)
 ADD_SUBDIRECTORY(yaml_parser)
@@ -126,6 +127,7 @@ ADD_LIBRARY(${PROJECT_NAME} ${STATICORSHARED}
     $<TARGET_OBJECTS:json_object>
     $<TARGET_OBJECTS:solver_object>
 
+        $<TARGET_OBJECTS:binary_stl_data>
         $<TARGET_OBJECTS:core>
         $<TARGET_OBJECTS:get_git_sha>
         $<TARGET_OBJECTS:observers_and_api>
@@ -199,7 +201,6 @@ ADD_EXECUTABLE(${TEST_EXE}
 TARGET_LINK_LIBRARIES(${TEST_EXE}
         gtest      # static
         gmock_main # static
-        binary_stl_data_static
         ${PROJECT_NAME}
         ${GRPC_GRPCPP_UNSECURE}
         ${PROTOBUF_LIBPROTOBUF}

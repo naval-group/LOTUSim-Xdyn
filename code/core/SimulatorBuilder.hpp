@@ -21,7 +21,7 @@
 #include "YamlSimulatorInput.hpp"
 
 #include "EnvironmentAndFrames.hpp"
-#include "GeometricTypes3d.hpp"
+#include "external_data_structures/GeometricTypes3d.hpp"
 #include "WindModel.hpp"
 
 #include <ssc/data_source.hpp>

@@ -11,7 +11,7 @@
 #include "gtest/gtest.h"
 #include <ssc/random_data_generator/DataGenerator.hpp>
 #include "EnvironmentAndFrames.hpp"
-#include "GeometricTypes3d.hpp"
+#include "external_data_structures/GeometricTypes3d.hpp"
 #include <ssc/macros.hpp>
 #include "WaveModel.hpp"
 #include TR1INC(memory)

@@ -6,7 +6,7 @@
  */
 
 #include <ssc/random_data_generator.hpp>
-#include "GeometricTypes3d.hpp"
+#include "external_data_structures/GeometricTypes3d.hpp"
 
 namespace ssc
 {
@@ -19,5 +19,3 @@ namespace ssc
         }
     }
 }
-
-

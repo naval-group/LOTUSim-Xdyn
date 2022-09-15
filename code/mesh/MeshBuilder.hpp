@@ -1,7 +1,7 @@
 #ifndef MESHBUILDER_HPP
 #define MESHBUILDER_HPP
 
-#include "GeometricTypes3d.hpp"
+#include "external_data_structures/GeometricTypes3d.hpp"
 #include "MeshNumeric.hpp"
 #include "Mesh.hpp"
 #include <map>

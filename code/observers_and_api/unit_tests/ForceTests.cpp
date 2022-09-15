@@ -10,7 +10,7 @@
 
 #include "ForceTester.hpp"
 #include "ForceTests.hpp"
-#include "generate_test_ship.hpp"
+#include "xdyn/binary_stl_data/generate_test_ship.hpp"
 #include "GravityForceModel.hpp"
 #include "ExactHydrostaticForceModel.hpp"
 #include "FastHydrostaticForceModel.hpp"
