@@ -5,7 +5,7 @@
  *      Author: mcharlou2016
  */
 
-#include "WindModel.hpp"
+#include "environment_models/WindModel.hpp"
 
 WindModel::WindModel()
 {
@@ -14,4 +14,3 @@ WindModel::WindModel()
 WindModel::~WindModel()
 {
 }
-

@@ -11,13 +11,13 @@
 #include <fstream>
 #include <ssc/integrate.hpp>
 
-#include "BodyStates.hpp"
+#include "xdyn/core/BodyStates.hpp"
 #include "hdb_data.hpp"
 #include "hdb_test.hpp"
 #include "RadiationDampingBuilder.hpp"
 #include "RadiationDampingForceModel.hpp"
 #include "RadiationDampingForceModelTest.hpp"
-#include "EnvironmentAndFrames.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
 #include "yaml_data.hpp"
 #include "precal_test_data.hpp"
 

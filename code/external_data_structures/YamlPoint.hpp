@@ -10,7 +10,7 @@
 
 #include <string>
 
-#include "YamlCoordinates.hpp"
+#include "external_data_structures/YamlCoordinates.hpp"
 
 struct YamlPoint : public YamlCoordinates
 {

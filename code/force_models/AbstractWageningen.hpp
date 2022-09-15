@@ -8,7 +8,7 @@
 #ifndef ABSTRACTWAGENINGEN_HPP_
 #define ABSTRACTWAGENINGEN_HPP_
 
-#include "ForceModel.hpp"
+#include "xdyn/core/ForceModel.hpp"
 
 /** \details This class was created to
  *  \addtogroup module

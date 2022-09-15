@@ -18,8 +18,8 @@ extern "C"
     #include "fmiModelTypes.h"
 }
 
-#include "Sim.hpp"
-#include "YamlSimulatorInput.hpp"
+#include "xdyn/core/Sim.hpp"
+#include "external_data_structures/YamlSimulatorInput.hpp"
 
 namespace fmi
 {

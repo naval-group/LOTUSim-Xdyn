@@ -8,7 +8,7 @@
 #ifndef PARSE_TIME_SERIES_HPP_
 #define PARSE_TIME_SERIES_HPP_
 
-#include "YamlTimeSeries.hpp"
+#include "external_data_structures/YamlTimeSeries.hpp"
 #include "yaml.h"
 
 /**  \brief Parses the commands for use by controlled forces.

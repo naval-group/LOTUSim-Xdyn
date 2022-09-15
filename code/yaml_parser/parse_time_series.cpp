@@ -6,7 +6,7 @@
  */
 
 #include "parse_time_series.hpp"
-#include "InvalidInputException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 
 #include <ssc/yaml_parser.hpp>
 

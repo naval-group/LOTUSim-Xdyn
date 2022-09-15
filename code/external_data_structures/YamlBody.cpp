@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "YamlBody.hpp"
+#include "external_data_structures/YamlBody.hpp"
 
 YamlBody::YamlBody() :
     name(),

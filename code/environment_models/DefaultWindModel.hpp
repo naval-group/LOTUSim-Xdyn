@@ -10,7 +10,7 @@
 
 #include <string>
 
-#include "WindModel.hpp"
+#include "environment_models/WindModel.hpp"
 
 class DefaultWindModel : public WindModel
 {

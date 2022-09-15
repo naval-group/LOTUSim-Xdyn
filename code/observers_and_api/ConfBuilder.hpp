@@ -8,7 +8,7 @@
 #ifndef OBSERVERS_AND_API_INC_CONFBUILDER_HPP_
 #define OBSERVERS_AND_API_INC_CONFBUILDER_HPP_
 
-#include "Sim.hpp"
+#include "xdyn/core/Sim.hpp"
 #include <string>
 
 class ConfBuilder

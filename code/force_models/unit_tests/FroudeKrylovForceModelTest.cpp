@@ -6,19 +6,19 @@
  */
 
 #include "FroudeKrylovForceModelTest.hpp"
-#include "BodyWithSurfaceForces.hpp"
-#include "DefaultSurfaceElevation.hpp"
+#include "xdyn/core/BodyWithSurfaceForces.hpp"
+#include "xdyn/core/DefaultSurfaceElevation.hpp"
 #include "FroudeKrylovForceModel.hpp"
-#include "generate_body_for_tests.hpp"
+#include "xdyn/core/unit_tests/generate_body_for_tests.hpp"
 #include "TriMeshTestData.hpp"
-#include "MeshIntersector.hpp"
-#include "DiracSpectralDensity.hpp"
-#include "DiracDirectionalSpreading.hpp"
-#include "discretize.hpp"
-#include "Airy.hpp"
+#include "mesh/MeshIntersector.hpp"
+#include "environment_models/DiracSpectralDensity.hpp"
+#include "environment_models/DiracDirectionalSpreading.hpp"
+#include "environment_models/discretize.hpp"
+#include "environment_models/Airy.hpp"
 #include "env_for_tests.hpp"
-#include "YamlWaveModelInput.hpp"
-#include "Stretching.hpp"
+#include "external_data_structures/YamlWaveModelInput.hpp"
+#include "environment_models/Stretching.hpp"
 
 #include <ssc/kinematics.hpp>
 

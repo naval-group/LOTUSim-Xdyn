@@ -12,7 +12,7 @@
 
 enum class TypeOfQuadrature {RECTANGLE, TRAPEZOIDAL, SIMPSON, GAUSS_KRONROD, BURCHER, CLENSHAW_CURTIS, FILON};
 
-#include "YamlCoordinates.hpp"
+#include "external_data_structures/YamlCoordinates.hpp"
 
 struct YamlRadiationDamping
 {

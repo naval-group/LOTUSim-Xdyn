@@ -6,11 +6,11 @@
  */
 
 #include <Eigen/Dense>
-#include "Body.hpp"
+#include "xdyn/core/Body.hpp"
 #include "QuadraticDampingForceModel.hpp"
 
 #include "yaml.h"
-#include "external_data_structures_parsers.hpp"
+#include "yaml_parser/external_data_structures_parsers.hpp"
 
 std::string QuadraticDampingForceModel::model_name() {return "quadratic damping";}
 

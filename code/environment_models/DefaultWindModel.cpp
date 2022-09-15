@@ -5,7 +5,7 @@
  *      Author: mcharlou2016
  */
 
-#include "DefaultWindModel.hpp"
+#include "environment_models/DefaultWindModel.hpp"
 
 DefaultWindModel::DefaultWindModel(int)
 {

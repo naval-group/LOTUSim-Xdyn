@@ -8,8 +8,8 @@
 #ifndef LINEARHYDROSTATICFORCEMODEL_HPP_
 #define LINEARHYDROSTATICFORCEMODEL_HPP_
 
-#include "ForceModel.hpp"
-#include "EnvironmentAndFrames.hpp"
+#include "xdyn/core/ForceModel.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
 #include <ssc/kinematics.hpp>
 #include <Eigen/Dense>
 #include <map>

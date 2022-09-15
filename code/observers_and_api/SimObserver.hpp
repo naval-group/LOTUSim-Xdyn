@@ -8,7 +8,7 @@
 #ifndef SIMOBSERVER_HPP_
 #define SIMOBSERVER_HPP_
 
-#include "Res.hpp"
+#include "xdyn/core/Res.hpp"
 #include <ssc/solver/DiscreteSystem.hpp>
 #include <memory>
 #include <vector>

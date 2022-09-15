@@ -1,8 +1,8 @@
 #ifndef DICTOBSERVER_HPP_
 #define DICTOBSERVER_HPP_
 
-#include "Observer.hpp"
-#include "SurfaceElevationGrid.hpp"
+#include "xdyn/core/Observer.hpp"
+#include "xdyn/core/SurfaceElevationGrid.hpp"
 
 #include <sstream>
 #include <utility>

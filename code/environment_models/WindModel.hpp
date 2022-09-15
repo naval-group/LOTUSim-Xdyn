@@ -14,8 +14,8 @@
 #include <boost/optional/optional.hpp>
 #include "yaml-cpp/exceptions.h"
 
-#include "YamlModel.hpp"
-#include "InvalidInputException.hpp"
+#include "external_data_structures/YamlModel.hpp"
+#include "exceptions/InvalidInputException.hpp"
 
 class WindModel;
 typedef std::shared_ptr<WindModel> WindModelPtr;

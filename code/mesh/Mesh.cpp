@@ -1,6 +1,6 @@
 #include <map>
 
-#include "Mesh.hpp"
+#include "mesh/Mesh.hpp"
 #include "mesh_manipulations.hpp"
 
 Mesh::Mesh():
@@ -121,4 +121,3 @@ size_t Mesh::second_vertex_of_oriented_edge(size_t oriented_edge) const
     size_t reverse_direction = oriented_edge & 1;
     return edges[1-reverse_direction][edge_index];
 }
-

@@ -8,7 +8,7 @@
 #ifndef FROUDEKRYLOVFORCEMODEL_HPP_
 #define FROUDEKRYLOVFORCEMODEL_HPP_
 
-#include "ImmersedSurfaceForceModel.hpp"
+#include "xdyn/core/ImmersedSurfaceForceModel.hpp"
 
 /** \brief
  *  \details

@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "Body.hpp"
+#include "xdyn/core/Body.hpp"
 #include "FroudeKrylovForceModel.hpp"
 #include <ssc/exception_handling.hpp>
 

@@ -1,6 +1,6 @@
 #include "py_xdyn_core.hpp"
 #include "py_pybind_additions.hpp"
-#include "core/BlockedDOF.hpp"
+#include "xdyn/core/BlockedDOF.hpp"
 #include "core/Body.hpp"
 #include "core/BodyBuilder.hpp"
 #include "core/BodyStates.hpp"

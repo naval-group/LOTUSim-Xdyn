@@ -9,7 +9,7 @@
 #include <cmath>
 #define PI M_PI
 
-#include "BodyStates.hpp"
+#include "xdyn/core/BodyStates.hpp"
 #include "SimpleHeadingKeepingControllerTest.hpp"
 #include "SimpleHeadingKeepingController.hpp"
 #include "yaml_data.hpp"

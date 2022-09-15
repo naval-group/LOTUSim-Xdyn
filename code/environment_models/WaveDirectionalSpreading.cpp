@@ -4,7 +4,7 @@
  *  Created on: Jul 31, 2014
  *      Author: cady
  */
-#include "WaveDirectionalSpreading.hpp"
+#include "environment_models/WaveDirectionalSpreading.hpp"
 #include "SumOfWaveDirectionalSpreadings.hpp"
 
 #define _USE_MATH_DEFINE

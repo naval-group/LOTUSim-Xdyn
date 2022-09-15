@@ -8,8 +8,8 @@
 #ifndef MANEUVERINGFORCEMODEL_HPP_
 #define MANEUVERINGFORCEMODEL_HPP_
 
-#include "ForceModel.hpp"
-#include "YamlPosition.hpp"
+#include "xdyn/core/ForceModel.hpp"
+#include "external_data_structures/YamlPosition.hpp"
 #include "ManeuveringInternal.hpp"
 
 #include <ssc/data_source.hpp>

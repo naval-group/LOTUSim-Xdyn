@@ -8,7 +8,7 @@
 #ifndef MAKE_SIM_FOR_GZ_HPP_
 #define MAKE_SIM_FOR_GZ_HPP_
 
-#include "Sim.hpp"
+#include "xdyn/core/Sim.hpp"
 
 namespace GZ
 {

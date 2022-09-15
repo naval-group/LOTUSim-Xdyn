@@ -8,7 +8,7 @@
 #ifndef WAVEMODEL_HPP_
 #define WAVEMODEL_HPP_
 
-#include "DiscreteDirectionalWaveSpectrum.hpp"
+#include "environment_models/DiscreteDirectionalWaveSpectrum.hpp"
 
 #include <ssc/kinematics.hpp>
 #include <ssc/macros.hpp>

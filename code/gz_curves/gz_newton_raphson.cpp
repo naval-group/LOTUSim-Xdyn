@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "InternalErrorException.hpp"
+#include "exceptions/InternalErrorException.hpp"
 
 #include "gz_newton_raphson.hpp"
 

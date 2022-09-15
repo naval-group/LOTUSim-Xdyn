@@ -1,10 +1,10 @@
 #include "ErrorReporter.hpp"
 #include "ConnexionError.hpp"
 #include "GRPCError.hpp"
-#include "InternalErrorException.hpp"
-#include "InvalidInputException.hpp"
+#include "exceptions/InternalErrorException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 #include "MeshException.hpp"
-#include "NumericalErrorException.hpp"
+#include "exceptions/NumericalErrorException.hpp"
 #include "listeners.hpp"
 
 #include <ssc/exception_handling.hpp>

@@ -5,9 +5,9 @@
  *      Author: cady
  */
 
-#include "Airy.hpp"
-#include "InternalErrorException.hpp"
-#include "InvalidInputException.hpp"
+#include "environment_models/Airy.hpp"
+#include "exceptions/InternalErrorException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 
 #include <ssc/macros.hpp>
 #include <Eigen/Dense>

@@ -1,6 +1,6 @@
 
-#include "PrecalParser.hpp"
-#include "InvalidInputException.hpp"
+#include "hdb_interpolators/PrecalParser.hpp"
+#include "exceptions/InvalidInputException.hpp"
 #include <algorithm>
 #include <list>
 

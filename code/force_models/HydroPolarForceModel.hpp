@@ -6,7 +6,7 @@
 #include <Eigen/Dense>
 #include <boost/optional.hpp>
 
-#include "ForceModel.hpp"
+#include "xdyn/core/ForceModel.hpp"
 
 class HydroPolarForceModel : public ForceModel
 {

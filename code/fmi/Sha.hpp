@@ -1,15 +1,15 @@
 #ifndef CALCULATE_SHA1_HPP_
 #define CALCULATE_SHA1_HPP_
 
-#include "YamlRotation.hpp"
-#include "YamlEnvironmentalConstants.hpp"
-#include "YamlModel.hpp"
-#include "YamlBody.hpp"
-#include "YamlDynamics.hpp"
-#include "YamlDynamics6x6Matrix.hpp"
-#include "YamlPoint.hpp"
-#include "YamlCoordinates.hpp"
-#include "YamlSimulatorInput.hpp"
+#include "external_data_structures/YamlRotation.hpp"
+#include "external_data_structures/YamlEnvironmentalConstants.hpp"
+#include "external_data_structures/YamlModel.hpp"
+#include "external_data_structures/YamlBody.hpp"
+#include "external_data_structures/YamlDynamics.hpp"
+#include "external_data_structures/YamlDynamics6x6Matrix.hpp"
+#include "external_data_structures/YamlPoint.hpp"
+#include "external_data_structures/YamlCoordinates.hpp"
+#include "external_data_structures/YamlSimulatorInput.hpp"
 
 #include <boost/version.hpp>
 #if BOOST_VERSION<=106500

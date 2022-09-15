@@ -3,8 +3,8 @@
 
 #include "gtest/gtest.h"
 #include <ssc/random_data_generator.hpp>
-#include "YamlSimulatorInput.hpp"
-#include "YamlWaveModelInput.hpp"
+#include "external_data_structures/YamlSimulatorInput.hpp"
+#include "external_data_structures/YamlWaveModelInput.hpp"
 
 class SimulatorYamlParserTest : public ::testing::Test
 {

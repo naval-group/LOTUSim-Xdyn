@@ -1,10 +1,10 @@
 #ifndef FORCE_MODELS_INC_MMGMANOEUVRINGFORCEMODEL_HPP_
 #define FORCE_MODELS_INC_MMGMANOEUVRINGFORCEMODEL_HPP_
 
-#include "YamlCoordinates.hpp"
-#include "external_data_structures_parsers.hpp"
+#include "external_data_structures/YamlCoordinates.hpp"
+#include "yaml_parser/external_data_structures_parsers.hpp"
 
-#include "ForceModel.hpp"
+#include "xdyn/core/ForceModel.hpp"
 
 class MMGManeuveringForceModel : public ForceModel
 {

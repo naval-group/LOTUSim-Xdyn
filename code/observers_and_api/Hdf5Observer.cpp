@@ -9,7 +9,7 @@
 #include "demoPython.hpp"
 
 #include "Hdf5WaveObserver.hpp"
-#include "InternalErrorException.hpp"
+#include "exceptions/InternalErrorException.hpp"
 #include "Hdf5WaveSpectrumObserver.hpp"
 
 Hdf5Addressing::Hdf5Addressing(
@@ -193,5 +193,5 @@ void Hdf5Observer::write_before_simulation(const std::string& data, const DataAd
     {
         H5_Tools::write(h5File, Hdf5Addressing(address, "inputs").address, data);
     }
-    
+
 }

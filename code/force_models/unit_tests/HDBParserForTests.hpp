@@ -8,7 +8,7 @@
 #ifndef HDBPARSERFORTESTS_HPP_
 #define HDBPARSERFORTESTS_HPP_
 
-#include "HDBParser.hpp"
+#include "hdb_interpolators/HDBParser.hpp"
 
 class HDBParserForTests : public HDBParser
 {

@@ -11,8 +11,8 @@
 #include "EmitFMIXml.hpp"
 #include "FMIXml.hpp"
 #include "get_sha.hpp"
-#include "Sim.hpp"
-#include "SimulatorYamlParser.hpp"
+#include "xdyn/core/Sim.hpp"
+#include "yaml_parser/SimulatorYamlParser.hpp"
 #include "simulator_api.hpp"
 
 #include <ctime>

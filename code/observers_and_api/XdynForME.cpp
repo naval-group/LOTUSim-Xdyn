@@ -7,7 +7,7 @@
 
 #include <tuple>
 
-#include "InternalErrorException.hpp"
+#include "exceptions/InternalErrorException.hpp"
 #include "XdynForME.hpp"
 #include "SimulationServerObserver.hpp"
 

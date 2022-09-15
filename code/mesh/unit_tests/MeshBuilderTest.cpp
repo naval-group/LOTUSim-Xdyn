@@ -1,12 +1,12 @@
 #include <cmath>
 #include <algorithm>
 
-#include "InternalErrorException.hpp"
+#include "exceptions/InternalErrorException.hpp"
 #include "MeshException.hpp"
-#include "Mesh.hpp"
+#include "mesh/Mesh.hpp"
 #include "MeshBuilderTest.hpp"
 #include "TriMeshTestData.hpp"
-#include "MeshBuilder.hpp"
+#include "mesh/MeshBuilder.hpp"
 
 size_t get_oriented_edge_index(const size_t &e)
 {

@@ -8,7 +8,7 @@
 
 #include "ConstantForceModel.hpp"
 
-#include "Body.hpp"
+#include "xdyn/core/Body.hpp"
 #include "yaml.h"
 #include <ssc/macros.hpp>
 #include <ssc/yaml_parser.hpp>

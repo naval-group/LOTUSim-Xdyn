@@ -4,10 +4,10 @@
  *  Created on: Nov 13, 2014
  *      Author: cady
  */
-#include "HDBParser.hpp"
+#include "hdb_interpolators/HDBParser.hpp"
 
 #include "hdb_parser_internal_data_structures.hpp"
-#include "InvalidInputException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 #include "hdb_to_ast.hpp"
 
 #include <ssc/interpolation.hpp>

@@ -8,7 +8,7 @@
 #ifndef COS2SDIRECTIONALSPREADING_HPP_
 #define COS2SDIRECTIONALSPREADING_HPP_
 
-#include "WaveDirectionalSpreading.hpp"
+#include "environment_models/WaveDirectionalSpreading.hpp"
 
 /** \ingroup wave_models
  *  \section ex1 Example

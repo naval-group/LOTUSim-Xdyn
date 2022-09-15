@@ -8,8 +8,8 @@
 #ifndef GRPC_INC_GRPCFORCEMODEL_HPP_
 #define GRPC_INC_GRPCFORCEMODEL_HPP_
 
-#include "EnvironmentAndFrames.hpp"
-#include "ForceModel.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
+#include "xdyn/core/ForceModel.hpp"
 
 class GRPCForceModel : public ForceModel
 {

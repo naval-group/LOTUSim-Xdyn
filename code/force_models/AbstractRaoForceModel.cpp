@@ -7,14 +7,14 @@
 
 #include "AbstractRaoForceModel.hpp"
 
-#include "Body.hpp"
-#include "HDBParser.hpp"
+#include "xdyn/core/Body.hpp"
+#include "hdb_interpolators/HDBParser.hpp"
 #include "HydroDBParser.hpp"
-#include "PrecalParser.hpp"
-#include "InvalidInputException.hpp"
-#include "InternalErrorException.hpp"
+#include "hdb_interpolators/PrecalParser.hpp"
+#include "exceptions/InvalidInputException.hpp"
+#include "exceptions/InternalErrorException.hpp"
 #include "yaml.h"
-#include "external_data_structures_parsers.hpp"
+#include "yaml_parser/external_data_structures_parsers.hpp"
 
 std::string AbstractRaoForceModel::get_model_name(const YamlRAO::TypeOfRao& type_of_rao)
 {

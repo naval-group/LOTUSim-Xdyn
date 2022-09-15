@@ -8,7 +8,7 @@
 #include "h5_interface.hpp"
 #include "h5_version.hpp"
 #include "h5_interface_tests.hpp"
-#include "InternalErrorException.hpp"
+#include "exceptions/InternalErrorException.hpp"
 
 #include <string>
 

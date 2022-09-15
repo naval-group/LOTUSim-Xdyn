@@ -6,11 +6,11 @@
  */
 
 #include "GZCurve.hpp"
-#include "InvalidInputException.hpp"
-#include "InternalErrorException.hpp"
+#include "exceptions/InvalidInputException.hpp"
+#include "exceptions/InternalErrorException.hpp"
 #include "gz_newton_raphson.hpp"
 #include "ResultantForceComputer.hpp"
-#include "Sim.hpp"
+#include "xdyn/core/Sim.hpp"
 #include <cmath>
 #include <sstream>
 

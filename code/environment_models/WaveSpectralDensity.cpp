@@ -4,12 +4,12 @@
  *  Created on: Jul 30, 2014
  *      Author: cady
  */
-#include "WaveSpectralDensity.hpp"
-#include "discretize.hpp"
+#include "environment_models/WaveSpectralDensity.hpp"
+#include "environment_models/discretize.hpp"
 #include "SumOfWaveSpectralDensities.hpp"
 #include "WaveNumberFunctor.hpp"
-#include "InvalidInputException.hpp"
-#include "InternalErrorException.hpp"
+#include "exceptions/InvalidInputException.hpp"
+#include "exceptions/InternalErrorException.hpp"
 #include <cmath> // For isnan
 
 #include <limits>

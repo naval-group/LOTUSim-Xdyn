@@ -1,5 +1,5 @@
 #include "ClosingFacetComputer.hpp"
-#include "InternalErrorException.hpp"
+#include "exceptions/InternalErrorException.hpp"
 
 #include <ssc/macros.hpp>
 #include TR1INC(unordered_map)

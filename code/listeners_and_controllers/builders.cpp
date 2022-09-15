@@ -6,11 +6,11 @@
  */
 
 #include "builders.hpp"
-#include "DefaultSurfaceElevation.hpp"
+#include "xdyn/core/DefaultSurfaceElevation.hpp"
 #include "environment_parsers.hpp"
-#include "EnvironmentAndFrames.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
 #include "discretize.hpp"
-#include "Stretching.hpp"
+#include "environment_models/Stretching.hpp"
 #include "SurfaceElevationFromGRPC.hpp"
 #include "InvalidInputException.hpp"
 #include "YamlGRPC.hpp"

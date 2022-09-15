@@ -6,11 +6,11 @@
  */
 
 
-#include "environment_parsers.hpp"
-#include "external_data_structures_parsers.hpp"
-#include "InvalidInputException.hpp"
+#include "yaml_parser/environment_parsers.hpp"
+#include "yaml_parser/external_data_structures_parsers.hpp"
+#include "exceptions/InvalidInputException.hpp"
 #include "parse_output.hpp"
-#include "YamlGRPC.hpp"
+#include "external_data_structures/YamlGRPC.hpp"
 #include "yaml.h"
 #include <ssc/yaml_parser.hpp>
 #include <ssc/csv_file_reader.hpp>

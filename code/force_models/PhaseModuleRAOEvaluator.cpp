@@ -1,6 +1,6 @@
 #include "PhaseModuleRAOEvaluator.hpp"
-#include "EnvironmentAndFrames.hpp"
-#include "InvalidInputException.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
+#include "exceptions/InvalidInputException.hpp"
 #include <algorithm>
 #include <iomanip>
 

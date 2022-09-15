@@ -8,7 +8,7 @@
 #ifndef PARSE_CONTROLLERS_HPP_
 #define PARSE_CONTROLLERS_HPP_
 
-#include "YamlController.hpp"
+#include "external_data_structures/YamlController.hpp"
 #include "yaml.h"
 
 /**  \brief Parses the controllers for use by controlled forces.

@@ -13,9 +13,9 @@
 #include "get_sha.hpp"
 #include "FMI.hpp"
 #include "FMIException.hpp"
-#include "SimulatorYamlParser.hpp"
+#include "yaml_parser/SimulatorYamlParser.hpp"
 #include "simulator_api.hpp"
-#include "WaveModel.hpp"
+#include "environment_models/WaveModel.hpp"
 
 #include <ssc/macros.hpp>
 

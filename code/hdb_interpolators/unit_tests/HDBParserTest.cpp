@@ -5,10 +5,10 @@
  *      Author: cady
  */
 
-#include "HDBParser.hpp"
+#include "hdb_interpolators/HDBParser.hpp"
 #include "HDBParserTest.hpp"
 #include "hdb_data.hpp"
-#include "InvalidInputException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>

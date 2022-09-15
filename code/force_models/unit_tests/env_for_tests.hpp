@@ -9,7 +9,7 @@
 #ifndef ENV_FOR_TESTS_HPP_
 #define ENV_FOR_TESTS_HPP_
 
-#include "EnvironmentAndFrames.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
 
 #define BODY "body 1"
 

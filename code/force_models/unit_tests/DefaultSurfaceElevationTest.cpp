@@ -6,7 +6,7 @@
  */
 
 #include "DefaultSurfaceElevationTest.hpp"
-#include "DefaultSurfaceElevation.hpp"
+#include "xdyn/core/DefaultSurfaceElevation.hpp"
 #include <ssc/kinematics.hpp>
 
 DefaultSurfaceElevationTest::DefaultSurfaceElevationTest() : a(ssc::random_data_generator::DataGenerator(5466123))

@@ -12,7 +12,7 @@
 #include "gtest/gtest.h"
 #include <ssc/random_data_generator/DataGenerator.hpp>
 
-#include "Sim.hpp"
+#include "xdyn/core/Sim.hpp"
 
 class GZCurveTest : public ::testing::Test
 {

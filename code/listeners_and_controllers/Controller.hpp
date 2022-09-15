@@ -11,7 +11,7 @@
 #include <string>
 #include <ssc/solver/DiscreteSystem.hpp>
 #include <ssc/solver/ContinuousSystem.hpp>
-#include "Sim.hpp"
+#include "xdyn/core/Sim.hpp"
 /**
  * @brief Constant step controller.
  *

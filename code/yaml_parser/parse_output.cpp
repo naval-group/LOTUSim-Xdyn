@@ -7,7 +7,7 @@
 
 #include "parse_output.hpp"
 #include "parse_address.hpp"
-#include "InvalidInputException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 #include "yaml.h"
 #include <boost/algorithm/string/predicate.hpp>
 

@@ -18,7 +18,7 @@
 #include <ssc/kinematics.hpp>
 
 
-#include "Body.hpp"
+#include "xdyn/core/Body.hpp"
 #include "GRPCTypes.hpp"
 #include "ToGRPC.hpp"
 #include "FromGRPC.hpp"

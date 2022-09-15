@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "YamlCoordinates.hpp"
+#include "external_data_structures/YamlCoordinates.hpp"
 
 YamlCoordinates::YamlCoordinates() : x(0), y(0), z(0)
 {
@@ -14,4 +14,3 @@ YamlCoordinates::YamlCoordinates() : x(0), y(0), z(0)
 YamlCoordinates::YamlCoordinates(const double x, const double y, const double z) : x(x), y(y), z(z)
 {
 }
-

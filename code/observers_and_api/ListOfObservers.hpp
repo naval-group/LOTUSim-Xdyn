@@ -8,7 +8,7 @@
 #ifndef LISTOFOBSERVERS_HPP_
 #define LISTOFOBSERVERS_HPP_
 
-#include "Observer.hpp"
+#include "xdyn/core/Observer.hpp"
 
 struct YamlOutput;
 

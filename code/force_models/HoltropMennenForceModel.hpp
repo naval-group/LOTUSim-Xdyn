@@ -4,8 +4,8 @@
 #include <functional>
 #include <boost/optional.hpp>
 
-#include "ForceModel.hpp"
-#include "EnvironmentAndFrames.hpp"
+#include "xdyn/core/ForceModel.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
 
 class HoltropMennenForceModel : public ForceModel
 {

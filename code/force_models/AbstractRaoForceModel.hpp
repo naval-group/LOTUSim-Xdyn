@@ -8,10 +8,10 @@
 
 #include <ssc/macros.hpp>
 
-#include "ForceModel.hpp"
-#include "EnvironmentAndFrames.hpp"
+#include "xdyn/core/ForceModel.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
 #include "PhaseModuleRAOEvaluator.hpp"
-#include "YamlRAO.hpp"
+#include "external_data_structures/YamlRAO.hpp"
 
 /** \brief Abstracts the commonalities between linear Froude-Krylov & diffraction force models
  */

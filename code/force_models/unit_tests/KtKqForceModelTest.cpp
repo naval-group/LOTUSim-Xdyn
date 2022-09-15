@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "NumericalErrorException.hpp"
+#include "exceptions/NumericalErrorException.hpp"
 #include "KtKqForceModel.hpp"
 #include "KtKqForceModelTest.hpp"
 #include "yaml_data.hpp"
@@ -93,4 +93,3 @@ TEST_F(KtKqForceModelTest, clarify_exception_message_for_Kt_Kq_interpolation_err
     commands["rpm"] = 2*PI*0.025;
     EXPECT_THROW( w.get_force(states, a.random<double>(), env, commands).X(), NumericalErrorException);
 }
-

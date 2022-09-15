@@ -9,7 +9,7 @@
 #include "yaml.h"
 #include <ssc/yaml_parser.hpp>
 
-#include "InvalidInputException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 
 #include "PowerLawWindVelocityProfile.hpp"
 
@@ -52,4 +52,3 @@ PowerLawWindVelocityProfile::Input::Input(const WindMeanVelocityProfile::Input& 
 PowerLawWindVelocityProfile::Input::Input() : WindMeanVelocityProfile::Input(), alpha(), z_ref()
 {
 }
-

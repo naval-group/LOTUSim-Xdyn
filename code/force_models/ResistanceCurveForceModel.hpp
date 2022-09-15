@@ -10,7 +10,7 @@
 
 #include <ssc/macros.hpp>
 
-#include "ForceModel.hpp"
+#include "xdyn/core/ForceModel.hpp"
 
 struct EnvironmentAndFrames;
 

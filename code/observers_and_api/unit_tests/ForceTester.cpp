@@ -8,9 +8,9 @@
 
 #include "check_input_yaml.hpp"
 #include "ForceTester.hpp"
-#include "SimulatorYamlParser.hpp"
+#include "yaml_parser/SimulatorYamlParser.hpp"
 #include "simulator_api.hpp"
-#include "StateMacros.hpp"
+#include "xdyn/core/StateMacros.hpp"
 #include "GMForceModel.hpp"
 #include "ExactHydrostaticForceModel.hpp"
 #include "DiffractionForceModel.hpp"

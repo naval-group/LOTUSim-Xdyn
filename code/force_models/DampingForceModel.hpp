@@ -9,7 +9,7 @@
 #define DAMPINGFORCEMODEL_HPP_
 
 #include <Eigen/Dense>
-#include "ForceModel.hpp"
+#include "xdyn/core/ForceModel.hpp"
 
 class Body;
 

@@ -4,8 +4,8 @@
 #include <grpcpp/grpcpp.h>
 #include <functional>
 
-#include "InternalErrorException.hpp"
-#include "InvalidInputException.hpp"
+#include "exceptions/InternalErrorException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 #include "ErrorReporter.hpp"
 
 grpc::Status to_gRPC_status(const ErrorReporter& error_outputter);

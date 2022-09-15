@@ -12,7 +12,7 @@
 
 #include "SimServerInputs.hpp"
 #include "ConfBuilder.hpp"
-#include "YamlState.hpp"
+#include "external_data_structures/YamlState.hpp"
 
 class XdynForME
 {

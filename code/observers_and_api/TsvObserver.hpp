@@ -3,7 +3,7 @@
 
 #include <ostream>
 
-#include "Observer.hpp"
+#include "xdyn/core/Observer.hpp"
 
 class TsvObserver : public Observer
 {

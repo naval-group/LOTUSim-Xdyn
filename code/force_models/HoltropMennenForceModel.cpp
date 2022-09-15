@@ -1,5 +1,5 @@
 #include "HoltropMennenForceModel.hpp"
-#include "EnvironmentAndFrames.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
 #include <ssc/yaml_parser.hpp>
 #include <ssc/exception_handling.hpp>
 #include "yaml.h"

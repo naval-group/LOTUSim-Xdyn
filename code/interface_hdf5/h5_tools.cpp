@@ -1,6 +1,6 @@
 #include "h5_tools.hpp"
 
-#include "InternalErrorException.hpp"
+#include "exceptions/InternalErrorException.hpp"
 #include "h5_tools.h"
 
 std::string H5_Tools::ensureStringStartsAndEndsWithAPattern(
@@ -644,4 +644,3 @@ void H5_Tools::read(
     dataset.close();
     dataspace.close();
 }
-

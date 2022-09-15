@@ -1,8 +1,8 @@
 #include "HoltropMennenForceModelTest.hpp"
 
 #include "HoltropMennenForceModel.hpp"
-#include "EnvironmentAndFrames.hpp"
-#include "BodyStates.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
+#include "xdyn/core/BodyStates.hpp"
 
 #include <string>
 #include <sstream>

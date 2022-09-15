@@ -9,7 +9,7 @@
 #ifndef FORCETESTER_HPP_
 #define FORCETESTER_HPP_
 
-#include "Sim.hpp"
+#include "xdyn/core/Sim.hpp"
 
 std::vector<double> get_states(const double x, const double y,
         const double z, const double phi, const double theta, const double psi);

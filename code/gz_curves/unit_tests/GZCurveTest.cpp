@@ -8,8 +8,8 @@
 
 #include "GZCurveTest.hpp"
 #include "GZCurve.hpp"
-#include "InvalidInputException.hpp"
-#include "InternalErrorException.hpp"
+#include "exceptions/InvalidInputException.hpp"
+#include "exceptions/InternalErrorException.hpp"
 #include "stl_data.hpp"
 #include "yaml_data.hpp"
 #include "make_sim_for_GZ.hpp"

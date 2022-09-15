@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "YamlRadiationDamping.hpp"
+#include "external_data_structures/YamlRadiationDamping.hpp"
 
 YamlRadiationDamping::YamlRadiationDamping() : hdb_filename(),
                                                precal_r_filename(),

@@ -1,4 +1,4 @@
-#include "MeshBuilder.hpp"
+#include "mesh/MeshBuilder.hpp"
 
 #include "mesh_manipulations.hpp"
 

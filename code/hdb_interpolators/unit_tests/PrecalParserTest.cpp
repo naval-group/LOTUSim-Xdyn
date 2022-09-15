@@ -6,7 +6,7 @@
  */
 
 #include "PrecalParserTest.hpp"
-#include "PrecalParser.hpp"
+#include "hdb_interpolators/PrecalParser.hpp"
 #include "PrecalParserHelper.hpp"
 #include "precal_test_data.hpp"
 #include <cstdio>

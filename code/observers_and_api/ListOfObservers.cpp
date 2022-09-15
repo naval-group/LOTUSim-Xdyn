@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "YamlOutput.hpp"
+#include "external_data_structures/YamlOutput.hpp"
 #include "CsvObserver.hpp"
 #include "TsvObserver.hpp"
 #include "JsonObserver.hpp"

@@ -6,9 +6,9 @@
  */
 
 #include "environment_parsersTest.hpp"
-#include "environment_parsers.hpp"
+#include "yaml_parser/environment_parsers.hpp"
 #include "yaml_data.hpp"
-#include "InvalidInputException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 
 #include <boost/algorithm/string.hpp> // replace in string
 #include <boost/regex.hpp>

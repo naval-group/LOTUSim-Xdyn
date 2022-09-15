@@ -4,12 +4,12 @@
  *  Created on: Aug 1, 2014
  *      Author: cady
  */
-#include "discretize.hpp"
-#include "WaveDirectionalSpreading.hpp"
-#include "WaveSpectralDensity.hpp"
-#include "Stretching.hpp"
-#include "InternalErrorException.hpp"
-#include "InvalidInputException.hpp"
+#include "environment_models/discretize.hpp"
+#include "environment_models/WaveDirectionalSpreading.hpp"
+#include "environment_models/WaveSpectralDensity.hpp"
+#include "environment_models/Stretching.hpp"
+#include "exceptions/InternalErrorException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>

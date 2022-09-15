@@ -13,7 +13,7 @@
 
 #include <ssc/data_source.hpp>
 
-#include "BodyStates.hpp"
+#include "xdyn/core/BodyStates.hpp"
 
 
 namespace maneuvering

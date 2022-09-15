@@ -2,7 +2,7 @@
 #define MESH_INTERSECTOR_TEST_HPP
 
 #include "gtest/gtest.h"
-#include "MeshIntersector.hpp"
+#include "mesh/MeshIntersector.hpp"
 #include <ssc/random_data_generator.hpp>
 
 class MeshIntersectorTest : public ::testing::Test

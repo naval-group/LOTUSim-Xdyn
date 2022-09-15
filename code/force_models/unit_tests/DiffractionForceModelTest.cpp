@@ -12,13 +12,13 @@
 #include "yaml_data.hpp"
 #include "hdb_data.hpp"
 #include "precal_test_data.hpp"
-#include "DiracSpectralDensity.hpp"
-#include "DiracDirectionalSpreading.hpp"
-#include "YamlWaveModelInput.hpp"
-#include "Stretching.hpp"
-#include "discretize.hpp"
-#include "Airy.hpp"
-#include "SurfaceElevationFromWaves.hpp"
+#include "environment_models/DiracSpectralDensity.hpp"
+#include "environment_models/DiracDirectionalSpreading.hpp"
+#include "external_data_structures/YamlWaveModelInput.hpp"
+#include "environment_models/Stretching.hpp"
+#include "environment_models/discretize.hpp"
+#include "environment_models/Airy.hpp"
+#include "xdyn/core/SurfaceElevationFromWaves.hpp"
 
 #define BODY_NAME "TestShip"
 
@@ -243,7 +243,7 @@ TEST_F(DiffractionForceModelTest, precal_r_example)
     // U=-5.45, wave direction=-180°, wave period = 10.47198s -> encounter frequency = 0.4 rad/s => first line, incidence = 180°
     states = get_states_with_forward_speed(-5.45);
     F = force_model.get_force(states, 0., env, {});
-    
+
     ASSERT_NEAR( F.X(),  0.138050E+03 * 1e3 * sin(-   (90.317017) * M_PI / 180.), small_relative_error(F.X()));
     ASSERT_NEAR(-F.Y(),  0.117473E-02 * 1e3 * sin(- (- 48.947906) * M_PI / 180.), small_relative_error(F.Y()));
     ASSERT_NEAR(-F.Z(),  0.444391E+04 * 1e3 * sin(-  (140.987823) * M_PI / 180.), small_relative_error(F.Z()));

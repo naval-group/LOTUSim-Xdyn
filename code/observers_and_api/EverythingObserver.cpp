@@ -6,8 +6,8 @@
  */
 
 #include "EverythingObserver.hpp"
-#include "Sim.hpp"
-#include "StateMacros.hpp"
+#include "xdyn/core/Sim.hpp"
+#include "xdyn/core/StateMacros.hpp"
 
 EverythingObserver::EverythingObserver() : MapObserver(std::vector<std::string>({})), res()
 {

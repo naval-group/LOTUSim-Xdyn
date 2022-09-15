@@ -6,7 +6,7 @@
  */
 
 #include "SimObserver.hpp"
-#include "Sim.hpp"
+#include "xdyn/core/Sim.hpp"
 
 SimObserver::SimObserver() : res(std::vector<Res>())
 {

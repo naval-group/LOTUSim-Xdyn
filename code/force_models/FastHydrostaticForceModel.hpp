@@ -8,7 +8,7 @@
 #ifndef FASTHYDROSTATICFORCEMODEL_HPP_
 #define FASTHYDROSTATICFORCEMODEL_HPP_
 
-#include "ImmersedSurfaceForceModel.hpp"
+#include "xdyn/core/ImmersedSurfaceForceModel.hpp"
 
 class FastHydrostaticForceModel : public ImmersedSurfaceForceModel
 {

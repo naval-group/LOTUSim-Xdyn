@@ -2,7 +2,7 @@
 
 #include "HydroPolarForceModelTest.hpp"
 #include "HydroPolarForceModel.hpp"
-#include "yaml2eigen.hpp"
+#include "xdyn/core/yaml2eigen.hpp"
 
 HydroPolarForceModelTest::HydroPolarForceModelTest()
 {

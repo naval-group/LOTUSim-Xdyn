@@ -10,7 +10,7 @@
 
 #include <ssc/kinematics.hpp>
 
-#include "WaveModel.hpp"
+#include "environment_models/WaveModel.hpp"
 
 /** \brief First order Stokes wave model
  *  \ingroup wave_models

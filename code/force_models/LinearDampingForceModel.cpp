@@ -8,9 +8,9 @@
 #include <Eigen/Dense>
 #include "yaml.h"
 
-#include "Body.hpp"
+#include "xdyn/core/Body.hpp"
 #include "LinearDampingForceModel.hpp"
-#include "external_data_structures_parsers.hpp"
+#include "yaml_parser/external_data_structures_parsers.hpp"
 
 std::string LinearDampingForceModel::model_name() {return "linear damping";}
 

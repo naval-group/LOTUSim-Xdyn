@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 #include <vector>
-#include "AbstractStates.hpp"
+#include "external_data_structures/AbstractStates.hpp"
 
 
 struct YamlState : AbstractStates<double>
@@ -35,4 +35,3 @@ struct YamlState : AbstractStates<double>
 bool operator==(const YamlState& state1, const YamlState& state2);
 
 #endif /* EXTERNAL_DATA_STRUCTURES_INC_YAMLSTATE_HPP_ */
-

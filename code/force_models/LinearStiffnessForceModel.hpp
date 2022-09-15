@@ -3,7 +3,7 @@
 
 #include <Eigen/Dense>
 #include <boost/optional.hpp>
-#include "ForceModel.hpp"
+#include "xdyn/core/ForceModel.hpp"
 
 class LinearStiffnessForceModel : public ForceModel
 {

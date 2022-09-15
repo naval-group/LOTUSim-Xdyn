@@ -4,7 +4,7 @@
  *  Created on: Nov 29, 2017
  *      Author: cady
  */
-#include "YamlGRPC.hpp"
+#include "external_data_structures/YamlGRPC.hpp"
 
 YamlGRPC::YamlGRPC()
 :url()

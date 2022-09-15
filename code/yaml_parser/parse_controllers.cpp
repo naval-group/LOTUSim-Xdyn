@@ -6,8 +6,8 @@
  */
 
 #include "parse_controllers.hpp"
-#include "InvalidInputException.hpp"
-#include "external_data_structures_parsers.hpp"
+#include "exceptions/InvalidInputException.hpp"
+#include "yaml_parser/external_data_structures_parsers.hpp"
 #include <ssc/yaml_parser.hpp>
 
       void

@@ -9,8 +9,8 @@
 #define FORCE_MODELS_INC_CONSTANTFORCEMODEL_HPP_
 
 
-#include "EnvironmentAndFrames.hpp"
-#include "ForceModel.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
+#include "xdyn/core/ForceModel.hpp"
 
 class ConstantForceModel : public ForceModel
 {

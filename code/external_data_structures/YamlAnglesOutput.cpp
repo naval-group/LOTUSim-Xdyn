@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "YamlAnglesOutput.hpp"
+#include "external_data_structures/YamlAnglesOutput.hpp"
 
 YamlAnglesOutput::YamlAnglesOutput() : YamlOutput(), frame(""), relative_to_frame("")
 {

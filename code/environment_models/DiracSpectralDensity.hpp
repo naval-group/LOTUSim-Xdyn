@@ -8,7 +8,7 @@
 #ifndef DIRACSPECTRALDENSITY_HPP_
 #define DIRACSPECTRALDENSITY_HPP_
 
-#include "WaveSpectralDensity.hpp"
+#include "environment_models/WaveSpectralDensity.hpp"
 
 /** \author cady
  *  \date Jul 31, 2014, 2:30:28 PM

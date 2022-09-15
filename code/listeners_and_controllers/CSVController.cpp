@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "InvalidInputException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 #include "CSVController.hpp"
 #include "yaml.h"
 #include <numeric>

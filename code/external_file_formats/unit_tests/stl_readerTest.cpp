@@ -1,5 +1,5 @@
 #include "MeshException.hpp"
-#include "stl_reader.hpp"
+#include "external_file_formats/stl_reader.hpp"
 #include "stl_data.hpp"
 #include "stl_readerTest.hpp"
 
@@ -186,4 +186,3 @@ TEST_F(StlReaderTest, should_be_able_to_read_a_binary_cube)
 {
     const VectorOfVectorOfPoints facets = read_stl(test_data::binary_stl());
 }
-

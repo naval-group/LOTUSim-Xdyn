@@ -5,8 +5,8 @@
  *      Author: cady
  */
 
-#include "History.hpp"
-#include "InternalErrorException.hpp"
+#include "hdb_interpolators/History.hpp"
+#include "exceptions/InternalErrorException.hpp"
 #include <cmath>
 #include <cstdint>
 #include <iterator>

@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "YamlForcesAndTorquesOutput.hpp"
+#include "external_data_structures/YamlForcesAndTorquesOutput.hpp"
 
 YamlForcesAndTorquesOutput::YamlForcesAndTorquesOutput() : YamlOutput(), type(""), point_name(""), point_frame("")
 {

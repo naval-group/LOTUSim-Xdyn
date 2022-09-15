@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "YamlDynamics.hpp"
+#include "external_data_structures/YamlDynamics.hpp"
 
 YamlDynamics::YamlDynamics() :
     centre_of_inertia(),

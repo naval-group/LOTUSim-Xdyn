@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "YamlPosition.hpp"
+#include "external_data_structures/YamlPosition.hpp"
 
 YamlPosition::YamlPosition() : coordinates(YamlCoordinates()),
                                angle(YamlAngle()),

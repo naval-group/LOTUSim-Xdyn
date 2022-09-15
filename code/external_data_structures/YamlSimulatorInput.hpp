@@ -8,12 +8,12 @@
 #ifndef YAMLSIMULATORINPUT_HPP_
 #define YAMLSIMULATORINPUT_HPP_
 
-#include "YamlRotation.hpp"
-#include "YamlModel.hpp"
-#include "YamlBody.hpp"
-#include "YamlEnvironmentalConstants.hpp"
-#include "YamlController.hpp"
-#include "YamlTimeSeries.hpp"
+#include "external_data_structures/YamlRotation.hpp"
+#include "external_data_structures/YamlModel.hpp"
+#include "external_data_structures/YamlBody.hpp"
+#include "external_data_structures/YamlEnvironmentalConstants.hpp"
+#include "external_data_structures/YamlController.hpp"
+#include "external_data_structures/YamlTimeSeries.hpp"
 
 struct YamlSimulatorInput
 {

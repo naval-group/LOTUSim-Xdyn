@@ -8,7 +8,7 @@
 #ifndef BRETSCHNEIDERSPECTRUM_HPP_
 #define BRETSCHNEIDERSPECTRUM_HPP_
 
-#include "WaveSpectralDensity.hpp"
+#include "environment_models/WaveSpectralDensity.hpp"
 
 /** \author cady
  *  \date Jul 30, 2014, 2:25:11 PM

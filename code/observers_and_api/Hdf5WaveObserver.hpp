@@ -5,7 +5,7 @@
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 #include "H5Cpp.h"
-#include "SurfaceElevationGrid.hpp"
+#include "xdyn/core/SurfaceElevationGrid.hpp"
 
 class Hdf5WaveObserver
 {

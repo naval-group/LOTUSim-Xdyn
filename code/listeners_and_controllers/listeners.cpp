@@ -9,12 +9,12 @@
 
 #include "check_input_yaml.hpp"
 #include "InterpolationModule.hpp"
-#include "InvalidInputException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 #include "listeners.hpp"
 #include "PIDController.hpp"
 #include "GrpcController.hpp"
 #include "CSVController.hpp"
-#include "YamlTimeSeries.hpp"
+#include "external_data_structures/YamlTimeSeries.hpp"
 
 #include <ssc/macros.hpp>
 #include TR1INC(memory)

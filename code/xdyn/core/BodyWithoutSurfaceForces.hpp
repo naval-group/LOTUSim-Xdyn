@@ -1,0 +1,25 @@
+/*
+ * BodyWithoutSurfaceForces.hpp
+ *
+ *  Created on: Jan 9, 2015
+ *      Author: cady
+ */
+
+#ifndef BODYWITHOUTSURFACEFORCES_HPP_
+#define BODYWITHOUTSURFACEFORCES_HPP_
+
+#include "xdyn/core/Body.hpp"
+
+class BodyWithoutSurfaceForces : public Body
+{
+    public:
+        BodyWithoutSurfaceForces(const size_t idx, const BlockedDOF& blocked_states, const YamlFilteredStates& filtered_states);
+        BodyWithoutSurfaceForces(const BodyStates& states, const size_t idx, const BlockedDOF& blocked_states, const YamlFilteredStates& filtered_states);
+        BodyWithoutSurfaceForces(const size_t idx, const BlockedDOF& blocked_states, const StatesFilter& filtered_states);
+        BodyWithoutSurfaceForces(const BodyStates& states, const size_t idx, const BlockedDOF& blocked_states, const StatesFilter& filtered_states);
+        void update_intersection_with_free_surface(const EnvironmentAndFrames& env,
+                                                           const double t
+                                                          );
+};
+
+#endif /* BODYWITHOUTSURFACEFORCES_HPP_ */

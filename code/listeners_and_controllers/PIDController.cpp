@@ -8,7 +8,7 @@
 #include "yaml.h"
 #include "PIDController.hpp"
 #include "check_input_yaml.hpp"
-#include "InvalidInputException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 
 PIDController::PIDController (const double tstart,
                               const double dt,

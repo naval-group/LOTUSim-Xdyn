@@ -1,7 +1,7 @@
 #include <cmath>
 
 #include "LinearStiffnessForceModel.hpp"
-#include "EnvironmentAndFrames.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
 
 #include "LinearStiffnessForceModelTest.hpp"
 

@@ -8,17 +8,17 @@
 #ifndef BUILDERS_HPP_
 #define BUILDERS_HPP_
 
-#include "DefaultSurfaceElevation.hpp"
-#include "SurfaceElevationBuilder.hpp"
-#include "DiracDirectionalSpreading.hpp"
-#include "DiscreteDirectionalWaveSpectrum.hpp"
-#include "SurfaceElevationFromWaves.hpp"
-#include "Airy.hpp"
-#include "BretschneiderSpectrum.hpp"
-#include "Cos2sDirectionalSpreading.hpp"
-#include "DiracSpectralDensity.hpp"
-#include "JonswapSpectrum.hpp"
-#include "PiersonMoskowitzSpectrum.hpp"
+#include "xdyn/core/DefaultSurfaceElevation.hpp"
+#include "xdyn/core/SurfaceElevationBuilder.hpp"
+#include "xdyn/core/SurfaceElevationFromWaves.hpp"
+#include "environment_models/Airy.hpp"
+#include "environment_models/BretschneiderSpectrum.hpp"
+#include "environment_models/Cos2sDirectionalSpreading.hpp"
+#include "environment_models/DiracDirectionalSpreading.hpp"
+#include "environment_models/DiracSpectralDensity.hpp"
+#include "environment_models/DiscreteDirectionalWaveSpectrum.hpp"
+#include "environment_models/JonswapSpectrum.hpp"
+#include "environment_models/PiersonMoskowitzSpectrum.hpp"
 
 typedef TR1(shared_ptr)<SurfaceElevationInterface> SurfaceElevationInterfacePtr;
 typedef TR1(shared_ptr)<WaveSpectralDensity> WaveSpectralDensityPtr;

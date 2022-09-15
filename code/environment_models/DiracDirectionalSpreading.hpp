@@ -8,7 +8,7 @@
 #ifndef DIRACDIRECTIONALSPREADING_HPP_
 #define DIRACDIRECTIONALSPREADING_HPP_
 
-#include "WaveDirectionalSpreading.hpp"
+#include "environment_models/WaveDirectionalSpreading.hpp"
 
 /** \brief No directional spreading: 1 in a particular direction theta0 & zero elsewhere?
  *  \ingroup wave_models

@@ -7,12 +7,12 @@
 #include <ssc/solver/Scheduler.hpp>
 #include <ssc/solver/solve.hpp>
 
-#include "SimulatorYamlParser.hpp"
+#include "yaml_parser/SimulatorYamlParser.hpp"
 #include "check_input_yaml.hpp"
 #include "EverythingObserver.hpp"
 #include "listeners.hpp"
-#include "Sim.hpp"
-#include "SimulatorBuilder.hpp"
+#include "xdyn/core/Sim.hpp"
+#include "xdyn/core/SimulatorBuilder.hpp"
 #include "SimObserver.hpp"
 
 struct YamlSimulatorInput;

@@ -11,7 +11,7 @@
 #include <ostream>
 #include <unordered_map>
 
-#include "Observer.hpp"
+#include "xdyn/core/Observer.hpp"
 
 class CsvObserver : public Observer
 {

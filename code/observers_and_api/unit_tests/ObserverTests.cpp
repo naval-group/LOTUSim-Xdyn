@@ -6,7 +6,7 @@
  */
 
 #include "ObserverTests.hpp"
-#include "Sim.hpp"
+#include "xdyn/core/Sim.hpp"
 #include "yaml_data.hpp"
 #include "stl_data.hpp"
 #include "simulator_api.hpp"

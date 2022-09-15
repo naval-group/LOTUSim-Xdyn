@@ -7,7 +7,7 @@
 
 #include "BretschneiderSpectrumTest.hpp"
 #include "BretschneiderSpectrum.hpp"
-#include "InvalidInputException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 
 #define NB_TRIALS 10
 

@@ -9,8 +9,8 @@
 #define PIDCONTROLLER_HPP_
 
 #include <string>
-#include <ssc/data_source.hpp>
-#include "State.hpp"
+#include <ssc/solver.hpp>
+#include "xdyn/core/State.hpp"
 #include "Controller.hpp"
 
 /*

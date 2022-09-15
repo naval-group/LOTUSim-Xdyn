@@ -2,7 +2,7 @@
 #include "YamlOutput.hpp"
 #include "parse_output.hpp"
 #include "XdynCommandLineArguments.hpp"
-#include "Sim.hpp"
+#include "xdyn/core/Sim.hpp"
 #include "stl_io_hdf5.hpp"
 #include "h5_tools.hpp"
 

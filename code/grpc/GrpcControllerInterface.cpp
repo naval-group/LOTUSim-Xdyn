@@ -1,12 +1,12 @@
 #include "GrpcControllerInterface.hpp"
-#include "InvalidInputException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 #include "yaml.h"
 #include <grpcpp/grpcpp.h>
 #include "controller.pb.h"
 #include "controller.grpc.pb.h"
 #include <ssc/kinematics.hpp>
 #include "grpc_error_outputter.hpp"
-#include "InternalErrorException.hpp"
+#include "exceptions/InternalErrorException.hpp"
 
 template <> std::string get_type_of_service<GrpcControllerInterface>()
 {

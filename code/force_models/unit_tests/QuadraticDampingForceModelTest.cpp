@@ -7,9 +7,9 @@
 
 #include "QuadraticDampingForceModel.hpp"
 #include "QuadraticDampingForceModelTest.hpp"
-#include "generate_body_for_tests.hpp"
-#include "BodyStates.hpp"
-#include "EnvironmentAndFrames.hpp"
+#include "xdyn/core/unit_tests/generate_body_for_tests.hpp"
+#include "xdyn/core/BodyStates.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
 
 #include <ssc/kinematics.hpp>
 
@@ -137,4 +137,3 @@ TEST_F(QuadraticDampingForceModelTest, example_with_dense_damping_matrix)
         }
     }
 }
-

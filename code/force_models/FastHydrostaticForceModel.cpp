@@ -6,10 +6,10 @@
  */
 
 #include "FastHydrostaticForceModel.hpp"
-#include "Body.hpp"
+#include "xdyn/core/Body.hpp"
 #include "calculate_gz.hpp"
 #include "mesh_manipulations.hpp"
-#include "Observer.hpp"
+#include "xdyn/core/Observer.hpp"
 
 std::string FastHydrostaticForceModel::model_name(){return "non-linear hydrostatic (fast)";}
 

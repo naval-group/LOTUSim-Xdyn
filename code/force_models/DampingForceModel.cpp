@@ -8,7 +8,7 @@
 #include "DampingForceModel.hpp"
 
 #include <Eigen/Dense>
-#include "Body.hpp"
+#include "xdyn/core/Body.hpp"
 
 
 DampingForceModel::DampingForceModel(const std::string& name_, const std::string& body_name_, const EnvironmentAndFrames& env, const Eigen::Matrix<double,6,6>& D_) :

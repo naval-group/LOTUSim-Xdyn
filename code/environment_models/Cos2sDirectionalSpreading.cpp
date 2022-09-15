@@ -7,7 +7,7 @@
 
 #include "Cos2sDirectionalSpreading.hpp"
 
-#include "InvalidInputException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 
 #include <boost/math/special_functions/gamma.hpp>
 

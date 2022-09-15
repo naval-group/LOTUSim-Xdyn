@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "DiracDirectionalSpreading.hpp"
+#include "environment_models/DiracDirectionalSpreading.hpp"
 
 #include <cmath>
 

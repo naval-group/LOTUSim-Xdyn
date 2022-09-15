@@ -6,7 +6,7 @@
  */
 
 #include "ExactHydrostaticForceModel.hpp"
-#include "Body.hpp"
+#include "xdyn/core/Body.hpp"
 #include "mesh_manipulations.hpp"
 
 std::string ExactHydrostaticForceModel::model_name(){return "non-linear hydrostatic (exact)";}

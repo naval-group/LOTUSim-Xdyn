@@ -6,8 +6,8 @@
  */
 
 #include "StretchingTest.hpp"
-#include "Stretching.hpp"
-#include "YamlWaveModelInput.hpp"
+#include "environment_models/Stretching.hpp"
+#include "external_data_structures/YamlWaveModelInput.hpp"
 
 StretchingTest::StretchingTest() : a(ssc::random_data_generator::DataGenerator(88223232))
 {

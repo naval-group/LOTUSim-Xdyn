@@ -5,13 +5,13 @@
  *      Author: cady
  */
 
-#include "BodyWithSurfaceForces.hpp"
-#include "DefaultSurfaceElevation.hpp"
+#include "xdyn/core/BodyWithSurfaceForces.hpp"
+#include "xdyn/core/DefaultSurfaceElevation.hpp"
 #include "FastHydrostaticForceModel.hpp"
 #include "HydrostaticForceModelTest.hpp"
-#include "generate_body_for_tests.hpp"
+#include "xdyn/core/unit_tests/generate_body_for_tests.hpp"
 #include "TriMeshTestData.hpp"
-#include "MeshIntersector.hpp"
+#include "mesh/MeshIntersector.hpp"
 #include "ExactHydrostaticForceModel.hpp"
 
 #include <ssc/kinematics.hpp>

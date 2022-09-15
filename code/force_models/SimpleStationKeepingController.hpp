@@ -8,7 +8,7 @@
 #ifndef SIMPLESTATIONKEEPINGCONTROLLER_HPP_
 #define SIMPLESTATIONKEEPINGCONTROLLER_HPP_
 
-#include "ForceModel.hpp"
+#include "xdyn/core/ForceModel.hpp"
 
 class SimpleStationKeepingController : public ForceModel
 {

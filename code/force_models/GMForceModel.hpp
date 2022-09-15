@@ -8,8 +8,8 @@
 #ifndef GMFORCEMODEL_HPP_
 #define GMFORCEMODEL_HPP_
 
-#include "ImmersedSurfaceForceModel.hpp"
-#include "EnvironmentAndFrames.hpp"
+#include "xdyn/core/ImmersedSurfaceForceModel.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
 
 class Body;
 

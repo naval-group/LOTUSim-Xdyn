@@ -7,15 +7,15 @@
 
 #include "RadiationDampingForceModel.hpp"
 
-#include "Body.hpp"
+#include "xdyn/core/Body.hpp"
 #include "HydroDBParser.hpp"
-#include "HDBParser.hpp"
-#include "PrecalParser.hpp"
-#include "History.hpp"
-#include "InvalidInputException.hpp"
-#include "InternalErrorException.hpp"
+#include "hdb_interpolators/HDBParser.hpp"
+#include "hdb_interpolators/PrecalParser.hpp"
+#include "hdb_interpolators/History.hpp"
+#include "exceptions/InvalidInputException.hpp"
+#include "exceptions/InternalErrorException.hpp"
 #include "RadiationDampingBuilder.hpp"
-#include "external_data_structures_parsers.hpp"
+#include "yaml_parser/external_data_structures_parsers.hpp"
 
 #include <ssc/macros.hpp>
 

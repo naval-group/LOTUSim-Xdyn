@@ -8,7 +8,7 @@
 #ifndef MAPOBSERVER_HPP_
 #define MAPOBSERVER_HPP_
 
-#include "Observer.hpp"
+#include "xdyn/core/Observer.hpp"
 
 class MapObserver : public Observer
 {

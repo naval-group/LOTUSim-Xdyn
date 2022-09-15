@@ -9,7 +9,7 @@
 #include <string>
 #include <boost/optional.hpp>
 
-#include "YamlCoordinates.hpp"
+#include "external_data_structures/YamlCoordinates.hpp"
 /*
  *     ss << "model: diffraction\n"
        << "hdb: test_ship.hdb\n"

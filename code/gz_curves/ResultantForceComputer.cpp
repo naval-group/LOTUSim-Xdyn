@@ -9,7 +9,7 @@
 #include "GZTypes.hpp"
 #include "GravityForceModel.hpp"
 #include "ResultantForceComputer.hpp"
-#include "Sim.hpp"
+#include "xdyn/core/Sim.hpp"
 
 #define NORM(f) (sqrt(f.X()*f.X()+f.Y()*f.Y()+f.Z()*f.Z()))
 

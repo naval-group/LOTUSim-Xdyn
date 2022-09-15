@@ -5,9 +5,9 @@
  *      Author: cady
  */
 
-#include "DiracSpectralDensity.hpp"
+#include "environment_models/DiracSpectralDensity.hpp"
 
-#include "InvalidInputException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 
 #include <cmath>
 #include <sstream>

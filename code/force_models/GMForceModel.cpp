@@ -9,13 +9,13 @@
 #include "calculate_gz.hpp"
 #include "yaml.h"
 #include <ssc/yaml_parser.hpp>
-#include "environment_parsers.hpp"
-#include "Body.hpp"
+#include "yaml_parser/environment_parsers.hpp"
+#include "xdyn/core/Body.hpp"
 #include "ExactHydrostaticForceModel.hpp"
 #include "FastHydrostaticForceModel.hpp"
-#include "Observer.hpp"
-#include "InvalidInputException.hpp"
-#include "BodyWithSurfaceForces.hpp"
+#include "xdyn/core/Observer.hpp"
+#include "exceptions/InvalidInputException.hpp"
+#include "xdyn/core/BodyWithSurfaceForces.hpp"
 
 std::string GMForceModel::model_name(){return "GM";}
 

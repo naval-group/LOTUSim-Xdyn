@@ -8,8 +8,8 @@
 #ifndef YAMLPOSITION_HPP_
 #define YAMLPOSITION_HPP_
 
-#include "YamlCoordinates.hpp"
-#include "YamlAngle.hpp"
+#include "external_data_structures/YamlCoordinates.hpp"
+#include "external_data_structures/YamlAngle.hpp"
 
 #include <ostream>
 #include <string>

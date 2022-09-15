@@ -5,8 +5,8 @@
  *      Author: cady
  */
 
-#include "DiscreteDirectionalWaveSpectrum.hpp"
-#include "InvalidInputException.hpp"
+#include "environment_models/DiscreteDirectionalWaveSpectrum.hpp"
+#include "exceptions/InvalidInputException.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>

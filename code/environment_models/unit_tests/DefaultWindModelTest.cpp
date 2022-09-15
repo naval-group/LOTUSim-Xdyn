@@ -7,7 +7,7 @@
 
 #include <Eigen/Dense>
 
-#include "DefaultWindModel.hpp"
+#include "environment_models/DefaultWindModel.hpp"
 
 #include "DefaultWindModelTest.hpp"
 

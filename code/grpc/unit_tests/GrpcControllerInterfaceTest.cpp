@@ -7,7 +7,7 @@
 
 #include "GrpcControllerInterface.hpp"
 #include "GrpcControllerInterfaceTest.hpp"
-#include "InvalidInputException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 #include "yaml_data.hpp"
 
 

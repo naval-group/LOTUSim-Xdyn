@@ -2,7 +2,7 @@
 #define PARSE_ADDRESS_HPP_
 
 #include <string>
-#include "YamlOutput.hpp"
+#include "external_data_structures/YamlOutput.hpp"
 
 struct WebsocketURLElements
 {

@@ -11,7 +11,7 @@
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 
-#include "WaveDirectionalSpreading.hpp"
+#include "environment_models/WaveDirectionalSpreading.hpp"
 
 /** \brief
  *  \details

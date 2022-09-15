@@ -7,8 +7,8 @@
 
 #include "RudderForceModel.hpp"
 
-#include "external_data_structures_parsers.hpp"
-#include "yaml2eigen.hpp"
+#include "yaml_parser/external_data_structures_parsers.hpp"
+#include "xdyn/core/yaml2eigen.hpp"
 
 #include <ssc/yaml_parser.hpp>
 #include "yaml.h"

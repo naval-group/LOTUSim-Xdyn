@@ -13,8 +13,8 @@
 #include "force.grpc.pb.h"
 
 #include "GRPCTypes.hpp"
-#include "DiscreteDirectionalWaveSpectrum.hpp"
-#include "EnvironmentAndFrames.hpp"
+#include "environment_models/DiscreteDirectionalWaveSpectrum.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
 
 #include "GRPCForceModel.hpp"
 

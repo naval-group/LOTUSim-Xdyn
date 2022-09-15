@@ -9,7 +9,7 @@
 #define MESH_MANIPULATIONS_HPP_
 
 #include "external_data_structures/GeometricTypes3d.hpp"
-#include "MeshIntersector.hpp"
+#include "mesh/MeshIntersector.hpp"
 
 
 /**  \author cady

@@ -11,7 +11,7 @@
 #include "UniformWindVelocityProfile.hpp"
 #include "PowerLawWindVelocityProfile.hpp"
 #include "LogWindVelocityProfile.hpp"
-#include "InvalidInputException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 
 #include "WindMeanVelocityProfileTest.hpp"
 

@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "YamlModel.hpp"
+#include "external_data_structures/YamlModel.hpp"
 
 YamlModel::YamlModel() : model(), yaml(), index_of_first_line_in_global_yaml()
 {

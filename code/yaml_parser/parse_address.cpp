@@ -2,7 +2,7 @@
 #include <cstdlib> // std::atoi
 #include <iostream>
 #include <boost/regex.hpp>
-#include "InvalidInputException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 
 boost::regex websocket_url_regex();
 boost::regex websocket_url_regex()

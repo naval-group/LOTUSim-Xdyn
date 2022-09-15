@@ -1,8 +1,8 @@
 #include "MMGManeuveringForceModel.hpp"
-#include "Body.hpp"
-#include "EnvironmentAndFrames.hpp"
-#include "YamlPosition.hpp"
-#include "BodyStates.hpp"
+#include "xdyn/core/Body.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
+#include "external_data_structures/YamlPosition.hpp"
+#include "xdyn/core/BodyStates.hpp"
 #include "yaml.h"
 #include <ssc/yaml_parser.hpp>
 #include <ssc/kinematics.hpp>

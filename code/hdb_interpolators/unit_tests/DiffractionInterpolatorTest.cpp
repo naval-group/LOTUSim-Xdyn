@@ -11,10 +11,10 @@
 #include <cmath>
 #define PI M_PI
 
-#include "HDBParser.hpp"
+#include "hdb_interpolators/HDBParser.hpp"
 #include "hdb_data.hpp"
 #include "RaoInterpolator.hpp"
-#include "YamlRAO.hpp"
+#include "external_data_structures/YamlRAO.hpp"
 
 DiffractionInterpolatorTest::DiffractionInterpolatorTest() : a(ssc::random_data_generator::DataGenerator(989899))
 {

@@ -9,11 +9,11 @@
 #include <cmath>
 #define PI M_PI
 
-#include "BodyStates.hpp"
+#include "xdyn/core/BodyStates.hpp"
 #include "yaml_data.hpp"
 #include "WageningenControlledForceModel.hpp"
 #include "WageningenControlledForceModelTest.hpp"
-#include "InvalidInputException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 
 #define EPS 1E-2
 #define NB_TRIALS 100

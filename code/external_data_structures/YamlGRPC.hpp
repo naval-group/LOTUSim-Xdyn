@@ -10,7 +10,7 @@
 
 #include <string>
 
-#include "YamlWaveOutput.hpp"
+#include "external_data_structures/YamlWaveOutput.hpp"
 
 struct YamlGRPC
 {

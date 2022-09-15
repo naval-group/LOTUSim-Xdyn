@@ -5,11 +5,11 @@
  *      Author: cady
  */
 
-#include "SimulatorYamlParser.hpp"
+#include "yaml_parser/SimulatorYamlParser.hpp"
 #include "yaml.h"
-#include "InvalidInputException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 #include <ssc/yaml_parser.hpp>
-#include "external_data_structures_parsers.hpp"
+#include "yaml_parser/external_data_structures_parsers.hpp"
 #include "parse_controllers.hpp"
 #include "parse_time_series.hpp"
 

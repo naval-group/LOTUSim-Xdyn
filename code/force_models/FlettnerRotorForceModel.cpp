@@ -1,7 +1,7 @@
 #include "FlettnerRotorForceModel.hpp"
-#include "ForceModel.hpp"
-#include "BodyStates.hpp"
-#include "external_data_structures_parsers.hpp"
+#include "xdyn/core/ForceModel.hpp"
+#include "xdyn/core/BodyStates.hpp"
+#include "yaml_parser/external_data_structures_parsers.hpp"
 #include "yaml.h"
 #include <Eigen/Dense>
 #include <ssc/yaml_parser.hpp>

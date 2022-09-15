@@ -6,7 +6,7 @@
  */
 
 
-#include "YamlWaveOutput.hpp"
+#include "external_data_structures/YamlWaveOutput.hpp"
 
 YamlWaveOutput::YamlWaveOutput() : frame_of_reference(""),
          xmin(0),

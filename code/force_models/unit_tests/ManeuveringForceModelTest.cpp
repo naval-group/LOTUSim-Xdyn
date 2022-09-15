@@ -6,8 +6,8 @@
  */
 #include "gmock/gmock.h"
 
-#include "EnvironmentAndFrames.hpp"
-#include "generate_body_for_tests.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
+#include "xdyn/core/unit_tests/generate_body_for_tests.hpp"
 #include "ManeuveringForceModelTest.hpp"
 #include "ManeuveringForceModel.hpp"
 #include "ManeuveringInternal.hpp"

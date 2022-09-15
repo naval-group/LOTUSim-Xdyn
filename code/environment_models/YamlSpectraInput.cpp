@@ -4,7 +4,7 @@
  *  Created on: Aug 7, 2014
  *      Author: cady
  */
-#include "YamlSpectraInput.hpp"
+#include "environment_models/YamlSpectraInput.hpp"
 
 YamlAiry::YamlAiry() :
 seed(0)

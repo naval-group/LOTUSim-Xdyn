@@ -8,10 +8,10 @@
 #ifndef YAMLBODY_HPP_
 #define YAMLBODY_HPP_
 
-#include "YamlPosition.hpp"
-#include "YamlSpeed.hpp"
-#include "YamlDynamics.hpp"
-#include "YamlModel.hpp"
+#include "external_data_structures/YamlPosition.hpp"
+#include "external_data_structures/YamlSpeed.hpp"
+#include "external_data_structures/YamlDynamics.hpp"
+#include "external_data_structures/YamlModel.hpp"
 
 #include <vector>
 #include <string>

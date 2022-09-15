@@ -8,9 +8,9 @@
 #include <algorithm>    // std::transform
 #include <numeric>      // std::partial_sum
 
-#include "History.hpp"
+#include "hdb_interpolators/History.hpp"
 #include "HistoryTest.hpp"
-#include "InternalErrorException.hpp"
+#include "exceptions/InternalErrorException.hpp"
 
 HistoryTest::HistoryTest() : a(ssc::random_data_generator::DataGenerator(5422))
 {

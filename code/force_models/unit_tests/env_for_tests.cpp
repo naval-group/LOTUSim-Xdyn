@@ -7,7 +7,7 @@
 
 
 #include "env_for_tests.hpp"
-#include "SurfaceElevationFromWaves.hpp"
+#include "xdyn/core/SurfaceElevationFromWaves.hpp"
 
 EnvironmentAndFrames get_environment_and_frames(const TR1(shared_ptr)<WaveModel>& wave_model)
 {
@@ -22,6 +22,3 @@ EnvironmentAndFrames get_environment_and_frames(const TR1(shared_ptr)<WaveModel>
     env.w = SurfaceElevationPtr(new SurfaceElevationFromWaves(wave_model));
     return env;
 }
-
-
-

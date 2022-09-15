@@ -10,9 +10,9 @@
 #include "parse_controllers.hpp"
 #include "parse_time_series.hpp"
 #include "yaml_data.hpp"
-#include "InvalidInputException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 #include "PIDController.hpp"
-#include "Sim.hpp"
+#include "xdyn/core/Sim.hpp"
 
 #define EPS (1E-14)
 #define _USE_MATH_DEFINE
@@ -214,7 +214,7 @@ TEST_F(listenersTest, get_pid_controllers_example)
         "    t: [0]\n"
         "    rpm: {unit: rad/s, values: [3]}\n"
         "    psi_co: {unit: deg, values: [30]}\n";
-    
+
     Sim sim = get_dummy_sim();
     //! [controllersTest listen_to_file_example]
     const auto controllers = build_controllers(0,

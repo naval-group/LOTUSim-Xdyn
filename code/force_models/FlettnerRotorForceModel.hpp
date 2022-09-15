@@ -10,8 +10,8 @@
 #include <ssc/kinematics.hpp>
 #include <ssc/interpolation.hpp>
 
-#include "BodyStates.hpp"
-#include "ForceModel.hpp"
+#include "xdyn/core/BodyStates.hpp"
+#include "xdyn/core/ForceModel.hpp"
 
 class FlettnerRotorForceModel : public ForceModel
 {

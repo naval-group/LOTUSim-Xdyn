@@ -7,7 +7,7 @@
 
 #include "mesh_manipulations.hpp"
 #include "MeshException.hpp"
-#include "InternalErrorException.hpp"
+#include "exceptions/InternalErrorException.hpp"
 
 double area(const Matrix3x& M, //!< Matrix containing (amongst others), the points of interest
             const int idxA,    //!< Index of the column containing the first point

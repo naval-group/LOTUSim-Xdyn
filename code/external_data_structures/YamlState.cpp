@@ -1,4 +1,4 @@
-#include "YamlState.hpp"
+#include "external_data_structures/YamlState.hpp"
 
 YamlState::YamlState()
     : AbstractStates<double>()
@@ -33,4 +33,3 @@ bool operator==(const YamlState& lhs, const YamlState& rhs)
             and (lhs.theta == rhs.theta)
             and (lhs.psi == rhs.psi);
 }
-

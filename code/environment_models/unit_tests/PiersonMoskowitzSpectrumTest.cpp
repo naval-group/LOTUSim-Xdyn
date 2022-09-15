@@ -11,7 +11,7 @@
 
 #include "PiersonMoskowitzSpectrumTest.hpp"
 #include "PiersonMoskowitzSpectrum.hpp"
-#include "InvalidInputException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 
 #define NB_TRIALS 10
 

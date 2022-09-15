@@ -6,12 +6,12 @@
  */
 #include <vector> // Needs to be declared before ssc/macros.hpp to overload <<
 #include <google/protobuf/stubs/common.h>
-#include "Airy.hpp"
-#include "DiracSpectralDensity.hpp"
-#include "DiracDirectionalSpreading.hpp"
-#include "Stretching.hpp"
-#include "discretize.hpp"
-#include "YamlWaveModelInput.hpp"
+#include "environment_models/Airy.hpp"
+#include "environment_models/DiracSpectralDensity.hpp"
+#include "environment_models/DiracDirectionalSpreading.hpp"
+#include "environment_models/Stretching.hpp"
+#include "environment_models/discretize.hpp"
+#include "external_data_structures/YamlWaveModelInput.hpp"
 #include <ssc/random_data_generator.hpp>
 #include <ssc/macros.hpp>
 

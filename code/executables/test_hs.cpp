@@ -5,22 +5,22 @@
  *      Author: cady
  */
 
-#include "Body.hpp"
-#include "DefaultSurfaceElevation.hpp"
+#include "xdyn/core/Body.hpp"
+#include "xdyn/core/DefaultSurfaceElevation.hpp"
 #include "FroudeKrylovForceModel.hpp"
 #include "TriMeshTestData.hpp"
-#include "MeshIntersector.hpp"
-#include "YamlRotation.hpp"
-#include "BodyBuilder.hpp"
+#include "mesh/MeshIntersector.hpp"
+#include "external_data_structures/YamlRotation.hpp"
+#include "xdyn/core/BodyBuilder.hpp"
 #include "external_data_structures/GeometricTypes3d.hpp"
 #include "xdyn/binary_stl_data/generate_test_ship.hpp"
-#include "DiracSpectralDensity.hpp"
-#include "DiracDirectionalSpreading.hpp"
-#include "discretize.hpp"
-#include "Airy.hpp"
-#include "SurfaceElevationFromWaves.hpp"
-#include "YamlWaveModelInput.hpp"
-#include "Stretching.hpp"
+#include "environment_models/DiracSpectralDensity.hpp"
+#include "environment_models/DiracDirectionalSpreading.hpp"
+#include "environment_models/discretize.hpp"
+#include "environment_models/Airy.hpp"
+#include "xdyn/core/SurfaceElevationFromWaves.hpp"
+#include "external_data_structures/YamlWaveModelInput.hpp"
+#include "environment_models/Stretching.hpp"
 #include <google/protobuf/stubs/common.h>
 #include <ssc/kinematics.hpp>
 

@@ -8,7 +8,7 @@
 #ifndef JONSWAPSPECTRUM_HPP_
 #define JONSWAPSPECTRUM_HPP_
 
-#include "WaveSpectralDensity.hpp"
+#include "environment_models/WaveSpectralDensity.hpp"
 
 /** \author cady
  *  \date Jul 30, 2014, 10:03:54 AM

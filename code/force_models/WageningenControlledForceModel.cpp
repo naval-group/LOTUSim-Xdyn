@@ -7,9 +7,9 @@
 
 #include "WageningenControlledForceModel.hpp"
 
-#include "Body.hpp"
-#include "external_data_structures_parsers.hpp"
-#include "InvalidInputException.hpp"
+#include "xdyn/core/Body.hpp"
+#include "yaml_parser/external_data_structures_parsers.hpp"
+#include "exceptions/InvalidInputException.hpp"
 
 #include <ssc/yaml_parser.hpp>
 

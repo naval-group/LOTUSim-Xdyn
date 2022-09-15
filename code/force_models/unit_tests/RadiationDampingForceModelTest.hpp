@@ -15,9 +15,9 @@
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 
-#include "Body.hpp"
+#include "xdyn/core/Body.hpp"
 #include "HDBParserForTests.hpp"
-#include "YamlRadiationDamping.hpp"
+#include "external_data_structures/YamlRadiationDamping.hpp"
 
 class RadiationDampingForceModelTest : public ::testing::Test
 {

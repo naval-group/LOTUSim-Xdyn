@@ -12,8 +12,8 @@
 #include <boost/optional/optional.hpp>
 #include <memory>
 #include <string>
-#include "YamlModel.hpp"
-#include "WindModel.hpp"
+#include "external_data_structures/YamlModel.hpp"
+#include "environment_models/WindModel.hpp"
 
 class WindMeanVelocityProfile;
 typedef std::shared_ptr<WindMeanVelocityProfile> WindMeanVelocityProfilePtr;

@@ -8,11 +8,11 @@
 #include "gmock/gmock.h"
 #include <boost/algorithm/string.hpp> // For boost::replace_all
 using namespace testing; // So we can use 'ElementsAre' unqualified
-#include "external_data_structures_parsers.hpp"
+#include "yaml_parser/external_data_structures_parsers.hpp"
 #include "SimulatorYamlParserTest.hpp"
 #include "yaml_data.hpp"
-#include "SimulatorYamlParser.hpp"
-#include "InvalidInputException.hpp"
+#include "yaml_parser/SimulatorYamlParser.hpp"
+#include "exceptions/InvalidInputException.hpp"
 #include "parse_controllers.hpp"
 #include "parse_time_series.hpp"
 #include "precal_test_data.hpp"

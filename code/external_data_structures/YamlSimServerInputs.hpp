@@ -1,7 +1,7 @@
 #ifndef EXTERNAL_DATA_STRUCTURES_INC_YAMLSIMSERVERINPUTS_HPP_
 #define EXTERNAL_DATA_STRUCTURES_INC_YAMLSIMSERVERINPUTS_HPP_
-#include "YamlController.hpp"
-#include "YamlState.hpp"
+#include "external_data_structures/YamlController.hpp"
+#include "external_data_structures/YamlState.hpp"
 #include <map>
 #include <vector>
 #include <string>

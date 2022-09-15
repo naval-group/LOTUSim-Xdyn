@@ -6,7 +6,7 @@
  */
 
 #include "DiracDirectionalSpreadingTest.hpp"
-#include "DiracDirectionalSpreading.hpp"
+#include "environment_models/DiracDirectionalSpreading.hpp"
 
 DiracDirectionalSpreadingTest::DiracDirectionalSpreadingTest() : a(ssc::random_data_generator::DataGenerator(58212))
 {
@@ -39,4 +39,3 @@ TEST_F(DiracDirectionalSpreadingTest, example)
     }
 //! [DiracDirectionalSpreadingTest expected output]
 }
-

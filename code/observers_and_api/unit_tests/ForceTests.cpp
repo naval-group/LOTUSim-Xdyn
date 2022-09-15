@@ -20,7 +20,7 @@
 #include "stl_writer.hpp"
 #include "TriMeshTestData.hpp"
 #include "GMForceModel.hpp"
-#include "SimulatorYamlParser.hpp"
+#include "yaml_parser/SimulatorYamlParser.hpp"
 #include "check_input_yaml.hpp"
 #include "simulator_api.hpp"
 

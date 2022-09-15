@@ -6,7 +6,7 @@
  */
 
 #include "calculate_gz.hpp"
-#include "EnvironmentAndFrames.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
 
 double calculate_gz(const ssc::kinematics::Transform& body2ned,
                     const ssc::kinematics::Wrench& force_and_torque_projected_in_NED_frame)
@@ -19,4 +19,3 @@ double calculate_gz(const ssc::kinematics::Transform& body2ned,
     const double my = force_and_torque_projected_in_NED_frame.torque(1);
     return (cos_psi_cos_theta*mx + sin_psi_cos_theta*my)/fz/Xbody_projected_in_NED_frame.norm();
 }
-

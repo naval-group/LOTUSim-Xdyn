@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-#include "YamlWaveOutput.hpp"
+#include "external_data_structures/YamlWaveOutput.hpp"
 
 struct YamlDiscretization
 {

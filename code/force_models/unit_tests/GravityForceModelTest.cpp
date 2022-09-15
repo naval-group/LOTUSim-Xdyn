@@ -5,10 +5,10 @@
  *      Author: cady
  */
 
-#include "EnvironmentAndFrames.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
 #include "GravityForceModel.hpp"
 #include "GravityForceModelTest.hpp"
-#include "generate_body_for_tests.hpp"
+#include "xdyn/core/unit_tests/generate_body_for_tests.hpp"
 #include <ssc/kinematics.hpp>
 
 #define BODY "body 1"

@@ -9,7 +9,7 @@
 #define GRAVITYFORCEMODEL_HPP_
 
 #include <ssc/kinematics.hpp>
-#include "ForceModel.hpp"
+#include "xdyn/core/ForceModel.hpp"
 
 class Body;
 struct EnvironmentAndFrames;

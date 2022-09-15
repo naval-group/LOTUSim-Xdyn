@@ -3,7 +3,7 @@
 
 #include "external_data_structures/GeometricTypes3d.hpp"
 #include "MeshNumeric.hpp"
-#include "Mesh.hpp"
+#include "mesh/Mesh.hpp"
 #include <map>
 
 struct Vector3dComparator

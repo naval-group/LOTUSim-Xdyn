@@ -8,7 +8,7 @@
 #include "check_input_yaml.hpp"
 #include "make_sim_for_GZ.hpp"
 #include "simulator_api.hpp"
-#include "SimulatorYamlParser.hpp"
+#include "yaml_parser/SimulatorYamlParser.hpp"
 
 Sim GZ::make_sim(const std::string& yaml, const std::string& stl)
 {

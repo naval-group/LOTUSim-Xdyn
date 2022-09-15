@@ -6,7 +6,7 @@
  */
 
 #include "PrecalParserHelper.hpp"
-#include "InvalidInputException.hpp"
+#include "exceptions/InvalidInputException.hpp"
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
 #include <cstdio>

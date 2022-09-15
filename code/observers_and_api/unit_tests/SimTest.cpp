@@ -5,11 +5,11 @@
  *      Author: cady
  */
 #include "SimObserver.hpp"
-#include "Sim.hpp"
+#include "xdyn/core/Sim.hpp"
 #include "SimTest.hpp"
 #include "yaml_data.hpp"
-#include "InternalErrorException.hpp"
-#include "SimulatorYamlParser.hpp"
+#include "exceptions/InternalErrorException.hpp"
+#include "yaml_parser/SimulatorYamlParser.hpp"
 #include "stl_data.hpp"
 #include "simulator_api.hpp"
 #include <ssc/solver/solve.hpp>

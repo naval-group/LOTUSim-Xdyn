@@ -10,10 +10,10 @@
 
 #include "gtest/gtest.h"
 #include <ssc/random_data_generator/DataGenerator.hpp>
-#include "EnvironmentAndFrames.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
 #include "external_data_structures/GeometricTypes3d.hpp"
 #include <ssc/macros.hpp>
-#include "WaveModel.hpp"
+#include "environment_models/WaveModel.hpp"
 #include TR1INC(memory)
 
 class FroudeKrylovForceModelTest : public ::testing::Test

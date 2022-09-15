@@ -8,7 +8,7 @@
 #ifndef SIMPLEHEADINGKEEPINGCONTROLLER_HPP_
 #define SIMPLEHEADINGKEEPINGCONTROLLER_HPP_
 
-#include "ForceModel.hpp"
+#include "xdyn/core/ForceModel.hpp"
 
 class SimpleHeadingKeepingController : public ForceModel
 {

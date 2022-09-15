@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "YamlOutput.hpp"
+#include "external_data_structures/YamlOutput.hpp"
 
 YamlOutput::YamlOutput() : filename(), format(), address(), port(), data(), full_output(false)
 {

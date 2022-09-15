@@ -9,7 +9,7 @@
 #define OBSERVERS_AND_API_INC_EVERYTHINGOBSERVER_HPP_
 
 #include "MapObserver.hpp"
-#include "Res.hpp"
+#include "xdyn/core/Res.hpp"
 
 class EverythingObserver : public MapObserver
 {

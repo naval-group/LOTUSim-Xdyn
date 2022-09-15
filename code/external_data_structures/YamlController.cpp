@@ -5,7 +5,7 @@
  *      Author: lincker
  */
 
-#include "YamlController.hpp"
+#include "external_data_structures/YamlController.hpp"
 
 YamlController::YamlController() : type(), dt(), name(), rest_of_the_yaml()
 {}

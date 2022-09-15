@@ -11,8 +11,8 @@
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 
-#include "ForceModel.hpp"
-#include "YamlRadiationDamping.hpp"
+#include "xdyn/core/ForceModel.hpp"
+#include "external_data_structures/YamlRadiationDamping.hpp"
 
 class HydroDBParser;
 

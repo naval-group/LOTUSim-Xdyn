@@ -2,8 +2,8 @@
 #define OBSERVERS_AND_API_INC_SIMSERVER_HPP_
 
 #include "ConfBuilder.hpp"
-#include "YamlState.hpp"
-#include "YamlSimServerInputs.hpp"
+#include "external_data_structures/YamlState.hpp"
+#include "external_data_structures/YamlSimServerInputs.hpp"
 #include "SimServerInputs.hpp"
 
 class XdynForCS

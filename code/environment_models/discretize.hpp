@@ -8,8 +8,8 @@
 #ifndef DISCRETIZE_HPP_
 #define DISCRETIZE_HPP_
 
-#include "DiscreteDirectionalWaveSpectrum.hpp"
-#include "YamlRadiationDamping.hpp"
+#include "environment_models/DiscreteDirectionalWaveSpectrum.hpp"
+#include "external_data_structures/YamlRadiationDamping.hpp"
 
 class Stretching;
 class WaveSpectralDensity;

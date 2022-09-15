@@ -5,9 +5,9 @@
  *      Author: cady
  */
 #include "ModelExchangeServiceImpl.hpp"
-#include "BodyStates.hpp"
+#include "xdyn/core/BodyStates.hpp"
 #include "SimServerInputs.hpp"
-#include "YamlSimServerInputs.hpp"
+#include "external_data_structures/YamlSimServerInputs.hpp"
 #include "ErrorReporter.hpp"
 #include <cmath>
 #include <sstream>

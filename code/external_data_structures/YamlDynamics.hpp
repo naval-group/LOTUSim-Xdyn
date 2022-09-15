@@ -8,8 +8,8 @@
 #ifndef YAMLDYNAMICS_HPP_
 #define YAMLDYNAMICS_HPP_
 
-#include "YamlPoint.hpp"
-#include "YamlDynamics6x6Matrix.hpp"
+#include "external_data_structures/YamlPoint.hpp"
+#include "external_data_structures/YamlDynamics6x6Matrix.hpp"
 
 struct YamlDynamics
 {

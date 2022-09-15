@@ -11,7 +11,7 @@
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 
-#include "WaveSpectralDensity.hpp"
+#include "environment_models/WaveSpectralDensity.hpp"
 
 typedef TR1(shared_ptr)<WaveSpectralDensity> WaveSpectralDensityPtr;
 

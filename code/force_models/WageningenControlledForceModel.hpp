@@ -13,7 +13,7 @@
 #define NB_COEFF_KT 39
 #define NB_COEFF_KQ 47
 
-#include "YamlPosition.hpp"
+#include "external_data_structures/YamlPosition.hpp"
 
 /** \brief
  *  \details

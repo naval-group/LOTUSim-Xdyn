@@ -1,5 +1,5 @@
 #include "stl_data.hpp"
-#include "stl_reader.hpp"
+#include "external_file_formats/stl_reader.hpp"
 #include "stl_io_hdf5.hpp"
 #include "stl_io_hdf5Test.hpp"
 
@@ -86,4 +86,3 @@ TEST_F(stl_io_hdf5Test, should_be_able_to_read_triangulated_mesh_with_several_fa
     }
     EXPECT_EQ(0,remove(fileName.c_str()));
 }
-

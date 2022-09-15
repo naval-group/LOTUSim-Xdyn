@@ -7,7 +7,7 @@
 
 
 #include "WaveSpectralDensityTest.hpp"
-#include "WaveSpectralDensity.hpp"
+#include "environment_models/WaveSpectralDensity.hpp"
 
 WaveSpectralDensityTest::WaveSpectralDensityTest() : a(ssc::random_data_generator::DataGenerator(3215))
 {
@@ -45,5 +45,3 @@ TEST_F(WaveSpectralDensityTest, bug_detected_by_FS)
     ASSERT_EQ(1, omega.size());
     ASSERT_DOUBLE_EQ(1, omega.front());
 }
-
-

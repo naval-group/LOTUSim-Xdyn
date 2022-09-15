@@ -8,7 +8,7 @@
 #ifndef SURFACE_ELEVATION_FROM_GRPC_HPP
 #define SURFACE_ELEVATION_FROM_GRPC_HPP
 
-#include "SurfaceElevationInterface.hpp"
+#include "xdyn/core/SurfaceElevationInterface.hpp"
 
 struct YamlGRPC;
 
