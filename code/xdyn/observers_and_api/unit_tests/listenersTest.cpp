@@ -6,10 +6,10 @@
  */
 
 #include "listenersTest.hpp"
-#include "listeners.hpp"
-#include "PIDController.hpp"
 #include "xdyn/core/Sim.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
+#include "listeners_and_controllers/PIDController.hpp"
+#include "listeners_and_controllers/listeners.hpp"
 #include "test_data_generator/yaml_data.hpp"
 #include "xdyn/yaml_parser/parse_controllers.hpp"
 #include "xdyn/yaml_parser/parse_time_series.hpp"

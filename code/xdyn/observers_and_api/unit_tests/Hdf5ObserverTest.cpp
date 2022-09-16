@@ -1,10 +1,10 @@
 
 #include "test_data_generator/yaml_data.hpp"
-#include "xdyn/yaml_parser/parse_output.hpp"
 #include "Hdf5Observer.hpp"
 #include "Hdf5ObserverTest.hpp"
 #include "ListOfObservers.hpp"
-#include "observers_and_api/simulator_api.hpp"
+#include "xdyn/observers_and_api/simulator_api.hpp"
+#include "xdyn/yaml_parser/parse_output.hpp"
 #include <ssc/solver/steppers.hpp>
 
 Hdf5ObserverTest::Hdf5ObserverTest() : a(ssc::random_data_generator::DataGenerator(546545))

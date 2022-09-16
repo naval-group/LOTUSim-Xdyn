@@ -1,7 +1,5 @@
 #include "ConfBuilder.hpp"
-#include "observers_and_api/simulator_api.hpp"
-
-
+#include "xdyn/observers_and_api/simulator_api.hpp"
 
 ConfBuilder::ConfBuilder(const std::string& yaml)
     : sim(get_system(yaml, 0))

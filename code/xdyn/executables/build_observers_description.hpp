@@ -2,7 +2,7 @@
 #define UTILITIES_FOR_SIMULATOR_HPP_
 
 #include "xdyn/external_data_structures/YamlOutput.hpp"
-#include "observers_and_api/ListOfObservers.hpp"
+#include "xdyn/observers_and_api/ListOfObservers.hpp"
 #include <string>
 #include <vector>
 

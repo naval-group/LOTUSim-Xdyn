@@ -6,17 +6,17 @@
  */
 
 
-#include "xdyn/yaml_parser/check_input_yaml.hpp"
 #include "ForceTester.hpp"
-#include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
-#include "observers_and_api/simulator_api.hpp"
 #include "xdyn/core/StateMacros.hpp"
 #include "xdyn/force_models/GMForceModel.hpp"
 #include "xdyn/force_models/ExactHydrostaticForceModel.hpp"
 #include "xdyn/force_models/DiffractionForceModel.hpp"
+#include "xdyn/observers_and_api/simulator_api.hpp"
 #include "test_data_generator/hdb_data.hpp"
 #include "test_data_generator/yaml_data.hpp"
 #include "test_data_generator/stl_data.hpp"
+#include "xdyn/yaml_parser/check_input_yaml.hpp"
+#include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
 
 Sim ForceTester::make_sim(const std::string& yaml, const std::string& stl) const
 {

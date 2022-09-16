@@ -1,5 +1,5 @@
-#include "observers_and_api/simulator_api.hpp"
-#include "listeners.hpp"
+#include "simulator_api.hpp"
+#include "listeners_and_controllers/listeners.hpp"
 #include "xdyn/core/DefaultSurfaceElevation.hpp"
 #include "xdyn/core/SimulatorBuilder.hpp"
 #include "xdyn/core/SurfaceElevationFromWaves.hpp"

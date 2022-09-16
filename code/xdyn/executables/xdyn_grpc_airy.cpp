@@ -7,8 +7,8 @@
 #include "display_command_line_arguments.hpp"
 #include "ErrorReporter.hpp"
 #include "xdyn/grpc/AiryGRPC.hpp"
-#include "observers_and_api/simulator_api.hpp" // xdyn/code/observers_and_api/simulator_api.hpp
 #include "test_data_generator/yaml_data.hpp" // To be removed late // xdyn/code/test_data_generator/yaml_data.hpp
+#include "xdyn/observers_and_api/simulator_api.hpp" // xdyn/code/observers_and_api/simulator_api.hpp
 #include <ssc/text_file_reader.hpp>
 #include <exception>
 #include <iostream>

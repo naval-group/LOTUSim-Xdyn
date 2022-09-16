@@ -1,11 +1,12 @@
-#include <functional>
-
 #include "XdynForCS.hpp"
 #include "JSONSerializer.hpp"
 #include "SimServerInputs.hpp"
-#include "observers_and_api/simulator_api.hpp"
-#include <ssc/solver/steppers.hpp>
+#include "xdyn/observers_and_api/simulator_api.hpp"
 #include "CoSimulationObserver.hpp"
+
+#include <ssc/solver/steppers.hpp>
+
+#include <functional>
 
 XdynForCS::XdynForCS(const std::string& yaml_model, const std::string& solver, const double dt):
         builder(yaml_model),

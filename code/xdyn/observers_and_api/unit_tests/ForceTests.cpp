@@ -5,9 +5,6 @@
  *      Author: cady
  */
 
-
-#include <boost/optional/optional_io.hpp>
-
 #include "ForceTester.hpp"
 #include "ForceTests.hpp"
 #include "xdyn/binary_stl_data/generate_test_ship.hpp"
@@ -15,16 +12,18 @@
 #include "xdyn/force_models/FastHydrostaticForceModel.hpp"
 #include "xdyn/force_models/GravityForceModel.hpp"
 #include "xdyn/force_models/GMForceModel.hpp"
+#include "xdyn/external_file_formats/stl_writer.hpp"
+#include "xdyn/observers_and_api/simulator_api.hpp"
+#include "test_data_generator/hdb_data.hpp"
 #include "test_data_generator/stl_data.hpp"
 #include "test_data_generator/yaml_data.hpp"
-#include "test_data_generator/hdb_data.hpp"
-#include "xdyn/external_file_formats/stl_writer.hpp"
 #include "test_data_generator/TriMeshTestData.hpp"
 #include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
 #include "xdyn/yaml_parser/check_input_yaml.hpp"
-#include "observers_and_api/simulator_api.hpp"
 
 #include <ssc/macros.hpp>
+
+#include <boost/optional/optional_io.hpp>
 
 #define EPS (1E-8)
 

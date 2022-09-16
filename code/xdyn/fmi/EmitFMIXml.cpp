@@ -5,15 +5,15 @@
  *      Author: cady
  */
 
-#include <boost/property_tree/xml_parser.hpp>
-#include <boost/property_tree/ptree.hpp>
-
 #include "EmitFMIXml.hpp"
 #include "FMIXml.hpp"
 #include "get_sha.hpp"
 #include "xdyn/core/Sim.hpp"
+#include "xdyn/observers_and_api/simulator_api.hpp"
 #include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
-#include "observers_and_api/simulator_api.hpp"
+
+#include <boost/property_tree/xml_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 #include <ctime>
 #include <iostream>

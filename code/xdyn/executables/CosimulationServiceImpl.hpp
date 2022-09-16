@@ -9,10 +9,10 @@
 #define EXECUTABLES_INC_XDYNFORCSGRPC_HPP_
 
 #include "xdyn/external_data_structures/YamlSimServerInputs.hpp"
+#include "xdyn/observers_and_api/XdynForCS.hpp"
+#include "ErrorReporter.hpp"
 #include "cosimulation.grpc.pb.h"
 #include "cosimulation.pb.h"
-#include "observers_and_api/XdynForCS.hpp"
-#include "ErrorReporter.hpp"
 #include "gRPCChecks.hpp"
 #include <grpcpp/grpcpp.h>
 

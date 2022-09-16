@@ -7,22 +7,22 @@
 #include "SimObserver.hpp"
 #include "xdyn/core/Sim.hpp"
 #include "SimTest.hpp"
-#include "test_data_generator/yaml_data.hpp"
-#include "xdyn/exceptions/InternalErrorException.hpp"
-#include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
-#include "test_data_generator/stl_data.hpp"
-#include "observers_and_api/simulator_api.hpp"
-#include <ssc/solver/solve.hpp>
-#include <ssc/solver/steppers.hpp>
-#include "test_data_generator/TriMeshTestData.hpp"
-#include "xdyn/binary_stl_data/generate_test_ship.hpp"
-#include "test_data_generator/hdb_data.hpp"
-#include "xdyn/yaml_parser/parse_output.hpp"
-#include "observers_and_api/ListOfObservers.hpp"
 #include "MapObserverTest.hpp"
-#include "precal_test_data.hpp"
+#include "xdyn/binary_stl_data/generate_test_ship.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
+#include "xdyn/observers_and_api/simulator_api.hpp"
+#include "test_data_generator/hdb_data.hpp"
+#include "test_data_generator/precal_test_data.hpp"
+#include "test_data_generator/stl_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
+#include "test_data_generator/TriMeshTestData.hpp"
+#include "xdyn/observers_and_api/ListOfObservers.hpp"
+#include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
+#include "xdyn/yaml_parser/parse_output.hpp"
 
 #include <ssc/data_source.hpp>
+#include <ssc/solver/solve.hpp>
+#include <ssc/solver/steppers.hpp>
 #include <boost/algorithm/string.hpp> // replace in string
 #include <fstream>
 #define _USE_MATH_DEFINE
