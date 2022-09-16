@@ -1,7 +1,7 @@
 #include "ListOfObservers.hpp"
 #include "ListOfObserversTest.hpp"
 #include "test_data_generator/yaml_data.hpp"
-#include "parse_output.hpp"
+#include "xdyn/yaml_parser/parse_output.hpp"
 
 TEST_F(ListOfObserversTest, should_be_able_to_create_a_list_of_observers)
 {

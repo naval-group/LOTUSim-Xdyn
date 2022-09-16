@@ -12,7 +12,7 @@
 #include "xdyn/core/BlockedDOF.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/exceptions/NumericalErrorException.hpp"
-#include "yaml_parser/external_data_structures_parsers.hpp"
+#include "xdyn/yaml_parser/external_data_structures_parsers.hpp"
 
 #include <ssc/csv_file_reader.hpp>
 #include <ssc/interpolation.hpp>

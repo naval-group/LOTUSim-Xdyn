@@ -7,7 +7,7 @@
 
 #include "ManeuveringForceModel.hpp"
 #include "xdyn/core/EnvironmentAndFrames.hpp"
-#include "yaml_parser/external_data_structures_parsers.hpp"
+#include "xdyn/yaml_parser/external_data_structures_parsers.hpp"
 #include "maneuvering_compiler.hpp"
 #include "maneuvering_DataSource_builder.hpp"
 #include "yaml.h"

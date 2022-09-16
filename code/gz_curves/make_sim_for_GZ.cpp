@@ -5,10 +5,10 @@
  *      Author: cady
  */
 
-#include "yaml_parser/check_input_yaml.hpp"
+#include "xdyn/yaml_parser/check_input_yaml.hpp"
 #include "make_sim_for_GZ.hpp"
 #include "observers_and_api/simulator_api.hpp"
-#include "yaml_parser/SimulatorYamlParser.hpp"
+#include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
 
 Sim GZ::make_sim(const std::string& yaml, const std::string& stl)
 {

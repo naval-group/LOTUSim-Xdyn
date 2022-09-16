@@ -20,8 +20,8 @@
 #include "test_data_generator/hdb_data.hpp"
 #include "xdyn/external_file_formats/stl_writer.hpp"
 #include "test_data_generator/TriMeshTestData.hpp"
-#include "yaml_parser/SimulatorYamlParser.hpp"
-#include "yaml_parser/check_input_yaml.hpp"
+#include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
+#include "xdyn/yaml_parser/check_input_yaml.hpp"
 #include "observers_and_api/simulator_api.hpp"
 
 #include <ssc/macros.hpp>

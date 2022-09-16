@@ -7,8 +7,8 @@
 #include <ssc/solver/Scheduler.hpp>
 #include <ssc/solver/solve.hpp>
 
-#include "yaml_parser/SimulatorYamlParser.hpp"
-#include "yaml_parser/check_input_yaml.hpp"
+#include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
+#include "xdyn/yaml_parser/check_input_yaml.hpp"
 #include "EverythingObserver.hpp"
 #include "listeners_and_controllers/listeners.hpp"
 #include "xdyn/core/Sim.hpp"

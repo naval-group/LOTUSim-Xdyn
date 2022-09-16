@@ -9,7 +9,7 @@
 #include "calculate_gz.hpp"
 #include "yaml.h"
 #include <ssc/yaml_parser.hpp>
-#include "yaml_parser/environment_parsers.hpp"
+#include "xdyn/yaml_parser/environment_parsers.hpp"
 #include "xdyn/core/Body.hpp"
 #include "ExactHydrostaticForceModel.hpp"
 #include "FastHydrostaticForceModel.hpp"

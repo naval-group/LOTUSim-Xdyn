@@ -12,7 +12,7 @@
 #include "FMIXml.hpp"
 #include "get_sha.hpp"
 #include "xdyn/core/Sim.hpp"
-#include "yaml_parser/SimulatorYamlParser.hpp"
+#include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
 #include "observers_and_api/simulator_api.hpp"
 
 #include <ctime>

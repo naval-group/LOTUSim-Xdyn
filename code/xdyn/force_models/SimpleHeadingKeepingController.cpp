@@ -7,7 +7,7 @@
 #include "SimpleHeadingKeepingController.hpp"
 
 #include "xdyn/core/BodyStates.hpp"
-#include "yaml_parser/external_data_structures_parsers.hpp"
+#include "xdyn/yaml_parser/external_data_structures_parsers.hpp"
 #include <ssc/yaml_parser.hpp>
 
 #include "yaml.h"

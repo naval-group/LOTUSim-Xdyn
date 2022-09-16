@@ -10,11 +10,11 @@
 #include "EverythingObserver.hpp"
 #include "EverythingObserverTest.hpp"
 #include "test_data_generator/yaml_data.hpp"
-#include "parse_output.hpp"
 #include "ListOfObservers.hpp"
 #include "observers_and_api/simulator_api.hpp"
-#include <ssc/solver/steppers.hpp>
 #include "test_data_generator/stl_data.hpp"
+#include "xdyn/yaml_parser/parse_output.hpp"
+#include <ssc/solver/steppers.hpp>
 
 #define EPS 1E-8
 #define _USE_MATH_DEFINE

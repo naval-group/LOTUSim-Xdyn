@@ -1,5 +1,5 @@
 #include "test_data_generator/yaml_data.hpp"
-#include "parse_output.hpp"
+#include "xdyn/yaml_parser/parse_output.hpp"
 #include "JsonObserver.hpp"
 #include "JsonObserverTest.hpp"
 #include "ListOfObservers.hpp"

@@ -9,7 +9,7 @@
 #include "SimTest.hpp"
 #include "test_data_generator/yaml_data.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
-#include "yaml_parser/SimulatorYamlParser.hpp"
+#include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
 #include "test_data_generator/stl_data.hpp"
 #include "observers_and_api/simulator_api.hpp"
 #include <ssc/solver/solve.hpp>
@@ -17,7 +17,7 @@
 #include "test_data_generator/TriMeshTestData.hpp"
 #include "xdyn/binary_stl_data/generate_test_ship.hpp"
 #include "test_data_generator/hdb_data.hpp"
-#include "parse_output.hpp"
+#include "xdyn/yaml_parser/parse_output.hpp"
 #include "observers_and_api/ListOfObservers.hpp"
 #include "MapObserverTest.hpp"
 #include "precal_test_data.hpp"

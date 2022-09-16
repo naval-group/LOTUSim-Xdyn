@@ -5,14 +5,14 @@
  *      Author: cady
  */
 
-#include <cstdio> // For remove
 #include "CSVControllerTest.hpp"
 #include "CSVController.hpp"
-#include "parse_controllers.hpp"
 #include "observers_and_api/simulator_api.hpp"
 #include "test_data_generator/yaml_data.hpp"
+#include "xdyn/yaml_parser/parse_controllers.hpp"
 #include <boost/algorithm/string.hpp>
 #include <ssc/solver/Scheduler.hpp>
+#include <cstdio> // For remove
 #define EPS (1E-14)
 #define _USE_MATH_DEFINE
 #include <cmath>

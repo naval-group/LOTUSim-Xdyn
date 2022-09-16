@@ -13,7 +13,7 @@
 #include "hdb_interpolators/PrecalParser.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
-#include "yaml_parser/external_data_structures_parsers.hpp"
+#include "xdyn/yaml_parser/external_data_structures_parsers.hpp"
 #include "yaml.h"
 
 std::string AbstractRaoForceModel::get_model_name(const YamlRAO::TypeOfRao& type_of_rao)

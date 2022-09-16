@@ -1,8 +1,8 @@
 #include "parse_address.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 #include <cstdlib> // std::atoi
 #include <iostream>
 #include <boost/regex.hpp>
-#include "xdyn/exceptions/InvalidInputException.hpp"
 
 boost::regex websocket_url_regex();
 boost::regex websocket_url_regex()

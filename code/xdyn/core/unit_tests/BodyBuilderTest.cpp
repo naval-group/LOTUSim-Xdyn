@@ -8,7 +8,7 @@
 #include "xdyn/core/BodyBuilder.hpp"
 #include "BodyBuilderTest.hpp"
 #include "mesh/Mesh.hpp"
-#include "yaml_parser/SimulatorYamlParser.hpp"
+#include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
 #include "test_data_generator/stl_data.hpp"
 #include "xdyn/external_file_formats/stl_reader.hpp"
 #include "test_data_generator/yaml_data.hpp"

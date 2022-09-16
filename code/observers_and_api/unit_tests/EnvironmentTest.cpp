@@ -1,6 +1,6 @@
 #include "EnvironmentTest.hpp"
 #include "xdyn/core/EnvironmentAndFrames.hpp"
-#include "yaml_parser/SimulatorYamlParser.hpp"
+#include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "test_data_generator/stl_data.hpp"
 #include "test_data_generator/yaml_data.hpp"

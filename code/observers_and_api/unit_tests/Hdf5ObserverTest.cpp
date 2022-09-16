@@ -1,6 +1,6 @@
 
 #include "test_data_generator/yaml_data.hpp"
-#include "parse_output.hpp"
+#include "xdyn/yaml_parser/parse_output.hpp"
 #include "Hdf5Observer.hpp"
 #include "Hdf5ObserverTest.hpp"
 #include "ListOfObservers.hpp"

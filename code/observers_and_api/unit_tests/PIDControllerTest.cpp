@@ -5,15 +5,16 @@
  *      Author: lincker
  */
 
-#include "observers_and_api/simulator_api.hpp"
-#include <ssc/solver/Scheduler.hpp>
-#include <ssc/solver/DiscreteSystem.hpp>
-#include "listeners.hpp"
 #include "PIDControllerTest.hpp"
 #include "PIDController.hpp"
-#include "parse_controllers.hpp"
-#include "parse_time_series.hpp"
+#include "observers_and_api/simulator_api.hpp"
+#include "listeners.hpp"
 #include "test_data_generator/yaml_data.hpp"
+#include "xdyn/yaml_parser/parse_controllers.hpp"
+#include "xdyn/yaml_parser/parse_time_series.hpp"
+
+#include <ssc/solver/Scheduler.hpp>
+#include <ssc/solver/DiscreteSystem.hpp>
 
 #define EPS (1E-14)
 #define _USE_MATH_DEFINE

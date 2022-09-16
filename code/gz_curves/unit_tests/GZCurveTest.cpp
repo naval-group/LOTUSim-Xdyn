@@ -13,7 +13,7 @@
 #include "xdyn/exceptions/InternalErrorException.hpp"
 #include "test_data_generator/stl_data.hpp"
 #include "test_data_generator/yaml_data.hpp"
-#include "yaml_parser/check_input_yaml.hpp"
+#include "xdyn/yaml_parser/check_input_yaml.hpp"
 #include "xdyn/binary_stl_data/generate_test_ship.hpp"
 #include "xdyn/external_file_formats/stl_writer.hpp"
 

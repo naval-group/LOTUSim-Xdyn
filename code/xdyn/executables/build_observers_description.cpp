@@ -1,8 +1,8 @@
 #include "build_observers_description.hpp"
-#include "yaml_parser/parse_output.hpp"
 #include "XdynCommandLineArguments.hpp"
 #include "xdyn/core/Sim.hpp"
 #include "xdyn/external_file_formats/stl_io_hdf5.hpp"
+#include "xdyn/yaml_parser/parse_output.hpp"
 #include "interface_hdf5/h5_tools.hpp"
 
 YamlOutput create_wave_observer_description(const XdynCommandLineArguments& input_data);

@@ -6,7 +6,7 @@
  */
 
 #include "environment_parsersTest.hpp"
-#include "yaml_parser/environment_parsers.hpp"
+#include "xdyn/yaml_parser/environment_parsers.hpp"
 #include "test_data_generator/yaml_data.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 
@@ -210,7 +210,7 @@ TEST_F(environment_parsersTest, clearer_error_message_if_missing_unit_value)
          * that is not shipped with Windows MXE cross platform build
          * Thus, we use boost::regex!
          */
-        const boost::regex expected_regex("Error parsing section wave/spectra: In file /opt/share/code/yaml_parser/environment_parsers.cpp, line [1-9][0-9]*, function void operator>>\\(const YAML::Node\\s*&, YamlStretching\\s*&\\): Error parsing wave stretching parameters \\('wave/spectra/stretching' section in the YAML file\\): In file /opt/share/code/yaml_parser/environment_parsers.cpp, line [1-9][0-9]*, function void operator>>\\(const YAML::Node\\s*&, YamlStretching\\s*&\\): Error parsing wave stretching parameters 'h': was expecting an object with fields 'unit' and 'value', e.g.:\n\th: \\{unit: 'm', value: 101\\}\nbut got the following error trying to parse it: yaml-cpp: error at line 0, column 0: bad dereference");
+        const boost::regex expected_regex("Error parsing section wave/spectra: In file .*/yaml_parser/environment_parsers.cpp, line [1-9][0-9]*, function void operator>>\\(const YAML::Node\\s*&, YamlStretching\\s*&\\): Error parsing wave stretching parameters \\('wave/spectra/stretching' section in the YAML file\\): In file .*yaml_parser/environment_parsers.cpp, line [1-9][0-9]*, function void operator>>\\(const YAML::Node\\s*&, YamlStretching\\s*&\\): Error parsing wave stretching parameters 'h': was expecting an object with fields 'unit' and 'value', e.g.:\n\th: \\{unit: 'm', value: 101\\}\nbut got the following error trying to parse it: yaml-cpp: error at line 0, column 0: bad dereference");
         ASSERT_TRUE(boost::regex_match(e.get_message(), expected_regex)) << e.get_message();
     }
     ASSERT_THROW(parse_waves(wave_yaml), InvalidInputException);

@@ -5,17 +5,20 @@
  *      Author: cady
  */
 
-#include "gmock/gmock.h"
-#include <boost/algorithm/string.hpp> // For boost::replace_all
-using namespace testing; // So we can use 'ElementsAre' unqualified
-#include "yaml_parser/external_data_structures_parsers.hpp"
+#include "xdyn/yaml_parser/external_data_structures_parsers.hpp"
 #include "SimulatorYamlParserTest.hpp"
 #include "test_data_generator/yaml_data.hpp"
-#include "yaml_parser/SimulatorYamlParser.hpp"
+#include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "parse_controllers.hpp"
 #include "parse_time_series.hpp"
-#include "precal_test_data.hpp"
+#include "test_data_generator/precal_test_data.hpp"
+
+#include "gmock/gmock.h"
+
+#include <boost/algorithm/string.hpp> // For boost::replace_all
+
+using namespace testing; // So we can use 'ElementsAre' unqualified
 
 const YamlSimulatorInput SimulatorYamlParserTest::yaml = SimulatorYamlParser(test_data::full_example_with_propulsion()).parse();
 const YamlSimulatorInput SimulatorYamlParserTest::old_yaml = SimulatorYamlParser(test_data::full_example_with_propulsion_and_old_key_name()).parse();

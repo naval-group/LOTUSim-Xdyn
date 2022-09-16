@@ -15,7 +15,7 @@
 #include "hdb_interpolators/HDBParser.hpp"
 #include "hdb_interpolators/PrecalParser.hpp"
 #include "hdb_interpolators/RadiationDampingBuilder.hpp"
-#include "yaml_parser/external_data_structures_parsers.hpp"
+#include "xdyn/yaml_parser/external_data_structures_parsers.hpp"
 
 #include <ssc/macros.hpp>
 

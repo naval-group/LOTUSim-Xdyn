@@ -7,7 +7,7 @@
 
 #include "ResistanceCurveForceModel.hpp"
 #include "xdyn/core/Body.hpp"
-#include "yaml_parser/environment_parsers.hpp"
+#include "xdyn/yaml_parser/environment_parsers.hpp"
 #include <ssc/interpolation.hpp>
 #include <ssc/yaml_parser.hpp>
 #include "yaml.h"

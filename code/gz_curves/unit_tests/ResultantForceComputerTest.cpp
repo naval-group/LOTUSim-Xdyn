@@ -7,7 +7,7 @@
 
 #include <set>
 
-#include "yaml_parser/check_input_yaml.hpp"
+#include "xdyn/yaml_parser/check_input_yaml.hpp"
 #include "ResultantForceComputerTest.hpp"
 #include "ResultantForceComputer.hpp"
 #include "GZTypes.hpp"

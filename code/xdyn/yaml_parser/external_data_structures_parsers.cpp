@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "yaml_parser/external_data_structures_parsers.hpp"
+#include "xdyn/yaml_parser/external_data_structures_parsers.hpp"
 #include "yaml.h"
 #include "yaml-cpp/exceptions.h"
 #include "xdyn/exceptions/InvalidInputException.hpp"

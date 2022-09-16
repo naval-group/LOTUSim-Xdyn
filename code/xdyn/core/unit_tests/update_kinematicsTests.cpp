@@ -9,7 +9,7 @@
 #include "update_kinematicsTests.hpp"
 #include "BodyBuilderTest.hpp"
 #include <ssc/kinematics.hpp>
-#include "yaml_parser/SimulatorYamlParser.hpp"
+#include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
 #include "test_data_generator/yaml_data.hpp"
 
 #define EPS (1E-10)
