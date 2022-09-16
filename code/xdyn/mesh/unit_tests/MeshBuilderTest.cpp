@@ -5,7 +5,7 @@
 #include "xdyn/exceptions/MeshException.hpp"
 #include "xdyn/mesh/Mesh.hpp"
 #include "MeshBuilderTest.hpp"
-#include "test_data_generator/TriMeshTestData.hpp"
+#include "xdyn/test_data_generator/TriMeshTestData.hpp"
 #include "xdyn/mesh/MeshBuilder.hpp"
 
 size_t get_oriented_edge_index(const size_t &e)

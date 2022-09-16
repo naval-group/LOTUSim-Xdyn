@@ -10,7 +10,7 @@
 #include "BodyBuilderTest.hpp"
 #include "xdyn/core/EnvironmentAndFrames.hpp"
 #include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
-#include "test_data_generator/yaml_data.hpp"
+#include "xdyn/test_data_generator/yaml_data.hpp"
 #include "xdyn/core/State.hpp"
 #define _USE_MATH_DEFINE
 #include <cmath>

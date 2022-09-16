@@ -1,5 +1,5 @@
 #include "stl_io_hdf5Test.hpp"
-#include "test_data_generator/stl_data.hpp"
+#include "xdyn/test_data_generator/stl_data.hpp"
 #include "xdyn/external_file_formats/stl_reader.hpp"
 #include "xdyn/external_file_formats/stl_io_hdf5.hpp"
 

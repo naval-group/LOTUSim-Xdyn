@@ -14,9 +14,9 @@
 #include "xdyn/environment_models/discretize.hpp"
 #include "xdyn/environment_models/Airy.hpp"
 #include "xdyn/force_models/DiffractionForceModel.hpp"
-#include "test_data_generator/yaml_data.hpp"
-#include "test_data_generator/hdb_data.hpp"
-#include "test_data_generator/precal_test_data.hpp"
+#include "xdyn/test_data_generator/yaml_data.hpp"
+#include "xdyn/test_data_generator/hdb_data.hpp"
+#include "xdyn/test_data_generator/precal_test_data.hpp"
 
 #include <fstream>
 

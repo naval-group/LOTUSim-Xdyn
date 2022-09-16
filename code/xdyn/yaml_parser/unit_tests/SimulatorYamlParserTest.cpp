@@ -7,12 +7,12 @@
 
 #include "xdyn/yaml_parser/external_data_structures_parsers.hpp"
 #include "SimulatorYamlParserTest.hpp"
-#include "test_data_generator/yaml_data.hpp"
+#include "xdyn/test_data_generator/yaml_data.hpp"
 #include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "parse_controllers.hpp"
 #include "parse_time_series.hpp"
-#include "test_data_generator/precal_test_data.hpp"
+#include "xdyn/test_data_generator/precal_test_data.hpp"
 
 #include "gmock/gmock.h"
 

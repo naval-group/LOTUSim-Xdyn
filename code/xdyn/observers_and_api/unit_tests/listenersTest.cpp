@@ -10,7 +10,7 @@
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/listeners_and_controllers/PIDController.hpp"
 #include "xdyn/listeners_and_controllers/listeners.hpp"
-#include "test_data_generator/yaml_data.hpp"
+#include "xdyn/test_data_generator/yaml_data.hpp"
 #include "xdyn/yaml_parser/parse_controllers.hpp"
 #include "xdyn/yaml_parser/parse_time_series.hpp"
 

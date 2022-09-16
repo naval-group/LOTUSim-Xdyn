@@ -8,10 +8,10 @@
 
 #include "file_writer.hpp"
 #include "xdyn/binary_stl_data/generate_test_ship.hpp"
-#include "test_data_generator/hdb_data.hpp"
-#include "test_data_generator/stl_data.hpp"
+#include "xdyn/test_data_generator/hdb_data.hpp"
+#include "xdyn/test_data_generator/stl_data.hpp"
 #include "xdyn/external_file_formats/stl_writer.hpp"
-#include "test_data_generator/TriMeshTestData.hpp"
+#include "xdyn/test_data_generator/TriMeshTestData.hpp"
 #include <google/protobuf/stubs/common.h>
 
 int main(int argc, const char* argv[])

@@ -20,7 +20,7 @@
 #include "env_for_tests.hpp"
 #include "RudderForceModelTest.hpp"
 #include "RudderForceModel.hpp"
-#include "test_data_generator/yaml_data.hpp"
+#include "xdyn/test_data_generator/yaml_data.hpp"
 #include "xdyn/external_data_structures/YamlWaveModelInput.hpp"
 #include "xdyn/environment_models/Stretching.hpp"
 

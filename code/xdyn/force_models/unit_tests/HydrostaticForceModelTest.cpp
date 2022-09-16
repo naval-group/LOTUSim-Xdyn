@@ -10,7 +10,7 @@
 #include "FastHydrostaticForceModel.hpp"
 #include "HydrostaticForceModelTest.hpp"
 #include "xdyn/core/unit_tests/generate_body_for_tests.hpp"
-#include "test_data_generator/TriMeshTestData.hpp"
+#include "xdyn/test_data_generator/TriMeshTestData.hpp"
 #include "xdyn/mesh/MeshIntersector.hpp"
 #include "ExactHydrostaticForceModel.hpp"
 

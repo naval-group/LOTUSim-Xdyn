@@ -11,9 +11,9 @@
 #include "xdyn/hdb_interpolators/RadiationDampingBuilder.hpp"
 #include "xdyn/force_models/RadiationDampingForceModel.hpp"
 #include "xdyn/core/EnvironmentAndFrames.hpp"
-#include "test_data_generator/hdb_data.hpp"
-#include "test_data_generator/precal_test_data.hpp"
-#include "test_data_generator/yaml_data.hpp"
+#include "xdyn/test_data_generator/hdb_data.hpp"
+#include "xdyn/test_data_generator/precal_test_data.hpp"
+#include "xdyn/test_data_generator/yaml_data.hpp"
 
 #include <ssc/integrate.hpp>
 #define _USE_MATH_DEFINE

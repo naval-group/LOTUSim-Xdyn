@@ -9,11 +9,11 @@
 #include "MapObserver.hpp"
 #include "MapObserverTest.hpp"
 #include "ListOfObservers.hpp"
-#include "test_data_generator/yaml_data.hpp"
+#include "xdyn/test_data_generator/yaml_data.hpp"
 #include "xdyn/observers_and_api/simulator_api.hpp"
 #include "xdyn/yaml_parser/parse_output.hpp"
 #include <ssc/solver/steppers.hpp>
-#include "test_data_generator/stl_data.hpp"
+#include "xdyn/test_data_generator/stl_data.hpp"
 
 #define EPS 1E-8
 #define _USE_MATH_DEFINE

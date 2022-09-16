@@ -6,8 +6,8 @@
  */
 
 #include "file_writer.hpp"
-#include "test_data_generator/yaml_data.hpp"
-#include "test_data_generator/precal_test_data.hpp"
+#include "xdyn/test_data_generator/yaml_data.hpp"
+#include "xdyn/test_data_generator/precal_test_data.hpp"
 #include <fstream>
 
 int main(int argc, const char* argv[])

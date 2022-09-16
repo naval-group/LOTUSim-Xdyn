@@ -10,7 +10,7 @@
 #include "get_sha.hpp"
 #include "ParseFMIXml.hpp"
 #include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
-#include "test_data_generator/yaml_data.hpp"
+#include "xdyn/test_data_generator/yaml_data.hpp"
 
 EmitFMIXmlTest::EmitFMIXmlTest() : a(ssc::random_data_generator::DataGenerator(21212))
 {

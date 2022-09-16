@@ -1,4 +1,4 @@
-#include "test_data_generator/yaml_data.hpp"
+#include "xdyn/test_data_generator/yaml_data.hpp"
 #include "JsonObserver.hpp"
 #include "JsonObserverTest.hpp"
 #include "ListOfObservers.hpp"

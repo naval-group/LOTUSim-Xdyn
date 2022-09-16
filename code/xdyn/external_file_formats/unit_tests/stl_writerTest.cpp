@@ -8,9 +8,9 @@
 #include "stl_writerTest.hpp"
 #include "xdyn/external_file_formats/stl_reader.hpp"
 #include "xdyn/external_file_formats/stl_writer.hpp"
-#include "test_data_generator/stl_data.hpp"
+#include "xdyn/test_data_generator/stl_data.hpp"
 #include "base91.hpp"
-#include "test_data_generator/TriMeshTestData.hpp"
+#include "xdyn/test_data_generator/TriMeshTestData.hpp"
 
 stl_writerTest::stl_writerTest() : a(ssc::random_data_generator::DataGenerator(542))
 {

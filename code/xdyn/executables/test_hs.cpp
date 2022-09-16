@@ -9,7 +9,7 @@
 #include "xdyn/core/DefaultSurfaceElevation.hpp"
 #include "xdyn/core/SurfaceElevationFromWaves.hpp"
 #include "xdyn/force_models/FroudeKrylovForceModel.hpp"
-#include "test_data_generator/TriMeshTestData.hpp"
+#include "xdyn/test_data_generator/TriMeshTestData.hpp"
 #include "xdyn/mesh/MeshIntersector.hpp"
 #include "xdyn/external_data_structures/GeometricTypes3d.hpp"
 #include "xdyn/external_data_structures/YamlRotation.hpp"

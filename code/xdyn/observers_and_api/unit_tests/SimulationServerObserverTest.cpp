@@ -1,6 +1,6 @@
 #include "SimulationServerObserverTest.hpp"
 
-#include "test_data_generator/yaml_data.hpp"
+#include "xdyn/test_data_generator/yaml_data.hpp"
 #include "xdyn/observers_and_api/simulator_api.hpp"
 #include "xdyn/yaml_parser/parse_output.hpp"
 

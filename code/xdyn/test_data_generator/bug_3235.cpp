@@ -1,6 +1,6 @@
 #include <sstream>
 
-#include "test_data_generator/yaml_data.hpp"
+#include "xdyn/test_data_generator/yaml_data.hpp"
 
 // For DTMB BEGO MAHDB (YAML by Antoine PAGES)
 

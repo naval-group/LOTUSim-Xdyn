@@ -1,4 +1,4 @@
-#include "test_data_generator/hdb_data.hpp"
+#include "xdyn/test_data_generator/hdb_data.hpp"
 #include <sstream>
 
 std::string test_data::hdb_issue_184()

@@ -7,7 +7,7 @@
 
 #include "xdyn/hdb_interpolators/HDBParser.hpp"
 #include "HDBParserTest.hpp"
-#include "test_data_generator/hdb_data.hpp"
+#include "xdyn/test_data_generator/hdb_data.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 
 #define _USE_MATH_DEFINE

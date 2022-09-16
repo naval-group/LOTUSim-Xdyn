@@ -1,9 +1,9 @@
 #include "py_xdyn_data.hpp"
 #include "py_pybind_additions.hpp"
-#include "test_data_generator/TriMeshTestData.hpp"
-#include "test_data_generator/hdb_data.hpp"
-#include "test_data_generator/yaml_data.hpp"
-#include "test_data_generator/precal_test_data.hpp"
+#include "xdyn/test_data_generator/TriMeshTestData.hpp"
+#include "xdyn/test_data_generator/hdb_data.hpp"
+#include "xdyn/test_data_generator/yaml_data.hpp"
+#include "xdyn/test_data_generator/precal_test_data.hpp"
 #include "xdyn/core/Body.hpp"
 #include "xdyn/core/BodyBuilder.hpp"
 #include <string>

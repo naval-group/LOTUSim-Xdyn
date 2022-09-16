@@ -1,6 +1,6 @@
 #include <cmath>
 
-#include "test_data_generator/TriMeshTestData.hpp"
+#include "xdyn/test_data_generator/TriMeshTestData.hpp"
 
 VectorOfPoints one_triangle()
 {
