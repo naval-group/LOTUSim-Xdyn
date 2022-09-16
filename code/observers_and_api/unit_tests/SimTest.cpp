@@ -11,14 +11,14 @@
 #include "xdyn/exceptions/InternalErrorException.hpp"
 #include "yaml_parser/SimulatorYamlParser.hpp"
 #include "test_data_generator/stl_data.hpp"
-#include "simulator_api.hpp"
+#include "observers_and_api/simulator_api.hpp"
 #include <ssc/solver/solve.hpp>
 #include <ssc/solver/steppers.hpp>
 #include "test_data_generator/TriMeshTestData.hpp"
 #include "xdyn/binary_stl_data/generate_test_ship.hpp"
 #include "test_data_generator/hdb_data.hpp"
 #include "parse_output.hpp"
-#include "ListOfObservers.hpp"
+#include "observers_and_api/ListOfObservers.hpp"
 #include "MapObserverTest.hpp"
 #include "precal_test_data.hpp"
 

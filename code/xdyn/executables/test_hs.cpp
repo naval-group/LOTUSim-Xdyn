@@ -7,20 +7,20 @@
 
 #include "xdyn/core/Body.hpp"
 #include "xdyn/core/DefaultSurfaceElevation.hpp"
-#include "FroudeKrylovForceModel.hpp"
+#include "xdyn/core/SurfaceElevationFromWaves.hpp"
+#include "force_models/FroudeKrylovForceModel.hpp"
 #include "test_data_generator/TriMeshTestData.hpp"
 #include "mesh/MeshIntersector.hpp"
+#include "xdyn/external_data_structures/GeometricTypes3d.hpp"
 #include "xdyn/external_data_structures/YamlRotation.hpp"
 #include "xdyn/core/BodyBuilder.hpp"
-#include "xdyn/external_data_structures/GeometricTypes3d.hpp"
 #include "xdyn/binary_stl_data/generate_test_ship.hpp"
+#include "xdyn/environment_models/Airy.hpp"
 #include "xdyn/environment_models/DiracSpectralDensity.hpp"
 #include "xdyn/environment_models/DiracDirectionalSpreading.hpp"
-#include "xdyn/environment_models/discretize.hpp"
-#include "xdyn/environment_models/Airy.hpp"
-#include "xdyn/core/SurfaceElevationFromWaves.hpp"
-#include "xdyn/external_data_structures/YamlWaveModelInput.hpp"
 #include "xdyn/environment_models/Stretching.hpp"
+#include "xdyn/environment_models/discretize.hpp"
+#include "xdyn/external_data_structures/YamlWaveModelInput.hpp"
 #include <google/protobuf/stubs/common.h>
 #include <ssc/kinematics.hpp>
 

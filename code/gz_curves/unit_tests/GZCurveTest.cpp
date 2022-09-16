@@ -8,11 +8,12 @@
 
 #include "GZCurveTest.hpp"
 #include "GZCurve.hpp"
+#include "gz_curves/make_sim_for_GZ.cpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
 #include "test_data_generator/stl_data.hpp"
 #include "test_data_generator/yaml_data.hpp"
-#include "make_sim_for_GZ.hpp"
+#include "yaml_parser/check_input_yaml.hpp"
 #include "xdyn/binary_stl_data/generate_test_ship.hpp"
 #include "xdyn/external_file_formats/stl_writer.hpp"
 

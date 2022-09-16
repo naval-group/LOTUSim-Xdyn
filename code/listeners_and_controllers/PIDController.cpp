@@ -7,7 +7,7 @@
 
 #include "yaml.h"
 #include "PIDController.hpp"
-#include "check_input_yaml.hpp"
+#include "yaml_parser/check_input_yaml.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 
 PIDController::PIDController (const double tstart,

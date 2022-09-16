@@ -7,7 +7,7 @@
 
 #include <boost/algorithm/string.hpp> // For boost::to_upper
 
-#include "check_input_yaml.hpp"
+#include "yaml_parser/check_input_yaml.hpp"
 #include "InterpolationModule.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "listeners.hpp"

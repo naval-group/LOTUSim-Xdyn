@@ -5,12 +5,13 @@
  *      Author: cady
  */
 
-#include <sstream>
-
+#include "get_sha.hpp"
 #include "Sha.hpp"
 #include "xdyn/external_data_structures/YamlSimulatorInput.hpp"
-#include "get_sha.hpp"
-#include "get_git_sha.h"
+#include "get_git_sha/get_git_sha.h"
+#include "yaml_parser/check_input_yaml.hpp"
+
+#include <sstream>
 
 std::string sha(const std::string& s, const YamlSimulatorInput& i);
 std::string sha(const std::string& s, const YamlSimulatorInput& i)

@@ -6,10 +6,10 @@
  */
 
 
-#include "check_input_yaml.hpp"
+#include "yaml_parser/check_input_yaml.hpp"
 #include "ForceTester.hpp"
 #include "yaml_parser/SimulatorYamlParser.hpp"
-#include "simulator_api.hpp"
+#include "observers_and_api/simulator_api.hpp"
 #include "xdyn/core/StateMacros.hpp"
 #include "GMForceModel.hpp"
 #include "ExactHydrostaticForceModel.hpp"

@@ -13,7 +13,7 @@
 
 #include "build_observers_description.hpp"
 #include "parse_XdynCommandLineArguments.hpp"
-#include "simulator_api.hpp"
+#include "observers_and_api/simulator_api.hpp"
 #include "XdynCommandLineArguments.hpp"
 
 #include <ssc/solver/solve.hpp>

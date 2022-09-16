@@ -1,10 +1,10 @@
+#include "display_command_line_arguments.hpp"
+#include "parse_XdynForCSCommandLineArguments.hpp"
+#include "boost_program_options_descriptions/OptionPrinter.hpp"
+
 #include <algorithm>
 #include <cstdlib> // EXIT_FAILURE, EXIT_SUCCESS
 #include <iostream>
-
-#include "display_command_line_arguments.hpp"
-#include "parse_XdynForCSCommandLineArguments.hpp"
-#include "OptionPrinter.hpp"
 
 bool invalid(const XdynForCSCommandLineArguments& input)
 {

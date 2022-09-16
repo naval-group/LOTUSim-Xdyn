@@ -85,7 +85,7 @@ ADD_SUBDIRECTORY(grpc)
 ADD_SUBDIRECTORY(listeners_and_controllers)
 ADD_SUBDIRECTORY(observers_and_api)
 ADD_SUBDIRECTORY(gz_curves)
-ADD_SUBDIRECTORY(executables)
+ADD_SUBDIRECTORY(xdyn/executables)
 ADD_SUBDIRECTORY(fmi)
 
 IF (WIN32)
@@ -182,7 +182,7 @@ SET(TEST_EXE run_all_tests)
 INCLUDE_DIRECTORIES(SYSTEM ${PROTOBUF_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(SYSTEM ${GRPC_INCLUDE_DIR})
 ADD_EXECUTABLE(${TEST_EXE}
-        executables/run_all_tests.cpp
+        xdyn/executables/run_all_tests.cpp
         $<TARGET_OBJECTS:mesh_tests>
         $<TARGET_OBJECTS:yaml_parser_tests>
         $<TARGET_OBJECTS:external_file_formats_tests>

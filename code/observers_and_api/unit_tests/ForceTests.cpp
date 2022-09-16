@@ -21,8 +21,8 @@
 #include "test_data_generator/TriMeshTestData.hpp"
 #include "GMForceModel.hpp"
 #include "yaml_parser/SimulatorYamlParser.hpp"
-#include "check_input_yaml.hpp"
-#include "simulator_api.hpp"
+#include "yaml_parser/check_input_yaml.hpp"
+#include "observers_and_api/simulator_api.hpp"
 
 #include <ssc/macros.hpp>
 

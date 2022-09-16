@@ -3,7 +3,7 @@
 #include "XdynForCS.hpp"
 #include "JSONSerializer.hpp"
 #include "SimServerInputs.hpp"
-#include "simulator_api.hpp"
+#include "observers_and_api/simulator_api.hpp"
 #include <ssc/solver/steppers.hpp>
 #include "CoSimulationObserver.hpp"
 

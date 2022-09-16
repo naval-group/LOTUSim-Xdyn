@@ -1,5 +1,5 @@
-#include "get_git_sha.h"
-#include "mesh_manipulations.hpp"
+#include "get_git_sha/get_git_sha.h"
+#include "mesh/mesh_manipulations.hpp"
 #include "xdyn/external_file_formats/stl_reader.hpp"
 #include "xdyn/external_file_formats/stl_writer.hpp"
 #include "base91.hpp"

@@ -8,9 +8,9 @@
 #include <ssc/solver/solve.hpp>
 
 #include "yaml_parser/SimulatorYamlParser.hpp"
-#include "check_input_yaml.hpp"
+#include "yaml_parser/check_input_yaml.hpp"
 #include "EverythingObserver.hpp"
-#include "listeners.hpp"
+#include "listeners_and_controllers/listeners.hpp"
 #include "xdyn/core/Sim.hpp"
 #include "xdyn/core/SimulatorBuilder.hpp"
 #include "SimObserver.hpp"

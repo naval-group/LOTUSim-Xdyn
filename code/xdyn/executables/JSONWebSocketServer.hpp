@@ -13,7 +13,7 @@
 #include <ssc/websocket.hpp>
 #include <ssc/macros.hpp>
 
-#include "JSONSerializer.hpp"
+#include "observers_and_api/JSONSerializer.hpp"
 #include "ErrorReporter.hpp"
 
 volatile sig_atomic_t stop;

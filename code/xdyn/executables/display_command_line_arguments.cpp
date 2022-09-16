@@ -8,8 +8,8 @@
 #include <ssc/check_ssc_version.hpp>
 
 #include "display_command_line_arguments.hpp"
-#include "get_git_sha.h"
-#include "OptionPrinter.hpp"
+#include "get_git_sha/get_git_sha.h"
+#include "boost_program_options_descriptions/OptionPrinter.hpp"
 
 std::string description(const std::string& des)
 {

@@ -1,12 +1,11 @@
 #include "py_xdyn_exe.hpp"
 #include "py_pybind_additions.hpp"
 
-#include "executables/ErrorReporter.hpp"
-#include "executables/XdynCommandLineArguments.hpp"
-#include "executables/parse_XdynCommandLineArguments.hpp"
-#include "executables/build_observers_description.hpp"
+#include "xdyn/executables/ErrorReporter.hpp"
+#include "xdyn/executables/XdynCommandLineArguments.hpp"
+#include "xdyn/executables/parse_XdynCommandLineArguments.hpp"
+#include "xdyn/executables/build_observers_description.hpp"
 #include "observers_and_api/simulator_api.hpp"
-
 #include "ssc/ssc/text_file_reader.hpp"
 #include "ssc/ssc/solver/solve.hpp"
 #include "ssc/ssc/solver/steppers.hpp"

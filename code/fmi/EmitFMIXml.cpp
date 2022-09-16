@@ -13,7 +13,7 @@
 #include "get_sha.hpp"
 #include "xdyn/core/Sim.hpp"
 #include "yaml_parser/SimulatorYamlParser.hpp"
-#include "simulator_api.hpp"
+#include "observers_and_api/simulator_api.hpp"
 
 #include <ctime>
 #include <iostream>

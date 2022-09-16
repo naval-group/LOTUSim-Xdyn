@@ -1,8 +1,8 @@
-#include "XdynForME.hpp"
+#include "observers_and_api/XdynForME.hpp"
 #include "parse_XdynForMECommandLineArguments.hpp"
 #include "XdynForMECommandLineArguments.hpp"
 
-#include "gRPCProtoBufServer.hpp"
+#include "observers_and_api/gRPCProtoBufServer.hpp"
 #include "ModelExchangeServiceImpl.hpp"
 #include "JSONWebSocketServer.hpp"
 #include "ErrorReporter.hpp"
@@ -69,4 +69,3 @@ int main(int argc, char** argv)
     }
     return EXIT_SUCCESS;
 }
-

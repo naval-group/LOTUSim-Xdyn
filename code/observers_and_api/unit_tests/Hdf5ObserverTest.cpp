@@ -4,7 +4,7 @@
 #include "Hdf5Observer.hpp"
 #include "Hdf5ObserverTest.hpp"
 #include "ListOfObservers.hpp"
-#include "simulator_api.hpp"
+#include "observers_and_api/simulator_api.hpp"
 #include <ssc/solver/steppers.hpp>
 
 Hdf5ObserverTest::Hdf5ObserverTest() : a(ssc::random_data_generator::DataGenerator(546545))

@@ -1,26 +1,8 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
 PROJECT(executables)
 
-INCLUDE_DIRECTORIES(${get_git_sha_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${exceptions_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${boost_program_options_descriptions_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${test_data_generator_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${external_data_structures_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${core_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${yaml_parser_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${external_file_formats_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${mesh_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${environment_models_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${binary_stl_data_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${force_models_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${listeners_and_controllers_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${observers_and_api_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${hdb_interpolators_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${gz_curves_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${interface_hdf5_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(${grpc_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
+INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
@@ -30,7 +12,7 @@ INCLUDE_DIRECTORIES(SYSTEM ${HDF5_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(SYSTEM ${PROTOBUF_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(SYSTEM ${GRPC_INCLUDE_DIR})
 
-SET(cosimulation_proto ${CMAKE_CURRENT_SOURCE_DIR}/../../interfaces/proto/cosimulation.proto)
+SET(cosimulation_proto ${CMAKE_CURRENT_SOURCE_DIR}/../../../interfaces/proto/cosimulation.proto)
 SET(cosimulation_proto_srcs "${CMAKE_CURRENT_BINARY_DIR}/cosimulation.pb.cc")
 SET(cosimulation_proto_hdrs "${CMAKE_CURRENT_BINARY_DIR}/cosimulation.pb.h")
 SET(cosimulation_grpc_srcs "${CMAKE_CURRENT_BINARY_DIR}/cosimulation.grpc.pb.cc")
@@ -46,7 +28,7 @@ ADD_CUSTOM_COMMAND(
          "${PROTOC_PREFIX}${cosimulation_proto}"
     DEPENDS "${cosimulation_proto}")
 
-SET(model_exchange_proto ${CMAKE_CURRENT_SOURCE_DIR}/../../interfaces/proto/model_exchange.proto)
+SET(model_exchange_proto ${CMAKE_CURRENT_SOURCE_DIR}/../../../interfaces/proto/model_exchange.proto)
 SET(model_exchange_proto_srcs "${CMAKE_CURRENT_BINARY_DIR}/model_exchange.pb.cc")
 SET(model_exchange_proto_hdrs "${CMAKE_CURRENT_BINARY_DIR}/model_exchange.pb.h")
 SET(model_exchange_grpc_srcs "${CMAKE_CURRENT_BINARY_DIR}/model_exchange.grpc.pb.cc")
@@ -322,9 +304,9 @@ ENDIF()
 
 INSTALL(
     FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../postprocessing/Python/plot.py
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../postprocessing/Python/animate.py
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../postprocessing/Python/waveYamlToCsv.py
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../../postprocessing/Python/plot.py
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../../postprocessing/Python/animate.py
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../../postprocessing/Python/waveYamlToCsv.py
     DESTINATION demos)
 
 INSTALL(

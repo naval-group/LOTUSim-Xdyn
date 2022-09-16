@@ -1,5 +1,5 @@
 /*
- * DampingMatrixInterpolatorTest.cpp
+ * RadiationDampingBuilderTest.cpp
  *
  *  Created on: Nov 27, 2014
  *      Author: cady
@@ -114,7 +114,7 @@ TEST_F(RadiationDampingBuilderTest, can_create_exponentially_spaced_intervals)
         double delta = v[1]-v[0];
         for (size_t i = 2 ; i < n ; ++i)
         {
-            ASSERT_LT(std::abs(delta), std::abs(v[i]-v[i-1]));
+            ASSERT_LT(delta, v[i]-v[i-1]);
             delta = v[i]-v[i-1];
         }
     }

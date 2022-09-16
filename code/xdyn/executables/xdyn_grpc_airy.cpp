@@ -2,18 +2,18 @@
  * xdyn_grpc_airy.cpp
  *
  */
-#include <exception>
-#include <iostream>
-#include <google/protobuf/stubs/common.h>
-#include <grpcpp/grpcpp.h>
 #include "gRPCChecks.hpp"
 #include "parse_XdynCommandLineArguments.hpp"
 #include "display_command_line_arguments.hpp"
 #include "ErrorReporter.hpp"
-#include "AiryGRPC.hpp"
-#include "simulator_api.hpp" // xdyn/code/observers_and_api/simulator_api.hpp
+#include "grpc/AiryGRPC.hpp"
+#include "observers_and_api/simulator_api.hpp" // xdyn/code/observers_and_api/simulator_api.hpp
 #include "test_data_generator/yaml_data.hpp" // To be removed late // xdyn/code/test_data_generator/yaml_data.hpp
 #include <ssc/text_file_reader.hpp>
+#include <exception>
+#include <iostream>
+#include <google/protobuf/stubs/common.h>
+#include <grpcpp/grpcpp.h>
 
 const std::string xdyn_grpc_airy_description = "This is the Airy wave gRPC server, based on xdyn";
 

@@ -5,7 +5,7 @@
  *      Author: lincker
  */
 
-#include "simulator_api.hpp"
+#include "observers_and_api/simulator_api.hpp"
 #include <ssc/solver/Scheduler.hpp>
 #include <ssc/solver/DiscreteSystem.hpp>
 #include "listeners.hpp"

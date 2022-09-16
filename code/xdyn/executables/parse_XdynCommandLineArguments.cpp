@@ -5,16 +5,14 @@
  *      Author: cady
  */
 
+#include "display_command_line_arguments.hpp"
+#include "parse_XdynCommandLineArguments.hpp"
+#include "XdynCommandLineArguments.hpp"
+#include "boost_program_options_descriptions/OptionPrinter.hpp"
+
 #include <algorithm>
 #include <cstdlib> // EXIT_FAILURE, EXIT_SUCCESS
 #include <iostream>
-
-#include "display_command_line_arguments.hpp"
-#include "parse_XdynCommandLineArguments.hpp"
-#include "OptionPrinter.hpp"
-#include "XdynCommandLineArguments.hpp"
-
-
 
 bool invalid(const XdynCommandLineArguments& input)
 {

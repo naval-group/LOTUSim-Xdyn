@@ -5,15 +5,16 @@
  *      Author: cady
  */
 
+#include "get_git_sha/get_git_sha.h"
+#include "EmitFMIXml.hpp"
+
+#include <ssc/check_ssc_version.hpp>
+#include <ssc/text_file_reader.hpp>
+
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
-
-#include <ssc/check_ssc_version.hpp>
-#include <ssc/text_file_reader.hpp>
-#include "get_git_sha.h"
-#include "EmitFMIXml.hpp"
 
 std::string description(const std::string& des);
 std::string description(const std::string& des)

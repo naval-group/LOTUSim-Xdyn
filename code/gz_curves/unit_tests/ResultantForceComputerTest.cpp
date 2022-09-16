@@ -7,10 +7,11 @@
 
 #include <set>
 
-#include "make_sim_for_GZ.hpp"
+#include "yaml_parser/check_input_yaml.hpp"
 #include "ResultantForceComputerTest.hpp"
 #include "ResultantForceComputer.hpp"
 #include "GZTypes.hpp"
+#include "gz_curves/make_sim_for_GZ.hpp"
 #include "test_data_generator/stl_data.hpp"
 #include "test_data_generator/yaml_data.hpp"
 

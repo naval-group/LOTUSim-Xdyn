@@ -11,7 +11,7 @@
 #include "xdyn/external_data_structures/YamlSimServerInputs.hpp"
 #include "cosimulation.grpc.pb.h"
 #include "cosimulation.pb.h"
-#include "XdynForCS.hpp"
+#include "observers_and_api/XdynForCS.hpp"
 #include "ErrorReporter.hpp"
 #include "gRPCChecks.hpp"
 #include <grpcpp/grpcpp.h>

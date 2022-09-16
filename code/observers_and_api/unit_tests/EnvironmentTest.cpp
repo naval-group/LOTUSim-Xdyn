@@ -4,7 +4,7 @@
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "test_data_generator/stl_data.hpp"
 #include "test_data_generator/yaml_data.hpp"
-#include "simulator_api.hpp"
+#include "observers_and_api/simulator_api.hpp"
 
 #include <fstream>
 #define _USE_MATH_DEFINE

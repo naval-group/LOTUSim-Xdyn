@@ -1,8 +1,8 @@
-#include "XdynForCS.hpp"
+#include "observers_and_api/XdynForCS.hpp"
 #include "parse_XdynForCSCommandLineArguments.hpp"
 #include "XdynForCSCommandLineArguments.hpp"
 
-#include "gRPCProtoBufServer.hpp"
+#include "observers_and_api/gRPCProtoBufServer.hpp"
 #include "CosimulationServiceImpl.hpp"
 #include "JSONWebSocketServer.hpp"
 #include "ErrorReporter.hpp"

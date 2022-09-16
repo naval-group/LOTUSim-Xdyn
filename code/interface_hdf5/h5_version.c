@@ -1,6 +1,6 @@
 #include "h5_tools.h"
 #include "h5_version.h"
-#include "get_git_sha.h"
+#include "get_git_sha/get_git_sha.h"
 
 #ifndef STR
 #define STR(s) STR_(s)

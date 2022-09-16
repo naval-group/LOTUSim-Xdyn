@@ -9,7 +9,7 @@
 #include "CSVControllerTest.hpp"
 #include "CSVController.hpp"
 #include "parse_controllers.hpp"
-#include "simulator_api.hpp"
+#include "observers_and_api/simulator_api.hpp"
 #include "test_data_generator/yaml_data.hpp"
 #include <boost/algorithm/string.hpp>
 #include <ssc/solver/Scheduler.hpp>
