@@ -11,6 +11,9 @@
         "peterj.proto",
         "ms-vscode.cpptools-extension-pack"
     ],
+    "features": {
+		"docker-in-docker": "stable"
+    },
     "settings": {
         "editor.rulers": [
             100

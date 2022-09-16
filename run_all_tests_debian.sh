@@ -12,7 +12,7 @@ docker run $TERMINAL \
     --security-opt seccomp=unconfined \
     --rm \
     -u $( id -u $USER ):$( id -g $USER ) \
-    -v $(pwd)/build_deb11:/build \
+    -v "$(pwd)/build_deb11":/build \
     -w /build \
     -it \
     sirehna/base-image-debian11-gcc10:2021-12-12 \

@@ -7,7 +7,7 @@ echo "./validation" >> .dockerignore
 make headers
 docker run  --rm \
     -u $(id -u):$(id -g) \
-    -v $(pwd):/opt/share \
+    -v "$(pwd)":/opt/share \
     -w /opt/share \
     sirehna/base-image-win64-gccx-posixthreads-ssc-xdyn /bin/bash -c \
        "cd /opt/share &&\
