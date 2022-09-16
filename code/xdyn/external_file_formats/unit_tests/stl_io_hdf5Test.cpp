@@ -1,7 +1,7 @@
-#include "test_data_generator/stl_data.hpp"
-#include "external_file_formats/stl_reader.hpp"
-#include "stl_io_hdf5.hpp"
 #include "stl_io_hdf5Test.hpp"
+#include "test_data_generator/stl_data.hpp"
+#include "xdyn/external_file_formats/stl_reader.hpp"
+#include "xdyn/external_file_formats/stl_io_hdf5.hpp"
 
 TEST_F(stl_io_hdf5Test, should_be_able_to_create_the_correct_number_of_points_and_triangles)
 {

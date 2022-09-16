@@ -9,7 +9,7 @@
 
 #include "xdyn/exceptions/InternalErrorException.hpp"
 #include "xdyn/core/update_kinematics.hpp"
-#include "external_file_formats/stl_reader.hpp"
+#include "xdyn/external_file_formats/stl_reader.hpp"
 #include "xdyn/core/BodyBuilder.hpp"
 
 #include <ssc/text_file_reader.hpp>

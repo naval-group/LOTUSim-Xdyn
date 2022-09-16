@@ -1,6 +1,6 @@
 #include "simulator_api.hpp"
 #include "listeners.hpp"
-#include "external_file_formats/stl_reader.hpp"
+#include "xdyn/external_file_formats/stl_reader.hpp"
 
 #include "grpc/SurfaceElevationFromGRPC.hpp"
 #include "xdyn/core/DefaultSurfaceElevation.hpp"

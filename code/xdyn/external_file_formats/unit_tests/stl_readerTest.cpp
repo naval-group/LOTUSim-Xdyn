@@ -1,5 +1,5 @@
 #include "xdyn/exceptions/MeshException.hpp"
-#include "external_file_formats/stl_reader.hpp"
+#include "xdyn/external_file_formats/stl_reader.hpp"
 #include "test_data_generator/stl_data.hpp"
 #include "stl_readerTest.hpp"
 

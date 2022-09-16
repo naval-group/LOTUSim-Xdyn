@@ -3,7 +3,7 @@
 #include "h5_version.hpp"
 #include "h5_tools.hpp"
 #include "h5_tools.hpp"
-#include "stl_io_hdf5.hpp"
+#include "xdyn/external_file_formats/stl_io_hdf5.hpp"
 
 #include "demoMatLab.hpp"
 #include "demoPython.hpp"

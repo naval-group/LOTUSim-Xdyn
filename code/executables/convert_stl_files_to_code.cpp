@@ -1,7 +1,7 @@
 #include "get_git_sha.h"
 #include "mesh_manipulations.hpp"
-#include "external_file_formats/stl_reader.hpp"
-#include "stl_writer.hpp"
+#include "xdyn/external_file_formats/stl_reader.hpp"
+#include "xdyn/external_file_formats/stl_writer.hpp"
 #include "base91.hpp"
 #include <google/protobuf/stubs/common.h>
 #include <ssc/text_file_reader.hpp>

@@ -9,7 +9,7 @@
 #ifndef MANEUVERING_GRAMMAR_HPP_
 #define MANEUVERING_GRAMMAR_HPP_
 
-#include "boost_spirit_includes.hpp"
+#include "xdyn/external_file_formats/boost_spirit_includes.hpp"
 #include <boost/version.hpp>
 
 // Explicitly disabled efficient C++ flag so that the following line compiles

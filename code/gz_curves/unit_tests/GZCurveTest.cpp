@@ -14,7 +14,7 @@
 #include "test_data_generator/yaml_data.hpp"
 #include "make_sim_for_GZ.hpp"
 #include "xdyn/binary_stl_data/generate_test_ship.hpp"
-#include "stl_writer.hpp"
+#include "xdyn/external_file_formats/stl_writer.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>

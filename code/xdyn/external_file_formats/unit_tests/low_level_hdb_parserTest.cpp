@@ -1,5 +1,5 @@
 /*
- * HDBParserTest.cpp
+ * low_level_hdb_parserTest.cpp
  *
  *  Created on: Nov 5, 2014
  *      Author: cady
@@ -7,10 +7,10 @@
 
 #include "low_level_hdb_parserTest.hpp"
 #include "test_data_generator/hdb_data.hpp"
-#include "hdb_to_ast.hpp"
-#include "hdb_parser_internal_data_structures.hpp"
-#include "hdb_grammar.hpp"
-#include "pretty_print_hdb.hpp"
+#include "xdyn/external_file_formats/hdb_to_ast.hpp"
+#include "xdyn/external_file_formats/hdb_parser_internal_data_structures.hpp"
+#include "xdyn/external_file_formats/hdb_grammar.hpp"
+#include "xdyn/external_file_formats/pretty_print_hdb.hpp"
 
 using boost::spirit::ascii::blank;
 

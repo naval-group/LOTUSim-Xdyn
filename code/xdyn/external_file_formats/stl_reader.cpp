@@ -5,7 +5,7 @@
 #include <algorithm>
 
 #include "xdyn/exceptions/MeshException.hpp"
-#include "external_file_formats/stl_reader.hpp"
+#include "xdyn/external_file_formats/stl_reader.hpp"
 
 const int LINE_MAX_LENGTH = 256;
 const char TOKEN_vertex[] = "vertex";
