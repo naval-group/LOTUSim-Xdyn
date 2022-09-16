@@ -7,10 +7,10 @@
 
 #include "ObserverTests.hpp"
 #include "xdyn/core/Sim.hpp"
-#include "yaml_data.hpp"
-#include "stl_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
+#include "test_data_generator/stl_data.hpp"
 #include "simulator_api.hpp"
-#include "TriMeshTestData.hpp"
+#include "test_data_generator/TriMeshTestData.hpp"
 #include "parse_output.hpp"
 #include "ListOfObservers.hpp"
 #include "MapObserver.hpp"

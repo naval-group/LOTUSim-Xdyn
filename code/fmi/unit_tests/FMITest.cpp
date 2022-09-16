@@ -9,7 +9,7 @@
 
 #include "FMITest.hpp"
 #include "FMI.hpp"
-#include "yaml_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 
 using ::testing::ElementsAre;
 

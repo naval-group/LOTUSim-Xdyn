@@ -5,11 +5,11 @@
 #include <ssc/macros.hpp>
 #include <ssc/kinematics.hpp>
 
-#include "TriMeshTestData.hpp"
+#include "test_data_generator/TriMeshTestData.hpp"
 #include "mesh/MeshBuilder.hpp"
 #include "MeshIntersectorTest.hpp"
 #include "mesh_manipulations.hpp"
-#include "stl_data.hpp"
+#include "test_data_generator/stl_data.hpp"
 #include "external_file_formats/stl_reader.hpp"
 #include "mesh/MeshIntersector.hpp"
 #include "xdyn/binary_stl_data/generate_test_ship.hpp"

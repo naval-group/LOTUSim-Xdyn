@@ -7,7 +7,7 @@
 
 #include "parse_time_seriesTest.hpp"
 #include "parse_time_series.hpp"
-#include "yaml_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 
 parse_time_seriesTest::parse_time_seriesTest() : a(ssc::random_data_generator::DataGenerator(542121))
 {

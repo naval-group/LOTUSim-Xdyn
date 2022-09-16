@@ -7,7 +7,7 @@
 
 #include "environment_parsersTest.hpp"
 #include "yaml_parser/environment_parsers.hpp"
-#include "yaml_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 
 #include <boost/algorithm/string.hpp> // replace in string

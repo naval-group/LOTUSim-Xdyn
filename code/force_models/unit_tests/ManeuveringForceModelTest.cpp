@@ -11,7 +11,7 @@
 #include "ManeuveringForceModelTest.hpp"
 #include "ManeuveringForceModel.hpp"
 #include "ManeuveringInternal.hpp"
-#include "yaml_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>

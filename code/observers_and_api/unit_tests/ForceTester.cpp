@@ -14,9 +14,9 @@
 #include "GMForceModel.hpp"
 #include "ExactHydrostaticForceModel.hpp"
 #include "DiffractionForceModel.hpp"
-#include "hdb_data.hpp"
-#include "yaml_data.hpp"
-#include "stl_data.hpp"
+#include "test_data_generator/hdb_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
+#include "test_data_generator/stl_data.hpp"
 
 Sim ForceTester::make_sim(const std::string& yaml, const std::string& stl) const
 {

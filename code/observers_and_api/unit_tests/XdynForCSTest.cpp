@@ -1,7 +1,7 @@
-#include "yaml_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 #include <ssc/macros.hpp>
 
-#include "TriMeshTestData.hpp"
+#include "test_data_generator/TriMeshTestData.hpp"
 #include "XdynForCS.hpp"
 #include "XdynForCSTest.hpp"
 #include "JSONSerializer.hpp"

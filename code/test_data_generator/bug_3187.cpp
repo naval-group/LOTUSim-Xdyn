@@ -5,7 +5,7 @@
  *      Author: cady
  */
 #include <sstream>
-#include "yaml_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 
 
 std::string test_data::bug_3187()

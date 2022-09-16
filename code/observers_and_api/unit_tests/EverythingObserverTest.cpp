@@ -9,12 +9,12 @@
 
 #include "EverythingObserver.hpp"
 #include "EverythingObserverTest.hpp"
-#include "yaml_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 #include "parse_output.hpp"
 #include "ListOfObservers.hpp"
 #include "simulator_api.hpp"
 #include <ssc/solver/steppers.hpp>
-#include "stl_data.hpp"
+#include "test_data_generator/stl_data.hpp"
 
 #define EPS 1E-8
 #define _USE_MATH_DEFINE
@@ -92,7 +92,7 @@ TEST_F(EverythingObserverTest, GM)
     ASSERT_NEAR(expected_fz, results.back().extra_observations.at("Fz(GM,cube,NED)"), std::abs(max_relative_error*expected_fz));
     /*
     Cf. discussion here: https://gitlab.sirehna.com/sirehna/xdyn/-/merge_requests/166#note_115660
-    
+
     Cube with 1 m edges, half-immersed:
 
 - G is the centre of gravity,

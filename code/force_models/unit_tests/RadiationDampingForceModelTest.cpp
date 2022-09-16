@@ -12,13 +12,13 @@
 #include <ssc/integrate.hpp>
 
 #include "xdyn/core/BodyStates.hpp"
-#include "hdb_data.hpp"
+#include "test_data_generator/hdb_data.hpp"
 #include "hdb_test.hpp"
 #include "RadiationDampingBuilder.hpp"
 #include "RadiationDampingForceModel.hpp"
 #include "RadiationDampingForceModelTest.hpp"
 #include "xdyn/core/EnvironmentAndFrames.hpp"
-#include "yaml_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 #include "precal_test_data.hpp"
 
 #define EPS 5E-2

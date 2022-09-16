@@ -8,7 +8,7 @@
 
 #include "SimpleStationKeepingControllerTest.hpp"
 #include "SimpleStationKeepingController.hpp"
-#include "yaml_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>

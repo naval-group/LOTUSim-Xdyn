@@ -8,7 +8,7 @@
 
 #include "parse_outputTest.hpp"
 #include "parse_output.hpp"
-#include "yaml_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 
 parse_outputTest::parse_outputTest() : a(ssc::random_data_generator::DataGenerator(215451))
 {

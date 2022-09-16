@@ -1,5 +1,5 @@
 
-#include "yaml_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 #include "parse_output.hpp"
 #include "Hdf5Observer.hpp"
 #include "Hdf5ObserverTest.hpp"

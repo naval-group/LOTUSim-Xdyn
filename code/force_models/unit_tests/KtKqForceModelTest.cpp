@@ -8,7 +8,7 @@
 #include "xdyn/exceptions/NumericalErrorException.hpp"
 #include "KtKqForceModel.hpp"
 #include "KtKqForceModelTest.hpp"
-#include "yaml_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 
 #include "gmock/gmock.h"
 using ::testing::_;

@@ -9,9 +9,9 @@
 #include "BodyBuilderTest.hpp"
 #include "mesh/Mesh.hpp"
 #include "yaml_parser/SimulatorYamlParser.hpp"
-#include "stl_data.hpp"
+#include "test_data_generator/stl_data.hpp"
 #include "external_file_formats/stl_reader.hpp"
-#include "yaml_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 
 const BodyPtr BodyBuilderTest::body = BodyBuilderTest::build_body();
 

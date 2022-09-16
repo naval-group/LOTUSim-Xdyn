@@ -8,7 +8,7 @@
 #include "gmock/gmock.h"
 #include "LinearHydrostaticForceModel.hpp"
 #include "LinearHydrostaticForceModelTest.hpp"
-#include "yaml_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>
@@ -42,6 +42,3 @@ TEST_F(LinearHydrostaticForceModelTest, parser_test)
     ASSERT_THAT(input.K2, ElementsAre(0,1,0));
     ASSERT_THAT(input.K3, ElementsAre(0,0,1));
 }
-
-
-

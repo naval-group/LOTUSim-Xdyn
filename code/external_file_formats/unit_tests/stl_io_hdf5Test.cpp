@@ -1,4 +1,4 @@
-#include "stl_data.hpp"
+#include "test_data_generator/stl_data.hpp"
 #include "external_file_formats/stl_reader.hpp"
 #include "stl_io_hdf5.hpp"
 #include "stl_io_hdf5Test.hpp"

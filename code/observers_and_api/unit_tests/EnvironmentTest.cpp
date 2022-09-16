@@ -2,8 +2,8 @@
 #include "xdyn/core/EnvironmentAndFrames.hpp"
 #include "yaml_parser/SimulatorYamlParser.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
-#include "stl_data.hpp"
-#include "yaml_data.hpp"
+#include "test_data_generator/stl_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 #include "simulator_api.hpp"
 
 #include <fstream>

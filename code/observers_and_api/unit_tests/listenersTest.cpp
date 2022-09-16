@@ -9,7 +9,7 @@
 #include "listeners.hpp"
 #include "parse_controllers.hpp"
 #include "parse_time_series.hpp"
-#include "yaml_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "PIDController.hpp"
 #include "xdyn/core/Sim.hpp"

@@ -8,7 +8,7 @@
 #include "LinearFroudeKrylovForceModelTest.hpp"
 #include "DiffractionForceModelTest.hpp"
 #include "LinearFroudeKrylovForceModel.hpp"
-#include "hdb_data.hpp"
+#include "test_data_generator/hdb_data.hpp"
 #include "precal_test_data.hpp"
 
 #include <fstream>

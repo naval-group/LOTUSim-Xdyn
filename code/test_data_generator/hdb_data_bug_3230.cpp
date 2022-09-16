@@ -1,4 +1,4 @@
-#include "hdb_data.hpp"
+#include "test_data_generator/hdb_data.hpp"
 
 std::string test_data::bug_3230_hdb()
 {

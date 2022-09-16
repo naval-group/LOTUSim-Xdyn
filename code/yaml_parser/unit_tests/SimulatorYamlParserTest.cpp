@@ -10,7 +10,7 @@
 using namespace testing; // So we can use 'ElementsAre' unqualified
 #include "yaml_parser/external_data_structures_parsers.hpp"
 #include "SimulatorYamlParserTest.hpp"
-#include "yaml_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 #include "yaml_parser/SimulatorYamlParser.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "parse_controllers.hpp"

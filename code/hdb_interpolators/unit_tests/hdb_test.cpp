@@ -9,7 +9,7 @@
 #include <cmath>
 #define PI M_PI
 
-#include "hdb_data.hpp"
+#include "test_data_generator/hdb_data.hpp"
 #include "hdb_test.hpp"
 #include "RadiationDampingBuilder.hpp"
 

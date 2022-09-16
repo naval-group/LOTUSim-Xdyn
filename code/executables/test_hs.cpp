@@ -8,7 +8,7 @@
 #include "xdyn/core/Body.hpp"
 #include "xdyn/core/DefaultSurfaceElevation.hpp"
 #include "FroudeKrylovForceModel.hpp"
-#include "TriMeshTestData.hpp"
+#include "test_data_generator/TriMeshTestData.hpp"
 #include "mesh/MeshIntersector.hpp"
 #include "external_data_structures/YamlRotation.hpp"
 #include "xdyn/core/BodyBuilder.hpp"

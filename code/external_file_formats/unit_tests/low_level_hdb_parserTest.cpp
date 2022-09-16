@@ -6,7 +6,7 @@
  */
 
 #include "low_level_hdb_parserTest.hpp"
-#include "hdb_data.hpp"
+#include "test_data_generator/hdb_data.hpp"
 #include "hdb_to_ast.hpp"
 #include "hdb_parser_internal_data_structures.hpp"
 #include "hdb_grammar.hpp"

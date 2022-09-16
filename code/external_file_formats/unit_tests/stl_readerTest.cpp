@@ -1,6 +1,6 @@
 #include "xdyn/exceptions/MeshException.hpp"
 #include "external_file_formats/stl_reader.hpp"
-#include "stl_data.hpp"
+#include "test_data_generator/stl_data.hpp"
 #include "stl_readerTest.hpp"
 
 TEST_F(StlReaderTest, should_be_able_to_detect_ascii_file)

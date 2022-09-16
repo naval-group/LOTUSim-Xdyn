@@ -5,9 +5,9 @@
  *      Author: cady
  */
 #include <sstream>
-#include "stl_data.hpp"
-#include "hdb_data.hpp"
-#include "yaml_data.hpp"
+#include "test_data_generator/stl_data.hpp"
+#include "test_data_generator/hdb_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 
 
 

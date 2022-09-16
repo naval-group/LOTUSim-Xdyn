@@ -8,7 +8,7 @@
 #include "xdyn/core/Body.hpp"
 #include "ResistanceCurveForceModel.hpp"
 #include "ResistanceCurveForceModelTest.hpp"
-#include "yaml_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 #include "xdyn/core/EnvironmentAndFrames.hpp"
 
 #define EPS 1E-6

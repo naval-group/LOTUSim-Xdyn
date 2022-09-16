@@ -10,7 +10,7 @@
 #define PI M_PI
 
 #include "xdyn/core/BodyStates.hpp"
-#include "yaml_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 #include "WageningenControlledForceModel.hpp"
 #include "WageningenControlledForceModelTest.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"

@@ -7,7 +7,7 @@
 
 #include "parse_controllersTest.hpp"
 #include "parse_controllers.hpp"
-#include "yaml_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 
 parse_controllersTest::parse_controllersTest() : a(ssc::random_data_generator::DataGenerator(542121))
 {

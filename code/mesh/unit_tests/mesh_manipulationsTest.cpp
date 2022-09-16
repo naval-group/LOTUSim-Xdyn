@@ -8,7 +8,7 @@
 #include "mesh_manipulationsTest.hpp"
 #include "external_data_structures/GeometricTypes3d.hpp"
 #include "mesh_manipulations.hpp"
-#include "TriMeshTestData.hpp"
+#include "test_data_generator/TriMeshTestData.hpp"
 #include "xdyn/exceptions/MeshException.hpp"
 #include "mesh/MeshBuilder.hpp"
 

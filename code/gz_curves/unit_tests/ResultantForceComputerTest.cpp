@@ -11,8 +11,8 @@
 #include "ResultantForceComputerTest.hpp"
 #include "ResultantForceComputer.hpp"
 #include "GZTypes.hpp"
-#include "stl_data.hpp"
-#include "yaml_data.hpp"
+#include "test_data_generator/stl_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 
 #define EPS (1E-10)
 #define BIG_EPS (1E-5)

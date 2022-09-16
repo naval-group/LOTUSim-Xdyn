@@ -13,7 +13,7 @@
 #include "PIDController.hpp"
 #include "parse_controllers.hpp"
 #include "parse_time_series.hpp"
-#include "yaml_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 
 #define EPS (1E-14)
 #define _USE_MATH_DEFINE

@@ -12,7 +12,7 @@
 #define PI M_PI
 
 #include "hdb_interpolators/HDBParser.hpp"
-#include "hdb_data.hpp"
+#include "test_data_generator/hdb_data.hpp"
 #include "RaoInterpolator.hpp"
 #include "external_data_structures/YamlRAO.hpp"
 

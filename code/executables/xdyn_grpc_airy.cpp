@@ -12,7 +12,7 @@
 #include "ErrorReporter.hpp"
 #include "AiryGRPC.hpp"
 #include "simulator_api.hpp" // xdyn/code/observers_and_api/simulator_api.hpp
-#include "yaml_data.hpp" // To be removed late // xdyn/code/test_data_generator/yaml_data.hpp
+#include "test_data_generator/yaml_data.hpp" // To be removed late // xdyn/code/test_data_generator/yaml_data.hpp
 #include <ssc/text_file_reader.hpp>
 
 const std::string xdyn_grpc_airy_description = "This is the Airy wave gRPC server, based on xdyn";

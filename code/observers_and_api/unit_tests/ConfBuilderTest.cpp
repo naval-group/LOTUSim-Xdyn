@@ -1,7 +1,7 @@
 #include "ConfBuilderTest.hpp"
-#include "yaml_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 #include "ConfBuilder.hpp"
-#include "TriMeshTestData.hpp"
+#include "test_data_generator/TriMeshTestData.hpp"
 
 
 ConfBuilderTest::ConfBuilderTest() : a(ssc::random_data_generator::DataGenerator(78910))

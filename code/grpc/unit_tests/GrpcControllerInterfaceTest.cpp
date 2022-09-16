@@ -8,7 +8,7 @@
 #include "GrpcControllerInterface.hpp"
 #include "GrpcControllerInterfaceTest.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
-#include "yaml_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
 
 
 GrpcControllerInterfaceTest::GrpcControllerInterfaceTest()

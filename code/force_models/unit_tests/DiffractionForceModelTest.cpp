@@ -9,8 +9,8 @@
 
 #include "DiffractionForceModelTest.hpp"
 #include "DiffractionForceModel.hpp"
-#include "yaml_data.hpp"
-#include "hdb_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
+#include "test_data_generator/hdb_data.hpp"
 #include "precal_test_data.hpp"
 #include "environment_models/DiracSpectralDensity.hpp"
 #include "environment_models/DiracDirectionalSpreading.hpp"
