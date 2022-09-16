@@ -225,5 +225,5 @@ INCLUDE(CMakeCustomTargets)
 INCLUDE(CMakePack)
 
 IF(BUILD_PYTHON_WRAPPER)
-    ADD_SUBDIRECTORY(wrapper_python)
+    ADD_SUBDIRECTORY(xdyn_wrapper_python)
 ENDIF()
