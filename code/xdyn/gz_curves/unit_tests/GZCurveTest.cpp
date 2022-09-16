@@ -8,9 +8,9 @@
 
 #include "GZCurveTest.hpp"
 #include "GZCurve.hpp"
-#include "gz_curves/make_sim_for_GZ.cpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
+#include "xdyn/gz_curves/make_sim_for_GZ.cpp"
 #include "test_data_generator/stl_data.hpp"
 #include "test_data_generator/yaml_data.hpp"
 #include "xdyn/yaml_parser/check_input_yaml.hpp"

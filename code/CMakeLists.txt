@@ -84,7 +84,7 @@ ADD_SUBDIRECTORY(xdyn/force_models)
 ADD_SUBDIRECTORY(xdyn/grpc)
 ADD_SUBDIRECTORY(listeners_and_controllers)
 ADD_SUBDIRECTORY(observers_and_api)
-ADD_SUBDIRECTORY(gz_curves)
+ADD_SUBDIRECTORY(xdyn/gz_curves)
 ADD_SUBDIRECTORY(xdyn/executables)
 ADD_SUBDIRECTORY(xdyn/fmi)
 

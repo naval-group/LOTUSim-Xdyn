@@ -5,18 +5,15 @@
  *      Author: cady
  */
 
-
-
-#include <google/protobuf/stubs/common.h>
-#include <ssc/text_file_reader.hpp>
-
-#include "xdyn/core/Sim.hpp"
 #include "display_command_line_arguments.hpp"
-#include "gz_curves/GZCurve.hpp"
-#include "gz_curves/make_sim_for_GZ.hpp"
-#include "boost_program_options_descriptions/OptionPrinter.hpp"
-#include "parse_XdynCommandLineArguments.hpp"
 #include "ErrorReporter.hpp"
+#include "xdyn/core/Sim.hpp"
+#include "xdyn/gz_curves/GZCurve.hpp"
+#include "xdyn/gz_curves/make_sim_for_GZ.hpp"
+#include "parse_XdynCommandLineArguments.hpp"
+#include <ssc/text_file_reader.hpp>
+#include "boost_program_options_descriptions/OptionPrinter.hpp"
+#include <google/protobuf/stubs/common.h>
 
 #define _USE_MATH_DEFINE
 #include <cmath>
