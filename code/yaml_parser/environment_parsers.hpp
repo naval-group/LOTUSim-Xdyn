@@ -9,7 +9,7 @@
 #define ENVIRONMENT_PARSERS_HPP_
 
 #include "external_data_structures/YamlWaveModelInput.hpp"
-#include "environment_models/YamlSpectraInput.hpp"
+#include "xdyn/environment_models/YamlSpectraInput.hpp"
 #include "external_data_structures/YamlGRPC.hpp"
 
 #include <string>

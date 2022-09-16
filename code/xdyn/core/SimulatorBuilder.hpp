@@ -8,9 +8,9 @@
 #ifndef SIMULATORBUILDER_HPP_
 #define SIMULATORBUILDER_HPP_
 
-#include "environment_models/WaveModel.hpp"
-#include "environment_models/WaveDirectionalSpreading.hpp"
-#include "environment_models/WaveSpectralDensity.hpp"
+#include "xdyn/environment_models/WaveModel.hpp"
+#include "xdyn/environment_models/WaveDirectionalSpreading.hpp"
+#include "xdyn/environment_models/WaveSpectralDensity.hpp"
 
 #include "xdyn/core/SurfaceElevationBuilder.hpp"
 #include "DirectionalSpreadingBuilder.hpp"
@@ -22,7 +22,7 @@
 
 #include "xdyn/core/EnvironmentAndFrames.hpp"
 #include "external_data_structures/GeometricTypes3d.hpp"
-#include "environment_models/WindModel.hpp"
+#include "xdyn/environment_models/WindModel.hpp"
 
 #include <ssc/data_source.hpp>
 #include <ssc/kinematics.hpp>

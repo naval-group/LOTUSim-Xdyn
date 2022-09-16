@@ -1,7 +1,7 @@
 #ifndef GRPC_INC_TOGRPCCOMMON_HPP_
 #define GRPC_INC_TOGRPCCOMMON_HPP_
 
-#include "environment_models/DiscreteDirectionalWaveSpectrum.hpp" // xdyn/code/environment_models/DiscreteDirectionalWaveSpectrum.hpp
+#include "xdyn/environment_models/DiscreteDirectionalWaveSpectrum.hpp" // xdyn/code/environment_models/DiscreteDirectionalWaveSpectrum.hpp
 #include "wave_types.pb.h"
 #include <grpcpp/grpcpp.h>
 

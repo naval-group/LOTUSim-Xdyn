@@ -2,7 +2,7 @@
 #define HDF5OBSERVER_HPP_
 
 #include "xdyn/core/Observer.hpp"
-#include "environment_models/DiscreteDirectionalWaveSpectrum.hpp"
+#include "xdyn/environment_models/DiscreteDirectionalWaveSpectrum.hpp"
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 #include "H5Cpp.h"

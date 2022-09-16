@@ -2,7 +2,7 @@
 #define SURFACEELEVATIONFROMWAVESTEST_HPP_
 
 #include "gtest/gtest.h"
-#include "environment_models/WaveModel.hpp"
+#include "xdyn/environment_models/WaveModel.hpp"
 #include <ssc/random_data_generator.hpp>
 
 class SurfaceElevationFromWavesTest : public ::testing::Test

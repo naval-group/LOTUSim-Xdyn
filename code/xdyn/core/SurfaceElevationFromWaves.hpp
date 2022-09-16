@@ -9,7 +9,7 @@
 #define SURFACEELEVATIONFROMWAVES_HPP_
 
 #include "xdyn/core/SurfaceElevationInterface.hpp"
-#include "environment_models/WaveModel.hpp"
+#include "xdyn/environment_models/WaveModel.hpp"
 #include "xdyn/core/Observer.hpp"
 
 #include <ssc/kinematics.hpp>

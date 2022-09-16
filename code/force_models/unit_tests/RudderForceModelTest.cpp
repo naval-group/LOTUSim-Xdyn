@@ -11,18 +11,18 @@
 
 #define DEG2RAD (PI/180.)
 
-#include "environment_models/Airy.hpp"
+#include "xdyn/environment_models/Airy.hpp"
 #include "xdyn/core/BodyWithoutSurfaceForces.hpp"
-#include "environment_models/DiscreteDirectionalWaveSpectrum.hpp"
-#include "environment_models/DiracSpectralDensity.hpp"
-#include "environment_models/DiracDirectionalSpreading.hpp"
-#include "environment_models/discretize.hpp"
+#include "xdyn/environment_models/DiscreteDirectionalWaveSpectrum.hpp"
+#include "xdyn/environment_models/DiracSpectralDensity.hpp"
+#include "xdyn/environment_models/DiracDirectionalSpreading.hpp"
+#include "xdyn/environment_models/discretize.hpp"
 #include "env_for_tests.hpp"
 #include "RudderForceModelTest.hpp"
 #include "RudderForceModel.hpp"
 #include "test_data_generator/yaml_data.hpp"
 #include "external_data_structures/YamlWaveModelInput.hpp"
-#include "environment_models/Stretching.hpp"
+#include "xdyn/environment_models/Stretching.hpp"
 
 namespace ssc
 {

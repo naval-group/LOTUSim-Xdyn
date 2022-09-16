@@ -1,7 +1,7 @@
 #ifndef HDF5WAVESPECTRUMOBSERVER_HPP_
 #define HDF5WAVESPECTRUMOBSERVER_HPP_
 
-#include "environment_models/DiscreteDirectionalWaveSpectrum.hpp"
+#include "xdyn/environment_models/DiscreteDirectionalWaveSpectrum.hpp"
 
 #include <string>
 #include <vector>

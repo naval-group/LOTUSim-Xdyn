@@ -16,7 +16,7 @@
 #include <ssc/solver/DiscreteSystem.hpp>
 #include TR1INC(memory)
 
-#include "environment_models/DiscreteDirectionalWaveSpectrum.hpp"
+#include "xdyn/environment_models/DiscreteDirectionalWaveSpectrum.hpp"
 #include "mesh/Mesh.hpp"
 
 class Sim;

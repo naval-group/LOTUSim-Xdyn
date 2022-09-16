@@ -6,15 +6,15 @@
  */
 
 #include "SurfaceElevationFromWavesTest.hpp"
-#include "environment_models/discretize.hpp"
-#include "environment_models/Airy.hpp"
-#include "environment_models/DiracDirectionalSpreading.hpp"
-#include "environment_models/DiracSpectralDensity.hpp"
+#include "xdyn/environment_models/discretize.hpp"
+#include "xdyn/environment_models/Airy.hpp"
+#include "xdyn/environment_models/DiracDirectionalSpreading.hpp"
+#include "xdyn/environment_models/DiracSpectralDensity.hpp"
 #include "xdyn/core/SurfaceElevationBuilder.hpp"
 #include "xdyn/core/SurfaceElevationFromWaves.hpp"
 #include "external_data_structures/YamlWaveModelInput.hpp"
 #include "external_data_structures/YamlWaveModelInput.hpp"
-#include "environment_models/Stretching.hpp"
+#include "xdyn/environment_models/Stretching.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include <ssc/kinematics.hpp>
 #define _USE_MATH_DEFINE

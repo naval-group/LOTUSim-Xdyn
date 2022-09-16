@@ -11,7 +11,7 @@
 #include "test_data_generator/TriMeshTestData.hpp"
 #include "xdyn/core/unit_tests/generate_body_for_tests.hpp"
 #include "xdyn/core/DefaultSurfaceElevation.hpp"
-#include "environment_models/DefaultWindModel.hpp"
+#include "xdyn/environment_models/DefaultWindModel.hpp"
 #include "yaml_parser/SimulatorYamlParser.hpp"
 #include "test_data_generator/yaml_data.hpp"
 #include <ssc/kinematics.hpp>

@@ -15,7 +15,7 @@
 #include "FMIException.hpp"
 #include "yaml_parser/SimulatorYamlParser.hpp"
 #include "simulator_api.hpp"
-#include "environment_models/WaveModel.hpp"
+#include "xdyn/environment_models/WaveModel.hpp"
 
 #include <ssc/macros.hpp>
 

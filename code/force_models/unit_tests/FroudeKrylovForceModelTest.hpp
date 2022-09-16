@@ -13,7 +13,7 @@
 #include "xdyn/core/EnvironmentAndFrames.hpp"
 #include "external_data_structures/GeometricTypes3d.hpp"
 #include <ssc/macros.hpp>
-#include "environment_models/WaveModel.hpp"
+#include "xdyn/environment_models/WaveModel.hpp"
 #include TR1INC(memory)
 
 class FroudeKrylovForceModelTest : public ::testing::Test

@@ -14,13 +14,13 @@
 #include "xdyn/core/BodyBuilder.hpp"
 #include "external_data_structures/GeometricTypes3d.hpp"
 #include "xdyn/binary_stl_data/generate_test_ship.hpp"
-#include "environment_models/DiracSpectralDensity.hpp"
-#include "environment_models/DiracDirectionalSpreading.hpp"
-#include "environment_models/discretize.hpp"
-#include "environment_models/Airy.hpp"
+#include "xdyn/environment_models/DiracSpectralDensity.hpp"
+#include "xdyn/environment_models/DiracDirectionalSpreading.hpp"
+#include "xdyn/environment_models/discretize.hpp"
+#include "xdyn/environment_models/Airy.hpp"
 #include "xdyn/core/SurfaceElevationFromWaves.hpp"
 #include "external_data_structures/YamlWaveModelInput.hpp"
-#include "environment_models/Stretching.hpp"
+#include "xdyn/environment_models/Stretching.hpp"
 #include <google/protobuf/stubs/common.h>
 #include <ssc/kinematics.hpp>
 

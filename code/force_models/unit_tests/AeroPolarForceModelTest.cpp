@@ -2,7 +2,7 @@
 
 #include "AeroPolarForceModelTest.hpp"
 #include "AeroPolarForceModel.hpp"
-#include "UniformWindVelocityProfile.hpp"
+#include "xdyn/environment_models/UniformWindVelocityProfile.hpp"
 
 AeroPolarForceModelTest::AeroPolarForceModelTest()
 {

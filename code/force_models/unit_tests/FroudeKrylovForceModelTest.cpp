@@ -12,13 +12,13 @@
 #include "xdyn/core/unit_tests/generate_body_for_tests.hpp"
 #include "test_data_generator/TriMeshTestData.hpp"
 #include "mesh/MeshIntersector.hpp"
-#include "environment_models/DiracSpectralDensity.hpp"
-#include "environment_models/DiracDirectionalSpreading.hpp"
-#include "environment_models/discretize.hpp"
-#include "environment_models/Airy.hpp"
+#include "xdyn/environment_models/DiracSpectralDensity.hpp"
+#include "xdyn/environment_models/DiracDirectionalSpreading.hpp"
+#include "xdyn/environment_models/discretize.hpp"
+#include "xdyn/environment_models/Airy.hpp"
 #include "env_for_tests.hpp"
 #include "external_data_structures/YamlWaveModelInput.hpp"
-#include "environment_models/Stretching.hpp"
+#include "xdyn/environment_models/Stretching.hpp"
 
 #include <ssc/kinematics.hpp>
 
