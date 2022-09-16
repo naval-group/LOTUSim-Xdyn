@@ -5,8 +5,8 @@
  *      Author: cady
  */
 
-#include "get_git_sha/get_git_sha.h"
 #include "EmitFMIXml.hpp"
+#include "xdyn/get_git_sha/get_git_sha.h"
 
 #include <ssc/check_ssc_version.hpp>
 #include <ssc/text_file_reader.hpp>
