@@ -11,7 +11,8 @@
 
 #include "gtest/gtest.h"
 #include <ssc/random_data_generator/DataGenerator.hpp>
-#include "DiffractionForceModel.hpp"
+#include "xdyn/force_models/DiffractionForceModel.hpp"
+
 struct YamlModel;
 
 class ForceTests : public ::testing::Test

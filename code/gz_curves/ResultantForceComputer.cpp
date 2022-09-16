@@ -5,9 +5,9 @@
  *      Author: cady
  */
 
-#include "calculate_gz.hpp"
 #include "GZTypes.hpp"
-#include "GravityForceModel.hpp"
+#include "xdyn/force_models/calculate_gz.hpp"
+#include "xdyn/force_models/GravityForceModel.hpp"
 #include "ResultantForceComputer.hpp"
 #include "xdyn/core/Sim.hpp"
 

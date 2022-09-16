@@ -6,12 +6,11 @@
 #ifndef ABSTRACTRAOFORCEMODEL_HPP_
 #define ABSTRACTRAOFORCEMODEL_HPP_
 
-#include <ssc/macros.hpp>
-
+#include "PhaseModuleRAOEvaluator.hpp"
 #include "xdyn/core/ForceModel.hpp"
 #include "xdyn/core/EnvironmentAndFrames.hpp"
-#include "PhaseModuleRAOEvaluator.hpp"
 #include "xdyn/external_data_structures/YamlRAO.hpp"
+#include <ssc/macros.hpp>
 
 /** \brief Abstracts the commonalities between linear Froude-Krylov & diffraction force models
  */

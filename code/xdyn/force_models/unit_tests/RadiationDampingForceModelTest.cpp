@@ -5,21 +5,21 @@
  *      Author: cady
  */
 
+#include "RadiationDampingForceModelTest.hpp"
+#include "hdb_interpolators/unit_tests/hdb_test.hpp"
+#include "xdyn/core/BodyStates.hpp"
+#include "hdb_interpolators/RadiationDampingBuilder.hpp"
+#include "xdyn/force_models/RadiationDampingForceModel.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
+#include "test_data_generator/hdb_data.hpp"
+#include "test_data_generator/precal_test_data.hpp"
+#include "test_data_generator/yaml_data.hpp"
+
+#include <ssc/integrate.hpp>
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
 #include <fstream>
-#include <ssc/integrate.hpp>
-
-#include "xdyn/core/BodyStates.hpp"
-#include "test_data_generator/hdb_data.hpp"
-#include "hdb_test.hpp"
-#include "RadiationDampingBuilder.hpp"
-#include "RadiationDampingForceModel.hpp"
-#include "RadiationDampingForceModelTest.hpp"
-#include "xdyn/core/EnvironmentAndFrames.hpp"
-#include "test_data_generator/yaml_data.hpp"
-#include "precal_test_data.hpp"
 
 #define EPS 5E-2
 
