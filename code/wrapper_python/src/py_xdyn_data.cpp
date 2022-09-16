@@ -4,8 +4,8 @@
 #include "test_data_generator/hdb_data.hpp"
 #include "test_data_generator/yaml_data.hpp"
 #include "test_data_generator/precal_test_data.hpp"
-#include "core/Body.hpp"
-#include "core/BodyBuilder.hpp"
+#include "xdyn/core/Body.hpp"
+#include "xdyn/core/BodyBuilder.hpp"
 #include <string>
 
 // Duplicated code from core/unit_tests and executables/test_hs.cpp

@@ -1,8 +1,8 @@
 #include "py_xdyn_force.hpp"
 #include "py_pybind_additions.hpp"
 
-#include "core/ForceModel.hpp"
-#include "core/ImmersedSurfaceForceModel.hpp"
+#include "xdyn/core/ForceModel.hpp"
+#include "xdyn/core/ImmersedSurfaceForceModel.hpp"
 #include "xdyn/external_data_structures/GeometricTypes3d.hpp"
 #include "xdyn/force_models/AbstractRaoForceModel.hpp"
 #include "xdyn/force_models/AbstractWageningen.hpp"
