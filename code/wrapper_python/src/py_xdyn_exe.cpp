@@ -5,7 +5,7 @@
 #include "xdyn/executables/XdynCommandLineArguments.hpp"
 #include "xdyn/executables/parse_XdynCommandLineArguments.hpp"
 #include "xdyn/executables/build_observers_description.hpp"
-#include "observers_and_api/simulator_api.hpp"
+#include "xdyn/observers_and_api/simulator_api.hpp"
 #include "ssc/ssc/text_file_reader.hpp"
 #include "ssc/ssc/solver/solve.hpp"
 #include "ssc/ssc/solver/steppers.hpp"

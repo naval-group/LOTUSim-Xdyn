@@ -8,10 +8,10 @@
 #ifndef EXECUTABLES_INC_MODELEXCHANGESERVICEIMPL_HPP_
 #define EXECUTABLES_INC_MODELEXCHANGESERVICEIMPL_HPP_
 
-#include "xdyn/external_data_structures/YamlSimServerInputs.hpp"
 #include "model_exchange.grpc.pb.h"
 #include "model_exchange.pb.h"
-#include "observers_and_api/XdynForME.hpp"
+#include "xdyn/external_data_structures/YamlSimServerInputs.hpp"
+#include "xdyn/observers_and_api/XdynForME.hpp"
 #include "ErrorReporter.hpp"
 #include "gRPCChecks.hpp"
 #include <grpcpp/grpcpp.h>

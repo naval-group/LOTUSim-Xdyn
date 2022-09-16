@@ -1,11 +1,10 @@
-#include "observers_and_api/XdynForME.hpp"
 #include "parse_XdynForMECommandLineArguments.hpp"
 #include "XdynForMECommandLineArguments.hpp"
-
-#include "observers_and_api/gRPCProtoBufServer.hpp"
 #include "ModelExchangeServiceImpl.hpp"
 #include "JSONWebSocketServer.hpp"
 #include "ErrorReporter.hpp"
+#include "xdyn/observers_and_api/XdynForME.hpp"
+#include "xdyn/observers_and_api/gRPCProtoBufServer.hpp"
 
 #include <ssc/text_file_reader.hpp>
 

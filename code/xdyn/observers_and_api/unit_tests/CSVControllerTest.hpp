@@ -8,7 +8,7 @@
 #ifndef CSVCONTROLLERTEST_HPP_
 #define CSVCONTROLLERTEST_HPP_
 
-#include "listeners_and_controllers/TempFile.hpp"
+#include "xdyn/listeners_and_controllers/TempFile.hpp"
 #include <ssc/random_data_generator/DataGenerator.hpp>
 #include "gtest/gtest.h"
 

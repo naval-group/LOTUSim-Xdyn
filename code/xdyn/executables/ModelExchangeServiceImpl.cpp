@@ -6,7 +6,7 @@
  */
 #include "ModelExchangeServiceImpl.hpp"
 #include "xdyn/core/BodyStates.hpp"
-#include "observers_and_api/SimServerInputs.hpp"
+#include "xdyn/observers_and_api/SimServerInputs.hpp"
 #include "xdyn/external_data_structures/YamlSimServerInputs.hpp"
 #include "ErrorReporter.hpp"
 #include <cmath>

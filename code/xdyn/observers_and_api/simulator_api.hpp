@@ -1,19 +1,19 @@
 #ifndef SIMULATORAPI_HPP_
 #define SIMULATORAPI_HPP_
 
-#include <map>
-#include <string>
+#include "EverythingObserver.hpp"
+#include "SimObserver.hpp"
+#include "xdyn/core/Sim.hpp"
+#include "xdyn/core/SimulatorBuilder.hpp"
+#include "xdyn/listeners_and_controllers/listeners.hpp"
+#include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
+#include "xdyn/yaml_parser/check_input_yaml.hpp"
 
 #include <ssc/solver/Scheduler.hpp>
 #include <ssc/solver/solve.hpp>
 
-#include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
-#include "xdyn/yaml_parser/check_input_yaml.hpp"
-#include "EverythingObserver.hpp"
-#include "listeners_and_controllers/listeners.hpp"
-#include "xdyn/core/Sim.hpp"
-#include "xdyn/core/SimulatorBuilder.hpp"
-#include "SimObserver.hpp"
+#include <map>
+#include <string>
 
 struct YamlSimulatorInput;
 
