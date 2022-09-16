@@ -84,8 +84,8 @@ TEST_F(RadiationDampingBuilderTest, can_create_linearly_spaced_intervals)
     RadiationDampingBuilder builder(TypeOfQuadrature::SIMPSON, TypeOfQuadrature::SIMPSON);
     for (size_t k = 0 ; k < 10 ; ++k)
     {
-        const double xmin = a.random<double>();
-        const double xmax = a.random<double>().greater_than(xmin);
+        const double xmin = a.random<double>().between(-1000, +1000);
+        const double xmax = a.random<double>().between(xmin, xmin + 1000);
         const size_t n = a.random<size_t>().between(3,200);
         const auto v = builder.build_regular_intervals(xmin, xmax, n);
         ASSERT_EQ(n, v.size());
