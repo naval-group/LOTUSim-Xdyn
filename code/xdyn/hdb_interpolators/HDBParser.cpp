@@ -4,7 +4,7 @@
  *  Created on: Nov 13, 2014
  *      Author: cady
  */
-#include "hdb_interpolators/HDBParser.hpp"
+#include "xdyn/hdb_interpolators/HDBParser.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/external_file_formats/hdb_parser_internal_data_structures.hpp"
 #include "xdyn/external_file_formats/hdb_to_ast.hpp"

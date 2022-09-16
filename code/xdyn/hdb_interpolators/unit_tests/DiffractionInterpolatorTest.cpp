@@ -11,7 +11,7 @@
 #include <cmath>
 #define PI M_PI
 
-#include "hdb_interpolators/HDBParser.hpp"
+#include "xdyn/hdb_interpolators/HDBParser.hpp"
 #include "test_data_generator/hdb_data.hpp"
 #include "RaoInterpolator.hpp"
 #include "xdyn/external_data_structures/YamlRAO.hpp"

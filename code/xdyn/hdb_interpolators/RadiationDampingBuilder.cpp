@@ -18,7 +18,7 @@ typedef TR1(shared_ptr)<ssc::interpolation::Interpolator> InterpolatorPtr;
 #include <cmath>
 #define PI M_PI
 
-#include "hdb_interpolators/History.hpp"
+#include "xdyn/hdb_interpolators/History.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
 #include "RadiationDampingBuilder.hpp"
 

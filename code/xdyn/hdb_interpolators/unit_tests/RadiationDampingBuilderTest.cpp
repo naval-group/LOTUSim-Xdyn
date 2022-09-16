@@ -7,7 +7,7 @@
 
 #include "hdb_test.hpp"
 #include "test_data_generator/hdb_data.hpp"
-#include "hdb_interpolators/History.hpp"
+#include "xdyn/hdb_interpolators/History.hpp"
 #include "RadiationDampingBuilderTest.hpp"
 #include "RadiationDampingBuilder.hpp"
 

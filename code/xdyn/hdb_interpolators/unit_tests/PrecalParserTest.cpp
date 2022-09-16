@@ -6,9 +6,9 @@
  */
 
 #include "PrecalParserTest.hpp"
-#include "hdb_interpolators/PrecalParser.hpp"
 #include "PrecalParserHelper.hpp"
-#include "precal_test_data.hpp"
+#include "xdyn/hdb_interpolators/PrecalParser.hpp"
+#include "test_data_generator/precal_test_data.hpp"
 #include <cstdio>
 #include <fstream>
 

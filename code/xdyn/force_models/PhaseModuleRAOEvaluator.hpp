@@ -1,7 +1,7 @@
 #ifndef _PHASEMODULERAOEVALUATORHPP_
 #define _PHASEMODULERAOEVALUATORHPP_
 
-#include "hdb_interpolators/RaoInterpolator.hpp"
+#include "xdyn/hdb_interpolators/RaoInterpolator.hpp"
 #include <ssc/kinematics.hpp>
 #include <string>
 #include <vector>

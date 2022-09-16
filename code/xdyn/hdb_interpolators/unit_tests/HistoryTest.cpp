@@ -8,7 +8,7 @@
 #include <algorithm>    // std::transform
 #include <numeric>      // std::partial_sum
 
-#include "hdb_interpolators/History.hpp"
+#include "xdyn/hdb_interpolators/History.hpp"
 #include "HistoryTest.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
 

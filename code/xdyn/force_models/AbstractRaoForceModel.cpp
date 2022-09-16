@@ -8,9 +8,9 @@
 #include "AbstractRaoForceModel.hpp"
 
 #include "xdyn/core/Body.hpp"
-#include "hdb_interpolators/HDBParser.hpp"
-#include "hdb_interpolators/HydroDBParser.hpp"
-#include "hdb_interpolators/PrecalParser.hpp"
+#include "xdyn/hdb_interpolators/HDBParser.hpp"
+#include "xdyn/hdb_interpolators/HydroDBParser.hpp"
+#include "xdyn/hdb_interpolators/PrecalParser.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
 #include "xdyn/yaml_parser/external_data_structures_parsers.hpp"

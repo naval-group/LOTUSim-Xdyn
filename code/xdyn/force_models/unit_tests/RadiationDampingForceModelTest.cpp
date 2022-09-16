@@ -6,9 +6,9 @@
  */
 
 #include "RadiationDampingForceModelTest.hpp"
-#include "hdb_interpolators/unit_tests/hdb_test.hpp"
+#include "xdyn/hdb_interpolators/unit_tests/hdb_test.hpp"
 #include "xdyn/core/BodyStates.hpp"
-#include "hdb_interpolators/RadiationDampingBuilder.hpp"
+#include "xdyn/hdb_interpolators/RadiationDampingBuilder.hpp"
 #include "xdyn/force_models/RadiationDampingForceModel.hpp"
 #include "xdyn/core/EnvironmentAndFrames.hpp"
 #include "test_data_generator/hdb_data.hpp"

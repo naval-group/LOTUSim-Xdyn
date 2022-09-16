@@ -8,22 +8,21 @@
 #ifndef BODYSTATES_HPP_
 #define BODYSTATES_HPP_
 
-#include <tuple>
+#include "xdyn/core/StatesFilter.hpp"
+#include "xdyn/core/StateMacros.hpp"
+#include "xdyn/external_data_structures/GeometricTypes3d.hpp"
+#include "xdyn/external_data_structures/YamlRotation.hpp"
+#include "xdyn/external_data_structures/AbstractStates.hpp"
+#include "mesh/MeshIntersector.hpp"
+#include "xdyn/hdb_interpolators/History.hpp"
 
+#include <ssc/kinematics.hpp>
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 
 #include <Eigen/Dense>
 
-#include <ssc/kinematics.hpp>
-#include "xdyn/external_data_structures/GeometricTypes3d.hpp"
-#include "mesh/MeshIntersector.hpp"
-#include "xdyn/core/StateMacros.hpp"
-#include "hdb_interpolators/History.hpp"
-#include "xdyn/external_data_structures/YamlRotation.hpp"
-#include "xdyn/external_data_structures/AbstractStates.hpp"
-#include "xdyn/core/StatesFilter.hpp"
-
+#include <tuple>
 
 class Mesh;
 typedef TR1(shared_ptr)<Mesh> MeshPtr;

@@ -1,6 +1,6 @@
 #include "yaml.h"
 #include "xdyn/core/BodyStates.hpp"
-#include "hdb_interpolators/History.hpp"
+#include "xdyn/hdb_interpolators/History.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
 #include "xdyn/core/StatesFilter.hpp"

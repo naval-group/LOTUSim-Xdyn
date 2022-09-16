@@ -1,9 +1,9 @@
 #ifndef CORE_INC_STATE_HPP_
 #define CORE_INC_STATE_HPP_
 
-#include "hdb_interpolators/History.hpp"
-#include "xdyn/external_data_structures/AbstractStates.hpp"
 #include "xdyn/core/StateMacros.hpp"
+#include "xdyn/external_data_structures/AbstractStates.hpp"
+#include "xdyn/hdb_interpolators/History.hpp"
 
 class State : public AbstractStates<History>
 {

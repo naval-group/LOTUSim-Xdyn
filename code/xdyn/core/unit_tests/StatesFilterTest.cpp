@@ -7,7 +7,7 @@
 
 
 #include "xdyn/external_data_structures/AbstractStates.hpp"
-#include "hdb_interpolators/History.hpp"
+#include "xdyn/hdb_interpolators/History.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/core/StatesFilter.hpp"
 #include "StatesFilterTest.hpp"

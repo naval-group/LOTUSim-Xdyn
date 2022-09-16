@@ -31,7 +31,7 @@
 #include "xdyn/force_models/SimpleStationKeepingController.hpp"
 #include "xdyn/force_models/unit_tests/HDBParserForTests.hpp"
 #include "xdyn/force_models/WageningenControlledForceModel.hpp"
-#include "hdb_interpolators/HDBParser.hpp"
+#include "xdyn/hdb_interpolators/HDBParser.hpp"
 #include "ssc/ssc/data_source/DataSource.hpp"
 #include "ssc/ssc/kinematics/Point.hpp"
 #include "ssc/ssc/kinematics/Wrench.hpp"

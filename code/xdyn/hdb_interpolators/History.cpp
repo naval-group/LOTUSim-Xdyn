@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "hdb_interpolators/History.hpp"
+#include "xdyn/hdb_interpolators/History.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
 #include <cmath>
 #include <cstdint>
