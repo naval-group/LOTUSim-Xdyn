@@ -11,7 +11,7 @@
 #include "FroudeKrylovForceModel.hpp"
 #include "xdyn/core/unit_tests/generate_body_for_tests.hpp"
 #include "test_data_generator/TriMeshTestData.hpp"
-#include "mesh/MeshIntersector.hpp"
+#include "xdyn/mesh/MeshIntersector.hpp"
 #include "xdyn/environment_models/DiracSpectralDensity.hpp"
 #include "xdyn/environment_models/DiracDirectionalSpreading.hpp"
 #include "xdyn/environment_models/discretize.hpp"

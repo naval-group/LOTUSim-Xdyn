@@ -11,7 +11,7 @@
 #include "xdyn/core/BodyWithSurfaceForces.hpp"
 #include "xdyn/core/BodyWithoutSurfaceForces.hpp"
 #include "xdyn/hdb_interpolators/HDBParser.hpp"
-#include "mesh/MeshBuilder.hpp"
+#include "xdyn/mesh/MeshBuilder.hpp"
 #include "xdyn/hdb_interpolators/PrecalParser.hpp"
 #include "xdyn/external_data_structures/YamlBody.hpp"
 #include "xdyn/core/yaml2eigen.hpp"

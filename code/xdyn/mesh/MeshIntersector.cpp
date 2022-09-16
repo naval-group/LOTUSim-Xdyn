@@ -1,6 +1,6 @@
-#include "mesh/MeshIntersector.hpp"
+#include "xdyn/mesh/MeshIntersector.hpp"
 #include "ClosingFacetComputer.hpp"
-#include "mesh/MeshBuilder.hpp"
+#include "xdyn/mesh/MeshBuilder.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
 #include "mesh_manipulations.hpp"
 #include "2DMeshDisplay.hpp"

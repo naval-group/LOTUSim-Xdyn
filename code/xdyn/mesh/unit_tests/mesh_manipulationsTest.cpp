@@ -10,7 +10,7 @@
 #include "mesh_manipulations.hpp"
 #include "test_data_generator/TriMeshTestData.hpp"
 #include "xdyn/exceptions/MeshException.hpp"
-#include "mesh/MeshBuilder.hpp"
+#include "xdyn/mesh/MeshBuilder.hpp"
 
 #include <ssc/macros.hpp>
 

@@ -17,7 +17,7 @@
 #include TR1INC(memory)
 
 #include "xdyn/environment_models/DiscreteDirectionalWaveSpectrum.hpp"
-#include "mesh/Mesh.hpp"
+#include "xdyn/mesh/Mesh.hpp"
 
 class Sim;
 struct SurfaceElevationGrid;

@@ -2,7 +2,7 @@
 #define MESHBUILDER_TEST_HPP
 
 #include "gtest/gtest.h"
-#include "mesh/Mesh.hpp"
+#include "xdyn/mesh/Mesh.hpp"
 
 class MeshBuilderTest : public ::testing::Test
 {

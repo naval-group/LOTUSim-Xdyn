@@ -1,6 +1,6 @@
 #include <map>
 
-#include "mesh/Mesh.hpp"
+#include "xdyn/mesh/Mesh.hpp"
 #include "mesh_manipulations.hpp"
 
 Mesh::Mesh():

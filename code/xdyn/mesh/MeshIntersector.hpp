@@ -6,7 +6,7 @@
 #include <ssc/kinematics.hpp>
 
 #include "CenterOfMass.hpp"
-#include "mesh/Mesh.hpp"
+#include "xdyn/mesh/Mesh.hpp"
 
 class FacetIterator
 {

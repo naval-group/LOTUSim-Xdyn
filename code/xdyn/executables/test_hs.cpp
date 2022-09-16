@@ -10,7 +10,7 @@
 #include "xdyn/core/SurfaceElevationFromWaves.hpp"
 #include "xdyn/force_models/FroudeKrylovForceModel.hpp"
 #include "test_data_generator/TriMeshTestData.hpp"
-#include "mesh/MeshIntersector.hpp"
+#include "xdyn/mesh/MeshIntersector.hpp"
 #include "xdyn/external_data_structures/GeometricTypes3d.hpp"
 #include "xdyn/external_data_structures/YamlRotation.hpp"
 #include "xdyn/core/BodyBuilder.hpp"

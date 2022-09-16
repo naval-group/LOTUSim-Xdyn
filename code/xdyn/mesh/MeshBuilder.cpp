@@ -1,4 +1,4 @@
-#include "mesh/MeshBuilder.hpp"
+#include "xdyn/mesh/MeshBuilder.hpp"
 
 #include "mesh_manipulations.hpp"
 
