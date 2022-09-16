@@ -2,9 +2,9 @@
 #include "listeners.hpp"
 #include "external_file_formats/stl_reader.hpp"
 
+#include "grpc/SurfaceElevationFromGRPC.hpp"
 #include "xdyn/core/DefaultSurfaceElevation.hpp"
 #include "xdyn/core/SimulatorBuilder.hpp"
-#include "xdyn/core/SurfaceElevationFromGRPC.hpp"
 #include "xdyn/core/SurfaceElevationFromWaves.hpp"
 #include "xdyn/environment_models/Airy.hpp"
 #include "xdyn/environment_models/BretschneiderSpectrum.hpp"

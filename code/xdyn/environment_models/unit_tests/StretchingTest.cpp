@@ -7,7 +7,7 @@
 
 #include "StretchingTest.hpp"
 #include "xdyn/environment_models/Stretching.hpp"
-#include "external_data_structures/YamlWaveModelInput.hpp"
+#include "xdyn/external_data_structures/YamlWaveModelInput.hpp"
 
 StretchingTest::StretchingTest() : a(ssc::random_data_generator::DataGenerator(88223232))
 {

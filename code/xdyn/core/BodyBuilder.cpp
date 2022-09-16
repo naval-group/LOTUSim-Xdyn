@@ -13,7 +13,7 @@
 #include "hdb_interpolators/HDBParser.hpp"
 #include "mesh/MeshBuilder.hpp"
 #include "hdb_interpolators/PrecalParser.hpp"
-#include "external_data_structures/YamlBody.hpp"
+#include "xdyn/external_data_structures/YamlBody.hpp"
 #include "xdyn/core/yaml2eigen.hpp"
 
 #include <ssc/kinematics.hpp>

@@ -12,7 +12,7 @@
 #include "xdyn/core/StateMacros.hpp"
 #include "xdyn/core/SurfaceElevationInterface.hpp"
 #include "xdyn/environment_models/WindModel.hpp"
-#include "external_data_structures/YamlRotation.hpp"
+#include "xdyn/external_data_structures/YamlRotation.hpp"
 #include <boost/optional.hpp>
 #include <ssc/kinematics.hpp>
 

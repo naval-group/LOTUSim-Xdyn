@@ -6,7 +6,7 @@
  */
 #include "CosimulationServiceImpl.hpp"
 #include "xdyn/core/BodyStates.hpp"
-#include "external_data_structures/YamlSimServerInputs.hpp"
+#include "xdyn/external_data_structures/YamlSimServerInputs.hpp"
 #include <sstream>
 
 CosimulationServiceImpl::CosimulationServiceImpl(const XdynForCS& simserver_, ErrorReporter& error_outputter_):

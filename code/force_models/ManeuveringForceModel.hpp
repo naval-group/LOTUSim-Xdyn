@@ -9,7 +9,7 @@
 #define MANEUVERINGFORCEMODEL_HPP_
 
 #include "xdyn/core/ForceModel.hpp"
-#include "external_data_structures/YamlPosition.hpp"
+#include "xdyn/external_data_structures/YamlPosition.hpp"
 #include "ManeuveringInternal.hpp"
 
 #include <ssc/data_source.hpp>

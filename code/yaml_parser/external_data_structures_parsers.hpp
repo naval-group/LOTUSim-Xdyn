@@ -10,7 +10,7 @@
 #include "boost/optional/optional.hpp"
 
 #include "yaml.h"
-#include "external_data_structures/YamlSimulatorInput.hpp"
+#include "xdyn/external_data_structures/YamlSimulatorInput.hpp"
 
 size_t try_to_parse_positive_integer(const YAML::Node& node, const std::string& key);
 void operator >> (const YAML::Node& node, YamlRotation& g);

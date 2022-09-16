@@ -14,7 +14,7 @@
 #include <boost/optional/optional.hpp>
 #include "yaml-cpp/exceptions.h"
 
-#include "external_data_structures/YamlModel.hpp"
+#include "xdyn/external_data_structures/YamlModel.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 
 class WindModel;

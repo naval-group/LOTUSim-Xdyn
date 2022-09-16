@@ -18,10 +18,10 @@
 #include "WaveModelBuilder.hpp"
 
 #include "xdyn/core/Sim.hpp"
-#include "external_data_structures/YamlSimulatorInput.hpp"
+#include "xdyn/external_data_structures/YamlSimulatorInput.hpp"
 
 #include "xdyn/core/EnvironmentAndFrames.hpp"
-#include "external_data_structures/GeometricTypes3d.hpp"
+#include "xdyn/external_data_structures/GeometricTypes3d.hpp"
 #include "xdyn/environment_models/WindModel.hpp"
 
 #include <ssc/data_source.hpp>

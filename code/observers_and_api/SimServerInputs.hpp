@@ -13,7 +13,7 @@ struct YamlSimServerInputs;
 #include <map>
 #include <string>
 #include "xdyn/core/State.hpp"
-#include "external_data_structures/YamlController.hpp"
+#include "xdyn/external_data_structures/YamlController.hpp"
 
 struct SimServerInputs
 {

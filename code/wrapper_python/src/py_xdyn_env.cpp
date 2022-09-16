@@ -22,8 +22,8 @@
 #include "xdyn/environment_models/WaveSpectralDensity.hpp"
 #include "xdyn/environment_models/WindModel.hpp"
 #include "xdyn/environment_models/WindMeanVelocityProfile.hpp"
-#include "external_data_structures/YamlModel.hpp"
-#include "external_data_structures/YamlWaveModelInput.hpp"
+#include "xdyn/external_data_structures/YamlModel.hpp"
+#include "xdyn/external_data_structures/YamlWaveModelInput.hpp"
 #include <vector>
 
 namespace py = pybind11;

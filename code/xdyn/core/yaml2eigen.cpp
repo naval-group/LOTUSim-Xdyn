@@ -8,11 +8,11 @@
 #include "xdyn/core/yaml2eigen.hpp"
 
 #include "xdyn/exceptions/InvalidInputException.hpp"
-#include "external_data_structures/YamlAngle.hpp"
-#include "external_data_structures/YamlCoordinates.hpp"
-#include "external_data_structures/YamlPoint.hpp"
-#include "external_data_structures/YamlPosition.hpp"
-#include "external_data_structures/YamlRotation.hpp"
+#include "xdyn/external_data_structures/YamlAngle.hpp"
+#include "xdyn/external_data_structures/YamlCoordinates.hpp"
+#include "xdyn/external_data_structures/YamlPoint.hpp"
+#include "xdyn/external_data_structures/YamlPosition.hpp"
+#include "xdyn/external_data_structures/YamlRotation.hpp"
 
 #include <ssc/exception_handling.hpp>
 

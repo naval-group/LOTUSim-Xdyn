@@ -3,9 +3,9 @@
 
 #include <string>
 
-#include "external_data_structures/YamlSimServerInputs.hpp"
+#include "xdyn/external_data_structures/YamlSimServerInputs.hpp"
 #include "SimServerInputs.hpp"
-#include "external_data_structures/YamlState.hpp"
+#include "xdyn/external_data_structures/YamlState.hpp"
 
 YamlSimServerInputs deserialize(const std::string& input);
 std::string serialize(const std::vector<YamlState>& states);

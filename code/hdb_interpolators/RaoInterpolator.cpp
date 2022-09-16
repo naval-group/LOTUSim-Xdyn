@@ -5,7 +5,7 @@
 #define PI M_PI
 
 #include "HydroDBParser.hpp"
-#include "external_data_structures/YamlRAO.hpp"
+#include "xdyn/external_data_structures/YamlRAO.hpp"
 #include <algorithm>
 
 

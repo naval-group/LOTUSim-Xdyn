@@ -16,12 +16,12 @@
 #include <Eigen/Dense>
 
 #include <ssc/kinematics.hpp>
-#include "external_data_structures/GeometricTypes3d.hpp"
+#include "xdyn/external_data_structures/GeometricTypes3d.hpp"
 #include "mesh/MeshIntersector.hpp"
 #include "xdyn/core/StateMacros.hpp"
 #include "hdb_interpolators/History.hpp"
-#include "external_data_structures/YamlRotation.hpp"
-#include "external_data_structures/AbstractStates.hpp"
+#include "xdyn/external_data_structures/YamlRotation.hpp"
+#include "xdyn/external_data_structures/AbstractStates.hpp"
 #include "xdyn/core/StatesFilter.hpp"
 
 

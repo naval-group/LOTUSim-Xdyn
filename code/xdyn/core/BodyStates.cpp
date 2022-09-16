@@ -9,7 +9,7 @@
 #include "xdyn/core/EnvironmentAndFrames.hpp"
 #include "xdyn/core/StateMacros.hpp"
 #include "xdyn/core/StatesFilter.hpp"
-#include "external_data_structures/YamlBody.hpp"
+#include "xdyn/external_data_structures/YamlBody.hpp"
 #include "xdyn/core/yaml2eigen.hpp"
 
 BodyStates::BodyStates(const double Tmax) : AbstractStates<History>(Tmax),

@@ -12,8 +12,8 @@
 #include "xdyn/environment_models/DiracSpectralDensity.hpp"
 #include "xdyn/core/SurfaceElevationBuilder.hpp"
 #include "xdyn/core/SurfaceElevationFromWaves.hpp"
-#include "external_data_structures/YamlWaveModelInput.hpp"
-#include "external_data_structures/YamlWaveModelInput.hpp"
+#include "xdyn/external_data_structures/YamlWaveModelInput.hpp"
+#include "xdyn/external_data_structures/YamlWaveModelInput.hpp"
 #include "xdyn/environment_models/Stretching.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include <ssc/kinematics.hpp>

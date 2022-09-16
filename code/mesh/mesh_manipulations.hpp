@@ -8,7 +8,7 @@
 #ifndef MESH_MANIPULATIONS_HPP_
 #define MESH_MANIPULATIONS_HPP_
 
-#include "external_data_structures/GeometricTypes3d.hpp"
+#include "xdyn/external_data_structures/GeometricTypes3d.hpp"
 #include "mesh/MeshIntersector.hpp"
 
 

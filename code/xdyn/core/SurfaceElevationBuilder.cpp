@@ -6,7 +6,7 @@
  */
 
 #include "xdyn/core/SurfaceElevationBuilder.hpp"
-#include "external_data_structures/YamlWaveModelInput.hpp"
+#include "xdyn/external_data_structures/YamlWaveModelInput.hpp"
 
 SurfaceElevationBuilderInterface::~SurfaceElevationBuilderInterface()
 {

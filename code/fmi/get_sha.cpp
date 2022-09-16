@@ -8,7 +8,7 @@
 #include <sstream>
 
 #include "Sha.hpp"
-#include "external_data_structures/YamlSimulatorInput.hpp"
+#include "xdyn/external_data_structures/YamlSimulatorInput.hpp"
 #include "get_sha.hpp"
 #include "get_git_sha.h"
 

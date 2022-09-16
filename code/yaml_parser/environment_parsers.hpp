@@ -8,9 +8,9 @@
 #ifndef ENVIRONMENT_PARSERS_HPP_
 #define ENVIRONMENT_PARSERS_HPP_
 
-#include "external_data_structures/YamlWaveModelInput.hpp"
+#include "xdyn/external_data_structures/YamlWaveModelInput.hpp"
 #include "xdyn/environment_models/YamlSpectraInput.hpp"
-#include "external_data_structures/YamlGRPC.hpp"
+#include "xdyn/external_data_structures/YamlGRPC.hpp"
 
 #include <string>
 #include <boost/optional/optional_io.hpp>

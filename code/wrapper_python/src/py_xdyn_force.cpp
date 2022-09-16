@@ -3,7 +3,7 @@
 
 #include "core/ForceModel.hpp"
 #include "core/ImmersedSurfaceForceModel.hpp"
-#include "external_data_structures/GeometricTypes3d.hpp"
+#include "xdyn/external_data_structures/GeometricTypes3d.hpp"
 #include "force_models/AbstractRaoForceModel.hpp"
 #include "force_models/AbstractWageningen.hpp"
 #include "force_models/AeroPolarForceModel.hpp"
@@ -37,7 +37,7 @@
 #include "ssc/ssc/kinematics/Wrench.hpp"
 #include "ssc/ssc/macros/tr1_macros.hpp"
 #include <string>
-#include TR1INC(memory) 
+#include TR1INC(memory)
 
 namespace py = pybind11;
 

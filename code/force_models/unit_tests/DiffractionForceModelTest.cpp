@@ -14,7 +14,7 @@
 #include "precal_test_data.hpp"
 #include "xdyn/environment_models/DiracSpectralDensity.hpp"
 #include "xdyn/environment_models/DiracDirectionalSpreading.hpp"
-#include "external_data_structures/YamlWaveModelInput.hpp"
+#include "xdyn/external_data_structures/YamlWaveModelInput.hpp"
 #include "xdyn/environment_models/Stretching.hpp"
 #include "xdyn/environment_models/discretize.hpp"
 #include "xdyn/environment_models/Airy.hpp"

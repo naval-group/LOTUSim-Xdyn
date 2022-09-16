@@ -21,7 +21,7 @@
 #include "RudderForceModelTest.hpp"
 #include "RudderForceModel.hpp"
 #include "test_data_generator/yaml_data.hpp"
-#include "external_data_structures/YamlWaveModelInput.hpp"
+#include "xdyn/external_data_structures/YamlWaveModelInput.hpp"
 #include "xdyn/environment_models/Stretching.hpp"
 
 namespace ssc

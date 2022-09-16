@@ -12,7 +12,7 @@
 #include TR1INC(memory)
 
 #include "xdyn/core/ForceModel.hpp"
-#include "external_data_structures/YamlRadiationDamping.hpp"
+#include "xdyn/external_data_structures/YamlRadiationDamping.hpp"
 
 class HydroDBParser;
 

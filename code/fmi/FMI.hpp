@@ -19,7 +19,7 @@ extern "C"
 }
 
 #include "xdyn/core/Sim.hpp"
-#include "external_data_structures/YamlSimulatorInput.hpp"
+#include "xdyn/external_data_structures/YamlSimulatorInput.hpp"
 
 namespace fmi
 {

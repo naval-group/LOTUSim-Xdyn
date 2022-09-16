@@ -9,7 +9,7 @@
 #define DISCRETIZE_HPP_
 
 #include "xdyn/environment_models/DiscreteDirectionalWaveSpectrum.hpp"
-#include "external_data_structures/YamlRadiationDamping.hpp"
+#include "xdyn/external_data_structures/YamlRadiationDamping.hpp"
 
 class Stretching;
 class WaveSpectralDensity;

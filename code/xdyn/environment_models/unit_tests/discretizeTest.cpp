@@ -18,7 +18,7 @@
 #include "xdyn/environment_models/DiracDirectionalSpreading.hpp"
 #include "xdyn/environment_models/Stretching.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
-#include "external_data_structures/YamlWaveModelInput.hpp"
+#include "xdyn/external_data_structures/YamlWaveModelInput.hpp"
 #include <ssc/macros.hpp>
 
 discretizeTest::discretizeTest()

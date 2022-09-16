@@ -8,7 +8,7 @@
 #ifndef SIMULATORYAMLPARSER_HPP_
 #define SIMULATORYAMLPARSER_HPP_
 
-#include "external_data_structures/YamlSimulatorInput.hpp"
+#include "xdyn/external_data_structures/YamlSimulatorInput.hpp"
 #include <ssc/yaml_parser/YamlParser.hpp>
 
 class SimulatorYamlParser : public ssc::yaml_parser::YamlParser

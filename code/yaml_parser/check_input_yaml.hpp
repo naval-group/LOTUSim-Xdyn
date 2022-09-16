@@ -8,7 +8,7 @@
 #ifndef CHECK_INPUT_YAML_HPP_
 #define CHECK_INPUT_YAML_HPP_
 
-#include "external_data_structures/YamlSimulatorInput.hpp"
+#include "xdyn/external_data_structures/YamlSimulatorInput.hpp"
 
 YamlSimulatorInput check_input_yaml(const YamlSimulatorInput& input);
 void check_controller_output_is_not_defined_in_a_command(const std::string& controller_command_name,

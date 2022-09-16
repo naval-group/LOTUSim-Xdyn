@@ -14,7 +14,7 @@
 #include "PIDController.hpp"
 #include "GrpcController.hpp"
 #include "CSVController.hpp"
-#include "external_data_structures/YamlTimeSeries.hpp"
+#include "xdyn/external_data_structures/YamlTimeSeries.hpp"
 
 #include <ssc/macros.hpp>
 #include TR1INC(memory)

@@ -2,7 +2,7 @@
 #define OBSERVERS_AND_API_INC_SIMULATIONSERVEROBSERVER_HPP_
 
 #include "xdyn/core/Observer.hpp"
-#include "external_data_structures/YamlState.hpp"
+#include "xdyn/external_data_structures/YamlState.hpp"
 
 class SimulationServerObserver : public Observer
 {

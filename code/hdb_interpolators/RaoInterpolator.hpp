@@ -1,7 +1,7 @@
 #ifndef _RAOINTERPOLATORHPP_
 #define _RAOINTERPOLATORHPP_
 
-#include "external_data_structures/YamlRAO.hpp"
+#include "xdyn/external_data_structures/YamlRAO.hpp"
 #include <ssc/interpolation.hpp>
 #include <Eigen/Dense>
 #include <vector>

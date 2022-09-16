@@ -7,8 +7,8 @@
 
 
 #include "SimServerInputs.hpp"
-#include "external_data_structures/YamlSimServerInputs.hpp"
-#include "external_data_structures/YamlState.hpp"
+#include "xdyn/external_data_structures/YamlSimServerInputs.hpp"
+#include "xdyn/external_data_structures/YamlState.hpp"
 
 void record(State& state, const YamlState& ystate);
 void record(State& state, const YamlState& ystate)

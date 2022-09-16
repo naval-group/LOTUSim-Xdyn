@@ -4,7 +4,7 @@
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
 #include "xdyn/core/StatesFilter.hpp"
-#include "external_data_structures/YamlBody.hpp"
+#include "xdyn/external_data_structures/YamlBody.hpp"
 
 FilteredStates::FilteredStates(const StatesFilter& filters, const AbstractStates<History>& states, const YamlRotation& rot)
     : AbstractStates<double>()

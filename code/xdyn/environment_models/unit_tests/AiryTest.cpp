@@ -15,7 +15,7 @@
 #include "xdyn/environment_models/SumOfWaveDirectionalSpreadings.hpp"
 #include "xdyn/environment_models/Stretching.hpp"
 #include "xdyn/environment_models/discretize.hpp"
-#include "external_data_structures/YamlWaveModelInput.hpp"
+#include "xdyn/external_data_structures/YamlWaveModelInput.hpp"
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI

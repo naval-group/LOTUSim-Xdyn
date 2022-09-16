@@ -1,7 +1,7 @@
 #ifndef TRIMESHTESTDATA_HPP
 #define TRIMESHTESTDATA_HPP
 
-#include "external_data_structures/GeometricTypes3d.hpp"
+#include "xdyn/external_data_structures/GeometricTypes3d.hpp"
 
 VectorOfPoints one_triangle();
 VectorOfPoints one_triangle_clockwise();

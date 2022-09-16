@@ -1,7 +1,7 @@
 #ifndef FORCE_MODELS_INC_MMGMANOEUVRINGFORCEMODEL_HPP_
 #define FORCE_MODELS_INC_MMGMANOEUVRINGFORCEMODEL_HPP_
 
-#include "external_data_structures/YamlCoordinates.hpp"
+#include "xdyn/external_data_structures/YamlCoordinates.hpp"
 #include "yaml_parser/external_data_structures_parsers.hpp"
 
 #include "xdyn/core/ForceModel.hpp"

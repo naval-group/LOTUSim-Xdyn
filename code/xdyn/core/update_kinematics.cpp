@@ -9,8 +9,8 @@
 #include "xdyn/core/BodyBuilder.hpp"
 #include "xdyn/core/StateMacros.hpp"
 #include "xdyn/core/yaml2eigen.hpp"
-#include "external_data_structures/YamlAngle.hpp"
-#include "external_data_structures/YamlBody.hpp"
+#include "xdyn/external_data_structures/YamlAngle.hpp"
+#include "xdyn/external_data_structures/YamlBody.hpp"
 
 #include <ssc/kinematics.hpp>
 

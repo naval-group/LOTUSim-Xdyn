@@ -9,8 +9,8 @@
 #define BODYBUILDER_HPP_
 
 #include "xdyn/core/Body.hpp"
-#include "external_data_structures/YamlRotation.hpp"
-#include "external_data_structures/GeometricTypes3d.hpp"
+#include "xdyn/external_data_structures/YamlRotation.hpp"
+#include "xdyn/external_data_structures/GeometricTypes3d.hpp"
 
 struct YamlDynamics6x6Matrix;
 struct YamlAngle;

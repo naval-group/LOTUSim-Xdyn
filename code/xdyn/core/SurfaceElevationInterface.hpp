@@ -8,7 +8,7 @@
 #ifndef SURFACELEVATIONINTERFACE_HPP_
 #define SURFACELEVATIONINTERFACE_HPP_
 
-#include "external_data_structures/GeometricTypes3d.hpp"
+#include "xdyn/external_data_structures/GeometricTypes3d.hpp"
 #include "xdyn/core/SurfaceElevationGrid.hpp"
 #include "xdyn/core/Observer.hpp"
 #include <ssc/kinematics.hpp>

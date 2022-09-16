@@ -11,7 +11,7 @@
 
 #include "xdyn/exceptions/InternalErrorException.hpp"
 #include "xdyn/exceptions/GRPCError.hpp"
-#include "external_data_structures/YamlGRPC.hpp"
+#include "xdyn/external_data_structures/YamlGRPC.hpp"
 #include "xdyn/environment_models/discretize.hpp"
 
 #include <grpcpp/grpcpp.h>

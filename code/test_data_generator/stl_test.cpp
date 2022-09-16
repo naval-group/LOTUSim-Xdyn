@@ -1,4 +1,4 @@
-#include "external_data_structures/GeometricTypes3d.hpp"
+#include "xdyn/external_data_structures/GeometricTypes3d.hpp"
 
 VectorOfVectorOfPoints stl0();
 VectorOfVectorOfPoints stl0()

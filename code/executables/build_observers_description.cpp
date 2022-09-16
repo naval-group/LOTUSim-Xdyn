@@ -1,5 +1,4 @@
 #include "build_observers_description.hpp"
-#include "YamlOutput.hpp"
 #include "parse_output.hpp"
 #include "XdynCommandLineArguments.hpp"
 #include "xdyn/core/Sim.hpp"

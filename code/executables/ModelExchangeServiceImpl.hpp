@@ -8,7 +8,7 @@
 #ifndef EXECUTABLES_INC_MODELEXCHANGESERVICEIMPL_HPP_
 #define EXECUTABLES_INC_MODELEXCHANGESERVICEIMPL_HPP_
 
-#include "external_data_structures/YamlSimServerInputs.hpp"
+#include "xdyn/external_data_structures/YamlSimServerInputs.hpp"
 #include "model_exchange.grpc.pb.h"
 #include "model_exchange.pb.h"
 #include "XdynForME.hpp"

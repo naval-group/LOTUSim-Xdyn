@@ -8,7 +8,7 @@
 #ifndef EXECUTABLES_INC_XDYNFORCSGRPC_HPP_
 #define EXECUTABLES_INC_XDYNFORCSGRPC_HPP_
 
-#include "external_data_structures/YamlSimServerInputs.hpp"
+#include "xdyn/external_data_structures/YamlSimServerInputs.hpp"
 #include "cosimulation.grpc.pb.h"
 #include "cosimulation.pb.h"
 #include "XdynForCS.hpp"

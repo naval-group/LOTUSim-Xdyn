@@ -19,7 +19,7 @@
 
 #include TR1INC(memory)
 
-#include "external_data_structures/YamlBody.hpp"
+#include "xdyn/external_data_structures/YamlBody.hpp"
 #include "xdyn/core/StateMacros.hpp"
 
 class BlockedDOF

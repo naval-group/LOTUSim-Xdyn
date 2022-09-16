@@ -12,7 +12,7 @@
 #include <boost/optional/optional.hpp>
 #include <memory>
 #include <string>
-#include "external_data_structures/YamlModel.hpp"
+#include "xdyn/external_data_structures/YamlModel.hpp"
 #include "xdyn/environment_models/WindModel.hpp"
 
 class WindMeanVelocityProfile;

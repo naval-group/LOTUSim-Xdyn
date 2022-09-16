@@ -10,8 +10,8 @@
 
 #include <ssc/data_source.hpp>
 #include <ssc/solver.hpp>
-#include "external_data_structures/YamlTimeSeries.hpp"
-#include "external_data_structures/YamlController.hpp"
+#include "xdyn/external_data_structures/YamlTimeSeries.hpp"
+#include "xdyn/external_data_structures/YamlController.hpp"
 
 class Sim;
 

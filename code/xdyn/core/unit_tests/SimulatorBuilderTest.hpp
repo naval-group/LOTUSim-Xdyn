@@ -10,7 +10,7 @@
 
 #include "gtest/gtest.h"
 #include <ssc/random_data_generator.hpp>
-#include "external_data_structures/YamlSimulatorInput.hpp"
+#include "xdyn/external_data_structures/YamlSimulatorInput.hpp"
 #include "xdyn/core/SimulatorBuilder.hpp"
 
 class SimulatorBuilderTest : public ::testing::Test

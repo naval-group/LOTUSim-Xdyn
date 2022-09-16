@@ -6,7 +6,7 @@
  */
 
 #include "xdyn/core/unit_tests/generate_body_for_tests.hpp"
-#include "external_data_structures/YamlRotation.hpp"
+#include "xdyn/external_data_structures/YamlRotation.hpp"
 #include "xdyn/core/BodyBuilder.hpp"
 #include "test_data_generator/TriMeshTestData.hpp"
 

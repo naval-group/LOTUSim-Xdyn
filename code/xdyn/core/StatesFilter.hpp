@@ -10,8 +10,8 @@
 
 #include <memory>
 #include <string>
-#include "external_data_structures/AbstractStates.hpp"
-#include "external_data_structures/YamlRotation.hpp"
+#include "xdyn/external_data_structures/AbstractStates.hpp"
+#include "xdyn/external_data_structures/YamlRotation.hpp"
 
 class History;
 

@@ -3,8 +3,8 @@
 
 #include <cmath>
 #include "xdyn/core/yaml2eigen.hpp"
-#include "external_data_structures/YamlPosition.hpp"
-#include "external_data_structures/YamlRotation.hpp"
+#include "xdyn/external_data_structures/YamlPosition.hpp"
+#include "xdyn/external_data_structures/YamlRotation.hpp"
 #include "xdyn/core/yaml2eigen.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
 

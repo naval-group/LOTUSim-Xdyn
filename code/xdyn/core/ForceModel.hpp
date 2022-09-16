@@ -16,11 +16,11 @@
 
 #include "yaml-cpp/exceptions.h"
 #include "xdyn/exceptions/InvalidInputException.hpp"
-#include "external_data_structures/YamlBody.hpp"
+#include "xdyn/external_data_structures/YamlBody.hpp"
 #include "xdyn/core/Wrench.hpp"
 
 #include "xdyn/core/EnvironmentAndFrames.hpp"
-#include "external_data_structures/YamlPosition.hpp"
+#include "xdyn/external_data_structures/YamlPosition.hpp"
 
 namespace ssc { namespace data_source { class DataSource;}}
 struct BodyStates;

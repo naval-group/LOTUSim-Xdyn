@@ -12,7 +12,7 @@
 #include <vector>
 #include <functional>
 
-#include "external_data_structures/YamlRadiationDamping.hpp"
+#include "xdyn/external_data_structures/YamlRadiationDamping.hpp"
 
 class History;
 
