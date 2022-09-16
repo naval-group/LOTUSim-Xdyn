@@ -6,7 +6,7 @@
 #include "parse_XdynCommandLineArguments.hpp"
 #include "display_command_line_arguments.hpp"
 #include "ErrorReporter.hpp"
-#include "grpc/AiryGRPC.hpp"
+#include "xdyn/grpc/AiryGRPC.hpp"
 #include "observers_and_api/simulator_api.hpp" // xdyn/code/observers_and_api/simulator_api.hpp
 #include "test_data_generator/yaml_data.hpp" // To be removed late // xdyn/code/test_data_generator/yaml_data.hpp
 #include <ssc/text_file_reader.hpp>

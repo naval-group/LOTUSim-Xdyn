@@ -22,7 +22,7 @@
 #include "GRPCTypes.hpp"
 #include "ToGRPC.hpp"
 #include "FromGRPC.hpp"
-#include "HydroDBParser.hpp"
+#include "hdb_interpolators/HydroDBParser.hpp"
 
 template <> std::string get_type_of_service<GRPCForceModel>()
 {

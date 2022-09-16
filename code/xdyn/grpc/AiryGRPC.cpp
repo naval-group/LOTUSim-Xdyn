@@ -1,6 +1,6 @@
 #include "AiryGRPC.hpp"
 #include "ToGRPCCommon.hpp"
-#include "xdyn/core/EnvironmentAndFrames.hpp" //xdyn/code/core/EnvironmentAndFrames.hpp
+#include "xdyn/core/EnvironmentAndFrames.hpp"
 #include "wave_types.pb.h"
 #include "wave_types.grpc.pb.h"
 #include "wave_grpc.grpc.pb.h"

@@ -9,7 +9,7 @@
 #define GRPCCONTROLLER_HPP_
 
 #include "Controller.hpp"
-#include "GrpcControllerInterface.hpp"
+#include "xdyn/grpc/GrpcControllerInterface.hpp"
 class GrpcController : public Controller
 {
   public:

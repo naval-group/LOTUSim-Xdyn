@@ -40,8 +40,8 @@
 #include "xdyn/force_models/SimpleHeadingKeepingController.hpp"
 #include "xdyn/force_models/SimpleStationKeepingController.hpp"
 #include "xdyn/force_models/WageningenControlledForceModel.hpp"
-#include "grpc/GRPCForceModel.hpp"
-#include "grpc/SurfaceElevationFromGRPC.hpp"
+#include "xdyn/grpc/GRPCForceModel.hpp"
+#include "xdyn/grpc/SurfaceElevationFromGRPC.hpp"
 
 SimulatorBuilder get_builder(const YamlSimulatorInput& input, const double t0, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
 SimulatorBuilder get_builder(const YamlSimulatorInput& input, const double t0, const ssc::data_source::DataSource& command_listener)

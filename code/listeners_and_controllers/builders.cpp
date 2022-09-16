@@ -12,7 +12,7 @@
 #include "xdyn/environment_models/Stretching.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/external_data_structures/YamlGRPC.hpp"
-#include "grpc/SurfaceElevationFromGRPC.hpp"
+#include "xdyn/grpc/SurfaceElevationFromGRPC.hpp"
 #include "xdyn/yaml_parser/environment_parsers.hpp"
 #include <algorithm>
 
