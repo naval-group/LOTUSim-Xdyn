@@ -1,6 +1,6 @@
 #include "Hdf5WaveObserverBuilder.hpp"
 
-#include "h5_interface.hpp"
+#include "xdyn/interface_hdf5/h5_interface.hpp"
 
 /** \def MIN(i1,i2) Define minimum of two scalar*/
 #define MIN(i1,i2) (i1 < i2 ? i1 : i2)
@@ -110,4 +110,3 @@ H5Element Hdf5WaveObserverBuilder::get_h5ElementZ() const
     h5ElementZ.dataset = group.createDataSet(datasetName+"z",h5ElementZ.datatype, h5ElementZ.dataspace, cparms3);
     return h5ElementZ;
 }
-

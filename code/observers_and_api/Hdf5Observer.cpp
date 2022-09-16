@@ -1,16 +1,14 @@
 #include "Hdf5Observer.hpp"
-
-#include "h5_version.hpp"
-#include "h5_tools.hpp"
-#include "h5_tools.hpp"
+#include "Hdf5WaveObserver.hpp"
+#include "Hdf5WaveSpectrumObserver.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 #include "xdyn/external_file_formats/stl_io_hdf5.hpp"
+#include "xdyn/interface_hdf5/h5_version.hpp"
+#include "xdyn/interface_hdf5/h5_tools.hpp"
 
 #include "demoMatLab.hpp"
 #include "demoPython.hpp"
 
-#include "Hdf5WaveObserver.hpp"
-#include "xdyn/exceptions/InternalErrorException.hpp"
-#include "Hdf5WaveSpectrumObserver.hpp"
 
 Hdf5Addressing::Hdf5Addressing(
         const DataAddressing& addressing,

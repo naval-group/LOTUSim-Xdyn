@@ -1,9 +1,9 @@
 #include "Hdf5WaveSpectrumObserver.hpp"
-#include "h5_tools.hpp"
+#include "xdyn/interface_hdf5/h5_tools.hpp"
+#include <cmath>
+#include <iomanip>
 #include <iostream>
 #include <sstream>
-#include <iomanip>
-#include <cmath>
 
 void hdf5WaveSpectrumObserver(
         const std::string& fileName,
@@ -55,4 +55,3 @@ void hdf5WaveSpectrumObserver(
     hdf5WaveSpectrumObserver(h5File, datasetName, s);
     h5File.close();
 }
-
