@@ -5,9 +5,8 @@
  *      Author: cady
  */
 
-#include <iostream>
 #include <ssc/kinematics.hpp>
-
+#include <iostream>
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
@@ -39,4 +38,3 @@ int main(int argc, char** argv)
               << "psi: "   << angles.psi*RAD2DEG << std::endl;
     return 0;
 }
-

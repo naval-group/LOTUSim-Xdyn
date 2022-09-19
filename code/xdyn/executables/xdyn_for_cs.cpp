@@ -1,11 +1,10 @@
-#include "xdyn/observers_and_api/XdynForCS.hpp"
 #include "parse_XdynForCSCommandLineArguments.hpp"
 #include "XdynForCSCommandLineArguments.hpp"
-
-#include "xdyn/observers_and_api/gRPCProtoBufServer.hpp"
 #include "CosimulationServiceImpl.hpp"
 #include "JSONWebSocketServer.hpp"
 #include "ErrorReporter.hpp"
+#include "xdyn/observers_and_api/XdynForCS.hpp"
+#include "xdyn/observers_and_api/gRPCProtoBufServer.hpp"
 
 #include <ssc/text_file_reader.hpp>
 
