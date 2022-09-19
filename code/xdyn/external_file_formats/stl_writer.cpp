@@ -1,7 +1,6 @@
-#include <sstream>
-
 #include "stl_writer.hpp"
 #include "xdyn/exceptions/MeshException.hpp"
+#include <sstream>
 
 ::std::ostream& operator<<(::std::ostream& os, const EPoint& point);
 ::std::ostream& operator<<(::std::ostream& os, const EPoint& point)
