@@ -4,6 +4,9 @@
  *  Created on: Nov 27, 2014
  *      Author: cady
  */
+#include "RadiationDampingBuilder.hpp"
+#include "History.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 
 #include <algorithm>    // std::reverse
 
@@ -17,10 +20,6 @@ typedef TR1(shared_ptr)<ssc::interpolation::Interpolator> InterpolatorPtr;
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
-
-#include "xdyn/hdb_interpolators/History.hpp"
-#include "xdyn/exceptions/InternalErrorException.hpp"
-#include "RadiationDampingBuilder.hpp"
 
 RadiationDampingBuilder::RadiationDampingBuilder(const TypeOfQuadrature& type_of_quadrature_for_convolution_, //!< Gauss-Kronrod, rectangle, Simpson, trapezoidal, Burcher, Clenshaw-Curtis or Filon
                                                  const TypeOfQuadrature& type_of_quadrature_for_cos_transform_ //!< Gauss-Kronrod, rectangle, Simpson, trapezoidal, Burcher, Clenshaw-Curtis or Filon

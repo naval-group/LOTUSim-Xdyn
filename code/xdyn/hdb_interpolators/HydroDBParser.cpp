@@ -1,5 +1,5 @@
-#include "xdyn/hdb_interpolators/HDBParser.hpp"
-#include "xdyn/hdb_interpolators/PrecalParser.hpp"
+#include "HDBParser.hpp"
+#include "PrecalParser.hpp"
 
 std::shared_ptr<HydroDBParser> parser_factory(const std::string& hdb_filename, const std::string& precal_filename)
 {

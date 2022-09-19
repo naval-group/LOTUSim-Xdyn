@@ -5,11 +5,11 @@
  *      Author: cady
  */
 
+#include "RadiationDampingBuilderTest.hpp"
+#include "RadiationDampingBuilder.hpp"
 #include "hdb_test.hpp"
 #include "xdyn/test_data_generator/hdb_data.hpp"
 #include "xdyn/hdb_interpolators/History.hpp"
-#include "RadiationDampingBuilderTest.hpp"
-#include "RadiationDampingBuilder.hpp"
 
 #include <ssc/integrate.hpp>
 #include <ssc/macros.hpp>

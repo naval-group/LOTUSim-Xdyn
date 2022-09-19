@@ -4,14 +4,14 @@
  *  Created on: Dec 14, 2014
  *      Author: cady
  */
+#include "hdb_test.hpp"
+#include "RadiationDampingBuilder.hpp"
+#include "xdyn/test_data_generator/hdb_data.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
 
-#include "xdyn/test_data_generator/hdb_data.hpp"
-#include "hdb_test.hpp"
-#include "RadiationDampingBuilder.hpp"
 
 std::function<double(double)> get_interpolated_Br()
 {

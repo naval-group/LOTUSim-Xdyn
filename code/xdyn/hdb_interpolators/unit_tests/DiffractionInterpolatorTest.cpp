@@ -6,15 +6,15 @@
  */
 
 #include "DiffractionInterpolatorTest.hpp"
+#include "xdyn/external_data_structures/YamlRAO.hpp"
+#include "xdyn/hdb_interpolators/HDBParser.hpp"
+#include "xdyn/test_data_generator/hdb_data.hpp"
+#include "RaoInterpolator.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
 
-#include "xdyn/hdb_interpolators/HDBParser.hpp"
-#include "xdyn/test_data_generator/hdb_data.hpp"
-#include "RaoInterpolator.hpp"
-#include "xdyn/external_data_structures/YamlRAO.hpp"
 
 DiffractionInterpolatorTest::DiffractionInterpolatorTest() : a(ssc::random_data_generator::DataGenerator(989899))
 {

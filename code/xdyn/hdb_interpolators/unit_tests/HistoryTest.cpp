@@ -5,12 +5,11 @@
  *      Author: cady
  */
 
+#include "HistoryTest.hpp"
+#include "History.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 #include <algorithm>    // std::transform
 #include <numeric>      // std::partial_sum
-
-#include "xdyn/hdb_interpolators/History.hpp"
-#include "HistoryTest.hpp"
-#include "xdyn/exceptions/InternalErrorException.hpp"
 
 HistoryTest::HistoryTest() : a(ssc::random_data_generator::DataGenerator(5422))
 {

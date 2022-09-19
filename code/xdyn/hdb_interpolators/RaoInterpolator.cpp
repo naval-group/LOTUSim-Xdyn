@@ -1,11 +1,11 @@
 #include "RaoInterpolator.hpp"
+#include "HydroDBParser.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
+#include "xdyn/external_data_structures/YamlRAO.hpp"
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
 
-#include "HydroDBParser.hpp"
-#include "xdyn/external_data_structures/YamlRAO.hpp"
 #include <algorithm>
 
 
