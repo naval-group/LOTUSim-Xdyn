@@ -6,7 +6,7 @@
  */
 
 #include "DiracDirectionalSpreadingTest.hpp"
-#include "xdyn/environment_models/DiracDirectionalSpreading.hpp"
+#include "DiracDirectionalSpreading.hpp"
 
 DiracDirectionalSpreadingTest::DiracDirectionalSpreadingTest() : a(ssc::random_data_generator::DataGenerator(58212))
 {

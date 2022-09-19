@@ -6,7 +6,7 @@
  */
 
 #include "BretschneiderSpectrumTest.hpp"
-#include "xdyn/environment_models/BretschneiderSpectrum.hpp"
+#include "BretschneiderSpectrum.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 
 #define NB_TRIALS 10

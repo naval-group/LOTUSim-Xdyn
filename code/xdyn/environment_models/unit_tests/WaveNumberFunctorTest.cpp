@@ -6,7 +6,7 @@
  */
 
 #include "WaveNumberFunctorTest.hpp"
-#include "xdyn/environment_models/WaveNumberFunctor.hpp"
+#include "WaveNumberFunctor.hpp"
 #include <tuple>
 
 WaveNumberFunctorTest::WaveNumberFunctorTest() : a(ssc::random_data_generator::DataGenerator(54545))

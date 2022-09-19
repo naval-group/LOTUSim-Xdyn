@@ -4,12 +4,11 @@
  *  Created on: 11 déc. 2020
  *      Author: mcharlou2016
  */
-
-#include <cmath>
-#include "yaml.h"
-#include <ssc/yaml_parser.hpp>
-
 #include "LogWindVelocityProfile.hpp"
+#include <ssc/yaml_parser.hpp>
+#include "yaml.h"
+#include <cmath>
+
 
 LogWindVelocityProfile::LogWindVelocityProfile(const Input& input) : WindMeanVelocityProfile(input), z0(input.z0), z_ref(input.z_ref)
 {
@@ -54,4 +53,3 @@ LogWindVelocityProfile::Input::Input(const WindMeanVelocityProfile::Input& paren
 LogWindVelocityProfile::Input::Input() : WindMeanVelocityProfile::Input(), z0(), z_ref()
 {
 }
-

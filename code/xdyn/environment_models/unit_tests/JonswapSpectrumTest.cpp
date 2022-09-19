@@ -6,7 +6,7 @@
  */
 
 #include "JonswapSpectrumTest.hpp"
-#include "xdyn/environment_models/JonswapSpectrum.hpp"
+#include "JonswapSpectrum.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 
 #define _USE_MATH_DEFINE

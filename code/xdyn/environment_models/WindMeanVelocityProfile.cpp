@@ -5,11 +5,11 @@
  *      Author: mcharlou2016
  */
 
+#include "WindMeanVelocityProfile.hpp"
+#include <ssc/yaml_parser.hpp>
 #include <Eigen/Dense>
 #include "yaml.h"
-#include <ssc/yaml_parser.hpp>
 
-#include "WindMeanVelocityProfile.hpp"
 
 WindMeanVelocityProfile::WindMeanVelocityProfile(const Input& input) : velocity(input.velocity), direction(cos(input.direction), sin(input.direction), 0.)
 {

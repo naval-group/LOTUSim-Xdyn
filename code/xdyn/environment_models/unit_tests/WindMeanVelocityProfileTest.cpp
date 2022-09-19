@@ -6,10 +6,9 @@
  */
 
 #include "WindMeanVelocityProfileTest.hpp"
-
-#include "xdyn/environment_models/UniformWindVelocityProfile.hpp"
-#include "xdyn/environment_models/PowerLawWindVelocityProfile.hpp"
-#include "xdyn/environment_models/LogWindVelocityProfile.hpp"
+#include "UniformWindVelocityProfile.hpp"
+#include "PowerLawWindVelocityProfile.hpp"
+#include "LogWindVelocityProfile.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 
 #include <cmath>

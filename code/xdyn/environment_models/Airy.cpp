@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "xdyn/environment_models/Airy.hpp"
+#include "Airy.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 

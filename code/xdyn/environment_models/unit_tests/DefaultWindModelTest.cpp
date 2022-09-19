@@ -6,7 +6,7 @@
  */
 
 #include "DefaultWindModelTest.hpp"
-#include "xdyn/environment_models/DefaultWindModel.hpp"
+#include "DefaultWindModel.hpp"
 #include <Eigen/Dense>
 
 DefaultWindModelTest::DefaultWindModelTest () : a(ssc::random_data_generator::DataGenerator(54200))

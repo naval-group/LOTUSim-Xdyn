@@ -4,16 +4,16 @@
  *  Created on: Jul 30, 2014
  *      Author: cady
  */
-#include "xdyn/environment_models/WaveSpectralDensity.hpp"
-#include "xdyn/environment_models/discretize.hpp"
+#include "WaveSpectralDensity.hpp"
+#include "discretize.hpp"
 #include "SumOfWaveSpectralDensities.hpp"
 #include "WaveNumberFunctor.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
+#include <boost/math/tools/roots.hpp>
 #include <cmath> // For isnan
 
 #include <limits>
-#include <boost/math/tools/roots.hpp>
 
 WaveSpectralDensity::WaveSpectralDensity()
 {

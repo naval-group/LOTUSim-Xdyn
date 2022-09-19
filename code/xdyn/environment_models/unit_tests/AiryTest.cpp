@@ -6,15 +6,15 @@
  */
 
 #include "AiryTest.hpp"
-#include "xdyn/environment_models/Airy.hpp"
-#include "xdyn/environment_models/BretschneiderSpectrum.hpp"
-#include "xdyn/environment_models/Cos2sDirectionalSpreading.hpp"
-#include "xdyn/environment_models/DiracSpectralDensity.hpp"
-#include "xdyn/environment_models/DiracDirectionalSpreading.hpp"
-#include "xdyn/environment_models/SumOfWaveSpectralDensities.hpp"
-#include "xdyn/environment_models/SumOfWaveDirectionalSpreadings.hpp"
-#include "xdyn/environment_models/Stretching.hpp"
-#include "xdyn/environment_models/discretize.hpp"
+#include "Airy.hpp"
+#include "BretschneiderSpectrum.hpp"
+#include "Cos2sDirectionalSpreading.hpp"
+#include "DiracSpectralDensity.hpp"
+#include "DiracDirectionalSpreading.hpp"
+#include "SumOfWaveSpectralDensities.hpp"
+#include "SumOfWaveDirectionalSpreadings.hpp"
+#include "Stretching.hpp"
+#include "discretize.hpp"
 #include "xdyn/external_data_structures/YamlWaveModelInput.hpp"
 #define _USE_MATH_DEFINE
 #include <cmath>

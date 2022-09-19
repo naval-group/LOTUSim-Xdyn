@@ -7,7 +7,7 @@
 
 
 #include "WaveSpectralDensityTest.hpp"
-#include "xdyn/environment_models/WaveSpectralDensity.hpp"
+#include "WaveSpectralDensity.hpp"
 
 WaveSpectralDensityTest::WaveSpectralDensityTest() : a(ssc::random_data_generator::DataGenerator(3215))
 {

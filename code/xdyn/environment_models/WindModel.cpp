@@ -5,7 +5,7 @@
  *      Author: mcharlou2016
  */
 
-#include "xdyn/environment_models/WindModel.hpp"
+#include "WindModel.hpp"
 
 WindModel::WindModel()
 {

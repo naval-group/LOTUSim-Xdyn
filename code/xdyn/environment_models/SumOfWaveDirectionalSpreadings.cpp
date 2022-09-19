@@ -6,7 +6,6 @@
  */
 
 #include "SumOfWaveDirectionalSpreadings.hpp"
-
 #include "SumOfWaveSpectralDensities.hpp"
 
 #include <list>

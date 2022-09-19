@@ -5,9 +5,9 @@
  *      Author: cady
  */
 
-#include "xdyn/environment_models/Stretching.hpp"
-#include "xdyn/external_data_structures/YamlWaveModelInput.hpp"
+#include "Stretching.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
+#include "xdyn/external_data_structures/YamlWaveModelInput.hpp"
 #include <ssc/macros.hpp>
 #include <cmath> // For isnan
 

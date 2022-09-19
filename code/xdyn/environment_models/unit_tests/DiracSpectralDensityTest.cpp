@@ -6,7 +6,7 @@
  */
 
 #include "DiracSpectralDensityTest.hpp"
-#include "xdyn/environment_models/DiracSpectralDensity.hpp"
+#include "DiracSpectralDensity.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 
 #define NB_TRIALS 10

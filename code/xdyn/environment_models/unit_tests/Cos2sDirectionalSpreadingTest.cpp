@@ -4,15 +4,13 @@
  *  Created on: Jul 31, 2014
  *      Author: cady
  */
+#include "Cos2sDirectionalSpreadingTest.hpp"
+#include "Cos2sDirectionalSpreading.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
-
-#include "Cos2sDirectionalSpreadingTest.hpp"
-#include "xdyn/environment_models/Cos2sDirectionalSpreading.hpp"
-#include "xdyn/exceptions/InvalidInputException.hpp"
-
 #define NB_TRIALS 10
 
 Cos2sDirectionalSpreadingTest::Cos2sDirectionalSpreadingTest() : a(ssc::random_data_generator::DataGenerator(8))

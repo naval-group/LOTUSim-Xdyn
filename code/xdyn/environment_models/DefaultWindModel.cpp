@@ -5,7 +5,7 @@
  *      Author: mcharlou2016
  */
 
-#include "xdyn/environment_models/DefaultWindModel.hpp"
+#include "DefaultWindModel.hpp"
 
 DefaultWindModel::DefaultWindModel(int)
 {

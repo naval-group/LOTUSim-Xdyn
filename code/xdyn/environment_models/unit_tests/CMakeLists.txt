@@ -1,5 +1,4 @@
-SET(MODULE_UNDER_TEST environment_models)
-PROJECT(${MODULE_UNDER_TEST}_tests)
+PROJECT(environment_models_tests)
 SET(SRC
     AiryTest.cpp
     BretschneiderSpectrumTest.cpp
@@ -16,6 +15,7 @@ SET(SRC
     WindMeanVelocityProfileTest.cpp
     )
 
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/..)
 INCLUDE_DIRECTORIES(SYSTEM ${GTEST_INCLUDE_DIRS})
 
 ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})

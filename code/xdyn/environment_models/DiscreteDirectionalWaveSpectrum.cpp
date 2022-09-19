@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "xdyn/environment_models/DiscreteDirectionalWaveSpectrum.hpp"
+#include "DiscreteDirectionalWaveSpectrum.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 
 #define _USE_MATH_DEFINE

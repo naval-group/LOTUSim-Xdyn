@@ -5,9 +5,8 @@
  *      Author: mcharlou2016
  */
 
+#include "UniformWindVelocityProfile.hpp"
 #include <math.h>
-
-#include "xdyn/environment_models/UniformWindVelocityProfile.hpp"
 
 UniformWindVelocityProfile::UniformWindVelocityProfile(const Input& input) : WindMeanVelocityProfile(input)
 {

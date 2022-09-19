@@ -4,10 +4,10 @@
  *  Created on: Aug 1, 2014
  *      Author: cady
  */
-#include "xdyn/environment_models/discretize.hpp"
-#include "xdyn/environment_models/WaveDirectionalSpreading.hpp"
-#include "xdyn/environment_models/WaveSpectralDensity.hpp"
-#include "xdyn/environment_models/Stretching.hpp"
+#include "discretize.hpp"
+#include "WaveDirectionalSpreading.hpp"
+#include "WaveSpectralDensity.hpp"
+#include "Stretching.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 

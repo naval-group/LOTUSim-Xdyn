@@ -5,9 +5,9 @@
  *      Author: cady
  */
 
-#include "xdyn/environment_models/WaveModel.hpp"
+#include "WaveModel.hpp"
+#include "discretize.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
-#include "xdyn/environment_models/discretize.hpp"
 #include <cmath> // For isnan
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_real_distribution.hpp>

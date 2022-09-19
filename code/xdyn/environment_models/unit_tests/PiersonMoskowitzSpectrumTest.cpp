@@ -10,7 +10,7 @@
 #define PI M_PI
 
 #include "PiersonMoskowitzSpectrumTest.hpp"
-#include "xdyn/environment_models/PiersonMoskowitzSpectrum.hpp"
+#include "PiersonMoskowitzSpectrum.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 
 #define NB_TRIALS 10

@@ -5,13 +5,12 @@
  *      Author: mcharlou2016
  */
 
-#include <cmath>
-#include "yaml.h"
-#include <ssc/yaml_parser.hpp>
-
-#include "xdyn/exceptions/InvalidInputException.hpp"
-
 #include "PowerLawWindVelocityProfile.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
+#include <ssc/yaml_parser.hpp>
+#include "yaml.h"
+#include <cmath>
+
 
 PowerLawWindVelocityProfile::PowerLawWindVelocityProfile(const Input& input) : WindMeanVelocityProfile(input), alpha(input.alpha), z_ref(input.z_ref)
 {
