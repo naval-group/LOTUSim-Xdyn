@@ -5,9 +5,8 @@
  *      Author: cady
  */
 
-#include "xdyn/exceptions/InternalErrorException.hpp"
-
 #include "gz_newton_raphson.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 
 double delta(const Eigen::Vector3d& X1, const Eigen::Vector3d& X2);
 double delta(const Eigen::Vector3d& X1, const Eigen::Vector3d& X2)
