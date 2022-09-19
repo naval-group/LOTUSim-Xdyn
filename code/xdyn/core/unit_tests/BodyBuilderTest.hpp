@@ -8,9 +8,9 @@
 #ifndef BODYBUILDERTEST_HPP_
 #define BODYBUILDERTEST_HPP_
 
-#include "gtest/gtest.h"
-#include "xdyn/core/Body.hpp"
+#include "Body.hpp"
 #include <ssc/random_data_generator.hpp>
+#include "gtest/gtest.h"
 
 class BodyBuilderTest : public ::testing::Test
 {

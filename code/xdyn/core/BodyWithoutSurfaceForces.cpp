@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "xdyn/core/BodyWithoutSurfaceForces.hpp"
+#include "BodyWithoutSurfaceForces.hpp"
 
 BodyWithoutSurfaceForces::BodyWithoutSurfaceForces(const size_t i, const BlockedDOF& blocked_states_, const YamlFilteredStates& filtered_states) : Body(i, blocked_states_, filtered_states)
 {

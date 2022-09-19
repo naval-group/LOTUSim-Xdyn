@@ -9,8 +9,9 @@
 #ifndef BODYTEST_HPP_
 #define BODYTEST_HPP_
 
-#include "gtest/gtest.h"
+#include "Body.hpp"
 #include <ssc/random_data_generator/DataGenerator.hpp>
+#include "gtest/gtest.h"
 
 class BodyTest : public ::testing::Test
 {

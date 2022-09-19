@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "xdyn/core/DefaultSurfaceElevation.hpp"
+#include "DefaultSurfaceElevation.hpp"
 
 DefaultSurfaceElevation::DefaultSurfaceElevation(
     const double wave_height_,

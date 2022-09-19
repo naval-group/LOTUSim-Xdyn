@@ -4,10 +4,9 @@
  *  Created on: Jan 9, 2015
  *      Author: cady
  */
+#include "BodyWithSurfaceForces.hpp"
+#include "EnvironmentAndFrames.hpp"
 #include <ssc/exception_handling.hpp>
-
-#include "xdyn/core/BodyWithSurfaceForces.hpp"
-#include "xdyn/core/EnvironmentAndFrames.hpp"
 
 BodyWithSurfaceForces::BodyWithSurfaceForces(const size_t i, const BlockedDOF& blocked_states_, const YamlFilteredStates& filtered_states) : Body(i, blocked_states_, filtered_states)
 {

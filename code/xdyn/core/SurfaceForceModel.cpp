@@ -5,8 +5,8 @@
  *      Author: cady
  */
 
-#include "xdyn/core/BodyStates.hpp"
 #include "SurfaceForceModel.hpp"
+#include "BodyStates.hpp"
 
 SurfaceForceModel::SurfaceForceModel(const std::string& name_, const std::string& body_name, const EnvironmentAndFrames& env) :
         ForceModel(name_, {}, body_name, env),

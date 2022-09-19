@@ -5,12 +5,11 @@
  *      Author: cady
  */
 
-
-#include <algorithm>
-#include "xdyn/core/Observer.hpp"
+#include "Observer.hpp"
+#include "Sim.hpp"
+#include "SurfaceElevationGrid.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
-#include "xdyn/core/Sim.hpp"
-#include "xdyn/core/SurfaceElevationGrid.hpp"
+#include <algorithm>
 
 Observer::Observer()
     : requested_serializations()

@@ -5,9 +5,9 @@
  *      Author: cady
  */
 
-#include "xdyn/core/Body.hpp"
-#include "xdyn/core/EnvironmentAndFrames.hpp"
-#include "xdyn/core/Observer.hpp"
+#include "Body.hpp"
+#include "EnvironmentAndFrames.hpp"
+#include "Observer.hpp"
 #include "xdyn/exceptions/NumericalErrorException.hpp"
 
 Body::Body(const size_t i, const BlockedDOF& blocked_states_, const YamlFilteredStates& filtered_states)

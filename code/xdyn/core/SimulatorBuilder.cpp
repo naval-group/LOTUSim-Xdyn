@@ -5,12 +5,11 @@
  *      Author: cady
  */
 
-#include "xdyn/core/SimulatorBuilder.hpp"
-
+#include "SimulatorBuilder.hpp"
+#include "BodyBuilder.hpp"
+#include "update_kinematics.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
-#include "xdyn/core/update_kinematics.hpp"
 #include "xdyn/external_file_formats/stl_reader.hpp"
-#include "xdyn/core/BodyBuilder.hpp"
 
 #include <ssc/text_file_reader.hpp>
 

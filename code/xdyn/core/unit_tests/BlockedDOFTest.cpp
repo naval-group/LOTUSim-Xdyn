@@ -4,15 +4,13 @@
  *  Created on: Aug 19, 2015
  *      Author: cady
  */
-
-
-#include <fstream>
-
-#include <boost/filesystem.hpp> // For boost::filesystem::unique_path
-
+#include "BlockedDOFTest.hpp"
 #include "xdyn/core/BlockedDOF.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
-#include "BlockedDOFTest.hpp"
+#include <boost/filesystem.hpp> // For boost::filesystem::unique_path
+#include <fstream>
+
+
 
 BlockedDOFTest::BlockedDOFTest() : a(ssc::random_data_generator::DataGenerator(854512))
 {

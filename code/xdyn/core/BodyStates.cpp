@@ -5,12 +5,12 @@
  *      Author: cady
  */
 
-#include "xdyn/core/BodyStates.hpp"
-#include "xdyn/core/EnvironmentAndFrames.hpp"
-#include "xdyn/core/StateMacros.hpp"
-#include "xdyn/core/StatesFilter.hpp"
+#include "BodyStates.hpp"
+#include "EnvironmentAndFrames.hpp"
+#include "StateMacros.hpp"
+#include "StatesFilter.hpp"
+#include "yaml2eigen.hpp"
 #include "xdyn/external_data_structures/YamlBody.hpp"
-#include "xdyn/core/yaml2eigen.hpp"
 
 BodyStates::BodyStates(const double Tmax) : AbstractStates<History>(Tmax),
 name(),

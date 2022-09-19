@@ -1,10 +1,10 @@
-#include "yaml.h"
-#include "xdyn/core/BodyStates.hpp"
-#include "xdyn/hdb_interpolators/History.hpp"
+#include "StatesFilter.hpp"
+#include "BodyStates.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
-#include "xdyn/core/StatesFilter.hpp"
 #include "xdyn/external_data_structures/YamlBody.hpp"
+#include "xdyn/hdb_interpolators/History.hpp"
+#include "yaml.h"
 
 FilteredStates::FilteredStates(const StatesFilter& filters, const AbstractStates<History>& states, const YamlRotation& rot)
     : AbstractStates<double>()

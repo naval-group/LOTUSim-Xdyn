@@ -5,11 +5,10 @@
  *      Author: cady
  */
 
-#include "xdyn/core/EnvironmentAndFrames.hpp"
-
+#include "EnvironmentAndFrames.hpp"
+#include "SurfaceElevationInterface.hpp"
+#include "Observer.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
-#include "xdyn/core/SurfaceElevationInterface.hpp"
-#include "xdyn/core/Observer.hpp"
 
 #include <ssc/kinematics.hpp>
 using namespace ssc::kinematics;

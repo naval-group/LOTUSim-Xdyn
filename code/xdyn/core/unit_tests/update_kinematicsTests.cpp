@@ -5,12 +5,12 @@
  *      Author: cady
  */
 
-#include "xdyn/core/update_kinematics.hpp"
 #include "update_kinematicsTests.hpp"
 #include "BodyBuilderTest.hpp"
-#include <ssc/kinematics.hpp>
-#include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
+#include "xdyn/core/update_kinematics.hpp"
 #include "xdyn/test_data_generator/yaml_data.hpp"
+#include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
+#include <ssc/kinematics.hpp>
 
 #define EPS (1E-10)
 

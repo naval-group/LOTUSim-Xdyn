@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "xdyn/core/Res.hpp"
+#include "Res.hpp"
 
 Res::Res() : t(0), x(), extra_observations()
 {

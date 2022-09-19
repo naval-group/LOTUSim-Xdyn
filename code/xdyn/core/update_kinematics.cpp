@@ -4,11 +4,11 @@
  *  Created on: Jun 16, 2014
  *      Author: cady
  */
-#include "xdyn/core/update_kinematics.hpp"
-#include "xdyn/core/Body.hpp"
-#include "xdyn/core/BodyBuilder.hpp"
-#include "xdyn/core/StateMacros.hpp"
-#include "xdyn/core/yaml2eigen.hpp"
+#include "update_kinematics.hpp"
+#include "Body.hpp"
+#include "BodyBuilder.hpp"
+#include "StateMacros.hpp"
+#include "yaml2eigen.hpp"
 #include "xdyn/external_data_structures/YamlAngle.hpp"
 #include "xdyn/external_data_structures/YamlBody.hpp"
 

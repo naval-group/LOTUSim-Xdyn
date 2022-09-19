@@ -1,7 +1,6 @@
-#include "xdyn/core/Wrench.hpp"
-#include <iostream>
-
+#include "Wrench.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
+#include <iostream>
 
 Wrench::Wrench(const ssc::kinematics::Point& P, const std::string& frame_):
         force(Eigen::Vector3d(0, 0, 0)),

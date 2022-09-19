@@ -4,12 +4,7 @@
  *  Created on: Aug 19, 2015
  *      Author: cady
  */
-
-#include <algorithm>
-#include <map>
-#include <vector>
-
-#include "xdyn/core/BlockedDOF.hpp"
+#include "BlockedDOF.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/exceptions/NumericalErrorException.hpp"
 #include "xdyn/yaml_parser/external_data_structures_parsers.hpp"
@@ -17,6 +12,10 @@
 #include <ssc/csv_file_reader.hpp>
 #include <ssc/interpolation.hpp>
 #include <ssc/text_file_reader.hpp>
+
+#include <algorithm>
+#include <map>
+#include <vector>
 
 typedef YamlDOF<std::vector<double> > Table;
 

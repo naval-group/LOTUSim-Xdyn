@@ -5,8 +5,7 @@
  *      Author: cady
  */
 
-#include "xdyn/core/SurfaceElevationFromWaves.hpp"
-
+#include "SurfaceElevationFromWaves.hpp"
 #include <ssc/exception_handling.hpp>
 
 

@@ -5,8 +5,7 @@
  *      Author: cady
  */
 
-#include "xdyn/core/yaml2eigen.hpp"
-
+#include "yaml2eigen.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/external_data_structures/YamlAngle.hpp"
 #include "xdyn/external_data_structures/YamlCoordinates.hpp"

@@ -5,13 +5,13 @@
  *      Author: cady
  */
 
-#include "xdyn/core/BodyBuilder.hpp"
 #include "BodyBuilderTest.hpp"
-#include "xdyn/mesh/Mesh.hpp"
-#include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
-#include "xdyn/test_data_generator/stl_data.hpp"
+#include "BodyBuilder.hpp"
 #include "xdyn/external_file_formats/stl_reader.hpp"
+#include "xdyn/mesh/Mesh.hpp"
+#include "xdyn/test_data_generator/stl_data.hpp"
 #include "xdyn/test_data_generator/yaml_data.hpp"
+#include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
 
 const BodyPtr BodyBuilderTest::body = BodyBuilderTest::build_body();
 

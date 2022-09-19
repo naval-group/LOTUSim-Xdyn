@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "xdyn/core/SurfaceElevationInterface.hpp"
+#include "SurfaceElevationInterface.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
 #include <ssc/exception_handling.hpp>
 #include <string>

@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "xdyn/core/SurfaceElevationBuilder.hpp"
+#include "SurfaceElevationBuilder.hpp"
 #include "xdyn/external_data_structures/YamlWaveModelInput.hpp"
 
 SurfaceElevationBuilderInterface::~SurfaceElevationBuilderInterface()

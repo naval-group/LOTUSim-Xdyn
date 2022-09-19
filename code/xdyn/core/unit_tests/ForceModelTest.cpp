@@ -4,13 +4,10 @@
  *  Created on: May 11, 2015
  *      Author: cady
  */
-
 #include "ForceModelTest.hpp"
-#include "xdyn/core/ForceModel.hpp"
-
-#include <ssc/data_source.hpp>
-
+#include "ForceModel.hpp"
 #include "random_kinematics.hpp"
+#include <ssc/data_source.hpp>
 
 EnvironmentAndFrames make_env(ssc::random_data_generator::DataGenerator& a);
 EnvironmentAndFrames make_env(ssc::random_data_generator::DataGenerator& a)

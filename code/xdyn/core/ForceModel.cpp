@@ -5,13 +5,11 @@
  *      Author: cady
  */
 
-#include "xdyn/core/ForceModel.hpp"
-
+#include "ForceModel.hpp"
+#include "Observer.hpp"
+#include "yaml2eigen.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
-#include "xdyn/core/Observer.hpp"
-#include "xdyn/core/yaml2eigen.hpp"
-
 #include <ssc/data_source.hpp>
 
 #define _USE_MATH_DEFINE
