@@ -6,23 +6,23 @@
  */
 
 #include "GRPCForceModel.hpp"
-#include <memory> // std::make_shared
-#include <vector>
-#include "grpc_error_outputter.hpp"
 #include "force.pb.h"
 #include "force.grpc.pb.h"
+#include "grpc_error_outputter.hpp"
+#include "GRPCTypes.hpp"
+#include "ToGRPC.hpp"
+#include "FromGRPC.hpp"
+#include "xdyn/core/Body.hpp"
+#include "xdyn/hdb_interpolators/HydroDBParser.hpp"
 
-#include "yaml.h"
 #include <ssc/macros.hpp>
 #include <ssc/yaml_parser.hpp>
 #include <ssc/kinematics.hpp>
 
+#include "yaml.h"
 
-#include "xdyn/core/Body.hpp"
-#include "GRPCTypes.hpp"
-#include "ToGRPC.hpp"
-#include "FromGRPC.hpp"
-#include "xdyn/hdb_interpolators/HydroDBParser.hpp"
+#include <memory> // std::make_shared
+#include <vector>
 
 template <> std::string get_type_of_service<GRPCForceModel>()
 {

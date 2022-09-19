@@ -5,8 +5,8 @@
  *      Author: cady
  */
 
-#include "GrpcControllerInterface.hpp"
 #include "GrpcControllerInterfaceTest.hpp"
+#include "GrpcControllerInterface.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/test_data_generator/yaml_data.hpp"
 

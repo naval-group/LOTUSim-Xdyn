@@ -5,8 +5,8 @@
  *      Author: cady
  */
 
-#include "GRPCForceModel.hpp"
 #include "GRPCForceModelTest.hpp"
+#include "GRPCForceModel.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/test_data_generator/yaml_data.hpp"
 
