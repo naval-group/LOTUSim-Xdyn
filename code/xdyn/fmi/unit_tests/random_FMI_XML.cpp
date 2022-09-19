@@ -4,11 +4,8 @@
  *  Created on: May 22, 2015
  *      Author: cady
  */
-
-#include <ssc/random_data_generator.hpp>
-
 #include "FMIXml.hpp"
-
+#include <ssc/random_data_generator.hpp>
 namespace ssc
 {
     namespace random_data_generator

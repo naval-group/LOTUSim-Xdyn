@@ -4,11 +4,9 @@
  *  Created on: May 21, 2015
  *      Author: cady
  */
-
-#include <limits>
-
 #include "ParseFMIXmlTest.hpp"
 #include "ParseFMIXml.hpp"
+#include <limits>
 
 ParseFMIXmlTest::ParseFMIXmlTest() : a(ssc::random_data_generator::DataGenerator(54222100))
 {

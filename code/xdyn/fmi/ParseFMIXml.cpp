@@ -6,14 +6,14 @@
  */
 
 #include "ParseFMIXml.hpp"
+#include "FMIException.hpp"
 
-#include <limits> // std::numeric_limits
+#include <ssc/macros.hpp>
 
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
+#include <limits> // std::numeric_limits
 
-#include "FMIException.hpp"
-#include <ssc/macros.hpp>
 
 using boost::property_tree::ptree;
 
@@ -271,4 +271,3 @@ fmi::Xml fmi::parse(const std::string& xml)
     pt >> ans;
     return ans;
 }
-

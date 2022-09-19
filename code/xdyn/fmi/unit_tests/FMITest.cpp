@@ -4,12 +4,10 @@
  *  Created on: May 12, 2015
  *      Author: cady
  */
-
-#include "gmock/gmock.h"
-
 #include "FMITest.hpp"
 #include "FMI.hpp"
 #include "xdyn/test_data_generator/yaml_data.hpp"
+#include "gmock/gmock.h"
 
 using ::testing::ElementsAre;
 

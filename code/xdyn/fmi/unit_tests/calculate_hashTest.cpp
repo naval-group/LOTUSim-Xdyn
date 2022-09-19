@@ -4,10 +4,9 @@
  *  Created on: May 19, 2015
  *      Author: cady
  */
-#include <boost/functional/hash.hpp>
-
 #include "calculate_hashTest.hpp"
 #include "Sha.hpp"
+#include <boost/functional/hash.hpp>
 
 calculate_hashTest::calculate_hashTest() : a(ssc::random_data_generator::DataGenerator(54212))
 {
@@ -82,4 +81,3 @@ TEST_F(calculate_hashTest, can_hash_YamlCoordinates)
     ASSERT_EQ("abc4e338663794e4c7162d129747ba3b3a10620b", sha1.get());
 //! [calculate_hashTest expected output]
 }
-

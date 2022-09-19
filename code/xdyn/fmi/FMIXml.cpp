@@ -4,10 +4,9 @@
  *  Created on: May 21, 2015
  *      Author: cady
  */
+#include "FMIXml.hpp"
 
 #include <limits>
-
-#include "FMIXml.hpp"
 
 fmi::DateTime::DateTime() : year(), month(), day(), hours(), minutes(), seconds()
 {

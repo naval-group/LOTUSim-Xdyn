@@ -4,9 +4,9 @@
  *  Created on: May 12, 2015
  *      Author: cady
  */
-#include "get_sha.hpp"
 #include "FMI.hpp"
 #include "FMIException.hpp"
+#include "get_sha.hpp"
 #include "xdyn/observers_and_api/simulator_api.hpp"
 #include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
 
