@@ -4,12 +4,10 @@
  *  Created on: Feb 8, 2018
  *      Author: cady
  */
+#include "hdb_data.hpp"
+#include "stl_data.hpp"
+#include "yaml_data.hpp"
 #include <sstream>
-#include "xdyn/test_data_generator/stl_data.hpp"
-#include "xdyn/test_data_generator/hdb_data.hpp"
-#include "xdyn/test_data_generator/yaml_data.hpp"
-
-
 
 std::string test_data::issue_20()
 {

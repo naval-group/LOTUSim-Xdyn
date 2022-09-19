@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "xdyn/test_data_generator/yaml_data.hpp"
+#include "yaml_data.hpp"
 #include <boost/algorithm/string.hpp>
 #include <sstream>
 

@@ -1,4 +1,4 @@
-#include "xdyn/test_data_generator/hdb_data.hpp"
+#include "hdb_data.hpp"
 #include <sstream>
 
 std::string test_data::big_hdb()

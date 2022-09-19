@@ -1,4 +1,4 @@
-#include "xdyn/test_data_generator/hdb_data.hpp"
+#include "hdb_data.hpp"
 #include <cmath>
 
 std::string test_data::test_ship_hdb()
