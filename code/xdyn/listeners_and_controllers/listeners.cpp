@@ -5,17 +5,15 @@
  *      Author: cady
  */
 
-#include <boost/algorithm/string.hpp> // For boost::to_upper
-
-#include "xdyn/yaml_parser/check_input_yaml.hpp"
-#include "InterpolationModule.hpp"
-#include "xdyn/exceptions/InvalidInputException.hpp"
 #include "listeners.hpp"
-#include "PIDController.hpp"
-#include "GrpcController.hpp"
 #include "CSVController.hpp"
+#include "GrpcController.hpp"
+#include "InterpolationModule.hpp"
+#include "PIDController.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/external_data_structures/YamlTimeSeries.hpp"
-
+#include "xdyn/yaml_parser/check_input_yaml.hpp"
+#include <boost/algorithm/string.hpp> // For boost::to_upper
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 

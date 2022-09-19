@@ -1,5 +1,5 @@
-#include <cstdlib> // For mkstemp
 #include "TempFile.hpp"
+#include <cstdlib> // For mkstemp
 
 /**
  * @brief Generate a temporary file and return its name

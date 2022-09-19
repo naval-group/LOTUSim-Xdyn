@@ -5,10 +5,10 @@
  *      Author: lincker
  */
 
-#include "yaml.h"
 #include "PIDController.hpp"
-#include "xdyn/yaml_parser/check_input_yaml.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
+#include "xdyn/yaml_parser/check_input_yaml.hpp"
+#include "yaml.h"
 
 PIDController::PIDController (const double tstart,
                               const double dt,

@@ -5,8 +5,8 @@
  *      Author: cady
  */
 
-#include "xdyn/exceptions/InvalidInputException.hpp"
 #include "CSVController.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 #include "yaml.h"
 #include <numeric>
 
