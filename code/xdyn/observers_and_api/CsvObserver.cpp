@@ -5,12 +5,12 @@
  *      Author: cady
  */
 
+#include "CsvObserver.hpp"
+#include <boost/algorithm/string.hpp>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <boost/algorithm/string.hpp>
 
-#include "CsvObserver.hpp"
 
 CsvObserver::CsvObserver(const std::string& filename) :
         Observer(),

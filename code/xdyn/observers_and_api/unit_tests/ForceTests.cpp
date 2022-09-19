@@ -5,14 +5,14 @@
  *      Author: cady
  */
 
-#include "ForceTester.hpp"
 #include "ForceTests.hpp"
+#include "ForceTester.hpp"
 #include "xdyn/binary_stl_data/generate_test_ship.hpp"
+#include "xdyn/external_file_formats/stl_writer.hpp"
 #include "xdyn/force_models/ExactHydrostaticForceModel.hpp"
 #include "xdyn/force_models/FastHydrostaticForceModel.hpp"
 #include "xdyn/force_models/GravityForceModel.hpp"
 #include "xdyn/force_models/GMForceModel.hpp"
-#include "xdyn/external_file_formats/stl_writer.hpp"
 #include "xdyn/observers_and_api/simulator_api.hpp"
 #include "xdyn/test_data_generator/hdb_data.hpp"
 #include "xdyn/test_data_generator/stl_data.hpp"

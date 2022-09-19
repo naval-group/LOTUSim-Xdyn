@@ -4,11 +4,11 @@
  *  Created on: Jun 16, 2014
  *      Author: cady
  */
-#include "SimObserver.hpp"
-#include "xdyn/core/Sim.hpp"
 #include "SimTest.hpp"
+#include "SimObserver.hpp"
 #include "MapObserverTest.hpp"
 #include "xdyn/binary_stl_data/generate_test_ship.hpp"
+#include "xdyn/core/Sim.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
 #include "xdyn/observers_and_api/simulator_api.hpp"
 #include "xdyn/test_data_generator/hdb_data.hpp"

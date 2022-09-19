@@ -5,14 +5,14 @@
  *      Author: cady
  */
 
-#include "xdyn/external_data_structures/YamlOutput.hpp"
+#include "ListOfObservers.hpp"
 #include "CsvObserver.hpp"
 #include "TsvObserver.hpp"
 #include "JsonObserver.hpp"
 #include "MapObserver.hpp"
 #include "Hdf5Observer.hpp"
 #include "WebSocketObserver.hpp"
-#include "ListOfObservers.hpp"
+#include "xdyn/external_data_structures/YamlOutput.hpp"
 
 ObserverPtr ListOfObservers::parse_observer(const YamlOutput& output)
 {

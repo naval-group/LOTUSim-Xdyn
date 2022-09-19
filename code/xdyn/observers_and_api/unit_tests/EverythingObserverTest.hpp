@@ -8,12 +8,12 @@
 #ifndef OBSERVERS_AND_API_UNIT_TESTS_INC_EVERYTHINGOBSERVERTEST_HPP_
 #define OBSERVERS_AND_API_UNIT_TESTS_INC_EVERYTHINGOBSERVERTEST_HPP_
 
+#include "gtest/gtest.h"
+#include <ssc/random_data_generator/DataGenerator.hpp>
+
 #include <map>
 #include <string>
 #include <vector>
-
-#include "gtest/gtest.h"
-#include <ssc/random_data_generator/DataGenerator.hpp>
 
 class ListOfObservers;
 
@@ -26,8 +26,5 @@ class EverythingObserverTest : public ::testing::Test
         virtual void TearDown();
         ssc::random_data_generator::DataGenerator a;
 };
-
-std::vector<Res> get_results(const ListOfObservers& observers);
-
 
 #endif /* OBSERVERS_AND_API_UNIT_TESTS_INC_EVERYTHINGOBSERVERTEST_HPP_ */

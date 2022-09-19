@@ -1,11 +1,11 @@
-#include <iomanip> // std::setprecision
+#include "JSONSerializer.hpp"
 
 #include <ssc/json.hpp>
 #include <ssc/json/rapidjson/document.h>
 #include <ssc/json/rapidjson/writer.h>
 #include <ssc/json/rapidjson/stringbuffer.h>
 
-#include "JSONSerializer.hpp"
+#include <iomanip> // std::setprecision
 
 YamlSimServerInputs deserialize(const std::string& input)
 {

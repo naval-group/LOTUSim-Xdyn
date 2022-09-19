@@ -1,5 +1,4 @@
 #include "simulator_api.hpp"
-#include "xdyn/listeners_and_controllers/listeners.hpp"
 #include "xdyn/core/DefaultSurfaceElevation.hpp"
 #include "xdyn/core/SimulatorBuilder.hpp"
 #include "xdyn/core/SurfaceElevationFromWaves.hpp"
@@ -42,6 +41,7 @@
 #include "xdyn/force_models/WageningenControlledForceModel.hpp"
 #include "xdyn/grpc/GRPCForceModel.hpp"
 #include "xdyn/grpc/SurfaceElevationFromGRPC.hpp"
+#include "xdyn/listeners_and_controllers/listeners.hpp"
 
 SimulatorBuilder get_builder(const YamlSimulatorInput& input, const double t0, const ssc::data_source::DataSource& command_listener = ssc::data_source::DataSource());
 SimulatorBuilder get_builder(const YamlSimulatorInput& input, const double t0, const ssc::data_source::DataSource& command_listener)

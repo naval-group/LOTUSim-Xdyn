@@ -1,10 +1,9 @@
+#include "XdynForCSTest.hpp"
+#include "XdynForCS.hpp"
+#include "JSONSerializer.hpp"
+#include "xdyn/test_data_generator/TriMeshTestData.hpp"
 #include "xdyn/test_data_generator/yaml_data.hpp"
 #include <ssc/macros.hpp>
-
-#include "xdyn/test_data_generator/TriMeshTestData.hpp"
-#include "XdynForCS.hpp"
-#include "XdynForCSTest.hpp"
-#include "JSONSerializer.hpp"
 #define EPS 1E-8
 
 XdynForCSTest::XdynForCSTest() : a(ssc::random_data_generator::DataGenerator(123456789))

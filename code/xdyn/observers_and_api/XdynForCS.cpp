@@ -1,8 +1,8 @@
 #include "XdynForCS.hpp"
 #include "JSONSerializer.hpp"
 #include "SimServerInputs.hpp"
-#include "xdyn/observers_and_api/simulator_api.hpp"
 #include "CoSimulationObserver.hpp"
+#include "xdyn/observers_and_api/simulator_api.hpp"
 
 #include <ssc/solver/steppers.hpp>
 

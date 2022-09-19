@@ -5,12 +5,12 @@
  *      Author: cady
  */
 
-#include "EverythingObserver.hpp"
 #include "EverythingObserverTest.hpp"
-#include "xdyn/test_data_generator/yaml_data.hpp"
+#include "EverythingObserver.hpp"
 #include "ListOfObservers.hpp"
 #include "xdyn/observers_and_api/simulator_api.hpp"
 #include "xdyn/test_data_generator/stl_data.hpp"
+#include "xdyn/test_data_generator/yaml_data.hpp"
 #include "xdyn/yaml_parser/parse_output.hpp"
 #include <ssc/solver/steppers.hpp>
 
@@ -41,6 +41,7 @@ ListOfObservers observers()
     return ListOfObservers({ObserverPtr(new EverythingObserver())});
 }
 
+std::vector<Res> get_results(const ListOfObservers& observers);
 std::vector<Res> get_results(const ListOfObservers& observers)
 {
     if (observers.empty())

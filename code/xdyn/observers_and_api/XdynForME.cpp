@@ -5,11 +5,10 @@
  *      Author: cady
  */
 
-#include <tuple>
-
-#include "xdyn/exceptions/InternalErrorException.hpp"
 #include "XdynForME.hpp"
 #include "SimulationServerObserver.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
+#include <tuple>
 
 XdynForME::XdynForME(const std::string& yaml_model) :builder(yaml_model)
 {

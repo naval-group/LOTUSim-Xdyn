@@ -6,15 +6,12 @@
  */
 
 
-#include "xdyn/test_data_generator/yaml_data.hpp"
-
-
-#include "XdynForME.hpp"
 #include "XdynForMETest.hpp"
-#define EPS 1E-8
-#include <ssc/macros.hpp>
-
+#include "XdynForME.hpp"
 #include "JSONSerializer.hpp"
+#include "xdyn/test_data_generator/yaml_data.hpp"
+#include <ssc/macros.hpp>
+#define EPS 1E-8
 
 XdynForMETest::XdynForMETest() : a(ssc::random_data_generator::DataGenerator(123456789))
 {

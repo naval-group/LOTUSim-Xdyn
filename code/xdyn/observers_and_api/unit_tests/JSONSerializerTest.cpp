@@ -1,12 +1,10 @@
-#include <algorithm>
-#include <vector>
-#include <iostream>
-
+#include "JSONSerializerTest.hpp"
 #include "JSONSerializer.hpp"
 #include "SimServerInputs.hpp"
 #include "xdyn/test_data_generator/yaml_data.hpp"
-
-#include "JSONSerializerTest.hpp"
+#include <algorithm>
+#include <vector>
+#include <iostream>
 
 JSONSerializerTest::JSONSerializerTest(): a(ssc::random_data_generator::DataGenerator(42)), yaml(
         "{\"Dt\": 12\n"
