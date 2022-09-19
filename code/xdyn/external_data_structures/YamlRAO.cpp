@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "xdyn/external_data_structures/YamlRAO.hpp"
+#include "YamlRAO.hpp"
 
 YamlRAO::YamlRAO() : hdb_filename(),
                      precal_filename(),

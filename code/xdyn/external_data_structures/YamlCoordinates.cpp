@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "xdyn/external_data_structures/YamlCoordinates.hpp"
+#include "YamlCoordinates.hpp"
 
 YamlCoordinates::YamlCoordinates() : x(0), y(0), z(0)
 {

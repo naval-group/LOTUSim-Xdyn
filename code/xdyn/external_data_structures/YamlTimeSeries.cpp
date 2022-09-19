@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "xdyn/external_data_structures/YamlTimeSeries.hpp"
+#include "YamlTimeSeries.hpp"
 
 YamlTimeSeries::YamlTimeSeries() : name(),t(),values()
 {}

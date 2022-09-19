@@ -6,7 +6,7 @@
  */
 
 
-#include "xdyn/external_data_structures/YamlWaveOutput.hpp"
+#include "YamlWaveOutput.hpp"
 
 YamlWaveOutput::YamlWaveOutput() : frame_of_reference(""),
          xmin(0),

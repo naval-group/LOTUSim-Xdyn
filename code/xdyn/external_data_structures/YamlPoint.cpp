@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "xdyn/external_data_structures/YamlPoint.hpp"
+#include "YamlPoint.hpp"
 
 YamlPoint::YamlPoint() : YamlCoordinates(), name(""), frame("")
 {

@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "xdyn/external_data_structures/YamlSimulatorInput.hpp"
+#include "YamlSimulatorInput.hpp"
 
 YamlSimulatorInput::YamlSimulatorInput() : rotations(),
                                            environmental_constants(),

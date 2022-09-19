@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "xdyn/external_data_structures/YamlRotation.hpp"
+#include "YamlRotation.hpp"
 
 YamlRotation::YamlRotation() : order_by(""), convention(std::vector<std::string>())
 {

@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "xdyn/external_data_structures/YamlBody.hpp"
+#include "YamlBody.hpp"
 
 YamlBody::YamlBody() :
     name(),

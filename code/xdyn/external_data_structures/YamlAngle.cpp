@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "xdyn/external_data_structures/YamlAngle.hpp"
+#include "YamlAngle.hpp"
 
 YamlAngle::YamlAngle() : phi(0), theta(0), psi(0)
 {

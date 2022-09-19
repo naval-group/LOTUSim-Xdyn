@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "xdyn/external_data_structures/YamlDynamics6x6Matrix.hpp"
+#include "YamlDynamics6x6Matrix.hpp"
 
 YamlDynamics6x6Matrix::YamlDynamics6x6Matrix() : read_from_file(false),
                                                  hdb_filename(),

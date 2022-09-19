@@ -1,4 +1,4 @@
-#include "xdyn/external_data_structures/YamlState.hpp"
+#include "YamlState.hpp"
 
 YamlState::YamlState()
     : AbstractStates<double>()

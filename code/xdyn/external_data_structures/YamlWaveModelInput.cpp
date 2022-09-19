@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "xdyn/external_data_structures/YamlWaveModelInput.hpp"
+#include "YamlWaveModelInput.hpp"
 
 YamlDiscretization::YamlDiscretization() : nfreq(0), ndir(0), omega_min(0), omega_max(0), energy_fraction(0),equal_energy_bins(false)
 {}

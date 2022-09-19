@@ -1,4 +1,4 @@
-#include "xdyn/external_data_structures/YamlSimServerInputs.hpp"
+#include "YamlSimServerInputs.hpp"
 
 YamlSimServerInputs::YamlSimServerInputs()
     : Dt()

@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "xdyn/external_data_structures/YamlOutput.hpp"
+#include "YamlOutput.hpp"
 
 YamlOutput::YamlOutput() : filename(), format(), address(), port(), data(), full_output(false)
 {

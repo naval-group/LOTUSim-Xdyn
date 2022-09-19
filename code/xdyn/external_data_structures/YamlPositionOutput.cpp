@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "xdyn/external_data_structures/YamlPositionOutput.hpp"
+#include "YamlPositionOutput.hpp"
 
 YamlPositionOutput::YamlPositionOutput() : YamlOutput(), point(""), relative_to_frame("")
 {}

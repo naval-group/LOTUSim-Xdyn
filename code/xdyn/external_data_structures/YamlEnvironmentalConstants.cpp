@@ -5,7 +5,7 @@
  *      Author: cady
  */
 
-#include "xdyn/external_data_structures/YamlEnvironmentalConstants.hpp"
+#include "YamlEnvironmentalConstants.hpp"
 
 
 YamlEnvironmentalConstants::YamlEnvironmentalConstants() : g(0), rho(0), rho_air(), nu(0)
