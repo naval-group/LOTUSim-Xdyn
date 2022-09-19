@@ -5,11 +5,10 @@
  *      Author: cady
  */
 
-#include "gmock/gmock.h"
-#include "LinearHydrostaticForceModel.hpp"
 #include "LinearHydrostaticForceModelTest.hpp"
+#include "LinearHydrostaticForceModel.hpp"
 #include "xdyn/test_data_generator/yaml_data.hpp"
-
+#include "gmock/gmock.h"
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI

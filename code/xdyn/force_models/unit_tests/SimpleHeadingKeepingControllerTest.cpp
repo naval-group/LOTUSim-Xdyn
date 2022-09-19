@@ -5,14 +5,14 @@
  *      Author: cady
  */
 
+#include "SimpleHeadingKeepingControllerTest.hpp"
+#include "SimpleHeadingKeepingController.hpp"
+#include "xdyn/core/BodyStates.hpp"
+#include "xdyn/test_data_generator/yaml_data.hpp"
+
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
-
-#include "xdyn/core/BodyStates.hpp"
-#include "SimpleHeadingKeepingControllerTest.hpp"
-#include "SimpleHeadingKeepingController.hpp"
-#include "xdyn/test_data_generator/yaml_data.hpp"
 
 #define EPS 1E-14
 

@@ -4,25 +4,24 @@
  *  Created on: Feb 2, 2015
  *      Author: cady
  */
+#include "RudderForceModelTest.hpp"
+#include "RudderForceModel.hpp"
+#include "env_for_tests.hpp"
+#include "xdyn/core/BodyWithoutSurfaceForces.hpp"
+#include "xdyn/environment_models/Airy.hpp"
+#include "xdyn/environment_models/DiscreteDirectionalWaveSpectrum.hpp"
+#include "xdyn/environment_models/DiracSpectralDensity.hpp"
+#include "xdyn/environment_models/DiracDirectionalSpreading.hpp"
+#include "xdyn/environment_models/discretize.hpp"
+#include "xdyn/environment_models/Stretching.hpp"
+#include "xdyn/external_data_structures/YamlWaveModelInput.hpp"
+#include "xdyn/test_data_generator/yaml_data.hpp"
 
 #define _USE_MATH_DEFINE
 #include <cmath>
 #define PI M_PI
 
 #define DEG2RAD (PI/180.)
-
-#include "xdyn/environment_models/Airy.hpp"
-#include "xdyn/core/BodyWithoutSurfaceForces.hpp"
-#include "xdyn/environment_models/DiscreteDirectionalWaveSpectrum.hpp"
-#include "xdyn/environment_models/DiracSpectralDensity.hpp"
-#include "xdyn/environment_models/DiracDirectionalSpreading.hpp"
-#include "xdyn/environment_models/discretize.hpp"
-#include "env_for_tests.hpp"
-#include "RudderForceModelTest.hpp"
-#include "RudderForceModel.hpp"
-#include "xdyn/test_data_generator/yaml_data.hpp"
-#include "xdyn/external_data_structures/YamlWaveModelInput.hpp"
-#include "xdyn/environment_models/Stretching.hpp"
 
 namespace ssc
 {

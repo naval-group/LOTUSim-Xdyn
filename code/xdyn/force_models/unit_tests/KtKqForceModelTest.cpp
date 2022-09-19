@@ -5,9 +5,9 @@
  *      Author: cady
  */
 
-#include "xdyn/exceptions/NumericalErrorException.hpp"
-#include "KtKqForceModel.hpp"
 #include "KtKqForceModelTest.hpp"
+#include "KtKqForceModel.hpp"
+#include "xdyn/exceptions/NumericalErrorException.hpp"
 #include "xdyn/test_data_generator/yaml_data.hpp"
 
 #include "gmock/gmock.h"

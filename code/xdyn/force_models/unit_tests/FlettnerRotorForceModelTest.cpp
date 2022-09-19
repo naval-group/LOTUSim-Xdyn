@@ -1,8 +1,7 @@
-#include <cmath>
-
 #include "FlettnerRotorForceModelTest.hpp"
 #include "FlettnerRotorForceModel.hpp"
 #include "xdyn/environment_models/UniformWindVelocityProfile.hpp"
+#include <cmath>
 
 FlettnerRotorForceModelTest::FlettnerRotorForceModelTest()
 {

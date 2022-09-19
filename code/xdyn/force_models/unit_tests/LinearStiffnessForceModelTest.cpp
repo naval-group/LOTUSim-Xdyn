@@ -1,9 +1,7 @@
-#include <cmath>
-
+#include "LinearStiffnessForceModelTest.hpp"
 #include "LinearStiffnessForceModel.hpp"
 #include "xdyn/core/EnvironmentAndFrames.hpp"
-
-#include "LinearStiffnessForceModelTest.hpp"
+#include <cmath>
 
 LinearStiffnessForceModelTest::LinearStiffnessForceModelTest() : a(ssc::random_data_generator::DataGenerator(16752))
 {

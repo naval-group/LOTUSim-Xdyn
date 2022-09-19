@@ -5,11 +5,11 @@
  *      Author: cady
  */
 
-#include "xdyn/core/Body.hpp"
-#include "ResistanceCurveForceModel.hpp"
 #include "ResistanceCurveForceModelTest.hpp"
-#include "xdyn/test_data_generator/yaml_data.hpp"
+#include "ResistanceCurveForceModel.hpp"
+#include "xdyn/core/Body.hpp"
 #include "xdyn/core/EnvironmentAndFrames.hpp"
+#include "xdyn/test_data_generator/yaml_data.hpp"
 
 #define EPS 1E-6
 

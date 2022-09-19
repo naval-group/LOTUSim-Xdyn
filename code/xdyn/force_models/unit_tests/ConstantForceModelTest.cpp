@@ -5,10 +5,10 @@
  *      Author: cady
  */
 
+#include "ConstantForceModelTest.hpp"
+#include "ConstantForceModel.hpp"
 #include "xdyn/core/BodyBuilder.hpp"
 #include "xdyn/core/EnvironmentAndFrames.hpp"
-#include "ConstantForceModel.hpp"
-#include "ConstantForceModelTest.hpp"
 #include "xdyn/core/unit_tests/generate_body_for_tests.hpp"
 #include "xdyn/test_data_generator/yaml_data.hpp"
 #include "xdyn/test_data_generator/TriMeshTestData.hpp"

@@ -5,9 +5,9 @@
  *      Author: cady
  */
 
-#include "xdyn/core/EnvironmentAndFrames.hpp"
-#include "GravityForceModel.hpp"
 #include "GravityForceModelTest.hpp"
+#include "GravityForceModel.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
 #include "xdyn/core/unit_tests/generate_body_for_tests.hpp"
 #include <ssc/kinematics.hpp>
 

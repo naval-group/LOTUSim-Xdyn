@@ -1,18 +1,18 @@
 /*
- * HydrostaticForceModuleTest.cpp
+ * HydrostaticForceModelTest.cpp
  *
  *  Created on: Jun 16, 2014
  *      Author: cady
  */
 
+#include "HydrostaticForceModelTest.hpp"
+#include "ExactHydrostaticForceModel.hpp"
+#include "FastHydrostaticForceModel.hpp"
 #include "xdyn/core/BodyWithSurfaceForces.hpp"
 #include "xdyn/core/DefaultSurfaceElevation.hpp"
-#include "FastHydrostaticForceModel.hpp"
-#include "HydrostaticForceModelTest.hpp"
 #include "xdyn/core/unit_tests/generate_body_for_tests.hpp"
-#include "xdyn/test_data_generator/TriMeshTestData.hpp"
 #include "xdyn/mesh/MeshIntersector.hpp"
-#include "ExactHydrostaticForceModel.hpp"
+#include "xdyn/test_data_generator/TriMeshTestData.hpp"
 
 #include <ssc/kinematics.hpp>
 

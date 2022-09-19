@@ -5,12 +5,11 @@
  *      Author: cady
  */
 
+#include "LinearDampingForceModel.hpp"
+#include "xdyn/core/Body.hpp"
+#include "xdyn/yaml_parser/external_data_structures_parsers.hpp"
 #include <Eigen/Dense>
 #include "yaml.h"
-
-#include "xdyn/core/Body.hpp"
-#include "LinearDampingForceModel.hpp"
-#include "xdyn/yaml_parser/external_data_structures_parsers.hpp"
 
 std::string LinearDampingForceModel::model_name() {return "linear damping";}
 

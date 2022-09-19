@@ -5,8 +5,8 @@
  *      Author: cady
  */
 
-#include "xdyn/core/Body.hpp"
 #include "FroudeKrylovForceModel.hpp"
+#include "xdyn/core/Body.hpp"
 #include <ssc/exception_handling.hpp>
 
 std::string FroudeKrylovForceModel::model_name() {return "non-linear Froude-Krylov";}

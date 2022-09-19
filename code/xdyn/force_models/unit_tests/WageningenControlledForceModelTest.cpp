@@ -4,15 +4,10 @@
  *  Created on: Oct 22, 2014
  *      Author: cady
  */
-
-#define _USE_MATH_DEFINE
-#include <cmath>
-#define PI M_PI
-
+#include "WageningenControlledForceModelTest.hpp"
+#include "WageningenControlledForceModel.hpp"
 #include "xdyn/core/BodyStates.hpp"
 #include "xdyn/test_data_generator/yaml_data.hpp"
-#include "WageningenControlledForceModel.hpp"
-#include "WageningenControlledForceModelTest.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 
 #define EPS 1E-2

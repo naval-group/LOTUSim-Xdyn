@@ -6,13 +6,13 @@
  */
 
 #include "ManeuveringForceModel.hpp"
-#include "xdyn/core/EnvironmentAndFrames.hpp"
-#include "xdyn/yaml_parser/external_data_structures_parsers.hpp"
 #include "maneuvering_compiler.hpp"
 #include "maneuvering_DataSource_builder.hpp"
-#include "yaml.h"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
 #include "xdyn/core/yaml2eigen.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
+#include "xdyn/yaml_parser/external_data_structures_parsers.hpp"
+#include "yaml.h"
 
 ManeuveringForceModel::Yaml::Yaml():
     name(),

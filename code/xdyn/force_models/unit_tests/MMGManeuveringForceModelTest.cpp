@@ -1,6 +1,5 @@
-#include "MMGManeuveringForceModel.hpp"
-
 #include "MMGManeuveringForceModelTest.hpp"
+#include "MMGManeuveringForceModel.hpp"
 
 MMGManeuveringForceModelTest::MMGManeuveringForceModelTest()
 {

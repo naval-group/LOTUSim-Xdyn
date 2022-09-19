@@ -4,10 +4,10 @@
  *  Created on: Oct 17, 2014
  *      Author: cady
  */
-#include "xdyn/core/unit_tests/generate_body_for_tests.hpp"
 #include "LinearDampingForceModelTest.hpp"
 #include "LinearDampingForceModel.hpp"
 #include "xdyn/core/EnvironmentAndFrames.hpp"
+#include "xdyn/core/unit_tests/generate_body_for_tests.hpp"
 
 #define BODY "body 1"
 

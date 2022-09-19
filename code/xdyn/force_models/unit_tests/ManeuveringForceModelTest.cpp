@@ -4,14 +4,13 @@
  *  Created on: Jan 19, 2015
  *      Author: cady
  */
-#include "gmock/gmock.h"
-
-#include "xdyn/core/EnvironmentAndFrames.hpp"
-#include "xdyn/core/unit_tests/generate_body_for_tests.hpp"
 #include "ManeuveringForceModelTest.hpp"
 #include "ManeuveringForceModel.hpp"
 #include "ManeuveringInternal.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
+#include "xdyn/core/unit_tests/generate_body_for_tests.hpp"
 #include "xdyn/test_data_generator/yaml_data.hpp"
+#include "gmock/gmock.h"
 
 #define _USE_MATH_DEFINE
 #include <cmath>

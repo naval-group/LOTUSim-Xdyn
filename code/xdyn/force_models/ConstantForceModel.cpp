@@ -9,11 +9,10 @@
 #include "ConstantForceModel.hpp"
 
 #include "xdyn/core/Body.hpp"
-#include "yaml.h"
 #include <ssc/macros.hpp>
-#include <ssc/yaml_parser.hpp>
-
 #include <ssc/kinematics.hpp>
+#include <ssc/yaml_parser.hpp>
+#include "yaml.h"
 
 std::string ConstantForceModel::model_name() {return "constant force";}
 

@@ -1,8 +1,7 @@
-#include <cmath>
-
 #include "HydroPolarForceModelTest.hpp"
 #include "HydroPolarForceModel.hpp"
 #include "xdyn/core/yaml2eigen.hpp"
+#include <cmath>
 
 HydroPolarForceModelTest::HydroPolarForceModelTest()
 {

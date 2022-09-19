@@ -6,16 +6,16 @@
  */
 
 #include "GMForceModel.hpp"
-#include "calculate_gz.hpp"
-#include "yaml.h"
-#include <ssc/yaml_parser.hpp>
-#include "xdyn/yaml_parser/environment_parsers.hpp"
-#include "xdyn/core/Body.hpp"
 #include "ExactHydrostaticForceModel.hpp"
 #include "FastHydrostaticForceModel.hpp"
+#include "calculate_gz.hpp"
 #include "xdyn/core/Observer.hpp"
-#include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/core/BodyWithSurfaceForces.hpp"
+#include "xdyn/core/Body.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
+#include "xdyn/yaml_parser/environment_parsers.hpp"
+#include <ssc/yaml_parser.hpp>
+#include "yaml.h"
 
 std::string GMForceModel::model_name(){return "GM";}
 

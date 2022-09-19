@@ -5,12 +5,12 @@
  *      Author: jacquenot
  */
 
-#include <Eigen/Dense>
-#include "xdyn/core/Body.hpp"
 #include "QuadraticDampingForceModel.hpp"
-
-#include "yaml.h"
+#include "xdyn/core/Body.hpp"
 #include "xdyn/yaml_parser/external_data_structures_parsers.hpp"
+
+#include <Eigen/Dense>
+#include "yaml.h"
 
 std::string QuadraticDampingForceModel::model_name() {return "quadratic damping";}
 

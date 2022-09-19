@@ -5,9 +5,9 @@
  *      Author: cady
  */
 
-#include "xdyn/core/EnvironmentAndFrames.hpp"
 #include "GravityForceModel.hpp"
 #include "xdyn/core/Body.hpp"
+#include "xdyn/core/EnvironmentAndFrames.hpp"
 
 std::string GravityForceModel::model_name(){return "gravity";}
 

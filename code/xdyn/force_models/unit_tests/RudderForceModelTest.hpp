@@ -9,12 +9,10 @@
 #ifndef RUDDERFORCEMODELTEST_HPP_
 #define RUDDERFORCEMODELTEST_HPP_
 
-#include "gtest/gtest.h"
+#include "xdyn/environment_models/WaveModel.hpp"
 #include <ssc/random_data_generator/DataGenerator.hpp>
-
 #include <ssc/macros.hpp>
-
-class Wavemodel;
+#include "gtest/gtest.h"
 
 class RudderForceModelTest : public ::testing::Test
 {
