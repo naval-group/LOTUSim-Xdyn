@@ -1,18 +1,17 @@
 /*
  * MeshIntersectorTest.cpp
  */
+#include "MeshIntersectorTest.hpp"
+#include "mesh_manipulations.hpp"
+#include "xdyn/binary_stl_data/generate_test_ship.hpp"
+#include "xdyn/external_file_formats/stl_reader.hpp"
+#include "xdyn/mesh/MeshBuilder.hpp"
+#include "xdyn/mesh/MeshIntersector.hpp"
+#include "xdyn/test_data_generator/stl_data.hpp"
+#include "xdyn/test_data_generator/TriMeshTestData.hpp"
 
 #include <ssc/macros.hpp>
 #include <ssc/kinematics.hpp>
-
-#include "xdyn/test_data_generator/TriMeshTestData.hpp"
-#include "xdyn/mesh/MeshBuilder.hpp"
-#include "MeshIntersectorTest.hpp"
-#include "mesh_manipulations.hpp"
-#include "xdyn/test_data_generator/stl_data.hpp"
-#include "xdyn/external_file_formats/stl_reader.hpp"
-#include "xdyn/mesh/MeshIntersector.hpp"
-#include "xdyn/binary_stl_data/generate_test_ship.hpp"
 
 #define EPS 1E-6
 

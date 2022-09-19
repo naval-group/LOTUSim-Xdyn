@@ -1,9 +1,9 @@
-#include "xdyn/mesh/MeshIntersector.hpp"
+#include "MeshIntersector.hpp"
 #include "ClosingFacetComputer.hpp"
-#include "xdyn/mesh/MeshBuilder.hpp"
-#include "xdyn/exceptions/InternalErrorException.hpp"
+#include "MeshBuilder.hpp"
 #include "mesh_manipulations.hpp"
 #include "2DMeshDisplay.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 #include <ssc/macros/SerializeMapsSetsAndVectors.hpp>
 #include <algorithm> //std::all_of
 #include <numeric> //std::accumulate

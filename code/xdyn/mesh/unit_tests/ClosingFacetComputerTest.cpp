@@ -4,10 +4,11 @@
  *  Created on: Feb 27, 2015
  *      Author: cady
  */
-
-#define _USE_MATH_DEFINE
-#include <cmath>
-#define PI M_PI
+#include "ClosingFacetComputerTest.hpp"
+#include "ClosingFacetComputer.hpp"
+#include "2DMeshDisplay.hpp"
+#include "TestMeshes.hpp"
+#include "xdyn/exceptions/InternalErrorException.hpp"
 
 #include <Eigen/Dense>
 
@@ -15,11 +16,10 @@
 
 #include <ssc/macros.hpp>
 
-#include "2DMeshDisplay.hpp"
-#include "ClosingFacetComputerTest.hpp"
-#include "ClosingFacetComputer.hpp"
-#include "xdyn/exceptions/InternalErrorException.hpp"
-#include "TestMeshes.hpp"
+#define _USE_MATH_DEFINE
+#include <cmath>
+#define PI M_PI
+
 
 ClosingFacetComputerTest::ClosingFacetComputerTest() : a(ssc::random_data_generator::DataGenerator(21233))
 {

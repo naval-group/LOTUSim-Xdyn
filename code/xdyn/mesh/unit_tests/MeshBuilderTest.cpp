@@ -1,12 +1,11 @@
-#include <cmath>
-#include <algorithm>
-
+#include "MeshBuilderTest.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
 #include "xdyn/exceptions/MeshException.hpp"
 #include "xdyn/mesh/Mesh.hpp"
-#include "MeshBuilderTest.hpp"
-#include "xdyn/test_data_generator/TriMeshTestData.hpp"
 #include "xdyn/mesh/MeshBuilder.hpp"
+#include "xdyn/test_data_generator/TriMeshTestData.hpp"
+#include <cmath>
+#include <algorithm>
 
 size_t get_oriented_edge_index(const size_t &e)
 {

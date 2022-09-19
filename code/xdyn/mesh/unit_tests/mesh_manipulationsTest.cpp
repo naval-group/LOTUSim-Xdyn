@@ -6,11 +6,11 @@
  */
 
 #include "mesh_manipulationsTest.hpp"
-#include "xdyn/external_data_structures/GeometricTypes3d.hpp"
 #include "mesh_manipulations.hpp"
-#include "xdyn/test_data_generator/TriMeshTestData.hpp"
 #include "xdyn/exceptions/MeshException.hpp"
+#include "xdyn/external_data_structures/GeometricTypes3d.hpp"
 #include "xdyn/mesh/MeshBuilder.hpp"
+#include "xdyn/test_data_generator/TriMeshTestData.hpp"
 
 #include <ssc/macros.hpp>
 

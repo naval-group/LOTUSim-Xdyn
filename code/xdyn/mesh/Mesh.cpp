@@ -1,7 +1,7 @@
-#include <map>
 
-#include "xdyn/mesh/Mesh.hpp"
+#include "Mesh.hpp"
 #include "mesh_manipulations.hpp"
+#include <map>
 
 Mesh::Mesh():
     nodes(),
