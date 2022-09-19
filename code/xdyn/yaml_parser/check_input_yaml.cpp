@@ -4,12 +4,11 @@
  *  Created on: May 23, 2014
  *      Author: cady
  */
+#include "check_input_yaml.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 #include <algorithm>
 #include <unordered_set>
 #include <sstream>
-
-#include "check_input_yaml.hpp"
-#include "xdyn/exceptions/InvalidInputException.hpp"
 
 void check_rotations(const YamlRotation& input);
 void throw_if_any_errors_were_detected(const std::string& caller, const std::stringstream& ss);

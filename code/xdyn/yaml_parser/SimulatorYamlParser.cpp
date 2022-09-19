@@ -5,13 +5,13 @@
  *      Author: cady
  */
 
-#include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
-#include "yaml.h"
-#include "xdyn/exceptions/InvalidInputException.hpp"
-#include <ssc/yaml_parser.hpp>
-#include "xdyn/yaml_parser/external_data_structures_parsers.hpp"
+#include "SimulatorYamlParser.hpp"
+#include "external_data_structures_parsers.hpp"
 #include "parse_controllers.hpp"
 #include "parse_time_series.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
+#include "yaml.h"
+#include <ssc/yaml_parser.hpp>
 
 SimulatorYamlParser::SimulatorYamlParser(const std::string& data) : YamlParser(data)
 {

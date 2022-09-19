@@ -1,7 +1,7 @@
-#include <vector>
 #include "parse_addressTest.hpp"
 #include "parse_address.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
+#include <vector>
 
 parse_addressTest::parse_addressTest() : a(ssc::random_data_generator::DataGenerator(666))
 {
