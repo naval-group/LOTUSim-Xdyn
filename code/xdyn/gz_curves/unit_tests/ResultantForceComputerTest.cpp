@@ -11,16 +11,14 @@
 #include "xdyn/gz_curves/make_sim_for_GZ.hpp"
 #include "xdyn/test_data_generator/stl_data.hpp"
 #include "xdyn/test_data_generator/yaml_data.hpp"
-#include "xdyn/yaml_parser/check_input_yaml.hpp"
-
-#include <set>
-
-#define EPS (1E-10)
-#define BIG_EPS (1E-5)
 
 #define _USE_MATH_DEFINE
 #include <cmath>
+#include <set>
+
 #define PI M_PI
+#define EPS (1E-10)
+#define BIG_EPS (1E-5)
 
 Sim ResultantForceComputerTest::sim = GZ::make_sim(test_data::oscillating_cube_example(), test_data::cube());
 
