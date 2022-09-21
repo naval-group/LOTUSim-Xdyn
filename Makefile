@@ -199,18 +199,18 @@ debian_11_release_gcc_10_wrapper_python_all:
 	@echo "The Python 3.08 wheel can be installed on Ubuntu 20.04"
 	@echo "The Python 3.10 wheel can be installed on Ubuntu 22.04"
 	@echo "A docker image based on Debian11, with xdyn, Python3, all proto files and the Python generated code is created"
-	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.7
+	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/xdyn_wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.7
 	make debian_11_release_gcc_10_wrapper_py307
-	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.8
+	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/xdyn_wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.8
 	make debian_11_release_gcc_10_wrapper_py308
-	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.9
+	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/xdyn_wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.9
 	make debian_11_release_gcc_10_wrapper
-	make -C code/wrapper_python create_docker_image_debian11_py309
-	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.10
+	make -C code/xdyn_wrapper_python create_docker_image_debian11_py309
+	@rm -rf build_deb11_pywrapper/CMakeCache.txt build_deb11_pywrapper/xdyn_wrapper_python build_deb11_pywrapper/lib.linux-x86_64-3.10
 	make debian_11_release_gcc_10_wrapper_py310
-	make -C code/wrapper_python create_docker_image_ubuntu2204_py310
-	ls code/wrapper_python/*.whl
-	make -C code/wrapper_python test_additional_platforms_depending_on_debian
+	make -C code/xdyn_wrapper_python create_docker_image_ubuntu2204_py310
+	ls code/xdyn_wrapper_python/*.whl
+	make -C code/xdyn_wrapper_python test_additional_platforms_depending_on_debian
 	@echo "Success for :"
 	@echo " - Linux x86-64 Debian 11 with Python 3.7"
 	@echo " - Linux x86-64 Debian 11 with Python 3.8"
@@ -229,26 +229,26 @@ debian_11_release_clang_14: ADDITIONAL_CMAKE_PARAMETERS=-D CMAKE_CXX_COMPILER=cl
 debian_11_release_clang_14: cmake-debian-target build-debian test-debian
 
 build-docker-python-image:
-	make -C code/wrapper_python ${DOCKER_IMAGE}
+	make -C code/xdyn_wrapper_python ${DOCKER_IMAGE}
 
 package-debian-python:
-	@mkdir -p code/wrapper_python/build
-	cp -rf ${BUILD_DIR}/lib.linux-x86_64-${PYTHON_VERSION} code/wrapper_python/build/.
-	make -C code/wrapper_python ${PYTHON_TEST_TARGET}
+	@mkdir -p code/xdyn_wrapper_python/build
+	cp -rf ${BUILD_DIR}/lib.linux-x86_64-${PYTHON_VERSION} code/xdyn_wrapper_python/build/.
+	make -C code/xdyn_wrapper_python ${PYTHON_TEST_TARGET}
 
 package-debian-python-with-doc:
 	@echo "Create the xdyn wheel file and generate the HTML sphinx associated documenation"
-	@mkdir -p code/wrapper_python/build
-	cp -rf ${BUILD_DIR}/lib.linux-x86_64-${PYTHON_VERSION} code/wrapper_python/build/.
-	make -C code/wrapper_python ${PYTHON_TEST_TARGET}
-	make -C code/wrapper_python doc
-	@echo "xdyn python documentation is located in code/wrapper_python/doc/src/build/html"
+	@mkdir -p code/xdyn_wrapper_python/build
+	cp -rf ${BUILD_DIR}/lib.linux-x86_64-${PYTHON_VERSION} code/xdyn_wrapper_python/build/.
+	make -C code/xdyn_wrapper_python ${PYTHON_TEST_TARGET}
+	make -C code/xdyn_wrapper_python doc
+	@echo "xdyn python documentation is located in code/xdyn_wrapper_python/doc/src/build/html"
 
 package-debian-python-specific-deb10-gcc8:
-	@mkdir -p code/wrapper_python/build/lib.linux-x86_64-${PYTHON_VERSION}
+	@mkdir -p code/xdyn_wrapper_python/build/lib.linux-x86_64-${PYTHON_VERSION}
 	cp -rf ${BUILD_DIR}/lib.linux-x86_64-${PYTHON_VERSION}/xdyn.so \
-		code/wrapper_python/build/lib.linux-x86_64-${PYTHON_VERSION}/xdyn.cpython-37m-x86_64-linux-gnu.so
-	make -C code/wrapper_python ${PYTHON_TEST_TARGET}
+		code/xdyn_wrapper_python/build/lib.linux-x86_64-${PYTHON_VERSION}/xdyn.cpython-37m-x86_64-linux-gnu.so
+	make -C code/xdyn_wrapper_python ${PYTHON_TEST_TARGET}
 
 windows_gccx_posix: BUILD_TYPE=Release
 windows_gccx_posix: BUILD_DIR=build_win_posix
@@ -435,7 +435,7 @@ clean:
 	@rm -rf build_*
 	@rm -rf yaml-cpp
 	@make -C doc clean
-	@make -C code/wrapper_python clean
+	@make -C code/xdyn_wrapper_python clean
 
 GREP=$(DOCKER_AS_USER) --entrypoint /bin/grep bitnami/minideb@sha256:25c5d5677df967c85b1bc3a33505cb43225dd92de06fe35eda3042348995835f
 

@@ -1,0 +1,20 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
+PROJECT(external_file_formats)
+
+SET(SRC
+    stl_reader.cpp
+    stl_writer.cpp
+    stl_io_hdf5.cpp
+    hdb_to_ast.cpp
+    pretty_print_hdb.cpp
+    )
+
+INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${eigen_hdf5_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${HDF5_INCLUDE_DIR})
+
+ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
+
+ADD_SUBDIRECTORY(unit_tests)

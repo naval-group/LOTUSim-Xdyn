@@ -64,27 +64,29 @@ SET(ssc_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/ssc" CACHE PATH "Path to SSC i
 SET(SSC_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/ssc" CACHE PATH "Path to SSC include directory")
 SET(F2C_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ssc/ssc/f2c" CACHE PATH "Path to f2c include directory")
 
-ADD_SUBDIRECTORY(get_git_sha)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/ssc)
 ADD_SUBDIRECTORY(base91x)
-ADD_SUBDIRECTORY(exceptions)
-ADD_SUBDIRECTORY(external_data_structures)
-ADD_SUBDIRECTORY(test_data_generator)
-ADD_SUBDIRECTORY(interface_hdf5)
-ADD_SUBDIRECTORY(external_file_formats)
-ADD_SUBDIRECTORY(binary_stl_data)
-ADD_SUBDIRECTORY(mesh)
-ADD_SUBDIRECTORY(environment_models)
-ADD_SUBDIRECTORY(yaml_parser)
 ADD_SUBDIRECTORY(boost_program_options_descriptions)
-ADD_SUBDIRECTORY(hdb_interpolators)
-ADD_SUBDIRECTORY(core)
-ADD_SUBDIRECTORY(force_models)
-ADD_SUBDIRECTORY(grpc)
-ADD_SUBDIRECTORY(listeners_and_controllers)
-ADD_SUBDIRECTORY(observers_and_api)
-ADD_SUBDIRECTORY(gz_curves)
-ADD_SUBDIRECTORY(executables)
-ADD_SUBDIRECTORY(fmi)
+ADD_SUBDIRECTORY(xdyn/binary_stl_data)
+ADD_SUBDIRECTORY(xdyn/core)
+ADD_SUBDIRECTORY(xdyn/exceptions)
+ADD_SUBDIRECTORY(xdyn/environment_models)
+ADD_SUBDIRECTORY(xdyn/external_data_structures)
+ADD_SUBDIRECTORY(xdyn/external_file_formats)
+ADD_SUBDIRECTORY(xdyn/get_git_sha)
+ADD_SUBDIRECTORY(xdyn/test_data_generator)
+ADD_SUBDIRECTORY(xdyn/interface_hdf5)
+ADD_SUBDIRECTORY(xdyn/mesh)
+ADD_SUBDIRECTORY(xdyn/yaml_parser)
+ADD_SUBDIRECTORY(xdyn/hdb_interpolators)
+ADD_SUBDIRECTORY(xdyn/force_models)
+ADD_SUBDIRECTORY(xdyn/grpc)
+ADD_SUBDIRECTORY(xdyn/listeners_and_controllers)
+ADD_SUBDIRECTORY(xdyn/observers_and_api)
+ADD_SUBDIRECTORY(xdyn/gz_curves)
+ADD_SUBDIRECTORY(xdyn/executables)
+ADD_SUBDIRECTORY(xdyn/fmi)
 
 IF (WIN32)
     SET(STATICORSHARED STATIC)
@@ -126,6 +128,7 @@ ADD_LIBRARY(${PROJECT_NAME} ${STATICORSHARED}
     $<TARGET_OBJECTS:json_object>
     $<TARGET_OBJECTS:solver_object>
 
+        $<TARGET_OBJECTS:binary_stl_data>
         $<TARGET_OBJECTS:core>
         $<TARGET_OBJECTS:get_git_sha>
         $<TARGET_OBJECTS:observers_and_api>
@@ -179,7 +182,7 @@ SET(TEST_EXE run_all_tests)
 INCLUDE_DIRECTORIES(SYSTEM ${PROTOBUF_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(SYSTEM ${GRPC_INCLUDE_DIR})
 ADD_EXECUTABLE(${TEST_EXE}
-        executables/run_all_tests.cpp
+        xdyn/executables/run_all_tests.cpp
         $<TARGET_OBJECTS:mesh_tests>
         $<TARGET_OBJECTS:yaml_parser_tests>
         $<TARGET_OBJECTS:external_file_formats_tests>
@@ -199,7 +202,6 @@ ADD_EXECUTABLE(${TEST_EXE}
 TARGET_LINK_LIBRARIES(${TEST_EXE}
         gtest      # static
         gmock_main # static
-        binary_stl_data_static
         ${PROJECT_NAME}
         ${GRPC_GRPCPP_UNSECURE}
         ${PROTOBUF_LIBPROTOBUF}
@@ -223,5 +225,5 @@ INCLUDE(CMakeCustomTargets)
 INCLUDE(CMakePack)
 
 IF(BUILD_PYTHON_WRAPPER)
-    ADD_SUBDIRECTORY(wrapper_python)
+    ADD_SUBDIRECTORY(xdyn_wrapper_python)
 ENDIF()

@@ -1,0 +1,17 @@
+PROJECT(mesh_tests)
+SET(SRC
+    MeshBuilderTest.cpp
+    MeshIntersectorTest.cpp
+    mesh_manipulationsTest.cpp
+    RandomEPointGenerator.cpp
+    ClosingFacetComputerTest.cpp
+    TestMeshes.cpp
+    )
+
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/..)
+INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${GTEST_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${GMOCK_INCLUDE_DIRS})
+
+ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})

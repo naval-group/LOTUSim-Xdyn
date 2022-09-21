@@ -88,7 +88,7 @@ build:debian11-release-python-all:
   script:
     - make NB_OF_PARALLEL_BUILDS="-j 1" debian_11_release_gcc_10_wrapper_python_all
     - mv build_deb11_pywrapper/xdyn.deb .
-    - mv code/wrapper_python/*.whl .
+    - mv code/xdyn_wrapper_python/*.whl .
     - docker build . --tag xdyn
   artifacts:
     when: on_success

@@ -1,0 +1,16 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
+PROJECT(interface_hdf5)
+
+SET(SRC
+    h5_tools.cpp
+    h5_version.cpp
+    h5_tools.c
+    h5_version.c
+    )
+
+INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${HDF5_INCLUDE_DIR})
+
+ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
+
+ADD_SUBDIRECTORY(unit_tests)

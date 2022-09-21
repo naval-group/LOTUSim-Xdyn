@@ -1,0 +1,18 @@
+PROJECT(hdb_interpolators_tests)
+SET(SRC
+    HDBParserTest.cpp
+    HistoryTest.cpp
+    RadiationDampingBuilderTest.cpp
+    DiffractionInterpolatorTest.cpp
+    hdb_test.cpp
+    PrecalParserTest.cpp
+    )
+
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/..)
+INCLUDE_DIRECTORIES(${ssc_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${GTEST_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
+
+ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})

@@ -1,0 +1,35 @@
+/*
+ * generate_stl_examples.cpp
+ *
+ *  Created on: 17 avr. 2014
+ *      Author: cady
+ */
+
+
+#include "file_writer.hpp"
+#include "xdyn/binary_stl_data/generate_test_ship.hpp"
+#include "xdyn/test_data_generator/hdb_data.hpp"
+#include "xdyn/test_data_generator/stl_data.hpp"
+#include "xdyn/external_file_formats/stl_writer.hpp"
+#include "xdyn/test_data_generator/TriMeshTestData.hpp"
+#include <google/protobuf/stubs/common.h>
+
+int main(int argc, const char* argv[])
+{
+    const std::string path = argc>1 ? std::string(argv[1])+"/" : "";
+    std::map<std::string,std::string> stl;
+
+    stl["single_facet.stl"] = test_data::single_facet();
+    stl["three_facets.stl"] = test_data::three_facets();
+    stl["cube.stl"]         = test_data::cube();
+    stl["big_cube.stl"]     = test_data::big_cube();
+    stl["L.stl"]            = write_stl(L());
+    stl["U.stl"]            = write_stl(U());
+    stl["test_ship.stl"]    = write_stl(test_ship());
+    stl["test_ship.hdb"]    = test_data::bug_3210();
+    stl["big.hdb"]          = test_data::big_hdb();
+
+    write_files(path, stl);
+    google::protobuf::ShutdownProtobufLibrary();
+    return 0;
+}

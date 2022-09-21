@@ -1,0 +1,18 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8)
+PROJECT(gz_curves)
+
+SET(SRC
+    GZTypes.cpp
+    make_sim_for_GZ.cpp
+    ResultantForceComputer.cpp
+    gz_newton_raphson.cpp
+    GZCurve.cpp
+    )
+
+INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
+
+ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
+
+ADD_SUBDIRECTORY(unit_tests)
