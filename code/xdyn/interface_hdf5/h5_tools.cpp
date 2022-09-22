@@ -290,10 +290,8 @@ void H5_Tools::write(
         const std::string& datasetName,
         const double& v)
 {
-    H5::DataType datatype(H5::PredType::NATIVE_DOUBLE);
-    hsize_t dimsf[2];
-    dimsf[0] = 1;
-    dimsf[1] = 1;
+    const H5::DataType datatype(H5::PredType::NATIVE_DOUBLE);
+    const hsize_t dimsf[2] = {1, 1};
     H5::DataSpace dataspace(2, dimsf);
     H5::DataSet dataset = H5_Tools::createDataSet(file, datasetName, datatype, dataspace);
     dataset.write(&v, H5::PredType::NATIVE_DOUBLE);
@@ -317,10 +315,8 @@ void H5_Tools::write(
         const std::string& datasetName,
         const std::vector<double>& v)
 {
-    H5::DataType datatype(H5::PredType::NATIVE_DOUBLE);
-    hsize_t dimsf[2];
-    dimsf[0] = (hsize_t)v.size();
-    dimsf[1] = 1;
+    const H5::DataType datatype(H5::PredType::NATIVE_DOUBLE);
+    const hsize_t dimsf[2] = {(hsize_t)v.size(), 1};
     H5::DataSpace dataspace(2, dimsf);
     H5::DataSet dataset = H5_Tools::createDataSet(file, datasetName, datatype, dataspace);
     dataset.write(&v[0], H5::PredType::NATIVE_DOUBLE);
@@ -378,10 +374,8 @@ void H5_Tools::write(
         const std::string& datasetName,
         const std::vector<std::vector<double> >& v)
 {
-    H5::DataType datatype(H5::PredType::NATIVE_DOUBLE);
-    hsize_t dimsf[2];
-    dimsf[0] = (hsize_t)v.size();
-    dimsf[1] = (hsize_t)v.at(0).size();
+    const H5::DataType datatype(H5::PredType::NATIVE_DOUBLE);
+    const hsize_t dimsf[2] = {(hsize_t)v.size(), (hsize_t)v.at(0).size()};
     H5::DataSpace dataspace(2, dimsf);
     H5::DataSet dataset = H5_Tools::createDataSet(file, datasetName, datatype, dataspace);
     const auto vflat = flatten(v);
@@ -406,7 +400,7 @@ void H5_Tools::write(
         const std::string& datasetName,
         const std::vector<std::vector<std::vector<double> > >& v)
 {
-    H5::DataType datatype(H5::PredType::NATIVE_DOUBLE);
+    const H5::DataType datatype(H5::PredType::NATIVE_DOUBLE);
     hsize_t dimsf[3];
     dimsf[0] = (hsize_t)v.size();
     dimsf[1] = (hsize_t)v.at(0).size();
@@ -470,7 +464,7 @@ void H5_Tools::read(
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "One expects float data");
     }
-    const H5::FloatType floattype= dataset.getFloatType();
+    const H5::FloatType floattype = dataset.getFloatType();
     std::string order_string;
     H5T_order_t order = floattype.getOrder(order_string);
     if (order != H5T_ORDER_LE)
@@ -506,7 +500,7 @@ void H5_Tools::read(
         std::vector<double> & res)
 {
     H5::DataSet dataset = file.openDataSet(datasetName);
-    H5T_class_t type_class = dataset.getTypeClass();
+    const H5T_class_t type_class = dataset.getTypeClass();
     if(type_class != H5T_FLOAT)
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "One expects float data");
