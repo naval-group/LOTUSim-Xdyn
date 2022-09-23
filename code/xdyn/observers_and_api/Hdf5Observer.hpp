@@ -1,10 +1,9 @@
 #ifndef HDF5OBSERVER_HPP_
 #define HDF5OBSERVER_HPP_
 
+#include "Hdf5WaveObserver.hpp"
 #include "xdyn/core/Observer.hpp"
 #include "xdyn/environment_models/DiscreteDirectionalWaveSpectrum.hpp"
-#include <ssc/macros.hpp>
-#include TR1INC(memory)
 #include "H5Cpp.h"
 
 struct Hdf5Addressing
@@ -17,7 +16,6 @@ struct Hdf5Addressing
             );
 };
 
-class Hdf5WaveObserver;
 class Hdf5Observer : public Observer
 {
     public:
@@ -50,7 +48,7 @@ class Hdf5Observer : public Observer
         std::map<std::string, H5::DataSet> name2dataset;
         std::map<std::string, H5::DataType> name2datatype;
         std::map<std::string, H5::DataSpace> name2dataspace;
-        TR1(shared_ptr)<Hdf5WaveObserver> wave_serializer;
+        Hdf5WaveObserverPtr wave_serializer;
         std::string filename;
 };
 
