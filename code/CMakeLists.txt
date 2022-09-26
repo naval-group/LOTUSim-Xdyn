@@ -67,7 +67,7 @@ SET(F2C_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ssc/ssc/f2c" CACHE PATH "Path t
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/ssc)
 ADD_SUBDIRECTORY(thirdparty/base91x)
-ADD_SUBDIRECTORY(boost_program_options_descriptions)
+ADD_SUBDIRECTORY(thirdparty/boost_program_options_descriptions)
 ADD_SUBDIRECTORY(xdyn/binary_stl_data)
 ADD_SUBDIRECTORY(xdyn/core)
 ADD_SUBDIRECTORY(xdyn/exceptions)
