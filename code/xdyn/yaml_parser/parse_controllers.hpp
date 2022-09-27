@@ -14,10 +14,9 @@
 /**  \brief Parses the controllers for use by controlled forces.
   *  \snippet simulator_yaml_parser/unit_tests/parse_controllersTest.cpp parse_controllersTest example
   */
-std::vector<YamlController> parse_controller_yaml(const std::string& yaml //!< YAML data
-                                                  );
-
-
+std::vector<YamlController> parse_controller_yaml(
+    const std::string& yaml //!< YAML data
+    );
 
 void operator >> (const YAML::Node& node, YamlController& c);
 
