@@ -221,12 +221,30 @@ debian_11_release_gcc_10_wrapper_python_all:
 debian_11_release_clang_14: BUILD_TYPE = Release
 debian_11_release_clang_14: BUILD_DIR = build_deb11_clang14
 debian_11_release_clang_14: CPACK_GENERATOR = DEB
-debian_11_release_clang_14: DOCKER_IMAGE = sirehna/base-image-debian11-clang14:2022-08-25
+debian_11_release_clang_14: DOCKER_IMAGE = sirehna/base-image-debian11-clang14:2022-09-27
 debian_11_release_clang_14: BOOST_ROOT = /opt/boost
 debian_11_release_clang_14: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_11_release_clang_14: BUILD_PYTHON_WRAPPER = False
 debian_11_release_clang_14: ADDITIONAL_CMAKE_PARAMETERS=-D CMAKE_CXX_COMPILER=clang++ -D CMAKE_C_COMPILER=clang -D BUILD_DOCUMENTATION=False
-debian_11_release_clang_14: cmake-debian-target build-debian test-debian # doxygen-debian
+debian_11_release_clang_14: cmake-debian-target build-debian test-debian
+
+debian_11_release_clang_14_docker:
+	@make debian_11_release_clang_14
+	@cp build_deb11_clang14/xdyn.deb .
+	@echo "**" > .dockerignore
+	@echo "!xdyn.deb" >> .dockerignore
+	@docker build . --tag xdyn
+	@rm -f .dockerignore
+
+debian_11_release_clang_14_doxygen: BUILD_TYPE = Release
+debian_11_release_clang_14_doxygen: BUILD_DIR = build_deb11_clang14
+debian_11_release_clang_14_doxygen: CPACK_GENERATOR = DEB
+debian_11_release_clang_14_doxygen: DOCKER_IMAGE = sirehna/base-image-debian11-clang14:2022-09-27
+debian_11_release_clang_14_doxygen: BOOST_ROOT = /opt/boost
+debian_11_release_clang_14_doxygen: HDF5_DIR = /usr/local/hdf5/share/cmake
+debian_11_release_clang_14_doxygen: BUILD_PYTHON_WRAPPER = False
+debian_11_release_clang_14_doxygen: ADDITIONAL_CMAKE_PARAMETERS=-D CMAKE_CXX_COMPILER=clang++ -D CMAKE_C_COMPILER=clang -D BUILD_DOCUMENTATION=True
+debian_11_release_clang_14_doxygen: cmake-debian-target doxygen-debian
 
 build-docker-python-image:
 	make -C code/xdyn_wrapper_python ${DOCKER_IMAGE}
