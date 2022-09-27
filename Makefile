@@ -225,8 +225,8 @@ debian_11_release_clang_14: DOCKER_IMAGE = sirehna/base-image-debian11-clang14:2
 debian_11_release_clang_14: BOOST_ROOT = /opt/boost
 debian_11_release_clang_14: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_11_release_clang_14: BUILD_PYTHON_WRAPPER = False
-debian_11_release_clang_14: ADDITIONAL_CMAKE_PARAMETERS=-D CMAKE_CXX_COMPILER=clang++ -D CMAKE_C_COMPILER=clang
-debian_11_release_clang_14: cmake-debian-target build-debian test-debian
+debian_11_release_clang_14: ADDITIONAL_CMAKE_PARAMETERS=-D CMAKE_CXX_COMPILER=clang++ -D CMAKE_C_COMPILER=clang -D BUILD_DOCUMENTATION=False
+debian_11_release_clang_14: cmake-debian-target build-debian test-debian # doxygen-debian
 
 build-docker-python-image:
 	make -C code/xdyn_wrapper_python ${DOCKER_IMAGE}
@@ -278,7 +278,6 @@ cmake-windows-target: code/yaml-cpp/CMakeLists.txt
 	    cmake -Wno-dev\
 	        -G Ninja \
 	        -D THIRD_PARTY_DIRECTORY=/opt \
-	        -D BUILD_DOCUMENTATION:BOOL=False \
 	        -D CPACK_GENERATOR=$(CPACK_GENERATOR) \
 	        -D CMAKE_BUILD_TYPE=$(BUILD_TYPE) \
 	        -D CMAKE_INSTALL_PREFIX:PATH=/opt/xdyn \
@@ -327,7 +326,6 @@ cmake-debian-target: code/yaml-cpp/CMakeLists.txt
 	    cmake -Wno-dev \
 	     -G Ninja \
 	     -D THIRD_PARTY_DIRECTORY=/opt/ \
-	     -D BUILD_DOCUMENTATION:BOOL=False \
 	     -D CPACK_GENERATOR=$(CPACK_GENERATOR) \
 	     -D CMAKE_BUILD_TYPE=$(BUILD_TYPE) \
 	     -D CMAKE_INSTALL_PREFIX:PATH=/opt/xdyn \
@@ -344,6 +342,14 @@ build-debian:
 	    mkdir -p $(BUILD_DIR) && \
 	    cd $(BUILD_DIR) && \
 	    ninja $(NB_OF_PARALLEL_BUILDS) package"
+
+doxygen-debian: SHELL:=/bin/bash
+doxygen-debian:
+	$(DOCKER_AS_USER) $(DOCKER_IMAGE) /bin/bash -c \
+	   "cd /opt/share && \
+	    mkdir -p $(BUILD_DIR) && \
+	    cd $(BUILD_DIR) && \
+	    ninja $(NB_OF_PARALLEL_BUILDS) doc_dev_fr"
 
 test-debian: SHELL:=/bin/bash
 test-debian:
@@ -372,7 +378,6 @@ cmake-ubuntu-intel-target: code/yaml-cpp/CMakeLists.txt
 	     -D CMAKE_C_COMPILER=icc \
 	     -D CMAKE_CXX_COMPILER=icpc \
 	     -D THIRD_PARTY_DIRECTORY=/opt/ \
-	     -D BUILD_DOCUMENTATION:BOOL=False \
 	     -D CPACK_GENERATOR=$(CPACK_GENERATOR) \
 	     -D CMAKE_BUILD_TYPE=$(BUILD_TYPE) \
 	     -D CMAKE_INSTALL_PREFIX:PATH=/opt/xdyn \
