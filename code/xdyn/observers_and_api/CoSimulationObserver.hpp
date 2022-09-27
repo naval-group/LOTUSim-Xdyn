@@ -2,8 +2,6 @@
 #define OBSERVERS_AND_API_COSIMULATIONOBSERVER_HPP_
 
 #include "SimulationServerObserver.hpp"
-#include <string>
-#include <vector>
 
 class CoSimulationObserver : public SimulationServerObserver
 {
