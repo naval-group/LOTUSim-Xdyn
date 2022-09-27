@@ -407,7 +407,10 @@ docker: BOOST_ROOT = /opt/boost
 docker: HDF5_DIR = /usr/local/hdf5/share/cmake
 docker: cmake-debian-target build-debian
 	@cp build_deb11/xdyn.deb .
+	@echo "**" > .dockerignore
+	@echo "!xdyn.deb" >> .dockerignore
 	@docker build . --tag xdyn
+	@rm -f .dockerignore
 
 xdyn.deb: build_deb11/xdyn.deb
 	@cp $< $@

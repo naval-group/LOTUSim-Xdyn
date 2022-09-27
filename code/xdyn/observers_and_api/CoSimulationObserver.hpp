@@ -1,8 +1,6 @@
 #ifndef OBSERVERS_AND_API_COSIMULATIONOBSERVER_HPP_
 #define OBSERVERS_AND_API_COSIMULATIONOBSERVER_HPP_
 
-#include <vector>
-
 #include "SimulationServerObserver.hpp"
 
 class CoSimulationObserver : public SimulationServerObserver
@@ -13,7 +11,6 @@ public:
 
 private:
     using Observer::get_serializer;
-    using Observer::get_initializer;
     std::function<void()> get_serializer(const double val, const DataAddressing& address) override;
 
     const std::string body_name;

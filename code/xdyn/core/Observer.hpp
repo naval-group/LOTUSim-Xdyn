@@ -8,16 +8,18 @@
 #ifndef OBSERVER_HPP_
 #define OBSERVER_HPP_
 
-#include <functional>
-#include <map>
-#include <string>
-#include <vector>
+
+#include "xdyn/environment_models/DiscreteDirectionalWaveSpectrum.hpp"
+#include "xdyn/mesh/Mesh.hpp"
+
 #include <ssc/macros.hpp>
 #include <ssc/solver/DiscreteSystem.hpp>
 #include TR1INC(memory)
 
-#include "xdyn/environment_models/DiscreteDirectionalWaveSpectrum.hpp"
-#include "xdyn/mesh/Mesh.hpp"
+#include <functional>
+#include <map>
+#include <string>
+#include <vector>
 
 class Sim;
 struct SurfaceElevationGrid;

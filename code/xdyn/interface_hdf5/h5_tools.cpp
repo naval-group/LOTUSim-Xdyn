@@ -290,10 +290,8 @@ void H5_Tools::write(
         const std::string& datasetName,
         const double& v)
 {
-    H5::DataType datatype(H5::PredType::NATIVE_DOUBLE);
-    hsize_t dimsf[2];
-    dimsf[0] = 1;
-    dimsf[1] = 1;
+    const H5::DataType datatype(H5::PredType::NATIVE_DOUBLE);
+    const hsize_t dimsf[2] = {1, 1};
     H5::DataSpace dataspace(2, dimsf);
     H5::DataSet dataset = H5_Tools::createDataSet(file, datasetName, datatype, dataspace);
     dataset.write(&v, H5::PredType::NATIVE_DOUBLE);
@@ -317,10 +315,8 @@ void H5_Tools::write(
         const std::string& datasetName,
         const std::vector<double>& v)
 {
-    H5::DataType datatype(H5::PredType::NATIVE_DOUBLE);
-    hsize_t dimsf[2];
-    dimsf[0] = (hsize_t)v.size();
-    dimsf[1] = 1;
+    const H5::DataType datatype(H5::PredType::NATIVE_DOUBLE);
+    const hsize_t dimsf[2] = {(hsize_t)v.size(), 1};
     H5::DataSpace dataspace(2, dimsf);
     H5::DataSet dataset = H5_Tools::createDataSet(file, datasetName, datatype, dataspace);
     dataset.write(&v[0], H5::PredType::NATIVE_DOUBLE);
@@ -378,10 +374,8 @@ void H5_Tools::write(
         const std::string& datasetName,
         const std::vector<std::vector<double> >& v)
 {
-    H5::DataType datatype(H5::PredType::NATIVE_DOUBLE);
-    hsize_t dimsf[2];
-    dimsf[0] = (hsize_t)v.size();
-    dimsf[1] = (hsize_t)v.at(0).size();
+    const H5::DataType datatype(H5::PredType::NATIVE_DOUBLE);
+    const hsize_t dimsf[2] = {(hsize_t)v.size(), (hsize_t)v.at(0).size()};
     H5::DataSpace dataspace(2, dimsf);
     H5::DataSet dataset = H5_Tools::createDataSet(file, datasetName, datatype, dataspace);
     const auto vflat = flatten(v);
@@ -396,9 +390,9 @@ void H5_Tools::write(
         const std::vector<std::vector<std::vector<double> > >& v)
 {
     if (not h5_doesFileExists(filename.c_str())) H5_Tools::createEmptyHdf5File(filename);
-    H5::H5File f(filename, H5F_ACC_RDWR);
-    H5_Tools::write(f, datasetName, v);
-    f.close();
+    H5::H5File file(filename, H5F_ACC_RDWR);
+    H5_Tools::write(file, datasetName, v);
+    file.close();
 }
 
 void H5_Tools::write(
@@ -406,7 +400,7 @@ void H5_Tools::write(
         const std::string& datasetName,
         const std::vector<std::vector<std::vector<double> > >& v)
 {
-    H5::DataType datatype(H5::PredType::NATIVE_DOUBLE);
+    const H5::DataType datatype(H5::PredType::NATIVE_DOUBLE);
     hsize_t dimsf[3];
     dimsf[0] = (hsize_t)v.size();
     dimsf[1] = (hsize_t)v.at(0).size();
@@ -470,7 +464,7 @@ void H5_Tools::read(
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "One expects float data");
     }
-    const H5::FloatType floattype= dataset.getFloatType();
+    const H5::FloatType floattype = dataset.getFloatType();
     std::string order_string;
     H5T_order_t order = floattype.getOrder(order_string);
     if (order != H5T_ORDER_LE)
@@ -483,13 +477,13 @@ void H5_Tools::read(
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "One expects 64 bit float");
     }
     H5::DataSpace dataspace = dataset.getSpace();
-    int rank = dataspace.getSimpleExtentNdims();
+    const int rank = dataspace.getSimpleExtentNdims();
     if (!((rank==1) || (rank==2)))
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "One expects 1 or 2 rank data, not" << rank);
     }
     hsize_t dims_out[2];
-    int ndims = dataspace.getSimpleExtentDims(dims_out, NULL);
+    const int ndims = dataspace.getSimpleExtentDims(dims_out, NULL);
     if (!((ndims==1)||(ndims==2)))
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "One expects 1 or 2 rank data, not" << ndims);
@@ -506,14 +500,14 @@ void H5_Tools::read(
         std::vector<double> & res)
 {
     H5::DataSet dataset = file.openDataSet(datasetName);
-    H5T_class_t type_class = dataset.getTypeClass();
+    const H5T_class_t type_class = dataset.getTypeClass();
     if(type_class != H5T_FLOAT)
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "One expects float data");
     }
     const H5::FloatType floattype= dataset.getFloatType();
     std::string order_string;
-    H5T_order_t order = floattype.getOrder(order_string);
+    const H5T_order_t order = floattype.getOrder(order_string);
     if (order != H5T_ORDER_LE)
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "One expects little endian data, not " << order_string);
@@ -524,13 +518,13 @@ void H5_Tools::read(
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "One expects 64 bit float");
     }
     H5::DataSpace dataspace = dataset.getSpace();
-    int rank = dataspace.getSimpleExtentNdims();
+    const int rank = dataspace.getSimpleExtentNdims();
     if (!((rank==1) || (rank==2)))
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "One expects 1 or 2 rank data, not" << rank);
     }
     hsize_t dims_out[2];
-    int ndims = dataspace.getSimpleExtentDims(dims_out, NULL);
+    const int ndims = dataspace.getSimpleExtentDims(dims_out, NULL);
     if (!((ndims==1)||(ndims==2)))
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "One expects 1 or 2 rank data, not" << ndims);
@@ -557,7 +551,7 @@ void H5_Tools::read(
     }
     const H5::FloatType floattype= dataset.getFloatType();
     std::string order_string;
-    H5T_order_t order = floattype.getOrder(order_string);
+    const H5T_order_t order = floattype.getOrder(order_string);
     if (order != H5T_ORDER_LE)
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "One expects little endian data, not " << order_string);
@@ -568,18 +562,18 @@ void H5_Tools::read(
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "One expects 64 bit float");
     }
     H5::DataSpace dataspace = dataset.getSpace();
-    int rank = dataspace.getSimpleExtentNdims();
+    const int rank = dataspace.getSimpleExtentNdims();
     if (rank!=2)
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "One expects 2 rank data, not" << rank);
     }
     hsize_t dims_out[2];
-    int ndims = dataspace.getSimpleExtentDims(dims_out, NULL);
+    const int ndims = dataspace.getSimpleExtentDims(dims_out, NULL);
     if (ndims!=2)
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "One expects 2 rank data, not" << ndims);
     }
-    H5::DataSpace memspace(2, dims_out);
+    const H5::DataSpace memspace(2, dims_out);
     double *p = (double*)malloc((size_t) (dims_out[0] * dims_out[1]) * sizeof(double));
     dataset.read(p, H5::PredType::NATIVE_DOUBLE, memspace, dataspace);
     for (hsize_t i=0; i<dims_out[0];++i)
@@ -597,14 +591,14 @@ void H5_Tools::read(
         std::vector<std::vector<std::vector<double> > > & res)
 {
     H5::DataSet dataset = file.openDataSet(datasetName);
-    H5T_class_t type_class = dataset.getTypeClass();
+    const H5T_class_t type_class = dataset.getTypeClass();
     if(type_class != H5T_FLOAT)
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "One expects float data");
     }
     const H5::FloatType floattype= dataset.getFloatType();
     std::string order_string;
-    H5T_order_t order = floattype.getOrder(order_string);
+    const H5T_order_t order = floattype.getOrder(order_string);
     if (order != H5T_ORDER_LE)
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "One expects little endian data, not " << order_string);
@@ -615,13 +609,13 @@ void H5_Tools::read(
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "One expects 64 bit float");
     }
     H5::DataSpace dataspace = dataset.getSpace();
-    int rank = dataspace.getSimpleExtentNdims();
+    const int rank = dataspace.getSimpleExtentNdims();
     if (rank!=3)
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "One expects 3 rank data, not" << rank);
     }
     hsize_t dims_out[3];
-    int ndims = dataspace.getSimpleExtentDims(dims_out, NULL);
+    const int ndims = dataspace.getSimpleExtentDims(dims_out, NULL);
     if (ndims!=3)
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "One expects 3 rank data, not" << ndims);

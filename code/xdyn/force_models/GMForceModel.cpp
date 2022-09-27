@@ -9,9 +9,9 @@
 #include "ExactHydrostaticForceModel.hpp"
 #include "FastHydrostaticForceModel.hpp"
 #include "calculate_gz.hpp"
-#include "xdyn/core/Observer.hpp"
-#include "xdyn/core/BodyWithSurfaceForces.hpp"
 #include "xdyn/core/Body.hpp"
+#include "xdyn/core/BodyWithSurfaceForces.hpp"
+#include "xdyn/core/Observer.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/yaml_parser/environment_parsers.hpp"
 #include <ssc/yaml_parser.hpp>
@@ -124,7 +124,7 @@ Wrench GMForceModel::get_force(const BodyStates& states, const double t, const E
 void GMForceModel::extra_observations(Observer& observer) const
 {
     observer.write_before_solver_step(*GM,DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"GM"},std::string("GM(") + get_body_name() + ")"));
-    observer.write_before_solver_step(*GZ,DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"GM"},std::string("GZ(") + get_body_name() + ")"));
+    observer.write_before_solver_step(*GZ,DataAddressing(std::vector<std::string>{"efforts",get_body_name(),get_name(),"GZ"},std::string("GZ(") + get_body_name() + ")"));
 }
 
 double GMForceModel::pe(const BodyStates& , const std::vector<double>& , const EnvironmentAndFrames& ) const
