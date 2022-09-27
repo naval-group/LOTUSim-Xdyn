@@ -11,6 +11,7 @@
 #include "InterpolationModule.hpp"
 #include "PIDController.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
+#include "xdyn/external_data_structures/YamlController.hpp"
 #include "xdyn/external_data_structures/YamlTimeSeries.hpp"
 #include "xdyn/yaml_parser/check_input_yaml.hpp"
 #include <boost/algorithm/string.hpp> // For boost::to_upper
