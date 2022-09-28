@@ -6,8 +6,8 @@ IF(DOXYGEN_FOUND)
     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/DoxygenLayout.in ${CMAKE_CURRENT_BINARY_DIR}/DoxygenLayout.xml @ONLY)
     FILE(MAKE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../doc/dev_fr")
     FILE(MAKE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../doc/dev_fr/html")
-    MESSAGE(STATUS "Adding doc_dev_fr target")
-    ADD_CUSTOM_TARGET(doc_dev_fr
+    MESSAGE(STATUS "Adding doc_doxygen target")
+    ADD_CUSTOM_TARGET(doc_doxygen
         ${DOXYGEN_EXECUTABLE} Doxyfile
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating API documentation with Doxygen" VERBATIM

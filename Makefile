@@ -367,7 +367,7 @@ doxygen-debian:
 	   "cd /opt/share && \
 	    mkdir -p $(BUILD_DIR) && \
 	    cd $(BUILD_DIR) && \
-	    ninja $(NB_OF_PARALLEL_BUILDS) doc_dev_fr"
+	    ninja $(NB_OF_PARALLEL_BUILDS) doc_doxygen"
 
 test-debian: SHELL:=/bin/bash
 test-debian:
