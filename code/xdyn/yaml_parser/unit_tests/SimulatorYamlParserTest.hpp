@@ -3,9 +3,7 @@
 
 #include "gtest/gtest.h"
 #include <ssc/random_data_generator.hpp>
-#include "xdyn/external_data_structures/YamlSimulatorInput.hpp"
-#include "xdyn/external_data_structures/YamlWaveModelInput.hpp"
-
+struct YamlSimulatorInput;
 class SimulatorYamlParserTest : public ::testing::Test
 {
     protected:

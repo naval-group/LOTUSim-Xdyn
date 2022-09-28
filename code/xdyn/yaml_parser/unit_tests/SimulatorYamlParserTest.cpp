@@ -8,11 +8,13 @@
 #include "SimulatorYamlParserTest.hpp"
 #include "parse_controllers.hpp"
 #include "parse_time_series.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
+#include "xdyn/external_data_structures/YamlSimulatorInput.hpp"
+#include "xdyn/external_data_structures/YamlWaveModelInput.hpp"
 #include "xdyn/test_data_generator/precal_test_data.hpp"
 #include "xdyn/test_data_generator/yaml_data.hpp"
 #include "xdyn/yaml_parser/external_data_structures_parsers.hpp"
 #include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
-#include "xdyn/exceptions/InvalidInputException.hpp"
 
 #include "gmock/gmock.h"
 
@@ -541,4 +543,16 @@ TEST_F(SimulatorYamlParserTest, can_parse_filtered_states)
     ASSERT_TRUE(yaml.bodies.front().filtered_states.phi.empty());
     ASSERT_TRUE(yaml.bodies.front().filtered_states.theta.empty());
     ASSERT_TRUE(yaml.bodies.front().filtered_states.psi.empty());
+}
+
+TEST_F(SimulatorYamlParserTest, missing_environment_model_yaml_node_should_throw_an_error)
+{
+    const std::string uncomplete_yaml =
+        "rotations convention: [psi, theta', phi'']\n"
+        "\n"
+        "environmental constants:\n"
+        "    g: {value: 9.81, unit: m/s^2}\n"
+        "    rho: {value: 1026, unit: kg/m^3}\n"
+        "    nu: {value: 1.18e-6, unit: m^2/s}\n";
+    ASSERT_THROW(SimulatorYamlParser(uncomplete_yaml).parse(), InvalidInputException);
 }
