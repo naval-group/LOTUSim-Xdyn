@@ -245,6 +245,8 @@ debian_11_release_clang_14_doxygen: HDF5_DIR = /usr/local/hdf5/share/cmake
 debian_11_release_clang_14_doxygen: BUILD_PYTHON_WRAPPER = False
 debian_11_release_clang_14_doxygen: ADDITIONAL_CMAKE_PARAMETERS=-D CMAKE_CXX_COMPILER=clang++ -D CMAKE_C_COMPILER=clang -D BUILD_DOCUMENTATION=True
 debian_11_release_clang_14_doxygen: cmake-debian-target doxygen-debian
+	@echo "Doxygen documentation was created in directory doc/doxygen"
+	@echo "Open in the web browser doc/doxygen/html/index.html"
 
 build-docker-python-image:
 	make -C code/xdyn_wrapper_python ${DOCKER_IMAGE}
