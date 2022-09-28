@@ -3,7 +3,7 @@ PROJECT(x-dyn)
 SET(DESCRIPTION "X-DYN : Simulateur 6ddl de navires")
 SET(CMAKE_VERBOSE_MAKEFILE OFF)
 #############################################################################
-OPTION(BUILD_DOCUMENTATION "Boolean used to build xdyn documentation" ON)
+OPTION(BUILD_DOCUMENTATION "Boolean used to build xdyn documentation" OFF)
 OPTION(THIRD_PARTY_DIRECTORY "Where should CMake look for (former submodules) eigen, eigen3-hdf5, etc... ?" ${CMAKE_CURRENT_SOURCE_DIR})
 #############################################################################
 # User configuration
@@ -66,8 +66,7 @@ SET(F2C_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ssc/ssc/f2c" CACHE PATH "Path t
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/ssc)
-ADD_SUBDIRECTORY(base91x)
-ADD_SUBDIRECTORY(boost_program_options_descriptions)
+ADD_SUBDIRECTORY(thirdparty)
 ADD_SUBDIRECTORY(xdyn/binary_stl_data)
 ADD_SUBDIRECTORY(xdyn/core)
 ADD_SUBDIRECTORY(xdyn/exceptions)

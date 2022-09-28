@@ -7,3 +7,4 @@ all:
 clean:
 	@make -C user_fr clean
 	@make -C training clean
+	@rm -rf doxygen
