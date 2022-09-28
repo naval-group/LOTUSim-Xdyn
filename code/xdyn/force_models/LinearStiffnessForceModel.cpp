@@ -1,4 +1,5 @@
 #include "LinearStiffnessForceModel.hpp"
+#include "xdyn/core/yaml2eigen.hpp"
 #include "xdyn/yaml_parser/external_data_structures_parsers.hpp"
 #include <ssc/kinematics.hpp>
 #include "yaml.h"
@@ -58,12 +59,7 @@ LinearStiffnessForceModel::Input LinearStiffnessForceModel::parse(const std::str
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'damping matrix at the center of gravity projected in the body frame': " << e.get_message());
     }
-    for (size_t j = 0 ; j < 6 ; ++j) ret.K(0,(int)j) = M.row_1[j];
-    for (size_t j = 0 ; j < 6 ; ++j) ret.K(1,(int)j) = M.row_2[j];
-    for (size_t j = 0 ; j < 6 ; ++j) ret.K(2,(int)j) = M.row_3[j];
-    for (size_t j = 0 ; j < 6 ; ++j) ret.K(3,(int)j) = M.row_4[j];
-    for (size_t j = 0 ; j < 6 ; ++j) ret.K(4,(int)j) = M.row_5[j];
-    for (size_t j = 0 ; j < 6 ; ++j) ret.K(5,(int)j) = M.row_6[j];
+    ret.K = make_matrix6x6(M);
     parse_optional(node, "equilibrium position", ret.equilibrium_position);
     return ret;
 }

@@ -100,7 +100,7 @@ BodyPtr BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& 
 
 void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& rigid_body_inertia, const YamlDynamics6x6Matrix& added_mass) const
 {
-    const Eigen::Matrix<double,6,6> Mrb = convert(rigid_body_inertia);
+    const Eigen::Matrix<double,6,6> Mrb = make_matrix6x6(rigid_body_inertia);
     if(!isSymmetricDefinitePositive(Mrb))
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException,
@@ -132,7 +132,7 @@ void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& r
     }
     else
     {
-        Ma = convert(added_mass);
+        Ma = make_matrix6x6(added_mass);
     }
     if(!isSymmetric(Ma))
     {
@@ -159,46 +159,6 @@ void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& r
     states.total_inertia = Mt;
 }
 
-
-void convert_matrix_from_aquaplus_to_xdyn_frame(Eigen::Matrix<double,6,6>& matrix);
-void convert_matrix_from_aquaplus_to_xdyn_frame(Eigen::Matrix<double,6,6>& matrix)
-{
-    matrix(0, 1) = -matrix(0, 1);
-    matrix(0, 2) = -matrix(0, 2);
-    matrix(0, 4) = -matrix(0, 4);
-    matrix(0, 5) = -matrix(0, 5);
-    matrix(1, 0) = -matrix(1, 0);
-    matrix(1, 3) = -matrix(1, 3);
-    matrix(2, 0) = -matrix(2, 0);
-    matrix(2, 3) = -matrix(2, 3);
-    matrix(3, 1) = -matrix(3, 1);
-    matrix(3, 2) = -matrix(3, 2);
-    matrix(3, 4) = -matrix(3, 4);
-    matrix(3, 5) = -matrix(3, 5);
-    matrix(4, 0) = -matrix(4, 0);
-    matrix(4, 3) = -matrix(4, 3);
-    matrix(5, 0) = -matrix(5, 0);
-    matrix(5, 3) = -matrix(5, 3);
-}
-
-Eigen::Matrix<double,6,6> BodyBuilder::convert(const YamlDynamics6x6Matrix& M) const
-{
-    Eigen::Matrix<double,6,6> ret;
-    for (size_t j = 0 ; j < 6 ; ++j)
-    {
-        ret(0, static_cast<Eigen::Index>(j)) = M.row_1.at(j);
-        ret(1, static_cast<Eigen::Index>(j)) = M.row_2.at(j);
-        ret(2, static_cast<Eigen::Index>(j)) = M.row_3.at(j);
-        ret(3, static_cast<Eigen::Index>(j)) = M.row_4.at(j);
-        ret(4, static_cast<Eigen::Index>(j)) = M.row_5.at(j);
-        ret(5, static_cast<Eigen::Index>(j)) = M.row_6.at(j);
-    }
-    if (not(M.row_convention_xdyn_with_z_down))
-    {
-        convert_matrix_from_aquaplus_to_xdyn_frame(ret);
-    }
-    return ret;
-}
 
 BodyPtr BodyBuilder::build(const std::string& name, const VectorOfVectorOfPoints& mesh, const size_t idx, const double t0, const YamlRotation& convention, const double Tmax, const bool has_surface_forces) const
 {

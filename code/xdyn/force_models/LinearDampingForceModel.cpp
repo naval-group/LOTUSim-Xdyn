@@ -7,6 +7,7 @@
 
 #include "LinearDampingForceModel.hpp"
 #include "xdyn/core/Body.hpp"
+#include "xdyn/core/yaml2eigen.hpp"
 #include "xdyn/yaml_parser/external_data_structures_parsers.hpp"
 #include <Eigen/Dense>
 #include "yaml.h"
@@ -39,11 +40,5 @@ LinearDampingForceModel::Input LinearDampingForceModel::parse(const std::string&
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'damping matrix at the center of gravity projected in the body frame': " << e.get_message());
     }
-    for (size_t j = 0 ; j < 6 ; ++j) ret(0,(int)j) = M.row_1[j];
-    for (size_t j = 0 ; j < 6 ; ++j) ret(1,(int)j) = M.row_2[j];
-    for (size_t j = 0 ; j < 6 ; ++j) ret(2,(int)j) = M.row_3[j];
-    for (size_t j = 0 ; j < 6 ; ++j) ret(3,(int)j) = M.row_4[j];
-    for (size_t j = 0 ; j < 6 ; ++j) ret(4,(int)j) = M.row_5[j];
-    for (size_t j = 0 ; j < 6 ; ++j) ret(5,(int)j) = M.row_6[j];
-    return ret;
+    return make_matrix6x6(M);
 }
