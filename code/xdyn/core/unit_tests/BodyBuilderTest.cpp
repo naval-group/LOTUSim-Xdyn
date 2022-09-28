@@ -66,9 +66,9 @@ TEST_F(BodyBuilderTest, should_be_able_to_detect_no_symmetric_inertia_matrix)
     Eigen::MatrixXd m = Eigen::MatrixXd::Zero(n,n);
     m(0,0) = m(1,1) = m(2,2) = 2;
     m(0,1) = m(1,0) = m(2,1) = m(1,2) = -1;
-    ASSERT_TRUE(isSymmetric(m));
+    ASSERT_TRUE(is_symmetric(m));
     m(2,1) = -2;
-    ASSERT_FALSE(isSymmetric(m));
+    ASSERT_FALSE(is_symmetric(m));
 }
 
 TEST_F(BodyBuilderTest, should_be_able_to_detect_inconsistent_inertia_matrix)
@@ -77,9 +77,9 @@ TEST_F(BodyBuilderTest, should_be_able_to_detect_inconsistent_inertia_matrix)
     Eigen::MatrixXd m = Eigen::MatrixXd::Zero(n,n);
     m(0,0) = m(1,1) = m(2,2) = 2;
     m(0,1) = m(1,0) = m(2,1) = m(1,2) = -1;
-    ASSERT_TRUE(isSymmetricDefinitePositive(m));
+    ASSERT_TRUE(is_symmetric_definite_positive(m));
     m(0,0) = 0.0;
-    ASSERT_FALSE(isSymmetricDefinitePositive(m));
+    ASSERT_FALSE(is_symmetric_definite_positive(m));
 }
 
 
@@ -132,7 +132,7 @@ TEST_F(BodyBuilderTest, should_be_able_to_detect_inconsistent_inertia_matrix_pas
     m(5,3) = 56;
     m(5,4) = 126;
     m(5,5) = 252;
-    ASSERT_TRUE(isSymmetricDefinitePositive(m));
+    ASSERT_TRUE(is_symmetric_definite_positive(m));
 }
 
 TEST_F(BodyBuilderTest, relative_position_should_be_correct)

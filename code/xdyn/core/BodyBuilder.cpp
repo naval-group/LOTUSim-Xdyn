@@ -20,7 +20,7 @@
 #include <ssc/kinematics.hpp>
 #include <Eigen/Dense>
 
-bool isSymmetric(const Eigen::MatrixXd& m)
+bool is_symmetric(const Eigen::MatrixXd& m)
 {
     const double tol = 1e-10;
     if (m.rows()!=m.cols()) return false;
@@ -33,9 +33,9 @@ bool isSymmetric(const Eigen::MatrixXd& m)
 /**
  * \note is based on Sylvester criterion
  */
-bool isSymmetricDefinitePositive(const Eigen::MatrixXd& m)
+bool is_symmetric_definite_positive(const Eigen::MatrixXd& m)
 {
-    if (!isSymmetric(m)) return false;
+    if (!is_symmetric(m)) return false;
     const Eigen::Index n = m.rows();
     for (Eigen::Index i = 1;i<=n;++i)
     {
@@ -101,7 +101,7 @@ BodyPtr BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& 
 void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& rigid_body_inertia, const YamlDynamics6x6Matrix& added_mass) const
 {
     const Eigen::Matrix<double,6,6> Mrb = make_matrix6x6(rigid_body_inertia);
-    if(!isSymmetricDefinitePositive(Mrb))
+    if(!is_symmetric_definite_positive(Mrb))
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException,
                 "The rigid body inertia mass matrix is not symmetric definite positive "
@@ -134,7 +134,7 @@ void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& r
     {
         Ma = make_matrix6x6(added_mass);
     }
-    if(!isSymmetric(Ma))
+    if(!is_symmetric(Ma))
     {
         std::cerr << "Warning! The input added mass is not symmetric"
                   << " for body '" << states.name << "': " << std::endl
@@ -142,7 +142,7 @@ void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& r
                   << Ma << std::endl;
     }
     const Eigen::Matrix<double,6,6> Mt = Mrb + Ma;
-    if(!isSymmetricDefinitePositive(Mt))
+    if(!is_symmetric_definite_positive(Mt))
     {
         std::cerr << "Warning! The total inertia matrix (rigid body inertia + added mass) is not symmetric definite positive"
                   << " for body '" << states.name << "': " << std::endl

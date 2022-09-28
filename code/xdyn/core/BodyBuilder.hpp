@@ -58,7 +58,7 @@ class BodyBuilder
         YamlRotation rotations; //!< Rotation convention (describes how we can build a rotation matrix from three angles)
 };
 
-bool isSymmetric(const Eigen::MatrixXd& m);
-bool isSymmetricDefinitePositive(const Eigen::MatrixXd& m);
+bool is_symmetric(const Eigen::MatrixXd& m);
+bool is_symmetric_definite_positive(const Eigen::MatrixXd& m);
 
 #endif /* BODYBUILDER_HPP_ */
