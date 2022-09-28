@@ -270,7 +270,7 @@ void Sim::output(const StateType& x, Observer& obs, const double t, const std::v
         for (const auto& output : discrete_system->get_outputs())
         {
             const double value = pimpl->command_listener.get<double>(output);
-            obs.write_before_solver_step(value, DataAddressing(std::vector<std::string>{"controllers",name}, output));
+            obs.write_before_solver_step(value, DataAddressing(std::vector<std::string>{"controllers", name, output}, output));
         }
     }
 }

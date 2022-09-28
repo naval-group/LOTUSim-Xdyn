@@ -36,6 +36,8 @@ tutorial_11.csv: tutorial_11_gRPC_controller.yml
 	rm tutorial_11_gRPC_controller.yml
 
 clean:
-	rm -rf tutorial_11.csv tutorial_11_gRPC_controller.yml
+	@rm -f tutorial_11_gRPC_controller.yml
+	@rm -f tutorial_11.csv
+	@rm -f tutorial_11_gRPC_controller.hdf5
 	@$(DOCKER_COMPOSE) down --remove-orphans
 	@$(DOCKER_COMPOSE) -f docker-compose-issue-204.yml down --remove-orphans
