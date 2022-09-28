@@ -12,6 +12,7 @@
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
 #include "xdyn/external_data_structures/YamlBody.hpp"
+#include "xdyn/external_data_structures/YamlRotation.hpp"
 #include "xdyn/hdb_interpolators/HDBParser.hpp"
 #include "xdyn/hdb_interpolators/PrecalParser.hpp"
 #include "xdyn/mesh/MeshBuilder.hpp"
