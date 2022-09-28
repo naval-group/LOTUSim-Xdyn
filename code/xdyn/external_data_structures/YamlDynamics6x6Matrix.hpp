@@ -18,6 +18,7 @@ struct YamlDynamics6x6Matrix
     std::string hdb_filename;
     std::string precal_filename;
     std::string frame;
+    bool row_convention_xdyn_with_z_down;
     std::vector<double> row_1;
     std::vector<double> row_2;
     std::vector<double> row_3;

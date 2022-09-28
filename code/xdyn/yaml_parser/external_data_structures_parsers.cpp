@@ -6,10 +6,10 @@
  */
 
 #include "external_data_structures_parsers.hpp"
-#include "yaml.h"
-#include "yaml-cpp/exceptions.h"
+//#include "yaml-cpp/exceptions.h"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include <ssc/yaml_parser.hpp>
+#include "yaml.h"
 
 size_t try_to_parse_positive_integer(const YAML::Node& node, const std::string& key)
 {
@@ -233,7 +233,8 @@ void parse_YamlDynamics6x6Matrix(const YAML::Node& node, YamlDynamics6x6Matrix& 
     if (const YAML::Node* parameter = node.FindValue("from hdb"))
     {
         if (node.FindValue("row 1") or node.FindValue("row 2") or node.FindValue("row 3")
-            or node.FindValue("row 4") or node.FindValue("row 5") or node.FindValue("row 6"))
+            or node.FindValue("row 4") or node.FindValue("row 5") or node.FindValue("row 6")
+            or node.FindValue("convention z down"))
         {
             THROW(__PRETTY_FUNCTION__, InvalidInputException,
                     "cannot specify both an HDB filename & a matrix (both keys 'from hdb' and "
@@ -265,6 +266,11 @@ void parse_YamlDynamics6x6Matrix(const YAML::Node& node, YamlDynamics6x6Matrix& 
             else
             {
                 m.frame = frame_name;
+            }
+            m.row_convention_xdyn_with_z_down = true;
+            if (const YAML::Node* parameter = node.FindValue("convention z down"))
+            {
+                *parameter >> m.row_convention_xdyn_with_z_down;
             }
             node["row 1"] >> m.row_1;
             node["row 2"] >> m.row_2;

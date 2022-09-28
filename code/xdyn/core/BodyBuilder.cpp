@@ -159,6 +159,28 @@ void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& r
     states.total_inertia = Mt;
 }
 
+
+void convert_matrix_from_aquaplus_to_xdyn_frame(Eigen::Matrix<double,6,6>& matrix);
+void convert_matrix_from_aquaplus_to_xdyn_frame(Eigen::Matrix<double,6,6>& matrix)
+{
+    matrix(0, 1) = -matrix(0, 1);
+    matrix(0, 2) = -matrix(0, 2);
+    matrix(0, 4) = -matrix(0, 4);
+    matrix(0, 5) = -matrix(0, 5);
+    matrix(1, 0) = -matrix(1, 0);
+    matrix(1, 3) = -matrix(1, 3);
+    matrix(2, 0) = -matrix(2, 0);
+    matrix(2, 3) = -matrix(2, 3);
+    matrix(3, 1) = -matrix(3, 1);
+    matrix(3, 2) = -matrix(3, 2);
+    matrix(3, 4) = -matrix(3, 4);
+    matrix(3, 5) = -matrix(3, 5);
+    matrix(4, 0) = -matrix(4, 0);
+    matrix(4, 3) = -matrix(4, 3);
+    matrix(5, 0) = -matrix(5, 0);
+    matrix(5, 3) = -matrix(5, 3);
+}
+
 Eigen::Matrix<double,6,6> BodyBuilder::convert(const YamlDynamics6x6Matrix& M) const
 {
     Eigen::Matrix<double,6,6> ret;
@@ -170,6 +192,10 @@ Eigen::Matrix<double,6,6> BodyBuilder::convert(const YamlDynamics6x6Matrix& M) c
         ret(3, static_cast<Eigen::Index>(j)) = M.row_4.at(j);
         ret(4, static_cast<Eigen::Index>(j)) = M.row_5.at(j);
         ret(5, static_cast<Eigen::Index>(j)) = M.row_6.at(j);
+    }
+    if (not(M.row_convention_xdyn_with_z_down))
+    {
+        convert_matrix_from_aquaplus_to_xdyn_frame(ret);
     }
     return ret;
 }
