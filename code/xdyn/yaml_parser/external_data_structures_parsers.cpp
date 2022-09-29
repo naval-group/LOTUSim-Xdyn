@@ -182,18 +182,7 @@ void operator >> (const YAML::Node& node, YamlDynamics& d)
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "One can not define both keys '" << am_buoyancy <<"' and '" << am_gravity << "'.");
     }
-    if (node.FindValue(rb_buoyancy))
-    {
-        try
-        {
-            parse_YamlDynamics6x6Matrix(node[rb_buoyancy], d.rigid_body_inertia, false, d.centre_of_inertia.frame);
-        }
-        catch(const InvalidInputException& e)
-        {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node '" << rb_buoyancy << "': " << e.get_message());
-        }
-    }
-    else
+    if (node.FindValue(rb_gravity))
     {
         try
         {
@@ -204,18 +193,20 @@ void operator >> (const YAML::Node& node, YamlDynamics& d)
             THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node '" << rb_gravity << "': " << e.get_message());
         }
     }
-    if (node.FindValue(am_buoyancy))
+    else
     {
         try
         {
-            parse_YamlDynamics6x6Matrix(node[am_buoyancy], d.added_mass, false, d.centre_of_inertia.frame);
+            parse_YamlDynamics6x6Matrix(node[rb_buoyancy], d.rigid_body_inertia, false, d.centre_of_inertia.frame);
         }
         catch(const InvalidInputException& e)
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node '" << am_buoyancy << "': " << e.get_message());
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node '" << rb_buoyancy << "': " << e.get_message());
         }
+        std::cout << "Using key '" << rb_buoyancy << "' is not recommended, as it is considered as the matrix expressed at center of gravity." << std::endl;
+        std::cout << "Please replace key '" << rb_buoyancy << "' with key '." << rb_gravity << "'." <<std::endl;
     }
-    else
+    if (node.FindValue(am_gravity))
     {
         try
         {
@@ -225,6 +216,19 @@ void operator >> (const YAML::Node& node, YamlDynamics& d)
         {
             THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node '" << am_gravity << "': " << e.get_message());
         }
+    }
+    else
+    {
+        try
+        {
+            parse_YamlDynamics6x6Matrix(node[am_buoyancy], d.added_mass, false, d.centre_of_inertia.frame);
+        }
+        catch(const InvalidInputException& e)
+        {
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node '" << am_buoyancy << "': " << e.get_message());
+        }
+        std::cout << "Using key '" << am_buoyancy << "' is not recommended, as it is considered as the matrix expressed at center of gravity." << std::endl;
+        std::cout << "Please replace key '" << am_buoyancy << "' with key '." << am_gravity << "'." <<std::endl;
     }
     node["hydrodynamic forces calculation point in body frame"] >> d.hydrodynamic_forces_calculation_point_in_body_frame;
 }
