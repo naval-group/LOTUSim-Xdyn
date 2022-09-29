@@ -12,6 +12,7 @@
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
 #include "xdyn/external_data_structures/YamlBody.hpp"
+#include "xdyn/external_data_structures/YamlRotation.hpp"
 #include "xdyn/hdb_interpolators/HDBParser.hpp"
 #include "xdyn/hdb_interpolators/PrecalParser.hpp"
 #include "xdyn/mesh/MeshBuilder.hpp"
@@ -19,7 +20,7 @@
 #include <ssc/kinematics.hpp>
 #include <Eigen/Dense>
 
-bool isSymmetric(const Eigen::MatrixXd& m)
+bool is_symmetric(const Eigen::MatrixXd& m)
 {
     const double tol = 1e-10;
     if (m.rows()!=m.cols()) return false;
@@ -32,9 +33,9 @@ bool isSymmetric(const Eigen::MatrixXd& m)
 /**
  * \note is based on Sylvester criterion
  */
-bool isSymmetricDefinitePositive(const Eigen::MatrixXd& m)
+bool is_symmetric_definite_positive(const Eigen::MatrixXd& m)
 {
-    if (!isSymmetric(m)) return false;
+    if (!is_symmetric(m)) return false;
     const Eigen::Index n = m.rows();
     for (Eigen::Index i = 1;i<=n;++i)
     {
@@ -97,17 +98,8 @@ BodyPtr BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& 
     return ret;
 }
 
-void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& rigid_body_inertia, const YamlDynamics6x6Matrix& added_mass) const
+Eigen::Matrix<double,6,6> build_added_matrix(const std::string& states_name, const YamlDynamics6x6Matrix& added_mass)
 {
-    const Eigen::Matrix<double,6,6> Mrb = convert(rigid_body_inertia);
-    if(!isSymmetricDefinitePositive(Mrb))
-    {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                "The rigid body inertia mass matrix is not symmetric definite positive "
-                << "for body '" << states.name << "': " << std::endl
-                << "Mrb = " << std::endl
-                << Mrb << std::endl);
-    }
     Eigen::Matrix<double,6,6> Ma;
     if (added_mass.read_from_file)
     {
@@ -131,17 +123,32 @@ void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& r
     }
     else
     {
-        Ma = convert(added_mass);
+        Ma = make_matrix6x6(added_mass);
     }
-    if(!isSymmetric(Ma))
+    if(!is_symmetric(Ma))
     {
         std::cerr << "Warning! The input added mass is not symmetric"
-                  << " for body '" << states.name << "': " << std::endl
+                  << " for body '" << states_name << "': " << std::endl
                   << "Ma = " << std::endl
                   << Ma << std::endl;
     }
+    return Ma;
+}
+
+void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& rigid_body_inertia, const YamlDynamics6x6Matrix& added_mass) const
+{
+    const Eigen::Matrix<double,6,6> Mrb = make_matrix6x6(rigid_body_inertia);
+    if(!is_symmetric_definite_positive(Mrb))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                "The rigid body inertia mass matrix is not symmetric definite positive "
+                << "for body '" << states.name << "': " << std::endl
+                << "Mrb = " << std::endl
+                << Mrb << std::endl);
+    }
+    const Eigen::Matrix<double,6,6> Ma = build_added_matrix(states.name, added_mass);
     const Eigen::Matrix<double,6,6> Mt = Mrb + Ma;
-    if(!isSymmetricDefinitePositive(Mt))
+    if(!is_symmetric_definite_positive(Mt))
     {
         std::cerr << "Warning! The total inertia matrix (rigid body inertia + added mass) is not symmetric definite positive"
                   << " for body '" << states.name << "': " << std::endl
@@ -152,26 +159,12 @@ void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& r
                   << "Mrb+Ma = " << std::endl
                   << Mt << std::endl;
     }
-    Eigen::Matrix<double,6,6> M_inv = Mt.inverse();
+    const Eigen::Matrix<double,6,6> M_inv = Mt.inverse();
     states.inverse_of_the_total_inertia = M_inv;
     states.solid_body_inertia = Mrb;
     states.total_inertia = Mt;
 }
 
-Eigen::Matrix<double,6,6> BodyBuilder::convert(const YamlDynamics6x6Matrix& M) const
-{
-    Eigen::Matrix<double,6,6> ret;
-    for (size_t j = 0 ; j < 6 ; ++j)
-    {
-        ret(0, static_cast<Eigen::Index>(j)) = M.row_1.at(j);
-        ret(1, static_cast<Eigen::Index>(j)) = M.row_2.at(j);
-        ret(2, static_cast<Eigen::Index>(j)) = M.row_3.at(j);
-        ret(3, static_cast<Eigen::Index>(j)) = M.row_4.at(j);
-        ret(4, static_cast<Eigen::Index>(j)) = M.row_5.at(j);
-        ret(5, static_cast<Eigen::Index>(j)) = M.row_6.at(j);
-    }
-    return ret;
-}
 
 BodyPtr BodyBuilder::build(const std::string& name, const VectorOfVectorOfPoints& mesh, const size_t idx, const double t0, const YamlRotation& convention, const double Tmax, const bool has_surface_forces) const
 {

@@ -6,10 +6,10 @@
  */
 
 #include "external_data_structures_parsers.hpp"
-#include "yaml.h"
-#include "yaml-cpp/exceptions.h"
+//#include "yaml-cpp/exceptions.h"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include <ssc/yaml_parser.hpp>
+#include "yaml.h"
 
 size_t try_to_parse_positive_integer(const YAML::Node& node, const std::string& key)
 {
@@ -170,49 +170,65 @@ void operator >> (const YAML::Node& node, YamlSpeed& s)
 void operator >> (const YAML::Node& node, YamlDynamics& d)
 {
     parse_point_with_name(node["centre of inertia"], d.centre_of_inertia, "centre of inertia");
-    if (node.FindValue("rigid body inertia matrix at the center of buoyancy projected in the body frame"))
+    const std::string rb_buoyancy("rigid body inertia matrix at the center of buoyancy projected in the body frame");
+    const std::string rb_gravity("rigid body inertia matrix at the center of gravity and projected in the body frame");
+    const std::string am_buoyancy("added mass matrix at the center of buoyancy projected in the body frame");
+    const std::string am_gravity("added mass matrix at the center of gravity and projected in the body frame");
+    if (node.FindValue(rb_buoyancy) and node.FindValue(rb_gravity))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "One can not define both keys '" << rb_buoyancy <<"' and '" << rb_gravity << "'.");
+    }
+    if (node.FindValue(am_buoyancy) and node.FindValue(am_gravity))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "One can not define both keys '" << am_buoyancy <<"' and '" << am_gravity << "'.");
+    }
+    if (node.FindValue(rb_gravity))
     {
         try
         {
-            parse_YamlDynamics6x6Matrix(node["rigid body inertia matrix at the center of buoyancy projected in the body frame"], d.rigid_body_inertia, false, d.centre_of_inertia.frame);
+            parse_YamlDynamics6x6Matrix(node[rb_gravity], d.rigid_body_inertia, false, d.centre_of_inertia.frame);
         }
         catch(const InvalidInputException& e)
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'rigid body inertia matrix at the center of buoyancy projected in the body frame': " << e.get_message());
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node '" << rb_gravity << "': " << e.get_message());
         }
     }
     else
     {
         try
         {
-            parse_YamlDynamics6x6Matrix(node["rigid body inertia matrix at the center of gravity and projected in the body frame"], d.rigid_body_inertia, false, d.centre_of_inertia.frame);
+            parse_YamlDynamics6x6Matrix(node[rb_buoyancy], d.rigid_body_inertia, false, d.centre_of_inertia.frame);
         }
         catch(const InvalidInputException& e)
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'rigid body inertia matrix at the center of gravity and projected in the body frame': " << e.get_message());
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node '" << rb_buoyancy << "': " << e.get_message());
         }
+        std::cout << "Using key '" << rb_buoyancy << "' is not recommended, as it is considered as the matrix expressed at center of gravity." << std::endl;
+        std::cout << "Please replace key '" << rb_buoyancy << "' with key '." << rb_gravity << "'." <<std::endl;
     }
-    if (node.FindValue("added mass matrix at the center of buoyancy projected in the body frame"))
+    if (node.FindValue(am_gravity))
     {
         try
         {
-            parse_YamlDynamics6x6Matrix(node["added mass matrix at the center of buoyancy projected in the body frame"], d.added_mass, false, d.centre_of_inertia.frame);
+            parse_YamlDynamics6x6Matrix(node[am_gravity], d.added_mass, false, d.centre_of_inertia.frame);
         }
         catch(const InvalidInputException& e)
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'added mass matrix at the center of buoyancy projected in the body frame': " << e.get_message());
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node '" << am_gravity << "': " << e.get_message());
         }
     }
     else
     {
         try
         {
-            parse_YamlDynamics6x6Matrix(node["added mass matrix at the center of gravity and projected in the body frame"], d.added_mass, false, d.centre_of_inertia.frame);
+            parse_YamlDynamics6x6Matrix(node[am_buoyancy], d.added_mass, false, d.centre_of_inertia.frame);
         }
         catch(const InvalidInputException& e)
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'added mass matrix at the center of gravity and projected in the body frame': " << e.get_message());
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node '" << am_buoyancy << "': " << e.get_message());
         }
+        std::cout << "Using key '" << am_buoyancy << "' is not recommended, as it is considered as the matrix expressed at center of gravity." << std::endl;
+        std::cout << "Please replace key '" << am_buoyancy << "' with key '." << am_gravity << "'." <<std::endl;
     }
     node["hydrodynamic forces calculation point in body frame"] >> d.hydrodynamic_forces_calculation_point_in_body_frame;
 }
@@ -233,7 +249,8 @@ void parse_YamlDynamics6x6Matrix(const YAML::Node& node, YamlDynamics6x6Matrix& 
     if (const YAML::Node* parameter = node.FindValue("from hdb"))
     {
         if (node.FindValue("row 1") or node.FindValue("row 2") or node.FindValue("row 3")
-            or node.FindValue("row 4") or node.FindValue("row 5") or node.FindValue("row 6"))
+            or node.FindValue("row 4") or node.FindValue("row 5") or node.FindValue("row 6")
+            or node.FindValue("convention z down"))
         {
             THROW(__PRETTY_FUNCTION__, InvalidInputException,
                     "cannot specify both an HDB filename & a matrix (both keys 'from hdb' and "
@@ -265,6 +282,11 @@ void parse_YamlDynamics6x6Matrix(const YAML::Node& node, YamlDynamics6x6Matrix& 
             else
             {
                 m.frame = frame_name;
+            }
+            m.row_convention_xdyn_with_z_down = true;
+            if (const YAML::Node* parameter = node.FindValue("convention z down"))
+            {
+                *parameter >> m.row_convention_xdyn_with_z_down;
             }
             node["row 1"] >> m.row_1;
             node["row 2"] >> m.row_2;

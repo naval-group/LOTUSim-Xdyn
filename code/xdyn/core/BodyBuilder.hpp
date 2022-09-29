@@ -9,20 +9,20 @@
 #define BODYBUILDER_HPP_
 
 #include "xdyn/core/Body.hpp"
-#include "xdyn/external_data_structures/YamlRotation.hpp"
 #include "xdyn/external_data_structures/GeometricTypes3d.hpp"
 
-struct YamlDynamics6x6Matrix;
 struct YamlAngle;
+struct YamlDynamics6x6Matrix;
+struct YamlRotation;
 
 /** \author cady
  *  \date Jun 17, 2014, 12:39:59 PM
  *  \brief Builds a Body object from the YAML & STL describing it
  *  \ingroup simulator
  *  \section ex1 Example
- *  \snippet simulator/unit_tests/BodyBuilderTest.cpp BodyBuilderTest example
+ *  \snippet core/unit_tests/BodyBuilderTest.cpp BodyBuilderTest example
  *  \section ex2 Expected output
- *  \snippet simulator/unit_tests/BodyBuilderTest.cpp BodyBuilderTest expected output
+ *  \snippet core/unit_tests/BodyBuilderTest.cpp BodyBuilderTest expected output
  */
 class BodyBuilder
 {
@@ -50,11 +50,6 @@ class BodyBuilder
 
         void add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& rigid_body_inertia, const YamlDynamics6x6Matrix& added_mass) const;
 
-        /**  \details Converts the external YAML data structure (several std::vectors)
-         *            to an Eigen::Matrix used for calculations
-         */
-        Eigen::Matrix<double,6,6> convert(const YamlDynamics6x6Matrix& M) const;
-
         /** \brief Puts the mesh in the body frame
          *  \details Uses the body frame's initial position relative to the mesh
          */
@@ -63,7 +58,8 @@ class BodyBuilder
         YamlRotation rotations; //!< Rotation convention (describes how we can build a rotation matrix from three angles)
 };
 
-bool isSymmetric(const Eigen::MatrixXd& m);
-bool isSymmetricDefinitePositive(const Eigen::MatrixXd& m);
+bool is_symmetric(const Eigen::MatrixXd& m);
+bool is_symmetric_definite_positive(const Eigen::MatrixXd& m);
+Eigen::Matrix<double,6,6> build_added_matrix(const std::string& states_name, const YamlDynamics6x6Matrix& added_mass);
 
 #endif /* BODYBUILDER_HPP_ */
