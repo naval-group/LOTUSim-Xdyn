@@ -8,11 +8,11 @@
 #ifndef BODY_HPP_
 #define BODY_HPP_
 
-#include "xdyn/core/BlockedDOF.hpp"
-#include "xdyn/core/BodyStates.hpp"
-#include "xdyn/core/StatesFilter.hpp"
-#include "xdyn/core/StateMacros.hpp"
-#include "xdyn/core/State.hpp"
+#include "BlockedDOF.hpp"
+#include "BodyStates.hpp"
+#include "StatesFilter.hpp"
+#include "StateMacros.hpp"
+#include "State.hpp"
 
 #include <ssc/kinematics.hpp>
 
@@ -37,9 +37,10 @@ class Body
 
         /** \brief Use SurfaceElevation to compute wave height & update accordingly
          */
-        virtual void update_intersection_with_free_surface(const EnvironmentAndFrames& env,
-                                                   const double t
-                                                  ) = 0;
+        virtual void update_intersection_with_free_surface(
+            const EnvironmentAndFrames& env,
+            const double t
+            ) = 0;
 
         ssc::kinematics::Point get_origin(const StateType& x) const;
         ssc::kinematics::Point get_position_of_body_relative_to_mesh() const;
@@ -58,14 +59,16 @@ class Body
 
         /**  \brief Update down vector (expressed in body's mesh frame), taking the new coordinates into account
          */
-        void update_projection_of_z_in_mesh_frame(const double g,
-                                                  const ssc::kinematics::KinematicsPtr& k);
+        void update_projection_of_z_in_mesh_frame(
+            const double g,
+            const ssc::kinematics::KinematicsPtr& k);
 
-        void calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_forces,
-                                         const StateType& x,
-                                         StateType& dx_dt,
-                                         const double t,
-                                         const EnvironmentAndFrames& env) const;
+        void calculate_state_derivatives(
+            const ssc::kinematics::Wrench& sum_of_forces,
+            const StateType& x,
+            StateType& dx_dt,
+            const double t,
+            const EnvironmentAndFrames& env) const;
 
         Eigen::Vector3d get_uvw(const StateType& x) const;
         Eigen::Vector3d get_pqr(const StateType& x) const;
