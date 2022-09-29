@@ -11,12 +11,6 @@
 #include "SurfaceForceModel.hpp"
 
 /** \brief This class implemented SurfaceForceModel's begin & end methods
- *  \addtogroup mesh_wrappers
- *  \ingroup mesh_wrappers
- *  \section ex1 Example
- *  \snippet mesh_wrappers/unit_tests/ImmersedSurfaceForceModelTest.cpp ImmersedSurfaceForceModelTest example
- *  \section ex2 Expected output
- *  \snippet mesh_wrappers/unit_tests/ImmersedSurfaceForceModelTest.cpp ImmersedSurfaceForceModelTest expected output
  */
 class EmergedSurfaceForceModel : public SurfaceForceModel
 {
