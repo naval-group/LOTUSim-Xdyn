@@ -60,5 +60,6 @@ class BodyBuilder
 
 bool is_symmetric(const Eigen::MatrixXd& m);
 bool is_symmetric_definite_positive(const Eigen::MatrixXd& m);
+Eigen::Matrix<double,6,6> build_added_matrix(const std::string& states_name, const YamlDynamics6x6Matrix& added_mass);
 
 #endif /* BODYBUILDER_HPP_ */

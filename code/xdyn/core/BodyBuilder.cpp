@@ -98,17 +98,8 @@ BodyPtr BodyBuilder::build(const YamlBody& input, const VectorOfVectorOfPoints& 
     return ret;
 }
 
-void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& rigid_body_inertia, const YamlDynamics6x6Matrix& added_mass) const
+Eigen::Matrix<double,6,6> build_added_matrix(const std::string& states_name, const YamlDynamics6x6Matrix& added_mass)
 {
-    const Eigen::Matrix<double,6,6> Mrb = make_matrix6x6(rigid_body_inertia);
-    if(!is_symmetric_definite_positive(Mrb))
-    {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                "The rigid body inertia mass matrix is not symmetric definite positive "
-                << "for body '" << states.name << "': " << std::endl
-                << "Mrb = " << std::endl
-                << Mrb << std::endl);
-    }
     Eigen::Matrix<double,6,6> Ma;
     if (added_mass.read_from_file)
     {
@@ -137,10 +128,25 @@ void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& r
     if(!is_symmetric(Ma))
     {
         std::cerr << "Warning! The input added mass is not symmetric"
-                  << " for body '" << states.name << "': " << std::endl
+                  << " for body '" << states_name << "': " << std::endl
                   << "Ma = " << std::endl
                   << Ma << std::endl;
     }
+    return Ma;
+}
+
+void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& rigid_body_inertia, const YamlDynamics6x6Matrix& added_mass) const
+{
+    const Eigen::Matrix<double,6,6> Mrb = make_matrix6x6(rigid_body_inertia);
+    if(!is_symmetric_definite_positive(Mrb))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                "The rigid body inertia mass matrix is not symmetric definite positive "
+                << "for body '" << states.name << "': " << std::endl
+                << "Mrb = " << std::endl
+                << Mrb << std::endl);
+    }
+    const Eigen::Matrix<double,6,6> Ma = build_added_matrix(states.name, added_mass);
     const Eigen::Matrix<double,6,6> Mt = Mrb + Ma;
     if(!is_symmetric_definite_positive(Mt))
     {
@@ -153,7 +159,7 @@ void BodyBuilder::add_inertia(BodyStates& states, const YamlDynamics6x6Matrix& r
                   << "Mrb+Ma = " << std::endl
                   << Mt << std::endl;
     }
-    Eigen::Matrix<double,6,6> M_inv = Mt.inverse();
+    const Eigen::Matrix<double,6,6> M_inv = Mt.inverse();
     states.inverse_of_the_total_inertia = M_inv;
     states.solid_body_inertia = Mrb;
     states.total_inertia = Mt;

@@ -7,11 +7,14 @@
 
 #include "BodyBuilderTest.hpp"
 #include "BodyBuilder.hpp"
+#include "xdyn/external_data_structures/YamlDynamics6x6Matrix.hpp"
 #include "xdyn/external_file_formats/stl_reader.hpp"
 #include "xdyn/mesh/Mesh.hpp"
 #include "xdyn/test_data_generator/stl_data.hpp"
 #include "xdyn/test_data_generator/yaml_data.hpp"
+#include "xdyn/yaml_parser/external_data_structures_parsers.hpp"
 #include "xdyn/yaml_parser/SimulatorYamlParser.hpp"
+#include "yaml.h"
 
 const BodyPtr BodyBuilderTest::body = BodyBuilderTest::build_body();
 
@@ -548,4 +551,162 @@ TEST_F(BodyBuilderTest, hydrodynamic_forces_calculation_point_in_body_frame)
     ASSERT_DOUBLE_EQ(0.696, P.x());
     ASSERT_DOUBLE_EQ(0, P.y());
     ASSERT_DOUBLE_EQ(1.418, P.z());
+}
+
+TEST_F(BodyBuilderTest, build_added_matrix_on_full_example)
+{
+    const auto yaml = SimulatorYamlParser(test_data::full_example()).parse();
+    const Eigen::Matrix<double,6,6> ret = build_added_matrix("my_body", yaml.bodies[0].dynamics.added_mass);
+    const auto states = body->get_states();
+    ASSERT_DOUBLE_EQ(1.0, ret(0,0));
+    ASSERT_DOUBLE_EQ(1.0, ret(0,1));
+    ASSERT_DOUBLE_EQ(1.0, ret(0,2));
+    ASSERT_DOUBLE_EQ(1.0, ret(0,3));
+    ASSERT_DOUBLE_EQ(1.0, ret(0,4));
+    ASSERT_DOUBLE_EQ(1.0, ret(0,5));
+    ASSERT_DOUBLE_EQ(1.0, ret(1,0));
+    ASSERT_DOUBLE_EQ(2.0, ret(1,1));
+    ASSERT_DOUBLE_EQ(3.0, ret(1,2));
+    ASSERT_DOUBLE_EQ(4.0, ret(1,3));
+    ASSERT_DOUBLE_EQ(5.0, ret(1,4));
+    ASSERT_DOUBLE_EQ(6.0, ret(1,5));
+    ASSERT_DOUBLE_EQ(1.0, ret(2,0));
+    ASSERT_DOUBLE_EQ(3.0, ret(2,1));
+    ASSERT_DOUBLE_EQ(6.0, ret(2,2));
+    ASSERT_DOUBLE_EQ(10.0, ret(2,3));
+    ASSERT_DOUBLE_EQ(15.0, ret(2,4));
+    ASSERT_DOUBLE_EQ(21.0, ret(2,5));
+    ASSERT_DOUBLE_EQ(1.0, ret(3,0));
+    ASSERT_DOUBLE_EQ(4.0, ret(3,1));
+    ASSERT_DOUBLE_EQ(10.0, ret(3,2));
+    ASSERT_DOUBLE_EQ(20.0, ret(3,3));
+    ASSERT_DOUBLE_EQ(35.0, ret(3,4));
+    ASSERT_DOUBLE_EQ(56.0, ret(3,5));
+    ASSERT_DOUBLE_EQ(1.0, ret(4,0));
+    ASSERT_DOUBLE_EQ(5.0, ret(4,1));
+    ASSERT_DOUBLE_EQ(15.0, ret(4,2));
+    ASSERT_DOUBLE_EQ(35.0, ret(4,3));
+    ASSERT_DOUBLE_EQ(70.0, ret(4,4));
+    ASSERT_DOUBLE_EQ(126.0, ret(4,5));
+    ASSERT_DOUBLE_EQ(1.0, ret(5,0));
+    ASSERT_DOUBLE_EQ(6.0, ret(5,1));
+    ASSERT_DOUBLE_EQ(21.0, ret(5,2));
+    ASSERT_DOUBLE_EQ(56.0, ret(5,3));
+    ASSERT_DOUBLE_EQ(126.0, ret(5,4));
+    ASSERT_DOUBLE_EQ(252.0, ret(5,5));
+}
+
+TEST_F(BodyBuilderTest, build_added_matrix_on_no_added_mass)
+{
+    const std::string no_added_mass =
+        "added mass matrix at the center of gravity and projected in the body frame:\n"
+        "    row 1: [0,0,0,0,0,0]\n"
+        "    row 2: [0,0,0,0,0,0]\n"
+        "    row 3: [0,0,0,0,0,0]\n"
+        "    row 4: [0,0,0,0,0,0]\n"
+        "    row 5: [0,0,0,0,0,0]\n"
+        "    row 6: [0,0,0,0,0,0]\n";
+    std::stringstream stream(no_added_mass);
+    YAML::Parser parser(stream);
+    YAML::Node node;
+    parser.GetNextDocument(node);
+    YamlDynamics6x6Matrix M;
+    parse_YamlDynamics6x6Matrix(node["added mass matrix at the center of gravity and projected in the body frame"], M, false);
+    const Eigen::Matrix<double,6,6> ret = build_added_matrix("my_body", M);
+    for (int i=0;i<6;++i)
+    {
+        for (int j=0;j<6;++j)
+        {
+            ASSERT_DOUBLE_EQ(0.0, ret(i,j));
+        }
+    }
+}
+
+void check_added_masses(const std::string& yaml_added_masses);
+void check_added_masses(const std::string& yaml_added_masses)
+{
+    std::stringstream stream(yaml_added_masses);
+    YAML::Parser parser(stream);
+    YAML::Node node;
+    parser.GetNextDocument(node);
+    YamlDynamics6x6Matrix M;
+    parse_YamlDynamics6x6Matrix(node["added mass matrix at the center of gravity and projected in the body frame"], M, false);
+    const Eigen::Matrix<double,6,6> ret = build_added_matrix("my_body", M);
+    ASSERT_DOUBLE_EQ(1.0, ret(0,0));
+    ASSERT_DOUBLE_EQ(1.0, ret(0,1));
+    ASSERT_DOUBLE_EQ(1.0, ret(0,2));
+    ASSERT_DOUBLE_EQ(1.0, ret(0,3));
+    ASSERT_DOUBLE_EQ(1.0, ret(0,4));
+    ASSERT_DOUBLE_EQ(1.0, ret(0,5));
+    ASSERT_DOUBLE_EQ(1.0, ret(1,0));
+    ASSERT_DOUBLE_EQ(2.0, ret(1,1));
+    ASSERT_DOUBLE_EQ(3.0, ret(1,2));
+    ASSERT_DOUBLE_EQ(4.0, ret(1,3));
+    ASSERT_DOUBLE_EQ(5.0, ret(1,4));
+    ASSERT_DOUBLE_EQ(6.0, ret(1,5));
+    ASSERT_DOUBLE_EQ(1.0, ret(2,0));
+    ASSERT_DOUBLE_EQ(3.0, ret(2,1));
+    ASSERT_DOUBLE_EQ(6.0, ret(2,2));
+    ASSERT_DOUBLE_EQ(10.0, ret(2,3));
+    ASSERT_DOUBLE_EQ(15.0, ret(2,4));
+    ASSERT_DOUBLE_EQ(21.0, ret(2,5));
+    ASSERT_DOUBLE_EQ(1.0, ret(3,0));
+    ASSERT_DOUBLE_EQ(4.0, ret(3,1));
+    ASSERT_DOUBLE_EQ(10.0, ret(3,2));
+    ASSERT_DOUBLE_EQ(20.0, ret(3,3));
+    ASSERT_DOUBLE_EQ(35.0, ret(3,4));
+    ASSERT_DOUBLE_EQ(56.0, ret(3,5));
+    ASSERT_DOUBLE_EQ(1.0, ret(4,0));
+    ASSERT_DOUBLE_EQ(5.0, ret(4,1));
+    ASSERT_DOUBLE_EQ(15.0, ret(4,2));
+    ASSERT_DOUBLE_EQ(35.0, ret(4,3));
+    ASSERT_DOUBLE_EQ(70.0, ret(4,4));
+    ASSERT_DOUBLE_EQ(126.0, ret(4,5));
+    ASSERT_DOUBLE_EQ(1.0, ret(5,0));
+    ASSERT_DOUBLE_EQ(6.0, ret(5,1));
+    ASSERT_DOUBLE_EQ(21.0, ret(5,2));
+    ASSERT_DOUBLE_EQ(56.0, ret(5,3));
+    ASSERT_DOUBLE_EQ(126.0, ret(5,4));
+    ASSERT_DOUBLE_EQ(252.0, ret(5,5));
+}
+
+TEST_F(BodyBuilderTest, build_added_matrix_without_specifying_convention)
+{
+    const std::string yaml_added_masses =
+        "added mass matrix at the center of gravity and projected in the body frame:\n"
+        "    row 1: [1,    1,    1,    1,    1,    1]\n"
+        "    row 2: [1,    2,    3,    4,    5,    6]\n"
+        "    row 3: [1,    3,    6,    10,   15,  21]\n"
+        "    row 4: [1,    4,    10,   20,   35,  56]\n"
+        "    row 5: [1,    5,    15,   35,   70, 126]\n"
+        "    row 6: [1,    6,    21,   56,  126, 252]\n";
+    check_added_masses(yaml_added_masses);
+}
+
+TEST_F(BodyBuilderTest, build_added_matrix_with_specifying_xdyn_convention)
+{
+    const std::string yaml_added_masses =
+        "added mass matrix at the center of gravity and projected in the body frame:\n"
+        "    row 1: [1,    1,    1,    1,    1,    1]\n"
+        "    row 2: [1,    2,    3,    4,    5,    6]\n"
+        "    row 3: [1,    3,    6,    10,   15,  21]\n"
+        "    row 4: [1,    4,    10,   20,   35,  56]\n"
+        "    row 5: [1,    5,    15,   35,   70, 126]\n"
+        "    row 6: [1,    6,    21,   56,  126, 252]\n"
+        "    convention z down: true\n";
+    check_added_masses(yaml_added_masses);
+}
+
+TEST_F(BodyBuilderTest, build_added_matrix_with_specifying_zup_convention)
+{
+    const std::string yaml_added_masses =
+        "added mass matrix at the center of gravity and projected in the body frame:\n"
+        "    row 1: [+1,   -1,   -1,    +1,   -1,   -1]\n"
+        "    row 2: [-1,   +2,   +3,    -4,   +5,   +6]\n"
+        "    row 3: [-1,   +3,   +6,   -10,  +15,  +21]\n"
+        "    row 4: [+1,   -4,   -10,  +20,  -35,  -56]\n"
+        "    row 5: [-1,   +5,   +15,  -35,  +70, +126]\n"
+        "    row 6: [-1,   +6,   +21,  -56, +126, +252]\n"
+        "    convention z down: false\n";
+    check_added_masses(yaml_added_masses);
 }
