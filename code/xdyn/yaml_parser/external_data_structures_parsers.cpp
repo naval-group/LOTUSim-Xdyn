@@ -170,48 +170,60 @@ void operator >> (const YAML::Node& node, YamlSpeed& s)
 void operator >> (const YAML::Node& node, YamlDynamics& d)
 {
     parse_point_with_name(node["centre of inertia"], d.centre_of_inertia, "centre of inertia");
-    if (node.FindValue("rigid body inertia matrix at the center of buoyancy projected in the body frame"))
+    const std::string rb_buoyancy("rigid body inertia matrix at the center of buoyancy projected in the body frame");
+    const std::string rb_gravity("rigid body inertia matrix at the center of gravity and projected in the body frame");
+    const std::string am_buoyancy("added mass matrix at the center of buoyancy projected in the body frame");
+    const std::string am_gravity("added mass matrix at the center of gravity and projected in the body frame");
+    if (node.FindValue(rb_buoyancy) and node.FindValue(rb_gravity))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "One can not define both keys '" << rb_buoyancy <<"' and '" << rb_gravity << "'.");
+    }
+    if (node.FindValue(am_buoyancy) and node.FindValue(am_gravity))
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "One can not define both keys '" << am_buoyancy <<"' and '" << am_gravity << "'.");
+    }
+    if (node.FindValue(rb_buoyancy))
     {
         try
         {
-            parse_YamlDynamics6x6Matrix(node["rigid body inertia matrix at the center of buoyancy projected in the body frame"], d.rigid_body_inertia, false, d.centre_of_inertia.frame);
+            parse_YamlDynamics6x6Matrix(node[rb_buoyancy], d.rigid_body_inertia, false, d.centre_of_inertia.frame);
         }
         catch(const InvalidInputException& e)
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'rigid body inertia matrix at the center of buoyancy projected in the body frame': " << e.get_message());
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node '" << rb_buoyancy << "': " << e.get_message());
         }
     }
     else
     {
         try
         {
-            parse_YamlDynamics6x6Matrix(node["rigid body inertia matrix at the center of gravity and projected in the body frame"], d.rigid_body_inertia, false, d.centre_of_inertia.frame);
+            parse_YamlDynamics6x6Matrix(node[rb_gravity], d.rigid_body_inertia, false, d.centre_of_inertia.frame);
         }
         catch(const InvalidInputException& e)
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'rigid body inertia matrix at the center of gravity and projected in the body frame': " << e.get_message());
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node '" << rb_gravity << "': " << e.get_message());
         }
     }
-    if (node.FindValue("added mass matrix at the center of buoyancy projected in the body frame"))
+    if (node.FindValue(am_buoyancy))
     {
         try
         {
-            parse_YamlDynamics6x6Matrix(node["added mass matrix at the center of buoyancy projected in the body frame"], d.added_mass, false, d.centre_of_inertia.frame);
+            parse_YamlDynamics6x6Matrix(node[am_buoyancy], d.added_mass, false, d.centre_of_inertia.frame);
         }
         catch(const InvalidInputException& e)
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'added mass matrix at the center of buoyancy projected in the body frame': " << e.get_message());
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node '" << am_buoyancy << "': " << e.get_message());
         }
     }
     else
     {
         try
         {
-            parse_YamlDynamics6x6Matrix(node["added mass matrix at the center of gravity and projected in the body frame"], d.added_mass, false, d.centre_of_inertia.frame);
+            parse_YamlDynamics6x6Matrix(node[am_gravity], d.added_mass, false, d.centre_of_inertia.frame);
         }
         catch(const InvalidInputException& e)
         {
-            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'added mass matrix at the center of gravity and projected in the body frame': " << e.get_message());
+            THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node '" << am_gravity << "': " << e.get_message());
         }
     }
     node["hydrodynamic forces calculation point in body frame"] >> d.hydrodynamic_forces_calculation_point_in_body_frame;
