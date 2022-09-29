@@ -7,6 +7,7 @@
 
 #include "BodyBuilderTest.hpp"
 #include "BodyBuilder.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/external_data_structures/YamlDynamics6x6Matrix.hpp"
 #include "xdyn/external_file_formats/stl_reader.hpp"
 #include "xdyn/mesh/Mesh.hpp"
@@ -709,4 +710,18 @@ TEST_F(BodyBuilderTest, build_added_matrix_with_specifying_zup_convention)
         "    row 6: [-1,   +6,   +21,  -56, +126, +252]\n"
         "    convention z down: false\n";
     check_added_masses(yaml_added_masses);
+}
+
+TEST_F(BodyBuilderTest, build_added_matrix_with_invalid_optional_key)
+{
+    const std::string yaml_added_masses =
+        "added mass matrix at the center of gravity and projected in the body frame:\n"
+        "    row 1: [+1,   -1,   -1,    +1,   -1,   -1]\n"
+        "    row 2: [-1,   +2,   +3,    -4,   +5,   +6]\n"
+        "    row 3: [-1,   +3,   +6,   -10,  +15,  +21]\n"
+        "    row 4: [+1,   -4,   -10,  +20,  -35,  -56]\n"
+        "    row 5: [-1,   +5,   +15,  -35,  +70, +126]\n"
+        "    row 6: [-1,   +6,   +21,  -56, +126, +252]\n"
+        "    convention z down: invalid value\n";
+    ASSERT_THROW(check_added_masses(yaml_added_masses), InvalidInputException);
 }
