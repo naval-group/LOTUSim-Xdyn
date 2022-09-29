@@ -8,10 +8,10 @@
 #ifndef SUMOFWAVEDIRECTIONALSPREADINGS_HPP_
 #define SUMOFWAVEDIRECTIONALSPREADINGS_HPP_
 
+#include "xdyn/environment_models/WaveDirectionalSpreading.hpp"
 #include <ssc/macros.hpp>
 #include TR1INC(memory)
 
-#include "xdyn/environment_models/WaveDirectionalSpreading.hpp"
 
 /** \brief
  *  \details
