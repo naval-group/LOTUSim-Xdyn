@@ -57,7 +57,7 @@ LinearStiffnessForceModel::Input LinearStiffnessForceModel::parse(const std::str
     }
     catch(const InvalidInputException& e)
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'damping matrix at the center of gravity projected in the body frame': " << e.get_message());
+        THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node 'stiffness matrix': " << e.get_message());
     }
     ret.K = make_matrix6x6(M);
     parse_optional(node, "equilibrium position", ret.equilibrium_position);
