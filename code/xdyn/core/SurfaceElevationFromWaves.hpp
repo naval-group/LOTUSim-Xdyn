@@ -9,8 +9,8 @@
 #define SURFACEELEVATIONFROMWAVES_HPP_
 
 #include "xdyn/core/SurfaceElevationInterface.hpp"
-#include "xdyn/environment_models/WaveModel.hpp"
 #include "xdyn/core/Observer.hpp"
+#include "xdyn/environment_models/WaveModel.hpp"
 
 #include <ssc/kinematics.hpp>
 
@@ -27,13 +27,13 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
 {
     public:
         SurfaceElevationFromWaves(
-                const std::vector<WaveModelPtr>& models,
-                const std::pair<std::size_t,std::size_t> output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0),
-                const ssc::kinematics::PointMatrixPtr& output_mesh = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix("NED", 0)));
+            const std::vector<WaveModelPtr>& models,
+            const std::pair<std::size_t,std::size_t> output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0),
+            const ssc::kinematics::PointMatrixPtr& output_mesh = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix("NED", 0)));
         SurfaceElevationFromWaves(
-                const WaveModelPtr& model,
-                const std::pair<std::size_t,std::size_t> output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0),
-                const ssc::kinematics::PointMatrixPtr& output_mesh = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix("NED", 0)));
+            const WaveModelPtr& model,
+            const std::pair<std::size_t,std::size_t> output_mesh_size = std::make_pair((std::size_t)0,(std::size_t)0),
+            const ssc::kinematics::PointMatrixPtr& output_mesh = ssc::kinematics::PointMatrixPtr(new ssc::kinematics::PointMatrix("NED", 0)));
 
         std::vector<WaveModelPtr> get_models() const {return directional_spectra;};
 
@@ -41,7 +41,11 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
     private:
         SurfaceElevationFromWaves(); // Disabled
 
-        std::vector<FlatDiscreteDirectionalWaveSpectrum> get_flat_directional_spectra(const double x, const double y, const double t) const;
+        std::vector<FlatDiscreteDirectionalWaveSpectrum> get_flat_directional_spectra(
+            const double x,
+            const double y,
+            const double t
+            ) const;
 
         /**
          *  \section ex1 Example
@@ -49,23 +53,25 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
          *  \section ex2 Expected output
          *  \snippet core/unit_tests/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest relative_wave_height expected output
          *  */
-        std::vector<double> wave_height(const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
-                                        const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
-                                        const double t                //!< Current instant (in seconds)
-                                        ) const;
+        std::vector<double> wave_height(
+            const std::vector<double> &x, //!< x-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+            const std::vector<double> &y, //!< y-coordinates of the points, relative to the centre of the NED frame, projected in the NED frame
+            const double t                //!< Current instant (in seconds)
+            ) const;
 
         /**  \author cady
           *  \date Feb 3, 2015, 10:06:45 AM
           *  \brief Orbital velocity
           *  \returns Velocity of the fluid at given points & instant, in m/s
           */
-        ssc::kinematics::PointMatrix orbital_velocity(const double g,                 //!< gravity (in m/s^2)
-                                                      const std::vector<double>& x,   //!< x-positions in the NED frame (in meters)
-                                                      const std::vector<double>& y,   //!< y-positions in the NED frame (in meters)
-                                                      const std::vector<double>& z,   //!< z-positions in the NED frame (in meters)
-                                                      const double t,                 //!< Current time instant (in seconds)
-                                                      const std::vector<double>& eta //!< Wave elevations at (x,y) in the NED frame (in meters)
-                                                     ) const;
+        ssc::kinematics::PointMatrix orbital_velocity(
+                const double g,                 //!< gravity (in m/s^2)
+                const std::vector<double>& x,   //!< x-positions in the NED frame (in meters)
+                const std::vector<double>& y,   //!< y-positions in the NED frame (in meters)
+                const std::vector<double>& z,   //!< z-positions in the NED frame (in meters)
+                const double t,                 //!< Current time instant (in seconds)
+                const std::vector<double>& eta //!< Wave elevations at (x,y) in the NED frame (in meters)
+                ) const;
 
         /**  \brief Unsteady pressure field induced by undisturbed waves. Used to compute the Froude-Krylov forces.
           *  \details Also called "subsurface pressure" (by DNV), "unsteady pressure" (by Faltinsen) or constant pressure contour (by Lloyd)
@@ -83,14 +89,15 @@ class SurfaceElevationFromWaves: public SurfaceElevationInterface
          *  \section ex2 Expected output
          *  \snippet core/unit_tests/SurfaceElevationFromWavesTest.cpp SurfaceElevationFromWavesTest dynamic_pressure expected output
          *  */
-        std::vector<double> dynamic_pressure(const double rho,               //!< water density (in kg/m^3)
-                                             const double g,                 //!< gravity (in m/s^2)
-                                             const std::vector<double> &x,   //!< x-positions in the NED frame (in meters)
-                                             const std::vector<double> &y,   //!< y-positions in the NED frame (in meters)
-                                             const std::vector<double> &z,   //!< z-positions in the NED frame (in meters)
-                                             const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
-                                             const double t                  //!< Current time instant (in seconds)
-                                             ) const;
+        std::vector<double> dynamic_pressure(
+                const double rho,               //!< water density (in kg/m^3)
+                const double g,                 //!< gravity (in m/s^2)
+                const std::vector<double> &x,   //!< x-positions in the NED frame (in meters)
+                const std::vector<double> &y,   //!< y-positions in the NED frame (in meters)
+                const std::vector<double> &z,   //!< z-positions in the NED frame (in meters)
+                const std::vector<double> &eta, //!< Wave elevations at (x,y) in the NED frame (in meters)
+                const double t                  //!< Current time instant (in seconds)
+                ) const;
 
         std::vector<WaveModelPtr> directional_spectra;
 };
