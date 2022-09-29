@@ -51,6 +51,7 @@ TEST_F(BodyBuilderTest, name_should_be_correct)
 {
     ASSERT_EQ("body 1", body->get_name());
 }
+
 TEST_F(BodyBuilderTest, centre_of_gravity_should_be_computed_properly)
 {
     const auto G = body->get_states().G;
@@ -179,9 +180,9 @@ TEST_F(BodyBuilderTest, relative_position_should_be_correct)
     body_unit_normal = ctm * unit_normal;
 
     for i=1:n
-        fprintf('ASSERT_NEAR(%18.12f,(double)body.states.mesh->facets.at(%d).unit_normal(0),EPS);\n',body_unit_normal(1,i),i-1);
-        fprintf('ASSERT_NEAR(%18.12f,(double)body.states.mesh->facets.at(%d).unit_normal(1),EPS);\n',body_unit_normal(2,i),i-1);
-        fprintf('ASSERT_NEAR(%18.12f,(double)body.states.mesh->facets.at(%d).unit_normal(2),EPS);\n',body_unit_normal(3,i),i-1);
+        fprintf('ASSERT_NEAR(%18.12f, body.states.mesh->facets.at(%d).unit_normal(0), EPS);\n',body_unit_normal(1,i),i-1);
+        fprintf('ASSERT_NEAR(%18.12f, body.states.mesh->facets.at(%d).unit_normal(1), EPS);\n',body_unit_normal(2,i),i-1);
+        fprintf('ASSERT_NEAR(%18.12f, body.states.mesh->facets.at(%d).unit_normal(2), EPS);\n',body_unit_normal(3,i),i-1);
         fprintf('\n');
     end
     % Data
@@ -230,9 +231,9 @@ TEST_F(BodyBuilderTest, relative_position_should_be_correct)
     for i=1:n
         bary = sum(vertices(:,1+3*(i-1):3+3*(i-1)),2)/3;
         body_bary = ctm * bary -ctm*translation;
-        fprintf('ASSERT_NEAR(%18.12f,(double)body.states.mesh->facets.at(%d).barycenter(0),EPS);\n',body_bary(1),i-1);
-        fprintf('ASSERT_NEAR(%18.12f,(double)body.states.mesh->facets.at(%d).barycenter(1),EPS);\n',body_bary(2),i-1);
-        fprintf('ASSERT_NEAR(%18.12f,(double)body.states.mesh->facets.at(%d).barycenter(2),EPS);\n',body_bary(3),i-1);
+        fprintf('ASSERT_NEAR(%18.12f, body.states.mesh->facets.at(%d).barycenter(0), EPS);\n',body_bary(1),i-1);
+        fprintf('ASSERT_NEAR(%18.12f, body.states.mesh->facets.at(%d).barycenter(1), EPS);\n',body_bary(2),i-1);
+        fprintf('ASSERT_NEAR(%18.12f, body.states.mesh->facets.at(%d).barycenter(2), EPS);\n',body_bary(3),i-1);
         fprintf('\n');
     end
 
@@ -247,121 +248,121 @@ TEST_F(BodyBuilderTest, mesh_is_correct)
     {
         ASSERT_DOUBLE_EQ(0.5,states.mesh->facets.at(i).area) << std::endl << "Facet: " << i << " (starting at 0)";
     }
-    ASSERT_NEAR(   -0.141120008060,(double)states.mesh->facets.at(0).unit_normal(0),EPS);
-    ASSERT_NEAR(   -0.833049961067,(double)states.mesh->facets.at(0).unit_normal(1),EPS);
-    ASSERT_NEAR(   -0.534895228705,(double)states.mesh->facets.at(0).unit_normal(2),EPS);
+    ASSERT_NEAR(   -0.141120008060, states.mesh->facets.at(0).unit_normal(0), EPS);
+    ASSERT_NEAR(   -0.833049961067, states.mesh->facets.at(0).unit_normal(1), EPS);
+    ASSERT_NEAR(   -0.534895228705, states.mesh->facets.at(0).unit_normal(2), EPS);
 
-    ASSERT_NEAR(   -0.141120008060,(double)states.mesh->facets.at(1).unit_normal(0),EPS);
-    ASSERT_NEAR(   -0.833049961067,(double)states.mesh->facets.at(1).unit_normal(1),EPS);
-    ASSERT_NEAR(   -0.534895228705,(double)states.mesh->facets.at(1).unit_normal(2),EPS);
+    ASSERT_NEAR(   -0.141120008060, states.mesh->facets.at(1).unit_normal(0), EPS);
+    ASSERT_NEAR(   -0.833049961067, states.mesh->facets.at(1).unit_normal(1), EPS);
+    ASSERT_NEAR(   -0.534895228705, states.mesh->facets.at(1).unit_normal(2), EPS);
 
-    ASSERT_NEAR(    0.141120008060,(double)states.mesh->facets.at(2).unit_normal(0),EPS);
-    ASSERT_NEAR(    0.833049961067,(double)states.mesh->facets.at(2).unit_normal(1),EPS);
-    ASSERT_NEAR(    0.534895228705,(double)states.mesh->facets.at(2).unit_normal(2),EPS);
+    ASSERT_NEAR(    0.141120008060, states.mesh->facets.at(2).unit_normal(0), EPS);
+    ASSERT_NEAR(    0.833049961067, states.mesh->facets.at(2).unit_normal(1), EPS);
+    ASSERT_NEAR(    0.534895228705, states.mesh->facets.at(2).unit_normal(2), EPS);
 
-    ASSERT_NEAR(    0.141120008060,(double)states.mesh->facets.at(3).unit_normal(0),EPS);
-    ASSERT_NEAR(    0.833049961067,(double)states.mesh->facets.at(3).unit_normal(1),EPS);
-    ASSERT_NEAR(    0.534895228705,(double)states.mesh->facets.at(3).unit_normal(2),EPS);
+    ASSERT_NEAR(    0.141120008060, states.mesh->facets.at(3).unit_normal(0), EPS);
+    ASSERT_NEAR(    0.833049961067, states.mesh->facets.at(3).unit_normal(1), EPS);
+    ASSERT_NEAR(    0.534895228705, states.mesh->facets.at(3).unit_normal(2), EPS);
 
-    ASSERT_NEAR(   -0.411982245666,(double)states.mesh->facets.at(4).unit_normal(0),EPS);
-    ASSERT_NEAR(    0.540712264176,(double)states.mesh->facets.at(4).unit_normal(1),EPS);
-    ASSERT_NEAR(   -0.733417259564,(double)states.mesh->facets.at(4).unit_normal(2),EPS);
+    ASSERT_NEAR(   -0.411982245666, states.mesh->facets.at(4).unit_normal(0), EPS);
+    ASSERT_NEAR(    0.540712264176, states.mesh->facets.at(4).unit_normal(1), EPS);
+    ASSERT_NEAR(   -0.733417259564, states.mesh->facets.at(4).unit_normal(2), EPS);
 
-    ASSERT_NEAR(   -0.411982245666,(double)states.mesh->facets.at(5).unit_normal(0),EPS);
-    ASSERT_NEAR(    0.540712264176,(double)states.mesh->facets.at(5).unit_normal(1),EPS);
-    ASSERT_NEAR(   -0.733417259564,(double)states.mesh->facets.at(5).unit_normal(2),EPS);
+    ASSERT_NEAR(   -0.411982245666, states.mesh->facets.at(5).unit_normal(0), EPS);
+    ASSERT_NEAR(    0.540712264176, states.mesh->facets.at(5).unit_normal(1), EPS);
+    ASSERT_NEAR(   -0.733417259564, states.mesh->facets.at(5).unit_normal(2), EPS);
 
-    ASSERT_NEAR(    0.411982245666,(double)states.mesh->facets.at(6).unit_normal(0),EPS);
-    ASSERT_NEAR(   -0.540712264176,(double)states.mesh->facets.at(6).unit_normal(1),EPS);
-    ASSERT_NEAR(    0.733417259564,(double)states.mesh->facets.at(6).unit_normal(2),EPS);
+    ASSERT_NEAR(    0.411982245666, states.mesh->facets.at(6).unit_normal(0), EPS);
+    ASSERT_NEAR(   -0.540712264176, states.mesh->facets.at(6).unit_normal(1), EPS);
+    ASSERT_NEAR(    0.733417259564, states.mesh->facets.at(6).unit_normal(2), EPS);
 
-    ASSERT_NEAR(    0.411982245666,(double)states.mesh->facets.at(7).unit_normal(0),EPS);
-    ASSERT_NEAR(   -0.540712264176,(double)states.mesh->facets.at(7).unit_normal(1),EPS);
-    ASSERT_NEAR(    0.733417259564,(double)states.mesh->facets.at(7).unit_normal(2),EPS);
+    ASSERT_NEAR(    0.411982245666, states.mesh->facets.at(7).unit_normal(0), EPS);
+    ASSERT_NEAR(   -0.540712264176, states.mesh->facets.at(7).unit_normal(1), EPS);
+    ASSERT_NEAR(    0.733417259564, states.mesh->facets.at(7).unit_normal(2), EPS);
 
-    ASSERT_NEAR(    0.900197629736,(double)states.mesh->facets.at(8).unit_normal(0),EPS);
-    ASSERT_NEAR(    0.116867487937,(double)states.mesh->facets.at(8).unit_normal(1),EPS);
-    ASSERT_NEAR(   -0.419507112791,(double)states.mesh->facets.at(8).unit_normal(2),EPS);
+    ASSERT_NEAR(    0.900197629736, states.mesh->facets.at(8).unit_normal(0), EPS);
+    ASSERT_NEAR(    0.116867487937, states.mesh->facets.at(8).unit_normal(1), EPS);
+    ASSERT_NEAR(   -0.419507112791, states.mesh->facets.at(8).unit_normal(2), EPS);
 
-    ASSERT_NEAR(    0.900197629736,(double)states.mesh->facets.at(9).unit_normal(0),EPS);
-    ASSERT_NEAR(    0.116867487937,(double)states.mesh->facets.at(9).unit_normal(1),EPS);
-    ASSERT_NEAR(   -0.419507112791,(double)states.mesh->facets.at(9).unit_normal(2),EPS);
+    ASSERT_NEAR(    0.900197629736, states.mesh->facets.at(9).unit_normal(0), EPS);
+    ASSERT_NEAR(    0.116867487937, states.mesh->facets.at(9).unit_normal(1), EPS);
+    ASSERT_NEAR(   -0.419507112791, states.mesh->facets.at(9).unit_normal(2), EPS);
 
-    ASSERT_NEAR(   -0.900197629736,(double)states.mesh->facets.at(10).unit_normal(0),EPS);
-    ASSERT_NEAR(   -0.116867487937,(double)states.mesh->facets.at(10).unit_normal(1),EPS);
-    ASSERT_NEAR(    0.419507112791,(double)states.mesh->facets.at(10).unit_normal(2),EPS);
+    ASSERT_NEAR(   -0.900197629736, states.mesh->facets.at(10).unit_normal(0), EPS);
+    ASSERT_NEAR(   -0.116867487937, states.mesh->facets.at(10).unit_normal(1), EPS);
+    ASSERT_NEAR(    0.419507112791, states.mesh->facets.at(10).unit_normal(2), EPS);
 
-    ASSERT_NEAR(   -0.900197629736,(double)states.mesh->facets.at(11).unit_normal(0),EPS);
-    ASSERT_NEAR(   -0.116867487937,(double)states.mesh->facets.at(11).unit_normal(1),EPS);
-    ASSERT_NEAR(    0.419507112791,(double)states.mesh->facets.at(11).unit_normal(2),EPS);
+    ASSERT_NEAR(   -0.900197629736, states.mesh->facets.at(11).unit_normal(0), EPS);
+    ASSERT_NEAR(   -0.116867487937, states.mesh->facets.at(11).unit_normal(1), EPS);
+    ASSERT_NEAR(    0.419507112791, states.mesh->facets.at(11).unit_normal(2), EPS);
 
-    ASSERT_NEAR( 4653.107061659046,(double)states.mesh->facets.at(0).centre_of_gravity(0),EPS);
-    ASSERT_NEAR(27495.176689261680,(double)states.mesh->facets.at(0).centre_of_gravity(1),EPS);
-    ASSERT_NEAR(17643.637701317213,(double)states.mesh->facets.at(0).centre_of_gravity(2),EPS);
+    ASSERT_NEAR( 4653.107061659046, states.mesh->facets.at(0).centre_of_gravity(0), EPS);
+    ASSERT_NEAR(27495.176689261680, states.mesh->facets.at(0).centre_of_gravity(1), EPS);
+    ASSERT_NEAR(17643.637701317213, states.mesh->facets.at(0).centre_of_gravity(2), EPS);
 
-    ASSERT_NEAR( 4652.669668367245,(double)states.mesh->facets.at(1).centre_of_gravity(0),EPS);
-    ASSERT_NEAR(27495.317970853757,(double)states.mesh->facets.at(1).centre_of_gravity(1),EPS);
-    ASSERT_NEAR(17643.533064601623,(double)states.mesh->facets.at(1).centre_of_gravity(2),EPS);
+    ASSERT_NEAR( 4652.669668367245, states.mesh->facets.at(1).centre_of_gravity(0), EPS);
+    ASSERT_NEAR(27495.317970853757, states.mesh->facets.at(1).centre_of_gravity(1), EPS);
+    ASSERT_NEAR(17643.533064601623, states.mesh->facets.at(1).centre_of_gravity(2), EPS);
 
-    ASSERT_NEAR( 4653.110854251884,(double)states.mesh->facets.at(2).centre_of_gravity(0),EPS);
-    ASSERT_NEAR(27496.189976644138,(double)states.mesh->facets.at(2).centre_of_gravity(1),EPS);
-    ASSERT_NEAR(17643.928124126061,(double)states.mesh->facets.at(2).centre_of_gravity(2),EPS);
+    ASSERT_NEAR( 4653.110854251884, states.mesh->facets.at(2).centre_of_gravity(0), EPS);
+    ASSERT_NEAR(27496.189976644138, states.mesh->facets.at(2).centre_of_gravity(1), EPS);
+    ASSERT_NEAR(17643.928124126061, states.mesh->facets.at(2).centre_of_gravity(2), EPS);
 
-    ASSERT_NEAR( 4652.948115790528,(double)states.mesh->facets.at(3).centre_of_gravity(0),EPS);
-    ASSERT_NEAR(27495.970783393434,(double)states.mesh->facets.at(3).centre_of_gravity(1),EPS);
-    ASSERT_NEAR(17644.312432250183,(double)states.mesh->facets.at(3).centre_of_gravity(2),EPS);
+    ASSERT_NEAR( 4652.948115790528, states.mesh->facets.at(3).centre_of_gravity(0), EPS);
+    ASSERT_NEAR(27495.970783393434, states.mesh->facets.at(3).centre_of_gravity(1), EPS);
+    ASSERT_NEAR(17644.312432250183, states.mesh->facets.at(3).centre_of_gravity(2), EPS);
 
-    ASSERT_NEAR( 4652.879446831289,(double)states.mesh->facets.at(4).centre_of_gravity(0),EPS);
-    ASSERT_NEAR(27495.814847424819,(double)states.mesh->facets.at(4).centre_of_gravity(1),EPS);
-    ASSERT_NEAR(17643.327054887071,(double)states.mesh->facets.at(4).centre_of_gravity(2),EPS);
+    ASSERT_NEAR( 4652.879446831289, states.mesh->facets.at(4).centre_of_gravity(0), EPS);
+    ASSERT_NEAR(27495.814847424819, states.mesh->facets.at(4).centre_of_gravity(1), EPS);
+    ASSERT_NEAR(17643.327054887071, states.mesh->facets.at(4).centre_of_gravity(2), EPS);
 
-    ASSERT_NEAR( 4652.626420957397,(double)states.mesh->facets.at(5).centre_of_gravity(0),EPS);
-    ASSERT_NEAR(27496.053574915863,(double)states.mesh->facets.at(5).centre_of_gravity(1),EPS);
-    ASSERT_NEAR(17643.645189000905,(double)states.mesh->facets.at(5).centre_of_gravity(2),EPS);
+    ASSERT_NEAR( 4652.626420957397, states.mesh->facets.at(5).centre_of_gravity(0), EPS);
+    ASSERT_NEAR(27496.053574915863, states.mesh->facets.at(5).centre_of_gravity(1), EPS);
+    ASSERT_NEAR(17643.645189000905, states.mesh->facets.at(5).centre_of_gravity(2), EPS);
 
-    ASSERT_NEAR( 4653.338469079641,(double)states.mesh->facets.at(6).centre_of_gravity(0),EPS);
-    ASSERT_NEAR(27495.551818480999,(double)states.mesh->facets.at(6).centre_of_gravity(1),EPS);
-    ASSERT_NEAR(17644.238770556203,(double)states.mesh->facets.at(6).centre_of_gravity(2),EPS);
+    ASSERT_NEAR( 4653.338469079641, states.mesh->facets.at(6).centre_of_gravity(0), EPS);
+    ASSERT_NEAR(27495.551818480999, states.mesh->facets.at(6).centre_of_gravity(1), EPS);
+    ASSERT_NEAR(17644.238770556203, states.mesh->facets.at(6).centre_of_gravity(2), EPS);
 
-    ASSERT_NEAR( 4652.991363200376,(double)states.mesh->facets.at(7).centre_of_gravity(0),EPS);
-    ASSERT_NEAR(27495.235179331332,(double)states.mesh->facets.at(7).centre_of_gravity(1),EPS);
-    ASSERT_NEAR(17644.200307850901,(double)states.mesh->facets.at(7).centre_of_gravity(2),EPS);
+    ASSERT_NEAR( 4652.991363200376, states.mesh->facets.at(7).centre_of_gravity(0), EPS);
+    ASSERT_NEAR(27495.235179331332, states.mesh->facets.at(7).centre_of_gravity(1), EPS);
+    ASSERT_NEAR(17644.200307850901, states.mesh->facets.at(7).centre_of_gravity(2), EPS);
 
-    ASSERT_NEAR( 4653.501207540998,(double)states.mesh->facets.at(8).centre_of_gravity(0),EPS);
-    ASSERT_NEAR(27495.771011731704,(double)states.mesh->facets.at(8).centre_of_gravity(1),EPS);
-    ASSERT_NEAR(17643.854462432086,(double)states.mesh->facets.at(8).centre_of_gravity(2),EPS);
+    ASSERT_NEAR( 4653.501207540998, states.mesh->facets.at(8).centre_of_gravity(0), EPS);
+    ASSERT_NEAR(27495.771011731704, states.mesh->facets.at(8).centre_of_gravity(1), EPS);
+    ASSERT_NEAR(17643.854462432086, states.mesh->facets.at(8).centre_of_gravity(2), EPS);
 
-    ASSERT_NEAR( 4653.316840123090,(double)states.mesh->facets.at(9).centre_of_gravity(0),EPS);
-    ASSERT_NEAR(27495.673565832738,(double)states.mesh->facets.at(9).centre_of_gravity(1),EPS);
-    ASSERT_NEAR(17643.431691602662,(double)states.mesh->facets.at(9).centre_of_gravity(2),EPS);
+    ASSERT_NEAR( 4653.316840123090, states.mesh->facets.at(9).centre_of_gravity(0), EPS);
+    ASSERT_NEAR(27495.673565832738, states.mesh->facets.at(9).centre_of_gravity(1), EPS);
+    ASSERT_NEAR(17643.431691602662, states.mesh->facets.at(9).centre_of_gravity(2), EPS);
 
-    ASSERT_NEAR( 4652.553969908576,(double)states.mesh->facets.at(10).centre_of_gravity(0),EPS);
-    ASSERT_NEAR(27495.376460923409,(double)states.mesh->facets.at(10).centre_of_gravity(1),EPS);
-    ASSERT_NEAR(17644.095671135306,(double)states.mesh->facets.at(10).centre_of_gravity(2),EPS);
+    ASSERT_NEAR( 4652.553969908576, states.mesh->facets.at(10).centre_of_gravity(0), EPS);
+    ASSERT_NEAR(27495.376460923409, states.mesh->facets.at(10).centre_of_gravity(1), EPS);
+    ASSERT_NEAR(17644.095671135306, states.mesh->facets.at(10).centre_of_gravity(2), EPS);
 
-    ASSERT_NEAR( 4652.463682496041,(double)states.mesh->facets.at(11).centre_of_gravity(0),EPS);
-    ASSERT_NEAR(27495.834381665158,(double)states.mesh->facets.at(11).centre_of_gravity(1),EPS);
-    ASSERT_NEAR(17644.029497125022,(double)states.mesh->facets.at(11).centre_of_gravity(2),EPS);
+    ASSERT_NEAR( 4652.463682496041, states.mesh->facets.at(11).centre_of_gravity(0), EPS);
+    ASSERT_NEAR(27495.834381665158, states.mesh->facets.at(11).centre_of_gravity(1), EPS);
+    ASSERT_NEAR(17644.029497125022, states.mesh->facets.at(11).centre_of_gravity(2), EPS);
 
     ASSERT_EQ(8,states.mesh->nodes.cols());
     ASSERT_EQ(3,states.mesh->nodes.rows());
-    ASSERT_NEAR( 4653.132472705181,(double)states.mesh->nodes.col(0)(0),EPS);
-    ASSERT_NEAR(27495.576119933776,(double)states.mesh->nodes.col(0)(1),EPS);
-    ASSERT_NEAR(17643.008920773238,(double)states.mesh->nodes.col(0)(2),EPS);
+    ASSERT_NEAR( 4653.132472705181, states.mesh->nodes.col(0)(0), EPS);
+    ASSERT_NEAR(27495.576119933776, states.mesh->nodes.col(0)(1), EPS);
+    ASSERT_NEAR(17643.008920773238, states.mesh->nodes.col(0)(2), EPS);
 }
 
 TEST_F(BodyBuilderTest, mesh_to_body_is_correct)
 {
     const auto states = body->get_states();
-    ASSERT_DOUBLE_EQ(0.41198224566568298,     (double)states.mesh_to_body(0,0));
-    ASSERT_DOUBLE_EQ(-0.90019762973551742391, (double)states.mesh_to_body(1,0));
-    ASSERT_DOUBLE_EQ(-0.14112000805986721352, (double)states.mesh_to_body(2,0));
-    ASSERT_DOUBLE_EQ(-0.54071226417559081767, (double)states.mesh_to_body(0,1));
-    ASSERT_DOUBLE_EQ(-0.11686748793698308047, (double)states.mesh_to_body(1,1));
-    ASSERT_DOUBLE_EQ(-0.83304996106680495593, (double)states.mesh_to_body(2,1));
-    ASSERT_DOUBLE_EQ(0.73341725956399950181,  (double)states.mesh_to_body(0,2));
-    ASSERT_DOUBLE_EQ(0.41950711279054053726,  (double)states.mesh_to_body(1,2));
-    ASSERT_DOUBLE_EQ(-0.53489522870537720145, (double)states.mesh_to_body(2,2));
+    ASSERT_DOUBLE_EQ(0.41198224566568298,     states.mesh_to_body(0,0));
+    ASSERT_DOUBLE_EQ(-0.90019762973551742391, states.mesh_to_body(1,0));
+    ASSERT_DOUBLE_EQ(-0.14112000805986721352, states.mesh_to_body(2,0));
+    ASSERT_DOUBLE_EQ(-0.54071226417559081767, states.mesh_to_body(0,1));
+    ASSERT_DOUBLE_EQ(-0.11686748793698308047, states.mesh_to_body(1,1));
+    ASSERT_DOUBLE_EQ(-0.83304996106680495593, states.mesh_to_body(2,1));
+    ASSERT_DOUBLE_EQ(0.73341725956399950181,  states.mesh_to_body(0,2));
+    ASSERT_DOUBLE_EQ(0.41950711279054053726,  states.mesh_to_body(1,2));
+    ASSERT_DOUBLE_EQ(-0.53489522870537720145, states.mesh_to_body(2,2));
 }
 
 /**
@@ -373,48 +374,48 @@ TEST_F(BodyBuilderTest, mesh_to_body_is_correct)
     Mt = Ma+Mrb
     for i in range(6):
         for j in range(6):
-            print('    ASSERT_DOUBLE_EQ({2},(double)states.solid_body_inertia({0},{1}));'.format(i,j,Mrb[i,j]))
+            print('    ASSERT_DOUBLE_EQ({2}.0, states.solid_body_inertia({0},{1}));'.format(i,j,Mrb[i,j]))
  * \endcode
  */
 TEST_F(BodyBuilderTest, rigid_body_inertia_is_correct)
 {
     const auto states = body->get_states();
-    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia(0,0));
-    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia(0,1));
-    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia(0,2));
-    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia(0,3));
-    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia(0,4));
-    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia(0,5));
-    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia(1,0));
-    ASSERT_DOUBLE_EQ(12,(double)states.solid_body_inertia(1,1));
-    ASSERT_DOUBLE_EQ(13,(double)states.solid_body_inertia(1,2));
-    ASSERT_DOUBLE_EQ(14,(double)states.solid_body_inertia(1,3));
-    ASSERT_DOUBLE_EQ(15,(double)states.solid_body_inertia(1,4));
-    ASSERT_DOUBLE_EQ(16,(double)states.solid_body_inertia(1,5));
-    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia(2,0));
-    ASSERT_DOUBLE_EQ(13,(double)states.solid_body_inertia(2,1));
-    ASSERT_DOUBLE_EQ(16,(double)states.solid_body_inertia(2,2));
-    ASSERT_DOUBLE_EQ(20,(double)states.solid_body_inertia(2,3));
-    ASSERT_DOUBLE_EQ(25,(double)states.solid_body_inertia(2,4));
-    ASSERT_DOUBLE_EQ(31,(double)states.solid_body_inertia(2,5));
-    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia(3,0));
-    ASSERT_DOUBLE_EQ(14,(double)states.solid_body_inertia(3,1));
-    ASSERT_DOUBLE_EQ(20,(double)states.solid_body_inertia(3,2));
-    ASSERT_DOUBLE_EQ(30,(double)states.solid_body_inertia(3,3));
-    ASSERT_DOUBLE_EQ(45,(double)states.solid_body_inertia(3,4));
-    ASSERT_DOUBLE_EQ(66,(double)states.solid_body_inertia(3,5));
-    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia(4,0));
-    ASSERT_DOUBLE_EQ(15,(double)states.solid_body_inertia(4,1));
-    ASSERT_DOUBLE_EQ(25,(double)states.solid_body_inertia(4,2));
-    ASSERT_DOUBLE_EQ(45,(double)states.solid_body_inertia(4,3));
-    ASSERT_DOUBLE_EQ(80,(double)states.solid_body_inertia(4,4));
-    ASSERT_DOUBLE_EQ(136,(double)states.solid_body_inertia(4,5));
-    ASSERT_DOUBLE_EQ(11,(double)states.solid_body_inertia(5,0));
-    ASSERT_DOUBLE_EQ(16,(double)states.solid_body_inertia(5,1));
-    ASSERT_DOUBLE_EQ(31,(double)states.solid_body_inertia(5,2));
-    ASSERT_DOUBLE_EQ(66,(double)states.solid_body_inertia(5,3));
-    ASSERT_DOUBLE_EQ(136,(double)states.solid_body_inertia(5,4));
-    ASSERT_DOUBLE_EQ(262,(double)states.solid_body_inertia(5,5));
+    ASSERT_DOUBLE_EQ(11.0, states.solid_body_inertia(0,0));
+    ASSERT_DOUBLE_EQ(11.0, states.solid_body_inertia(0,1));
+    ASSERT_DOUBLE_EQ(11.0, states.solid_body_inertia(0,2));
+    ASSERT_DOUBLE_EQ(11.0, states.solid_body_inertia(0,3));
+    ASSERT_DOUBLE_EQ(11.0, states.solid_body_inertia(0,4));
+    ASSERT_DOUBLE_EQ(11.0, states.solid_body_inertia(0,5));
+    ASSERT_DOUBLE_EQ(11.0, states.solid_body_inertia(1,0));
+    ASSERT_DOUBLE_EQ(12.0, states.solid_body_inertia(1,1));
+    ASSERT_DOUBLE_EQ(13.0, states.solid_body_inertia(1,2));
+    ASSERT_DOUBLE_EQ(14.0, states.solid_body_inertia(1,3));
+    ASSERT_DOUBLE_EQ(15.0, states.solid_body_inertia(1,4));
+    ASSERT_DOUBLE_EQ(16.0, states.solid_body_inertia(1,5));
+    ASSERT_DOUBLE_EQ(11.0, states.solid_body_inertia(2,0));
+    ASSERT_DOUBLE_EQ(13.0, states.solid_body_inertia(2,1));
+    ASSERT_DOUBLE_EQ(16.0, states.solid_body_inertia(2,2));
+    ASSERT_DOUBLE_EQ(20.0, states.solid_body_inertia(2,3));
+    ASSERT_DOUBLE_EQ(25.0, states.solid_body_inertia(2,4));
+    ASSERT_DOUBLE_EQ(31.0, states.solid_body_inertia(2,5));
+    ASSERT_DOUBLE_EQ(11.0, states.solid_body_inertia(3,0));
+    ASSERT_DOUBLE_EQ(14.0, states.solid_body_inertia(3,1));
+    ASSERT_DOUBLE_EQ(20.0, states.solid_body_inertia(3,2));
+    ASSERT_DOUBLE_EQ(30.0, states.solid_body_inertia(3,3));
+    ASSERT_DOUBLE_EQ(45.0, states.solid_body_inertia(3,4));
+    ASSERT_DOUBLE_EQ(66.0, states.solid_body_inertia(3,5));
+    ASSERT_DOUBLE_EQ(11.0, states.solid_body_inertia(4,0));
+    ASSERT_DOUBLE_EQ(15.0, states.solid_body_inertia(4,1));
+    ASSERT_DOUBLE_EQ(25.0, states.solid_body_inertia(4,2));
+    ASSERT_DOUBLE_EQ(45.0, states.solid_body_inertia(4,3));
+    ASSERT_DOUBLE_EQ(80.0, states.solid_body_inertia(4,4));
+    ASSERT_DOUBLE_EQ(136.0, states.solid_body_inertia(4,5));
+    ASSERT_DOUBLE_EQ(11.0, states.solid_body_inertia(5,0));
+    ASSERT_DOUBLE_EQ(16.0, states.solid_body_inertia(5,1));
+    ASSERT_DOUBLE_EQ(31.0, states.solid_body_inertia(5,2));
+    ASSERT_DOUBLE_EQ(66.0, states.solid_body_inertia(5,3));
+    ASSERT_DOUBLE_EQ(136.0, states.solid_body_inertia(5,4));
+    ASSERT_DOUBLE_EQ(262.0, states.solid_body_inertia(5,5));
 }
 
 /**
@@ -426,48 +427,48 @@ TEST_F(BodyBuilderTest, rigid_body_inertia_is_correct)
     Mt = Ma+Mrb
     for i in range(6):
         for j in range(6):
-            print('    ASSERT_DOUBLE_EQ({2},(double)states.total_inertia->operator()({0},{1}));'.format(i,j,Mt[i,j]))
+            print('    ASSERT_DOUBLE_EQ({2}.0, states.total_inertia->operator()({0},{1}));'.format(i,j,Mt[i,j]))
  * \endcode
  */
 TEST_F(BodyBuilderTest, total_inertia_is_correct)
 {
     const auto states = body->get_states();
-    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia(0,0));
-    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia(0,1));
-    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia(0,2));
-    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia(0,3));
-    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia(0,4));
-    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia(0,5));
-    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia(1,0));
-    ASSERT_DOUBLE_EQ(14,(double)states.total_inertia(1,1));
-    ASSERT_DOUBLE_EQ(16,(double)states.total_inertia(1,2));
-    ASSERT_DOUBLE_EQ(18,(double)states.total_inertia(1,3));
-    ASSERT_DOUBLE_EQ(20,(double)states.total_inertia(1,4));
-    ASSERT_DOUBLE_EQ(22,(double)states.total_inertia(1,5));
-    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia(2,0));
-    ASSERT_DOUBLE_EQ(16,(double)states.total_inertia(2,1));
-    ASSERT_DOUBLE_EQ(22,(double)states.total_inertia(2,2));
-    ASSERT_DOUBLE_EQ(30,(double)states.total_inertia(2,3));
-    ASSERT_DOUBLE_EQ(40,(double)states.total_inertia(2,4));
-    ASSERT_DOUBLE_EQ(52,(double)states.total_inertia(2,5));
-    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia(3,0));
-    ASSERT_DOUBLE_EQ(18,(double)states.total_inertia(3,1));
-    ASSERT_DOUBLE_EQ(30,(double)states.total_inertia(3,2));
-    ASSERT_DOUBLE_EQ(50,(double)states.total_inertia(3,3));
-    ASSERT_DOUBLE_EQ(80,(double)states.total_inertia(3,4));
-    ASSERT_DOUBLE_EQ(122,(double)states.total_inertia(3,5));
-    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia(4,0));
-    ASSERT_DOUBLE_EQ(20,(double)states.total_inertia(4,1));
-    ASSERT_DOUBLE_EQ(40,(double)states.total_inertia(4,2));
-    ASSERT_DOUBLE_EQ(80,(double)states.total_inertia(4,3));
-    ASSERT_DOUBLE_EQ(150,(double)states.total_inertia(4,4));
-    ASSERT_DOUBLE_EQ(262,(double)states.total_inertia(4,5));
-    ASSERT_DOUBLE_EQ(12,(double)states.total_inertia(5,0));
-    ASSERT_DOUBLE_EQ(22,(double)states.total_inertia(5,1));
-    ASSERT_DOUBLE_EQ(52,(double)states.total_inertia(5,2));
-    ASSERT_DOUBLE_EQ(122,(double)states.total_inertia(5,3));
-    ASSERT_DOUBLE_EQ(262,(double)states.total_inertia(5,4));
-    ASSERT_DOUBLE_EQ(514,(double)states.total_inertia(5,5));
+    ASSERT_DOUBLE_EQ(12.0, states.total_inertia(0,0));
+    ASSERT_DOUBLE_EQ(12.0, states.total_inertia(0,1));
+    ASSERT_DOUBLE_EQ(12.0, states.total_inertia(0,2));
+    ASSERT_DOUBLE_EQ(12.0, states.total_inertia(0,3));
+    ASSERT_DOUBLE_EQ(12.0, states.total_inertia(0,4));
+    ASSERT_DOUBLE_EQ(12.0, states.total_inertia(0,5));
+    ASSERT_DOUBLE_EQ(12.0, states.total_inertia(1,0));
+    ASSERT_DOUBLE_EQ(14.0, states.total_inertia(1,1));
+    ASSERT_DOUBLE_EQ(16.0, states.total_inertia(1,2));
+    ASSERT_DOUBLE_EQ(18.0, states.total_inertia(1,3));
+    ASSERT_DOUBLE_EQ(20.0, states.total_inertia(1,4));
+    ASSERT_DOUBLE_EQ(22.0, states.total_inertia(1,5));
+    ASSERT_DOUBLE_EQ(12.0, states.total_inertia(2,0));
+    ASSERT_DOUBLE_EQ(16.0, states.total_inertia(2,1));
+    ASSERT_DOUBLE_EQ(22.0, states.total_inertia(2,2));
+    ASSERT_DOUBLE_EQ(30.0, states.total_inertia(2,3));
+    ASSERT_DOUBLE_EQ(40.0, states.total_inertia(2,4));
+    ASSERT_DOUBLE_EQ(52.0, states.total_inertia(2,5));
+    ASSERT_DOUBLE_EQ(12.0, states.total_inertia(3,0));
+    ASSERT_DOUBLE_EQ(18.0, states.total_inertia(3,1));
+    ASSERT_DOUBLE_EQ(30.0, states.total_inertia(3,2));
+    ASSERT_DOUBLE_EQ(50.0, states.total_inertia(3,3));
+    ASSERT_DOUBLE_EQ(80.0, states.total_inertia(3,4));
+    ASSERT_DOUBLE_EQ(122.0, states.total_inertia(3,5));
+    ASSERT_DOUBLE_EQ(12.0, states.total_inertia(4,0));
+    ASSERT_DOUBLE_EQ(20.0, states.total_inertia(4,1));
+    ASSERT_DOUBLE_EQ(40.0, states.total_inertia(4,2));
+    ASSERT_DOUBLE_EQ(80.0, states.total_inertia(4,3));
+    ASSERT_DOUBLE_EQ(150.0, states.total_inertia(4,4));
+    ASSERT_DOUBLE_EQ(262.0, states.total_inertia(4,5));
+    ASSERT_DOUBLE_EQ(12.0, states.total_inertia(5,0));
+    ASSERT_DOUBLE_EQ(22.0, states.total_inertia(5,1));
+    ASSERT_DOUBLE_EQ(52.0, states.total_inertia(5,2));
+    ASSERT_DOUBLE_EQ(122.0, states.total_inertia(5,3));
+    ASSERT_DOUBLE_EQ(262.0, states.total_inertia(5,4));
+    ASSERT_DOUBLE_EQ(514.0, states.total_inertia(5,5));
 }
 
 /**
@@ -494,9 +495,9 @@ TEST_F(BodyBuilderTest, total_inertia_is_correct)
     body_mesh_points = ctm * raw_mesh_points -repmat(ctm*translation,1,n);
 
     for i=1:n
-        fprintf('ASSERT_NEAR(%18.12f,(double)body->states.M->m(0,%d),EPS);\n',body_mesh_points(1,i),i-1);
-        fprintf('ASSERT_NEAR(%18.12f,(double)body->states.M->m(1,%d),EPS);\n',body_mesh_points(2,i),i-1);
-        fprintf('ASSERT_NEAR(%18.12f,(double)body->states.M->m(2,%d),EPS);\n',body_mesh_points(3,i),i-1);
+        fprintf('ASSERT_NEAR(%18.12f, body->states.M->m(0,%d), EPS);\n',body_mesh_points(1,i),i-1);
+        fprintf('ASSERT_NEAR(%18.12f, body->states.M->m(1,%d), EPS);\n',body_mesh_points(2,i),i-1);
+        fprintf('ASSERT_NEAR(%18.12f, body->states.M->m(2,%d), EPS);\n',body_mesh_points(3,i),i-1);
         fprintf('\n');
     end
    \endcode
@@ -506,37 +507,37 @@ TEST_F(BodyBuilderTest, mesh_should_be_correct)
     const double EPS = 1E-11;
     const auto states = body->get_states();
     ASSERT_EQ("body 1", states.M->get_frame());
-    ASSERT_NEAR( 4653.132472705181,(double)states.M->m(0,0),EPS);
-    ASSERT_NEAR(27495.576119933776,(double)states.M->m(1,0),EPS);
-    ASSERT_NEAR(17643.008920773238,(double)states.M->m(2,0),EPS);
+    ASSERT_NEAR( 4653.132472705181, states.M->m(0,0), EPS);
+    ASSERT_NEAR(27495.576119933776, states.M->m(1,0), EPS);
+    ASSERT_NEAR(17643.008920773238, states.M->m(2,0), EPS);
 
-    ASSERT_NEAR( 4653.544454950847,(double)states.M->m(0,1),EPS);
-    ASSERT_NEAR(27495.035407669598,(double)states.M->m(1,1),EPS);
-    ASSERT_NEAR(17643.742338032804,(double)states.M->m(2,1),EPS);
+    ASSERT_NEAR( 4653.544454950847, states.M->m(0,1), EPS);
+    ASSERT_NEAR(27495.035407669598, states.M->m(1,1), EPS);
+    ASSERT_NEAR(17643.742338032804, states.M->m(2,1), EPS);
 
-    ASSERT_NEAR( 4652.644257321111,(double)states.M->m(0,2),EPS);
-    ASSERT_NEAR(27494.918540181661,(double)states.M->m(1,2),EPS);
-    ASSERT_NEAR(17644.161845145594,(double)states.M->m(2,2),EPS);
+    ASSERT_NEAR( 4652.644257321111, states.M->m(0,2), EPS);
+    ASSERT_NEAR(27494.918540181661, states.M->m(1,2), EPS);
+    ASSERT_NEAR(17644.161845145594, states.M->m(2,2), EPS);
 
-    ASSERT_NEAR( 4652.232275075446,(double)states.M->m(0,3),EPS);
-    ASSERT_NEAR(27495.459252445839,(double)states.M->m(1,3),EPS);
-    ASSERT_NEAR(17643.428427886029,(double)states.M->m(2,3),EPS);
+    ASSERT_NEAR( 4652.232275075446, states.M->m(0,3), EPS);
+    ASSERT_NEAR(27495.459252445839, states.M->m(1,3), EPS);
+    ASSERT_NEAR(17643.428427886029, states.M->m(2,3), EPS);
 
-    ASSERT_NEAR( 4653.685574958907,(double)states.M->m(0,4),EPS);
-    ASSERT_NEAR(27495.868457630666,(double)states.M->m(1,4),EPS);
-    ASSERT_NEAR(17644.277233261510,(double)states.M->m(2,4),EPS);
+    ASSERT_NEAR( 4653.685574958907, states.M->m(0,4), EPS);
+    ASSERT_NEAR(27495.868457630666, states.M->m(1,4), EPS);
+    ASSERT_NEAR(17644.277233261510, states.M->m(2,4), EPS);
 
-    ASSERT_NEAR( 4653.273592713241,(double)states.M->m(0,5),EPS);
-    ASSERT_NEAR(27496.409169894843,(double)states.M->m(1,5),EPS);
-    ASSERT_NEAR(17643.543816001944,(double)states.M->m(2,5),EPS);
+    ASSERT_NEAR( 4653.273592713241, states.M->m(0,5), EPS);
+    ASSERT_NEAR(27496.409169894843, states.M->m(1,5), EPS);
+    ASSERT_NEAR(17643.543816001944, states.M->m(2,5), EPS);
 
-    ASSERT_NEAR( 4652.373395083505,(double)states.M->m(0,6),EPS);
-    ASSERT_NEAR(27496.292302406906,(double)states.M->m(1,6),EPS);
-    ASSERT_NEAR(17643.963323114735,(double)states.M->m(2,6),EPS);
+    ASSERT_NEAR( 4652.373395083505, states.M->m(0,6), EPS);
+    ASSERT_NEAR(27496.292302406906, states.M->m(1,6), EPS);
+    ASSERT_NEAR(17643.963323114735, states.M->m(2,6), EPS);
 
-    ASSERT_NEAR( 4652.785377329171,(double)states.M->m(0,7),EPS);
-    ASSERT_NEAR(27495.751590142729,(double)states.M->m(1,7),EPS);
-    ASSERT_NEAR(17644.696740374300,(double)states.M->m(2,7),EPS);
+    ASSERT_NEAR( 4652.785377329171, states.M->m(0,7), EPS);
+    ASSERT_NEAR(27495.751590142729, states.M->m(1,7), EPS);
+    ASSERT_NEAR(17644.696740374300, states.M->m(2,7), EPS);
 }
 
 TEST_F(BodyBuilderTest, hydrodynamic_forces_calculation_point_in_body_frame)
