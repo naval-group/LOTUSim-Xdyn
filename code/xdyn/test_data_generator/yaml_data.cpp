@@ -1844,7 +1844,7 @@ std::string test_data::heading_keeping_base()
          + "            z: {value: 3.45, unit: m}\n"
          + centre_of_inertia("dtmb", 0, 0, 0)
          + "        mass: {value: 8569., unit: tonne} # Caution: 'ton' is the british ton which is 907.185 kg\n"
-         + "        rigid body inertia matrix at the center of buoyancy projected in the body frame:\n"
+         + "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
          + "            frame: dtmb\n"
          + "            row 1: [8.569e6,0,0,0,0,0]\n"
          + "            row 2: [0,8.569e6,0,0,0,0]\n"
@@ -3724,7 +3724,7 @@ std::string test_data::fmi()
         +  hydrodynamic_calculation_point()
         +  centre_of_inertia("TestShip", 0.258, 0, 0.432)
         +  "        mass: {value: 253.31, unit: tonne} # Caution: 'ton' is the british ton which is 907.185 kg\n"
-        +  "        rigid body inertia matrix at the center of buoyancy projected in the body frame:\n"
+        +  "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
         +  "            frame: TestShip\n"
         +  "            row 1: [253310,0,0,0,0,0]\n"
         +  "            row 2: [0,253310,0,0,0,0]\n"
