@@ -18,6 +18,32 @@ void happy_case(TempFile& csv)
     csv.close();
 }
 
+void linear_increasing_time_starting_at_zero(TempFile& csv);
+void linear_increasing_time_starting_at_zero(TempFile& csv)
+{
+    csv << "t,some column,rpm_co,beta_co\n";
+    csv << "0.0,1,2,3\n";
+    csv << "0.1,2,4,6\n";
+    csv << "0.2,3,6,9\n";
+    csv << "0.3,4,8,12\n";
+    csv << "0.4,5,10,15\n";
+    csv.close();
+}
+
+void linear_increasing_time_starting_with_negative_times(TempFile& csv);
+void linear_increasing_time_starting_with_negative_times(TempFile& csv)
+{
+    csv << "t,some column,rpm_co,beta_co\n";
+    csv << "-0.2,-1,-2,-3\n";
+    csv << "-0.1,0,0,0\n";
+    csv << "0.0,1,2,3\n";
+    csv << "0.1,2,4,6\n";
+    csv << "0.2,3,6,9\n";
+    csv << "0.3,4,8,12\n";
+    csv << "0.4,5,10,15\n";
+    csv.close();
+}
+
 void single_line(TempFile& csv);
 void single_line(TempFile& csv)
 {
@@ -120,6 +146,73 @@ TEST_F(CSVLineByLineReaderTest, can_get_correct_value_before_first_timestamp_and
     values = reader.get_values(3);
     ASSERT_DOUBLE_EQ(66.5, values["port side propeller(rpm)"]);
     ASSERT_DOUBLE_EQ(47.78, values["port side propeller(beta)"]);
+}
+
+void check_positive_linear_spaced_requests(CSVLineByLineReader& reader);
+void check_positive_linear_spaced_requests(CSVLineByLineReader& reader)
+{
+    // Check value at t=0.0
+    std::unordered_map<std::string, double> values = reader.get_values(0.0);
+    ASSERT_DOUBLE_EQ(2, values["port side propeller(rpm)"]);
+    ASSERT_DOUBLE_EQ(3, values["port side propeller(beta)"]);
+    // Check value at t=0.1
+    values = reader.get_values(0.1);
+    ASSERT_DOUBLE_EQ(4, values["port side propeller(rpm)"]);
+    ASSERT_DOUBLE_EQ(6, values["port side propeller(beta)"]);
+    // Check value at t=0.2
+    values = reader.get_values(0.2);
+    ASSERT_DOUBLE_EQ(6, values["port side propeller(rpm)"]);
+    ASSERT_DOUBLE_EQ(9, values["port side propeller(beta)"]);
+    // Check value at t=0.3
+    values = reader.get_values(0.3);
+    ASSERT_DOUBLE_EQ(8, values["port side propeller(rpm)"]);
+    ASSERT_DOUBLE_EQ(12, values["port side propeller(beta)"]);
+    // Check value at t=0.35 (between timestamps 0.3 and 0.4)
+    values = reader.get_values(0.35);
+    ASSERT_DOUBLE_EQ(8, values["port side propeller(rpm)"]);
+    ASSERT_DOUBLE_EQ(12, values["port side propeller(beta)"]);
+    // Check value at t=0.4
+    values = reader.get_values(0.4);
+    ASSERT_DOUBLE_EQ(10, values["port side propeller(rpm)"]);
+    ASSERT_DOUBLE_EQ(15, values["port side propeller(beta)"]);
+    // Check values after last timestamps
+    for (size_t i=0;i<10;++i)
+    {
+        values = reader.get_values(0.4 + static_cast<double>(i));
+        ASSERT_DOUBLE_EQ(10, values["port side propeller(rpm)"]);
+        ASSERT_DOUBLE_EQ(15, values["port side propeller(beta)"]);
+    }
+}
+
+TEST_F(CSVLineByLineReaderTest, can_get_correct_value_with_linear_increasing_time_starting_at_zero)
+{
+    linear_increasing_time_starting_at_zero(csv);
+    CSVLineByLineReader reader = get_reader();
+    // Before first timestamp, returned values are zero
+    std::unordered_map<std::string, double> values = reader.get_values(-1.0);
+    ASSERT_DOUBLE_EQ(0, values["port side propeller(rpm)"]);
+    ASSERT_DOUBLE_EQ(0, values["port side propeller(beta)"]);
+    // Check value at t=0.4
+    values = reader.get_values(0.4);
+    ASSERT_DOUBLE_EQ(10, values["port side propeller(rpm)"]);
+    ASSERT_DOUBLE_EQ(15, values["port side propeller(beta)"]);
+    check_positive_linear_spaced_requests(reader);
+}
+
+TEST_F(CSVLineByLineReaderTest, can_get_correct_value_with_linear_increasing_time_starting_with_negative_times)
+{
+    linear_increasing_time_starting_with_negative_times(csv);
+    CSVLineByLineReader reader = get_reader();
+    std::unordered_map<std::string, double> values = reader.get_values(-10.0);
+    ASSERT_DOUBLE_EQ(0, values["port side propeller(rpm)"]);
+    ASSERT_DOUBLE_EQ(0, values["port side propeller(beta)"]);
+    values = reader.get_values(-0.2);
+    ASSERT_DOUBLE_EQ(-2, values["port side propeller(rpm)"]);
+    ASSERT_DOUBLE_EQ(-3, values["port side propeller(beta)"]);
+    values = reader.get_values(-0.1);
+    ASSERT_DOUBLE_EQ(0, values["port side propeller(rpm)"]);
+    ASSERT_DOUBLE_EQ(0, values["port side propeller(beta)"]);
+    check_positive_linear_spaced_requests(reader);
 }
 
 TEST_F(CSVLineByLineReaderTest, empty_file)
