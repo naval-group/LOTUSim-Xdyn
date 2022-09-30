@@ -29,9 +29,9 @@ bodies: # All bodies have NED as parent frame
             frame: body
             x: {value: 0, unit: m}
             y: {value: 0, unit: m}
-            z: {value: 0, unit: m} 
+            z: {value: 0, unit: m}
         mass: {value: 65700.0, unit: tonne} # Caution: 'ton' is the british ton which is 907.185 kg
-        rigid body inertia matrix at the center of buoyancy projected in the body frame:
+        rigid body inertia matrix at the center of gravity and projected in the body frame:
             frame: body
             row 1: [0.757e08,0,0,0,0,0]
             row 2: [0,0.757e08,0,0,0,0]
@@ -39,7 +39,7 @@ bodies: # All bodies have NED as parent frame
             row 4: [0,0,0,0.233e11,0,0]
             row 5: [0,0,0,0,0.387e12,0]
             row 6: [0,0,0,0,0,0.387e12]
-        added mass matrix at the center of buoyancy projected in the body frame:
+        added mass matrix at the center of gravity and projected in the body frame:
             frame: body
             row 1: [0,0,0,0,0,0]
             row 2: [0,0,0,0,0,0]

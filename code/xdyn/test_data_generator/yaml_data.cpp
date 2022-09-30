@@ -1844,7 +1844,7 @@ std::string test_data::heading_keeping_base()
          + "            z: {value: 3.45, unit: m}\n"
          + centre_of_inertia("dtmb", 0, 0, 0)
          + "        mass: {value: 8569., unit: tonne} # Caution: 'ton' is the british ton which is 907.185 kg\n"
-         + "        rigid body inertia matrix at the center of buoyancy projected in the body frame:\n"
+         + "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
          + "            frame: dtmb\n"
          + "            row 1: [8.569e6,0,0,0,0,0]\n"
          + "            row 2: [0,8.569e6,0,0,0,0]\n"
@@ -1852,7 +1852,7 @@ std::string test_data::heading_keeping_base()
          + "            row 4: [0,0,0,4.271e8,0,0]\n"
          + "            row 5: [0,0,0,0,1.080e10,0]\n"
          + "            row 6: [0,0,0,0,0,1.080e10]\n"
-         + "        added mass matrix at the center of buoyancy projected in the body frame:\n"
+         + "        added mass matrix at the center of gravity and projected in the body frame:\n"
          + "            frame: dtmb\n"
          + "            # T min Aqua+ (3.5s)\n"
          + "            row 1: [ 8.979E+04, 0.000E+00, -1.981E+05,  0.000E+00, -1.962E+07,  0.000E+00]\n"
@@ -3724,7 +3724,7 @@ std::string test_data::fmi()
         +  hydrodynamic_calculation_point()
         +  centre_of_inertia("TestShip", 0.258, 0, 0.432)
         +  "        mass: {value: 253.31, unit: tonne} # Caution: 'ton' is the british ton which is 907.185 kg\n"
-        +  "        rigid body inertia matrix at the center of buoyancy projected in the body frame:\n"
+        +  "        rigid body inertia matrix at the center of gravity and projected in the body frame:\n"
         +  "            frame: TestShip\n"
         +  "            row 1: [253310,0,0,0,0,0]\n"
         +  "            row 2: [0,253310,0,0,0,0]\n"
@@ -3732,7 +3732,7 @@ std::string test_data::fmi()
         +  "            row 4: [0,0,0,1.522e6,0,0]\n"
         +  "            row 5: [0,0,0,0,8.279e6,0]\n"
         +  "            row 6: [0,0,0,0,0,7.676e6]\n"
-        +  "        added mass matrix at the center of buoyancy projected in the body frame:\n"
+        +  "        added mass matrix at the center of gravity and projected in the body frame:\n"
         +  "            frame: TestShip\n"
         +  "            row 1: [3.519e4,0,0,0,0,0]\n"
         +  "            row 2: [0,3.023e5,0,0,0,0]\n"
