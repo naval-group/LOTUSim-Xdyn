@@ -1,9 +1,8 @@
 #ifndef TSVOBSERVER_HPP_
 #define TSVOBSERVER_HPP_
 
-#include <ostream>
-
 #include "xdyn/core/Observer.hpp"
+#include <ostream>
 
 class TsvObserver : public Observer
 {
@@ -19,7 +18,6 @@ class TsvObserver : public Observer
 
         bool output_to_file;
         std::ostream& os;
-        size_t length_of_title_line;
 
         using Observer::get_serializer;
         using Observer::get_initializer;
