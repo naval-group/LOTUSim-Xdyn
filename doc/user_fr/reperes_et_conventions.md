@@ -568,7 +568,7 @@ pulsation infinie figure dans la section
 valeurs asymptotiques à pulsations infinies, aucune interpolation ou
 extrapolation n'est nécessaire.
 
-Lorsque la matrice de masse est déclarée directemnt dans le YAML et comme pour la matrice de matrice d'inertie,
+Lorsque la matrice de masses ajoutées est déclarée directement dans le YAML et comme pour la matrice d'inertie,
 il est possible de déclarer la clé optionnelle `convention z down` de valeur booléenne
 pour renseigner si la matrice est déclarée dans le repère avec z vers le bas,
 ou alors z vers le haut.
