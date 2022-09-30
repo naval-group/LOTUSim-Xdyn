@@ -520,7 +520,7 @@ figure dans le membre de gauche de l'équation fondamentale de la dynamique
 ```math
 M\ddot{X} = \sum F_i
 ```
- pour des raisons de stabilité numérique (l'effort
+pour des raisons de stabilité numérique (l'effort
 dépend des accélérations qui doivent justement être calculées par la résolution
 de l'équation fondamentale de la dynamique).
 La matrice de masses ajoutées n'est cependant pas équivalente à une masse supplémentaire, car
