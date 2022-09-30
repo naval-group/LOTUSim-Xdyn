@@ -291,15 +291,15 @@ bodies:
 
 Chaque corps comprend :
 
- - un nom (section `name`)
- - éventuellement un maillage (section `mesh`)
+ - un nom (section `name`),
+ - éventuellement un maillage (section `mesh`),
  - la position du [repère body](#rep%C3%A8re-navire-mobile-ou-body-ou-rep%C3%A8re-de-r%C3%A9solution) par rapport au maillage (section
-  `position of body frame relative to mesh`)
+  `position of body frame relative to mesh`),
  - ses conditions initiales (sections
    `initial position of body frame relative to NED` et
-   `initial velocity of body frame relative to NED`)
- - des données nécessaires pour les calculs cinétiques (section `dynamics`)
- - la liste des efforts auxquels il est soumis (sections `external forces`).
+   `initial velocity of body frame relative to NED`),
+ - des données nécessaires pour les calculs cinétiques (section `dynamics`),
+ - la liste des efforts auxquels il est soumis (sections `external forces`),
  - de façon facultative, des états forcés.
 
 ### Exemple complet
