@@ -438,11 +438,11 @@ La section `dynamics` permet de décrire l'inertie du solide. Elle est composée
 de cinq sous-sections :
 
 - `hydrodynamic forces calculation point in body frame` est le
-  [point de calcul des efforts hydrodynamiques](#rep%C3%A8re-de-calcul-hydrodynamique)
-- `centre of inertia` (si le repère "body" n'est pas au centre de masse)
-- `mass` contenant la masse du corps considéré
-- `rigid body inertia matrix at the center of gravity and projected in the body
-  frame` définissant la matrice d'inertie
+  [point de calcul des efforts hydrodynamiques](#rep%C3%A8re-de-calcul-hydrodynamique),
+- `centre of inertia` (si le repère "body" n'est pas au centre de masse),
+- `mass` contenant la masse du corps considéré,
+- `rigid body inertia matrix at the center of gravity and projected in the body frame`
+  définissant la matrice d'inertie,
 - `added mass matrix at the center of gravity and projected in the body frame`
   pour les masses ajoutées.
 
@@ -476,8 +476,7 @@ qui vaut 907.185 kg.
 
 #### Matrice d'inertie
 
-La matrice d'inertie n'est pas normalisée et on n'effectue pas de changement
-de repère.
+La matrice d'inertie n'est pas normalisée.
 
 ```yaml
 rigid body inertia matrix at the center of gravity and projected in the body frame:
@@ -489,7 +488,6 @@ rigid body inertia matrix at the center of gravity and projected in the body fra
     row 6: [0,0,0,0,0,7.676e6]
 ```
 
-
 Les calculs sont réalisés en supposant que les termes $`a_{ij}`$ de la matrice
 d'inertie sont en unité SI, c'est-à-dire:
 
@@ -497,6 +495,13 @@ d'inertie sont en unité SI, c'est-à-dire:
 - en $`\texttt{kg}\times\texttt{m}^2`$ pour les termes $`a_{ij}`$ avec $`4\leq i,j \leq 6`$,
 - en $`\texttt{kg}\times\texttt{m}`$ pour les deux blocs 3x3 extra-diagonaux
   représentant les termes croisés de la matrice d'inertie.
+
+Pour cette matrice, il est possible de déclarer la clé optionnelle
+`convention z down` de valeur booléenne
+pour renseigner si la matrice est déclarée dans le repère avec z vers le bas,
+ou alors z vers le haut.
+Par défaut, la convention xdyn de z vers le bas est utilisée:
+`convention z down: true`.
 
 #### Inerties ajoutées
 
@@ -562,6 +567,13 @@ pulsation infinie figure dans la section
 `[added_mass_damping_matrix_inf_freq]`. PRECAL_R calculant directement des
 valeurs asymptotiques à pulsations infinies, aucune interpolation ou
 extrapolation n'est nécessaire.
+
+Lorsque la matrice de masse est déclarée directemnt dans le YAML et comme pour la matrice de matrice d'inertie,
+il est possible de déclarer la clé optionnelle `convention z down` de valeur booléenne
+pour renseigner si la matrice est déclarée dans le repère avec z vers le bas,
+ou alors z vers le haut.
+Par défaut, la convention xdyn de z vers le bas est utilisée:
+`convention z down: true`.
 
 ### Forçage de degrés de liberté
 

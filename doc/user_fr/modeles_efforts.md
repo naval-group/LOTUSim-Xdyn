@@ -423,6 +423,13 @@ La partie `equilibrium position` est optionelle, et permet de spécifier la posi
 
 **Note :** Le repère de référence pour la position d'équilibre est toujours le corps considéré. En raison d'une limitation technique actuelle du parseur YAML d'xdyn, le repère de référence doit toujours être renseigné, mais sa valeur sera ignorée (xdyn utilisera toujours le repère lié au corps, quelle que soit la valeur de la clef `frame`).
 
+Pour ce modèle, il est possible de déclarer la clé optionnelle
+`convention z down` de valeur booléenne dans le nœud `stiffness matrix`
+pour renseigner si la matrice est déclarée dans le repère avec z vers le bas,
+ou alors z vers le haut.
+Par défaut, la convention xdyn de z vers le bas est utilisée:
+`convention z down: true`.
+
 ## Efforts de Froude-Krylov
 
 ### Description
@@ -1049,7 +1056,12 @@ matrice renseignée de la façon suivante :
 Cette matrice est la matrice $`(d_{ij})`$ décrite dans [la
 documentation](#efforts-damortissement-visqueux).
 
-
+Pour ces deux modèles, il est possible de déclarer la clé optionnelle
+`convention z down` de valeur booléenne
+pour renseigner si la matrice est déclarée dans le repère avec z vers le bas,
+ou alors z vers le haut.
+Par défaut, la convention xdyn de z vers le bas est utilisée:
+`convention z down: true`.
 
 ### Références
 
