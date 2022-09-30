@@ -1,7 +1,7 @@
 #include "CSVLineByLineReaderTest.hpp"
 #include "CSVYaml.hpp"
-#include "xdyn/exceptions/InvalidInputException.hpp"
 #include "TempFile.hpp"
+#include "xdyn/exceptions/InvalidInputException.hpp"
 
 CSVLineByLineReaderTest::CSVLineByLineReaderTest() : csv(), a(29081981)
 {
