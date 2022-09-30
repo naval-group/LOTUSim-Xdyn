@@ -61,7 +61,7 @@ CSVController::CSVController(
         Controller(tstart, 0, name_)
         , yaml(yaml_)
         , csv(toCSVYaml(yaml))
-        , tstart(std::numeric_limits<double>::min())
+        , tstart(-std::numeric_limits<double>::max())
         , got_tstart(false)
 {
 }
