@@ -1461,9 +1461,9 @@ dans un modèle de manoeuvrabilité les commandes d'un autre modèle :
   model: propeller+rudder
   position of propeller frame:
       frame: test
-      x: {value: -53.155, unit: m}
-      y: {value: 3.750, unit: m}
-      z: {value: 6.573, unit: m}
+      x: {value: -50.0, unit: m}
+      y: {value: 4.0, unit: m}
+      z: {value: 6.0, unit: m}
       phi: {value: 0, unit: rad}
       theta: {value: 4., unit: deg}
       psi: {value: 0, unit: deg}
@@ -1473,23 +1473,23 @@ dans un modèle de manoeuvrabilité les commandes d'un autre modèle :
   rotation: anti-clockwise
   number of blades: 4
   blade area ratio AE/A0: 0.809
-  diameter: {value: 4.65, unit: m}
-  rudder area: {value: 10.8, unit: m^2}
-  rudder height: {value: 4.171, unit: m}
+  diameter: {value: 3.65, unit: m}
+  rudder area: {value: 9.0, unit: m^2}
+  rudder height: {value: 3.171, unit: m}
   effective aspect ratio factor: 1.7
   lift tuning coefficient: 1.
   drag tuning coefficient: 1.
   position of rudder in body frame:
-      x: {value: -57.36, unit: m}
-      y: {value: 4.40, unit: m}
-      z: {value: 4.26, unit: m}
+      x: {value: -50.0, unit: m}
+      y: {value: 5.0, unit: m}
+      z: {value: 5.0, unit: m}
 - model: maneuvering
   name: man
   reference frame:
-      frame: fremm
+      frame: my_ship
       x: {value: 0, unit: m}
       y: {value: 0, unit: m}
-      z: {value: 2.22, unit: m}
+      z: {value: 2.5, unit: m}
       phi: {value: 0, unit: deg}
       theta: {value: 0, unit: deg}
       psi: {value: 0, unit: deg}
