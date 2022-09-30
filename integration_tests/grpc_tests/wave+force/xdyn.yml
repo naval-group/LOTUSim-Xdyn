@@ -85,7 +85,7 @@ bodies: # All bodies have NED as parent frame
             row 4: *Mp_row4
             row 5: *Mp_row5
             row 6: *Mp_row6
-        added mass matrix at the center of buoyancy projected in the body frame:
+        added mass matrix at the center of gravity and projected in the body frame:
             frame: TestBody
             row 1: *Ma_row1
             row 2: *Ma_row2
