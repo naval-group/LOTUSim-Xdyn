@@ -119,6 +119,7 @@ YamlSimulatorInput check_input_yaml(const YamlSimulatorInput& input)
 {
     check_rotations(input.rotations);
     check_for_duplicated_controller_names(input.controllers);
+    check_for_mesh_declaration_if_needed_by_force_models(input.bodies);
     return input;
 }
 
@@ -132,5 +133,32 @@ void check_for_duplicated_controller_names(const std::vector<YamlController>& co
             THROW(__PRETTY_FUNCTION__, InvalidInputException, "Controller name '" << controller.name << "' is defined twice in the YAML: each controller should have a unique name.");
         }
         names.insert(controller.name);
+    }
+}
+
+
+void _raise_invalid_input_exception(const std::string& model_name, const std::string& model_name_requesting_mesh);
+void _raise_invalid_input_exception(const std::string& model_name, const std::string& model_name_requesting_mesh)
+{
+    if (model_name == model_name_requesting_mesh)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+            "Attempting to evaluate forces with model '" << model_name_requesting_mesh << \
+            "' that requires a mesh. Please, declare a mesh to use this model.");
+    }
+}
+
+void check_for_mesh_declaration_if_needed_by_force_models(const std::vector<YamlBody>& bodies)
+{
+    for (const auto& body: bodies)
+    {
+        if (body.mesh.empty())
+        {
+            for (const auto& external_force: body.external_forces)
+            {
+                _raise_invalid_input_exception(external_force.model, "non-linear hydrostatic (fast)");
+                _raise_invalid_input_exception(external_force.model, "non-linear hydrostatic (exact)");
+            }
+        }
     }
 }

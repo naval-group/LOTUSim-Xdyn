@@ -3708,15 +3708,12 @@ std::string test_data::gRPC_controller()
 std::string test_data::fmi()
 {
     return rotation_convention()
-        +  "\n"
         +  environmental_constants()
-        +  "environment models:\n"
-        +  "  - model: no waves\n"
-        +  "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
-        +  "    \n"
+        +  environmental_models_no_waves_no_wind()
         +  "# Fixed frame: NED\n"
         +  "bodies: # All bodies have NED as parent frame\n"
         +  "  - name: TestShip\n"
+        +  "    # mesh: test_ship.stl\n"
         +  position_relative_to_mesh(9.355, 0, -3.21, 0, 0, 0)
         +  initial_position_of_body_frame_deg(0, 0, -0.099, 0, -0.334, 0)
         +  initial_velocity_kt("TestShip", 10, 0, 0, 0, 0, 0)
@@ -3742,7 +3739,14 @@ std::string test_data::fmi()
         +  "            row 6: [0,0,0,0,0,6.676e6]\n"
         +  "    external forces:\n"
         +  "      - model: gravity\n"
-        +  "      - model: non-linear hydrostatic (fast)\n"
+        +  "      # - model: non-linear hydrostatic (fast)\n"
+        +  "      - model: linear hydrostatics\n"
+        +  "        z eq: {value: 0.0, unit: m}\n"
+        +  "        theta eq: {value: 0, unit: deg}\n"
+        +  "        phi eq: {value: 0, unit: deg}\n"
+        +  "        K row 1: [1e5, 0 , 0]\n"
+        +  "        K row 2: [0, 1e6 , 0]\n"
+        +  "        K row 3: [0, 0 , 1e6]\n"
         +  "      - model: linear damping\n"
         +  damping_matrix()
         +  "      - model: quadratic damping\n"
