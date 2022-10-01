@@ -204,7 +204,7 @@ void operator >> (const YAML::Node& node, YamlDynamics& d)
             THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node '" << rb_buoyancy << "': " << e.get_message());
         }
         std::cout << "Using key '" << rb_buoyancy << "' is not recommended, as it is considered as the matrix expressed at center of gravity." << std::endl;
-        std::cout << "Please replace key '" << rb_buoyancy << "' with key '." << rb_gravity << "'." <<std::endl;
+        std::cout << "Please replace key '" << rb_buoyancy << "' with key '" << rb_gravity << "'." <<std::endl;
     }
     if (node.FindValue(am_gravity))
     {
@@ -228,7 +228,7 @@ void operator >> (const YAML::Node& node, YamlDynamics& d)
             THROW(__PRETTY_FUNCTION__, InvalidInputException, "In node '" << am_buoyancy << "': " << e.get_message());
         }
         std::cout << "Using key '" << am_buoyancy << "' is not recommended, as it is considered as the matrix expressed at center of gravity." << std::endl;
-        std::cout << "Please replace key '" << am_buoyancy << "' with key '." << am_gravity << "'." <<std::endl;
+        std::cout << "Please replace key '" << am_buoyancy << "' with key '" << am_gravity << "'." <<std::endl;
     }
     node["hydrodynamic forces calculation point in body frame"] >> d.hydrodynamic_forces_calculation_point_in_body_frame;
 }
