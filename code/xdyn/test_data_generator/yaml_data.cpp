@@ -24,6 +24,16 @@ std::string environmental_constants()
            "    nu: {value: 1.18e-6, unit: m^2/s}\n";
 }
 
+std::string environmental_models_no_waves_no_wind();
+std::string environmental_models_no_waves_no_wind()
+{
+    return "environment models:\n"
+           "  - model: no wind\n"
+           "  - model: no waves\n"
+           "    frame: NED\n"
+           "    constant sea elevation in NED frame: {value: 0, unit: m}\n";
+}
+
 std::string directional_spreading();
 std::string directional_spreading()
 {
@@ -4120,17 +4130,8 @@ std::string test_data::added_mass_from_precal_file()
 {
     std::stringstream ss;
     ss << rotation_convention()
-       << "\n"
-       << "environmental constants:\n"
-       << "    g: {value: 9.81, unit: m/s^2}\n"
-       << "    rho: {value: 1000, unit: kg/m^3}\n"
-       << "    nu: {value: 1.18e-6, unit: m^2/s}\n"
-       << "environment models:\n"
-       << "  - model: no wind\n"
-       << "  - model: no waves\n"
-       << "    frame: NED\n"
-       << "    constant sea elevation in NED frame: {value: 0, unit: m}\n"
-       << "    \n"
+       << environmental_constants()
+       << environmental_models_no_waves_no_wind()
        << "# Fixed frame: NED\n"
        << "bodies: # All bodies have NED as parent frame\n"
        << "  - name: body 1\n"
