@@ -77,8 +77,8 @@ std::function<void()> DictObserver::get_serializer(const SurfaceElevationGrid& s
         if (n>0) ssSurfaceElevationGrid << "\"waves\":{\"nx\":" << nx <<",\"ny\":" << ny
                                         << ",\"xmin\":"<< xmin << ",\"xmax\":"<< xmax
                                         << ",\"ymin\":"<< ymin << ",\"ymax\":"<< ymax
-                                        <<",\"z\":'"
-                                        <<base<91>::encode(sizeof(float)*static_cast<size_t>(n),&v[0])<<"'}";
+                                        <<",\"z\":\""
+                                        <<base<64>::encode(sizeof(float)*static_cast<size_t>(n),&v[0])<<"\"}";
     };
 }
 
