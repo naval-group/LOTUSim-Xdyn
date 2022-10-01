@@ -13,16 +13,24 @@
 
 std::string FastHydrostaticForceModel::model_name(){return "non-linear hydrostatic (fast)";}
 
-FastHydrostaticForceModel::FastHydrostaticForceModel(const std::string& body_name_, const EnvironmentAndFrames& env) : ImmersedSurfaceForceModel(model_name(), body_name_, env),
+FastHydrostaticForceModel::FastHydrostaticForceModel(
+    const std::string& body_name_,
+    const EnvironmentAndFrames& env) :
+        ImmersedSurfaceForceModel(model_name(), body_name_, env),
         centre_of_buoyancy(new Eigen::Vector3d())
 {
     if (env.w.use_count()==0)
     {
-        THROW(__PRETTY_FUNCTION__, InvalidInputException, "Force model '" + model_name() + "' needs a wave model, even if it's 'no waves'");
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+            "Force model '" + model_name() + "' needs a wave model, even if it's 'no waves'");
     }
 }
 
-FastHydrostaticForceModel::FastHydrostaticForceModel(const std::string& force_name_, const std::string& body_name_, const EnvironmentAndFrames& env) : ImmersedSurfaceForceModel(force_name_, body_name_, env),
+FastHydrostaticForceModel::FastHydrostaticForceModel(
+    const std::string& force_name_,
+    const std::string& body_name_,
+    const EnvironmentAndFrames& env) :
+        ImmersedSurfaceForceModel(force_name_, body_name_, env),
         centre_of_buoyancy(new Eigen::Vector3d())
 {
 }
