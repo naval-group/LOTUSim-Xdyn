@@ -528,7 +528,6 @@ TEST_F(SimulatorYamlParserTest, can_parse_controllers_and_commands_for_controlle
     ASSERT_EQ("propeller", yaml.commands[0].name);
 }
 
-
 TEST_F(SimulatorYamlParserTest, can_parse_filtered_states)
 {
     const YamlSimulatorInput yaml = SimulatorYamlParser(test_data::tutorial_10_gRPC_force_model()).parse();
@@ -603,4 +602,18 @@ TEST_F(SimulatorYamlParserTest, duplicate_hydrostatic_models_should_throw_an_err
         "      - model: non-linear hydrostatic (exact)\n      - model: non-linear hydrostatic (fast)");
     invalid_input = SimulatorYamlParser(invalid_yaml).parse();
     ASSERT_THROW(check_input_yaml(invalid_input), InvalidInputException);
+}
+
+TEST_F(SimulatorYamlParserTest, check_for_gravity_model_declaration_if_needed_by_force_models)
+{
+    std::string valid_yaml = test_data::test_ship_fast_hydrostatic_test();
+    YamlSimulatorInput valid_input = SimulatorYamlParser(valid_yaml).parse();
+    ASSERT_NO_THROW(check_input_yaml(valid_input));
+    ASSERT_TRUE(check_for_gravity_model_declaration_if_needed_by_force_models(valid_input.bodies));
+
+    valid_yaml = test_data::test_ship_fast_hydrostatic_test();
+    boost::replace_all(valid_yaml, "- model: gravity", "");
+    valid_input = SimulatorYamlParser(valid_yaml).parse();
+    ASSERT_NO_THROW(check_input_yaml(valid_input));
+    ASSERT_FALSE(check_for_gravity_model_declaration_if_needed_by_force_models(valid_input.bodies));
 }

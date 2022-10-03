@@ -31,4 +31,7 @@ void check_for_mesh_declaration_if_needed_by_force_models(
 void check_for_redundant_models(
     const std::vector<YamlBody>& bodies);
 
+bool check_for_gravity_model_declaration_if_needed_by_force_models(
+    const std::vector<YamlBody>& bodies);
+
 #endif /* CHECK_INPUT_YAML_HPP_ */
