@@ -69,8 +69,9 @@ void add(std::vector<YamlTimeSeries>::const_iterator& that_command, ssc::data_so
     ds.check_out();
 }
 
-ssc::data_source::DataSource make_command_listener(const std::vector<YamlTimeSeries>& commands //!< Parsed YAML commands
-                       )
+ssc::data_source::DataSource make_command_listener(
+    const std::vector<YamlTimeSeries>& commands //!< Parsed YAML commands
+    )
 {
     check_command_names(commands);
     ssc::data_source::DataSource ds;
@@ -114,7 +115,10 @@ Controller* build_controller(const double tstart, const YamlController& yaml_con
     return NULL;
 }
 
-void check_no_controller_outputs_are_defined_in_a_command(const Controller* controller, const std::vector<YamlTimeSeries>& yaml_commands)
+void check_no_controller_outputs_are_defined_in_a_command(
+    const Controller* controller,
+    const std::vector<YamlTimeSeries>& yaml_commands
+    )
 {
     const auto command_names = controller->get_command_names();
     for (const auto& command_name:command_names)
@@ -127,17 +131,19 @@ void check_no_controller_outputs_are_defined_in_a_command(const Controller* cont
   * adds their callbacks to the scheduler.
   *  \snippet observers_and_api/unit_tests/PIDControllerTest.cpp controllersTest initialize_controllers
   */
-void initialize_controllers(const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& controllers,
-                            ssc::solver::Scheduler& scheduler,
-                            Sim& system
-                            );
+void initialize_controllers(
+    const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& controllers,
+    ssc::solver::Scheduler& scheduler,
+    Sim& system
+    );
 
 
-std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > build_controllers(const double tstart,
-                                               const std::vector<YamlController>& yaml_controllers,
-                                               const std::vector<YamlTimeSeries>& yaml_commands,
-                                               Sim& sys
-                                               )
+std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > build_controllers(
+    const double tstart,
+    const std::vector<YamlController>& yaml_controllers,
+    const std::vector<YamlTimeSeries>& yaml_commands,
+    Sim& sys
+    )
 {
     std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > controllers;
     for (YamlController yaml_controller : yaml_controllers)
@@ -153,12 +159,13 @@ std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > build_controllers(con
     return controllers;
 }
 
-std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > get_initialized_controllers(const double tstart,
-                                               const std::vector<YamlController>& yaml_controllers, //!< Parsed YAML controllers
-                                               const std::vector<YamlTimeSeries>& yaml_commands, //!< Parsed YAML commands
-                                               ssc::solver::Scheduler& scheduler,
-                                               Sim& sys
-                                               )
+std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > get_initialized_controllers(
+    const double tstart,
+    const std::vector<YamlController>& yaml_controllers, //!< Parsed YAML controllers
+    const std::vector<YamlTimeSeries>& yaml_commands, //!< Parsed YAML commands
+    ssc::solver::Scheduler& scheduler,
+    Sim& sys
+    )
 {
     const auto controllers = build_controllers(tstart, yaml_controllers, yaml_commands, sys);
     initialize_controllers(controllers, scheduler, sys);
@@ -172,10 +179,11 @@ std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> > get_initialized_contr
  * To avoid cross-dependencies, the corresponding unit tests are moved to observers_and_api/unit_tests.
  */
 
-void initialize_controllers(const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& controllers,
-                            ssc::solver::Scheduler& scheduler,
-                            Sim& system
-                            )
+void initialize_controllers(
+    const std::vector<std::shared_ptr<ssc::solver::DiscreteSystem> >& controllers,
+    ssc::solver::Scheduler& scheduler,
+    Sim& system
+    )
 {
     system.set_discrete_state("t", scheduler.get_time());
     for (auto controller:controllers)

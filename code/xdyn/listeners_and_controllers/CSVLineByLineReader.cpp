@@ -37,7 +37,7 @@ CSVLineByLineReader::CSVLineByLineReader(const CSVYaml& y)
 , date2position()
 , position_of_first_line(file.tellg())
 , zero(yaml.commands)
-, max_date_so_far(std::numeric_limits<double>::min())
+, max_date_so_far(-std::numeric_limits<double>::max())
 {
     if (yaml.path.empty())
     {
