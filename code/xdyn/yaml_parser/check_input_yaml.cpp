@@ -204,7 +204,7 @@ void check_for_redundant_models(const std::vector<YamlBody>& bodies)
             if (model.second > 1)
             {
                 THROW(__PRETTY_FUNCTION__, InvalidInputException,
-                    "Hydrostatic model \'"<< model.first << "\' has been declared " << std::to_string(model.second));
+                    "Hydrostatic model \'"<< model.first << "\' has been declared " << std::to_string(model.second) << " times." << std::endl);
             }
         }
     }
