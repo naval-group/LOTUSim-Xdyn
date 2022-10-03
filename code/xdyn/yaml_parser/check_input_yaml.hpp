@@ -28,4 +28,7 @@ void check_for_duplicated_controller_names(
 void check_for_mesh_declaration_if_needed_by_force_models(
     const std::vector<YamlBody>& bodies);
 
+void check_for_redundant_models(
+    const std::vector<YamlBody>& bodies);
+
 #endif /* CHECK_INPUT_YAML_HPP_ */

@@ -7,6 +7,7 @@
 #include "check_input_yaml.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include <algorithm>
+#include <map>
 #include <unordered_set>
 #include <sstream>
 
@@ -120,6 +121,7 @@ YamlSimulatorInput check_input_yaml(const YamlSimulatorInput& input)
     check_rotations(input.rotations);
     check_for_duplicated_controller_names(input.controllers);
     check_for_mesh_declaration_if_needed_by_force_models(input.bodies);
+    check_for_redundant_models(input.bodies);
     return input;
 }
 
@@ -158,6 +160,51 @@ void check_for_mesh_declaration_if_needed_by_force_models(const std::vector<Yaml
             {
                 _raise_invalid_input_exception(external_force.model, "non-linear hydrostatic (fast)");
                 _raise_invalid_input_exception(external_force.model, "non-linear hydrostatic (exact)");
+            }
+        }
+    }
+}
+
+void check_for_redundant_models(const std::vector<YamlBody>& bodies)
+{
+    const std::unordered_set<std::string> hydrostatic_models =
+        {"linear hydrostatics",
+         "non-linear hydrostatic (fast)",
+         "non-linear hydrostatic (exact)"};
+    for (const auto& body: bodies)
+    {
+        std::map<std::string, size_t> counter;
+        for (const auto& external_force: body.external_forces)
+        {
+            auto search = hydrostatic_models.find(external_force.model);
+            if (search != hydrostatic_models.end())
+            {
+                // Found
+                if (counter.find(external_force.model)!= counter.end())
+                {
+                    // Already existing
+                    counter[external_force.model]++;
+                }
+                else
+                {
+                    // Add a new entry in counter map with value 1
+                    counter.insert(std::pair<std::string, size_t>{external_force.model, 1});
+                }
+            }
+        }
+        if (counter.size()>1)
+        {
+            std::stringstream ss;
+            for (const auto& model: counter){ss << model.first <<" "<<std::endl;}
+            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                "Several hydrostatic models have been declared" + ss.str());
+        }
+        for (const auto& model: counter)
+        {
+            if (model.second > 1)
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                    "Hydrostatic model \'"<< model.first << "\' has been declared " << std::to_string(model.second));
             }
         }
     }
