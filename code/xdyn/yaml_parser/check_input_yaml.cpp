@@ -160,6 +160,7 @@ void check_for_mesh_declaration_if_needed_by_force_models(const std::vector<Yaml
             {
                 _raise_invalid_input_exception(external_force.model, "non-linear hydrostatic (fast)");
                 _raise_invalid_input_exception(external_force.model, "non-linear hydrostatic (exact)");
+                _raise_invalid_input_exception(external_force.model, "non-linear Froude-Krylov");
             }
         }
     }
