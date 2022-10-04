@@ -8,13 +8,13 @@
 #ifndef BODYSTATES_HPP_
 #define BODYSTATES_HPP_
 
-#include "xdyn/core/StatesFilter.hpp"
-#include "xdyn/core/StateMacros.hpp"
+#include "StatesFilter.hpp"
+#include "StateMacros.hpp"
 #include "xdyn/external_data_structures/GeometricTypes3d.hpp"
 #include "xdyn/external_data_structures/YamlRotation.hpp"
 #include "xdyn/external_data_structures/AbstractStates.hpp"
-#include "xdyn/mesh/MeshIntersector.hpp"
 #include "xdyn/hdb_interpolators/History.hpp"
+#include "xdyn/mesh/MeshIntersector.hpp"
 
 #include <ssc/kinematics.hpp>
 #include <ssc/macros.hpp>
@@ -30,12 +30,15 @@ typedef Eigen::Matrix<double,6,6> Matrix66;
 
 struct BodyStates : AbstractStates<History>
 {
-    BodyStates(const double Tmax=0 //!< Defines how much history we store
-              );
-    BodyStates(const YamlFilteredStates& filtered_states, const double Tmax=0 //!< Defines how much history we store
-              );
-    BodyStates(const StatesFilter& states_filter, const double Tmax=0 //!< Defines how much history we store
-              );
+    BodyStates(
+        const double Tmax=0 //!< Defines how much history we store
+        );
+    BodyStates(
+        const YamlFilteredStates& filtered_states, const double Tmax=0 //!< Defines how much history we store
+        );
+    BodyStates(
+        const StatesFilter& states_filter, const double Tmax=0 //!< Defines how much history we store
+        );
     BodyStates& operator=(const AbstractStates<History>& rhs);
     std::string name;                                              //!< Body's name
     ssc::kinematics::Point G;                                      //!< Position of the ship's centre of gravity

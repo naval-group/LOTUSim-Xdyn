@@ -19,11 +19,15 @@ SurfaceForceModel::~SurfaceForceModel()
 {
 }
 
-Wrench SurfaceForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>&) const
+Wrench SurfaceForceModel::get_force(
+    const BodyStates& states,
+    const double t,
+    const EnvironmentAndFrames& env,
+    const std::map<std::string,double>&
+    ) const
 {
     zg_calculator->update_transform(env.k->get("NED", states.name));
     Wrench F(states.G, body_name);
-
     const auto b = begin(states.intersector);
     const auto e = end(states.intersector);
     std::function<SurfaceForceModel::DF(const FacetIterator &,
@@ -56,7 +60,11 @@ void SurfaceForceModel::calculations_after_surface_integration(const BodyStates&
 {
 }
 
-double SurfaceForceModel::potential_energy(const BodyStates& states, const std::vector<double>& x, const EnvironmentAndFrames& env) const
+double SurfaceForceModel::potential_energy(
+    const BodyStates& states,
+    const std::vector<double>& x,
+    const EnvironmentAndFrames& env
+    ) const
 {
     return pe(states, x, env);
 }

@@ -7,6 +7,8 @@
 #include "check_input_yaml.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include <algorithm>
+#include <iostream>
+#include <map>
 #include <unordered_set>
 #include <sstream>
 
@@ -119,6 +121,9 @@ YamlSimulatorInput check_input_yaml(const YamlSimulatorInput& input)
 {
     check_rotations(input.rotations);
     check_for_duplicated_controller_names(input.controllers);
+    check_for_mesh_declaration_if_needed_by_force_models(input.bodies);
+    check_for_gravity_model_declaration_if_needed_by_force_models(input.bodies);
+    check_for_redundant_models(input.bodies);
     return input;
 }
 
@@ -133,4 +138,108 @@ void check_for_duplicated_controller_names(const std::vector<YamlController>& co
         }
         names.insert(controller.name);
     }
+}
+
+
+void _raise_invalid_input_exception(const std::string& model_name, const std::string& model_name_requesting_mesh);
+void _raise_invalid_input_exception(const std::string& model_name, const std::string& model_name_requesting_mesh)
+{
+    if (model_name == model_name_requesting_mesh)
+    {
+        THROW(__PRETTY_FUNCTION__, InvalidInputException,
+            "Attempting to evaluate forces with model '" << model_name_requesting_mesh << \
+            "' that requires a mesh. Please, declare a mesh to use this model.");
+    }
+}
+
+void check_for_mesh_declaration_if_needed_by_force_models(const std::vector<YamlBody>& bodies)
+{
+    for (const auto& body: bodies)
+    {
+        if (body.mesh.empty())
+        {
+            for (const auto& external_force: body.external_forces)
+            {
+                _raise_invalid_input_exception(external_force.model, "non-linear hydrostatic (fast)");
+                _raise_invalid_input_exception(external_force.model, "non-linear hydrostatic (exact)");
+                _raise_invalid_input_exception(external_force.model, "non-linear Froude-Krylov");
+            }
+        }
+    }
+}
+
+void check_for_redundant_models(const std::vector<YamlBody>& bodies)
+{
+    const std::unordered_set<std::string> hydrostatic_models =
+        {"linear hydrostatics",
+         "non-linear hydrostatic (fast)",
+         "non-linear hydrostatic (exact)"};
+    for (const auto& body: bodies)
+    {
+        std::map<std::string, size_t> counter;
+        for (const auto& external_force: body.external_forces)
+        {
+            auto search = hydrostatic_models.find(external_force.model);
+            if (search != hydrostatic_models.end())
+            {
+                // Found
+                if (counter.find(external_force.model)!= counter.end())
+                {
+                    // Already existing
+                    counter[external_force.model]++;
+                }
+                else
+                {
+                    // Add a new entry in counter map with value 1
+                    counter.insert(std::pair<std::string, size_t>{external_force.model, 1});
+                }
+            }
+        }
+        if (counter.size()>1)
+        {
+            std::stringstream ss;
+            for (const auto& model: counter){ss << model.first <<" "<<std::endl;}
+            THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                "Several hydrostatic models have been declared" + ss.str());
+        }
+        for (const auto& model: counter)
+        {
+            if (model.second > 1)
+            {
+                THROW(__PRETTY_FUNCTION__, InvalidInputException,
+                    "Hydrostatic model \'"<< model.first << "\' has been declared " << std::to_string(model.second) << " times." << std::endl);
+            }
+        }
+    }
+}
+
+bool check_for_gravity_model_declaration_if_needed_by_force_models(const std::vector<YamlBody>& bodies)
+{
+    const std::unordered_set<std::string> models_needing_gravity =
+        {"non-linear hydrostatic (fast)",
+         "non-linear hydrostatic (exact)"};
+    bool do_all_bodies_have_defined_a_gravity_model_if_needed = true;
+    for (const auto& body: bodies)
+    {
+        bool has_gravity_model_been_declared = false;
+        bool does_any_model_needing_gravity_has_been_defined = false;
+        for (const auto& external_force: body.external_forces)
+        {
+            if (external_force.model == "gravity")
+            {
+                has_gravity_model_been_declared = true;
+            }
+            auto search = models_needing_gravity.find(external_force.model);
+            if (search != models_needing_gravity.end())
+            {
+                does_any_model_needing_gravity_has_been_defined = true;
+            }
+        }
+        if (does_any_model_needing_gravity_has_been_defined and (not has_gravity_model_been_declared))
+        {
+            std::cout << "WARNING: You defined an hydrostatic model without a gravity model!"<< std::endl;
+            do_all_bodies_have_defined_a_gravity_model_if_needed = false;
+        }
+    }
+    return do_all_bodies_have_defined_a_gravity_model_if_needed;
 }

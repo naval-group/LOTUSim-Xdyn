@@ -6,6 +6,7 @@
  */
 
 #include "SimulatorYamlParserTest.hpp"
+#include "check_input_yaml.hpp"
 #include "parse_controllers.hpp"
 #include "parse_time_series.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
@@ -527,7 +528,6 @@ TEST_F(SimulatorYamlParserTest, can_parse_controllers_and_commands_for_controlle
     ASSERT_EQ("propeller", yaml.commands[0].name);
 }
 
-
 TEST_F(SimulatorYamlParserTest, can_parse_filtered_states)
 {
     const YamlSimulatorInput yaml = SimulatorYamlParser(test_data::tutorial_10_gRPC_force_model()).parse();
@@ -555,4 +555,65 @@ TEST_F(SimulatorYamlParserTest, missing_environment_model_yaml_node_should_throw
         "    rho: {value: 1026, unit: kg/m^3}\n"
         "    nu: {value: 1.18e-6, unit: m^2/s}\n";
     ASSERT_THROW(SimulatorYamlParser(uncomplete_yaml).parse(), InvalidInputException);
+}
+
+TEST_F(SimulatorYamlParserTest, missing_mesh_node_should_throw_an_error_for_force_model_requiring_a_mesh)
+{
+    const std::string valid_yaml = test_data::test_ship_fast_hydrostatic_test();
+    const YamlSimulatorInput valid_input = SimulatorYamlParser(valid_yaml).parse();
+    ASSERT_NO_THROW(check_input_yaml(valid_input));
+    std::string invalid_yaml = test_data::test_ship_fast_hydrostatic_test();
+    boost::replace_all(invalid_yaml, "mesh: test_ship.stl", "");
+    YamlSimulatorInput invalid_input = SimulatorYamlParser(invalid_yaml).parse();
+    ASSERT_THROW(check_input_yaml(invalid_input), InvalidInputException);
+    invalid_yaml = test_data::test_ship_exact_hydrostatic_test();
+    boost::replace_all(invalid_yaml, "mesh: test_ship.stl", "");
+    invalid_input = SimulatorYamlParser(invalid_yaml).parse();
+    ASSERT_THROW(check_input_yaml(invalid_input), InvalidInputException);
+}
+
+TEST_F(SimulatorYamlParserTest, duplicate_hydrostatic_models_should_throw_an_error)
+{
+    const std::string valid_yaml = test_data::test_ship_fast_hydrostatic_test();
+    const YamlSimulatorInput valid_input = SimulatorYamlParser(valid_yaml).parse();
+    ASSERT_NO_THROW(check_input_yaml(valid_input));
+
+    std::string invalid_yaml = test_data::test_ship_fast_hydrostatic_test();
+    boost::replace_all(invalid_yaml, "      - model: non-linear hydrostatic (fast)",
+        "      - model: non-linear hydrostatic (fast)\n      - model: non-linear hydrostatic (fast)\n");
+    std::cout << invalid_yaml << std::endl;
+    YamlSimulatorInput invalid_input = SimulatorYamlParser(invalid_yaml).parse();
+    ASSERT_THROW(check_input_yaml(invalid_input), InvalidInputException);
+
+    invalid_yaml = test_data::test_ship_fast_hydrostatic_test();
+    boost::replace_all(invalid_yaml, "      - model: non-linear hydrostatic (fast)",
+        "      - model: non-linear hydrostatic (fast)\n      - model: non-linear hydrostatic (exact)");
+    invalid_input = SimulatorYamlParser(invalid_yaml).parse();
+    ASSERT_THROW(check_input_yaml(invalid_input), InvalidInputException);
+
+    invalid_yaml = test_data::test_ship_exact_hydrostatic_test();
+    boost::replace_all(invalid_yaml, "      - model: non-linear hydrostatic (exact)",
+        "      - model: non-linear hydrostatic (exact)\n      - model: non-linear hydrostatic (exact)");
+    invalid_input = SimulatorYamlParser(invalid_yaml).parse();
+    ASSERT_THROW(check_input_yaml(invalid_input), InvalidInputException);
+
+    invalid_yaml = test_data::test_ship_exact_hydrostatic_test();
+    boost::replace_all(invalid_yaml, "      - model: non-linear hydrostatic (exact)",
+        "      - model: non-linear hydrostatic (exact)\n      - model: non-linear hydrostatic (fast)");
+    invalid_input = SimulatorYamlParser(invalid_yaml).parse();
+    ASSERT_THROW(check_input_yaml(invalid_input), InvalidInputException);
+}
+
+TEST_F(SimulatorYamlParserTest, check_for_gravity_model_declaration_if_needed_by_force_models)
+{
+    std::string valid_yaml = test_data::test_ship_fast_hydrostatic_test();
+    YamlSimulatorInput valid_input = SimulatorYamlParser(valid_yaml).parse();
+    ASSERT_NO_THROW(check_input_yaml(valid_input));
+    ASSERT_TRUE(check_for_gravity_model_declaration_if_needed_by_force_models(valid_input.bodies));
+
+    valid_yaml = test_data::test_ship_fast_hydrostatic_test();
+    boost::replace_all(valid_yaml, "- model: gravity", "");
+    valid_input = SimulatorYamlParser(valid_yaml).parse();
+    ASSERT_NO_THROW(check_input_yaml(valid_input));
+    ASSERT_FALSE(check_for_gravity_model_declaration_if_needed_by_force_models(valid_input.bodies));
 }
