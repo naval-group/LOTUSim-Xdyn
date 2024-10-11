@@ -14,7 +14,7 @@ void start_ws_server(const XdynForMECommandLineArguments& input_data)
     const ssc::text_file_reader::TextFileReader yaml_reader(input_data.yaml_filenames);
     const auto yaml = yaml_reader.get_contents();
     JSONWebSocketServer<XdynForME> server(XdynForME(yaml), input_data.verbose);
-    server.start(input_data.port, input_data.show_websocket_debug_information);
+    server.start(input_data.address, input_data.port, input_data.show_websocket_debug_information);
 }
 
 void start_grpc_server(const XdynForMECommandLineArguments& input_data, const std::string& yaml);

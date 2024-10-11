@@ -58,6 +58,7 @@ po::options_description get_options_description(XdynForCSCommandLineArguments& i
         ("verbose,v",                                                                    "Display all information received & emitted by the server on the standard output.")
         ("websocket-debug,w",                                                            "Display *all* websocket-related information (connect/disconnect, payload, etc.): very chatty.")
         ("debug,d",                                                                      "Used by the application's support team to help error diagnosis. Allows us to pinpoint the exact location in code where the error occurred (do not catch exceptions), eg. for use in a debugger.")
+        ("address,a",  po::value<std::vector<std::string> >(&input_data.address),        "Adress for the websocket server")
         ("port,p",     po::value<short unsigned int>(&input_data.port),                  "port for the websocket server. Available values are 1024-65535 (2^16, but port 0 is reserved and unavailable and ports in range 1-1023 are privileged (application needs to be run as root to have access to those ports)")
         ("grpc,g",                                                                       "Launch a gRPC server instead of the (default) JSON+websocket server.")
         ;

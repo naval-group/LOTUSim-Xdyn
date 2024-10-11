@@ -48,9 +48,9 @@ class JSONWebSocketServer
         {
         }
 
-        void start(const short unsigned int port, const bool debug)
+        void start(std::vector<std::string> address, const short unsigned int port, const bool debug)
         {
-            std::cout << "Starting websocket server on " << ADDRESS << ":" << port << " (press Ctrl+C to terminate)" << std::endl;
+            std::cout << "Starting websocket server on " << address << ":" << port << " (press Ctrl+C to terminate)" << std::endl;
             std::shared_ptr<ssc::websocket::Server> w(new ssc::websocket::Server(handler, port, debug));
             signal(SIGINT, stop_simulation);
             while(!stop)
