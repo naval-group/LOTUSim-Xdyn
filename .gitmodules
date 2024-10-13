@@ -1,7 +1,6 @@
-	
 [submodule "code/ssc"]
-	path = code/ssc
-	url = ../scientific_computing
+path = code/ssc
+url = ../ssc
 [submodule "interfaces"]
-	path = interfaces
-	url = ../interfaces
+path = interfaces
+url = ../interfaces
