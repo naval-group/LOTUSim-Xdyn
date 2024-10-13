@@ -13,6 +13,10 @@ default:
   before_script:
     - make update-submodules
     - make headers
+  tags:
+    - docker 
+    - linux
+
 
 after_script:
   - docker ps
