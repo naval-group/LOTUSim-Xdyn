@@ -18,7 +18,7 @@ void start_ws_server(const XdynForCSCommandLineArguments& input_data, const std:
 void start_ws_server(const XdynForCSCommandLineArguments& input_data, const std::string& yaml)
 {
     JSONWebSocketServer<XdynForCS> server(get_SimServer(input_data, yaml), input_data.verbose);
-    server.start(input_data.port, input_data.show_websocket_debug_information);
+    server.start(input_data.address, input_data.port, input_data.show_websocket_debug_information);
 }
 
 void start_grpc_server(const XdynForCSCommandLineArguments& input_data, const std::string& yaml);
