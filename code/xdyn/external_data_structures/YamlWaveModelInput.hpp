@@ -16,12 +16,15 @@
 struct YamlDiscretization
 {
     YamlDiscretization();
-    size_t nfreq;           //!< Nb of frequencies in the discretization
-    size_t ndir;            //!< Nb of directions in the discretization
-    double omega_min;       //!< First angular frequency (in rad/s)
-    double omega_max;       //!< Last angular frequency (in rad/s)
-    double energy_fraction; //!< Between 0 and 1: sum(S(omega[i]).S(psi[j]),taken into account)/sum(S(omega[i]).S(psi[j]),total)
-    bool equal_energy_bins; //!< False (by default) or true. When false, omegas are sampled regularly between omega_min and omega_max. When true, they are sampled such that the integral of the spectrum is constant between two consecutive omega values.
+    size_t nfreq;               //!< Nb of frequencies in the discretization
+    size_t ndir;                //!< Nb of directions in the discretization
+    double omega_min;           //!< First angular frequency (in rad/s)
+    double omega_max;           //!< Last angular frequency (in rad/s)
+    double energy_fraction;     //!< Between 0 and 1: sum(S(omega[i]).S(psi[j]),taken into account)/sum(S(omega[i]).S(psi[j]),total)
+    bool equal_energy_bins;     //!< False (by default) or true. When false, omegas are sampled regularly between omega_min and omega_max. When true, they are sampled such that the integral of the spectrum is constant between two consecutive omega values.
+    bool periodic;              //!< To choose to make the wave periodic of size sizes[0] or not
+    int resolution;             //!< Renderer wave resolution (number of points for the resolution, usually 128)
+    std::vector<double> sizes;  //!< Repetition sizes of the renderer (max 3 different size in Unity)
 };
 
 struct YamlStretching

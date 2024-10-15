@@ -20,6 +20,7 @@ FlatDiscreteDirectionalWaveSpectrum::FlatDiscreteDirectionalWaveSpectrum() :
     sin_psi(),
     k(),
     phase(),
+    band({}),
     pdyn_factor(),
     pdyn_factor_sh()
 {
@@ -43,7 +44,13 @@ DiscreteDirectionalWaveSpectrum::DiscreteDirectionalWaveSpectrum() :
     k(),
     phase(),
     pdyn_factor(),
-    pdyn_factor_sh()
+    pdyn_factor_sh(),
+    energy_fraction(1),
+    periodic(false),
+    resolution(0),
+    sizes({}),
+    S(TR1(shared_ptr)<WaveSpectralDensity>()),
+    D(TR1(shared_ptr)<WaveDirectionalSpreading>())
 {
 }
 

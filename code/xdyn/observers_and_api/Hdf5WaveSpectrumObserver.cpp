@@ -44,6 +44,12 @@ void hdf5WaveSpectrumObserver(
     H5_Tools::write(h5File, dn+"/gamma", s.psi);
     H5_Tools::write(h5File, dn+"/k", s.k);
     H5_Tools::write(h5File, dn+"/phase", s.phase);
+    std::vector<double> band_export; // We export the band associated to each frequency in the H5 spectra file
+    for (size_t i=1; i<=s.band.size(); i++)
+    {
+        band_export.push_back(s.band[i-1]);
+    }
+    H5_Tools::write(h5File, dn+"/band", band_export);
 }
 
 void hdf5WaveSpectrumObserver(

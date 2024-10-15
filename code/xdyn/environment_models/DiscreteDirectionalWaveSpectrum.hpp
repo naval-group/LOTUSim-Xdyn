@@ -11,6 +11,11 @@
 #include <functional>
 #include <vector>
 
+#include "WaveSpectralDensity.hpp"
+#include "WaveDirectionalSpreading.hpp"
+#include <ssc/macros.hpp>
+#include TR1INC(memory)
+
 /** \author cady
  *  \date Jul 31, 2014, 1:08:15 PM
  *  \brief Used by 'discretize'
@@ -34,6 +39,14 @@ struct DiscreteDirectionalWaveSpectrum
 
     std::function<double(double,double,double)> pdyn_factor;    //!< Factor used when computing the dynamic pressure (no unit)
     std::function<double(double,double,double)> pdyn_factor_sh; //!< Factor used when computing the orbital velocity (no unit)
+
+    double energy_fraction;                                     //!< Between 0 and 1: sum(rays taken into account)/sum(rays total)
+    bool periodic;                                              //!< Space periodic waves or not
+    int resolution;                                             //!< Number of discretization points in the renderer
+    std::vector<double> sizes;                                  //!< Different repetition sizes in meters in the renderer (largers first)
+    TR1(shared_ptr)<WaveSpectralDensity> S;
+    TR1(shared_ptr)<WaveDirectionalSpreading> D;
+
     void check_sizes() const;
 };
 
@@ -55,6 +68,7 @@ struct FlatDiscreteDirectionalWaveSpectrum
     std::vector<double> sin_psi; //!< Sinus directions between 0 & 2pi the spatial spreading was discretized at (so we do not compute it each time), for each angular frequency omega, and direction
     std::vector<double> k;       //!< Discretized wave number (for each frequency) (in 1/m), for each angular frequency omega, i.e. same size as omega
     std::vector<double> phase;   //!< Random phases, for each (frequency, direction) couple (but time invariant) in radian, for each angular frequency omega, and direction
+    std::vector<int> band;       // Used to allocate the different wave rays into the right renderer bands
     std::function<double(double,double,double)> pdyn_factor;    //!< Factor used when computing the dynamic pressure (no unit)
     std::function<double(double,double,double)> pdyn_factor_sh; //!< Factor used when computing the orbital velocity (no unit)
     std::vector<double> get_periods() const; //< Get the ray periods as a vector, from omega attribute (in s)

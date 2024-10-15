@@ -106,9 +106,32 @@ DiscreteDirectionalWaveSpectrum SurfaceElevationBuilder<SurfaceElevationFromWave
     WaveDirectionalSpreadingPtr directional_spreading = parse_directional_spreading(spectrum);
     if (spectrum.depth>0)
     {
-        return discretize(*spectral_density, *directional_spreading, discretization.omega_min, discretization.omega_max, discretization.nfreq, discretization.ndir, Stretching(spectrum.stretching), discretization.equal_energy_bins);
+        return discretize(*spectral_density,
+                          *directional_spreading,
+                          discretization.omega_min,
+                          discretization.omega_max,
+                          discretization.nfreq,
+                          discretization.ndir,
+                          Stretching(spectrum.stretching),
+                          discretization.equal_energy_bins,
+                          discretization.energy_fraction,
+                          discretization.periodic,
+                          discretization.resolution,
+                          discretization.sizes);
     }
-    return discretize(*spectral_density, *directional_spreading, discretization.omega_min, discretization.omega_max, discretization.nfreq, discretization.ndir, spectrum.depth, Stretching(spectrum.stretching), discretization.equal_energy_bins);
+    return discretize(*spectral_density,
+                      *directional_spreading,
+                      discretization.omega_min,
+                      discretization.omega_max,
+                      discretization.nfreq,
+                      discretization.ndir,
+                      spectrum.depth,
+                      Stretching(spectrum.stretching), 
+                      discretization.equal_energy_bins,
+                      discretization.energy_fraction,
+                      discretization.periodic,
+                      discretization.resolution,
+                      discretization.sizes);
 }
 
 WaveModelPtr SurfaceElevationBuilder<SurfaceElevationFromWaves>::parse_wave_model(const YamlDiscretization& discretization, const YamlSpectrum& spectrum) const

@@ -51,12 +51,12 @@ WaveDirectionalSpreading* SumOfWaveDirectionalSpreadings::clone() const
   *         and omega_max (also included)
   *  \snippet environment_models/unit_tests/WaveSpectralDensityTest.cpp WaveSpectralDensityTest get_omega0_example
   */
-std::vector<double> SumOfWaveDirectionalSpreadings::get_directions(const size_t n) const
+std::vector<double> SumOfWaveDirectionalSpreadings::get_directions(const size_t n, const bool periodic) const
 {
     std::set<double> S;
     for (auto t = terms.begin() ; t != terms.end() ; ++t)
     {
-        std::vector<double> f = (*t)->get_directions(n);
+        std::vector<double> f = (*t)->get_directions(n, periodic);
         S.insert(f.begin(), f.end());
     }
     std::list<double> L(S.begin(), S.end());

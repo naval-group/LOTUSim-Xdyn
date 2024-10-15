@@ -57,8 +57,10 @@ class WaveDirectionalSpreading
           *  \details Returns n directions between 0 (included) and 2 pi (excluded)
           *  \snippet environment_models/unit_tests/WaveSpectralDensityTest.cpp WaveSpectralDensityTest get_omega0_example
           */
+        std::vector<std::pair<int,int>> build_coprimes(const size_t n) const; 
         virtual std::vector<double> get_directions(
-            const size_t n          //!< Number of angles to return
+            const size_t n,             //!< Number of angles to return
+            const bool periodic = false //!< Space periodic waves or not
             ) const;
 
         SumOfWaveDirectionalSpreadings operator+(const WaveDirectionalSpreading& w) const;
