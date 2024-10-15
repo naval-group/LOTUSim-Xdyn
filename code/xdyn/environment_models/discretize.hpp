@@ -47,7 +47,11 @@ DiscreteDirectionalWaveSpectrum discretize(
     const size_t nfreq,                //!< Number of frequencies in discrete spectrum
     const size_t ndir,                 //!< Number of directions in discrete spectrum
     const Stretching& stretching,      //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
-    const bool equal_energy_bins       //!< Choose omegas so the integral of S between two successive omegas is constant
+    const bool equal_energy_bins,      //!< Choose omegas so the integral of S between two successive omegas is constant
+    const double energy_fraction = 1.0,//!< Between 0 and 1: sum(rays taken into account)/sum(rays total)
+    const bool periodic = false,       //!< Space periodic waves or not
+    const int resolution = 128,        //!< Number of discretization points in the renderer
+    const std::vector<double> sizes = {}//!< Different repetition sizes in meters in the renderer (largers first)
     );
 
 /**  \author cady
@@ -65,7 +69,11 @@ DiscreteDirectionalWaveSpectrum discretize(
     const size_t ndir,                 //!< Number of directions in discrete spectrum
     const double h,                    //!< Water depth (in meters)
     const Stretching& stretching,      //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
-    const bool equal_energy_bins       //!< Choose omegas so the integral of S between two successive omegas is constant
+    const bool equal_energy_bins,      //!< Choose omegas so the integral of S between two successive omegas is constant
+    const double energy_fraction = 1.0,//!< Between 0 and 1: sum(rays taken into account)/sum(rays total)
+    const bool periodic = false,       //!< Space periodic waves or not
+    const int resolution = 128,        //!< Number of discretization points in the renderer
+    const std::vector<double> sizes = {}//!< Different repetition sizes in meters in the renderer (largers first)
     );
 
 /**  \author cady

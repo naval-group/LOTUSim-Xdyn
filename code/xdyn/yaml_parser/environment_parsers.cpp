@@ -141,13 +141,53 @@ void operator >> (const YAML::Node& node, YamlDiscretization& g)
     }
     ssc::yaml_parser::parse_uv(node["omega min"], g.omega_min);
     ssc::yaml_parser::parse_uv(node["omega max"], g.omega_max);
-    node["energy fraction"] >> g.energy_fraction;
+    if (node.FindValue("n"))
+    {
+        node["energy fraction"] >> g.energy_fraction;
+    }
+    else 
+    {
+        g.energy_fraction = 1.;
+    }
     try
     {
-        node["equal energy bins"]         >> g.equal_energy_bins;
+        node["equal energy bins"] >> g.equal_energy_bins;
     }
-    catch(std::exception& ) // Nothing to do: 'equal energy bins' section is not mandatory
+    catch(std::exception& ) {} // Nothing to do: 'equal energy bins' section is not mandatory
+
+    if (node.FindValue("periodic"))
     {
+        node["periodic"] >> g.periodic;
+    }
+    else 
+    {
+        g.periodic = false;
+    }
+    if (node.FindValue("resolution"))
+    {
+        node["resolution"] >> g.resolution;
+    }
+    else 
+    {
+        g.resolution = 128;
+    }
+    if (node.FindValue("first size"))
+    {
+        int size0;
+        node["first size"] >> size0;
+        g.sizes.push_back(size0);
+    }
+    if (node.FindValue("second size"))
+    {
+        int size1;
+        node["second size"] >> size1;
+        g.sizes.push_back(size1);
+    }
+    if (node.FindValue("third size"))
+    {
+        int size2;
+        node["third size"] >> size2;
+        g.sizes.push_back(size2);
     }
 }
 

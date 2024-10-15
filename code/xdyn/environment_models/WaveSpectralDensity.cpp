@@ -11,9 +11,10 @@
 #include "xdyn/exceptions/InvalidInputException.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
 #include <boost/math/tools/roots.hpp>
-#include <cmath> // For isnan
-
 #include <limits>
+#include <cmath> // For isnan
+#define _USE_MATH_DEFINE
+#define PI M_PI
 
 WaveSpectralDensity::WaveSpectralDensity()
 {
@@ -31,7 +32,9 @@ WaveSpectralDensity::~WaveSpectralDensity()
 std::vector<double> WaveSpectralDensity::get_angular_frequencies(const double omega_min, //!< Minimum angular frequency (in rad/s)
                                                                  const double omega_max, //!< Minimum angular frequency (in rad/s)
                                                                  const size_t n,         //!< Number of angular frequencies to return
-                                                                 const bool equal_energy_bins       //!< Choose omegas so the integral of S between two successive omegas is constant
+                                                                 const bool equal_energy_bins,      //!< Choose omegas so the integral of S between two successive omegas is constant
+                                                                 const bool periodic,    //!< Space periodic waves or not
+                                                                 const std::vector<double> sizes    //!< Different repetition sizes in meters in the renderer (largers first)                                                       
                                                                 ) const
 {
     if (std::isinf(omega_min))
@@ -76,22 +79,37 @@ std::vector<double> WaveSpectralDensity::get_angular_frequencies(const double om
         }
         return std::vector<double>(1, omega_min);
     }
-    std::vector<double> omega(n, 0);
-    const double Domega = omega_max - omega_min;
-    for (size_t i = 1 ; i <= n ; ++i)
+    if (periodic)
     {
-        omega[i-1] = omega_min + double(i-1)/double(n-1)*Domega;
-    }
-    if (equal_energy_bins)
-    {
-        std::vector<double> S(n, 0);
-        for (size_t i = 0 ; i < n ; ++i)
-        {
-            S[i] = this->operator()(omega[i]);
+        size_t n_bands = sizes.size();
+        std::vector<double> omega(n_bands*n,0);
+        for (size_t i = 1 ; i <= n ; ++i)
+        { // Here we generate frequencies that have a wavelenght that divides the repetition size for each band to have a periodic wave
+            omega[i-1] = sqrt(2*double(i)*PI*9.81/sizes[0]);
+            if (n_bands>=2) {omega[n+i-1] = sqrt(2*double(i)*PI*9.81/sizes[1]);}
+            if (n_bands==3) {omega[2*n+i-1] = sqrt(2*double(i)*PI*9.81/sizes[2]);}
         }
-        omega = equal_area_abscissae(omega, S);
+        return omega;
     }
-    return omega;
+    else
+    {
+        std::vector<double> omega(n, 0);
+        const double Domega = omega_max - omega_min;
+        for (size_t i = 1 ; i <= n ; ++i)
+        {
+            omega[i-1] = omega_min + double(i-1)/double(n-1)*Domega;
+        }
+        if (equal_energy_bins)
+        {
+            std::vector<double> S(n, 0);
+            for (size_t i = 0 ; i < n ; ++i)
+            {
+                S[i] = this->operator()(omega[i]);
+            }
+            omega = equal_area_abscissae(omega, S);
+        }
+        return omega;
+    }
 }
 
 double WaveSpectralDensity::get_wave_number(const double omega //!< Angular frequency (in radians)

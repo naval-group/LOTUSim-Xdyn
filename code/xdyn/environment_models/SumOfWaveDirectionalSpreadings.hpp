@@ -31,7 +31,7 @@ class SumOfWaveDirectionalSpreadings : public WaveDirectionalSpreading
 
         double operator()(const double psi) const;
         WaveDirectionalSpreading* clone() const;
-        std::vector<double> get_directions(const size_t n) const;
+        std::vector<double> get_directions(const size_t n, const bool periodic = false) const;
 
     private:
         SumOfWaveDirectionalSpreadings(); // Disabled

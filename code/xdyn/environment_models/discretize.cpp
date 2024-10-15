@@ -12,11 +12,15 @@
 #include "xdyn/exceptions/InvalidInputException.hpp"
 
 #define _USE_MATH_DEFINE
-#include <cmath>
 #define PI M_PI
 #include <list>
-#include <utility> //std::pair
-#include <cmath> // For isnan
+#include <algorithm>
+#include <numeric>
+#define EPS 1e-8
+#include TR1INC(memory)
+typedef std::pair<double, size_t> ValIdx;
+bool comparator(const ValIdx& l, const ValIdx& r);
+bool comparator(const ValIdx& l, const ValIdx& r) { return l.first > r.first; }
 
 DiscreteDirectionalWaveSpectrum common(
         const WaveSpectralDensity& S,      //!< Frequency spectrum
@@ -25,7 +29,11 @@ DiscreteDirectionalWaveSpectrum common(
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
         const size_t nfreq,                //!< Number of frequencies in discrete spectrum
         const size_t ndir,                 //!< Number of directions in discrete spectrum
-        const bool equal_energy_bins       //!< Choose omegas so that integral of S between two successive omegas is constant
+        const bool equal_energy_bins,      //!< Choose omegas so that integral of S between two successive omegas is constant
+        const double energy_fraction,      //!< Between 0 and 1: sum(rays taken into account)/sum(rays total)
+        const bool periodic,               //!< Space periodic waves or not
+        const int resolution,              //!< Number of discretization points in the renderer
+        const std::vector<double> sizes    //!< Different repetition sizes in meters in the renderer (largers first)
         );
 DiscreteDirectionalWaveSpectrum common(
         const WaveSpectralDensity& S,      //!< Frequency spectrum
@@ -34,20 +42,48 @@ DiscreteDirectionalWaveSpectrum common(
         const double omega_max,            //!< Upper bound of the angular frequency range (in rad/s)
         const size_t nfreq,                //!< Number of frequencies in discrete spectrum
         const size_t ndir,                 //!< Number of directions in discrete spectrum
-        const bool equal_energy_bins       //!< Choose omegas so that integral of S between two successive omegas is constant
+        const bool equal_energy_bins,      //!< Choose omegas so that integral of S between two successive omegas is constant
+        const double energy_fraction,      //!< Between 0 and 1: sum(rays taken into account)/sum(rays total)
+        const bool periodic,               //!< Space periodic waves or not
+        const int resolution,              //!< Number of discretization points in the renderer
+        const std::vector<double> sizes    //!< Different repetition sizes in meters in the renderer (largers first)
         )
 {
     DiscreteDirectionalWaveSpectrum ret;
-    ret.omega = S.get_angular_frequencies(omega_min, omega_max, nfreq, equal_energy_bins);
-    if (ndir==0)
+    if (ndir == 0)
     {
         THROW(__PRETTY_FUNCTION__, InvalidInputException, "ndir == 0");
     }
-    ret.psi = D.get_directions(ndir);
+    ret.psi = D.get_directions(ndir, periodic);
+    std::vector<double> omega = S.get_angular_frequencies(omega_min, omega_max, nfreq, equal_energy_bins, periodic, sizes);
+    if (periodic)
+    {
+        std::vector<size_t> indices(omega.size());
+        std::iota(begin(indices), end(indices), static_cast<size_t>(0));
+        std::sort(begin(indices), end(indices), [&omega](size_t a, size_t b) { return omega[a] < omega[b]; } );
+        double last_omega = 0.f;
+        std::vector<double> temp_omega;
+        for (size_t i = 0; i < omega.size(); i++)
+        {
+            double this_omega = omega[indices[i]];
+            if (std::abs(this_omega - last_omega) > EPS)
+            {
+                last_omega = this_omega;
+                temp_omega.push_back(this_omega);
+            }
+        }
+        omega = temp_omega;
+    }
+    ret.omega = omega;
     ret.Si.reserve(ret.omega.size());
-    ret.Dj.reserve(ret.psi.size());
     for (const auto omega:ret.omega) ret.Si.push_back(S(omega));
+    ret.Dj.reserve(ret.psi.size());
     for (const auto psi:ret.psi) ret.Dj.push_back(D(psi));
+    ret.S = TR1(shared_ptr)<WaveSpectralDensity>(S.clone());
+    ret.D = TR1(shared_ptr)<WaveDirectionalSpreading>(D.clone());
+    ret.resolution = resolution;
+    ret.sizes = sizes;
+    ret.energy_fraction = energy_fraction;
     return ret;
 }
 
@@ -59,10 +95,14 @@ DiscreteDirectionalWaveSpectrum discretize(
         const size_t nfreq,                //!< Number of frequencies in discrete spectrum
         const size_t ndir,                 //!< Number of directions in discrete spectrum
         const Stretching& stretching,      //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
-        const bool equal_energy_bins       //!< Choose omegas so the integral of S between two successive omegas is constant
-        )
+        const bool equal_energy_bins,      //!< Choose omegas so the integral of S between two successive omegas is constant
+        const double energy_fraction,      //!< Between 0 and 1: sum(rays taken into account)/sum(rays total)
+        const bool periodic,               //!< Space periodic waves or not
+        const int resolution,              //!< Number of discretization points in the renderer
+        const std::vector<double> sizes    //!< Different repetition sizes in meters in the renderer (largers first)
+)
 {
-    DiscreteDirectionalWaveSpectrum ret = common(S, D, omega_min, omega_max, nfreq, ndir, equal_energy_bins);
+    DiscreteDirectionalWaveSpectrum ret = common(S, D, omega_min, omega_max, nfreq, ndir, equal_energy_bins, energy_fraction, periodic, resolution, sizes);
     ret.k.reserve(ret.omega.size());
     for (const auto omega:ret.omega) ret.k.push_back(S.get_wave_number(omega));
     ret.pdyn_factor = [stretching](const double k, const double z, const double eta){return dynamic_pressure_factor(k,z,eta,stretching);};
@@ -85,10 +125,14 @@ DiscreteDirectionalWaveSpectrum discretize(
         const size_t ndir,                 //!< Number of directions in discrete spectrum
         const double h,                    //!< Water depth (in meters)
         const Stretching& stretching,      //!< Dilate z-axis to properly compute orbital velocities (delta-stretching)
-        const bool equal_energy_bins       //!< Choose omegas so the integral of S between two successive omegas is constant
-        )
+        const bool equal_energy_bins,      //!< Choose omegas so the integral of S between two successive omegas is constant
+        const double energy_fraction,      //!< Between 0 and 1: sum(rays taken into account)/sum(rays total)
+        const bool periodic,               //!< Space periodic waves or not
+        const int resolution,              //!< Number of discretization points in the renderer
+        const std::vector<double> sizes    //!< Different repetition sizes in meters in the renderer (largers first)
+)
 {
-    DiscreteDirectionalWaveSpectrum ret = common(S, D, omega_min, omega_max, nfreq, ndir, equal_energy_bins);
+    DiscreteDirectionalWaveSpectrum ret = common(S, D, omega_min, omega_max, nfreq, ndir, equal_energy_bins, energy_fraction, periodic, resolution, sizes);
     ret.k.reserve(ret.omega.size());
     for (const auto omega:ret.omega) ret.k.push_back(S.get_wave_number(omega,h));
     for (size_t i = 0 ; i < ret.k.size() ; ++i)
@@ -104,11 +148,6 @@ DiscreteDirectionalWaveSpectrum discretize(
     return ret;
 }
 
-typedef std::pair<double,size_t> ValIdx;
-bool comparator ( const ValIdx& l, const ValIdx& r);
-bool comparator ( const ValIdx& l, const ValIdx& r)
-   { return l.first > r.first; }
-
 /**
  * \param spectrum
  * \return flattened spectrum
@@ -116,34 +155,38 @@ bool comparator ( const ValIdx& l, const ValIdx& r)
  * If we filter and discard some rays, we should also take into account rao...
  */
 FlatDiscreteDirectionalWaveSpectrum flatten(
-        const DiscreteDirectionalWaveSpectrum& spectrum //!< Spectrum to flatten
-        )
+    const DiscreteDirectionalWaveSpectrum& spectrum //!< Spectrum to flatten
+)
 {
     FlatDiscreteDirectionalWaveSpectrum ret;
-    spectrum.check_sizes();
+    ret.pdyn_factor = spectrum.pdyn_factor;
+    ret.pdyn_factor_sh = spectrum.pdyn_factor_sh;
     const size_t nOmega = spectrum.omega.size();
     const size_t nPsi = spectrum.psi.size();
-    double domega = 1;
-    double dpsi = 1;
-    if (nOmega*nPsi > 0)
+    if (nOmega * nPsi > 0)
     {
-        ret.phase.reserve(nOmega*nPsi);
+        ret.phase.reserve(nOmega * nPsi);
     }
-    for (size_t i = 0 ; i < nOmega ; ++i)
+    double dpsi;
+    double Si;
+    double domega;
+    double mult_factor;
+    for (size_t i = 0; i < nOmega; ++i)
     {
         if (nOmega > 1)
         {
             if (i == 0)
             {
-                domega = (spectrum.omega.at(1)-spectrum.omega.at(0))/2;
+                domega = (spectrum.omega.at(1) - spectrum.omega.at(0)) / 2;
             }
             else if (i == nOmega - 1)
             {
-                domega = (spectrum.omega.at(nOmega-1)-spectrum.omega.at(nOmega-2))/2;
+                domega = (spectrum.omega.at(nOmega - 1) - spectrum.omega.at(nOmega - 2)) / 2;
             }
             else
             {
-                domega = (spectrum.omega.at(i)-spectrum.omega.at(i-1))/2 + (spectrum.omega.at(i+1)-spectrum.omega.at(i))/2;
+                domega = (spectrum.omega.at(i) - spectrum.omega.at(i - 1)) / 2
+                        + (spectrum.omega.at(i + 1) - spectrum.omega.at(i)) / 2;
             }
         }
         else
@@ -152,6 +195,7 @@ FlatDiscreteDirectionalWaveSpectrum flatten(
         }
         for (size_t j = 0 ; j < nPsi ; ++j)
         {
+            bool is_in = false;
             if (nPsi > 1)
             {
                 if (j == 0)
@@ -171,19 +215,58 @@ FlatDiscreteDirectionalWaveSpectrum flatten(
             {
                 dpsi = 1;
             }
-            ret.k.push_back(spectrum.k[i]);
-            ret.omega.push_back(spectrum.omega[i]);
-            ret.psi.push_back(spectrum.psi[j]);
-            ret.cos_psi.push_back(cos(spectrum.psi[j]));
-            ret.sin_psi.push_back(sin(spectrum.psi[j]));
-            const double s = spectrum.Si[i] * spectrum.Dj[j];
-            ret.a.push_back(sqrt(2 * s * domega * dpsi));
-            ret.phase.push_back(spectrum.phase.at(i).at(j));
+            if (spectrum.periodic)
+            {
+                // These band_max variables represents the maximum possible wavenumber according to Nyquist–Shannon sampling theorem
+                // https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem
+                // Here we ned to change the frequencies for the different directions psi to keep the wave periodic
+                std::vector<std::pair<int,int>> coprimes = spectrum.D->build_coprimes(nPsi); 
+                mult_factor = sqrt(pow(coprimes.at(j).first,2)+pow(coprimes.at(j).second,2));
+                Si = spectrum.S->operator()(spectrum.omega[i]*sqrt(mult_factor));
+                // The following lines allocate the frequencies to the right bands
+                double max_k = spectrum.k[i] * std::max(std::abs(cos(spectrum.psi[j])), std::abs(sin(spectrum.psi[j])));
+                if (max_k <= PI * spectrum.resolution / spectrum.sizes.at(0))
+                {
+                    ret.band.push_back(0);
+                    is_in = true;
+                }
+                else if (max_k <= PI * spectrum.resolution / spectrum.sizes.at(1))
+                {
+                    if (std::abs(fmod(spectrum.sizes.at(1),2*PI/max_k)) < EPS)
+                    {
+                        ret.band.push_back(1);
+                        is_in = true;
+                    }
+                }
+                else if (max_k <= PI * spectrum.resolution / spectrum.sizes.at(2))
+                {
+                    if (std::abs(fmod(spectrum.sizes.at(2),2*PI/max_k)) < EPS)
+                    {
+                        ret.band.push_back(2);
+                        is_in = true;
+                    }
+                }
+            }
+            else
+            {
+                Si = spectrum.Si[i];
+                mult_factor = 1;
+                is_in = true;
+            }
+            if (is_in)
+            {
+                ret.k.push_back(spectrum.k[i]*mult_factor);
+                ret.omega.push_back(spectrum.omega[i]*sqrt(mult_factor));
+                ret.a.push_back(sqrt(2 * Si * spectrum.Dj[j] * domega * sqrt(mult_factor) * dpsi));
+                ret.psi.push_back(spectrum.psi[j]);
+                ret.cos_psi.push_back(cos(spectrum.psi[j]));
+                ret.sin_psi.push_back(sin(spectrum.psi[j]));
+                ret.phase.push_back(spectrum.phase.at(i).at(j));
+            }
         }
     }
-    ret.pdyn_factor = spectrum.pdyn_factor;
-    ret.pdyn_factor_sh = spectrum.pdyn_factor_sh;
-    return ret;
+    if (spectrum.energy_fraction < 1) {return filter(ret,spectrum.energy_fraction);}
+    else {return ret;}
 }
 
 /**
@@ -228,6 +311,8 @@ FlatDiscreteDirectionalWaveSpectrum filter(
         ret.cos_psi.push_back(spectrum.cos_psi.at(sidj.second));
         ret.sin_psi.push_back(spectrum.sin_psi.at(sidj.second));
         ret.k.push_back(spectrum.k.at(sidj.second));
+        ret.phase.push_back(spectrum.phase.at(sidj.second));   
+        if (!spectrum.band.empty()) {ret.band.push_back(spectrum.band.at(sidj.second));}    
     }
     return ret;
 }

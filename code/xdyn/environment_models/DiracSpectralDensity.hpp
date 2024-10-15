@@ -41,7 +41,13 @@ class DiracSpectralDensity : public WaveSpectralDensity
           *  \brief A vector containing only omega0 (in rad/s)
           *  \snippet environment_models/unit_tests/DiracSpectralDensityTest.cpp DiracSpectralDensityTest get_omega0_example
           */
-        std::vector<double> get_angular_frequencies(const double omega_min, const double omega_max, const size_t n, const bool constant_energy_bins) const;
+        std::vector<double> get_angular_frequencies(const double omega_min,             //!< Lower bound of the angular frequency range (in rad/s)
+                                                    const double omega_max,             //!< Upper bound of the angular frequency range (in rad/s)
+                                                    const size_t n,                     //!< Number of frequencies in discrete spectrum
+                                                    const bool constant_energy_bins,    //!< Choose omegas so that integral of S between two successive omegas is constant
+                                                    const bool periodic = false,        //!< Space periodic waves or not
+                                                    const std::vector<double> sizes = {}//!< Different repetition sizes in meters in the renderer (largers first)
+                                                    ) const;
 
         WaveSpectralDensity* clone() const;
 
