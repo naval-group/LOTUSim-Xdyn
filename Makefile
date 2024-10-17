@@ -22,7 +22,8 @@ HEADERS=code/ssc/ssc/check_ssc_version.hpp\
         code/ssc/ssc/solver.hpp\
         code/ssc/ssc/text_file_reader.hpp\
         code/ssc/ssc/websocket.hpp\
-        code/ssc/ssc/yaml_parser.hpp
+        code/ssc/ssc/yaml_parser.hpp\
+		code/ssc/ssc/stb.hpp
 
 headers: ${HEADERS}
 windows: ${HEADERS} windows_gccx_posix

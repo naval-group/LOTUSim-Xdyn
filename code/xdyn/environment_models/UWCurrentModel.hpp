@@ -13,6 +13,7 @@
 
 #include <Eigen/Dense>
 #include <memory>
+
 #include <ssc/macros.hpp>
 #include <boost/optional/optional.hpp>
 #include "yaml-cpp/exceptions.h"
