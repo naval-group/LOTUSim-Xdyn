@@ -23,6 +23,7 @@
 #include "xdyn/core/EnvironmentAndFrames.hpp"
 #include "xdyn/external_data_structures/GeometricTypes3d.hpp"
 #include "xdyn/environment_models/WindModel.hpp"
+#include "xdyn/environment_models/UWCurrentModel.hpp"
 
 #include <ssc/data_source.hpp>
 #include <ssc/kinematics.hpp>
@@ -159,6 +160,22 @@ class SimulatorBuilder
             return *this;
         }
 
+        // /**  \brief Add the capacity to parse certain YAML inputs for UW models
+        //  *  \details This method must not be called with any parameters: the
+        //  *  default parameter is only there so we can use boost::enable_if. This
+        //  *  allows us to use can_parse for several types derived from a few
+        //  *  base classes (WaveModelInterface, ForceModel...) & the compiler will
+        //  *  automagically choose the right version of can_parse.
+        //  *  \returns *this (so we can chain calls to can_parse)
+        //  *  \snippet simulator/unit_tests/src/SimulatorBuilderTest.cpp SimulatorBuilderTest can_parse_example
+        //  */
+        template <typename T> SimulatorBuilder& can_parse(typename boost::enable_if<boost::is_base_of<UWCurrentModel,T> >::type* dummy = 0)
+        {
+        	(void)dummy; // Ignore "unused variable" warning: we just need "dummy" for boost::enable_if
+        	UWCurrent_model_parsers.push_back(UWCurrentModel::build_parser<T>());
+        	return *this;
+        }
+
         std::vector<BodyPtr> get_bodies(const MeshMap& meshes, const std::vector<bool>& bodies_contain_surface_forces, std::map<std::string,double> Tmax) const;
         EnvironmentAndFrames build_environment_and_frames() const;
         std::vector<ListOfForces> get_forces(const EnvironmentAndFrames& env) const;
@@ -190,6 +207,7 @@ class SimulatorBuilder
         TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> > directional_spreading_parsers;
         TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> > spectrum_parsers;
         std::vector<WindParser> wind_model_parsers;
+        std::vector<UWCurrentParser> UWCurrent_model_parsers;
         ssc::data_source::DataSource command_listener;
         double t0; //!< First time step (to initialize state history)
 };
