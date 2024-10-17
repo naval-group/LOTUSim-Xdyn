@@ -22,6 +22,7 @@ SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_, const doubl
         directional_spreading_parsers(TR1(shared_ptr)<std::vector<DirectionalSpreadingBuilderPtr> >(new std::vector<DirectionalSpreadingBuilderPtr>())),
         spectrum_parsers(TR1(shared_ptr)<std::vector<SpectrumBuilderPtr> >(new std::vector<SpectrumBuilderPtr>())),
         wind_model_parsers(),
+        UWCurrent_model_parsers(),
         command_listener(command_listener_),
         t0(t0_)
 {
@@ -75,6 +76,10 @@ EnvironmentAndFrames SimulatorBuilder::build_environment_and_frames() const
     {
         THROW(__PRETTY_FUNCTION__, InternalErrorException, "No wind parser defined. Need to call SimulatorBuilder::can_parse<T> with e.g. T=DefaultWindModel");
     }
+    if (UWCurrent_model_parsers.empty())
+    {
+    	THROW(__PRETTY_FUNCTION__, InternalErrorException, "No UW current parser defined. Need to call SimulatorBuilder::can_parse<T> with e.g. T=DefaultUWCurrentModel");
+    }
     for (auto that_model=input.environment.begin() ; that_model != input.environment.end() ; ++that_model)
     {
         bool env_model_successfully_parsed = false;
@@ -101,6 +106,19 @@ EnvironmentAndFrames SimulatorBuilder::build_environment_and_frames() const
                     THROW(__PRETTY_FUNCTION__, InternalErrorException, "More than one wind model was defined.");
                 }
                 env.wind = w.get();
+                env_model_successfully_parsed = true;
+            }
+        }
+        for(auto parser:UWCurrent_model_parsers)
+        {
+            boost::optional<UWCurrentModelPtr> w = parser(*that_model);
+            if (w)
+            {
+                if(env.UWCurrent)
+                {
+                    THROW(__PRETTY_FUNCTION__, InternalErrorException, "More than one UW current model was defined.");
+                }
+                env.UWCurrent = w.get();
                 env_model_successfully_parsed = true;
             }
         }

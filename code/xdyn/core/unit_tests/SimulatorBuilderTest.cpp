@@ -10,6 +10,7 @@
 #include "xdyn/core/SimulatorBuilder.hpp"
 #include "xdyn/core/unit_tests/generate_body_for_tests.hpp"
 #include "xdyn/environment_models/DefaultWindModel.hpp"
+#include "xdyn/environment_models/DefaultUWCurrentModel.hpp"
 #include "xdyn/exceptions/InternalErrorException.hpp"
 #include "xdyn/test_data_generator/TriMeshTestData.hpp"
 #include "xdyn/test_data_generator/yaml_data.hpp"
@@ -64,6 +65,7 @@ TEST_F(SimulatorBuilderTest, can_get_rho_and_g)
 {
     builder.can_parse<DefaultSurfaceElevation>();
     builder.can_parse<DefaultWindModel>();
+    builder.can_parse<DefaultUWCurrentModel>();
     const auto env = builder.build_environment_and_frames();
     ASSERT_DOUBLE_EQ(9.81,env.g);
     ASSERT_DOUBLE_EQ(1000,env.rho);
@@ -150,6 +152,7 @@ TEST_F(SimulatorBuilderTest, get_forces_should_throw_if_there_is_anything_it_can
 {
     builder.can_parse<DefaultSurfaceElevation>();
     builder.can_parse<DefaultWindModel>();
+    builder.can_parse<DefaultUWCurrentModel>();
     MeshMap m;
     const std::string name = input.bodies.front().name;
     m[name] = two_triangles();
@@ -162,6 +165,7 @@ TEST_F(SimulatorBuilderTest, wind_model_is_available_from_env)
 {
     builder.can_parse<DefaultSurfaceElevation>();
     builder.can_parse<DefaultWindModel>();
+    builder.can_parse<DefaultUWCurrentModel>();
     const auto env = builder.build_environment_and_frames();
     Eigen::Vector3d position;
     position << a.random<double>(), a.random<double>(), -std::abs(a.random<double>());
@@ -173,6 +177,7 @@ TEST_F(SimulatorBuilderTest, can_get_rho_air)
 {
     builder.can_parse<DefaultSurfaceElevation>();
     builder.can_parse<DefaultWindModel>();
+    builder.can_parse<DefaultUWCurrentModel>();
     const auto env = builder.build_environment_and_frames();
     ASSERT_DOUBLE_EQ(1.225,env.get_rho_air());
 }

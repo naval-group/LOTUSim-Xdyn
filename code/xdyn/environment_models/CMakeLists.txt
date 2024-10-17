@@ -4,20 +4,27 @@ PROJECT(environment_models)
 set(SRC
     Airy.cpp
     BretschneiderSpectrum.cpp
+    ConstantUWCurrentModel.cpp
     Cos2sDirectionalSpreading.cpp
+    DefaultUWCurrentModel.cpp
     DefaultWindModel.cpp
     DiracDirectionalSpreading.cpp
     DiracSpectralDensity.cpp
     DiscreteDirectionalWaveSpectrum.cpp
     discretize.cpp
+    DnvrpUWCurrentModel.cpp
+    EkmanUWCurrentModel.cpp
+    IsscUWCurrentModel.cpp
     JonswapSpectrum.cpp
     LogWindVelocityProfile.cpp
+    NocUWCurrentModel.cpp
     PiersonMoskowitzSpectrum.cpp
     PowerLawWindVelocityProfile.cpp
     Stretching.cpp
     SumOfWaveDirectionalSpreadings.cpp
     SumOfWaveSpectralDensities.cpp
     UniformWindVelocityProfile.cpp
+    UWCurrentModel.cpp
     WaveDirectionalSpreading.cpp
     WaveDirectionalSpreading.cpp
     WaveModel.cpp

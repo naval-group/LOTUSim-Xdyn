@@ -3,6 +3,8 @@
  *
  *  Created on: Jun 16, 2014
  *      Author: cady
+ *  Modified on: Sept 16, 2024
+ *      Author: julien.prodhon
  */
 
 #ifndef ENVIRONMENTANDFRAMES_HPP_
@@ -12,6 +14,7 @@
 #include "xdyn/core/StateMacros.hpp"
 #include "xdyn/core/SurfaceElevationInterface.hpp"
 #include "xdyn/environment_models/WindModel.hpp"
+#include "xdyn/environment_models/UWCurrentModel.hpp"
 #include "xdyn/external_data_structures/YamlRotation.hpp"
 #include <boost/optional.hpp>
 #include <ssc/kinematics.hpp>
@@ -26,6 +29,7 @@ struct EnvironmentAndFrames
                const StateType &state) const;
     SurfaceElevationPtr w;
     WindModelPtr wind;
+    UWCurrentModelPtr UWCurrent;
     ssc::kinematics::KinematicsPtr k;
     double rho;
     double nu;
