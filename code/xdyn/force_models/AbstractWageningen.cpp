@@ -45,9 +45,31 @@ AbstractWageningen::Yaml AbstractWageningen::parse(const std::string& yaml)
     return ret;
 }
 
-double AbstractWageningen::advance_ratio(const BodyStates& states, const std::map<std::string,double>& commands) const
+double AbstractWageningen::advance_ratio(const BodyStates& states, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
 {
-    const double Va = fabs(states.u());
+    // Naval Group Far East
+    Eigen::Vector3d WCurrent;
+    Eigen::Vector3d pos = {states.x(),states.y(),states.z()};
+    std::vector<double> xx {states.x()};
+    std::vector<double> yy {states.y()};
+    if (env.UWCurrent != nullptr)
+    {
+        if (env.w != nullptr)
+        {
+            std::vector<double> w_height = env.w->get_and_check_wave_height(xx,yy,t);
+            WCurrent = env.UWCurrent->get_UWCurrent(pos, t, w_height[0]);
+        }
+        else
+        {
+            WCurrent = Eigen::Vector3d::Zero();
+        }
+    }
+    else
+    {
+        WCurrent = Eigen::Vector3d::Zero();
+    }
+    const double Va = fabs(states.u()-WCurrent(0));
+    // stop
     const double n = commands.at("rpm")/(2*PI);
     return (1-w)*Va/n/D;
 }
@@ -68,7 +90,7 @@ Wrench AbstractWageningen::get_force(const BodyStates& states, const double, con
 {
     Wrench tau(ssc::kinematics::Point(name,0,0,0), name);
     const double n2 = commands.at("rpm")*commands.at("rpm")/(4*PI*PI); // In turns per second (Hz)
-    const double J = advance_ratio(states, commands);
+    const double J = advance_ratio(states, env, commands);
     tau.X() = (1-t)*env.rho*n2*D4*get_Kt(commands, J);
     tau.K() = kappa*eta_R*env.rho*n2*D5*get_Kq(commands, J);
     return tau;

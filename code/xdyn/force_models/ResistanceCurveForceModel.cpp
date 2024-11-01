@@ -55,10 +55,32 @@ ResistanceCurveForceModel::Yaml ResistanceCurveForceModel::parse(const std::stri
     return ret;
 }
 
-Wrench ResistanceCurveForceModel::get_force(const BodyStates& states, const double /*t*/, const EnvironmentAndFrames&, const std::map<std::string,double>&) const
+Wrench ResistanceCurveForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>&) const
 {
     ssc::kinematics::Vector6d tau = ssc::kinematics::Vector6d::Zero();
     const auto filtered = states.get_filtered_states();
-    tau(0) = -pimpl->get_resistance(filtered.u);
+    // Naval Group Far East
+    Eigen::Vector3d WCurrent;
+    Eigen::Vector3d pos = {states.x(),states.y(),states.z()};
+    std::vector<double> xx {states.x()};
+    std::vector<double> yy {states.y()};
+    if (env.UWCurrent != nullptr)
+    {
+        if (env.w != nullptr)
+        {
+            std::vector<double> w_height = env.w->get_and_check_wave_height(xx,yy,t);
+            WCurrent = env.UWCurrent->get_UWCurrent(pos, t, w_height[0]);
+        }
+        else
+        {
+            WCurrent = Eigen::Vector3d::Zero();
+        }
+    }
+    else
+    {
+        WCurrent = Eigen::Vector3d::Zero();
+    }
+    // stop
+    tau(0) = -pimpl->get_resistance(filtered.u - WCurrent(0));
     return Wrench(states.hydrodynamic_forces_calculation_point, body_name, tau);
 }

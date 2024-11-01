@@ -397,7 +397,7 @@ class WageningenControlledForceModelTest(unittest.TestCase):
         states = BodyStates()
         states.u.record(0, 3)
         commands = {"rpm": 20 * 2 * np.pi}
-        self.assertAlmostEqual(3.0 / 400.0, model.advance_ratio(states, commands), delta=1e-5)
+        self.assertAlmostEqual(3.0 / 400.0, model.advance_ratio(states, env, commands), delta=1e-5)
 
     def test_force(self):
         data = WageningenControlledForceModel.parse(wageningen())

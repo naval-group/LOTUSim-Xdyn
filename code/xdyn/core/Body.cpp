@@ -173,9 +173,31 @@ void Body::calculate_state_derivatives(const ssc::kinematics::Wrench& sum_of_for
     const ssc::kinematics::RotationMatrix& R = env.k->get("NED", states.name).get_rot();
     const Eigen::Map<const Eigen::Vector3d> uvw(_U(x,idx));
     const Eigen::Vector3d XpYpZp(R*uvw);
-    *_X(dx_dt,idx) = XpYpZp(0);
-    *_Y(dx_dt,idx) = XpYpZp(1);
-    *_Z(dx_dt,idx) = XpYpZp(2);
+    
+    std::vector<double> xx {*_X(x,idx)};
+    std::vector<double> yy {*_Y(x,idx)};
+
+    Eigen::Vector3d WCurrent;
+    if (env.UWCurrent != nullptr)
+    {
+        if (env.w != nullptr)
+        {
+            std::vector<double> w_height = env.w->get_and_check_wave_height(xx,yy,t);
+            WCurrent = env.UWCurrent->get_UWCurrent((get_origin(x)).v, t, w_height[0]);
+        }
+        else
+        {
+            WCurrent = Eigen::Vector3d::Zero();
+        }
+    }
+    else
+    {
+        WCurrent = Eigen::Vector3d::Zero();
+    }
+
+    *_X(dx_dt,idx) = XpYpZp(0) + WCurrent(0);
+    *_Y(dx_dt,idx) = XpYpZp(1) + WCurrent(1);
+    *_Z(dx_dt,idx) = XpYpZp(2) + WCurrent(2);
 
     // dqr/dt, dqi/dt, dqj/dt, dqk/dt
     const Eigen::Quaternion<double> q1(*_QR(x,idx),

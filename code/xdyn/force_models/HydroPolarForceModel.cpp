@@ -122,8 +122,30 @@ Wrench HydroPolarForceModel::get_force(const BodyStates& states, const double t,
     const Eigen::Vector3d omega(states.p(), states.q(), states.r());
     const Eigen::Vector3d Vo(states.u(), states.v(), states.w());
     const auto T = env.k->get(name, body_name);
+    // Naval Group Far East
+    Eigen::Vector3d WCurrent;
+    Eigen::Vector3d pos = {states.x(),states.y(),states.z()};
+    std::vector<double> xx {states.x()};
+    std::vector<double> yy {states.y()};
+    if (env.UWCurrent != nullptr)
+    {
+        if (env.w != nullptr)
+        {
+            std::vector<double> w_height = env.w->get_and_check_wave_height(xx,yy,t);
+            WCurrent = env.UWCurrent->get_UWCurrent(pos, t, w_height[0]);
+        }
+        else
+        {
+            WCurrent = Eigen::Vector3d::Zero();
+        }
+    }
+    else
+    {
+        WCurrent = Eigen::Vector3d::Zero();
+    }
+    // stop
     const Eigen::Vector3d P_body = T.get_point().v; // Coordinates of point P in body frame
-    const Eigen::Vector3d Vp_body = Vo - P_body.cross(omega); // Velocity of point P of body relative to NED, expressed in body frame
+    const Eigen::Vector3d Vp_body = Vo - P_body.cross(omega) - WCurrent; // Velocity of point P of body relative to NED, expressed in body frame
     Eigen::Vector3d Vp = T.get_rot()*Vp_body; // Velocity of P in fluid, expressed in internal frame
     const auto rotation = states.get_rot_from_ned_to_body();
     const Eigen::Vector3d P_NED = Eigen::Vector3d(states.x(), states.y(), states.z()) + rotation*P_body; // Coordinates of point P in NED frame
