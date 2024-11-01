@@ -218,19 +218,41 @@ RudderForceModel::RudderForceModel(
 
 ssc::kinematics::Vector6d RudderForceModel::get_rudder_force(
     const BodyStates& states,
-    const double /*t*/,
+    const double t,
     const EnvironmentAndFrames& env,
     const std::map<std::string,double>& commands,
     const double T
     ) const
 {
-    const double Va = states.u()*(1-w); // Cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag p. 96, eq. 1.2.41
+    // Naval Group Far East
+    Eigen::Vector3d WCurrent;
+    Eigen::Vector3d pos = {states.x(),states.y(),states.z()};
+    std::vector<double> xx {states.x()};
+    std::vector<double> yy {states.y()};
+    if (env.UWCurrent != nullptr)
+    {
+        if (env.w != nullptr)
+        {
+            std::vector<double> w_height = env.w->get_and_check_wave_height(xx,yy,t);
+            WCurrent = env.UWCurrent->get_UWCurrent(pos, t, w_height[0]);
+        }
+        else
+        {
+            WCurrent = Eigen::Vector3d::Zero();
+        }
+    }
+    else
+    {
+        WCurrent = Eigen::Vector3d::Zero();
+    }
+    // stop
+    const double Va = (states.u()-WCurrent(0))*(1-w); // Cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag p. 96, eq. 1.2.41
     const double DVa = model.get_D()*Va;
     // Thrust loading coefficient, Cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag p. 84, eq. 1.2.20
     const double CTh = std::abs(DVa) < 1e-10 ? 8e20 / PI * T / env.rho : 8 / PI * T / (env.rho * DVa*DVa);
 
     const double rudder_angle = commands.at("beta");
-    const InOutWake<ssc::kinematics::Point> Vs = model.get_vs(CTh, Va, (double)states.v(), T);
+    const InOutWake<ssc::kinematics::Point> Vs = model.get_vs(CTh, Va, (double)(states.v()-WCurrent(1)), T);
     const InOutWake<double> fluid_angle = model.get_fluid_angle(Vs);
     const InOutWake<double> area = model.get_Ar(CTh);
     const InOutWake<ssc::kinematics::Vector6d> w = model.get_wrench(rudder_angle, fluid_angle, Vs, area);
