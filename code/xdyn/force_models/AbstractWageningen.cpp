@@ -48,26 +48,8 @@ AbstractWageningen::Yaml AbstractWageningen::parse(const std::string& yaml)
 double AbstractWageningen::advance_ratio(const BodyStates& states, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
 {
     // Naval Group Far East
-    Eigen::Vector3d WCurrent;
-    Eigen::Vector3d pos = {states.x(),states.y(),states.z()};
-    std::vector<double> xx {states.x()};
-    std::vector<double> yy {states.y()};
-    if (env.UWCurrent != nullptr)
-    {
-        if (env.w != nullptr)
-        {
-            std::vector<double> w_height = env.w->get_and_check_wave_height(xx,yy,t);
-            WCurrent = env.UWCurrent->get_UWCurrent(pos, t, w_height[0]);
-        }
-        else
-        {
-            WCurrent = Eigen::Vector3d::Zero();
-        }
-    }
-    else
-    {
-        WCurrent = Eigen::Vector3d::Zero();
-    }
+    Eigen::Vector3d position = {states.x(),states.y(),states.z()};
+    Eigen::Vector3d WCurrent = env.get_UWCurrent(position,t);
     const double Va = fabs(states.u()-WCurrent(0));
     // stop
     const double n = commands.at("rpm")/(2*PI);
