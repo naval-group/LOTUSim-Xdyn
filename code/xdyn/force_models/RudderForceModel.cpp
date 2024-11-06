@@ -224,27 +224,10 @@ ssc::kinematics::Vector6d RudderForceModel::get_rudder_force(
     const double T
     ) const
 {
+    
     // Naval Group Far East
-    Eigen::Vector3d WCurrent;
-    Eigen::Vector3d pos = {states.x(),states.y(),states.z()};
-    std::vector<double> xx {states.x()};
-    std::vector<double> yy {states.y()};
-    if (env.UWCurrent != nullptr)
-    {
-        if (env.w != nullptr)
-        {
-            std::vector<double> w_height = env.w->get_and_check_wave_height(xx,yy,t);
-            WCurrent = env.UWCurrent->get_UWCurrent(pos, t, w_height[0]);
-        }
-        else
-        {
-            WCurrent = Eigen::Vector3d::Zero();
-        }
-    }
-    else
-    {
-        WCurrent = Eigen::Vector3d::Zero();
-    }
+    Eigen::Vector3d position = {states.x(),states.y(),states.z()};
+    Eigen::Vector3d WCurrent = env.get_UWCurrent(position,t);
     // stop
     const double Va = (states.u()-WCurrent(0))*(1-w); // Cf. "Maneuvering Technical Manual", J. Brix, Seehafen Verlag p. 96, eq. 1.2.41
     const double DVa = model.get_D()*Va;

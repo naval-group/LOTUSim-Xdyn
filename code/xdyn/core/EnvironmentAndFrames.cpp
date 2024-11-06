@@ -66,6 +66,27 @@ void EnvironmentAndFrames::feed(
         THROW(__PRETTY_FUNCTION__, InvalidInputException,
                 "In the YAML file (section [environment models/model/output/frame of reference]): the output reference frame is not defined (" << e.get_message() << ")");
     }
+    // try
+    // {
+    //     if (wind.get())
+    //     {
+    //         for (size_t i = 0 ; i < bodies.size() ; ++i)
+    //         {
+    //             bodies[i]->update_kinematics(state,k);
+    //         }
+    //         const auto kk = w->get_wind(k, t);
+    //         if(kk.z.size()!=0)
+    //         {
+    //             const auto address = DataAddressing(std::vector<std::string>{"Wind"},"wind");
+    //             observer.write_before_solver_step(kk, address);
+    //         }
+    //     }
+    // }
+    // catch (const ssc::kinematics::KinematicsException& e)
+    // {
+    //     THROW(__PRETTY_FUNCTION__, InvalidInputException,
+    //             "In the YAML file (section [environment models/model/output/frame of reference]): the output reference frame is not defined (" << e.get_message() << ")");
+    // }
 }
 
 void EnvironmentAndFrames::set_rho_air(const double value)
@@ -80,4 +101,19 @@ double EnvironmentAndFrames::get_rho_air() const
         THROW(__PRETTY_FUNCTION__, InvalidInputException,"The value of air density was requested, but was not specified in the input YAML file. Make sure the key 'air rho' is present in the 'environmental constants' section.")
     }
     return rho_air.get();
+}
+
+Eigen::Vector3d EnvironmentAndFrames::get_UWCurrent(const Eigen::Vector3d& position, const double t) const
+{
+    if (UWCurrent == nullptr)
+    {
+        return Eigen::Vector3d::Zero();
+    }
+    else
+    {
+        std::vector<double>  x {position(0)};
+        std::vector<double>  y {position(1)};
+        std::vector<double> z = w->get_and_check_wave_height(x,y,t);
+        return UWCurrent->get_UWCurrent(position, t, z[0]);
+    }
 }

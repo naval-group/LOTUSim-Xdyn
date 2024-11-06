@@ -38,6 +38,7 @@ struct EnvironmentAndFrames
 
     void set_rho_air (const double value);
     double get_rho_air () const;
+    Eigen::Vector3d get_UWCurrent(const Eigen::Vector3d& position, const double t) const;
 
     private:
         boost::optional<double> rho_air;
