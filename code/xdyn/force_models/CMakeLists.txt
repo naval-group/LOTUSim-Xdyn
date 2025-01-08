@@ -5,6 +5,7 @@ SET(SRC
     AbstractRaoForceModel.cpp
     AbstractWageningen.cpp
     AeroPolarForceModel.cpp
+    BasicBuoyancyForceModel.cpp
     calculate_gz.cpp
     ConstantForceModel.cpp
     DampingForceModel.cpp

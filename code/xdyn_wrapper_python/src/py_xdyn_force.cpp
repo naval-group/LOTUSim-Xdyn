@@ -7,6 +7,7 @@
 #include "xdyn/force_models/AbstractRaoForceModel.hpp"
 #include "xdyn/force_models/AbstractWageningen.hpp"
 #include "xdyn/force_models/AeroPolarForceModel.hpp"
+#include "xdyn/force_models/BasicBuoyancyForceModel.hpp"
 #include "xdyn/force_models/ConstantForceModel.hpp"
 #include "xdyn/force_models/DampingForceModel.hpp"
 #include "xdyn/force_models/DiffractionForceModel.hpp"
@@ -105,6 +106,29 @@ void py_add_module_xdyn_force(py::module& m0)
             py::arg("t"),
             py::arg("env"),
             py::arg("commands") = std::map<std::string,double>())
+        ;
+
+    py::class_<BasicBuoyancyForceModel::Input>(m, "BasicBuoyancyForceModelInput",
+        "Input for BasicBuoyancyForceModel")
+        .def(py::init<>())
+        .def_readwrite("V", &BasicBuoyancyForceModel::Input::V)
+        ;
+
+    py::class_<BasicBuoyancyForceModel, ForceModel>(m, "BasicBuoyancyForceModel",
+        "Basic Buoyancy force model")
+        .def(py::init<const BasicBuoyancyForceModel::Input& /*input*/, const std::string& /*body_name*/, const EnvironmentAndFrames& /*env*/>(),
+            py::arg("input_data"),
+            py::arg("body_name"),
+            py::arg("env"))
+        .def("get_force", &BasicBuoyancyForceModel::get_force,
+            py::arg("states"),
+            py::arg("t"),
+            py::arg("env"),
+            py::arg("commands") = std::map<std::string,double>()
+            )
+        .def_static("parse", &BasicBuoyancyForceModel::parse, py::arg("yaml"))
+        .def_static("model_name", &BasicBuoyancyForceModel::model_name,
+            "Returns model name \"basic buoyancy\"")
         ;
 
     py::class_<ResistanceCurveForceModel::Yaml>(m, "ResistanceCurveForceModelInput")
