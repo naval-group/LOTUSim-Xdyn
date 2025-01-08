@@ -3576,6 +3576,12 @@ std::string test_data::constant_force()
            "N: {value: 300, unit: kN*m}\n";
 }
 
+std::string test_data::basic_buoyancy_force()
+{
+    return "model: basic buoyancy\n"
+           "volume: {value: 1.7, unit: m3}\n";
+}
+
 std::string test_data::tutorial_09_gRPC_wave_model()
 {
     return rotation_convention()

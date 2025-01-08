@@ -21,6 +21,7 @@
 #include "xdyn/environment_models/UniformWindVelocityProfile.hpp"
 #include "xdyn/external_file_formats/stl_reader.hpp"
 #include "xdyn/force_models/AeroPolarForceModel.hpp"
+#include "xdyn/force_models/BasicBuoyancyForceModel.hpp"
 #include "xdyn/force_models/ConstantForceModel.hpp"
 #include "xdyn/force_models/DiffractionForceModel.hpp"
 #include "xdyn/force_models/ExactHydrostaticForceModel.hpp"
@@ -65,6 +66,7 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& input, const double t0, c
            .can_parse<SurfaceElevationFromGRPC>()
            .can_parse<WageningenControlledForceModel>()
            .can_parse<GravityForceModel>()
+           .can_parse<BasicBuoyancyForceModel>()
            .can_parse<ExactHydrostaticForceModel>()
            .can_parse<FastHydrostaticForceModel>()
            .can_parse<FroudeKrylovForceModel>()

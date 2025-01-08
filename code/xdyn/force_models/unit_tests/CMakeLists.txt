@@ -2,6 +2,7 @@ SET(MODULE_UNDER_TEST force_models)
 PROJECT(${MODULE_UNDER_TEST}_tests)
 SET(SRC
     AeroPolarForceModelTest.cpp
+    BasicBuoyancyForceModelTest.cpp
     ConstantForceModelTest.cpp
     DefaultSurfaceElevationTest.cpp
     DiffractionForceModelTest.cpp

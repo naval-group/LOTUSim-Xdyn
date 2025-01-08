@@ -12,6 +12,7 @@
 #include "xdyn/force_models/ExactHydrostaticForceModel.hpp"
 #include "xdyn/force_models/FastHydrostaticForceModel.hpp"
 #include "xdyn/force_models/GravityForceModel.hpp"
+#include "xdyn/force_models/BasicBuoyancyForceModel.hpp"
 #include "xdyn/force_models/GMForceModel.hpp"
 #include "xdyn/observers_and_api/simulator_api.hpp"
 #include "xdyn/test_data_generator/hdb_data.hpp"
