@@ -11,6 +11,7 @@
 #include "xdyn/exceptions/InternalErrorException.hpp"
 #include "xdyn/external_file_formats/stl_reader.hpp"
 
+#include <cstdlib>
 #include <ssc/text_file_reader.hpp>
 
 SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_, const double t0_, const ssc::data_source::DataSource& command_listener_) :
@@ -234,7 +235,22 @@ VectorOfVectorOfPoints SimulatorBuilder::get_mesh(const YamlBody& body) const
 {
     if (not(body.mesh.empty()))
     {
-        const ssc::text_file_reader::TextFileReader reader(body.mesh);
+        // Insert a section to manage absolute path of mesh for the lotusim project
+        std::string mesh_path = body.mesh;
+        const char* lotus_model_path = std::getenv("MODELS_PATH"); // env defined when installing lotusim
+        bool absolute(false);
+        #ifdef _WIN32
+            absolute = (mesh_path.size() > 2 && mesh_path[1] == ':' && (mesh_path[2] == '\\' || mesh_path[2] == '/')) || // "C:\mesh_path" 
+                       (mesh_path.size() > 1 && mesh_path[0] == '\\' && mesh_path[1] == '\\'); // "\\network\mesh_path"
+        #else
+            absolute = !mesh_path.empty() && mesh_path[0] == '/';
+        #endif
+        if (lotus_model_path && !absolute)
+        {
+            mesh_path = lotus_model_path + mesh_path; // adding "MODELS_PATH" to the path written in the yaml file under `mesh: `
+        }
+        // End of the modifications
+        const ssc::text_file_reader::TextFileReader reader(mesh_path);
         return read_stl(reader.get_contents());
     }
     return VectorOfVectorOfPoints();
