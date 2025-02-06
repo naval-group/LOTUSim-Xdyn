@@ -237,7 +237,7 @@ VectorOfVectorOfPoints SimulatorBuilder::get_mesh(const YamlBody& body) const
     {
         // Insert a section to manage absolute path of mesh for the lotusim project
         std::string mesh_path = body.mesh;
-        const char* lotus_model_path = std::getenv("MODELS_PATH"); // env defined when installing lotusim
+        const char* lotus_model_path = std::getenv("LOTUSIM_MODELS_PATH"); // env defined when installing lotusim
         bool absolute(false);
         #ifdef _WIN32
             absolute = (mesh_path.size() > 2 && mesh_path[1] == ':' && (mesh_path[2] == '\\' || mesh_path[2] == '/')) || // "C:\mesh_path" 
@@ -247,7 +247,7 @@ VectorOfVectorOfPoints SimulatorBuilder::get_mesh(const YamlBody& body) const
         #endif
         if (lotus_model_path && !absolute)
         {
-            mesh_path = lotus_model_path + mesh_path; // adding "MODELS_PATH" to the path written in the yaml file under `mesh: `
+            mesh_path = lotus_model_path + mesh_path; // adding "LOTUSIM_MODELS_PATH" to the path written in the yaml file under `mesh: `
         }
         // End of the modifications
         const ssc::text_file_reader::TextFileReader reader(mesh_path);
