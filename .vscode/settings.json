@@ -91,7 +91,11 @@
         "alignedvector3": "cpp",
         "source_location": "cpp",
         "semaphore": "cpp",
-        "*.usage": "cpp"
+        "*.usage": "cpp",
+        "format": "cpp",
+        "stdfloat": "cpp",
+        "filesystem": "cpp",
+        "dense": "cpp"
     },
     "python.formatting.provider": "autopep8",
     "cmake.sourceDirectory": "${workspaceFolder}/code"

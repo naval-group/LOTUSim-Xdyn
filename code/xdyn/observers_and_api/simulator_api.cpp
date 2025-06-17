@@ -8,14 +8,14 @@
 #include "xdyn/environment_models/Cos2sDirectionalSpreading.hpp"
 #include "xdyn/environment_models/DefaultUWCurrentModel.hpp"
 #include "xdyn/environment_models/DefaultWindModel.hpp"
-#include "xdyn/environment_models/DnvrpUWCurrentModel.hpp"
+// #include "xdyn/environment_models/DnvrpUWCurrentModel.hpp"
 #include "xdyn/environment_models/DiracDirectionalSpreading.hpp"
 #include "xdyn/environment_models/DiracSpectralDensity.hpp"
 #include "xdyn/environment_models/EkmanUWCurrentModel.hpp"
-#include "xdyn/environment_models/IsscUWCurrentModel.hpp"
+// #include "xdyn/environment_models/IsscUWCurrentModel.hpp"
 #include "xdyn/environment_models/JonswapSpectrum.hpp"
 #include "xdyn/environment_models/LogWindVelocityProfile.hpp"
-#include "xdyn/environment_models/NocUWCurrentModel.hpp"
+// #include "xdyn/environment_models/NocUWCurrentModel.hpp"
 #include "xdyn/environment_models/PiersonMoskowitzSpectrum.hpp"
 #include "xdyn/environment_models/PowerLawWindVelocityProfile.hpp"
 #include "xdyn/environment_models/UniformWindVelocityProfile.hpp"
@@ -91,9 +91,9 @@ SimulatorBuilder get_builder(const YamlSimulatorInput& input, const double t0, c
            .can_parse<DefaultUWCurrentModel>()
            .can_parse<ConstantUWCurrentModel>()
            .can_parse<EkmanUWCurrentModel>()
-           .can_parse<IsscUWCurrentModel>()
-           .can_parse<DnvrpUWCurrentModel>()
-           .can_parse<NocUWCurrentModel>()
+        //    .can_parse<IsscUWCurrentModel>()
+        //    .can_parse<DnvrpUWCurrentModel>()
+        //    .can_parse<NocUWCurrentModel>()
            .can_parse<HoltropMennenForceModel>()
            .can_parse<AeroPolarForceModel>()
            .can_parse<HydroPolarForceModel>()

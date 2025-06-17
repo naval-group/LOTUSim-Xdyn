@@ -21,8 +21,6 @@
 #include "xdyn/external_data_structures/YamlModel.hpp"
 #include "xdyn/exceptions/InvalidInputException.hpp"
 
-#include <map>
-
 class UWCurrentModel;
 typedef std::shared_ptr<UWCurrentModel> UWCurrentModelPtr;
 typedef std::function<boost::optional<UWCurrentModelPtr>(const YamlModel&)> UWCurrentParser;
@@ -63,25 +61,6 @@ public:
         };
         return parser;
     }
-
-    struct Seabed
-    {
-        Seabed(std::string sea_bed_file);
-        std::string seabed_file;
-        std::map< std::pair<int, int>, double> seabed;
-        int xmin;
-        int xmax;
-        int ymin;
-        int ymax;
-        double xscale;
-        double yscale;
-        double zscale;
-        double xoffset;
-        double yoffset;
-        double get_height(const double, const double) const;
-        Eigen::Vector2d get_gradient(const double, const double) const;
-    };
-
 };
 
 #endif /* ENVIRONMENT_MODELS_INC_UWCurrentMODEL_HPP_ */
