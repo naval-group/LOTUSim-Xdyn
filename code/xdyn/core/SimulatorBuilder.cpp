@@ -13,6 +13,7 @@
 
 #include <cstdlib>
 #include <ssc/text_file_reader.hpp>
+#include <boost/filesystem.hpp>
 
 SimulatorBuilder::SimulatorBuilder(const YamlSimulatorInput& input_, const double t0_, const ssc::data_source::DataSource& command_listener_) :
         input(input_),
@@ -238,18 +239,16 @@ VectorOfVectorOfPoints SimulatorBuilder::get_mesh(const YamlBody& body) const
         // Insert a section to manage absolute path of mesh for the lotusim project
         std::string mesh_path = body.mesh;
         const char* lotus_model_path = std::getenv("LOTUSIM_MODELS_PATH"); // env defined when installing lotusim
-        bool absolute(false);
-        #ifdef _WIN32
-            absolute = (mesh_path.size() > 2 && mesh_path[1] == ':' && (mesh_path[2] == '\\' || mesh_path[2] == '/')) || // "C:\mesh_path" 
-                       (mesh_path.size() > 1 && mesh_path[0] == '\\' && mesh_path[1] == '\\'); // "\\network\mesh_path"
-        #else
-            absolute = !mesh_path.empty() && mesh_path[0] == '/';
-        #endif
-        if (lotus_model_path && !absolute)
-        {
-            mesh_path = lotus_model_path + mesh_path; // adding "LOTUSIM_MODELS_PATH" to the path written in the yaml file under `mesh: `
-        }
-        // End of the modifications
+        boost::filesystem::path mesh_file_path(mesh_path);
+        if (!mesh_file_path.is_absolute()) // Check if file exists at the relative path 
+        { 
+            if (boost::filesystem::exists(mesh_path)) {} // File exists at relative path, keep it
+            else if (lotus_model_path) // File doesn't exist, try with LOTUSIM_MODELS_PATH
+            { 
+                boost::filesystem::path lotus_path(lotus_model_path);
+                mesh_path = (lotus_path / mesh_file_path).string(); // Combine (Boost.Filesystem auto handles sep)
+            }
+        } // End of the modifications
         const ssc::text_file_reader::TextFileReader reader(mesh_path);
         return read_stl(reader.get_contents());
     }

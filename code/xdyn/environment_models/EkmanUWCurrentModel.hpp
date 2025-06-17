@@ -14,6 +14,7 @@
 #include <string>
 
 #include "UWCurrentModel.hpp"
+#include "Seabed.hpp"
 
 class EkmanUWCurrentModel : public UWCurrentModel
 {
@@ -22,6 +23,7 @@ public:
     struct Input
     {
         Input();
+        Input(Seabed);
         Seabed seabed;
         double rho;
         double dTop;
@@ -57,4 +59,4 @@ private:
     Eigen::Vector2d windTau;
 };
 
-#endif /* ENVIRONMENT_MODELS_INC_EkmanUWCurrentModel_HPP_ */
+#endif /* EKMANUWCurrentModel_HPP_ */

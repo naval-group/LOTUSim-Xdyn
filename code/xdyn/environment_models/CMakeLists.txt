@@ -12,20 +12,20 @@ set(SRC
     DiracSpectralDensity.cpp
     DiscreteDirectionalWaveSpectrum.cpp
     discretize.cpp
-    DnvrpUWCurrentModel.cpp
+    # DnvrpUWCurrentModel.cpp
     EkmanUWCurrentModel.cpp
-    IsscUWCurrentModel.cpp
+    # IsscUWCurrentModel.cpp
     JonswapSpectrum.cpp
     LogWindVelocityProfile.cpp
-    NocUWCurrentModel.cpp
+    # NocUWCurrentModel.cpp
     PiersonMoskowitzSpectrum.cpp
     PowerLawWindVelocityProfile.cpp
+    Seabed.cpp
     Stretching.cpp
     SumOfWaveDirectionalSpreadings.cpp
     SumOfWaveSpectralDensities.cpp
     UniformWindVelocityProfile.cpp
     UWCurrentModel.cpp
-    WaveDirectionalSpreading.cpp
     WaveDirectionalSpreading.cpp
     WaveModel.cpp
     WaveNumberFunctor.cpp
@@ -38,6 +38,7 @@ set(SRC
 INCLUDE_DIRECTORIES(SYSTEM ${eigen_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(SYSTEM ${YAML_CPP_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${ssc_INCLUDE_DIRS})
 
 ADD_LIBRARY(${PROJECT_NAME} OBJECT ${SRC})
 
