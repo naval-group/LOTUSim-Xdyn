@@ -1,5 +1,6 @@
 PROJECT(environment_models_tests)
 SET(SRC
+    SeabedTest.cpp
     AiryTest.cpp
     BretschneiderSpectrumTest.cpp
     Cos2sDirectionalSpreadingTest.cpp
@@ -10,7 +11,6 @@ SET(SRC
     EkmanUWCurrentTest.cpp
     JonswapSpectrumTest.cpp
     PiersonMoskowitzSpectrumTest.cpp
-    SeabedTest.cpp
     StretchingTest.cpp
     WaveNumberFunctorTest.cpp
     WaveSpectralDensityTest.cpp
