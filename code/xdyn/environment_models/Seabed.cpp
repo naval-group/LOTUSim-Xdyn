@@ -42,7 +42,6 @@ Seabed::Seabed(std::string sea_bed_file)
     // Error checking
     if (!img) {
         std::cerr << "Failed to load seabed image: " << stbi_failure_reason() << std::endl;
-        return 142;
     }
     for (int i = 0; i < width * height; i++)
     {
