@@ -118,84 +118,64 @@ HydroPolarForceModel::Input HydroPolarForceModel::parse(const std::string& yaml)
 
 Wrench HydroPolarForceModel::get_force(const BodyStates& states, const double t, const EnvironmentAndFrames& env, const std::map<std::string,double>& commands) const
 {
-    using namespace std;
-    const Eigen::Vector3d omega(states.p(), states.q(), states.r());
-    const Eigen::Vector3d Vo(states.u(), states.v(), states.w());
-    const auto T = env.k->get(name, body_name);
-    // Naval Group Far East
-    Eigen::Vector3d position = {states.x(),states.y(),states.z()};
-    Eigen::Vector3d WCurrent = env.get_UWCurrent(position,t);
-    // stop
-    const Eigen::Vector3d P_body = T.get_point().v; // Coordinates of point P in body frame
-    const Eigen::Vector3d Vp_body = Vo - P_body.cross(omega) - WCurrent; // Velocity of point P of body relative to NED, expressed in body frame
-    Eigen::Vector3d Vp = T.get_rot()*Vp_body; // Velocity of P in fluid, expressed in internal frame
-    const auto rotation = states.get_rot_from_ned_to_body();
-    const Eigen::Vector3d P_NED = Eigen::Vector3d(states.x(), states.y(), states.z()) + rotation*P_body; // Coordinates of point P in NED frame
-    double water_height = 0.;
+    // NED, bodyNED (local body NED) and body frames are defined here (https://sirehna.github.io/xdyn/#rep%C3%A8res)
+    Wrench force(ssc::kinematics::Point(name,0,0,0), name);
+    const ssc::kinematics::RotationMatrix Rot_NED_to_body = states.get_rot_from_ned_to_body();
+    const ssc::kinematics::RotationMatrix Rot_body_to_NED = Rot_NED_to_body.transpose();
+    const ssc::kinematics::RotationMatrix Rot_NED_to_name = Rot_NED_to_body * env.k->get(name, body_name).get_rot();
+    // The following variables follow the naming Variable_Object_Frame
+    // P stands for position (x,y,z), V for the velocity (u,v,w)
+    const Eigen::Vector3d P_body_NED(states.x(), states.y(), states.z());
+    const Eigen::Vector3d V_body_NED(states.u(), states.v(), states.w());
+    // Omega is the angular velocities (p,q,r) with the 3-2-1 euler convention
+    const Eigen::Vector3d Omega_body(states.p(), states.q(), states.r());
+    const Eigen::Vector3d P_name_body = env.k->get(body_name, name).get_point().v;
+    const Eigen::Vector3d P_name_NED = P_body_NED + Rot_body_to_NED * P_name_body;
+    const Eigen::Vector3d V_name_NED = V_body_NED + Rot_body_to_NED * Omega_body.cross(P_name_body);
+    // Velocity of water flow in name frame
+    Eigen::Vector3d V_water_name = Rot_NED_to_name * V_name_NED; 
+    double water_surface_height = 0.;
     if (env.w.use_count())
     {
-        const auto wave_height = env.w->get_and_check_wave_height({P_NED(0)}, {P_NED(1)}, t);
+        const std::vector<double> wave_height = env.w->get_and_check_wave_height({P_name_NED(0)}, {P_name_NED(1)}, t);
+        water_surface_height = wave_height.at(0);
         if (use_waves_velocity)
         {
-            const auto wave_velocity_matrix = env.w->get_and_check_orbital_velocity(env.g, {P_NED(0)}, {P_NED(1)}, {P_NED(2)}, t, wave_height);
-            const Eigen::Vector3d Vw_NED(wave_velocity_matrix.m(0,0), wave_velocity_matrix.m(1,0), wave_velocity_matrix.m(2,0)); // Velocity of wave flow
-            Vp -= env.k->get(name, wave_velocity_matrix.get_frame()).get_rot()*Vw_NED;
+            const ssc::kinematics::PointMatrix wave_velocity_NED = env.w->get_and_check_orbital_velocity(env.g, {P_name_NED(0)}, {P_name_NED(1)}, {P_name_NED(2)}, t, wave_height);
+            const Eigen::Vector3d V_waves_NED(wave_velocity_NED.m(0,0), wave_velocity_NED.m(1,0), wave_velocity_NED.m(2,0)); 
+            V_water_name -= Rot_NED_to_name * V_waves_NED; // Adding orbital velocities effect
         }
-        water_height = wave_height.at(0);
     }
-    const double beta = -atan2(Vp(1), Vp(0)); // Incident angle of the flow, in [-pi,pi]
-    const double U = sqrt(Vp(0)*Vp(0) + Vp(1)*Vp(1)); // Apparent flow velocity projected in the (x,y) plane of the internal frame
-    double alpha = beta; // Angle of attack
-    if (angle_command)
+    // Naval Group Far East
+    Eigen::Vector3d V_Current_NED = env.get_UWCurrent(P_name_NED,t);
+    V_water_name -= Rot_NED_to_name * V_Current_NED;
+    // stop
+    if (P_name_NED(2) < water_surface_height)
     {
-        alpha += commands.at(angle_command.get());
+        std::cerr << "WARNING: In hydrodynamic polar force model '" << name << "', the calculation point isn't in the water (z = " << P_name_NED(2) << "). In consequence, no force is being applied by this model." << std::endl;
+        return force;
     }
-    alpha = remainder(alpha, 2*M_PI); // Putting alpha in [-pi,pi]
-    Wrench ret(ssc::kinematics::Point(name,0,0,0), name);
-    if (P_NED(2) > water_height)
+    // Incident angle of the flow, in [-pi,pi]
+    const double beta = - atan2(V_water_name(1), V_water_name(0)); 
+    // Apparent flow velocity projected in the (x,y) plane of the internal frame
+    const double U = std::hypot(V_water_name(0), V_water_name(1)); 
+    // Angle of attack in [-pi,pi]
+    const double alpha = remainder( (angle_command) ? beta + commands.at(angle_command.get()) : beta , 2*M_PI); 
+    const double alpha_sign = (alpha >= 0) ? +1 : -1;
+    const double alpha_prime = symmetry ? abs(alpha) : alpha;
+    const double lift = 0.5 * Cl->f(alpha_prime) * env.rho * U * U * reference_area;
+    const double drag = 0.5 * Cd->f(alpha_prime) * env.rho * U * U * reference_area;
+    force.X() = - drag * cos(beta) + alpha_sign * lift * sin(beta);
+    force.Y() = drag * sin(beta) + alpha_sign * lift * cos(beta);
+    if (Cm)
     {
-        std::cerr << "WARNING: In hydrodynamic polar force model '" << name << "', the calculation point seems to be outside of the water (z = " << P_NED(2) << "). In consequence, no force is being applied by this model." << std::endl;
-    }
-    else
-    {
-        const double alpha_prime = (symmetry && alpha<0) ? -alpha : alpha;
-        const double lift = 0.5*Cl->f(alpha_prime)*env.rho*pow(U, 2)*reference_area;
-        const double drag = 0.5*Cd->f(alpha_prime)*env.rho*pow(U, 2)*reference_area;
-        if (alpha>=0)
-        {
-            ret.X() = -drag*cos(beta) + lift*sin(beta);
-            ret.Y() =  drag*sin(beta) + lift*cos(beta);
-        }
-        else
-        {
-            ret.X() = -drag*cos(beta) - lift*sin(beta);
-            ret.Y() =  drag*sin(beta) - lift*cos(beta);
-        }
-        if (Cm)
-        {
-            double normalization_cubic_length;
-            if (chord_length.is_initialized())
-            {
-                normalization_cubic_length = reference_area*chord_length.get();
-            }
-            else
-            {
-                normalization_cubic_length = pow(reference_area, 1.5);
-            }
-            const double moment = 0.5*Cm->f(alpha_prime)*env.rho*pow(U, 2)*normalization_cubic_length;
-            if (alpha>=0)
-            {
-                ret.N() = moment;
-            }
-            else
-            {
-                ret.N() = -moment;
-            }
-        }
+        const double normalized_cubic_length = chord_length.is_initialized() ? reference_area * chord_length.get() : pow(reference_area, 1.5);
+        const double moment = 0.5 * Cm->f(alpha_prime) * env.rho * U * U * normalized_cubic_length;
+        force.N() = alpha_sign * moment;
     }
     *angle_of_attack = alpha;
     *relative_velocity = U;
-    return ret;
+    return force;
 }
 
 void HydroPolarForceModel::extra_observations(Observer& observer) const

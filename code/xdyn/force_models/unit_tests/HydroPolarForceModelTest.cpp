@@ -249,7 +249,7 @@ TEST_F(HydroPolarForceModelTest, should_print_warning_and_return_zero_force_if_c
 {
     HydroPolarForceModel::Input input;
     input.name = "test";
-    // Internal frame is placed under water, 5m above the body frame's origin (in the air)
+    // Internal frame is placed above water, 5m above the body frame's origin
     input.internal_frame = YamlPosition(YamlCoordinates(0,0,-5), YamlAngle(0,0,0), "body");
     input.reference_area = 100;
     input.angle_of_attack = {0.,0.12217305,0.15707963,0.20943951,0.48869219,1.04719755,1.57079633,2.0943951,2.61799388,M_PI};
