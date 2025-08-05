@@ -1,8 +1,11 @@
 /*
  * Seabed.hpp
  *
- *  Created on: Dec 20, 2016
- *      Author: cady
+ *  Created on: 20 June 2025
+ *      Author: julien.prodhon
+ * 
+ * Naval Group Far East - CoE
+ * Seabed height map implementation with bilinear interpolation
  */
 
 #ifndef SEABED_HPP_
@@ -11,12 +14,16 @@
 #include <Eigen/Dense>
 #include <map>
 
+struct InterpolationWeights {
+    double left, right, down, up;
+    int xleft, xright, ydown, yup;
+};
+
 class Seabed
 {
 public:
-    Seabed(std::string sea_bed_file);
-    Seabed(double depth);
-    std::tuple<double, double, double, double, int, int, int, int> get_pos(double, double) const;
+    Seabed(const std::string sea_bed_file);
+    Seabed(const double depth);
     double get_height(const double, const double) const;
     Eigen::Vector2d get_gradient(const double, const double) const;
 private:
@@ -28,7 +35,10 @@ private:
     double zscale;
     double xoffset;
     double yoffset;
+    InterpolationWeights calculateWeights(const double, const double) const;
 };
+
+
 
 
 #endif /* SEABED_HPP_ */

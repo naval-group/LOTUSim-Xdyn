@@ -5,12 +5,7 @@
  *      Author: julien.prodhon
  */
 
-// Naval Group Far East - CoE
-// Creating files for UW current class
-
-
 #include "UWCurrentModel.hpp"
-
 
 UWCurrentModel::UWCurrentModel() {}
 
