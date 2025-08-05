@@ -36,7 +36,7 @@ Seabed::Seabed(const std::string sea_bed_file)
     }
     // Load Image data
     int channels;
-    const unsigned char* img = stbi_load(seabed_path.c_str(), &width, &height, &channels, 1);
+    unsigned char* img = stbi_load(seabed_path.c_str(), &width, &height, &channels, 1);
     if (!img) {
         std::cerr << "Failed to load seabed image: " << stbi_failure_reason() << std::endl;
     }
