@@ -5,9 +5,6 @@
  *      Author: julien.prodhon
  */
 
-// Naval Group Far East - CoE
-// Creating files for UW current class
-
 #ifndef ENVIRONMENT_MODELS_INC_UWCurrentMODEL_HPP_
 #define ENVIRONMENT_MODELS_INC_UWCurrentMODEL_HPP_
 

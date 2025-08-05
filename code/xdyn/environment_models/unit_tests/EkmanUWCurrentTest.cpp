@@ -1,7 +1,7 @@
 /*
  * EkmanUWCurrentTest.cpp
  *
- *  Created on: 3 June 2025
+ *  Created on: 5 august 2025
  *      Author: julien.prodhon
  */
 
@@ -9,7 +9,7 @@
 #include "EkmanUWCurrentModel.hpp"
 #include <Eigen/Dense>
 
-EkmanUWCurrentTest::EkmanUWCurrentTest () : a(ssc::random_data_generator::DataGenerator(54200))
+EkmanUWCurrentTest::EkmanUWCurrentTest () : a(ssc::random_data_generator::DataGenerator(149555))
 {}
 
 EkmanUWCurrentTest::~EkmanUWCurrentTest (){}
@@ -32,7 +32,14 @@ TEST_F(EkmanUWCurrentTest, test_velocity)
 
 TEST_F(EkmanUWCurrentTest, test_bug_map_at)
 {
-    std::string yaml_input = "{seabed: seabedtest.png, dTop: 10, dBottom: 100, velocity: { value: 1, unit: m/s }, U10: { value: 1, unit: m/s }, wind angle: { value: 0, unit: rad }}";
+    std::string yaml_input = "{seabed file: seabedtest.png,"
+                             " latitude: { value: 47, unit: rad },"
+                             " top layer thickness: { value: 10, unit: m },"
+                             " bottom layer thickness: { value: 20, unit: m },"
+                             " current velocity: { value: 1, unit: m/s },"
+                             " current orientation: { value: 30, unit: deg },"
+                             " U10: { value: 1, unit: m/s },"
+                             " wind orientation: { value: 20, unit: deg }}";
     EkmanUWCurrentModel model = EkmanUWCurrentModel::parse(yaml_input);
     Eigen::Vector3d point1(3.5,-7,0.2);
     model.get_UWCurrent(point1,0,5.5);
