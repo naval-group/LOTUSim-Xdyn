@@ -11,6 +11,8 @@ project](https://www.irt-jules-verne.fr/wp-content/uploads/bassin-numerique.pdf)
 
 (c) 2015-2022 [SIREHNA](https://www.sirehna.com/) & [Naval Group](https://www.naval-group.com/en/) for all subsequent versions.
 
+(c) 2022-2025 [Naval Group](https://www.naval-group.com/en/) for all subsequent versions of the LOTUSim fork of Xdyn.
+
 **Disclaimer**: [External documentation](https://sirehna_naval_group.gitlab.io/sirehna/xdyn/) and [internal documentation](https://sirehna.gitlab-pages.sirehna.com/xdyn/)
 was written for a French project, with
 French participants, therefore it is in French. It will be translated
@@ -307,13 +309,14 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-The main contributors to this project are:
+The main contributor of this fork is:
+* [Julien Prodhon](https://github.com/julienprodhon)
 
+The main other contributors of this project are:
 * [Charles-Edouard CADY](https://gitlab.com/CharlesEdouardCady_SIREHNA)
 * [Guillaume JACQUENOT](https://gitlab.com/GuillaumeJacquenot)
 * [Léa LINCKER](https://gitlab.com/llincker)
 * [Moran CHARLOU](https://gitlab.com/mcharlou)
-
 
 See also the [full list of contributors](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/contributors) who took part in this project.
 
