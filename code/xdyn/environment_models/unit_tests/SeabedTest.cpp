@@ -10,7 +10,7 @@
 #include <Eigen/Dense>
 #include <fstream>
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "ssc/stb/stb_image_write.h"
+#include "stb.hpp"
 
 SeabedTest::SeabedTest () : a(ssc::random_data_generator::DataGenerator(149555))
 {}

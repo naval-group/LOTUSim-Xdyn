@@ -1,11 +1,16 @@
-# xdyn
+# LOTUSim-Xdyn
 
-xdyn is a lightweight time-domain ship simulator modelling the dynamic behaviour of a ship at sea, with its actuators, including some non-linear aspects of that behaviour and featuring a customizable maneuvring model.
-It simulates the mechanical behaviour of a solid body in a fluid environment by
-solving Newton's second law of motion, taking hydrodynamic forces into account.
+Xdyn is a lightweight time-domain ship simulator modelling the dynamic behaviour of a ship at sea, with its actuators, including some non-linear aspects of that behaviour and featuring a customizable maneuvring model.
+It simulates the mechanical behaviour of a solid body in a fluid environment by solving Newton's second law of motion, taking hydrodynamic forces into account.
 
-It was developed by SIREHNA through both self-funded projects and various collaborative projects, including the IRT Jules Verne's ["Bassin Numérique"
-project](https://www.irt-jules-verne.fr/wp-content/uploads/bassin-numerique.pdf).
+It is developed by SIREHNA through both self-funded projects and various collaborative projects, including the IRT Jules Verne's ["Bassin Numérique" project](https://www.irt-jules-verne.fr/wp-content/uploads/bassin-numerique.pdf).
+
+LOTUSim-Xdyn repository is a fork developed by Naval Group since 2022, in order to integrate Xdyn in a multi-agents environment simulator: [LOTUSim](https://github.com/naval-group/LOTUSim). 
+
+[Original documentation](https://sirehna.github.io/xdyn/) was written for a French project, with French participants, therefore it is in French. 
+Part of the documentation has been translated [here](https://github.com/naval-group/LOTUSim/wiki/xdyn-user-guide) for the user guide and [here](https://github.com/naval-group/LOTUSim/wiki/xdyn-development) regarding developer guide.
+
+If you need more help to use it inside LOTUSim, please [contact us](mailto:lotusim_support@navalgroup.com).
 
 (c) 2014-2015, [IRT Jules Verne](https://www.irt-jules-verne.fr/), [SIREHNA](https://www.sirehna.com/), [Naval Group](https://www.naval-group.com/en/), [Bureau Veritas](https://www.bureauveritas.fr/), [Hydrocean](https://marine-offshore.bureauveritas.com/bvsolutions), [STX France](https://chantiers-atlantique.com/en/), [LHEEA](https://lheea.ec-nantes.fr/) for the initial version.
 
@@ -13,53 +18,10 @@ project](https://www.irt-jules-verne.fr/wp-content/uploads/bassin-numerique.pdf)
 
 (c) 2022-2025 [Naval Group](https://www.naval-group.com/en/) for all subsequent versions of the LOTUSim fork of Xdyn.
 
-**Disclaimer**: [External documentation](https://sirehna_naval_group.gitlab.io/sirehna/xdyn/) and [internal documentation](https://sirehna.gitlab-pages.sirehna.com/xdyn/)
-was written for a French project, with
-French participants, therefore it is in French. It will be translated
-eventually. Also, please note that it is still a work-in-progress and, as such,
-can be incomplete. Despite our best efforts, inaccuracies may remain. However,
-the documentation will continue to evolve as new developments on xdyn are
-on-going.
-
-## Getting Started
-
-The easiest way to run xdyn is to use [Docker](https://www.docker.com/):
-
-```bash
-docker run sirehna/xdyn
-```
-
-This does not require installing or downloading anything except Docker itself.
-
-Pre-built binaries of xdyn are also available:
-
-- [for Debian 11](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/jobs/artifacts/master/download?job=build%3Adebian11-release)
-- [for Windows](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/jobs/artifacts/master/download?job=build%3Awindows)
-
-There are many other ways of using xdyn, all of which are described
-in [the documentation](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/jobs/artifacts/master/download?job=doc).
-
-The **environment models** implemented inside xdyn are described in detail [here](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/modeles_environnementaux.md)
-
-The **force models** implemented inside xdyn are described in detail [here](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/modeles_efforts_commandes_et_non_commandes.md)
-
-You can also learn how to use xdyn using the tutorials:
-
-- [Falling ball](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/tutorial_01.md)
-- [Hydrostatic](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/tutorial_02.md)
-- [Waves](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/tutorial_03.md)
-- [Propulsion](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/tutorial_06.md)
-- [gRPC wave model](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/tutorial_09.md)
-- [gRPC force model](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/tutorial_10.md)
-- [gRPC controller](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/tutorial_11.md)
-
 ## Building xdyn from source
 
-This section describes what you need to do if you wish to compile xdyn
-yourself.
-These instructions will get you a copy of the project up and running on your
-local machine for development and testing purposes. See deployment for notes on
-how to deploy the project on a live system.
+This section describes what you need to do if you wish to compile xdyn yourself.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 ### Prerequisites
 
@@ -158,8 +120,7 @@ Compile xdyn (`make windows`), install the xdyn executable, then run:
 
 All options can be found in [the documentation](https://sirehna_naval_group.gitlab.io/sirehna/xdyn/#ligne-de-commande).
 
-For example, to run the first [tutorial](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/tutorial_01.md),
-from the executables/demos folder, you can run:
+For example, to run the first tutorial, from the executables/demos folder, you can run:
 
 ```bash
 ./xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1
@@ -167,10 +128,8 @@ from the executables/demos folder, you can run:
 
 ### Running xdyn on Debian
 
-Compile xdyn (`make debian`) and install the xdyn executable
-(`sudo dpkg -i xdyn.deb`).
-You'll also need to install libgfortran3 (for debian9) or
-libgfortran5 (for debian10).
+Compile xdyn (`make debian`) and install the xdyn executable (`sudo dpkg -i xdyn.deb`).
+You'll also need to install libgfortran3 (for debian9) or libgfortran5 (for debian10).
 
 You can then run:
 
@@ -180,7 +139,7 @@ xdyn <yaml file> [xdyn options]
 
 All options can be found in [the documentation](https://sirehna_naval_group.gitlab.io/sirehna/xdyn/#ligne-de-commande).
 
-For example, to run the first [tutorial](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/tutorial_01.md),
+For example, to run the first tutorial,
 
 ```bash
 xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1
@@ -202,18 +161,13 @@ docker run -it --rm -u $(id -u):$(id -g) -v $(pwd):/build -w /build/path_to_yaml
 ```
 
 - Flag `--rm` deletes the container (not the image) after exit
-- Flag `-u $(id -u):$(id -g)` launches the container with the permissions
-of the current user, which ensures the files generated by xdyn (if any) are
-owned by the current user
-- Flag `-v $(pwd):/build` mounts the current directory to the container's
-`/build` directory
-- Flag `-w /build/path_to_yaml_file` sets the container's working directory and
-`path_to_yaml_file` should be replaced by a sub-path of the current directory
+- Flag `-u $(id -u):$(id -g)` launches the container with the permissions of the current user, which ensures the files generated by xdyn (if any) are owned by the current user
+- Flag `-v $(pwd):/build` mounts the current directory to the container's `/build` directory
+- Flag `-w /build/path_to_yaml_file` sets the container's working directory and `path_to_yaml_file` should be replaced by a sub-path of the current directory
 
-More details can be found in
-[Docker's official documentation](https://docs.docker.com/engine/reference/commandline/run/).
+More details can be found in [Docker's official documentation](https://docs.docker.com/engine/reference/commandline/run/).
 
-For example, to run the first [tutorial](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/doc/user_fr/tutorial_01.md) and display the results in the terminal, assuming we are in the project's root directory:
+For example, to run the first tutorial and display the results in the terminal, assuming we are in the project's root directory:
 
 ```bash
 docker run -it --rm -w /usr/demos sirehna/xdyn tutorial_01_falling_ball.yml --dt 0.1 --tend 1 -o tsv
@@ -223,8 +177,7 @@ docker run -it --rm -w /usr/demos sirehna/xdyn tutorial_01_falling_ball.yml --dt
 
 ### Valgrind
 
-The memory analyzer [Valgrind](https://valgrind.org/) can be used during
-development to check for memory leaks and use of uninitialized values.
+The memory analyzer [Valgrind](https://valgrind.org/) can be used during development to check for memory leaks and use of uninitialized values.
 To use it, first build a debug version (if you haven't already):
 
 ```bash
@@ -245,8 +198,7 @@ This script accepts any [flag `run_all_tests` does](https://gitlab.inria.fr/Phyl
 
 ### GDB
 
-A script called `gdb.sh` can be used during development to launch `xdyn` or the
-unit tests under [GDB](https://www.gnu.org/software/gdb/).
+A script called `gdb.sh` can be used during development to launch `xdyn` or the unit tests under [GDB](https://www.gnu.org/software/gdb/).
 
 To debug xdyn, first build a debug version (if you haven't already):
 
@@ -260,12 +212,9 @@ Then run:
 ./gdb.sh /build/executables/xdyn
 ```
 
-This will open a GDB prompt. To close it, press Ctrl+D. For more details on how
-to use GDB, refer to [the official GDB
-documentation](https://www.gnu.org/software/gdb/).
+This will open a GDB prompt. To close it, press Ctrl+D. For more details on how to use GDB, refer to [the official GDB documentation](https://www.gnu.org/software/gdb/).
 
-To launch the debugger on the unit tests, first build a debug version (if you
-haven't already):
+To launch the debugger on the unit tests, first build a debug version (if you haven't already):
 
 ```bash
 ./ninja_debug.sh run_all_tests
@@ -294,14 +243,12 @@ Add additional notes about how to deploy this on a live system.
 * [Pandoc](https://pandoc.org/) - To generate the documentation.
 * [Pweave](https://mpastell.com/pweave/) - To generate the tutorials.
 * [SSC](https://gitlab.com/sirehna_naval_group/sirehna/ssc) - For websockets, units decoding, interpolations, kinematics, CSV file reading and exception handling.
+* [stb](https://github.com/nothings/stb) - To handle images
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to submit
-issues & pull requests to xdyn.
-Our code of conduct is the [Contributor Covenant](CODE_OF_CONDUCT.md) (original
-version available
-[here](https://www.contributor-covenant.org/version/1/4/code-of-conduct) ).
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to submit issues & pull requests to xdyn.
+Our code of conduct is the [Contributor Covenant](CODE_OF_CONDUCT.md) (original version available [here](https://www.contributor-covenant.org/version/1/4/code-of-conduct) ).
 
 ## Versioning
 
@@ -309,16 +256,16 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-The main contributor of this fork is:
+The main contributor of LOTUSim-Xdyn fork is:
 * [Julien Prodhon](https://github.com/julienprodhon)
 
-The main other contributors of this project are:
+The main other contributors of Xdyn project are:
 * [Charles-Edouard CADY](https://gitlab.com/CharlesEdouardCady_SIREHNA)
 * [Guillaume JACQUENOT](https://gitlab.com/GuillaumeJacquenot)
 * [Léa LINCKER](https://gitlab.com/llincker)
 * [Moran CHARLOU](https://gitlab.com/mcharlou)
 
-See also the [full list of contributors](https://gitlab.com/sirehna_naval_group/sirehna/xdyn/-/blob/master/contributors) who took part in this project.
+See also the [full list of contributors](contributors) who took part in this project.
 
 ## License
 

@@ -1,46 +1,62 @@
-.PHONY: all_docker_images cmake-debian debian docker cmake-windows windows doc update-submodules
+.PHONY: all_docker_images cmake-debian debian docker cmake-windows windows doc update-submodules headers
 
 all: update-submodules generate_proto windows debian debug doc all_docker_images
 
 DOCKER_AS_ROOT:=docker run -t --rm -w /opt/share -v $(shell pwd):/opt/share
 DOCKER_AS_USER:=$(DOCKER_AS_ROOT) -u $(shell id -u):$(shell id -g)
 
-HEADERS=code/ssc/ssc/check_ssc_version.hpp\
-        code/ssc/ssc/csv_file_reader.hpp\
-        code/ssc/ssc/data_source.hpp\
-        code/ssc/ssc/decode_unit.hpp\
-        code/ssc/ssc/exception_handling.hpp\
-        code/ssc/ssc/geometry.hpp\
-        code/ssc/ssc/integrate.hpp\
-        code/ssc/ssc/interpolation.hpp\
-        code/ssc/ssc/ipopt_interface.hpp\
-        code/ssc/ssc/json.hpp\
-        code/ssc/ssc/kinematics.hpp\
-        code/ssc/ssc/macros.hpp\
-        code/ssc/ssc/numeric.hpp\
-        code/ssc/ssc/random_data_generator.hpp\
-        code/ssc/ssc/solver.hpp\
-        code/ssc/ssc/text_file_reader.hpp\
-        code/ssc/ssc/websocket.hpp\
-        code/ssc/ssc/yaml_parser.hpp
+update-submodules:
+	@echo "Updating Git submodules..."
+	@git submodule sync --recursive
+	@git submodule update --init --recursive
+	@git submodule foreach --recursive 'git fetch --tags'
+	
+# SSC headers that are generated
+SSC_GENERATED_HEADERS = \
+	code/ssc/ssc/check_ssc_version.hpp \
+	code/ssc/ssc/csv_file_reader.hpp \
+	code/ssc/ssc/data_source.hpp \
+	code/ssc/ssc/decode_unit.hpp \
+	code/ssc/ssc/exception_handling.hpp \
+	code/ssc/ssc/geometry.hpp \
+	code/ssc/ssc/integrate.hpp \
+	code/ssc/ssc/interpolation.hpp \
+	code/ssc/ssc/ipopt_interface.hpp \
+	code/ssc/ssc/json.hpp \
+	code/ssc/ssc/ssc/kinematics.hpp \
+	code/ssc/ssc/macros.hpp \
+	code/ssc/ssc/numeric.hpp \
+	code/ssc/ssc/random_data_generator.hpp \
+	code/ssc/ssc/solver.hpp \
+	code/ssc/ssc/text_file_reader.hpp \
+	code/ssc/ssc/websocket.hpp \
+	code/ssc/ssc/yaml_parser.hpp
+
+# STB header
+STB_HEADER = code/stb.hpp
+
+# All headers
+HEADERS = ${SSC_GENERATED_HEADERS} ${STB_HEADER}
+
+# Main headers target
 headers: ${HEADERS}
+
+# Generate SSC module headers
+${SSC_GENERATED_HEADERS}: | update-submodules
+	@echo "Generating SSC module headers..."
+	@cd code/ssc/ssc && sh generate_module_header.sh
+
+# Generate STB header
+${STB_HEADER}: | update-submodules
+	@echo "Generating STB header..."
+	@cd code && ./generate_stb_header.sh
+
 windows: ${HEADERS} windows_gccx_posix
 debian11: ${HEADERS} debian_11_release_gcc_10
 debian: ${HEADERS} debian_11_release_gcc_10
 debian11_clang: ${HEADERS} debian_11_release_clang_14
 debug: ${HEADERS} debian_11_debug_gcc_10
 ubuntu1804-intel: ${HEADERS} ubuntu_18_04_release_intel_compiler
-
-update-submodules:
-	@echo "Updating Git submodules..."
-	@git submodule sync --recursive
-	@git submodule update --init --recursive
-	@git submodule foreach --recursive 'git fetch --tags'
-
-${HEADERS}:
-	@git submodule sync --recursive
-	@git submodule update --init --recursive
-	@cd code/ssc/ssc && sh generate_module_header.sh && cd ../../..
 
 generate_proto:
 	make -C interfaces build
