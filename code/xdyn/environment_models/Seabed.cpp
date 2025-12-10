@@ -11,7 +11,7 @@
 #include <iostream>
 #include <boost/filesystem.hpp>
 #include "Seabed.hpp"
-#include "ssc/stb.hpp"
+#include "stb.hpp"
 
 // Constructor: Load seabed from image file
 Seabed::Seabed(const std::string sea_bed_file)

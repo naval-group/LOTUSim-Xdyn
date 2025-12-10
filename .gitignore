@@ -6,6 +6,7 @@ build_ubuntu*
 build_win*
 code/build_*
 code/yaml-cpp
+code/stb.hpp
 build_doc
 install
 install*32
